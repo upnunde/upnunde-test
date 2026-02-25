@@ -1,0 +1,259 @@
+.scriptBlockCard {
+  width: 100%;
+  padding: var(--spacing-16, 16px);
+  background: var(--surface-10, rgba(255, 255, 255, 1));
+  border-radius: var(--radius-12, 12px);
+  border: 1px solid var(--border-10, rgba(0, 0, 0, 0.07));
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-16, 16px);
+  position: relative;
+  transition: all 0.15s;
+  cursor: pointer;
+}
+
+.group {
+  /* group 클래스는 hover 상태 관리를 위해 사용 */
+}
+
+.scriptBlockCard:hover {
+  border-color: var(--border-20, rgba(0, 0, 0, 0.13));
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+}
+
+.scriptBlockCard:hover .contentArea::before {
+  content: "";
+  position: absolute;
+  left: 0;
+  top: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0, 0, 0, 0); /* bg-black-black-opacity-10/0 */
+  pointer-events: none;
+}
+
+.scriptBlockCard.selected {
+  border-color: var(--primary, rgba(246, 66, 212, 1));
+  box-shadow: 0 0 0 1px var(--primary-container, rgba(254, 227, 249, 1));
+}
+
+.contentArea {
+  display: flex;
+  align-items: flex-start;
+  gap: var(--spacing-16, 16px);
+  position: relative;
+  width: 100%;
+  padding-left: var(--spacing-40, 40px); /* 좌측 Add Button 공간 */
+}
+
+.contentArea::after {
+  content: "";
+  display: block;
+  width: 100%;
+  height: 4px;
+  margin-top: var(--spacing-4, 4px);
+}
+
+.textAreaWrapper {
+  flex: 1;
+  position: relative;
+  min-width: 0;
+}
+
+.textarea {
+  width: 100%;
+  min-height: 24px;
+  padding: 0;
+  border: none;
+  outline: none;
+  background: transparent;
+  font: var(--body-1-500, 500 16px/24px var(--font-family));
+  color: var(--on-surface-10, rgba(43, 43, 43, 1));
+  resize: none;
+  line-height: 24px;
+  overflow: hidden;
+  flex: 1;
+  justify-content: flex-start;
+  text-align: start;
+}
+
+.textarea::placeholder {
+  color: var(--on-surface-30, rgba(145, 145, 148, 1));
+}
+
+.deleteButton {
+  position: absolute;
+  right: var(--spacing-16, 16px);
+  top: var(--spacing-16, 16px);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 32px;
+  height: 32px;
+  padding: 0;
+  background: transparent;
+  border: 1px solid var(--border-10, rgba(0, 0, 0, 0.07));
+  border-radius: var(--radius-circle, 999px);
+  color: var(--on-surface-30, rgba(145, 145, 148, 1));
+  cursor: pointer;
+  transition: all 0.15s;
+  flex-shrink: 0;
+}
+
+/* Delete Button은 항상 표시 */
+
+.deleteButton:hover {
+  background: var(--error-container, rgba(252, 224, 224, 1));
+  border-color: var(--error, rgba(236, 50, 50, 1));
+  color: var(--error, rgba(236, 50, 50, 1));
+}
+
+.deleteButton:active {
+  background: var(--error-container, rgba(252, 224, 224, 1));
+  opacity: 0.8;
+}
+
+.metadataRow {
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-8, 8px);
+  padding: 0;
+  margin: 0;
+}
+
+.resourceGroup {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--spacing-8, 8px);
+}
+
+.resourceLabel {
+  width: 40px;
+  font: var(--caption-1-500, 500 12px/16px var(--font-family));
+  color: var(--on-surface-30, rgba(145, 145, 148, 1));
+  flex-shrink: 0;
+  text-align: center;
+}
+
+.resourceChip {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: var(--spacing-8, 8px);
+  padding: 0 var(--spacing-8, 8px);
+  height: 32px;
+  background: var(--surface-10, rgba(255, 255, 255, 1));
+  border: 1px solid var(--border-10, rgba(0, 0, 0, 0.05));
+  border-radius: var(--radius-4, 4px);
+  font: var(--caption-1-500, 500 12px/16px var(--font-family));
+  color: var(--on-surface-20, rgba(82, 82, 84, 1));
+  cursor: pointer;
+  transition: all 0.15s;
+  outline: 1px solid transparent;
+  outline-offset: -1px;
+}
+
+.resourceChip:hover {
+  background: var(--surface-20, rgba(248, 248, 252, 1));
+  transform: translateY(-1px);
+}
+
+.chipAvatar {
+  width: 16px;
+  height: 16px;
+  border-radius: var(--radius-circle, 999px);
+  object-fit: cover;
+}
+
+.chipEmoji {
+  font-size: 14px;
+  line-height: 1;
+}
+
+.emotionChip {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: var(--spacing-4, 4px);
+  padding: 0 var(--spacing-8, 8px);
+  height: 32px;
+  background: var(--surface-10, rgba(255, 255, 255, 1));
+  border: 1px solid var(--border-10, rgba(0, 0, 0, 0.05));
+  border-radius: var(--radius-4, 4px);
+  font: var(--caption-1-500, 500 12px/16px var(--font-family));
+  color: var(--on-surface-20, rgba(82, 82, 84, 1));
+  cursor: pointer;
+  transition: all 0.15s;
+  outline: 1px solid transparent;
+  outline-offset: -1px;
+}
+
+.emptyChip {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 32px;
+  height: 32px;
+  padding: 0;
+  background: transparent;
+  border: 1px dashed var(--border-20, rgba(0, 0, 0, 0.13));
+  border-radius: var(--radius-4, 4px);
+  color: var(--on-surface-30, rgba(145, 145, 148, 1));
+  cursor: pointer;
+  transition: all 0.15s;
+  opacity: 0.5;
+}
+
+.emptyChip:hover {
+  opacity: 1;
+  border-color: var(--primary, rgba(246, 66, 212, 1));
+  color: var(--primary, rgba(246, 66, 212, 1));
+  background: var(--primary-container, rgba(254, 227, 249, 1));
+}
+
+.choiceSection {
+  margin-top: var(--spacing-8, 8px);
+  padding: 0 var(--spacing-16, 16px);
+  width: 100%;
+}
+
+.divider {
+  width: 100%;
+  height: 1px;
+  background: var(--border-10, rgba(0, 0, 0, 0.07));
+  margin: var(--spacing-8, 8px) 0;
+}
+
+/* Add Button */
+.addButton {
+  position: absolute;
+  left: var(--spacing-16, 16px);
+  top: var(--spacing-16, 16px);
+  width: 40px; /* 더 큰 버튼 */
+  height: 40px;
+  padding: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: var(--surface-10, rgba(255, 255, 255, 1));
+  border: 1px solid var(--border-10, rgba(0, 0, 0, 0.07));
+  border-radius: var(--radius-circle, 999px);
+  color: var(--on-surface-10, rgba(43, 43, 43, 1));
+  cursor: pointer;
+  transition: all 0.15s;
+  z-index: 10;
+  box-shadow: 0px 2px 4px 2px rgba(0, 0, 0, 0.16);
+}
+
+/* Add Button은 항상 표시 */
+
+.addButton:hover {
+  background: var(--primary-container, rgba(254, 227, 249, 1));
+  border-color: var(--primary, rgba(246, 66, 212, 1));
+  color: var(--primary, rgba(246, 66, 212, 1));
+  transform: scale(1.1);
+}
+
+.addButton:active {
+  transform: scale(0.95);
+}

@@ -1,0 +1,655 @@
+"use client";
+
+import React, { useEffect, useCallback } from "react";
+import {
+  DndContext,
+  closestCenter,
+  type DragEndEvent,
+  PointerSensor,
+  useSensor,
+  useSensors,
+} from "@dnd-kit/core";
+import {
+  SortableContext,
+  verticalListSortingStrategy,
+  useSortable,
+} from "@dnd-kit/sortable";
+import { CSS } from "@dnd-kit/utilities";
+import { useEditorStore } from "@/store/useEditorStore";
+import { parseScriptToBlocks } from "@/utils/scriptParser";
+import { createBlock } from "@/store/useEditorStore";
+import { cn } from "@/lib/utils";
+import { Button } from "@/components/ui/button";
+import { Plus } from "lucide-react";
+import { ScriptBlock } from "./ScriptBlock";
+
+/** 텍스트(대사) 블록: 행 높이 36px, 세로 가변 확장 가능 */
+const WRAPPER_CLASS_TEXT =
+  "group flex min-h-[36px] h-fit items-start justify-center gap-0";
+const ROOT_CLASS_TEXT = "min-w-0 flex-1 min-h-[36px] h-fit";
+
+/** 선택지 블록: 최소 높이 36px, 내용에 따라 확장 */
+const WRAPPER_CLASS_CHOICE =
+  "group flex min-h-[36px] h-fit items-start justify-center gap-0";
+const ROOT_CLASS_CHOICE = "min-w-0 flex-1 min-h-[36px]";
+
+/** 한 줄 블록 (씬/캐릭터/연출/배경 등): 고정 높이 36px, px-0 py-1 */
+const WRAPPER_CLASS_COMPACT =
+  "group flex h-full items-center justify-start gap-0";
+const ROOT_CLASS_COMPACT = "min-w-0 flex-1 min-h-[36px] h-[36px]";
+
+const INITIAL_SCRIPT = `-> SCENE_1
+
+// ========================================
+// SCENE 1: 시온의 데이트 신청
+// ========================================
+== SCENE_1 ==
+# turn: 1
+# top_desc: 엘레나의 방 / 낮
+# bg: BgRofanPrincessRoom
+# bgm: BgmRofanEnjoy
+
+한가로운 오후.
+나는 침대에 기대어 앉아 책을 읽고 있었다.
+
+# char_img: ImgMariSurprise
+마리: 부인! 큰일 났어요! 이것 좀 보세요!
+
+급히 방으로 뛰어 들어온 마리가 사설지 한 부를 내밀었다.
+
+# char_img: ImgTabloidScandal
+표지에는 나와 카일런, 시온 황자의 모습이 실려있었고 [황태자와 공작의 결투! 공작 부인에게 무릎 꿇다!]라는 자극적인 제목이 함께하고 있었다.
+
+{Name}: 무릎을 꿇다니?
+{Name}: 두 사람은 그저 춤을 요청했을 뿐이잖아.
+
+# char_img: ImgMariLaugh
+마리: 제가 무도회장에 없었다는 게 너무 아쉬워요!
+마리: 멋진 두 남자를 사이에 두고 멋대로 휘두르는 부인의 모습이라니!
+
+{Name}: 난 휘두른 적 없어. 결코. 절대로.
+
+마리: 그게 그거죠!
+마리: 근데 부인 혹시 후회하신 거 아니죠?
+
+{Name}: 무슨 후회?
+
+마리: 다른 파트너와 춤을 출 걸... 하고 후회하신 거 아니에요?!
+
+# turn_last: 1
+
+* [아니야. 난 그날 밤 내 상대에게 만족해.]
+    # char_img: ImgMariLaugh
+    마리: 부인 말을 들으니 그 자리에 있지 못했던 게 너무 아쉬워요!
+    마리: 아, 맞다. 부인, 황궁으로부터 부인께 도착한 서신이에요.
+    -> SCENE_1_LETTER
+
+* [사실은 조금 후회했어.]
+    # char_img: ImgMariLaugh
+    마리: 부인 말을 들으니 그 자리에 있지 못했던 게 너무 아쉬워요!
+    마리: 아, 맞다. 부인, 황궁으로부터 부인께 도착한 서신이에요.
+    -> SCENE_1_LETTER
+
+== SCENE_1_LETTER ==
+# char_img:
+마리가 내민 것은 황실 문양이 찍힌 서신이었다.
+표지에는 시온 황자의 이름이 쓰여있었다.
+나는 조심스럽게 서신을 뜯었고 [우리가 처음 만났던 그곳에서 당신을 기다리겠습니다.] 만남을 신청하는 시온 황자의 정갈한 글씨체가 보였다.
+편지지에서는 그에게서 나던 옅은 장미향이 났다.
+
+# char_img: ImgMariSurprise
+마리: 이거 데이트 신청이죠?!
+마리: 황자 전하께서 부인께 데이트 신청을 하신 거예요!
+
+나는 호들갑을 떠는 마리를 뒤로한 채 얼굴의 열을 식히려 창문을 열었다.
+{Name}: <i>[황자를 다시 만나도 될까? 머릿속이 복잡해져 온 탓에 이에 대한 답신은 잠시 보류하기로 했다.]</i>
+
+-> SCENE_2
+
+// ========================================
+// SCENE 2: 카일런의 은밀한 취미
+// ========================================
+== SCENE_2 ==
+# turn: 2
+# top_desc: 공작성 정원 / 낮
+# bg: BgRofanGarden
+# bgm: BgmRofanHappy
+
+점심 식사 후 소화를 시키기 위해 정원을 산책하는 길이었다.
+그때, 화려한 제복을 입은 카일런이 정원 한쪽에서 나타났다.
+그 역시 산책을 하고 있는 중이었던 것인지 예상하지 못한 만남에 놀란 표정을 지었다.
+
+# spine: Kylen_default_Spine_01
+# pose: neutral_01
+카일런: 날이 추운데. 산책 중인 건가?
+
+{Name}: 밥을 많이 먹었더니 소화가 되지 않아서요.
+{Name}: 시원한 바람도 쐬고 싶고...
+
+{Name}: <i>[그와 단둘이 있는 상황은 언제나 어색했다. 하지만 이제 전처럼 불편하진 않았다.]</i>
+
+카일런: 괜찮으면 같이 걸을까?
+
+{Name}: 가, 같이 걷자고요?
+
+카일런은 내 대답도 듣지 않고 먼저 앞서 걷기 시작했다.
+잠시 고민하던 난 그의 뒤를 종종 걸음으로 뒤따랐고, 카일런이 내 걸음에 보폭을 맞춰주는 것으로 나란히 걷게 되었다.
+
+{Name}: 근데 손에 들고 있는 그 물건은 뭐예요?
+
+카일런: 망원경.
+
+# char_img: ImgTelescope
+{Name}: 망원경은 왜?
+
+# char_img:
+# spine: Kylen_default_Spine_01
+# pose: neutral_01
+카일런: 글쎄, 내 은밀한 취미랄까?
+
+{Name}: 망원경이 은밀한 취미라고요?
+
+# turn_last: 2
+
+* [설마 그 망원경으로 제 방을 엿보는 건 아니겠죠?]
+    # pose: smile_01
+    카일런은 내 대답이 웃긴지 작은 웃음을 터트렸다.
+    {Name}: <i>[그의 웃음을 처음보는 나는 순간적으로 벙찌고 말았다.]</i>
+    -> SCENE_2_INVITATION
+
+* [그 망원경으로 성벽이라도 감시하시는 거예요?]
+    # pose: smile_01
+    카일런은 내 대답이 웃긴지 작은 웃음을 터트렸다.
+    {Name}: <i>[그의 웃음을 처음보는 나는 순간적으로 벙찌고 말았다.]</i>
+    -> SCENE_2_INVITATION
+
+== SCENE_2_INVITATION ==
+# pose: smile_01
+카일런: 당신이 그런 엉뚱한 상상도 할 줄 아는 사람인 줄 몰랐어.
+
+{Name}: 농담 아니라 진담인데요?
+{Name}: 그럼 그 망원경으로 대체 뭘하는데요?
+
+카일런: 이건 그냥 보조일 뿐이야.
+카일런: 내가 이걸 갖고 뭘 하는지 자세히 알고 싶어?
+
+카일런은 도발적인 웃음을 흘리며 물어왔다.
+나는 자존심이 상했지만 궁금증을 못 참고 고개를 끄덕였다.
+
+# pose: neutral_01
+카일런: 그럼 내일 밤 이곳에서 다시 만나.
+카일런: 아주 자세히 알려줄 테니까.
+
+{Name}: <i>[내일은 시온 황자가 만나자고 한 날이기도 했다.]</i>
+카일런은 이번에도 내 대답은 듣지 않은 채 앞서가기 시작했다.
+나 역시 이번에는 대답을 아끼며 그의 뒤를 따를 뿐이었다.
+
+-> SCENE_3
+
+// ========================================
+// SCENE 3: 악몽과 결심
+// ========================================
+== SCENE_3 ==
+# turn: 3
+# top_desc: 엘레나의 방 / 밤
+# bg: BgRofanPrincessRoomNight
+# bgm: BgmRofanEnjoy
+
+카일런과의 산책을 마치고 맞이한 밤.
+마리는 내 머리에 향유를 발라 손질해주며 물었다.
+
+# char_img: ImgMariLaugh
+마리: 부인, 마음은 정하셨어요?
+
+{Name}: 마음이라니?
+
+마리: 공작님과 황자 전하가 동시에 데이트 신청을 하셨잖아요!
+마리: 내일은 누구랑 데이트를 하실 건가요?
+
+# turn_last: 3
+
+* [시온 황자를 만날까 생각 중이야.]
+    ~ RegressionProfileSion += 5
+    # char_img: ImgMariLaugh
+    마리: 저도 공작님보다는 시온 황자님이 훨씬 좋아요!
+    마리: 이유가 어찌 되었든 정부를 들인 일은 절대로 용서 못한다구요!
+    -> SCENE_3_NIGHTMARE
+
+* [공작의 취미가 뭔지 너무 궁금해.]
+    ~ RegressionProfileKylen += 5
+    # char_img: ImgMariSurprise
+    마리: 공작님께 취미가 있을 거란 생각은 못했어요.
+    마리: 나중에 저한테도 살짝 귀띔해 주실거죠?
+    -> SCENE_3_NIGHTMARE
+
+* [내일 일은 내일 생각하고 싶어.]
+    ~ RegressionProfileRaven += 5
+    # char_img: ImgMariNeutral
+    마리: 저는 개인적으로 황자님을 추천해요.
+    마리: 바람둥이 기질이 조금 마음에 걸리긴 하지만...
+    마리: 그래도 부인을 향한 마음은 진심이신 것 같거든요.
+    -> SCENE_3_NIGHTMARE
+
+== SCENE_3_NIGHTMARE ==
+머리 손질을 마친 마리는 불을 끄곤 방을 나갔다.
+나는 얼마 지나지 않아 잠에 들었고, 곧 악몽에 시달리기 시작했다.
+
+# char_img: ImgForestNight
+# bgm: BgmRofanDown
+# sfx: SoundAmbientHorror
+나는 내가 독살당한 숲을 끝 없이 달리고 있었다.
+목구멍이 타들어 가는 듯한 고통과 함께 숨이 막혀왔고...
+
+# char_img: ImgCarriagePotion
+독이 든 유리병의 이미지는 내 앞에서 절대 사라지지 않고 있었다.
+나는 죽음으로부터 영원히 도망칠 수 없었다.
+
+# char_img:
+# sfx: SoundStartle
+나는 온몸이 식은땀에 젖은 채 악몽에서 깨어났다.
+
+{Name}: <i>[그리고 깨달았다. 독살범을 찾기 전까지 내 운명은 변하지 않는다는 것을 말이다.]</i>
+
+-> SCENE_4
+
+// ========================================
+// SCENE 4: 탐색
+// ========================================
+== SCENE_4 ==
+# turn: 4
+# top_desc: 엘레나의 방 / 아침
+# bg: BgRofanPrincessRoom
+# bgm: BgmRofanDynamic
+
+뜬 눈으로 밤을 새우고 맞이한 아침.
+나는 시중을 들러 온 마리를 보자마자 말했다.
+
+{Name}: 마리. 카일런 공작과 황자 전하께 오늘 데이트 신청은 거절한다고 전해줄래?
+
+# char_img: ImgMariSurprise
+마리: 네? 뭐라고요?
+
+마리는 머리 위로 폭탄이라도 터진 것 같은 황당한 표정을 지었다.
+
+{Name}: 난 오늘부터 아주 중요한 일을 해야해.
+{Name}: 남자들에게 휘둘릴 시간 같은 건 없어.
+
+{Name}: <i>[내가 독살 당했던 날이 오기 전까지 반드시 독살범을 찾아야 했다. 겨우 사랑 놀음이나 하자고 되살아난 것이 아니니까.]</i>
+
+마리: 부인, 정말이에요?
+마리: 두 분을 만나는 것보다 중요한 일이 대체 뭐예요?
+
+{Name}: <i>[마리에게 설명해봤자 믿어주지 않을 게 분명했다. 나는 단호한 표정으로 대답을 대신했고, 마리는 더 이상 묻지 않았다.]</i>
+
+{Name}: 그리고 너한테 물어보고 싶은 게 있어.
+{Name}: 이 공작성에서 사람들이 발 길이 닿지 않는 장소가 있을까?
+{Name}: 베로니카 대공비나 리아가 은밀하게 찾는 장소 같은 거 말이야.
+
+{Name}: <i>[베로니카 대공비와 리아는 나를 독살했을지도 모르는 유력 용의자들이었다. 일단은 이 두 사람의 동선을 파악하는 게 중요했다.]</i>
+
+# char_img: ImgMariNeutral
+마리: 대공비 마님과 리아 아가씨요?
+
+마리는 잠시 고민하더니 떠오르는 장소 몇 개를 늘어놓았다.
+
+# bgm: BgmRofanAngry
+마리: 일단은 공작성의 지하예요.
+
+{Name}: 이 성의 지하?
+
+# char_img: ImgInfoCellar
+마리: 오래 전 큰 홍수가 있었을 때 침수된 이후로는 사용되지 않고 있어요.
+마리: 사용인들 사이의 소문으로는 리아 아가씨가 이곳에 자주 드나든다고 해요.
+
+# char_img: ImgMariNeutral
+마리: 그리고 두 번째 장소는 공작성의 옥탑이에요!
+
+{Name}: 옥탑?
+
+# char_img: ImgInfoRooftop
+마리: 과거 감옥으로 사용되었던 장소인데 지금은 아무도 출입하지 않는다고 해요.
+마리: 사람들이 많이 죽어나간 장소라 아무래도...
+마리: 아, 그리고 대공비 마님이 이곳에 출입하는 걸 본 사람이 있어요!
+
+{Name}: 베로니카 대공비가?
+
+# char_img: ImgMariNeutral
+마리: 네! 그리고 마지막 장소는 3층 끝방이에요.
+
+# char_img: ImgInfoRoom
+{Name}: 그 방에 대해서는 나도 들은 적이 있어.
+{Name}: 카스텔로 가문의 초대 가주가 그곳에서 자살 한 후로 문이 열리지 않는다고...
+
+마리: 맞아요. 지금까지 수많은 방법을 동원해 문을 열려고 했지만 모두 실패했어요.
+마리: 그래서 사람들은 그곳을 '공작성의 저주'라고 부르기도 해요.
+
+세 곳 모두 두려움부터 덜컥 들 정도로 쉽게 접근할 수 없는 장소임이 분명했다.
+하지만 한 번 죽었다 되살아난 내게 망설임 따윈 없었다.
+난 오늘 밤 세 개의 장소 중 한 곳에 가보기로 마음 먹었다.
+
+{Name}: <i>[그런데 어디로 가는 게 좋을까?]</i>
+
+# turn_last: 4
+
+* [나는 공작성의 지하로 가기로 마음 먹었다.]
+    -> SCENE_5
+* [나는 공작성의 옥탑으로 가기로 마음 먹었다.]
+    -> SCENE_6
+* [나는 3층의 끝 방으로 가기로 마음 먹었다.]
+    -> SCENE_7
+
+// ========================================
+// SCENE 5: 공작성의 지하
+// ========================================
+== SCENE_5 ==
+# turn: 5
+# top_desc: 공작성 지하 / 밤
+# bg: BgRofanCellar
+# bgm: BgmRofanAngry
+# sfx: SoundAmbientHorror
+
+작은 촛불에 의지한 채 도착한 성의 지하.
+여기서 리아가 범인이라는 단서를 찾을 수 있을까?
+더 깊은 곳으로 내려갈수록 공기는 습하고 차가워졌고 코를 지르는 악취에 숨을 쉬는 것도 힘들었다.
+
+그때, 소름끼치는 소리와 함께 등 뒤에서 무언가 빠르게 움직이는 게 보였다!
+
+# sfx: SoundAction
+나는 리아일지도 모른다는 생각에 두려움을 무릅쓰며 형체를 쫓아 달렸다.
+곧 형체를 따라 잡았고 얼굴을 확인하기 위해 촛불부터 들이밀었다.
+
+여자1: 고, 공작 부인!
+
+# char_img: ImgServantsShadow
+검은 형체의 정체는 다름 아닌 공작성의 하인과 하녀였다.
+두 사람은 아무래도 이곳에서 은밀한 상황을 연출하고 있었던 것 같았다.
+난 잠시 할 말을 잃었고, 그들은 붉어진 얼굴을 감싸쥐곤 도망치듯 공간을 벗어났다.
+
+# char_img:
+{Name}: 결국 아무것도 없는 건가?
+
+조금 더 살펴봤지만 리아에 대한 어떠한 단서도 찾을 수 없었다.
+난 잠시 고민하다가 다음 장소를 정했다.
+
+{Name}: 이번엔 3층 끝 방으로 가보자.`;
+
+function SortableBlockWrapper({
+  block,
+  index,
+  updateBlock,
+  addBlock,
+  removeBlock,
+  focusBlock,
+}: {
+  block: import("@/types/editor").ScriptBlock;
+  index: number;
+  updateBlock: (id: string, content: string, data?: Record<string, any>) => void;
+  addBlock: (index: number, type: import("@/types/editor").BlockType, content?: string) => string;
+  removeBlock: (id: string) => void;
+  focusBlock: (id: string) => void;
+}) {
+  const focusBlockId = useEditorStore((s) => s.focusBlockId);
+  const isFocused = focusBlockId === block.id;
+  
+  const {
+    attributes,
+    listeners,
+    setNodeRef,
+    transform,
+    transition,
+    isDragging,
+  } = useSortable({ id: block.id });
+
+  const style = {
+    transform: CSS.Transform.toString(transform),
+    transition,
+  };
+
+  return (
+    <div
+      ref={setNodeRef}
+      style={style}
+      id={`block-${block.id}`}
+      data-block-id={block.id}
+      className={cn(
+        block.type === "text"
+          ? WRAPPER_CLASS_TEXT
+          : block.type === "choice"
+            ? WRAPPER_CLASS_CHOICE
+            : WRAPPER_CLASS_COMPACT,
+        isDragging && "opacity-50"
+      )}
+    >
+      <div className="relative flex items-start justify-center gap-0 opacity-0 transition-opacity group-hover:opacity-100 shrink-0 w-fit h-fit mt-1 mb-1">
+        <Button
+          type="button"
+          variant="ghost"
+          size="icon"
+          className="h-7 w-7 shrink-0 rounded p-0 text-slate-400 hover:bg-slate-100 hover:text-slate-600"
+          aria-label="Add block below"
+          onClick={(e) => {
+            e.preventDefault();
+            e.stopPropagation();
+            const newBlockId = addBlock(index, "text");
+            if (newBlockId) focusBlock(newBlockId);
+          }}
+        >
+          <Plus className="size-5" />
+        </Button>
+        <button
+          type="button"
+          className="cursor-grab touch-none rounded px-0 py-0 w-6 h-7 mx-0 flex items-center justify-center text-slate-400 hover:bg-slate-100 hover:text-slate-600 active:cursor-grabbing mt-0 mb-0"
+          aria-label="Drag to reorder"
+          {...attributes}
+          {...listeners}
+        >
+          <svg className="h-5 w-5" viewBox="0 0 24 24" fill="currentColor" aria-hidden>
+            <circle cx="8" cy="6" r="2" />
+            <circle cx="8" cy="12" r="2" />
+            <circle cx="8" cy="18" r="2" />
+            <circle cx="16" cy="6" r="2" />
+            <circle cx="16" cy="12" r="2" />
+            <circle cx="16" cy="18" r="2" />
+          </svg>
+        </button>
+      </div>
+      <span
+        className={cn(
+          "shrink-0 text-[13px] font-medium tabular-nums w-10 h-full flex items-center justify-start pt-0 mt-0",
+          block.type === "text" && "mt-2",
+          block.type === "choice" && "mt-[10px]",
+          isFocused ? "text-primary" : "text-[rgba(197,207,221,1)]"
+        )}
+      >
+        {String(index).padStart(2, "0")}
+      </span>
+      <ScriptBlock
+        block={block}
+        index={index}
+        updateBlock={updateBlock}
+        addBlock={addBlock}
+        removeBlock={removeBlock}
+        focusBlock={focusBlock}
+        hideIndex
+        rootClassName={
+          block.type === "text"
+            ? ROOT_CLASS_TEXT
+            : block.type === "choice"
+              ? ROOT_CLASS_CHOICE
+              : ROOT_CLASS_COMPACT
+        }
+      />
+    </div>
+  );
+}
+
+export default function EditorBody() {
+  const blocks = useEditorStore((s) => s.blocks);
+  const setBlocks = useEditorStore((s) => s.setBlocks);
+  const setFocusBlockId = useEditorStore((s) => s.setFocusBlockId);
+  const undo = useEditorStore((s) => s.undo);
+  const redo = useEditorStore((s) => s.redo);
+  const addBlock = useEditorStore((s) => s.addBlock);
+  const updateBlock = useEditorStore((s) => s.updateBlock);
+  const removeBlock = useEditorStore((s) => s.removeBlock);
+  const reorderBlocks = useEditorStore((s) => s.reorderBlocks);
+
+  useEffect(() => {
+    const parsed = parseScriptToBlocks(INITIAL_SCRIPT);
+    setBlocks(parsed.length > 0 ? parsed : [createBlock("text", "")]);
+  }, [setBlocks]);
+
+  // Cmd+Z / Ctrl+Z: undo, Shift+Cmd+Z / Ctrl+Y: redo
+  useEffect(() => {
+    const handleKeyDown = (e: KeyboardEvent) => {
+      const isMod = e.metaKey || e.ctrlKey;
+      if (!isMod || e.key !== "z") {
+        if (!isMod || e.key !== "y") return;
+        // Ctrl+Y = redo (Windows/Linux)
+        e.preventDefault();
+        redo();
+        return;
+      }
+      if (e.shiftKey) {
+        e.preventDefault();
+        redo();
+      } else {
+        e.preventDefault();
+        undo();
+      }
+    };
+    document.addEventListener("keydown", handleKeyDown, true);
+    return () => document.removeEventListener("keydown", handleKeyDown, true);
+  }, [undo, redo]);
+
+  const focusBlock = useCallback(
+    (id: string) => {
+      setFocusBlockId(id);
+      // Focus next/previous block: run after state + DOM update so the target block is in the tree.
+      // Double rAF ensures React has committed and focus reliably moves (fixes arrow-key focus stuck on previous block).
+      requestAnimationFrame(() => {
+        requestAnimationFrame(() => {
+          const el = document.getElementById(`block-${id}`);
+          if (!el) return;
+
+          // 방향키 이동 시 포커스된 블록이 에디터와 미리보기 화면에 노출되도록 스크롤
+          const editorContainer = el.closest(".overflow-y-auto");
+          if (editorContainer) {
+            const containerRect = editorContainer.getBoundingClientRect();
+            const elementRect = el.getBoundingClientRect();
+            const scrollOffset = editorContainer.scrollTop + elementRect.top - containerRect.top - 100;
+            editorContainer.scrollTo({ top: Math.max(0, scrollOffset), behavior: "smooth" });
+          }
+
+          // Priority: textarea > input > button (for picker) > div with tabIndex (root).
+          // Exclude toolbar buttons (Add, Drag, Delete) so we focus the block's real input, not the row toolbar.
+          const textarea = el.querySelector("textarea");
+          const input = el.querySelector("input");
+          const pickerButton = el.querySelector(
+            "button[type='button']:not([aria-label='Delete block']):not([aria-label='Drag to reorder']):not([aria-label='Add block below'])"
+          );
+          // For root div with tabIndex, find div elements (not button) with tabIndex="0"
+          const rootDivs = Array.from(el.querySelectorAll<HTMLElement>("div[tabindex='0']"));
+          const rootDiv = rootDivs.find(div =>
+            div !== el &&
+            !div.querySelector("textarea, input") &&
+            div.classList.contains("group")
+          ) ?? rootDivs[0];
+
+          const focusable = textarea ?? input ?? pickerButton ?? rootDiv;
+
+          if (focusable && typeof (focusable as HTMLElement).focus === "function") {
+            (focusable as HTMLElement).focus();
+            if (textarea && textarea instanceof HTMLTextAreaElement) {
+              const textLength = textarea.value.length;
+              textarea.setSelectionRange(textLength, textLength);
+            }
+            if (input && input instanceof HTMLInputElement) {
+              const textLength = input.value.length;
+              input.setSelectionRange(textLength, textLength);
+            }
+            setTimeout(() => {
+              const focusEvent = new FocusEvent("focus", { bubbles: true, cancelable: true });
+              focusable.dispatchEvent(focusEvent);
+            }, 0);
+          }
+        });
+      });
+    },
+    [setFocusBlockId]
+  );
+
+  const handleBackgroundClick = useCallback(
+    (e: React.MouseEvent<HTMLDivElement>) => {
+      if (e.target !== e.currentTarget) return;
+      const lastBlock = blocks[blocks.length - 1];
+      if (lastBlock?.type === "text" && !lastBlock.content.trim()) {
+        focusBlock(lastBlock.id);
+      } else {
+        const newId = addBlock(blocks.length, "text");
+        focusBlock(newId);
+      }
+    },
+    [blocks, addBlock, focusBlock]
+  );
+
+  const handleDragEnd = useCallback(
+    (event: DragEndEvent) => {
+      const { active, over } = event;
+      if (over && active.id !== over.id) {
+        const oldIndex = blocks.findIndex((b) => b.id === active.id);
+        const newIndex = blocks.findIndex((b) => b.id === over.id);
+        if (oldIndex >= 0 && newIndex >= 0) reorderBlocks(oldIndex, newIndex);
+      }
+    },
+    [blocks, reorderBlocks]
+  );
+
+  const sensors = useSensors(
+    useSensor(PointerSensor, { activationConstraint: { distance: 8 } })
+  );
+
+  return (
+    <div className="min-h-full w-full cursor-text">
+      <DndContext
+        sensors={sensors}
+        collisionDetection={closestCenter}
+        onDragEnd={handleDragEnd}
+      >
+        <SortableContext
+          items={blocks.map((b) => b.id)}
+          strategy={verticalListSortingStrategy}
+        >
+          <div
+            className="ml-2 mr-5 flex min-h-full max-w-[1400px] flex-col gap-2"
+            onClick={handleBackgroundClick}
+          >
+            {blocks.map((block, i) => {
+              const isScene = block.type === "scene";
+              const prevBlock = i > 0 ? blocks[i - 1] : null;
+              const showDivider = isScene && prevBlock && prevBlock.type !== "scene";
+
+              return (
+                <div key={block.id}>
+                  {showDivider && (
+                    <div className="flex items-center gap-2 px-[48px] py-10">
+                      <div className="flex-1 border-t border-slate-200"></div>
+                    </div>
+                  )}
+                  <SortableBlockWrapper
+                    block={block}
+                    index={i + 1}
+                    updateBlock={updateBlock}
+                    addBlock={addBlock}
+                    removeBlock={removeBlock}
+                    focusBlock={focusBlock}
+                  />
+                </div>
+              );
+            })}
+          </div>
+        </SortableContext>
+      </DndContext>
+    </div>
+  );
+}

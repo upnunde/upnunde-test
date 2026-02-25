@@ -1,0 +1,49 @@
+.editorCanvas {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  overflow-y: auto;
+  overflow-x: hidden;
+  background: var(--background-20, rgba(248, 248, 252, 1));
+  min-width: 0;
+}
+
+.blocksList {
+  display: flex;
+  flex-direction: column;
+  padding: var(--spacing-24, 24px);
+  max-width: 800px;
+  width: 100%;
+  margin: 0 auto;
+  gap: var(--spacing-4, 4px);
+}
+
+.emptyState {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  min-height: 200px;
+}
+
+.emptyBlock {
+  width: 100%;
+  max-width: 800px;
+}
+
+.emptyTextarea {
+  width: 100%;
+  min-height: 40px;
+  padding: var(--spacing-8, 8px) var(--spacing-12, 12px);
+  border: none;
+  outline: none;
+  background: transparent;
+  font: var(--body-2-400, 400 15px/22px var(--font-family));
+  color: var(--on-surface-10, rgba(43, 43, 43, 1));
+  resize: none;
+  line-height: 22px;
+}
+
+.emptyTextarea::placeholder {
+  color: var(--on-surface-30, rgba(145, 145, 148, 1));
+}

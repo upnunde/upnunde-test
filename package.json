@@ -1,0 +1,24 @@
+{
+  "name": "testmode",
+  "version": "1.0.0",
+  "description": "이 리포지토리는 **Cursor ↔ Figma MCP 서버**, **Figma 플러그인**, 그리고 **Next.js 기반 웹 프론트엔드**를 함께 담고 있는 모노레포입니다.",
+  "license": "ISC",
+  "author": "",
+  "type": "commonjs",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "dependencies": {
+    "@dnd-kit/core": "^6.3.1",
+    "@dnd-kit/sortable": "^10.0.0",
+    "@dnd-kit/utilities": "^3.2.2",
+    "clsx": "^2.1.1",
+    "lucide-react": "^0.563.0",
+    "pnpm": "^10.28.2",
+    "react-textarea-autosize": "^8.5.9",
+    "tailwind-merge": "^3.4.0",
+    "zustand": "^5.0.11"
+  },
+  "keywords": []
+}

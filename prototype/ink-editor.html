@@ -1,0 +1,2913 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>리노벨 스튜디오 - Scene Editor</title>
+    <!-- Pretendard JP Font -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/variable/pretendardvariable-jp.min.css">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        :root {
+            /* ===== 리노벨 디자인 시스템 토큰 ===== */
+            
+            /* Primary */
+            --primary: rgba(246, 66, 212, 1);           /* pink 70 */
+            --primary-container: rgba(254, 227, 249, 1); /* pink 20 */
+            --on-primary: rgba(255, 255, 255, 1);
+            --on-primary-container: rgba(246, 66, 212, 1);
+            
+            /* Secondary */
+            --secondary: rgba(240, 240, 245, 1);        /* grayscale 20 */
+            --secondary-container: rgba(52, 52, 54, 1); /* grayscale 110 */
+            --on-secondary: rgba(82, 82, 84, 1);        /* grayscale 100 */
+            --on-secondary-container: rgba(255, 255, 255, 1);
+            
+            /* Surface */
+            --surface-10: rgba(255, 255, 255, 1);       /* white */
+            --surface-20: rgba(248, 248, 252, 1);       /* grayscale 10 */
+            --surface-inverse-10: rgba(43, 43, 43, 1);  /* grayscale 120 */
+            --surface-inverse-20: rgba(82, 82, 84, 1);  /* grayscale 100 */
+            --surface-disabled: rgba(0, 0, 0, 0.04);
+            
+            /* On Surface (Text) */
+            --on-surface-10: rgba(43, 43, 43, 1);       /* grayscale 120 - primary text */
+            --on-surface-20: rgba(82, 82, 84, 1);       /* grayscale 100 - secondary text */
+            --on-surface-30: rgba(145, 145, 148, 1);    /* grayscale 80 - muted text */
+            --on-surface-disabled: rgba(0, 0, 0, 0.22);
+            --on-surface-inverse: rgba(255, 255, 255, 1);
+            
+            /* Background */
+            --background-10: rgba(255, 255, 255, 1);
+            --background-20: rgba(248, 248, 252, 1);
+            
+            /* Border */
+            --border-10: rgba(0, 0, 0, 0.07);
+            --border-20: rgba(0, 0, 0, 0.13);
+            --border-30: rgba(0, 0, 0, 0.22);
+            --border-strong: rgba(43, 43, 43, 1);
+            --border-inverse: rgba(255, 255, 255, 1);
+            
+            /* Divider */
+            --divider-10: rgba(0, 0, 0, 0.09);
+            --divider-20: rgba(0, 0, 0, 0.22);
+            
+            /* Dim (Overlay) */
+            --dim-10: rgba(0, 0, 0, 0.28);
+            --dim-20: rgba(0, 0, 0, 0.53);
+            --dim-30: rgba(0, 0, 0, 0.67);
+            
+            /* Error */
+            --error: rgba(236, 50, 50, 1);              /* red 70 */
+            --error-container: rgba(252, 224, 224, 1);  /* red 20 */
+            --on-error: rgba(255, 255, 255, 1);
+            --on-error-container: rgba(236, 50, 50, 1);
+            
+            /* Spacing */
+            --spacing-1: 1px;
+            --spacing-2: 2px;
+            --spacing-4: 4px;
+            --spacing-8: 8px;
+            --spacing-12: 12px;
+            --spacing-16: 16px;
+            --spacing-20: 20px;
+            --spacing-24: 24px;
+            --spacing-28: 28px;
+            --spacing-32: 32px;
+            --spacing-36: 36px;
+            --spacing-40: 40px;
+            --spacing-44: 44px;
+            --spacing-48: 48px;
+            --spacing-52: 52px;
+            --spacing-56: 56px;
+            --spacing-60: 60px;
+            --spacing-64: 64px;
+            --spacing-68: 68px;
+            --spacing-72: 72px;
+            --spacing-80: 80px;
+            
+            /* Radius */
+            --radius-2: 2px;
+            --radius-4: 4px;
+            --radius-6: 6px;
+            --radius-8: 8px;
+            --radius-12: 12px;
+            --radius-16: 16px;
+            --radius-20: 20px;
+            --radius-circle: 999px;
+            
+            /* ===== Typography (Pretendard JP) ===== */
+            --font-family: 'Pretendard JP Variable', 'Pretendard JP', -apple-system, BlinkMacSystemFont, sans-serif;
+            
+            /* Heading */
+            --heading-1-700: 700 32px/38px var(--font-family);
+            --heading-2-700: 700 24px/34px var(--font-family);
+            --heading-2-500: 500 24px/34px var(--font-family);
+            --heading-3-700: 700 22px/30px var(--font-family);
+            --heading-3-500: 500 22px/30px var(--font-family);
+            --heading-4-700: 700 20px/28px var(--font-family);
+            --heading-4-500: 500 20px/28px var(--font-family);
+            --heading-5-700: 700 18px/26px var(--font-family);
+            --heading-5-500: 500 18px/26px var(--font-family);
+            
+            /* Body */
+            --body-1-700: 700 16px/24px var(--font-family);
+            --body-1-500: 500 16px/24px var(--font-family);
+            --body-1-400: 400 16px/24px var(--font-family);
+            --body-2-700: 700 15px/22px var(--font-family);
+            --body-2-500: 500 15px/22px var(--font-family);
+            --body-2-400: 400 15px/22px var(--font-family);
+            --body-3-700: 700 14px/20px var(--font-family);
+            --body-3-500: 500 14px/20px var(--font-family);
+            --body-3-400: 400 14px/20px var(--font-family);
+            --body-4-700: 700 13px/18px var(--font-family);
+            --body-4-500: 500 13px/18px var(--font-family);
+            --body-4-400: 400 13px/18px var(--font-family);
+            
+            /* Caption */
+            --caption-1-700: 700 12px/16px var(--font-family);
+            --caption-1-500: 500 12px/16px var(--font-family);
+            --caption-1-400: 400 12px/16px var(--font-family);
+            --caption-2-700: 700 11px/14px var(--font-family);
+            --caption-2-500: 500 11px/14px var(--font-family);
+            --caption-2-400: 400 11px/14px var(--font-family);
+            
+            /* ===== 기존 호환용 별칭 ===== */
+            --primary-light: var(--primary-container);
+            --text-primary: var(--on-surface-10);
+            --text-secondary: var(--on-surface-20);
+            --text-muted: var(--on-surface-30);
+            --bg-page: var(--background-20);
+            --bg-white: var(--surface-10);
+            --border: var(--border-10);
+            --border-light: var(--divider-10);
+        }
+
+        body {
+            font-family: 'Pretendard JP Variable', 'Pretendard JP', -apple-system, BlinkMacSystemFont, sans-serif;
+            background: var(--bg-page);
+            color: var(--text-primary);
+            font: var(--body-2-400);
+        }
+
+        /* 완전히 제거: 헤더 및 텍스트 이펙트 툴바 */
+        header.header,
+        .header,
+        .header-row-1,
+        .header-row-2,
+        .text-effect-toolbar,
+        #textEffectToolbar {
+            display: none !important;
+            visibility: hidden !important;
+            height: 0 !important;
+            width: 0 !important;
+            overflow: hidden !important;
+            position: absolute !important;
+            left: -9999px !important;
+        }
+
+            color: var(--on-surface-30);
+            font-size: 16px;
+        }
+
+        .back-btn {
+            width: 28px;
+            height: 28px;
+            border: 1px solid var(--border-20);
+            border-radius: var(--radius-circle);
+            background: transparent;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: var(--on-surface-20);
+            transition: all 0.15s;
+            font-size: 14px;
+            font-weight: 300;
+        }
+
+        .back-btn:hover {
+            background: var(--surface-20);
+        }
+
+        .page-title {
+            font: var(--body-1-500);
+            color: var(--on-surface-10);
+        }
+
+        .header-right {
+            display: flex;
+            align-items: center;
+            gap: var(--spacing-12);
+        }
+
+        .btn {
+            padding: var(--spacing-8) var(--spacing-20);
+            border-radius: var(--radius-8);
+            font: var(--body-3-500);
+            cursor: pointer;
+            transition: all 0.15s;
+            border: none;
+        }
+
+        .btn-secondary {
+            background: var(--surface-10);
+            border: 1px solid var(--border-20);
+            color: var(--on-surface-20);
+        }
+
+        .btn-secondary:hover {
+            background: var(--surface-20);
+        }
+
+        .btn-primary {
+            background: var(--primary);
+            color: var(--on-primary);
+        }
+
+        .btn-primary:hover {
+            filter: brightness(0.9);
+        }
+
+        /* Main Layout */
+        .main {
+            display: flex;
+            min-height: 100vh;
+        }
+
+        .editor-container {
+            flex: 1;
+            padding: var(--spacing-32) var(--spacing-40);
+            display: flex;
+            justify-content: center;
+        }
+
+        .editor {
+            width: 100%;
+            max-width: 1400px;
+            min-width: 800px;
+        }
+
+        @media (max-width: 880px) {
+            .editor-container {
+                padding: 24px 20px;
+            }
+            .editor {
+                min-width: auto;
+            }
+        }
+
+        /* Scene Section */
+        .scene-section {
+            background: var(--surface-10);
+            border-radius: var(--radius-12);
+            padding: var(--spacing-32) var(--spacing-40);
+            margin-bottom: var(--spacing-24);
+        }
+
+        @media (max-width: 1000px) {
+            .scene-section {
+                padding: var(--spacing-24);
+            }
+        }
+
+        .scene-header {
+            margin-bottom: var(--spacing-24);
+        }
+
+        .scene-label {
+            font: var(--body-1-500);
+            color: var(--on-surface-30);
+            margin-bottom: var(--spacing-8);
+        }
+
+        .scene-title {
+            font: var(--heading-2-700);
+            color: var(--on-surface-10);
+        }
+
+        /* Line Block */
+        .line-block {
+            position: relative;
+            padding: var(--spacing-12) 0;
+            padding-left: var(--spacing-40);
+            border-radius: var(--radius-6);
+            transition: background 0.15s, border-color 0.15s;
+            border-left: 2px solid transparent;
+        }
+
+        .line-block:hover {
+            background: rgba(0, 0, 0, 0.02);
+        }
+
+        .line-block.active {
+            background: rgba(0, 0, 0, 0.03);
+            border-left-color: var(--border-30);
+        }
+
+        .line-block:hover .line-actions {
+            opacity: 1;
+        }
+
+        .line-block.menu-open {
+            z-index: 1000;
+        }
+
+        .line-text {
+            font: var(--body-2-500);
+            color: var(--on-surface-10);
+            cursor: text;
+        }
+
+        .line-text:focus {
+            outline: none;
+        }
+
+        /* Line Actions (좌측 + 버튼) */
+        .line-actions {
+            position: absolute;
+            left: var(--spacing-4);
+            top: var(--spacing-12);
+            opacity: 0;
+            transition: opacity 0.15s;
+            z-index: 1001;
+        }
+
+        .add-menu-trigger {
+            width: 28px;
+            height: 28px;
+            border-radius: var(--radius-6);
+            background: var(--surface-10);
+            border: 1px solid var(--border-10);
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: var(--on-surface-30);
+            font-size: 18px;
+            font-weight: 300;
+            transition: all 0.15s;
+        }
+
+        .add-menu-trigger:hover {
+            border-color: var(--primary);
+            color: var(--primary);
+            background: var(--primary-container);
+        }
+
+        .add-menu-trigger.active {
+            border-color: var(--primary);
+            color: var(--primary);
+            background: var(--primary-container);
+        }
+
+        /* Add Menu Dropdown - 수정됨 */
+        .add-menu {
+            position: absolute;
+            left: 0;
+            top: 32px;
+            background: var(--surface-10);
+            border: 1px solid var(--border-10);
+            border-radius: var(--radius-12);
+            padding: var(--spacing-8);
+            min-width: 160px;
+            z-index: 9999;
+            display: none;
+        }
+
+        .add-menu.show {
+            display: block;
+        }
+
+        .add-menu-item {
+            display: flex;
+            align-items: center;
+            gap: var(--spacing-12);
+            padding: var(--spacing-12) var(--spacing-16);
+            border-radius: var(--radius-8);
+            cursor: pointer;
+            font-size: 14px;
+            color: var(--on-surface-20);
+            transition: all 0.1s;
+        }
+
+        .add-menu-item:hover {
+            background: var(--surface-20);
+            color: var(--on-surface-10);
+        }
+
+        .add-menu-item.disabled {
+            opacity: 0.4;
+            cursor: not-allowed;
+            pointer-events: none;
+        }
+
+        .add-menu-item.disabled:hover {
+            background: transparent;
+            color: var(--on-surface-30);
+        }
+
+        .add-menu-item .icon {
+            width: var(--spacing-20);
+            height: var(--spacing-20);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 16px;
+        }
+
+        .add-menu-item .check {
+            margin-left: auto;
+            color: var(--on-surface-30);
+            font-size: 14px;
+        }
+
+        /* Resource Tags - 세로 정렬, 색상 통일 */
+        .line-resources {
+            display: flex;
+            flex-direction: column;
+            gap: var(--spacing-8);
+            margin-top: var(--spacing-12);
+            padding-left: 0;
+        }
+
+        .resource-row {
+            display: flex;
+            align-items: center;
+            gap: var(--spacing-8);
+        }
+
+        .resource-label {
+            font: var(--body-4-500);
+            color: var(--on-surface-20);
+            min-width: var(--spacing-40);
+        }
+
+        /* 카테고리 박스 - W:Hug, H:36, gap:4, padding: 좌12 우4 상하0 */
+        .resource-tag {
+            display: inline-flex;
+            align-items: center;
+            gap: var(--spacing-4);
+            padding: 0 var(--spacing-4) 0 var(--spacing-12);
+            border-radius: var(--radius-8);
+            font: var(--body-4-500);
+            cursor: pointer;
+            transition: all 0.15s;
+            position: relative;
+            background: transparent;
+            border: 1px solid var(--border-20);
+            color: var(--on-surface-20);
+            height: 36px;
+            box-sizing: border-box;
+        }
+
+        .resource-tag:hover {
+            background: var(--surface-disabled);
+            border-color: var(--border-30);
+        }
+
+        /* 썸네일 24x24 - 원형 */
+        .resource-tag .thumbnail {
+            width: 24px;
+            height: 24px;
+            border-radius: var(--radius-circle);
+            object-fit: cover;
+            flex-shrink: 0;
+        }
+
+        .resource-tag .thumbnail-placeholder {
+            width: 24px;
+            height: 24px;
+            border-radius: var(--radius-circle);
+            background: linear-gradient(135deg, #FFB6C1 0%, #DDA0DD 100%);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 12px;
+            flex-shrink: 0;
+        }
+
+        .resource-tag .name {
+            white-space: nowrap;
+        }
+
+        /* 닫기 버튼 - 호버시에만 노출되고 박스 확장 */
+        .resource-tag .remove {
+            width: 0;
+            height: 24px;
+            border-radius: var(--radius-4);
+            background: transparent;
+            border: none;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 14px;
+            opacity: 0;
+            overflow: hidden;
+            transition: all 0.15s;
+            color: var(--on-surface-30);
+            cursor: pointer;
+            flex-shrink: 0;
+            padding: 0;
+            margin: 0;
+        }
+
+        .resource-tag:hover .remove {
+            opacity: 1;
+            width: 20px;
+            margin-left: var(--spacing-2);
+        }
+
+        .resource-tag .remove:hover {
+            color: var(--error);
+        }
+
+        /* 표정 드롭다운 - W:Hug, H:36, gap:4, padding: 좌12 우4 상하0 (카테고리 박스와 동일) */
+        .emotion-select {
+            display: inline-flex;
+            align-items: center;
+            gap: var(--spacing-4);
+            padding: 0 var(--spacing-4) 0 var(--spacing-12);
+            border-radius: var(--radius-8);
+            font: var(--body-4-500);
+            border: 1px solid var(--border-20);
+            background: transparent;
+            color: var(--on-surface-20);
+            cursor: pointer;
+            outline: none;
+            height: 36px;
+            margin-left: var(--spacing-4);
+            -webkit-appearance: none;
+            -moz-appearance: none;
+            appearance: none;
+            background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16' viewBox='0 0 24 24' fill='none' stroke='%23525254' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpolyline points='6 9 12 15 18 9'%3E%3C/polyline%3E%3C/svg%3E");
+            background-repeat: no-repeat;
+            background-position: right 8px center;
+            padding-right: 32px;
+        }
+
+        .emotion-select:hover {
+            border-color: var(--border-30);
+            background-color: var(--surface-disabled);
+        }
+
+        .emotion-select:focus {
+            border-color: var(--primary);
+        }
+
+        /* Choice Block */
+        .choice-block {
+            background: var(--surface-10);
+            border: 1px solid var(--border-10);
+            border-radius: var(--radius-8);
+            margin: var(--spacing-16) 0 0 0;
+            overflow: hidden;
+        }
+
+        .choice-header {
+            background: transparent;
+            padding: var(--spacing-12) var(--spacing-16);
+            display: grid;
+            grid-template-columns: 60px 1fr 140px 120px 32px;
+            gap: var(--spacing-16);
+            font: var(--body-4-500);
+            color: var(--on-surface-20);
+            border-bottom: 1px solid var(--border-10);
+            align-items: center;
+        }
+
+        .choice-header span:nth-child(3),
+        .choice-header span:nth-child(4),
+        .choice-header div:nth-child(3),
+        .choice-header div:nth-child(4) {
+            text-align: left;
+        }
+
+        .choice-row {
+            display: grid;
+            grid-template-columns: 60px 1fr 140px 120px 32px;
+            gap: var(--spacing-16);
+            padding: var(--spacing-12) var(--spacing-16);
+            align-items: center;
+            border-bottom: 1px solid var(--divider-10);
+        }
+
+        @media (max-width: 900px) {
+            .choice-header {
+                grid-template-columns: 50px 1fr 100px 80px 28px;
+                gap: 12px;
+                font-size: 11px;
+            }
+            .choice-row {
+                grid-template-columns: 50px 1fr 100px 80px 28px;
+                gap: 12px;
+            }
+            .choice-select {
+                font-size: 13px;
+                min-width: 160px;
+                padding-right: 28px;
+            }
+        }
+
+        .choice-row:last-child {
+            border-bottom: none;
+        }
+
+        .choice-label {
+            font: var(--body-4-500);
+            color: var(--on-surface-20);
+        }
+
+        .choice-content {
+            font: var(--body-4-400);
+            color: var(--on-surface-20);
+        }
+
+        .choice-content.ai-mode {
+            color: var(--primary);
+            font-weight: 500;
+        }
+
+        /* Scene 전환 드롭다운 - 카테고리 박스와 동일 (H:36, padding: 좌12 우4) */
+        .choice-select {
+            display: inline-flex;
+            align-items: center;
+            gap: var(--spacing-4);
+            padding: 0 var(--spacing-4) 0 var(--spacing-12);
+            border-radius: var(--radius-8);
+            font: var(--body-4-500);
+            border: 1px solid var(--border-20);
+            background: transparent;
+            color: var(--on-surface-20);
+            cursor: pointer;
+            outline: none;
+            height: 36px;
+            -webkit-appearance: none;
+            -moz-appearance: none;
+            appearance: none;
+            background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16' viewBox='0 0 24 24' fill='none' stroke='%23525254' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpolyline points='6 9 12 15 18 9'%3E%3C/polyline%3E%3C/svg%3E");
+            background-repeat: no-repeat;
+            background-position: right 8px center;
+            padding-right: 32px;
+            width: 160px;
+            min-width: 160px;
+            max-width: 160px;
+            overflow: hidden;
+            white-space: nowrap;
+            text-overflow: ellipsis;
+        }
+
+        .choice-select:hover {
+            border-color: var(--border-30);
+            background-color: var(--surface-disabled);
+        }
+
+        .choice-select:focus {
+            border-color: var(--primary);
+        }
+
+        .choice-prompt {
+            font-size: 12px;
+            color: var(--on-surface-30);
+        }
+
+        /* Toggle Switch */
+        .toggle {
+            width: 40px;
+            height: 22px;
+            background: var(--on-surface-30);
+            border-radius: var(--radius-circle);
+            position: relative;
+            cursor: pointer;
+            transition: background 0.2s;
+            justify-self: center;
+        }
+
+        .toggle.active {
+            background: var(--primary);
+        }
+
+        .toggle::after {
+            content: '';
+            position: absolute;
+            width: 18px;
+            height: 18px;
+            background: white;
+            border-radius: 50%;
+            top: 2px;
+            left: 2px;
+            transition: transform 0.2s;
+        }
+
+        .toggle.active::after {
+            transform: translateX(18px);
+        }
+
+        .add-choice {
+            padding: var(--spacing-12) var(--spacing-16);
+            font-size: 13px;
+            color: var(--on-surface-30);
+            cursor: pointer;
+            transition: color 0.15s;
+        }
+
+        .add-choice:hover {
+            color: var(--primary);
+        }
+
+        /* New Choice Block Styles */
+        .choice-block-header {
+            display: none;
+        }
+
+        .choice-block-title {
+            display: none;
+        }
+
+        .choice-block-delete {
+            width: 28px;
+            height: 28px;
+            border: none;
+            background: transparent;
+            cursor: pointer;
+            border-radius: 4px;
+            font-size: 14px;
+            opacity: 0.5;
+            transition: all 0.15s;
+        }
+
+        .choice-block-delete:hover {
+            background: var(--error-container);
+            opacity: 1;
+        }
+
+        .choice-table {
+            width: 100%;
+        }
+
+        .choice-input {
+            width: 100%;
+            padding: var(--spacing-8) var(--spacing-12);
+            border: 1px solid var(--border-10);
+            border-radius: var(--radius-6);
+            font: var(--body-4-400);
+            color: var(--on-surface-20);
+            background: #ffffff; /* 강제 화이트 배경 */
+            outline: none;
+            transition: border-color 0.15s;
+        }
+
+        .choice-input:focus {
+            border-color: var(--primary);
+        }
+
+        .choice-prompt-input {
+            width: 100%;
+            padding: var(--spacing-8) var(--spacing-12);
+            border: 1px solid var(--border-10);
+            border-radius: var(--radius-4);
+            font-size: 12px;
+            outline: none;
+            color: var(--on-surface-30);
+        }
+
+        .choice-prompt-input:focus {
+            border-color: var(--primary);
+            color: var(--on-surface-10);
+        }
+
+        .choice-rows {
+            /* border removed - ai-choice-section has its own border */
+        }
+
+        .choice-row:hover {
+            background: rgba(0, 0, 0, 0.02);
+        }
+
+        .choice-row:hover .choice-row-delete {
+            opacity: 1;
+        }
+
+        .choice-row-delete {
+            width: 28px;
+            height: 28px;
+            border: none;
+            background: transparent;
+            color: var(--on-surface-30);
+            border-radius: var(--radius-4);
+            cursor: pointer;
+            font-size: 14px;
+            opacity: 0;
+            transition: all 0.15s;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            justify-self: center;
+        }
+
+        .choice-row-delete:hover {
+            background: var(--error-container);
+            color: var(--error);
+        }
+
+        /* AI Row - 별도 영역 */
+        .ai-choice-section {
+            border-top: 1px solid var(--border-10);
+            background: transparent;
+        }
+
+        .ai-choice-section .choice-row {
+            background: transparent;
+        }
+
+        .ai-choice-section .choice-row:hover {
+            background: rgba(0, 0, 0, 0.02);
+        }
+
+        .ai-mode-row {
+            background: transparent;
+        }
+
+        .add-choice-row {
+            padding: var(--spacing-12) var(--spacing-16);
+            font-size: 13px;
+            color: var(--on-surface-30);
+            cursor: pointer;
+            transition: all 0.15s;
+            border-top: 1px solid var(--divider-10);
+        }
+
+        .add-choice-row:hover {
+            color: var(--primary);
+            background: var(--primary-container);
+        }
+
+        /* Add Choice Menu */
+        .add-choice-wrapper {
+            position: relative;
+            border-top: 1px solid var(--divider-10);
+        }
+
+        .add-choice-btn {
+            width: 100%;
+            padding: var(--spacing-12) var(--spacing-16);
+            font: var(--body-4-400);
+            color: var(--on-surface-30);
+            background: transparent;
+            border: none;
+            cursor: pointer;
+            text-align: left;
+            transition: all 0.15s;
+        }
+
+        .add-choice-btn:hover {
+            color: var(--primary);
+            background: var(--primary-container);
+        }
+
+        .add-choice-menu {
+            position: absolute;
+            bottom: 100%;
+            left: var(--spacing-16);
+            background: var(--surface-10);
+            border: 1px solid var(--border-10);
+            border-radius: var(--radius-8);
+            padding: var(--spacing-8);
+            min-width: 160px;
+            display: none;
+            z-index: 100;
+        }
+
+        .add-choice-menu.show {
+            display: block;
+        }
+
+        .add-choice-menu-item {
+            display: flex;
+            align-items: center;
+            gap: var(--spacing-12);
+            padding: var(--spacing-12) var(--spacing-16);
+            border-radius: var(--radius-6);
+            cursor: pointer;
+            font-size: 13px;
+            color: var(--on-surface-20);
+            transition: all 0.1s;
+        }
+
+        .add-choice-menu-item:hover {
+            background: var(--surface-20);
+            color: var(--on-surface-10);
+        }
+
+        .add-choice-menu-item .icon {
+            font-size: 14px;
+        }
+
+        /* AI Row Style */
+        .choice-row.ai-row {
+            background: transparent;
+        }
+
+        .choice-row.ai-row .choice-label.ai-label {
+            color: var(--primary);
+            font-weight: 500;
+        }
+
+        /* Add Choice Menu Item Disabled */
+        .add-choice-menu-item.disabled {
+            opacity: 0.4;
+            cursor: not-allowed;
+            pointer-events: none;
+        }
+
+        /* Right Panel - Resource Selection */
+        .right-panel {
+            width: 300px;
+            background: var(--surface-10);
+            border-left: 1px solid var(--border-10);
+            padding: var(--spacing-24);
+            position: fixed;
+            right: 0;
+            top: 56px;
+            bottom: 0;
+            overflow-y: auto;
+            transform: translateX(100%);
+            transition: transform 0.25s ease;
+            z-index: 200;
+        }
+
+        .right-panel.show {
+            transform: translateX(0);
+        }
+
+        .panel-header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-bottom: var(--spacing-20);
+        }
+
+        .panel-title {
+            font-size: 15px;
+            font-weight: 600;
+        }
+
+        .panel-close {
+            width: 28px;
+            height: 28px;
+            border: none;
+            background: transparent;
+            cursor: pointer;
+            border-radius: var(--radius-4);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: var(--on-surface-30);
+            font-size: 20px;
+        }
+
+        .panel-close:hover {
+            background: var(--surface-20);
+        }
+
+        .resource-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            row-gap: var(--spacing-20);
+            column-gap: var(--spacing-20);
+        }
+
+        .resource-item {
+            text-align: center;
+            cursor: pointer;
+            padding: var(--spacing-8) 0;
+            border-radius: var(--radius-8);
+            transition: all 0.15s;
+            border: 2px solid transparent;
+        }
+
+        .resource-item:hover {
+            background: var(--surface-20);
+        }
+
+        .resource-item.selected {
+            background: var(--surface-20);
+            border-color: transparent;
+        }
+
+        .resource-avatar {
+            width: 100px;
+            height: 100px;
+            border-radius: var(--radius-circle);
+            background: linear-gradient(135deg, var(--primary-container) 0%, var(--primary) 30%);
+            margin: 0 auto var(--spacing-8);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 24px;
+            object-fit: cover;
+        }
+
+        img.resource-avatar {
+            border: 2px solid var(--primary);
+        }
+
+        .resource-avatar.square {
+            border-radius: var(--radius-8);
+        }
+
+        .resource-name {
+            font-size: 13px;
+            font-weight: 500;
+        }
+
+        /* Divider */
+        .scene-divider {
+            height: 1px;
+            background: var(--divider-10);
+            margin: var(--spacing-32) 0;
+            margin-left: var(--spacing-40);
+        }
+
+        /* Delete button on line hover */
+        .line-delete {
+            position: absolute;
+            right: var(--spacing-8);
+            top: var(--spacing-12);
+            opacity: 0;
+            width: 28px;
+            height: 28px;
+            border: none;
+            background: transparent;
+            cursor: pointer;
+            border-radius: var(--radius-4);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: var(--on-surface-30);
+            transition: all 0.15s;
+            font-size: 14px;
+        }
+
+        .line-block:hover .line-delete {
+            opacity: 1;
+        }
+
+        .line-delete:hover {
+            background: var(--error-container);
+            color: var(--error);
+        }
+
+        /* Overlay - 딤 제거, 클릭 영역만 유지 */
+        .overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: transparent;
+            z-index: 150;
+            display: none;
+        }
+
+        .overlay.show {
+            display: block;
+        }
+
+        /* Panel Search */
+        .panel-search {
+            margin-bottom: var(--spacing-16);
+        }
+
+        .panel-search input {
+            width: 100%;
+            padding: var(--spacing-12) var(--spacing-16);
+            border: 1px solid var(--border-10);
+            border-radius: var(--radius-8);
+            font-size: 14px;
+            outline: none;
+            transition: border-color 0.15s;
+        }
+
+        .panel-search input:focus {
+            border-color: var(--primary);
+        }
+
+        .panel-search input::placeholder {
+            color: var(--on-surface-30);
+        }
+
+        /* Text Format Toolbar */
+        .format-toolbar {
+            position: absolute;
+            display: none;
+            background: var(--surface-inverse-10);
+            border-radius: var(--radius-6);
+            padding: var(--spacing-4);
+            gap: var(--spacing-2);
+            z-index: 1000;
+            flex-direction: row;
+        }
+
+        .format-toolbar.show {
+            display: flex;
+        }
+
+        .format-btn {
+            width: 32px;
+            height: 32px;
+            border: none;
+            background: transparent;
+            color: var(--on-surface-inverse);
+            border-radius: var(--radius-4);
+            cursor: pointer;
+            font-size: 14px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: background 0.1s;
+        }
+
+        .format-btn:hover {
+            background: rgba(255,255,255,0.15);
+        }
+
+        .format-btn:active {
+            background: rgba(255,255,255,0.25);
+        }
+
+        .format-btn strong {
+            font-weight: 500;
+        }
+
+        .format-btn em {
+            font-style: italic;
+            font-family: Georgia, serif;
+        }
+
+        .format-btn u {
+            text-decoration: underline;
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Overlay for panels -->
+    <div class="overlay" id="overlay" onclick="closeAllPanels()"></div>
+
+    <!-- Text Format Toolbar -->
+    <div class="format-toolbar" id="formatToolbar">
+        <button class="format-btn" onclick="formatText('bold')" title="굵게 (Ctrl+B)">
+            <strong>B</strong>
+        </button>
+        <button class="format-btn" onclick="formatText('italic')" title="기울임 (Ctrl+I)">
+            <em>I</em>
+        </button>
+        <button class="format-btn" onclick="formatText('underline')" title="밑줄 (Ctrl+U)">
+            <u>U</u>
+        </button>
+    </div>
+
+    <!-- Main Content -->
+    <main class="main">
+        <div class="editor-container">
+            <div class="editor">
+                <!-- Scene 01 -->
+                <section class="scene-section">
+                    <div class="scene-header">
+                        <div class="scene-label">Scene 01</div>
+                        <h2 class="scene-title">독살 당하는 현재</h2>
+                    </div>
+
+                    <!-- Line 1 with resources -->
+                    <div class="line-block" data-line-id="1">
+                        <div class="line-actions">
+                            <button class="add-menu-trigger" onclick="toggleAddMenu(event, this)">+</button>
+                            <div class="add-menu">
+                                <div class="add-menu-item" onclick="openResourcePanel('character', 1)">
+                                    <span class="icon">👤</span> 캐릭터
+                                </div>
+                                <div class="add-menu-item" onclick="openResourcePanel('background', 1)">
+                                    <span class="icon">🏞</span> 배경
+                                </div>
+                                <div class="add-menu-item" onclick="openResourcePanel('music', 1)">
+                                    <span class="icon">🎵</span> 음악
+                                </div>
+                                <div class="add-menu-item" onclick="openResourcePanel('effect', 1)">
+                                    <span class="icon">🎬</span> 연출
+                                </div>
+                                <div class="add-menu-item" onclick="addChoice(1)">
+                                    <span class="icon">📝</span> 선택지 추가
+                                </div>
+                                <div class="add-menu-item" onclick="addDescription(1)">
+                                    <span class="icon">💭</span> 상황 설명
+                                </div>
+                            </div>
+                        </div>
+                        <div class="line-text" contenteditable="true">온몸을 옥죄는 고통에 숨을 쉴 수도, 살려달라는 말 한 마디도 뱉을 수 없었다.</div>
+                        <div class="line-resources">
+                            <div class="resource-row" data-type="character">
+                                <span class="resource-label">캐릭터</span>
+                                <span class="resource-tag" onclick="openResourcePanel('character', 1)">
+                                    <img class="thumbnail" src="https://i.pravatar.cc/48?img=25" alt="손오공">
+                                    <span class="name">손오공</span>
+                                    <span class="remove" onclick="removeResourceRow(event, this)">×</span>
+                                </span>
+                                <select class="emotion-select" onchange="updateEmotion(this)">
+                                    <option value="기본">#기본</option>
+                                    <option value="화난" selected>#화난</option>
+                                    <option value="슬픔">#슬픔</option>
+                                    <option value="기쁨">#기쁨</option>
+                                    <option value="수줍은">#수줍은</option>
+                                    <option value="놀람">#놀람</option>
+                                    <option value="당황">#당황</option>
+                                    <option value="걱정">#걱정</option>
+                                </select>
+                            </div>
+                        </div>
+                        <button class="line-delete" title="삭제">🗑</button>
+                    </div>
+
+                    <!-- Line 2 with resources -->
+                    <div class="line-block" data-line-id="2">
+                        <div class="line-actions">
+                            <button class="add-menu-trigger" onclick="toggleAddMenu(event, this)">+</button>
+                            <div class="add-menu">
+                                <div class="add-menu-item" onclick="openResourcePanel('character', 2)">
+                                    <span class="icon">👤</span> 캐릭터
+                                </div>
+                                <div class="add-menu-item" onclick="openResourcePanel('background', 2)">
+                                    <span class="icon">🏞</span> 배경
+                                </div>
+                                <div class="add-menu-item" onclick="openResourcePanel('music', 2)">
+                                    <span class="icon">🎵</span> 음악
+                                </div>
+                                <div class="add-menu-item" onclick="openResourcePanel('effect', 2)">
+                                    <span class="icon">🎬</span> 연출
+                                </div>
+                                <div class="add-menu-item" onclick="addChoice(2)">
+                                    <span class="icon">📝</span> 선택지 추가
+                                </div>
+                                <div class="add-menu-item" onclick="addDescription(2)">
+                                    <span class="icon">💭</span> 상황 설명
+                                </div>
+                            </div>
+                        </div>
+                        <div class="line-text" contenteditable="true">몰락 백작가의 딸로 태어나 공작가로 팔려가듯 시집을 가게 된 나.</div>
+                        <div class="line-resources">
+                            <div class="resource-row" data-type="background">
+                                <span class="resource-label">배경</span>
+                                <span class="resource-tag" onclick="openResourcePanel('background', 2)">
+                                    <span class="thumbnail-placeholder">🏞</span>
+                                    <span class="name">나메크 성</span>
+                                    <span class="remove" onclick="removeResourceRow(event, this)">×</span>
+                                </span>
+                            </div>
+                        </div>
+                        <button class="line-delete" title="삭제">🗑</button>
+                    </div>
+
+                    <!-- Line 3 with resources -->
+                    <div class="line-block" data-line-id="3">
+                        <div class="line-actions">
+                            <button class="add-menu-trigger" onclick="toggleAddMenu(event, this)">+</button>
+                            <div class="add-menu">
+                                <div class="add-menu-item" onclick="openResourcePanel('character', 3)">
+                                    <span class="icon">👤</span> 캐릭터
+                                </div>
+                                <div class="add-menu-item" onclick="openResourcePanel('background', 3)">
+                                    <span class="icon">🏞</span> 배경
+                                </div>
+                                <div class="add-menu-item" onclick="openResourcePanel('music', 3)">
+                                    <span class="icon">🎵</span> 음악
+                                </div>
+                                <div class="add-menu-item" onclick="openResourcePanel('effect', 3)">
+                                    <span class="icon">🎬</span> 연출
+                                </div>
+                                <div class="add-menu-item" onclick="addChoice(3)">
+                                    <span class="icon">📝</span> 선택지 추가
+                                </div>
+                                <div class="add-menu-item" onclick="addDescription(3)">
+                                    <span class="icon">💭</span> 상황 설명
+                                </div>
+                            </div>
+                        </div>
+                        <div class="line-text" contenteditable="true">화려하지만 차가운 기운이 감도는 분위기. 이곳은 내 장례식장이 맞았다.</div>
+                        <div class="line-resources">
+                            <div class="resource-row" data-type="character">
+                                <span class="resource-label">캐릭터</span>
+                                <span class="resource-tag" onclick="openResourcePanel('character', 3)">
+                                    <img class="thumbnail" src="https://i.pravatar.cc/48?img=33" alt="인조인간 17호">
+                                    <span class="name">인조인간 17호</span>
+                                    <span class="remove" onclick="removeResourceRow(event, this)">×</span>
+                                </span>
+                                <select class="emotion-select" onchange="updateEmotion(this)">
+                                    <option value="기본">#기본</option>
+                                    <option value="화난">#화난</option>
+                                    <option value="슬픔">#슬픔</option>
+                                    <option value="기쁨">#기쁨</option>
+                                    <option value="수줍은" selected>#수줍은</option>
+                                    <option value="놀람">#놀람</option>
+                                    <option value="당황">#당황</option>
+                                    <option value="걱정">#걱정</option>
+                                </select>
+                            </div>
+                            <div class="resource-row" data-type="background">
+                                <span class="resource-label">배경</span>
+                                <span class="resource-tag" onclick="openResourcePanel('background', 3)">
+                                    <span class="thumbnail-placeholder">🏞</span>
+                                    <span class="name">나메크 성 폭포절벽</span>
+                                    <span class="remove" onclick="removeResourceRow(event, this)">×</span>
+                                </span>
+                            </div>
+                            <div class="resource-row" data-type="music">
+                                <span class="resource-label">음악</span>
+                                <span class="resource-tag" onclick="openResourcePanel('music', 3)">
+                                    <span class="thumbnail-placeholder">🎵</span>
+                                    <span class="name">Last Christmas</span>
+                                    <span class="remove" onclick="removeResourceRow(event, this)">×</span>
+                                </span>
+                            </div>
+                        </div>
+                        <button class="line-delete" title="삭제">🗑</button>
+                    </div>
+
+                    <!-- Choice Block (removed in React wrapper; kept only for template in JS) -->
+
+                    <!-- Line 4 -->
+                    <div class="line-block" data-line-id="4">
+                        <div class="line-actions">
+                            <button class="add-menu-trigger" onclick="toggleAddMenu(event, this)">+</button>
+                            <div class="add-menu">
+                                <div class="add-menu-item" onclick="openResourcePanel('character', 4)">
+                                    <span class="icon">👤</span> 캐릭터
+                                </div>
+                                <div class="add-menu-item" onclick="openResourcePanel('background', 4)">
+                                    <span class="icon">🏞</span> 배경
+                                </div>
+                                <div class="add-menu-item" onclick="openResourcePanel('music', 4)">
+                                    <span class="icon">🎵</span> 음악
+                                </div>
+                                <div class="add-menu-item" onclick="openResourcePanel('effect', 4)">
+                                    <span class="icon">🎬</span> 연출
+                                </div>
+                                <div class="add-menu-item" onclick="addChoice(4)">
+                                    <span class="icon">📝</span> 선택지 추가
+                                </div>
+                                <div class="add-menu-item" onclick="addDescription(4)">
+                                    <span class="icon">💭</span> 상황 설명
+                                </div>
+                            </div>
+                        </div>
+                        <div class="line-text" contenteditable="true">그리고 짙은 어둠이 드리워진 그림자 속에 한 남자가 서 있는 것이 보였다.</div>
+                        <button class="line-delete" title="삭제">🗑</button>
+                    </div>
+
+                    <div class="scene-divider"></div>
+
+                    <!-- Scene 02 -->
+                    <div class="scene-header">
+                        <div class="scene-label">Scene 02</div>
+                        <h2 class="scene-title">죽을 직전의 상황 (과거 회상)</h2>
+                    </div>
+
+                    <div class="line-block" data-line-id="5">
+                        <div class="line-actions">
+                            <button class="add-menu-trigger" onclick="toggleAddMenu(event, this)">+</button>
+                            <div class="add-menu">
+                                <div class="add-menu-item" onclick="openResourcePanel('character', 5)">
+                                    <span class="icon">👤</span> 캐릭터
+                                </div>
+                                <div class="add-menu-item" onclick="openResourcePanel('background', 5)">
+                                    <span class="icon">🏞</span> 배경
+                                </div>
+                                <div class="add-menu-item" onclick="openResourcePanel('music', 5)">
+                                    <span class="icon">🎵</span> 음악
+                                </div>
+                                <div class="add-menu-item" onclick="openResourcePanel('effect', 5)">
+                                    <span class="icon">🎬</span> 연출
+                                </div>
+                                <div class="add-menu-item" onclick="addChoice(5)">
+                                    <span class="icon">📝</span> 선택지 추가
+                                </div>
+                                <div class="add-menu-item" onclick="addDescription(5)">
+                                    <span class="icon">💭</span> 상황 설명
+                                </div>
+                            </div>
+                        </div>
+                        <div class="line-text" contenteditable="true">나는 남자의 얼굴을 확인하기</div>
+                        <button class="line-delete" title="삭제">🗑</button>
+                    </div>
+
+                    <div class="line-block" data-line-id="6">
+                        <div class="line-actions">
+                            <button class="add-menu-trigger" onclick="toggleAddMenu(event, this)">+</button>
+                            <div class="add-menu">
+                                <div class="add-menu-item" onclick="openResourcePanel('character', 6)">
+                                    <span class="icon">👤</span> 캐릭터
+                                </div>
+                                <div class="add-menu-item" onclick="openResourcePanel('background', 6)">
+                                    <span class="icon">🏞</span> 배경
+                                </div>
+                                <div class="add-menu-item" onclick="openResourcePanel('music', 6)">
+                                    <span class="icon">🎵</span> 음악
+                                </div>
+                                <div class="add-menu-item" onclick="openResourcePanel('effect', 6)">
+                                    <span class="icon">🎬</span> 연출
+                                </div>
+                                <div class="add-menu-item" onclick="addChoice(6)">
+                                    <span class="icon">📝</span> 선택지 추가
+                                </div>
+                                <div class="add-menu-item" onclick="addDescription(6)">
+                                    <span class="icon">💭</span> 상황 설명
+                                </div>
+                            </div>
+                        </div>
+                        <div class="line-text" contenteditable="true">위해 홀린 듯 조금씩 다가갔다.</div>
+                        <button class="line-delete" title="삭제">🗑</button>
+                    </div>
+
+                    <div class="line-block" data-line-id="7">
+                        <div class="line-actions">
+                            <button class="add-menu-trigger" onclick="toggleAddMenu(event, this)">+</button>
+                            <div class="add-menu">
+                                <div class="add-menu-item" onclick="openResourcePanel('character', 7)">
+                                    <span class="icon">👤</span> 캐릭터
+                                </div>
+                                <div class="add-menu-item" onclick="openResourcePanel('background', 7)">
+                                    <span class="icon">🏞</span> 배경
+                                </div>
+                                <div class="add-menu-item" onclick="openResourcePanel('music', 7)">
+                                    <span class="icon">🎵</span> 음악
+                                </div>
+                                <div class="add-menu-item" onclick="openResourcePanel('effect', 7)">
+                                    <span class="icon">🎬</span> 연출
+                                </div>
+                                <div class="add-menu-item" onclick="addChoice(7)">
+                                    <span class="icon">📝</span> 선택지 추가
+                                </div>
+                                <div class="add-menu-item" onclick="addDescription(7)">
+                                    <span class="icon">💭</span> 상황 설명
+                                </div>
+                            </div>
+                        </div>
+                        <div class="line-text" contenteditable="true">그렇게 남자의 얼굴을 확인하는 순간!</div>
+                        <button class="line-delete" title="삭제">🗑</button>
+                    </div>
+
+                    <div class="scene-divider"></div>
+
+                    <!-- Scene 03 -->
+                    <div class="scene-header">
+                        <div class="scene-label">Scene 03</div>
+                        <h2 class="scene-title">과거 회상 - 공작가로 시집오던 날</h2>
+                    </div>
+
+                    <div class="line-block" data-line-id="8">
+                        <div class="line-actions">
+                            <button class="add-menu-trigger" onclick="toggleAddMenu(event, this)">+</button>
+                            <div class="add-menu">
+                                <div class="add-menu-item" onclick="openResourcePanel('character', 8)">
+                                    <span class="icon">👤</span> 캐릭터
+                                </div>
+                                <div class="add-menu-item" onclick="openResourcePanel('background', 8)">
+                                    <span class="icon">🏞</span> 배경
+                                </div>
+                                <div class="add-menu-item" onclick="openResourcePanel('music', 8)">
+                                    <span class="icon">🎵</span> 음악
+                                </div>
+                                <div class="add-menu-item" onclick="openResourcePanel('effect', 8)">
+                                    <span class="icon">🎬</span> 연출
+                                </div>
+                                <div class="add-menu-item" onclick="addChoice(8)">
+                                    <span class="icon">📝</span> 선택지 추가
+                                </div>
+                                <div class="add-menu-item" onclick="addDescription(8)">
+                                    <span class="icon">💭</span> 상황 설명
+                                </div>
+                            </div>
+                        </div>
+                        <div class="line-text" contenteditable="true">3년 전, 아버지의 빚을 갚기 위해 나는 이 곳에 팔려왔다.</div>
+                        <div class="line-resources">
+                            <div class="resource-row" data-type="background">
+                                <span class="resource-label">배경</span>
+                                <span class="resource-tag" onclick="openResourcePanel('background', 8)">
+                                    <span class="thumbnail-placeholder">🏞</span>
+                                    <span class="name">공작가 정문</span>
+                                    <span class="remove" onclick="removeResourceRow(event, this)">×</span>
+                                </span>
+                            </div>
+                            <div class="resource-row" data-type="music">
+                                <span class="resource-label">음악</span>
+                                <span class="resource-tag" onclick="openResourcePanel('music', 8)">
+                                    <span class="thumbnail-placeholder">🎵</span>
+                                    <span class="name">긴장감 있는 행진곡</span>
+                                    <span class="remove" onclick="removeResourceRow(event, this)">×</span>
+                                </span>
+                            </div>
+                        </div>
+                        <button class="line-delete" title="삭제">🗑</button>
+                    </div>
+
+                    <div class="line-block" data-line-id="9">
+                        <div class="line-actions">
+                            <button class="add-menu-trigger" onclick="toggleAddMenu(event, this)">+</button>
+                            <div class="add-menu">
+                                <div class="add-menu-item" onclick="openResourcePanel('character', 9)">
+                                    <span class="icon">👤</span> 캐릭터
+                                </div>
+                                <div class="add-menu-item" onclick="openResourcePanel('background', 9)">
+                                    <span class="icon">🏞</span> 배경
+                                </div>
+                                <div class="add-menu-item" onclick="openResourcePanel('music', 9)">
+                                    <span class="icon">🎵</span> 음악
+                                </div>
+                                <div class="add-menu-item" onclick="openResourcePanel('effect', 9)">
+                                    <span class="icon">🎬</span> 연출
+                                </div>
+                                <div class="add-menu-item" onclick="addChoice(9)">
+                                    <span class="icon">📝</span> 선택지 추가
+                                </div>
+                                <div class="add-menu-item" onclick="addDescription(9)">
+                                    <span class="icon">💭</span> 상황 설명
+                                </div>
+                            </div>
+                        </div>
+                        <div class="line-text" contenteditable="true">웅장한 철문 앞에 서니 가슴이 철렁 내려앉았다.</div>
+                        <button class="line-delete" title="삭제">🗑</button>
+                    </div>
+
+                    <div class="line-block" data-line-id="10">
+                        <div class="line-actions">
+                            <button class="add-menu-trigger" onclick="toggleAddMenu(event, this)">+</button>
+                            <div class="add-menu">
+                                <div class="add-menu-item" onclick="openResourcePanel('character', 10)">
+                                    <span class="icon">👤</span> 캐릭터
+                                </div>
+                                <div class="add-menu-item" onclick="openResourcePanel('background', 10)">
+                                    <span class="icon">🏞</span> 배경
+                                </div>
+                                <div class="add-menu-item" onclick="openResourcePanel('music', 10)">
+                                    <span class="icon">🎵</span> 음악
+                                </div>
+                                <div class="add-menu-item" onclick="openResourcePanel('effect', 10)">
+                                    <span class="icon">🎬</span> 연출
+                                </div>
+                                <div class="add-menu-item" onclick="addChoice(10)">
+                                    <span class="icon">📝</span> 선택지 추가
+                                </div>
+                                <div class="add-menu-item" onclick="addDescription(10)">
+                                    <span class="icon">💭</span> 상황 설명
+                                </div>
+                            </div>
+                        </div>
+                        <div class="line-text" contenteditable="true">"어서 들어가. 공작님께서 기다리고 계시다."</div>
+                        <div class="line-resources">
+                            <div class="resource-row" data-type="effect">
+                                <span class="resource-label">연출</span>
+                                <span class="resource-tag" onclick="openResourcePanel('effect', 10)">
+                                    <span class="thumbnail-placeholder">🎬</span>
+                                    <span class="name">화면 흔들림</span>
+                                    <span class="remove" onclick="removeResourceRow(event, this)">×</span>
+                                </span>
+                            </div>
+                        </div>
+                        <button class="line-delete" title="삭제">🗑</button>
+                    </div>
+
+                    <div class="line-block" data-line-id="11">
+                        <div class="line-actions">
+                            <button class="add-menu-trigger" onclick="toggleAddMenu(event, this)">+</button>
+                            <div class="add-menu">
+                                <div class="add-menu-item" onclick="openResourcePanel('character', 11)">
+                                    <span class="icon">👤</span> 캐릭터
+                                </div>
+                                <div class="add-menu-item" onclick="openResourcePanel('background', 11)">
+                                    <span class="icon">🏞</span> 배경
+                                </div>
+                                <div class="add-menu-item" onclick="openResourcePanel('music', 11)">
+                                    <span class="icon">🎵</span> 음악
+                                </div>
+                                <div class="add-menu-item" onclick="openResourcePanel('effect', 11)">
+                                    <span class="icon">🎬</span> 연출
+                                </div>
+                                <div class="add-menu-item" onclick="addChoice(11)">
+                                    <span class="icon">📝</span> 선택지 추가
+                                </div>
+                                <div class="add-menu-item" onclick="addDescription(11)">
+                                    <span class="icon">💭</span> 상황 설명
+                                </div>
+                            </div>
+                        </div>
+                        <div class="line-text" contenteditable="true">집사의 차가운 목소리에 나는 고개를 숙인 채 발걸음을 옮겼다.</div>
+                        <button class="line-delete" title="삭제">🗑</button>
+                    </div>
+
+                    <div class="scene-divider"></div>
+
+                    <!-- Scene 04 -->
+                    <div class="scene-header">
+                        <div class="scene-label">Scene 04</div>
+                        <h2 class="scene-title">공작과의 첫 만남</h2>
+                    </div>
+
+                    <div class="line-block" data-line-id="12">
+                        <div class="line-actions">
+                            <button class="add-menu-trigger" onclick="toggleAddMenu(event, this)">+</button>
+                            <div class="add-menu">
+                                <div class="add-menu-item" onclick="openResourcePanel('character', 12)">
+                                    <span class="icon">👤</span> 캐릭터
+                                </div>
+                                <div class="add-menu-item" onclick="openResourcePanel('background', 12)">
+                                    <span class="icon">🏞</span> 배경
+                                </div>
+                                <div class="add-menu-item" onclick="openResourcePanel('music', 12)">
+                                    <span class="icon">🎵</span> 음악
+                                </div>
+                                <div class="add-menu-item" onclick="openResourcePanel('effect', 12)">
+                                    <span class="icon">🎬</span> 연출
+                                </div>
+                                <div class="add-menu-item" onclick="addChoice(12)">
+                                    <span class="icon">📝</span> 선택지 추가
+                                </div>
+                                <div class="add-menu-item" onclick="addDescription(12)">
+                                    <span class="icon">💭</span> 상황 설명
+                                </div>
+                            </div>
+                        </div>
+                        <div class="line-text" contenteditable="true">거대한 서재의 문이 열리자, 창가에 서 있는 한 남자의 뒷모습이 보였다.</div>
+                        <div class="line-resources">
+                            <div class="resource-row" data-type="background">
+                                <span class="resource-label">배경</span>
+                                <span class="resource-tag" onclick="openResourcePanel('background', 12)">
+                                    <span class="thumbnail-placeholder">🏞</span>
+                                    <span class="name">공작의 서재</span>
+                                    <span class="remove" onclick="removeResourceRow(event, this)">×</span>
+                                </span>
+                            </div>
+                            <div class="resource-row" data-type="music">
+                                <span class="resource-label">음악</span>
+                                <span class="resource-tag" onclick="openResourcePanel('music', 12)">
+                                    <span class="thumbnail-placeholder">🎵</span>
+                                    <span class="name">고요한 피아노</span>
+                                    <span class="remove" onclick="removeResourceRow(event, this)">×</span>
+                                </span>
+                            </div>
+                        </div>
+                        <button class="line-delete" title="삭제">🗑</button>
+                    </div>
+
+                    <div class="line-block" data-line-id="13">
+                        <div class="line-actions">
+                            <button class="add-menu-trigger" onclick="toggleAddMenu(event, this)">+</button>
+                            <div class="add-menu">
+                                <div class="add-menu-item" onclick="openResourcePanel('character', 13)">
+                                    <span class="icon">👤</span> 캐릭터
+                                </div>
+                                <div class="add-menu-item" onclick="openResourcePanel('background', 13)">
+                                    <span class="icon">🏞</span> 배경
+                                </div>
+                                <div class="add-menu-item" onclick="openResourcePanel('music', 13)">
+                                    <span class="icon">🎵</span> 음악
+                                </div>
+                                <div class="add-menu-item" onclick="openResourcePanel('effect', 13)">
+                                    <span class="icon">🎬</span> 연출
+                                </div>
+                                <div class="add-menu-item" onclick="addChoice(13)">
+                                    <span class="icon">📝</span> 선택지 추가
+                                </div>
+                                <div class="add-menu-item" onclick="addDescription(13)">
+                                    <span class="icon">💭</span> 상황 설명
+                                </div>
+                            </div>
+                        </div>
+                        <div class="line-text" contenteditable="true">"그래서 당신이 내 아내가 될 여자인가."</div>
+                        <div class="line-resources">
+                            <div class="resource-row" data-type="character">
+                                <span class="resource-label">캐릭터</span>
+                                <span class="resource-tag" onclick="openResourcePanel('character', 13)">
+                                    <img class="thumbnail" src="https://i.pravatar.cc/48?img=12" alt="카일런 공작">
+                                    <span class="name">카일런 공작</span>
+                                    <span class="remove" onclick="removeResourceRow(event, this)">×</span>
+                                </span>
+                                <select class="emotion-select" onchange="updateEmotion(this)">
+                                    <option value="무표정">#무표정</option>
+                                    <option value="차가운">#차가운</option>
+                                    <option value="냉소" selected>#냉소</option>
+                                </select>
+                            </div>
+                            <div class="resource-row" data-type="effect">
+                                <span class="resource-label">연출</span>
+                                <span class="resource-tag" onclick="openResourcePanel('effect', 13)">
+                                    <span class="thumbnail-placeholder">🎬</span>
+                                    <span class="name">역광 효과</span>
+                                    <span class="remove" onclick="removeResourceRow(event, this)">×</span>
+                                </span>
+                            </div>
+                        </div>
+                        <button class="line-delete" title="삭제">🗑</button>
+                    </div>
+
+                    <div class="line-block" data-line-id="14">
+                        <div class="line-actions">
+                            <button class="add-menu-trigger" onclick="toggleAddMenu(event, this)">+</button>
+                            <div class="add-menu">
+                                <div class="add-menu-item" onclick="openResourcePanel('character', 14)">
+                                    <span class="icon">👤</span> 캐릭터
+                                </div>
+                                <div class="add-menu-item" onclick="openResourcePanel('background', 14)">
+                                    <span class="icon">🏞</span> 배경
+                                </div>
+                                <div class="add-menu-item" onclick="openResourcePanel('music', 14)">
+                                    <span class="icon">🎵</span> 음악
+                                </div>
+                                <div class="add-menu-item" onclick="openResourcePanel('effect', 14)">
+                                    <span class="icon">🎬</span> 연출
+                                </div>
+                                <div class="add-menu-item" onclick="addChoice(14)">
+                                    <span class="icon">📝</span> 선택지 추가
+                                </div>
+                                <div class="add-menu-item" onclick="addDescription(14)">
+                                    <span class="icon">💭</span> 상황 설명
+                                </div>
+                            </div>
+                        </div>
+                        <div class="line-text" contenteditable="true">그의 목소리는 차갑고 날카로웠다. 마치 얼음 조각처럼.</div>
+                        <button class="line-delete" title="삭제">🗑</button>
+                    </div>
+
+                    <div class="line-block" data-line-id="15">
+                        <div class="line-actions">
+                            <button class="add-menu-trigger" onclick="toggleAddMenu(event, this)">+</button>
+                            <div class="add-menu">
+                                <div class="add-menu-item" onclick="openResourcePanel('character', 15)">
+                                    <span class="icon">👤</span> 캐릭터
+                                </div>
+                                <div class="add-menu-item" onclick="openResourcePanel('background', 15)">
+                                    <span class="icon">🏞</span> 배경
+                                </div>
+                                <div class="add-menu-item" onclick="openResourcePanel('music', 15)">
+                                    <span class="icon">🎵</span> 음악
+                                </div>
+                                <div class="add-menu-item" onclick="openResourcePanel('effect', 15)">
+                                    <span class="icon">🎬</span> 연출
+                                </div>
+                                <div class="add-menu-item" onclick="addChoice(15)">
+                                    <span class="icon">📝</span> 선택지 추가
+                                </div>
+                                <div class="add-menu-item" onclick="addDescription(15)">
+                                    <span class="icon">💭</span> 상황 설명
+                                </div>
+                            </div>
+                        </div>
+                        <div class="line-text" contenteditable="true">"예, 그렇습니다. 엘리나 벨크로스입니다."</div>
+                        <div class="line-resources">
+                            <div class="resource-row" data-type="character">
+                                <span class="resource-label">캐릭터</span>
+                                <span class="resource-tag" onclick="openResourcePanel('character', 15)">
+                                    <img class="thumbnail" src="https://i.pravatar.cc/48?img=5" alt="엘리나">
+                                    <span class="name">엘리나(주인공)</span>
+                                    <span class="remove" onclick="removeResourceRow(event, this)">×</span>
+                                </span>
+                                <select class="emotion-select" onchange="updateEmotion(this)">
+                                    <option value="기본">#기본</option>
+                                    <option value="긴장" selected>#긴장</option>
+                                    <option value="두려움">#두려움</option>
+                                </select>
+                            </div>
+                        </div>
+                        <button class="line-delete" title="삭제">🗑</button>
+                    </div>
+
+                    <div class="line-block" data-line-id="16">
+                        <div class="line-actions">
+                            <button class="add-menu-trigger" onclick="toggleAddMenu(event, this)">+</button>
+                            <div class="add-menu">
+                                <div class="add-menu-item" onclick="openResourcePanel('character', 16)">
+                                    <span class="icon">👤</span> 캐릭터
+                                </div>
+                                <div class="add-menu-item" onclick="openResourcePanel('background', 16)">
+                                    <span class="icon">🏞</span> 배경
+                                </div>
+                                <div class="add-menu-item" onclick="openResourcePanel('music', 16)">
+                                    <span class="icon">🎵</span> 음악
+                                </div>
+                                <div class="add-menu-item" onclick="openResourcePanel('effect', 16)">
+                                    <span class="icon">🎬</span> 연출
+                                </div>
+                                <div class="add-menu-item" onclick="addChoice(16)">
+                                    <span class="icon">📝</span> 선택지 추가
+                                </div>
+                                <div class="add-menu-item" onclick="addDescription(16)">
+                                    <span class="icon">💭</span> 상황 설명
+                                </div>
+                            </div>
+                        </div>
+                        <div class="line-text" contenteditable="true">"흥, 몰락한 백작가의 딸이라... 기대는 하지 않겠다."</div>
+                        <div class="line-resources">
+                            <div class="resource-row" data-type="character">
+                                <span class="resource-label">캐릭터</span>
+                                <span class="resource-tag" onclick="openResourcePanel('character', 16)">
+                                    <img class="thumbnail" src="https://i.pravatar.cc/48?img=12" alt="카일런 공작">
+                                    <span class="name">카일런 공작</span>
+                                    <span class="remove" onclick="removeResourceRow(event, this)">×</span>
+                                </span>
+                                <select class="emotion-select" onchange="updateEmotion(this)">
+                                    <option value="무표정">#무표정</option>
+                                    <option value="비웃음" selected>#비웃음</option>
+                                    <option value="냉소">#냉소</option>
+                                </select>
+                            </div>
+                        </div>
+                        <button class="line-delete" title="삭제">🗑</button>
+                    </div>
+
+                    <div class="scene-divider"></div>
+
+                    <!-- Scene 05 -->
+                    <div class="scene-header">
+                        <div class="scene-label">Scene 05</div>
+                        <h2 class="scene-title">현재 - 독이 퍼지는 순간</h2>
+                    </div>
+
+                    <div class="line-block" data-line-id="17">
+                        <div class="line-actions">
+                            <button class="add-menu-trigger" onclick="toggleAddMenu(event, this)">+</button>
+                            <div class="add-menu">
+                                <div class="add-menu-item" onclick="openResourcePanel('character', 17)">
+                                    <span class="icon">👤</span> 캐릭터
+                                </div>
+                                <div class="add-menu-item" onclick="openResourcePanel('background', 17)">
+                                    <span class="icon">🏞</span> 배경
+                                </div>
+                                <div class="add-menu-item" onclick="openResourcePanel('music', 17)">
+                                    <span class="icon">🎵</span> 음악
+                                </div>
+                                <div class="add-menu-item" onclick="openResourcePanel('effect', 17)">
+                                    <span class="icon">🎬</span> 연출
+                                </div>
+                                <div class="add-menu-item" onclick="addChoice(17)">
+                                    <span class="icon">📝</span> 선택지 추가
+                                </div>
+                                <div class="add-menu-item" onclick="addDescription(17)">
+                                    <span class="icon">💭</span> 상황 설명
+                                </div>
+                            </div>
+                        </div>
+                        <div class="line-text" contenteditable="true">다시 현재. 독이 온몸으로 퍼져가는 것이 느껴졌다.</div>
+                        <div class="line-resources">
+                            <div class="resource-row" data-type="background">
+                                <span class="resource-label">배경</span>
+                                <span class="resource-tag" onclick="openResourcePanel('background', 17)">
+                                    <span class="thumbnail-placeholder">🏞</span>
+                                    <span class="name">공작가 침실 (밤)</span>
+                                    <span class="remove" onclick="removeResourceRow(event, this)">×</span>
+                                </span>
+                            </div>
+                            <div class="resource-row" data-type="music">
+                                <span class="resource-label">음악</span>
+                                <span class="resource-tag" onclick="openResourcePanel('music', 17)">
+                                    <span class="thumbnail-placeholder">🎵</span>
+                                    <span class="name">비극적 오케스트라</span>
+                                    <span class="remove" onclick="removeResourceRow(event, this)">×</span>
+                                </span>
+                            </div>
+                            <div class="resource-row" data-type="effect">
+                                <span class="resource-label">연출</span>
+                                <span class="resource-tag" onclick="openResourcePanel('effect', 17)">
+                                    <span class="thumbnail-placeholder">🎬</span>
+                                    <span class="name">화면 붉은 틴트</span>
+                                    <span class="remove" onclick="removeResourceRow(event, this)">×</span>
+                                </span>
+                            </div>
+                        </div>
+                        <button class="line-delete" title="삭제">🗑</button>
+                    </div>
+
+                    <div class="line-block" data-line-id="18">
+                        <div class="line-actions">
+                            <button class="add-menu-trigger" onclick="toggleAddMenu(event, this)">+</button>
+                            <div class="add-menu">
+                                <div class="add-menu-item" onclick="openResourcePanel('character', 18)">
+                                    <span class="icon">👤</span> 캐릭터
+                                </div>
+                                <div class="add-menu-item" onclick="openResourcePanel('background', 18)">
+                                    <span class="icon">🏞</span> 배경
+                                </div>
+                                <div class="add-menu-item" onclick="openResourcePanel('music', 18)">
+                                    <span class="icon">🎵</span> 음악
+                                </div>
+                                <div class="add-menu-item" onclick="openResourcePanel('effect', 18)">
+                                    <span class="icon">🎬</span> 연출
+                                </div>
+                                <div class="add-menu-item" onclick="addChoice(18)">
+                                    <span class="icon">📝</span> 선택지 추가
+                                </div>
+                                <div class="add-menu-item" onclick="addDescription(18)">
+                                    <span class="icon">💭</span> 상황 설명
+                                </div>
+                            </div>
+                        </div>
+                        <div class="line-text" contenteditable="true">3년 전 그날의 기억이 주마등처럼 스쳐 지나갔다.</div>
+                        <button class="line-delete" title="삭제">🗑</button>
+                    </div>
+
+                    <div class="line-block" data-line-id="19">
+                        <div class="line-actions">
+                            <button class="add-menu-trigger" onclick="toggleAddMenu(event, this)">+</button>
+                            <div class="add-menu">
+                                <div class="add-menu-item" onclick="openResourcePanel('character', 19)">
+                                    <span class="icon">👤</span> 캐릭터
+                                </div>
+                                <div class="add-menu-item" onclick="openResourcePanel('background', 19)">
+                                    <span class="icon">🏞</span> 배경
+                                </div>
+                                <div class="add-menu-item" onclick="openResourcePanel('music', 19)">
+                                    <span class="icon">🎵</span> 음악
+                                </div>
+                                <div class="add-menu-item" onclick="openResourcePanel('effect', 19)">
+                                    <span class="icon">🎬</span> 연출
+                                </div>
+                                <div class="add-menu-item" onclick="addChoice(19)">
+                                    <span class="icon">📝</span> 선택지 추가
+                                </div>
+                                <div class="add-menu-item" onclick="addDescription(19)">
+                                    <span class="icon">💭</span> 상황 설명
+                                </div>
+                            </div>
+                        </div>
+                        <div class="line-text" contenteditable="true">그림자 속 남자가 천천히 다가왔다. 그의 얼굴이 달빛에 드러나는 순간—</div>
+                        <div class="line-resources">
+                            <div class="resource-row" data-type="character">
+                                <span class="resource-label">캐릭터</span>
+                                <span class="resource-tag" onclick="openResourcePanel('character', 19)">
+                                    <img class="thumbnail" src="https://i.pravatar.cc/48?img=12" alt="카일런 공작">
+                                    <span class="name">카일런 공작</span>
+                                    <span class="remove" onclick="removeResourceRow(event, this)">×</span>
+                                </span>
+                                <select class="emotion-select" onchange="updateEmotion(this)">
+                                    <option value="무표정">#무표정</option>
+                                    <option value="차가운">#차가운</option>
+                                    <option value="고통" selected>#고통</option>
+                                </select>
+                            </div>
+                            <div class="resource-row" data-type="effect">
+                                <span class="resource-label">연출</span>
+                                <span class="resource-tag" onclick="openResourcePanel('effect', 19)">
+                                    <span class="thumbnail-placeholder">🎬</span>
+                                    <span class="name">슬로우 모션</span>
+                                    <span class="remove" onclick="removeResourceRow(event, this)">×</span>
+                                </span>
+                            </div>
+                        </div>
+                        <button class="line-delete" title="삭제">🗑</button>
+                    </div>
+
+                    <div class="line-block" data-line-id="20">
+                        <div class="line-actions">
+                            <button class="add-menu-trigger" onclick="toggleAddMenu(event, this)">+</button>
+                            <div class="add-menu">
+                                <div class="add-menu-item" onclick="openResourcePanel('character', 20)">
+                                    <span class="icon">👤</span> 캐릭터
+                                </div>
+                                <div class="add-menu-item" onclick="openResourcePanel('background', 20)">
+                                    <span class="icon">🏞</span> 배경
+                                </div>
+                                <div class="add-menu-item" onclick="openResourcePanel('music', 20)">
+                                    <span class="icon">🎵</span> 음악
+                                </div>
+                                <div class="add-menu-item" onclick="openResourcePanel('effect', 20)">
+                                    <span class="icon">🎬</span> 연출
+                                </div>
+                                <div class="add-menu-item" onclick="addChoice(20)">
+                                    <span class="icon">📝</span> 선택지 추가
+                                </div>
+                                <div class="add-menu-item" onclick="addDescription(20)">
+                                    <span class="icon">💭</span> 상황 설명
+                                </div>
+                            </div>
+                        </div>
+                        <div class="line-text" contenteditable="true">"카일런...?"</div>
+                        <div class="line-resources">
+                            <div class="resource-row" data-type="effect">
+                                <span class="resource-label">연출</span>
+                                <span class="resource-tag" onclick="openResourcePanel('effect', 20)">
+                                    <span class="thumbnail-placeholder">🎬</span>
+                                    <span class="name">충격 이펙트</span>
+                                    <span class="remove" onclick="removeResourceRow(event, this)">×</span>
+                                </span>
+                            </div>
+                        </div>
+                        <button class="line-delete" title="삭제">🗑</button>
+                    </div>
+
+                    <div class="line-block" data-line-id="21">
+                        <div class="line-actions">
+                            <button class="add-menu-trigger" onclick="toggleAddMenu(event, this)">+</button>
+                            <div class="add-menu">
+                                <div class="add-menu-item" onclick="openResourcePanel('character', 21)">
+                                    <span class="icon">👤</span> 캐릭터
+                                </div>
+                                <div class="add-menu-item" onclick="openResourcePanel('background', 21)">
+                                    <span class="icon">🏞</span> 배경
+                                </div>
+                                <div class="add-menu-item" onclick="openResourcePanel('music', 21)">
+                                    <span class="icon">🎵</span> 음악
+                                </div>
+                                <div class="add-menu-item" onclick="openResourcePanel('effect', 21)">
+                                    <span class="icon">🎬</span> 연출
+                                </div>
+                                <div class="add-menu-item" onclick="addChoice(21)">
+                                    <span class="icon">📝</span> 선택지 추가
+                                </div>
+                                <div class="add-menu-item" onclick="addDescription(21)">
+                                    <span class="icon">💭</span> 상황 설명
+                                </div>
+                            </div>
+                        </div>
+                        <div class="line-text" contenteditable="true">내 남편이었다. 나를 독살한 범인이, 다름 아닌 카일런이었다.</div>
+                        <button class="line-delete" title="삭제">🗑</button>
+                    </div>
+
+                    <div class="line-block" data-line-id="22">
+                        <div class="line-actions">
+                            <button class="add-menu-trigger" onclick="toggleAddMenu(event, this)">+</button>
+                            <div class="add-menu">
+                                <div class="add-menu-item" onclick="openResourcePanel('character', 22)">
+                                    <span class="icon">👤</span> 캐릭터
+                                </div>
+                                <div class="add-menu-item" onclick="openResourcePanel('background', 22)">
+                                    <span class="icon">🏞</span> 배경
+                                </div>
+                                <div class="add-menu-item" onclick="openResourcePanel('music', 22)">
+                                    <span class="icon">🎵</span> 음악
+                                </div>
+                                <div class="add-menu-item" onclick="openResourcePanel('effect', 22)">
+                                    <span class="icon">🎬</span> 연출
+                                </div>
+                                <div class="add-menu-item" onclick="addChoice(22)">
+                                    <span class="icon">📝</span> 선택지 추가
+                                </div>
+                                <div class="add-menu-item" onclick="addDescription(22)">
+                                    <span class="icon">💭</span> 상황 설명
+                                </div>
+                            </div>
+                        </div>
+                        <div class="line-text" contenteditable="true">눈앞이 점점 어두워져 갔다. 그리고 마지막으로 본 것은...</div>
+                        <div class="line-resources">
+                            <div class="resource-row" data-type="effect">
+                                <span class="resource-label">연출</span>
+                                <span class="resource-tag" onclick="openResourcePanel('effect', 22)">
+                                    <span class="thumbnail-placeholder">🎬</span>
+                                    <span class="name">페이드 아웃</span>
+                                    <span class="remove" onclick="removeResourceRow(event, this)">×</span>
+                                </span>
+                            </div>
+                        </div>
+                        <button class="line-delete" title="삭제">🗑</button>
+                    </div>
+                </section>
+            </div>
+        </div>
+
+        <!-- Resource Selection Panel -->
+        <aside class="right-panel" id="resourcePanel">
+            <div class="panel-header">
+                <span class="panel-title" id="panelTitle">캐릭터</span>
+                <button class="panel-close" onclick="closeResourcePanel()">×</button>
+            </div>
+            <div class="panel-search">
+                <input type="text" placeholder="검색..." id="panelSearch">
+            </div>
+            <div class="resource-grid" id="resourceGrid">
+                <!-- 동적으로 채워짐 -->
+            </div>
+        </aside>
+    </main>
+
+    <script>
+        // 리소스 데이터
+        const resourceData = {
+            character: [
+                { id: 1, name: '손오공', emoji: '🧑', color: '#FFE4EC, #FFB8D4', thumbnail: 'https://i.pravatar.cc/48?img=25' },
+                { id: 2, name: '브루마', emoji: '👩', color: '#E0F2FE, #7DD3FC', thumbnail: 'https://i.pravatar.cc/48?img=5' },
+                { id: 3, name: '크리링', emoji: '👦', color: '#FEF3C7, #FCD34D', thumbnail: 'https://i.pravatar.cc/48?img=33' },
+                { id: 4, name: '인조인간 16호', emoji: '🤖', color: '#D1FAE5, #6EE7B7', thumbnail: 'https://i.pravatar.cc/48?img=12' },
+                { id: 5, name: '인조인간 17호', emoji: '🦸', color: '#EDE9FE, #A78BFA', thumbnail: 'https://i.pravatar.cc/48?img=15' },
+                { id: 6, name: '미스터 사탄', emoji: '😈', color: '#FEE2E2, #FCA5A5', thumbnail: 'https://i.pravatar.cc/48?img=8' },
+                { id: 7, name: '피콜로', emoji: '🎺', color: '#CFFAFE, #67E8F9', thumbnail: 'https://i.pravatar.cc/48?img=11' },
+                { id: 8, name: '치치', emoji: '🐱', color: '#FCE7F3, #F9A8D4', thumbnail: 'https://i.pravatar.cc/48?img=9' },
+            ],
+            background: [
+                { id: 1, name: '나메크 성', emoji: '🏰', color: '#E0F2FE, #7DD3FC' },
+                { id: 2, name: '나메크 성 폭포절벽', emoji: '🌊', color: '#CFFAFE, #67E8F9' },
+                { id: 3, name: '천하제일무도회', emoji: '🏟️', color: '#FEF3C7, #FCD34D' },
+                { id: 4, name: '카린탑', emoji: '🗼', color: '#D1FAE5, #6EE7B7' },
+                { id: 5, name: '프리저 우주선', emoji: '🚀', color: '#EDE9FE, #A78BFA' },
+                { id: 6, name: '정신과 시간의 방', emoji: '⏳', color: '#F5F5F7, #E5E5E5' },
+            ],
+            music: [
+                { id: 1, name: 'Last Christmas', emoji: '🎄', color: '#FEE2E2, #FCA5A5' },
+                { id: 2, name: 'Festive Holiday', emoji: '🎉', color: '#FEF3C7, #FCD34D' },
+                { id: 3, name: 'Dramatic Tension', emoji: '😰', color: '#EDE9FE, #A78BFA' },
+                { id: 4, name: 'Peaceful Morning', emoji: '🌅', color: '#CFFAFE, #67E8F9' },
+                { id: 5, name: 'Battle Theme', emoji: '⚔️', color: '#FEE2E2, #FCA5A5' },
+                { id: 6, name: 'Sad Memories', emoji: '😢', color: '#E0F2FE, #7DD3FC' },
+            ],
+            effect: [
+                { id: 1, name: '페이드인', emoji: '🌅', color: '#FEF3C7, #FCD34D' },
+                { id: 2, name: '페이드아웃', emoji: '🌙', color: '#EDE9FE, #A78BFA' },
+                { id: 3, name: '화면 흔들림', emoji: '📳', color: '#FEE2E2, #FCA5A5' },
+                { id: 4, name: '플래시', emoji: '⚡', color: '#FEF3C7, #FCD34D' },
+                { id: 5, name: '비 내림', emoji: '🌧️', color: '#E0F2FE, #7DD3FC' },
+                { id: 6, name: '눈 내림', emoji: '❄️', color: '#F5F5F7, #E5E5E5' },
+                { id: 7, name: '회상 효과', emoji: '💭', color: '#FCE7F3, #F9A8D4' },
+            ]
+        };
+
+        const resourceIcons = {
+            character: '👤',
+            background: '🏞',
+            music: '🎵',
+            effect: '🎬'
+        };
+
+        const resourceClasses = {
+            character: 'character',
+            background: 'background',
+            music: 'music',
+            effect: 'effect'
+        };
+
+        let currentResourceType = null;
+        let currentLineId = null;
+
+        // Toggle Add Menu
+        function toggleAddMenu(event, btn) {
+            event.stopPropagation();
+            const menu = btn.nextElementSibling;
+            const lineBlock = btn.closest('.line-block');
+            const allMenus = document.querySelectorAll('.add-menu');
+            const allTriggers = document.querySelectorAll('.add-menu-trigger');
+            const allLineBlocks = document.querySelectorAll('.line-block');
+            
+            // Close all other menus
+            allMenus.forEach(m => {
+                if (m !== menu) m.classList.remove('show');
+            });
+            allTriggers.forEach(t => {
+                if (t !== btn) t.classList.remove('active');
+            });
+            allLineBlocks.forEach(lb => {
+                if (lb !== lineBlock) lb.classList.remove('menu-open');
+            });
+            
+            // Check which resources are already added
+            const resourcesContainer = lineBlock.querySelector('.line-resources');
+            const addedTypes = [];
+            
+            if (resourcesContainer) {
+                const rows = resourcesContainer.querySelectorAll('.resource-row');
+                rows.forEach(row => {
+                    addedTypes.push(row.dataset.type);
+                });
+            }
+            
+            // Check if choice block exists inside this line
+            const hasChoiceBlock = !!lineBlock.querySelector('.choice-block');
+            
+            // Update menu items
+            const menuItems = menu.querySelectorAll('.add-menu-item');
+            menuItems.forEach(item => {
+                const onclick = item.getAttribute('onclick');
+                let isDisabled = false;
+                let resourceType = null;
+                
+                if (onclick.includes("'character'")) resourceType = 'character';
+                else if (onclick.includes("'background'")) resourceType = 'background';
+                else if (onclick.includes("'music'")) resourceType = 'music';
+                else if (onclick.includes("'effect'")) resourceType = 'effect';
+                else if (onclick.includes("addChoice")) resourceType = 'choice';
+                
+                if (resourceType && resourceType !== 'choice' && addedTypes.includes(resourceType)) {
+                    isDisabled = true;
+                }
+                
+                if (resourceType === 'choice' && hasChoiceBlock) {
+                    isDisabled = true;
+                }
+                
+                // Update item state
+                item.classList.toggle('disabled', isDisabled);
+                
+                // Remove existing check mark
+                const existingCheck = item.querySelector('.check');
+                if (existingCheck) existingCheck.remove();
+                
+                // Add check mark if added
+                if (isDisabled && resourceType !== 'choice') {
+                    const check = document.createElement('span');
+                    check.className = 'check';
+                    check.textContent = '✓';
+                    item.appendChild(check);
+                } else if (isDisabled && resourceType === 'choice') {
+                    const check = document.createElement('span');
+                    check.className = 'check';
+                    check.textContent = '✓';
+                    item.appendChild(check);
+                }
+            });
+            
+            menu.classList.toggle('show');
+            btn.classList.toggle('active');
+            lineBlock.classList.toggle('menu-open');
+        }
+
+        // Close menus when clicking outside
+        document.addEventListener('click', (e) => {
+            if (!e.target.closest('.line-actions')) {
+                document.querySelectorAll('.add-menu').forEach(m => m.classList.remove('show'));
+                document.querySelectorAll('.add-menu-trigger').forEach(t => t.classList.remove('active'));
+                document.querySelectorAll('.line-block').forEach(lb => lb.classList.remove('menu-open'));
+            }
+        });
+
+        // Open Resource Panel
+        function openResourcePanel(type, lineId) {
+            currentResourceType = type;
+            currentLineId = lineId;
+            
+            const panel = document.getElementById('resourcePanel');
+            const overlay = document.getElementById('overlay');
+            const title = document.getElementById('panelTitle');
+            const grid = document.getElementById('resourceGrid');
+            const search = document.getElementById('panelSearch');
+            
+            // Set title
+            const titles = {
+                character: '캐릭터',
+                background: '배경',
+                music: '음악',
+                effect: '연출'
+            };
+            title.textContent = titles[type];
+            search.placeholder = `${titles[type]} 검색...`;
+            
+            // Render resources
+            renderResources(type);
+            
+            // Show panel
+            panel.classList.add('show');
+            overlay.classList.add('show');
+            
+            // Close menu
+            document.querySelectorAll('.add-menu').forEach(m => m.classList.remove('show'));
+            document.querySelectorAll('.add-menu-trigger').forEach(t => t.classList.remove('active'));
+            document.querySelectorAll('.line-block').forEach(lb => lb.classList.remove('menu-open'));
+        }
+
+        // Render Resources
+        function renderResources(type) {
+            const grid = document.getElementById('resourceGrid');
+            const data = resourceData[type];
+            const isCharacter = type === 'character';
+            
+            grid.innerHTML = data.map(item => `
+                <div class="resource-item" onclick="selectResource('${type}', ${item.id}, '${item.name}', ${isCharacter && item.thumbnail ? `'${item.thumbnail}'` : 'null'})">
+                    ${isCharacter && item.thumbnail 
+                        ? `<img class="resource-avatar" src="${item.thumbnail}" alt="${item.name}">` 
+                        : `<div class="resource-avatar ${!isCharacter ? 'square' : ''}" style="background: linear-gradient(135deg, ${item.color});">${item.emoji}</div>`
+                    }
+                    <div class="resource-name">${item.name}</div>
+                </div>
+            `).join('');
+        }
+
+        // Select Resource
+        function selectResource(type, id, name, thumbnailUrl) {
+            const lineBlock = document.querySelector(`[data-line-id="${currentLineId}"]`);
+            let resourcesContainer = lineBlock.querySelector('.line-resources');
+            
+            if (!resourcesContainer) {
+                resourcesContainer = document.createElement('div');
+                resourcesContainer.className = 'line-resources';
+                lineBlock.querySelector('.line-text').after(resourcesContainer);
+            }
+
+            // Check if same type resource row already exists
+            const existingRow = resourcesContainer.querySelector(`[data-type="${type}"]`);
+            if (existingRow) {
+                existingRow.remove();
+            }
+
+            // Create new resource row
+            const row = document.createElement('div');
+            row.className = 'resource-row';
+            row.dataset.type = type;
+            
+            const labels = {
+                character: '캐릭터',
+                background: '배경',
+                music: '음악',
+                effect: '연출'
+            };
+            
+            const typeIcons = {
+                character: '👤',
+                background: '🏞',
+                music: '🎵',
+                effect: '🎬'
+            };
+            
+            // 썸네일 HTML 생성
+            let thumbnailHtml;
+            if (type === 'character' && thumbnailUrl) {
+                thumbnailHtml = `<img class="thumbnail" src="${thumbnailUrl}" alt="${name}">`;
+            } else {
+                thumbnailHtml = `<span class="thumbnail-placeholder">${typeIcons[type]}</span>`;
+            }
+            
+            if (type === 'character') {
+                row.innerHTML = `
+                    <span class="resource-label">${labels[type]}</span>
+                    <span class="resource-tag" onclick="openResourcePanel('${type}', ${currentLineId})">
+                        ${thumbnailHtml}
+                        <span class="name">${name}</span>
+                        <span class="remove" onclick="removeResourceRow(event, this)">×</span>
+                    </span>
+                    <select class="emotion-select" onchange="updateEmotion(this)">
+                        <option value="기본" selected>#기본</option>
+                        <option value="화난">#화난</option>
+                        <option value="슬픔">#슬픔</option>
+                        <option value="기쁨">#기쁨</option>
+                        <option value="수줍은">#수줍은</option>
+                        <option value="놀람">#놀람</option>
+                        <option value="당황">#당황</option>
+                        <option value="걱정">#걱정</option>
+                        <option value="무표정">#무표정</option>
+                        <option value="미소">#미소</option>
+                        <option value="눈물">#눈물</option>
+                        <option value="분노">#분노</option>
+                        <option value="두려움">#두려움</option>
+                        <option value="자신감">#자신감</option>
+                        <option value="피곤">#피곤</option>
+                        <option value="의심">#의심</option>
+                        <option value="사랑">#사랑</option>
+                        <option value="질투">#질투</option>
+                        <option value="혼란">#혼란</option>
+                        <option value="결의">#결의</option>
+                    </select>
+                `;
+            } else {
+                row.innerHTML = `
+                    <span class="resource-label">${labels[type]}</span>
+                    <span class="resource-tag" onclick="openResourcePanel('${type}', ${currentLineId})">
+                        ${thumbnailHtml}
+                        <span class="name">${name}</span>
+                        <span class="remove" onclick="removeResourceRow(event, this)">×</span>
+                    </span>
+                `;
+            }
+            
+            // 메뉴 순서대로 고정 위치에 삽입 (캐릭터 → 배경 → 음악 → 연출)
+            const typeOrder = ['character', 'background', 'music', 'effect'];
+            const currentIndex = typeOrder.indexOf(type);
+            
+            // 현재 타입보다 뒤에 있는 타입의 row를 찾아서 그 앞에 삽입
+            let insertBefore = null;
+            for (let i = currentIndex + 1; i < typeOrder.length; i++) {
+                const nextRow = resourcesContainer.querySelector(`[data-type="${typeOrder[i]}"]`);
+                if (nextRow) {
+                    insertBefore = nextRow;
+                    break;
+                }
+            }
+            
+            if (insertBefore) {
+                resourcesContainer.insertBefore(row, insertBefore);
+            } else {
+                resourcesContainer.appendChild(row);
+            }
+
+            // Close panel
+            closeResourcePanel();
+        }
+        
+        // Remove Resource Row
+        function removeResourceRow(event, element) {
+            event.stopPropagation();
+            const row = element.closest('.resource-row');
+            const resourcesContainer = row.parentElement;
+            row.remove();
+            
+            // Remove empty container
+            if (resourcesContainer.children.length === 0) {
+                resourcesContainer.remove();
+            }
+        }
+        
+        // Update Emotion
+        function updateEmotion(select) {
+            // 표정 변경 시 필요한 로직
+            console.log('표정 변경:', select.value);
+        }
+
+        // Close Resource Panel
+        function closeResourcePanel() {
+            document.getElementById('resourcePanel').classList.remove('show');
+            document.getElementById('overlay').classList.remove('show');
+            currentResourceType = null;
+            currentLineId = null;
+        }
+
+        // Close All Panels
+        function closeAllPanels() {
+            closeResourcePanel();
+        }
+
+
+        // Add Choice
+        function addChoice(lineId) {
+            const lineBlock = document.querySelector(`[data-line-id="${lineId}"]`);
+            
+            // Check if choice block already exists inside this line
+            const existingChoiceBlock = lineBlock.querySelector('.choice-block');
+            if (existingChoiceBlock) {
+                // Focus on the choice block if it exists
+                existingChoiceBlock.scrollIntoView({ behavior: 'smooth', block: 'center' });
+                document.querySelectorAll('.add-menu').forEach(m => m.classList.remove('show'));
+                document.querySelectorAll('.add-menu-trigger').forEach(t => t.classList.remove('active'));
+                document.querySelectorAll('.line-block').forEach(lb => lb.classList.remove('menu-open'));
+                return;
+            }
+            
+            // Create choice block
+            const choiceBlock = document.createElement('div');
+            choiceBlock.className = 'choice-block';
+            choiceBlock.innerHTML = `
+                <div class="choice-table">
+                    <div class="choice-header">
+                        <span>선택지</span>
+                        <span>내용</span>
+                        <span>Scene 전환</span>
+                        <span>선택지 유료로 전환</span>
+                        <button class="choice-block-delete" onclick="removeChoiceBlock(this)" title="선택지 삭제">🗑</button>
+                    </div>
+                    <div class="choice-rows">
+                        <div class="choice-row" data-choice-type="normal">
+                            <span class="choice-label">선택 1</span>
+                            <input type="text" class="choice-input" placeholder="선택지 내용을 입력하세요">
+                            <select class="choice-select">
+                                <option value="">Scene 선택</option>
+                                <option>Scene_01</option>
+                                <option>Scene_02</option>
+                                <option>Scene_03</option>
+                            </select>
+                            <div class="toggle" onclick="this.classList.toggle('active')"></div>
+                            <button class="choice-row-delete" onclick="removeChoiceRow(this)" title="삭제">🗑</button>
+                        </div>
+                        <div class="choice-row" data-choice-type="normal">
+                            <span class="choice-label">선택 2</span>
+                            <input type="text" class="choice-input" placeholder="선택지 내용을 입력하세요">
+                            <select class="choice-select">
+                                <option value="">Scene 선택</option>
+                                <option>Scene_01</option>
+                                <option>Scene_02</option>
+                                <option>Scene_03</option>
+                            </select>
+                            <div class="toggle" onclick="this.classList.toggle('active')"></div>
+                            <button class="choice-row-delete" onclick="removeChoiceRow(this)" title="삭제">🗑</button>
+                        </div>
+                    </div>
+                </div>
+                <div class="add-choice-wrapper">
+                    <button class="add-choice-btn" onclick="toggleChoiceMenu(this)">+ 추가하기</button>
+                    <div class="add-choice-menu">
+                        <div class="add-choice-menu-item" onclick="addNormalChoice(this)">
+                            <span class="icon">📋</span> 일반 선택지
+                        </div>
+                        <div class="add-choice-menu-item" onclick="addAIChoice(this)">
+                            <span class="icon">✦</span> AI 대화
+                        </div>
+                    </div>
+                </div>
+            `;
+            
+            // Insert inside the line block, 아래쪽에 배치 (삭제 버튼 위)
+            const deleteButton = lineBlock.querySelector('.line-delete');
+            if (deleteButton) {
+                lineBlock.insertBefore(choiceBlock, deleteButton);
+            } else {
+                lineBlock.appendChild(choiceBlock);
+            }
+            
+            // Scroll to the new choice block
+            choiceBlock.scrollIntoView({ behavior: 'smooth', block: 'center' });
+            
+            // Close menu
+            document.querySelectorAll('.add-menu').forEach(m => m.classList.remove('show'));
+            document.querySelectorAll('.add-menu-trigger').forEach(t => t.classList.remove('active'));
+            document.querySelectorAll('.line-block').forEach(lb => lb.classList.remove('menu-open'));
+        }
+        
+        // Toggle Choice Menu
+        function toggleChoiceMenu(btn) {
+            const menu = btn.nextElementSibling;
+            const choiceBlock = btn.closest('.choice-block');
+            const allMenus = document.querySelectorAll('.add-choice-menu');
+            
+            allMenus.forEach(m => {
+                if (m !== menu) m.classList.remove('show');
+            });
+            
+            // Check if AI choice already exists
+            const hasAI = choiceBlock.querySelector('.ai-choice-section');
+            const aiMenuItem = menu.querySelector('[onclick*="addAIChoice"]');
+            if (aiMenuItem) {
+                aiMenuItem.classList.toggle('disabled', !!hasAI);
+                
+                // Update check mark
+                const existingCheck = aiMenuItem.querySelector('.check');
+                if (existingCheck) existingCheck.remove();
+                
+                if (hasAI) {
+                    const check = document.createElement('span');
+                    check.className = 'check';
+                    check.textContent = '✓';
+                    check.style.marginLeft = 'auto';
+                    check.style.color = 'var(--text-muted)';
+                    aiMenuItem.appendChild(check);
+                }
+            }
+            
+            menu.classList.toggle('show');
+        }
+
+        // Close choice menus when clicking outside
+        document.addEventListener('click', (e) => {
+            if (!e.target.closest('.add-choice-wrapper')) {
+                document.querySelectorAll('.add-choice-menu').forEach(m => m.classList.remove('show'));
+            }
+        });
+
+        // Add Normal Choice Row
+        function addNormalChoice(menuItem) {
+            const choiceBlock = menuItem.closest('.choice-block');
+            const choiceRows = choiceBlock.querySelector('.choice-rows');
+            const normalRows = choiceRows.querySelectorAll('[data-choice-type="normal"]');
+            const rowCount = normalRows.length + 1;
+            
+            const newRow = document.createElement('div');
+            newRow.className = 'choice-row';
+            newRow.dataset.choiceType = 'normal';
+            newRow.innerHTML = `
+                <span class="choice-label">선택 ${rowCount}</span>
+                <input type="text" class="choice-input" placeholder="선택지 내용을 입력하세요">
+                <select class="choice-select">
+                    <option value="">Scene 선택</option>
+                    <option>Scene_01</option>
+                    <option>Scene_02</option>
+                    <option>Scene_03</option>
+                </select>
+                <div class="toggle" onclick="this.classList.toggle('active')"></div>
+                <button class="choice-row-delete" onclick="removeChoiceRow(this)" title="삭제">🗑</button>
+            `;
+            
+            choiceRows.appendChild(newRow);
+            
+            // Close menu
+            menuItem.closest('.add-choice-menu').classList.remove('show');
+            
+            // Update row numbers
+            updateChoiceNumbers(choiceBlock);
+        }
+
+        // Add AI Choice
+        function addAIChoice(menuItem) {
+            const choiceBlock = menuItem.closest('.choice-block');
+            const choiceTable = choiceBlock.querySelector('.choice-table');
+            
+            // Check if AI section already exists
+            if (choiceTable.querySelector('.ai-choice-section')) {
+                alert('AI 대화는 하나만 추가할 수 있습니다.');
+                menuItem.closest('.add-choice-menu').classList.remove('show');
+                return;
+            }
+            
+            // 일반 선택지 수 + 1 = AI 선택지 번호
+            const normalRows = choiceBlock.querySelectorAll('.choice-rows [data-choice-type="normal"]');
+            const aiRowIndex = normalRows.length + 1;
+            
+            const aiSection = document.createElement('div');
+            aiSection.className = 'ai-choice-section';
+            aiSection.innerHTML = `
+                <div class="choice-row ai-row" data-choice-type="ai">
+                    <span class="choice-label ai-label">선택 ${aiRowIndex}</span>
+                    <span class="choice-content ai-mode">✦ AI 모드로 직접 대화</span>
+                    <span></span>
+                    <span></span>
+                    <button class="choice-row-delete" onclick="removeAIChoice(this)" title="삭제">🗑</button>
+                </div>
+            `;
+            
+            choiceTable.appendChild(aiSection);
+            
+            // Close menu
+            menuItem.closest('.add-choice-menu').classList.remove('show');
+        }
+        
+        // Remove Choice Row (일반 선택지)
+        function removeChoiceRow(btn) {
+            const row = btn.closest('.choice-row');
+            const choiceBlock = row.closest('.choice-block');
+            row.remove();
+            
+            // Update row numbers
+            updateChoiceNumbers(choiceBlock);
+        }
+        
+        // Remove AI Choice
+        function removeAIChoice(btn) {
+            const aiSection = btn.closest('.ai-choice-section');
+            aiSection.remove();
+        }
+        
+        // Update Choice Numbers (일반 선택지 + AI 선택지)
+        function updateChoiceNumbers(choiceBlock) {
+            const normalRows = choiceBlock.querySelectorAll('.choice-rows [data-choice-type="normal"]');
+            normalRows.forEach((r, i) => {
+                const label = r.querySelector('.choice-label');
+                if (label) {
+                    label.textContent = `선택 ${i + 1}`;
+                }
+            });
+            
+            // AI 선택지 번호도 업데이트 (일반 선택지 수 + 1)
+            const aiRow = choiceBlock.querySelector('.ai-choice-section .choice-label.ai-label');
+            if (aiRow) {
+                aiRow.textContent = `선택 ${normalRows.length + 1}`;
+            }
+        }
+        
+        // Remove Choice Block
+        function removeChoiceBlock(btn) {
+            if (confirm('선택지 블록을 삭제하시겠습니까?')) {
+                btn.closest('.choice-block').remove();
+            }
+        }
+
+        // Add Description
+        function addDescription(lineId) {
+            alert('상황 설명이 추가됩니다');
+            document.querySelectorAll('.add-menu').forEach(m => m.classList.remove('show'));
+            document.querySelectorAll('.add-menu-trigger').forEach(t => t.classList.remove('active'));
+            document.querySelectorAll('.line-block').forEach(lb => lb.classList.remove('menu-open'));
+        }
+
+        // Search functionality
+        document.getElementById('panelSearch').addEventListener('input', (e) => {
+            const query = e.target.value.toLowerCase();
+            const items = document.querySelectorAll('.resource-item');
+            
+            items.forEach(item => {
+                const name = item.querySelector('.resource-name').textContent.toLowerCase();
+                item.style.display = name.includes(query) ? 'block' : 'none';
+            });
+        });
+
+        // 현재 활성 문장 하이라이트
+        function setActiveLine(lineBlock) {
+            const allLines = document.querySelectorAll('.line-block');
+            allLines.forEach(lb => {
+                lb.classList.toggle('active', lb === lineBlock);
+            });
+        }
+
+        // line-text 포커스 시 활성 문장 설정 (동적 생성 블록 포함)
+        document.addEventListener('focusin', (e) => {
+            const lineText = e.target.closest('.line-text');
+            if (lineText) {
+                const lineBlock = lineText.closest('.line-block');
+                if (lineBlock) {
+                    setActiveLine(lineBlock);
+                }
+            }
+        });
+
+        // Enter 키로 새 문장 블록 생성
+        document.addEventListener('keydown', (e) => {
+            if (e.key === 'Enter' && !e.shiftKey) {
+                const lineText = e.target.closest('.line-text');
+                if (lineText) {
+                    e.preventDefault();
+                    
+                    const lineBlock = lineText.closest('.line-block');
+                    const selection = window.getSelection();
+                    const range = selection.getRangeAt(0);
+                    
+                    // 커서 이후 텍스트 가져오기
+                    const afterRange = document.createRange();
+                    afterRange.setStart(range.endContainer, range.endOffset);
+                    afterRange.setEndAfter(lineText.lastChild || lineText);
+                    const afterText = afterRange.toString();
+                    
+                    // 커서 이전 텍스트만 남기기
+                    afterRange.deleteContents();
+                    
+                    // 새 line-block 생성
+                    const newLineId = Date.now();
+                    const newBlock = document.createElement('div');
+                    newBlock.className = 'line-block';
+                    newBlock.dataset.lineId = newLineId;
+                    newBlock.innerHTML = `
+                        <div class="line-actions">
+                            <button class="add-menu-trigger" onclick="toggleAddMenu(event, this)">+</button>
+                            <div class="add-menu">
+                                <div class="add-menu-item" onclick="openResourcePanel('character', ${newLineId})">
+                                    <span class="icon">👤</span> 캐릭터
+                                </div>
+                                <div class="add-menu-item" onclick="openResourcePanel('background', ${newLineId})">
+                                    <span class="icon">🏞</span> 배경
+                                </div>
+                                <div class="add-menu-item" onclick="openResourcePanel('music', ${newLineId})">
+                                    <span class="icon">🎵</span> 음악
+                                </div>
+                                <div class="add-menu-item" onclick="openResourcePanel('effect', ${newLineId})">
+                                    <span class="icon">🎬</span> 연출
+                                </div>
+                                <div class="add-menu-item" onclick="addChoice(${newLineId})">
+                                    <span class="icon">📝</span> 선택지 추가
+                                </div>
+                                <div class="add-menu-item" onclick="addDescription(${newLineId})">
+                                    <span class="icon">💭</span> 상황 설명
+                                </div>
+                            </div>
+                        </div>
+                        <div class="line-text" contenteditable="true">${afterText || ''}</div>
+                        <button class="line-delete" title="삭제" onclick="deleteLine(this)">🗑</button>
+                    `;
+                    
+                    // 현재 블록 다음에 새 문장 블록 삽입
+                    lineBlock.after(newBlock);
+                    
+                    // 새 블록의 텍스트 영역에 포커스
+                    const newLineText = newBlock.querySelector('.line-text');
+                    newLineText.focus();
+                    
+                    // 커서를 맨 앞으로
+                    const newRange = document.createRange();
+                    newRange.setStart(newLineText, 0);
+                    newRange.collapse(true);
+                    selection.removeAllRanges();
+                    selection.addRange(newRange);
+                }
+            }
+        });
+
+        // 문장 삭제
+        function deleteLine(btn) {
+            const lineBlock = btn.closest('.line-block');
+            const sceneSection = lineBlock.closest('.scene-section');
+            const allLines = sceneSection.querySelectorAll('.line-block');
+            
+            // 최소 1개 문장은 유지
+            if (allLines.length > 1) {
+                // 다음 또는 이전 블록으로 포커스 이동
+                const nextBlock = lineBlock.nextElementSibling;
+                const prevBlock = lineBlock.previousElementSibling;
+                
+                lineBlock.remove();
+                
+                if (nextBlock && nextBlock.classList.contains('line-block')) {
+                    nextBlock.querySelector('.line-text')?.focus();
+                } else if (prevBlock && prevBlock.classList.contains('line-block')) {
+                    prevBlock.querySelector('.line-text')?.focus();
+                }
+            }
+        }
+
+        // Text Format Toolbar
+        const formatToolbar = document.getElementById('formatToolbar');
+        let isFormatting = false;
+
+        // 텍스트 선택 시 툴바 표시
+        document.addEventListener('mouseup', (e) => {
+            if (isFormatting) {
+                isFormatting = false;
+                return;
+            }
+
+            setTimeout(() => {
+                const selection = window.getSelection();
+                const selectedText = selection.toString().trim();
+                
+                if (selectedText.length > 0) {
+                    const lineText = e.target.closest('.line-text');
+                    if (lineText) {
+                        const range = selection.getRangeAt(0);
+                        const rect = range.getBoundingClientRect();
+                        
+                        // 툴바 위치 설정
+                        formatToolbar.style.left = `${rect.left + (rect.width / 2) - 54}px`;
+                        formatToolbar.style.top = `${rect.top - 44 + window.scrollY}px`;
+                        formatToolbar.classList.add('show');
+                    }
+                } else {
+                    formatToolbar.classList.remove('show');
+                }
+            }, 10);
+        });
+
+        // 클릭 시 툴바 숨기기
+        document.addEventListener('mousedown', (e) => {
+            if (!formatToolbar.contains(e.target)) {
+                formatToolbar.classList.remove('show');
+            } else {
+                isFormatting = true;
+            }
+        });
+
+        // 텍스트 포맷 적용 (굵게/기울임/밑줄)
+        function formatText(command) {
+            document.execCommand(command, false, null);
+            
+            // 선택 유지하면서 툴바 숨기기
+            setTimeout(() => {
+                formatToolbar.classList.remove('show');
+            }, 100);
+        }
+
+
+        // 키보드 단축키
+        document.addEventListener('keydown', (e) => {
+            if (e.target.closest('.line-text')) {
+                if (e.ctrlKey || e.metaKey) {
+                    if (e.key === 'b') {
+                        e.preventDefault();
+                        formatText('bold');
+                    } else if (e.key === 'i') {
+                        e.preventDefault();
+                        formatText('italic');
+                    } else if (e.key === 'u') {
+                        e.preventDefault();
+                        formatText('underline');
+                    }
+                }
+            }
+        });
+
+        // Backspace로 빈 문장 삭제 및 이전 문장과 합치기
+        document.addEventListener('keydown', (e) => {
+            if (e.key === 'Backspace') {
+                const lineText = e.target.closest('.line-text');
+                if (lineText) {
+                    const selection = window.getSelection();
+                    const range = selection.getRangeAt(0);
+                    
+                    // 커서가 맨 앞에 있을 때
+                    if (range.startOffset === 0 && range.collapsed) {
+                        const lineBlock = lineText.closest('.line-block');
+                        let prevBlock = lineBlock.previousElementSibling;
+                        
+                        // 선택지 블록이면 건너뛰기
+                        while (prevBlock && !prevBlock.classList.contains('line-block')) {
+                            prevBlock = prevBlock.previousElementSibling;
+                        }
+                        
+                        if (prevBlock && prevBlock.classList.contains('line-block')) {
+                            e.preventDefault();
+                            
+                            const prevLineText = prevBlock.querySelector('.line-text');
+                            const currentText = lineText.textContent;
+                            const prevLength = prevLineText.textContent.length;
+                            
+                            // 이전 문장에 현재 텍스트 합치기
+                            prevLineText.textContent += currentText;
+                            
+                            // 현재 블록 삭제
+                            lineBlock.remove();
+                            
+                            // 이전 문장에 포커스 및 커서 위치 설정
+                            prevLineText.focus();
+                            const newRange = document.createRange();
+                            if (prevLineText.firstChild) {
+                                newRange.setStart(prevLineText.firstChild, prevLength);
+                            } else {
+                                newRange.setStart(prevLineText, 0);
+                            }
+                            newRange.collapse(true);
+                            selection.removeAllRanges();
+                            selection.addRange(newRange);
+                        }
+                    }
+                }
+            }
+        });
+    </script>
+</body>
+</html>

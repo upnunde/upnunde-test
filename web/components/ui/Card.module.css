@@ -1,0 +1,49 @@
+.card {
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-24, 24px);
+  background: var(--surface-10, rgba(255, 255, 255, 1));
+  color: var(--on-surface-10, rgba(43, 43, 43, 1));
+  border-radius: var(--radius-12, 12px);
+  border: 1px solid var(--border-10, rgba(0, 0, 0, 0.07));
+}
+
+.cardHeader {
+  display: grid;
+  grid-template-rows: auto auto;
+  align-items: start;
+  gap: var(--spacing-6, 6px);
+  padding: var(--spacing-24, 24px) var(--spacing-24, 24px) 0;
+}
+
+.cardTitle {
+  font: var(--heading-4-700, 700 20px/28px var(--font-family));
+  color: var(--on-surface-10, rgba(43, 43, 43, 1));
+  margin: 0;
+  line-height: 1.2;
+}
+
+.cardDescription {
+  font: var(--body-3-400, 400 14px/20px var(--font-family));
+  color: var(--on-surface-30, rgba(145, 145, 148, 1));
+  margin: 0;
+}
+
+.cardContent {
+  padding: 0 var(--spacing-24, 24px);
+}
+
+.cardContent:last-child {
+  padding-bottom: var(--spacing-24, 24px);
+}
+
+.cardFooter {
+  display: flex;
+  align-items: center;
+  padding: 0 var(--spacing-24, 24px) var(--spacing-24, 24px);
+}
+
+.cardFooter.borderTop {
+  padding-top: var(--spacing-24, 24px);
+  border-top: 1px solid var(--border-10, rgba(0, 0, 0, 0.07));
+}

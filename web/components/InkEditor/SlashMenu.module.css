@@ -1,0 +1,111 @@
+.slashMenu {
+  background: var(--surface-10, rgba(255, 255, 255, 1));
+  border: 1px solid var(--border-20, rgba(0, 0, 0, 0.13));
+  border-radius: var(--radius-8, 8px);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+  z-index: 1000;
+  min-width: 280px;
+  max-width: 320px;
+  max-height: 400px;
+  overflow: hidden;
+  animation: slideDown 0.15s ease-out;
+}
+
+@keyframes slideDown {
+  from {
+    opacity: 0;
+    transform: translateY(-8px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.slashMenuHeader {
+  padding: var(--spacing-8, 8px) var(--spacing-12, 12px);
+  border-bottom: 1px solid var(--border-10, rgba(0, 0, 0, 0.07));
+}
+
+.slashMenuTitle {
+  font: var(--body-3-500, 500 14px/20px var(--font-family));
+  color: var(--on-surface-20, rgba(82, 82, 84, 1));
+}
+
+.slashMenuList {
+  display: flex;
+  flex-direction: column;
+  padding: var(--spacing-4, 4px);
+  max-height: 360px;
+  overflow-y: auto;
+}
+
+.slashMenuGroup {
+  display: flex;
+  flex-direction: column;
+  margin-bottom: var(--spacing-4, 4px);
+}
+
+.slashMenuGroup:last-child {
+  margin-bottom: 0;
+}
+
+.slashMenuGroupLabel {
+  padding: var(--spacing-4, 4px) var(--spacing-12, 12px);
+  font: var(--caption-1-500, 500 12px/16px var(--font-family));
+  color: var(--on-surface-30, rgba(145, 145, 148, 1));
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.slashMenuItem {
+  display: flex;
+  align-items: flex-start;
+  gap: var(--spacing-8, 8px);
+  padding: var(--spacing-8, 8px) var(--spacing-12, 12px);
+  background: transparent;
+  border: none;
+  border-radius: var(--radius-4, 4px);
+  color: var(--on-surface-10, rgba(43, 43, 43, 1));
+  cursor: pointer;
+  transition: all 0.15s;
+  text-align: left;
+  width: 100%;
+}
+
+.slashMenuItem:hover,
+.slashMenuItemSelected {
+  background: var(--primary-container, rgba(254, 227, 249, 1));
+}
+
+.slashMenuItem:active {
+  background: var(--surface-disabled, rgba(0, 0, 0, 0.04));
+}
+
+.slashMenuEmoji {
+  font-size: 20px;
+  line-height: 1;
+  flex-shrink: 0;
+  margin-top: 2px;
+}
+
+.slashMenuItemContent {
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-2, 2px);
+  flex: 1;
+  min-width: 0;
+}
+
+.slashMenuLabel {
+  font: var(--body-2-500, 500 15px/22px var(--font-family));
+  color: var(--on-surface-10, rgba(43, 43, 43, 1));
+}
+
+.slashMenuDescription {
+  font: var(--body-3-400, 400 13px/18px var(--font-family));
+  color: var(--on-surface-30, rgba(145, 145, 148, 1));
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}

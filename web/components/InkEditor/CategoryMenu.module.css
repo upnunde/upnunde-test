@@ -1,0 +1,83 @@
+.categoryMenu {
+  z-index: 1000;
+  width: 160px; /* w-40 */
+  min-width: 160px; /* min-w-40 */
+  background: var(--surface-10, rgba(255, 255, 255, 1));
+  border-radius: var(--radius-6, 6px);
+  border: none;
+  box-shadow: 0px 6px 12px 6px rgba(0, 0, 0, 0.16);
+  padding: var(--spacing-4, 4px) var(--spacing-4, 4px); /* px-1 py-2 */
+  display: inline-flex;
+  flex-direction: column;
+  justify-content: flex-start;
+  align-items: flex-start;
+  gap: var(--spacing-2, 2px); /* gap-0.5 */
+}
+
+.menuItem {
+  display: inline-flex;
+  align-items: center;
+  justify-content: flex-start;
+  gap: var(--spacing-8, 8px);
+  width: 100%;
+  height: 32px; /* h-8 */
+  padding: 0 var(--spacing-8, 8px); /* px-2 */
+  border: none;
+  background: var(--surface-10, rgba(255, 255, 255, 1));
+  border-radius: var(--radius-4, 4px);
+  font: var(--body-2-400, 400 16px/20px var(--font-family)); /* text-base font-normal leading-5 */
+  color: var(--on-surface-20, rgba(82, 82, 84, 1));
+  cursor: pointer;
+  transition: all 0.15s;
+  overflow: hidden;
+  flex-shrink: 0;
+}
+
+.menuItem:hover:not(.disabled) {
+  background: var(--surface-10, rgba(255, 255, 255, 1));
+  color: var(--on-surface-20, rgba(82, 82, 84, 1));
+}
+
+.menuItem.disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+  color: var(--on-surface-30, rgba(145, 145, 148, 1));
+}
+
+.menuItem.disabled:hover {
+  background: transparent;
+}
+
+.menuItemIcon {
+  width: 20px; /* w-5 */
+  height: 20px; /* h-5 */
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+
+.menuItemIcon svg {
+  width: 14px; /* w-3.5 */
+  height: 14px; /* h-3.5 */
+  position: absolute;
+  left: 2.5px;
+  top: 2.5px;
+  color: var(--on-surface-10, rgba(43, 43, 43, 1));
+}
+
+.menuItemText {
+  flex: 1;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  font: var(--body-2-400, 400 16px/20px var(--font-family));
+  color: var(--on-surface-20, rgba(82, 82, 84, 1));
+  text-align: center;
+}
+
+.checkIcon {
+  margin-left: auto;
+  color: var(--primary, rgba(246, 66, 212, 1));
+}

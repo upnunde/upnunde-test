@@ -1,0 +1,64 @@
+.scriptBlock {
+  display: flex;
+  align-items: flex-start;
+  gap: var(--spacing-8, 8px);
+  padding: var(--spacing-8, 8px) var(--spacing-12, 12px);
+  border-radius: var(--radius-6, 6px);
+  transition: all 0.15s;
+  position: relative;
+  min-height: 40px;
+}
+
+.scriptBlock:hover {
+  background: var(--surface-20, rgba(248, 248, 252, 1));
+}
+
+.scriptBlock.selected {
+  background: var(--primary-container, rgba(254, 227, 249, 1));
+}
+
+.dragHandle {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 20px;
+  height: 20px;
+  margin-top: 2px;
+  color: var(--on-surface-30, rgba(145, 145, 148, 1));
+  cursor: grab;
+  opacity: 0;
+  transition: opacity 0.15s;
+  flex-shrink: 0;
+}
+
+.scriptBlock:hover .dragHandle {
+  opacity: 1;
+}
+
+.dragHandle:active {
+  cursor: grabbing;
+}
+
+.textAreaWrapper {
+  flex: 1;
+  position: relative;
+  min-width: 0;
+}
+
+.textarea {
+  width: 100%;
+  min-height: 22px;
+  padding: 0;
+  border: none;
+  outline: none;
+  background: transparent;
+  font: var(--body-2-400, 400 15px/22px var(--font-family));
+  color: var(--on-surface-10, rgba(43, 43, 43, 1));
+  resize: none;
+  line-height: 22px;
+  overflow: hidden;
+}
+
+.textarea::placeholder {
+  color: var(--on-surface-30, rgba(145, 145, 148, 1));
+}

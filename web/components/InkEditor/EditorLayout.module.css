@@ -1,0 +1,101 @@
+.root {
+  display: flex;
+  flex-direction: column;
+  width: 100vw;
+  height: 100vh;
+  background: var(--background-20, rgba(248, 248, 252, 1));
+  overflow: hidden;
+}
+
+.header {
+  height: 56px; /* h-14 */
+  flex-shrink: 0;
+  border-bottom: 1px solid var(--border-10, rgba(0, 0, 0, 0.07));
+  background: var(--surface-10, rgba(255, 255, 255, 1));
+  display: flex;
+  align-items: center;
+  padding: 0 var(--spacing-16, 16px);
+}
+
+.headerContent {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  width: 100%;
+}
+
+.logo {
+  font: var(--body-1-500, 500 16px/24px var(--font-family));
+  color: var(--on-surface-10, rgba(43, 43, 43, 1));
+}
+
+.logo strong {
+  font-weight: 700;
+}
+
+.saveButton {
+  padding: var(--spacing-8, 8px) var(--spacing-16, 16px);
+  background: var(--primary, rgba(246, 66, 212, 1));
+  color: var(--on-primary, rgba(255, 255, 255, 1));
+  border: none;
+  border-radius: var(--radius-6, 6px);
+  font: var(--body-2-500, 500 15px/22px var(--font-family));
+  cursor: pointer;
+  transition: filter 0.15s;
+}
+
+.saveButton:hover {
+  filter: brightness(0.9);
+}
+
+.saveButton:active {
+  filter: brightness(0.8);
+}
+
+.mainContainer {
+  flex: 1;
+  display: flex;
+  flex-direction: row;
+  overflow: hidden;
+  min-height: 0;
+}
+
+.editorCanvas {
+  flex: 1;
+  overflow-y: auto;
+  overflow-x: hidden;
+  padding: var(--spacing-32, 32px); /* p-8 */
+  min-width: 0;
+  background: var(--background-20, rgba(248, 248, 252, 1));
+}
+
+.sidebar {
+  width: 320px; /* w-[320px] */
+  flex-shrink: 0;
+  border-left: 1px solid var(--border-10, rgba(0, 0, 0, 0.07));
+  background: var(--surface-10, rgba(255, 255, 255, 1));
+  box-shadow: -4px 0 12px rgba(0, 0, 0, 0.05); /* shadow-xl */
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  animation: slideIn 0.3s ease-out;
+  overflow: hidden;
+}
+
+@keyframes slideIn {
+  from {
+    transform: translateX(100%);
+    opacity: 0;
+  }
+  to {
+    transform: translateX(0);
+    opacity: 1;
+  }
+}
+
+.sidebarContent {
+  flex: 1;
+  overflow-y: auto;
+  overflow-x: hidden;
+  height: 100%;
+}

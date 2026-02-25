@@ -1,0 +1,103 @@
+.sidebar {
+  width: 320px;
+  flex-shrink: 0;
+  display: flex;
+  flex-direction: column;
+  background: var(--surface-10, rgba(255, 255, 255, 1));
+  border-left: 1px solid var(--border-10, rgba(0, 0, 0, 0.07));
+  height: 100%;
+  overflow-y: auto;
+  overflow-x: hidden;
+}
+
+.sidebarHeader {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: var(--spacing-16, 16px) var(--spacing-20, 20px);
+  border-bottom: 1px solid var(--border-10, rgba(0, 0, 0, 0.07));
+  flex-shrink: 0;
+}
+
+.sidebarTitle {
+  font: var(--heading-4-700, 700 20px/28px var(--font-family));
+  color: var(--on-surface-10, rgba(43, 43, 43, 1));
+  margin: 0;
+}
+
+.closeButton {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 32px;
+  height: 32px;
+  padding: 0;
+  background: transparent;
+  border: 1px solid var(--border-10, rgba(0, 0, 0, 0.07));
+  border-radius: var(--radius-circle, 999px);
+  color: var(--on-surface-20, rgba(82, 82, 84, 1));
+  cursor: pointer;
+  transition: all 0.15s;
+}
+
+.closeButton:hover {
+  background: var(--surface-20, rgba(248, 248, 252, 1));
+  border-color: var(--border-20, rgba(0, 0, 0, 0.13));
+}
+
+.sidebarContent {
+  flex: 1;
+  padding: var(--spacing-20, 20px);
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-20, 20px);
+}
+
+.formGroup {
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-8, 8px);
+  margin-bottom: var(--spacing-16, 16px);
+}
+
+.formGroup:last-child {
+  margin-bottom: 0;
+}
+
+.textarea {
+  width: 100%;
+  min-height: 120px;
+  padding: var(--spacing-12, 12px);
+  border: 1px solid var(--border-20, rgba(0, 0, 0, 0.13));
+  border-radius: var(--radius-6, 6px);
+  background: var(--surface-10, rgba(255, 255, 255, 1));
+  font: var(--body-2-400, 400 15px/22px var(--font-family));
+  color: var(--on-surface-10, rgba(43, 43, 43, 1));
+  resize: vertical;
+  outline: none;
+  transition: all 0.15s;
+}
+
+.textarea:focus {
+  border-color: var(--primary, rgba(246, 66, 212, 1));
+  outline: 2px solid var(--primary-container, rgba(254, 227, 249, 1));
+  outline-offset: -2px;
+}
+
+.textarea::placeholder {
+  color: var(--on-surface-30, rgba(145, 145, 148, 1));
+}
+
+.formActions {
+  display: flex;
+  gap: var(--spacing-8, 8px);
+  margin-top: var(--spacing-16, 16px);
+}
+
+.comingSoon {
+  font: var(--body-3-400, 400 14px/20px var(--font-family));
+  color: var(--on-surface-30, rgba(145, 145, 148, 1));
+  text-align: center;
+  padding: var(--spacing-20, 20px);
+  margin: 0;
+}

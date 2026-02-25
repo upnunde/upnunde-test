@@ -1,0 +1,53 @@
+.editor {
+  width: 100%;
+  max-width: 1400px;
+  margin: 0 auto;
+  padding: var(--spacing-24, 24px);
+  background: var(--background-20, rgba(248, 248, 252, 1));
+  min-height: 100vh;
+}
+
+.blocksContainer {
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-20, 20px);
+}
+
+.blockWrapper {
+  position: relative;
+}
+
+.emptyState {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: var(--spacing-80, 80px) var(--spacing-24, 24px);
+  text-align: center;
+}
+
+.emptyMessage {
+  font: var(--body-2-400, 400 15px/22px var(--font-family));
+  color: var(--on-surface-30, rgba(145, 145, 148, 1));
+  margin-bottom: var(--spacing-24, 24px);
+}
+
+.addFirstBlockButton {
+  padding: var(--spacing-12, 12px) var(--spacing-20, 20px);
+  background: var(--primary, rgba(246, 66, 212, 1));
+  color: var(--on-primary, rgba(255, 255, 255, 1));
+  border: none;
+  border-radius: var(--radius-6, 6px);
+  font: var(--body-2-500, 500 15px/22px var(--font-family));
+  cursor: pointer;
+  transition: filter 0.15s;
+  margin: var(--spacing-4, 4px);
+}
+
+.addFirstBlockButton:hover {
+  filter: brightness(0.9);
+}
+
+.addFirstBlockButton:active {
+  filter: brightness(0.8);
+}

@@ -1,0 +1,46 @@
+.badge {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: var(--radius-4, 4px);
+  border: 1px solid transparent;
+  padding: var(--spacing-2, 2px) var(--spacing-8, 8px);
+  font: var(--caption-1-500, 500 12px/16px var(--font-family));
+  white-space: nowrap;
+  width: fit-content;
+  flex-shrink: 0;
+  gap: var(--spacing-4, 4px);
+  transition: all 0.15s;
+  overflow: hidden;
+}
+
+.badge:focus-visible {
+  outline: 2px solid var(--primary, rgba(246, 66, 212, 1));
+  outline-offset: 2px;
+}
+
+/* Variants */
+.default {
+  background: var(--primary, rgba(246, 66, 212, 1));
+  color: var(--on-primary, rgba(255, 255, 255, 1));
+}
+
+.secondary {
+  background: var(--secondary, rgba(240, 240, 245, 1));
+  color: var(--on-secondary, rgba(82, 82, 84, 1));
+}
+
+.destructive {
+  background: var(--error, rgba(236, 50, 50, 1));
+  color: var(--on-error, rgba(255, 255, 255, 1));
+}
+
+.outline {
+  border-color: var(--border-20, rgba(0, 0, 0, 0.13));
+  color: var(--on-surface-10, rgba(43, 43, 43, 1));
+  background: transparent;
+}
+
+.outline:hover {
+  background: var(--surface-20, rgba(248, 248, 252, 1));
+}

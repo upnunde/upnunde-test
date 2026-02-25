@@ -1,0 +1,39 @@
+.input {
+  display: flex;
+  width: 100%;
+  height: 36px;
+  min-width: 0;
+  border-radius: var(--radius-6, 6px);
+  border: 1px solid var(--border-20, rgba(0, 0, 0, 0.13));
+  background: var(--surface-10, rgba(255, 255, 255, 1));
+  padding: 0 var(--spacing-12, 12px);
+  font: var(--body-2-400, 400 15px/22px var(--font-family));
+  color: var(--on-surface-10, rgba(43, 43, 43, 1));
+  transition: all 0.15s;
+  outline: none;
+}
+
+.input::placeholder {
+  color: var(--on-surface-30, rgba(145, 145, 148, 1));
+}
+
+.input:focus {
+  border-color: var(--primary, rgba(246, 66, 212, 1));
+  outline: 2px solid var(--primary-container, rgba(254, 227, 249, 1));
+  outline-offset: -2px;
+}
+
+.input:disabled {
+  pointer-events: none;
+  cursor: not-allowed;
+  opacity: 0.5;
+  background: var(--surface-disabled, rgba(0, 0, 0, 0.04));
+}
+
+.input[aria-invalid="true"] {
+  border-color: var(--error, rgba(236, 50, 50, 1));
+}
+
+.input[aria-invalid="true"]:focus {
+  outline-color: var(--error-container, rgba(252, 224, 224, 1));
+}

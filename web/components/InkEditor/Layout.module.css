@@ -1,0 +1,17 @@
+.layout {
+  display: flex;
+  flex-direction: column;
+  width: 100vw;
+  height: 100vh;
+  background: var(--background-20, rgba(248, 248, 252, 1));
+  overflow: hidden;
+}
+
+.mainContainer {
+  display: flex;
+  flex-direction: row;
+  width: 100%;
+  height: calc(100vh - 136px); /* 56px (row1) + 80px (row2) */
+  margin-top: 136px; /* Header 높이만큼 여백 */
+  overflow: hidden;
+}

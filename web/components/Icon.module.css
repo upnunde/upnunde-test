@@ -1,0 +1,19 @@
+.icon {
+  display: inline-block;
+  flex-shrink: 0;
+  vertical-align: middle;
+  user-select: none;
+}
+
+.icon[onclick] {
+  cursor: pointer;
+  transition: opacity 0.15s ease;
+}
+
+.icon[onclick]:hover {
+  opacity: 0.8;
+}
+
+.icon[onclick]:active {
+  opacity: 0.6;
+}

@@ -1,0 +1,113 @@
+.editorMain {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  overflow-y: auto;
+  overflow-x: hidden;
+  background: var(--background-20, rgba(248, 248, 252, 1));
+  min-width: 0;
+}
+
+.blocksContainer {
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-20, 20px);
+  padding: var(--spacing-24, 24px);
+  max-width: 1400px;
+  width: 100%;
+  margin: 0 auto;
+}
+
+.blockWrapper {
+  position: relative;
+  transition: all 0.15s;
+}
+
+.blockWrapper:hover {
+  transform: translateX(2px);
+}
+
+.blockActive {
+  position: relative;
+}
+
+.blockActive::before {
+  content: "";
+  position: absolute;
+  left: calc(var(--spacing-24, 24px) * -1);
+  top: 0;
+  bottom: 0;
+  width: 4px;
+  background: var(--primary, rgba(246, 66, 212, 1));
+  border-radius: 0 2px 2px 0;
+}
+
+.blockActive > * {
+  border-color: var(--primary, rgba(246, 66, 212, 1));
+  box-shadow: 0 0 0 1px var(--primary-container, rgba(254, 227, 249, 1));
+}
+
+.scriptBlockWrapper {
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-12, 12px);
+}
+
+.resourceChips {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--spacing-8, 8px);
+  padding-top: var(--spacing-8, 8px);
+  margin-top: var(--spacing-8, 8px);
+  border-top: 1px solid var(--border-10, rgba(0, 0, 0, 0.07));
+}
+
+.resourceChip {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--spacing-4, 4px);
+  padding: var(--spacing-4, 4px) var(--spacing-8, 8px);
+  font: var(--body-3-400, 400 14px/20px var(--font-family));
+}
+
+.resourceAvatar {
+  width: 16px;
+  height: 16px;
+  border-radius: var(--radius-circle, 999px);
+  object-fit: cover;
+}
+
+.emptyState {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: var(--spacing-80, 80px) var(--spacing-24, 24px);
+  text-align: center;
+}
+
+.emptyMessage {
+  font: var(--body-2-400, 400 15px/22px var(--font-family));
+  color: var(--on-surface-30, rgba(145, 145, 148, 1));
+  margin-bottom: var(--spacing-24, 24px);
+}
+
+.addFirstBlockButton {
+  padding: var(--spacing-12, 12px) var(--spacing-20, 20px);
+  background: var(--primary, rgba(246, 66, 212, 1));
+  color: var(--on-primary, rgba(255, 255, 255, 1));
+  border: none;
+  border-radius: var(--radius-6, 6px);
+  font: var(--body-2-500, 500 15px/22px var(--font-family));
+  cursor: pointer;
+  transition: filter 0.15s;
+  margin: var(--spacing-4, 4px);
+}
+
+.addFirstBlockButton:hover {
+  filter: brightness(0.9);
+}
+
+.addFirstBlockButton:active {
+  filter: brightness(0.8);
+}

@@ -1,0 +1,37 @@
+.editorContent {
+  width: 100%;
+  min-height: 100%;
+  background: var(--background-20, rgba(248, 248, 252, 1));
+  padding: var(--spacing-20, 20px);
+  display: flex;
+  justify-content: center;
+  align-items: flex-start;
+}
+
+.blocksContainer {
+  max-width: 1400px;
+  min-width: 800px;
+  width: 100%;
+  padding: var(--spacing-20, 20px) var(--spacing-20, 20px);
+  background: var(--surface-10, rgba(255, 255, 255, 1));
+  border-radius: var(--radius-12, 12px);
+  border: 1px solid var(--border-10, rgba(0, 0, 0, 0.05));
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-20, 20px); /* 블록 간 간격 줄임 */
+  overflow: hidden;
+}
+
+.emptyState {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 200px;
+  padding: var(--spacing-32, 32px);
+}
+
+.emptyMessage {
+  font: var(--body-2-400, 400 15px/22px var(--font-family));
+  color: var(--on-surface-30, rgba(145, 145, 148, 1));
+  text-align: center;
+}
