@@ -55,12 +55,7 @@ export function SceneNavigation({
       } else {
         const element = document.getElementById(`block-${blockId}`);
         if (element) {
-          element.scrollIntoView({ behavior: "smooth", block: "start" });
-          const editorContainer = element.closest(".overflow-y-auto");
-          if (editorContainer) {
-            const scrollOffset = element.getBoundingClientRect().top - editorContainer.getBoundingClientRect().top + editorContainer.scrollTop - 100;
-            editorContainer.scrollTo({ top: scrollOffset, behavior: "smooth" });
-          }
+          element.scrollIntoView({ behavior: "auto", block: "nearest", inline: "nearest" });
         }
       }
     }, NAV_DELAY_MS);

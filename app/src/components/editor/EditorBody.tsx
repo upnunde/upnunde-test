@@ -532,13 +532,30 @@ export default function EditorBody() {
           const el = document.getElementById(`block-${id}`);
           if (!el) return;
 
-          // 방향키 이동 시 포커스된 블록이 에디터와 미리보기 화면에 노출되도록 스크롤
+          // 방향키 이동 시: 포커스된 블록이 "포커스 뷰포트" 밖일 때만 최소한으로 스크롤.
+          // - 포커스 뷰포트: 에디터 컨테이너 상/하단에서 10% 안쪽으로 들어온 내부 영역
+          // - 위로 갈 때: 이 내부 영역의 상단선을 기준으로 따라감
+          // - 아래로 갈 때: 이 내부 영역의 하단선을 기준으로 따라감 (최하단에서 따라가기)
           const editorContainer = el.closest(".overflow-y-auto");
-          if (editorContainer) {
+          if (editorContainer && editorContainer instanceof HTMLElement) {
             const containerRect = editorContainer.getBoundingClientRect();
             const elementRect = el.getBoundingClientRect();
-            const scrollOffset = editorContainer.scrollTop + elementRect.top - containerRect.top - 100;
-            editorContainer.scrollTo({ top: Math.max(0, scrollOffset), behavior: "smooth" });
+            const margin = containerRect.height * 0.1; // 상/하 10% 마진
+            const innerTop = containerRect.top + margin;
+            const innerBottom = containerRect.bottom - margin;
+
+            const topInView = elementRect.top >= innerTop;
+            const bottomInView = elementRect.bottom <= innerBottom;
+            if (!topInView) {
+              // 요소가 상단 마진 위로 나감 → 스크롤해서 요소 상단이 내부 상단선(innerTop)에 오도록
+              const delta = elementRect.top - innerTop;
+              editorContainer.scrollTo({ top: Math.max(0, editorContainer.scrollTop + delta), behavior: "auto" });
+            } else if (!bottomInView) {
+              // 요소가 하단 마진 아래로 나감 → 스크롤해서 요소 하단이 내부 하단선(innerBottom)에 오도록 (최하단 따라가기)
+              const delta = elementRect.bottom - innerBottom;
+              editorContainer.scrollTo({ top: editorContainer.scrollTop + delta, behavior: "auto" });
+            }
+            // 이미 뷰포트 안에 있으면 스크롤 위치 변경 없음
           }
 
           // Priority: textarea > input > button (for picker) > div with tabIndex (root).

@@ -1,8 +1,9 @@
-"use client";
+ "use client";
 
 import { useState, useRef } from "react";
 import { User } from "lucide-react";
 import { ProfileEditModal } from "@/components/ProfileEditModal";
+import { useRouter } from "next/navigation";
 
 export interface HeaderProps {
   /** Reserved for future use */
@@ -15,16 +16,24 @@ export interface HeaderProps {
 
 /** Global top header: Logo + User avatar only. Full width. */
 export default function Header({ profileImageUrl, onProfileImageChange }: HeaderProps) {
+  const router = useRouter();
   const [isProfileModalOpen, setIsProfileModalOpen] = useState(false);
   const profileButtonRef = useRef<HTMLButtonElement>(null);
 
   return (
     <header className="flex h-14 shrink-0 items-center justify-between border-b border-slate-200 bg-white px-4">
-      <img
-        src="/renovel-studio-logo.png"
-        alt="RE:NOVEL Studio"
-        className="h-5 object-contain object-left"
-      />
+      <button
+        type="button"
+        onClick={() => router.push("/login")}
+        className="flex items-center"
+        aria-label="로그인 화면으로 이동"
+      >
+        <img
+          src="/renovel-studio-logo.png"
+          alt="RE:NOVEL Studio"
+          className="h-5 object-contain object-left"
+        />
+      </button>
       <div className="flex items-center">
         <button
           ref={profileButtonRef}

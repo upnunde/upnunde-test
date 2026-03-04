@@ -174,10 +174,12 @@ export function ChoiceBlockTable({
   onChange,
   sceneOptions = [],
 }: ChoiceBlockTableProps) {
-  // 선택지가 비어 있으면 디폴트로 2개 노출
+  // 선택지는 최소 2개(선택 1, 선택 2)가 기본 구조
   useEffect(() => {
     if (choices.length === 0) {
       onChange([createEmptyChoice(), createEmptyChoice()]);
+    } else if (choices.length === 1) {
+      onChange([...choices, createEmptyChoice()]);
     }
   }, [choices.length, onChange]);
 
@@ -247,7 +249,7 @@ export function ChoiceBlockTable({
         />
       ))}
       {/* Footer: Task 4 - Dropdown with "선택지 추가" and "✨ AI 모드로 직접 대화" */}
-      <div className="flex h-[40px] items-center justify-start border-t border-slate-100 px-1 py-2">
+      <div className="flex h-[40px] items-center justify-start px-1 py-2">
         <DropdownMenu>
           <DropdownMenuTrigger asChild>
             <Button

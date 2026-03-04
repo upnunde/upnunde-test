@@ -2,6 +2,7 @@
 
 import React, { useLayoutEffect, useState, useRef } from "react";
 import { createPortal } from "react-dom";
+import { useRouter } from "next/navigation";
 
 const MODAL_WIDTH = 384;
 const GAP_BELOW_ANCHOR = 8;
@@ -17,6 +18,7 @@ interface ProfileEditModalProps {
 }
 
 export function ProfileEditModal({ isOpen, onClose, anchorRef, onSave }: ProfileEditModalProps) {
+  const router = useRouter();
   const [position, setPosition] = useState<{ top: number; left: number; maxHeight: number } | null>(null);
   const [avatarPreview, setAvatarPreview] = useState<string | null>(null);
   const cardRef = useRef<HTMLDivElement>(null);
@@ -170,7 +172,7 @@ export function ProfileEditModal({ isOpen, onClose, anchorRef, onSave }: Profile
         </div>
 
         {/* Form Fields */}
-        <div className="self-stretch p-5 flex flex-col justify-start items-start gap-10">
+        <div className="self-stretch p-5 flex flex-col justify-start items-start gap-5">
 
           {/* ID Field */}
           <div className="self-stretch flex flex-col justify-start items-start gap-3">
@@ -230,28 +232,42 @@ export function ProfileEditModal({ isOpen, onClose, anchorRef, onSave }: Profile
         </div>
 
         {/* Footer Actions */}
-        <div className="self-stretch px-5 pb-5 inline-flex justify-end items-center gap-2">
+        <div className="self-stretch px-5 pb-5 flex justify-between items-center gap-2">
           <button
             type="button"
             onClick={() => {
               if (avatarPreview) URL.revokeObjectURL(avatarPreview);
               setAvatarPreview(null);
               onClose();
+              router.push("/login");
             }}
-            className="h-10 min-w-20 px-4 bg-transparent rounded-md border border-slate-200 flex justify-center items-center hover:bg-slate-50 hover:border-slate-300 transition-colors"
+            className="h-10 min-w-20 -ml-2 bg-transparent rounded-lg flex justify-center items-center hover:bg-red-50 transition-colors"
           >
-            <span className="text-slate-700 text-base font-medium leading-5">취소</span>
+            <span className="text-red-600 text-base font-medium leading-5">로그아웃</span>
           </button>
-          <button
-            type="button"
-            onClick={() => {
-              onSave?.(avatarPreview ?? null);
-              onClose();
-            }}
-            className="h-10 min-w-20 px-4 bg-slate-800 rounded-md flex justify-center items-center hover:bg-slate-900 transition-colors"
-          >
-            <span className="text-white text-base font-medium leading-5">저장</span>
-          </button>
+          <div className="inline-flex justify-end items-center gap-2">
+            <button
+              type="button"
+              onClick={() => {
+                if (avatarPreview) URL.revokeObjectURL(avatarPreview);
+                setAvatarPreview(null);
+                onClose();
+              }}
+              className="h-10 min-w-20 px-4 rounded-md border border-slate-200 flex justify-center items-center text-slate-700 hover:bg-slate-50 transition-colors"
+            >
+              <span className="text-base font-medium leading-5">취소</span>
+            </button>
+            <button
+              type="button"
+              onClick={() => {
+                onSave?.(avatarPreview ?? null);
+                onClose();
+              }}
+              className="h-10 min-w-20 px-4 bg-slate-800 rounded-md flex justify-center items-center hover:bg-slate-900 transition-colors"
+            >
+              <span className="text-white text-base font-medium leading-5">저장</span>
+            </button>
+          </div>
         </div>
 
       </div>

@@ -108,6 +108,9 @@ const TYPE_ICONS: Record<BlockType, React.ElementType> = {
   event_end: Type,
 };
 
+/** 캐릭터 블록용 표정 옵션 */
+const EXPRESSIONS = ["기본", "웃음", "슬픔", "화남", "놀람", "당황", "무표정"] as const;
+
 /** 텍스트(대사) 블록 전용: 높이 내용에 맞춤, 패딩/갭 별도 적용, 세로 상단 정렬 */
 const TEXT_BLOCK_ROOT_CLASSES =
   "relative flex items-start justify-center w-full group/row gap-0 py-0 rounded-lg border-0 outline-none hover:bg-slate-50/50 focus-within:bg-white min-w-0 flex-1 min-h-[36px] h-fit";
@@ -166,6 +169,7 @@ export function ScriptBlock({
   const [isPickerOpen, setPickerOpen] = useState(
     Boolean(block.data?.isNew && PICKER_RESOURCE_TYPES.includes(block.type))
   );
+  const [expressionMenuOpen, setExpressionMenuOpen] = useState(false);
 
   const indexLabel = String(index).padStart(2, "0");
   const prevBlock = index > 0 ? blocks[index - 1] : null;
@@ -1098,7 +1102,12 @@ export function ScriptBlock({
             type={block.type}
             isOpen={isPickerOpen}
             onOpenChange={setPickerOpen}
-            onSelect={(value) => updateBlock(block.id, value)}
+            onSelect={(value) => {
+              updateBlock(block.id, value);
+              if (block.type === "character") {
+                requestAnimationFrame(() => setExpressionMenuOpen(true));
+              }
+            }}
             onClose={() => setPickerOpen(false)}
           >
             <button
@@ -1153,6 +1162,46 @@ export function ScriptBlock({
               <ChevronDown className="ml-1 h-4 w-4 shrink-0 text-slate-400" />
             </button>
           </ResourcePicker>
+          {isCharacter && !isEmpty && (
+            <DropdownMenu open={expressionMenuOpen} onOpenChange={setExpressionMenuOpen}>
+              <DropdownMenuTrigger asChild>
+                <button
+                  type="button"
+                  onClick={(e) => e.stopPropagation()}
+                  onFocus={onFocusBlock}
+                  className="ml-2 flex h-8 min-w-0 w-fit cursor-pointer items-center gap-1 rounded-md border border-slate-200 bg-white px-2 py-1.5 transition-all hover:bg-slate-50 focus:outline-none focus:ring-0 active:scale-[0.98]"
+                >
+                  <span
+                    className={cn(
+                      "min-w-0 flex-1 truncate text-[13px] font-medium text-[rgba(126,140,160,1)]"
+                    )}
+                  >
+                    {(block.data?.expression as string) || "기본"}
+                  </span>
+                  <ChevronDown className="ml-1 h-4 w-4 shrink-0 text-slate-400" />
+                </button>
+              </DropdownMenuTrigger>
+              <DropdownMenuContent
+                align="start"
+                className="w-40 p-1 bg-white rounded-lg shadow-lg border border-slate-100"
+              >
+                {EXPRESSIONS.map((expr) => (
+                  <DropdownMenuItem
+                    key={expr}
+                    onClick={() =>
+                      updateBlock(block.id, block.content, {
+                        ...(block.data ?? {}),
+                        expression: expr,
+                      })
+                    }
+                    className="flex items-center px-3 py-2.5 cursor-pointer text-sm text-slate-700 hover:bg-slate-50 focus:bg-slate-50 rounded-md"
+                  >
+                    {expr}
+                  </DropdownMenuItem>
+                ))}
+              </DropdownMenuContent>
+            </DropdownMenu>
+          )}
           <div className="ml-auto flex shrink-0 items-center opacity-0 transition-opacity group-hover:opacity-100">
             <Button
               type="button"

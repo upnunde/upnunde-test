@@ -5,6 +5,7 @@ import { Plus } from "lucide-react";
 import { useEditorStore, createBlock } from "@/store/useEditorStore";
 import { parseScriptToBlocks } from "@/utils/scriptParser";
 import { Button } from "@/components/ui/button";
+import { PageCard } from "@/components/layout/PageCard";
 
 const MAX_TITLE = 50;
 const MAX_SUMMARY = 100;
@@ -29,7 +30,7 @@ export function EpisodeForm() {
 
   return (
     <div className="h-full min-h-0 overflow-y-auto bg-slate-50 p-6">
-      <div className="mx-auto w-full max-w-[1200px] min-w-[800px] rounded-xl border border-slate-200 bg-white p-8 shadow-none">
+      <PageCard>
         <h1 className="text-2xl font-bold text-slate-900">에피소드</h1>
 
         <div className="mt-6 flex flex-col gap-6">
@@ -134,7 +135,7 @@ export function EpisodeForm() {
             에디터 변환하기
           </Button>
         </div>
-      </div>
+      </PageCard>
     </div>
   );
 }

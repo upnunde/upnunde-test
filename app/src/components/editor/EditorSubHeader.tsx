@@ -1,6 +1,7 @@
-"use client";
+ "use client";
 
 import { ChevronLeft } from "lucide-react";
+import { useRouter } from "next/navigation";
 import { useEditorStore } from "@/store/useEditorStore";
 import { Button } from "@/components/ui/button";
 
@@ -10,11 +11,17 @@ export interface EditorSubHeaderProps {
 }
 
 export function EditorSubHeader({ title = "에피소드 제목" }: EditorSubHeaderProps) {
+  const router = useRouter();
   const currentView = useEditorStore((s) => s.currentView);
   const setCurrentView = useEditorStore((s) => s.setCurrentView);
 
   const handleBack = () => {
     if (currentView === "editor") setCurrentView("form");
+  };
+
+  const handleSubmit = () => {
+    // TODO: 실제 등록 로직 연동 후 에피소드 목록 화면으로 이동
+    router.push("/series/1/episodes");
   };
 
   return (
@@ -40,6 +47,7 @@ export function EditorSubHeader({ title = "에피소드 제목" }: EditorSubHead
           type="button"
           size="sm"
           className="h-10 shadow-none bg-primary text-primary-foreground hover:bg-primary/90"
+          onClick={handleSubmit}
         >
           등록하기
         </Button>

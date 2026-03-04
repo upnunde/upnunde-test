@@ -6,6 +6,7 @@
 
 @theme inline {
   --color-background: var(--background);
+  --color-background-10: var(--background-10);
   --color-foreground: var(--foreground);
   --font-sans: var(--font-geist-sans);
   --font-mono: var(--font-geist-mono);
@@ -47,8 +48,10 @@
   --radius-4xl: calc(var(--radius) + 16px);
   /* Design system tokens */
   --color-surface-10: var(--surface-10);
+  --color-surface-20: var(--surface-20);
   --color-surface-disabled: var(--surface-disabled);
   --color-on-surface-10: var(--on-surface-10);
+  --color-on-surface-20: var(--on-surface-20);
   --color-on-surface-30: var(--on-surface-30);
   --color-on-surface-disabled: var(--on-surface-disabled);
   --color-border-10: var(--border-10);
@@ -57,11 +60,14 @@
   --color-secondary-on-secondary: var(--secondary-on-secondary);
   --color-secondary-secondary-container: var(--secondary-secondary-container);
   --color-secondary-on-secondary-container: var(--secondary-on-secondary-container);
+  --color-primary-primary-container: var(--primary-primary-container);
+  --color-primary-on-primary-container: var(--primary-on-primary-container);
 }
 
 :root {
   --radius: 0.625rem;
   --background: oklch(1 0 0);
+  --background-10: var(--background);
   --foreground: oklch(0.145 0 0);
   --card: oklch(1 0 0);
   --card-foreground: oklch(0.145 0 0);
@@ -95,8 +101,10 @@
 
   /* Design system tokens (Profile drawer etc.) */
   --surface-10: oklch(1 0 0);
+  --surface-20: #f8f8fc;
   --surface-disabled: oklch(0 0 0 / 0.05);
   --on-surface-10: oklch(0.2 0 0);
+  --on-surface-20: #525254;
   --on-surface-30: oklch(0.5 0 0);
   --on-surface-disabled: oklch(0 0 0 / 0.2);
   --border-10: oklch(0 0 0 / 0.07);
@@ -105,6 +113,8 @@
   --secondary-on-secondary: oklch(1 0 0);
   --secondary-secondary-container: oklch(0.92 0 0);
   --secondary-on-secondary-container: oklch(0.25 0 0);
+  --primary-primary-container: #FEE3F9;
+  --primary-on-primary-container: oklch(0.45 0.2 330);
 }
 
 .dark {
@@ -147,7 +157,7 @@
   }
   html,
   body {
-    @apply bg-background text-foreground m-0 p-0 w-full;
+    @apply bg-white text-foreground m-0 p-0 w-full;
     min-height: 100vh;
     height: 100%;
   }

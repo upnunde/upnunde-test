@@ -1,6 +1,7 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
+import { useRouter, useSearchParams } from "next/navigation";
 import { ChevronLeft } from "lucide-react";
 import Header from "@/components/Header/Header";
 import { EditorSubHeader } from "@/components/editor/EditorSubHeader";
@@ -13,11 +14,20 @@ import { useSceneClickHandler } from "@/hooks/useSceneClickHandler";
 import { Button } from "@/components/ui/button";
 
 export default function Home() {
+  const router = useRouter();
+  const searchParams = useSearchParams();
   const currentView = useEditorStore((s) => s.currentView);
   const setCurrentView = useEditorStore((s) => s.setCurrentView);
   const handleSceneClick = useSceneClickHandler();
   const [profileImageUrl, setProfileImageUrl] = useState<string | null>(null);
   const [isSceneSidebarCollapsed, setIsSceneSidebarCollapsed] = useState(false);
+
+  useEffect(() => {
+    if (searchParams.get("view") === "form") {
+      setCurrentView("form");
+      router.replace("/");
+    }
+  }, [searchParams, setCurrentView, router]);
 
   if (currentView === "form") {
     return (
@@ -30,7 +40,7 @@ export default function Home() {
               type="button"
               variant="outline"
               size="icon"
-              onClick={() => setCurrentView("editor")}
+              onClick={() => router.push("/series/1/episodes")}
               className="h-9 w-9 shrink-0 rounded-full border-slate-200 shadow-none focus-visible:ring-0 focus-visible:ring-offset-0"
               aria-label="뒤로 가기"
             >
