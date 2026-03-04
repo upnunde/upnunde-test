@@ -1,7 +1,7 @@
 "use client";
 
 import React, { useState } from "react";
-import { MoreVertical, Eye, EyeOff, Trash2, Calendar, BarChart3, Layers } from "lucide-react";
+import { MoreVertical, Eye, EyeOff, Trash2, Calendar, Layers } from "lucide-react";
 import {
   DropdownMenu,
   DropdownMenuTrigger,
@@ -120,7 +120,7 @@ export function SeriesItem({
             <DropdownMenuTrigger asChild>
               <button
                 type="button"
-                className="shrink-0 w-8 h-8 -mr-2 rounded-full flex items-center justify-center text-slate-500 hover:bg-slate-100 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-slate-200"
+                className="shrink-0 w-8 h-8 -mt-1 -mr-2 rounded-full flex items-center justify-center text-slate-500 hover:bg-slate-100 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-slate-200"
                 aria-label="더보기"
               >
                 <MoreVertical className="w-5 h-5" aria-hidden />
@@ -190,17 +190,17 @@ export function SeriesItem({
 
         {/* 상태 뱃지 (정책 8, 9, 10) */}
         {isPrivate && (
-          <span className="inline-flex rounded px-2 py-0.5 text-xs font-medium bg-primary/10 text-primary">
+          <span className="inline-flex mt-1 h-fit rounded px-2 py-1 text-sm font-medium bg-primary/10 text-primary">
             비공개
           </span>
         )}
         {isDraft && (
-          <span className="inline-flex rounded px-2 py-0.5 text-xs font-medium bg-primary/10 text-primary">
+          <span className="inline-flex mt-1 h-fit rounded px-2 py-1 text-sm font-medium bg-primary/10 text-primary">
             작성중
           </span>
         )}
         {isBanned && (
-          <div className="inline-flex h-7 items-center gap-4 px-2 py-1 rounded border border-destructive">
+          <div className="inline-flex mt-1 h-7 items-center gap-4 px-2 py-1 rounded border border-destructive">
             <div className="flex items-center gap-1">
               <ViolationIcon className="h-5 w-5 text-destructive" aria-hidden />
               <span className="text-destructive text-sm font-medium">
@@ -221,21 +221,23 @@ export function SeriesItem({
         <div className="w-full h-full" />
 
         {/* 메타: 날짜, 회차 수, 조회수 (정책 2, 3, 4, 11 - 툴팁) */}
-        <div className="mb-5 flex flex-wrap gap-6 text-xs text-on-surface-20">
+        <div className="mb-5 flex flex-wrap gap-6 text-[13px] text-on-surface-20">
           <div className="flex flex-col justify-center items-start gap-2">
             <div className="flex items-center gap-2">
-              <Calendar className="w-4 h-4 text-on-surface-20" aria-hidden />
+              <Calendar className="w-[18px] h-[18px] text-on-surface-20" aria-hidden />
               <span title="생성한 날짜">{dateStr}</span>
             </div>
             <div className="flex items-center gap-2">
-              <BarChart3 className="w-4 h-4 text-on-surface-20" aria-hidden />
+              <Eye className="w-[18px] h-[18px] text-on-surface-20" aria-hidden />
               <span title="작품 누적 조회수">{viewStr}</span>
             </div>
           </div>
           <div className="flex flex-col justify-start items-start gap-2">
             <div className="flex items-center gap-2">
-              <Layers className="w-4 h-4 text-on-surface-20" aria-hidden />
-              <span title="에피소드 등록 수">{episodeCount}회</span>
+              <Layers className="w-[18px] h-[18px] text-on-surface-20" aria-hidden />
+              <span title="에피소드 등록 수">
+                {episodeCount}회
+              </span>
             </div>
           </div>
         </div>
