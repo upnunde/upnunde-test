@@ -156,7 +156,7 @@ export default function EpisodeManagementPage() {
     return sortedEpisodes.slice(start, start + PAGE_SIZE);
   }, [sortedEpisodes, currentPage]);
 
-  const showEmptyBanner = episodes.length === 0 && seriesType !== "single";
+  const showEmptyBanner = episodes.length === 0 && seriesType === "series";
   const showPagination = totalItems > PAGE_SIZE;
 
   /** 정책 1: 뒤로가기 → 시리즈 목록 화면 */
