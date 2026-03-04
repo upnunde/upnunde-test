@@ -29,8 +29,7 @@ export function EpisodeForm() {
   }, [rawScript, setBlocks, setCurrentView]);
 
   return (
-    <div className="h-full min-h-0 overflow-y-auto bg-slate-50 p-6">
-      <PageCard>
+    <PageCard>
         <h1 className="text-2xl font-bold text-slate-900">에피소드</h1>
 
         <div className="mt-6 flex flex-col gap-6">
@@ -136,6 +135,5 @@ export function EpisodeForm() {
           </Button>
         </div>
       </PageCard>
-    </div>
   );
 }

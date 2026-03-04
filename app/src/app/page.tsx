@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useEffect } from "react";
+import { Suspense, useState, useEffect } from "react";
 import { useRouter, useSearchParams } from "next/navigation";
 import { ChevronLeft } from "lucide-react";
 import Header from "@/components/Header/Header";
@@ -13,7 +13,7 @@ import { useEditorStore } from "@/store/useEditorStore";
 import { useSceneClickHandler } from "@/hooks/useSceneClickHandler";
 import { Button } from "@/components/ui/button";
 
-export default function Home() {
+function HomeInner() {
   const router = useRouter();
   const searchParams = useSearchParams();
   const currentView = useEditorStore((s) => s.currentView);
@@ -49,7 +49,7 @@ export default function Home() {
             <h1 className="text-2xl font-extrabold text-slate-900">에피소드 생성</h1>
           </div>
         </header>
-        <div className="flex min-h-0 flex-1 flex-col overflow-hidden bg-slate-50">
+        <div className="flex min-h-0 flex-1 flex-col overflow-hidden bg-slate-50 pt-8 pb-8">
           <EpisodeForm />
         </div>
       </div>
@@ -109,5 +109,13 @@ export default function Home() {
         <div id="profile-modal-portal" className="absolute left-0 top-0 w-0 h-0 overflow-visible" aria-hidden />
       </div>
     </div>
+  );
+}
+
+export default function Home() {
+  return (
+    <Suspense fallback={null}>
+      <HomeInner />
+    </Suspense>
   );
 }

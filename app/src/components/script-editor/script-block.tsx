@@ -30,6 +30,11 @@ const BLOCK_TYPE_STYLES: Record<
     className:
       "border-l-4 border-l-neutral-400 bg-neutral-50/50 dark:bg-neutral-900/30",
   },
+  top_desc: {
+    label: "상단 설명",
+    className:
+      "border-l-4 border-l-slate-500 bg-slate-50/40 dark:bg-slate-900/30",
+  },
   background: {
     label: "배경",
     className:
@@ -65,16 +70,31 @@ const BLOCK_TYPE_STYLES: Record<
     className:
       "border-l-4 border-l-cyan-500 bg-cyan-50/30 dark:bg-cyan-950/20",
   },
+  event: {
+    label: "이벤트 시작",
+    className:
+      "border-l-4 border-l-rose-500 bg-rose-50/40 dark:bg-rose-950/20",
+  },
+  event_end: {
+    label: "이벤트 종료",
+    className:
+      "border-l-4 border-l-rose-400 bg-rose-50/20 dark:bg-rose-950/10",
+  },
 };
 
 const ALL_BLOCK_TYPES: BlockType[] = [
   "scene",
+  "top_desc",
   "text",
   "background",
   "character",
   "bgm",
   "sfx",
   "gallery",
+  "direction",
+  "choice",
+  "event",
+  "event_end",
 ];
 
 interface ScriptBlockProps {
