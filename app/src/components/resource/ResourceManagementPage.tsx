@@ -150,7 +150,7 @@ export function ResourceManagementPage() {
               >
                 <ChevronLeft className="h-5 w-5 text-slate-600" strokeWidth={2} />
               </Button>
-              <h1 className="text-base font-extrabold text-slate-900">리소스 관리</h1>
+              <h1 className="text-2xl font-bold text-slate-900">리소스 관리</h1>
             </div>
           </div>
         </header>
