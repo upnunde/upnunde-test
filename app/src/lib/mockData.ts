@@ -21,6 +21,12 @@ export interface AudioItem {
   fileUrl: string;
 }
 
+export interface GalleryItem {
+  id: string;
+  name: string;
+  url: string;
+}
+
 export const BACKGROUNDS: BackgroundItem[] = [
   { id: "bg-1", name: "School_Day", url: "https://picsum.photos/seed/school/400/700" },
   { id: "bg-2", name: "Night_Street", url: "https://picsum.photos/seed/night/400/700" },
@@ -54,4 +60,10 @@ export const SFX: AudioItem[] = [
   { id: "sfx-3", name: "Footsteps", fileUrl: "/audio/sfx_footsteps.mp3" },
   { id: "sfx-4", name: "Click", fileUrl: "/audio/sfx_click.mp3" },
   { id: "sfx-5", name: "Wind", fileUrl: "/audio/sfx_wind.mp3" },
+];
+
+export const GALLERIES: GalleryItem[] = [
+  { id: "gallery-1", name: "gallery_1", url: "https://picsum.photos/seed/gallery1/400/700" },
+  { id: "gallery-2", name: "gallery_2", url: "https://picsum.photos/seed/gallery2/400/700" },
+  { id: "gallery-3", name: "gallery_3", url: "https://picsum.photos/seed/gallery3/400/700" },
 ];

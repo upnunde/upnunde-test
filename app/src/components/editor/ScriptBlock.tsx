@@ -35,16 +35,9 @@ import { ResourcePicker } from "./ResourcePicker";
 import { ChoiceBlockTable } from "./ChoiceBlockTable";
 import { cn } from "@/lib/utils";
 
-const RESOURCE_TYPES: BlockType[] = [
-  "background",
-  "bgm",
-  "sfx",
-  "character",
-  "gallery",
-  "choice",
-];
+const RESOURCE_TYPES: BlockType[] = ["background", "bgm", "sfx", "character", "gallery", "choice"];
 
-const PICKER_RESOURCE_TYPES: BlockType[] = ["background", "character", "bgm", "sfx"];
+const PICKER_RESOURCE_TYPES: BlockType[] = ["background", "character", "bgm", "sfx", "gallery"];
 
 const TYPE_LABELS: Record<BlockType, string> = {
   scene: "Scene",
@@ -107,6 +100,12 @@ const TYPE_ICONS: Record<BlockType, React.ElementType> = {
   event: Type,
   event_end: Type,
 };
+
+function getRandomNameFromList<T extends { name: string }>(items: T[]): string {
+  if (!items.length) return "";
+  const index = Math.floor(Math.random() * items.length);
+  return items[index]?.name ?? "";
+}
 
 /** 캐릭터 블록용 표정 옵션 */
 const EXPRESSIONS = ["기본", "웃음", "슬픔", "화남", "놀람", "당황", "무표정"] as const;
@@ -178,13 +177,13 @@ export function ScriptBlock({
   const getDefaultResourceContent = useCallback((type: BlockType): string => {
     switch (type) {
       case "background":
-        return BACKGROUNDS[0]?.name || "School_Day";
+        return getRandomNameFromList(BACKGROUNDS) || "School_Day";
       case "character":
-        return CHARACTERS[0]?.name || "민수";
+        return getRandomNameFromList(CHARACTERS) || "민수";
       case "bgm":
-        return BGMS[0]?.name || "Calm_Piano";
+        return getRandomNameFromList(BGMS) || "Calm_Piano";
       case "sfx":
-        return SFX[0]?.name || "Door_Open";
+        return getRandomNameFromList(SFX) || "Door_Open";
       case "gallery":
         return "gallery_1";
       default:
@@ -885,71 +884,6 @@ export function ScriptBlock({
     );
   }
 
-  // Gallery: 선택된 상태만 표시 (기능은 추후 요청 시 구현)
-  if (block.type === "gallery") {
-    const displayName = block.content?.trim() || "gallery_1";
-    const labelKo = PICKER_LABEL_KO.gallery;
-    const labelColorClass = LABEL_COLOR_BY_TYPE.gallery;
-
-    return (
-      <div
-        className={cn(COMPACT_BLOCK_ROOT_CLASSES, rootClassName)}
-        onClick={() => onFocusBlock()}
-        onFocus={onFocusBlock}
-        tabIndex={0}
-        onKeyDown={(e) => {
-          if (e.key === "Delete") {
-            handleDeleteBlock(e);
-            return;
-          }
-          const currentIdx = index - 1;
-          if (e.key === "ArrowUp" && currentIdx > 0) {
-            e.preventDefault();
-            focusBlock(blocks[currentIdx - 1].id);
-          } else if (e.key === "ArrowDown" && currentIdx < blocks.length - 1) {
-            e.preventDefault();
-            focusBlock(blocks[currentIdx + 1].id);
-          }
-        }}
-      >
-        {!hideIndex && (
-          <span className="shrink-0 text-xs font-medium text-slate-400 tabular-nums">
-            {indexLabel}
-          </span>
-        )}
-        <div className="flex min-w-0 flex-1 items-center gap-0">
-          <div className="w-20 shrink-0 flex items-center">
-            <span className={cn("w-fit font-medium text-[13px]", labelColorClass)}>
-              # {labelKo}
-            </span>
-          </div>
-          <div className="flex h-8 min-w-0 w-fit cursor-default items-center gap-1 rounded-md border border-slate-200 bg-white px-2 py-1.5">
-            <ImagePlus className="h-5 w-5 shrink-0 text-slate-500" />
-            <span className="min-w-0 flex-1 truncate text-[13px] font-medium text-slate-600">
-              {displayName}
-            </span>
-          </div>
-          <div className="ml-auto flex shrink-0 items-center opacity-0 transition-opacity group-hover:opacity-100">
-            <Button
-              type="button"
-              variant="ghost"
-              size="icon"
-              className="h-8 w-8 text-slate-400 hover:bg-red-50 hover:text-red-500"
-              aria-label="Delete block"
-              onClick={(e) => {
-                e.preventDefault();
-                e.stopPropagation();
-                removeBlock(block.id);
-              }}
-            >
-              <Trash2 className={DELETE_ICON_CLASS} />
-            </Button>
-          </div>
-        </div>
-      </div>
-    );
-  }
-
   // Resource blocks: [Icon] [Label] [Value]
   const Icon = TYPE_ICONS[block.type];
   const label = TYPE_LABELS[block.type];
@@ -1109,6 +1043,7 @@ export function ScriptBlock({
               }
             }}
             onClose={() => setPickerOpen(false)}
+            selectedName={displayName}
           >
             <button
               type="button"
