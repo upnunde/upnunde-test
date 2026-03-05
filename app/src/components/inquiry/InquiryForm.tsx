@@ -165,7 +165,7 @@ export function InquiryForm({
         <div className="mt-2">
           <label
             htmlFor={`${prefix}inquiry-attachments`}
-            className="flex h-24 w-24 cursor-pointer items-center justify-center rounded-lg border border-dashed border-border-20 bg-white text-muted-foreground transition-colors hover:border-border-10 hover:bg-white"
+            className="flex w-[120px] h-[120px] cursor-pointer items-center justify-center rounded-lg border border-dashed border-border-20 bg-white text-muted-foreground transition-colors hover:border-border-10 hover:bg-white"
           >
             <span className="text-2xl leading-none">+</span>
           </label>

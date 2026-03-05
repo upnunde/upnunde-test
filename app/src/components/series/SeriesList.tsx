@@ -31,9 +31,11 @@ export function SeriesList({
   onCreateSeries,
   className,
 }: SeriesListProps) {
+  const visibleSeries = seriesList.filter((series) => series.status === "PUBLIC");
+
   return (
     <div className={`w-full max-w-[1200px] grid grid-cols-2 gap-4 ${className ?? ""}`}>
-      {seriesList.map((series) => (
+      {visibleSeries.map((series) => (
         <SeriesItem
           key={series.id}
           series={series}
