@@ -80,7 +80,10 @@ export default function SeriesNewPage() {
     worldviewPrompt.trim().length > 0 &&
     persona.trim().length > 0;
 
-  const focusField = (tab: SeriesCreateTab, ref: React.RefObject<HTMLElement>) => {
+  const focusField = (
+    tab: SeriesCreateTab,
+    ref: { current: HTMLElement | null }
+  ) => {
     setActiveTab(tab);
     setTimeout(() => {
       ref.current?.scrollIntoView({ behavior: "smooth", block: "center" });

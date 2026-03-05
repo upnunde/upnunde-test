@@ -82,7 +82,10 @@ export default function SeriesEditPage() {
     worldviewPrompt.trim().length > 0 &&
     persona.trim().length > 0;
 
-  const focusField = (tab: SeriesEditTab, ref: React.RefObject<HTMLElement>) => {
+  const focusField = (
+    tab: SeriesEditTab,
+    ref: { current: HTMLElement | null }
+  ) => {
     setActiveTab(tab);
     setTimeout(() => {
       ref.current?.scrollIntoView({ behavior: "smooth", block: "center" });
