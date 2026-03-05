@@ -11,6 +11,7 @@ import { EmptyStateBanner } from "@/components/episode/EmptyStateBanner";
 import { Pagination } from "@/components/episode/Pagination";
 import { PublishConfirmModal, DeleteConfirmModal } from "@/components/episode/ConfirmModals";
 import { Snackbar } from "@/components/episode/Snackbar";
+import { Button } from "@/components/ui/button";
 import type { Episode, SortOptions, SnackbarState, SeriesType } from "@/types/episode";
 
 const PAGE_SIZE = 10;
@@ -166,7 +167,7 @@ export default function EpisodeManagementPage() {
 
   /** 정책 3: 에피소드 추가 → 에피소드 추가 페이지 */
   const handleAddEpisode = useCallback(() => {
-    router.push("/?view=form");
+    router.push("/editor?view=form");
   }, [router]);
 
   /** 정책 16: 리소스 관리 → 리소스 관리 화면 */
@@ -177,7 +178,7 @@ export default function EpisodeManagementPage() {
   /** 정책 7: 행 클릭 → 원고 에디터 화면 */
   const handleRowClick = useCallback(
     (episode: Episode) => {
-      router.push(`/?episode=${episode.id}`);
+      router.push(`/editor?episode=${episode.id}`);
     },
     [router]
   );
@@ -232,6 +233,11 @@ export default function EpisodeManagementPage() {
     [router, seriesId]
   );
 
+  /** 문의하기 → 문의 페이지로 이동 */
+  const handleInquiry = useCallback(() => {
+    router.push("/inquiry");
+  }, [router]);
+
   return (
     <div className="flex flex-col h-screen w-full bg-white overflow-hidden">
       <Header profileImageUrl={profileImageUrl} onProfileImageChange={setProfileImageUrl} />
@@ -239,20 +245,22 @@ export default function EpisodeManagementPage() {
         <AppSidebar defaultActiveId="series" />
         <div className="flex min-w-0 flex-1 flex-col overflow-hidden">
           <main className="flex flex-1 flex-col overflow-hidden bg-slate-50">
-            {/* Sub Header - 정책 1, 2, 16 */}
-            <div className="w-full h-[80px] shrink-0 border-b border-slate-200 bg-white flex flex-col items-center justify-center">
-              <div className="w-full max-w-[1200px] min-w-[800px] p-0 flex items-center justify-start gap-4">
-                <button
+            {/* Sub Header - EditorInner와 동일 스타일 (뒤로가기 + 제목) */}
+            <header className="flex h-16 shrink-0 items-center justify-center border-b border-slate-200 bg-white px-6 py-0">
+              <div className="flex w-full max-w-[1200px] min-w-[800px] items-center justify-start gap-3">
+                <Button
                   type="button"
+                  variant="outline"
+                  size="icon"
                   onClick={handleBack}
-                  className="w-8 h-8 rounded-full border border-slate-200 flex items-center justify-center hover:bg-slate-50 transition-colors"
-                  aria-label="시리즈 목록으로 돌아가기"
+                  className="h-9 w-9 shrink-0 rounded-full border-slate-200 shadow-none focus-visible:ring-0 focus-visible:ring-offset-0"
+                  aria-label="시리즈 목록으로"
                 >
-                  <ChevronLeft className="w-4 h-4 text-slate-600" />
-                </button>
-                <h1 className="text-2xl font-bold text-slate-900">에피소드 관리</h1>
+                  <ChevronLeft className="h-5 w-5 text-slate-600" strokeWidth={2} />
+                </Button>
+                <h1 className="text-2xl font-extrabold text-slate-900">에피소드 관리</h1>
               </div>
-            </div>
+            </header>
 
             <div className="flex-1 overflow-y-auto flex flex-col items-center py-8 gap-3">
               {/* Title & Actions - 정책 2, 3, 16 */}
@@ -290,6 +298,7 @@ export default function EpisodeManagementPage() {
                   onDelete={handleDeleteClick}
                   onLinkEditor={handleLinkEditor}
                   onStats={handleStats}
+                  onInquiry={handleInquiry}
                   footer={
                     showPagination ? (
                       <Pagination

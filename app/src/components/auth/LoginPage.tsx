@@ -5,6 +5,14 @@ import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
+import {
+  Dialog,
+  DialogContent,
+  DialogHeader,
+  DialogTitle,
+} from "@/components/ui/dialog";
+import { InquiryForm } from "@/components/inquiry/InquiryForm";
+import { Snackbar } from "@/components/episode/Snackbar";
 import { cn } from "@/lib/utils";
 
 /* 소셜 로고 인라인 SVG (플랫폼 공식 비주얼) */
@@ -88,6 +96,8 @@ function Divider({ label = "또는" }: { label?: string }) {
 export function LoginPage() {
   const router = useRouter();
   const [email, setEmail] = useState("");
+  const [inquiryOpen, setInquiryOpen] = useState(false);
+  const [snackbar, setSnackbar] = useState({ open: false, message: "" });
 
   const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
@@ -127,7 +137,7 @@ export function LoginPage() {
             required
             value={email}
             onChange={(e) => setEmail(e.target.value)}
-            className="w-full h-14 rounded-[12px]"
+            className="w-full h-14 rounded-[12px] focus-visible:border-primary focus-visible:ring-primary/50 focus-visible:ring-[3px]"
             autoComplete="email"
           />
           <Button
@@ -197,13 +207,44 @@ export function LoginPage() {
         </p>
       </main>
 
-      {/* 우측 하단 고정: 문의하기 */}
-      <a
-        href="/inquiry"
+      {/* 우측 하단 고정: 문의하기 → 클릭 시 현재 화면 유지, 480px 문의 팝업 */}
+      <button
+        type="button"
+        onClick={() => setInquiryOpen(true)}
         className="absolute bottom-8 right-8 rounded-md border border-border bg-surface-10 px-4 py-2 text-sm font-medium text-on-surface-10 hover:bg-accent focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
       >
         문의하기
-      </a>
+      </button>
+
+      <Dialog open={inquiryOpen} onOpenChange={setInquiryOpen}>
+        <DialogContent
+          className="min-w-[480px] max-w-[640px] w-full rounded-xl border border-slate-200 bg-white px-5 pt-2 pb-5 shadow-none"
+          aria-describedby={undefined}
+        >
+          <DialogHeader>
+            <DialogTitle className="text-2xl font-bold text-slate-900">
+              문의
+            </DialogTitle>
+          </DialogHeader>
+          <InquiryForm
+            idPrefix="modal"
+            onSubmit={(e) => {
+              e.preventDefault();
+              // TODO: 실제 문의 접수 API 연동
+              setInquiryOpen(false);
+              setSnackbar({ open: true, message: "문의내용을 전달하였습니다" });
+            }}
+            onCancel={() => setInquiryOpen(false)}
+            className="flex flex-col gap-10 pt-2"
+          />
+        </DialogContent>
+      </Dialog>
+
+      <Snackbar
+        open={snackbar.open}
+        message={snackbar.message}
+        onClose={() => setSnackbar((s) => ({ ...s, open: false }))}
+      />
     </div>
   );
 }

@@ -6,6 +6,7 @@ import Header from "@/components/Header/Header";
 import AppSidebar from "@/components/AppSidebar/AppSidebar";
 import { SeriesList } from "@/components/series/SeriesList";
 import { SeriesDeleteModal } from "@/components/series/SeriesDeleteModal";
+import { PolicyAgreementModal } from "@/components/series/PolicyAgreementModal";
 import type { SeriesData } from "@/types/series";
 
 /** 기본(공개), 비공개, 작성중, 이용금지 4가지 상태 더미 */
@@ -55,6 +56,7 @@ export default function SeriesListPage() {
   const [profileImageUrl, setProfileImageUrl] = useState<string | null>(null);
   const [seriesList, setSeriesList] = useState<SeriesData[]>(MOCK_SERIES);
   const [seriesToDelete, setSeriesToDelete] = useState<SeriesData | null>(null);
+  const [policyModalOpen, setPolicyModalOpen] = useState(false);
 
   const handleEpisodeManage = useCallback(
     (series: SeriesData) => {
@@ -70,6 +72,13 @@ export default function SeriesListPage() {
     [router]
   );
 
+  const handleSeriesManage = useCallback(
+    (series: SeriesData) => {
+      router.push(`/series/${series.id}/edit`);
+    },
+    [router]
+  );
+
   const handleViolationDetail = useCallback(
     (_series: SeriesData) => {
       router.push("/guide/violation");
@@ -80,6 +89,11 @@ export default function SeriesListPage() {
   const handleCreateSeries = useCallback(() => {
     router.push("/series/new");
   }, [router]);
+
+  /** 새 시리즈 생성 클릭 → 정책 동의 모달 오픈 */
+  const handleOpenCreateSeries = useCallback(() => {
+    setPolicyModalOpen(true);
+  }, []);
 
   const handleDeleteSeries = useCallback(
     (target: SeriesData) => {
@@ -108,7 +122,7 @@ export default function SeriesListPage() {
         <div className="flex min-w-0 flex-1 flex-col overflow-hidden">
           <main className="flex flex-1 flex-col overflow-hidden bg-slate-50">
             {/* Sub Header */}
-            <div className="w-full h-[80px] shrink-0 border-b border-slate-200 bg-white flex flex-col items-center justify-center">
+            <div className="w-full h-[64px] shrink-0 border-b border-slate-200 bg-white flex flex-col items-center justify-center">
               <div className="w-full max-w-[1200px] min-w-[800px] p-0 flex items-center justify-start gap-4">
                 <h1 className="text-2xl font-bold text-slate-900">시리즈</h1>
               </div>
@@ -119,11 +133,12 @@ export default function SeriesListPage() {
                 seriesList={seriesList}
                 onResourceManage={handleResourceManage}
                 onEpisodeManage={handleEpisodeManage}
+                onSeriesManage={handleSeriesManage}
                 onViolationDetail={handleViolationDetail}
                 onSetPrivate={handleSetPrivate}
                 onSetPublic={handleSetPublic}
                 onDelete={(series) => setSeriesToDelete(series)}
-                onCreateSeries={handleCreateSeries}
+                onCreateSeries={handleOpenCreateSeries}
               />
             </div>
 
@@ -135,6 +150,12 @@ export default function SeriesListPage() {
                 handleDeleteSeries(s);
                 setSeriesToDelete(null);
               }}
+            />
+
+            <PolicyAgreementModal
+              open={policyModalOpen}
+              onClose={() => setPolicyModalOpen(false)}
+              onConfirm={handleCreateSeries}
             />
           </main>
         </div>

@@ -28,6 +28,8 @@ export interface EpisodeListItemProps {
   onLinkEditor?: (episode: Episode) => void;
   /** 정책 11: 통계 화면(조회수 등) 진입 */
   onStats?: (episode: Episode) => void;
+  /** 문의하기 클릭 시 (문의 페이지/모달 등) */
+  onInquiry?: (episode: Episode) => void;
 }
 
 export function EpisodeListItem({
@@ -38,6 +40,7 @@ export function EpisodeListItem({
   onDelete,
   onLinkEditor,
   onStats,
+  onInquiry,
 }: EpisodeListItemProps) {
   const { status, date, views } = episode;
   const isDraft = status === "DRAFT";
@@ -174,7 +177,7 @@ export function EpisodeListItem({
               </DropdownMenuItem>
               <DropdownMenuItem
                 className="flex cursor-pointer items-center gap-2 rounded-md px-3 py-2.5 text-sm text-slate-700 outline-none hover:bg-slate-50"
-                onSelect={() => onStats?.(episode)}
+                onSelect={() => onInquiry?.(episode)}
               >
                 <Mail className="h-4 w-4 shrink-0 text-slate-500" aria-hidden />
                 문의하기

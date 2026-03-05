@@ -122,7 +122,7 @@ export function ProfileEditModal({ isOpen, onClose, anchorRef, onSave }: Profile
         >
 
         {/* Header */}
-        <div className="self-stretch h-16 pl-5 pr-2 pt-4 pb-2 border-b border-slate-200 inline-flex justify-between items-center shrink-0">
+        <div className="self-stretch h-16 pl-5 pr-2 pt-4 pb-2 inline-flex justify-between items-center shrink-0">
           <div className="text-slate-800 text-lg font-bold leading-6">
             프로필편집
           </div>
@@ -239,7 +239,7 @@ export function ProfileEditModal({ isOpen, onClose, anchorRef, onSave }: Profile
               if (avatarPreview) URL.revokeObjectURL(avatarPreview);
               setAvatarPreview(null);
               onClose();
-              router.push("/login");
+              router.push("/");
             }}
             className="h-10 min-w-20 -ml-2 bg-transparent rounded-lg flex justify-center items-center hover:bg-red-50 transition-colors"
           >

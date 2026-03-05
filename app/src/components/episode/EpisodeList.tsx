@@ -12,6 +12,7 @@ export interface EpisodeListProps {
   onDelete: (episode: Episode) => void;
   onLinkEditor: (episode: Episode) => void;
   onStats: (episode: Episode) => void;
+  onInquiry?: (episode: Episode) => void;
   /** 정책 13: 페이지네이션을 테이블 하단에 렌더링할 때 전달 */
   footer?: React.ReactNode;
   className?: string;
@@ -28,6 +29,7 @@ export function EpisodeList({
   onDelete,
   onLinkEditor,
   onStats,
+  onInquiry,
   footer,
   className,
 }: EpisodeListProps) {
@@ -60,6 +62,7 @@ export function EpisodeList({
             onDelete={onDelete}
             onLinkEditor={onLinkEditor}
             onStats={onStats}
+            onInquiry={onInquiry}
           />
         ))}
       </div>

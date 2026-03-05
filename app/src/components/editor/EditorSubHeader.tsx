@@ -25,7 +25,7 @@ export function EditorSubHeader({ title = "에피소드 제목" }: EditorSubHead
   };
 
   return (
-    <header className="mx-auto flex h-20 w-full min-w-[800px] shrink-0 items-center justify-between px-10">
+    <header className="mx-auto flex h-16 w-full min-w-[800px] shrink-0 items-center justify-between px-10">
       <div className="flex items-center gap-3">
         <Button
           type="button"

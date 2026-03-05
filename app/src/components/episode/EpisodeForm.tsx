@@ -1,11 +1,11 @@
 "use client";
 
 import { useState, useCallback } from "react";
-import { Plus } from "lucide-react";
 import { useEditorStore, createBlock } from "@/store/useEditorStore";
 import { parseScriptToBlocks } from "@/utils/scriptParser";
 import { Button } from "@/components/ui/button";
 import { PageCard } from "@/components/layout/PageCard";
+import { AddResourceSlot } from "@/components/resource/cards/AddResourceSlot";
 
 const MAX_TITLE = 50;
 const MAX_SUMMARY = 100;
@@ -45,7 +45,7 @@ export function EpisodeForm() {
               value={title}
               onChange={(e) => setTitle(e.target.value)}
               placeholder="에피소드 제목을 입력해주세요."
-              className="rounded-md border border-slate-200 bg-white px-3 py-2 text-sm text-slate-900 placeholder:text-slate-400 focus:outline-none focus:ring-2 focus:ring-primary"
+              className="h-12 rounded-md border border-slate-200 bg-white px-3 py-2 text-sm text-slate-900 placeholder:text-slate-400 focus:outline-none focus:ring-2 focus:ring-primary"
             />
             <div className="flex justify-end text-xs text-slate-400">
               {title.length}/{MAX_TITLE}
@@ -64,26 +64,24 @@ export function EpisodeForm() {
               value={summary}
               onChange={(e) => setSummary(e.target.value)}
               placeholder="에피소드 요약을 입력해주세요."
-              className="rounded-md border border-slate-200 bg-white px-3 py-2 text-sm text-slate-900 placeholder:text-slate-400 focus:outline-none focus:ring-2 focus:ring-primary"
+              className="h-12 rounded-md border border-slate-200 bg-white px-3 py-2 text-sm text-slate-900 placeholder:text-slate-400 focus:outline-none focus:ring-2 focus:ring-primary"
             />
             <div className="flex justify-end text-xs text-slate-400">
               {summary.length}/{MAX_SUMMARY}
             </div>
           </div>
 
-          {/* 대표 이미지 */}
+          {/* 대표 이미지 (img1:1 타입 슬롯과 동일 스타일) */}
           <div className="flex flex-col gap-1 pb-5">
             <label className="flex items-center justify-start text-sm font-bold text-slate-900">
               대표 이미지<span className="text-red-500 px-1 h-fit w-fit align-middle -mt-1">*</span>
             </label>
             <p className="mb-2 text-xs text-slate-400">에피소드 대표 이미지를 등록해주세요.</p>
-            <button
-              type="button"
-              className="flex h-24 w-24 shrink-0 items-center justify-center rounded-lg border-2 border-dashed border-slate-300 bg-slate-50 text-slate-400 transition-colors hover:border-slate-400 hover:bg-slate-100"
-              aria-label="대표 이미지 업로드"
-            >
-              <Plus className="h-6 w-6" strokeWidth={2} />
-            </button>
+            <AddResourceSlot
+              variant="img1:1"
+              ariaLabel="대표 이미지 업로드"
+              onClick={() => {}}
+            />
           </div>
 
           {/* 지난 사건 히스토리 */}

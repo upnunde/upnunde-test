@@ -76,8 +76,7 @@ export function SeriesItem({
     onEpisodeManage?.(series);
   };
 
-   const handleSeriesManage = () => {
-    if (isDraft) return;
+  const handleSeriesManage = () => {
     onSeriesManage?.(series);
   };
 
@@ -100,7 +99,7 @@ export function SeriesItem({
             )}
             {(isPrivate || isBanned) && (
               <div className="absolute inset-0 flex items-center justify-center bg-black/50">
-                <span className="text-white text-sm font-medium">
+                <span className="text-white text-[15px] font-bold">
                   {isBanned ? "이용금지" : "비공개"}
                 </span>
               </div>
@@ -242,27 +241,21 @@ export function SeriesItem({
           </div>
         </div>
 
-        {/* 하단 관리 버튼 (정책 11) */}
+        {/* 하단 관리 버튼: 모든 상태에서 활성화 */}
         <div className="self-stretch inline-flex justify-start items-start gap-2 pt-0">
           <button
             type="button"
-            disabled={isDraft}
-            title={isDraft ? "필수 정보를 먼저 입력해야 합니다" : undefined}
             onClick={handleSeriesManage}
-            className={`w-full rounded-md border px-3 py-2 text-sm font-medium transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-2 ${
-              isDraft
-                ? "border-slate-200 text-slate-400 cursor-not-allowed"
-                : "border-slate-200 bg-white text-slate-700 hover:bg-slate-50"
-            }`}
+            className="h-10 w-full rounded-md border px-3 text-sm font-medium transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-2 border-slate-200 bg-white text-slate-700 hover:bg-slate-50"
           >
             시리즈 관리
           </button>
           <button
             type="button"
             disabled={isDraft}
-            title={isDraft ? "필수 정보를 먼저 입력해야 합니다" : undefined}
+            title={isDraft ? "시리즈 작성 완료 후 이용 가능합니다" : undefined}
             onClick={handleResource}
-            className={`w-full rounded-md border px-3 py-2 text-sm font-medium transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-2 ${
+            className={`h-10 w-full rounded-md border px-3 text-sm font-medium transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-2 ${
               isDraft
                 ? "border-slate-200 text-slate-400 cursor-not-allowed"
                 : "border-slate-200 bg-white text-slate-700 hover:bg-slate-50"
@@ -273,9 +266,9 @@ export function SeriesItem({
           <button
             type="button"
             disabled={isDraft}
-            title={isDraft ? "필수 정보를 먼저 입력해야 합니다" : undefined}
+            title={isDraft ? "시리즈 작성 완료 후 이용 가능합니다" : undefined}
             onClick={handleEpisode}
-            className={`w-full rounded-md border px-3 py-2 text-sm font-medium transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-2 ${
+            className={`h-10 w-full rounded-md border px-3 text-sm font-medium transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-2 ${
               isDraft
                 ? "border-slate-200 text-slate-400 cursor-not-allowed"
                 : "border-slate-200 bg-white text-slate-700 hover:bg-slate-50"
