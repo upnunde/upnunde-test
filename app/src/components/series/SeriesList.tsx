@@ -31,11 +31,21 @@ export function SeriesList({
   onCreateSeries,
   className,
 }: SeriesListProps) {
-  const visibleSeries = seriesList.filter((series) => series.status === "PUBLIC");
+  // 모든 상태(PUBLIC / PRIVATE / DRAFT / BANNED)를 화면에서 보여주되
+  // 상태별로 정렬해 시각적인 우선순위만 조정한다.
+  const orderedSeries = [...seriesList].sort((a, b) => {
+    const order: Record<SeriesData["status"], number> = {
+      PUBLIC: 0,
+      PRIVATE: 1,
+      DRAFT: 2,
+      BANNED: 3,
+    };
+    return order[a.status] - order[b.status];
+  });
 
   return (
     <div className={`w-full max-w-[1200px] grid grid-cols-2 gap-4 ${className ?? ""}`}>
-      {visibleSeries.map((series) => (
+      {orderedSeries.map((series) => (
         <SeriesItem
           key={series.id}
           series={series}

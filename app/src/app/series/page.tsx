@@ -30,14 +30,6 @@ const MOCK_SERIES: SeriesData[] = [
     viewCount: 8900,
   },
   {
-    id: "3",
-    title: "작성 중인 시리즈",
-    status: "DRAFT",
-    createdAt: "2025-12-20T10:00:00.000Z",
-    episodeCount: 0,
-    viewCount: 0,
-  },
-  {
     id: "4",
     title: "가이드 위반 작품",
     thumbnailUrl: "https://placehold.co/200x350?text=Thumbnail",
@@ -130,7 +122,7 @@ export default function SeriesListPage() {
 
             <div className="flex-1 overflow-y-auto flex flex-col items-center py-8 gap-3">
               <SeriesList
-                seriesList={seriesList}
+                seriesList={seriesList.filter((s) => s.status !== "BANNED")}
                 onResourceManage={handleResourceManage}
                 onEpisodeManage={handleEpisodeManage}
                 onSeriesManage={handleSeriesManage}
