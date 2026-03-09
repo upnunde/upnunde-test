@@ -124,7 +124,7 @@ export function BgmSection({
             className="h-9 border-border-20 text-on-surface-10 shrink-0"
             onClick={() => setModalOpen(true)}
           >
-            + 추가하기
+            추가하기
           </Button>
         </div>
         {items.length === 0 ? (

@@ -300,8 +300,8 @@ export function BgmListModal({ open, onClose, onAdd }: BgmListModalProps) {
           </div>
 
           {/* 리스트 - 우측(선택한 음악)과 동일한 레이아웃 구조 */}
-          <div className="flex-1 min-w-0 border-r border-border-10 px-2 py-4 flex flex-col gap-1">
-            <div className="flex w-full items-center justify-between text-xs font-medium text-on-surface-30 px-4 mt-2">
+          <div className="flex-1 min-w-0 border-r border-border-10 px-2 py-0 flex flex-col gap-0">
+            <div className="flex h-8 w-full items-center justify-between text-xs font-medium text-on-surface-30 px-4 mt-2">
               <span>리스트</span>
             </div>
             <div className="flex-1 flex flex-col gap-0 overflow-y-auto pr-1">
@@ -331,7 +331,7 @@ export function BgmListModal({ open, onClose, onAdd }: BgmListModalProps) {
 
           {/* 선택한 음악 - 좌측(리스트)과 동일한 레이아웃 구조 */}
           <div className="flex-1 min-w-0 px-2 py-0 flex flex-col gap-0">
-            <div className="flex w-full items-center justify-between text-xs font-medium text-on-surface-30 px-4">
+            <div className="flex h-8 w-full items-center justify-between text-xs font-medium text-on-surface-30 px-4 mt-2">
               <span>선택한 음악</span>
               <span className="text-on-surface-20">
                 <span className="text-on-surface-10">{selectedTracks.length}</span>
