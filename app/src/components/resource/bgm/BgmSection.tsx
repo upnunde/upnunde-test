@@ -1,10 +1,21 @@
 "use client";
 
-import React, { useState } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import { Button } from "@/components/ui/button";
 import { BgmListItem } from "./BgmListItem";
 import { BgmListModal } from "./BgmListModal";
 import type { BgmResource } from "@/types/resource";
+
+/** "00:00" 형식을 초로 변환 */
+function parseDurationToSeconds(duration: string): number {
+  const parts = duration.trim().split(":");
+  if (parts.length >= 2) {
+    const m = parseInt(parts[0], 10) || 0;
+    const s = parseInt(parts[1], 10) || 0;
+    return m * 60 + s;
+  }
+  return 0;
+}
 
 /** [정책 8, 9, 10] BGM 전용 섹션. 리스트 형태, [+ 추가하기] → 팝업, 항목별 미리듣기/삭제. */
 export interface BgmSectionProps {
@@ -30,6 +41,65 @@ export function BgmSection({
   onAddFromModal,
 }: BgmSectionProps) {
   const [modalOpen, setModalOpen] = useState(false);
+  const [playingId, setPlayingId] = useState<string | null>(null);
+  const [isPaused, setIsPaused] = useState(false);
+  const [currentTime, setCurrentTime] = useState(0);
+  const timerRef = useRef<ReturnType<typeof setInterval> | null>(null);
+
+  const playingItem = items.find((i) => i.id === playingId);
+  const totalSeconds = playingItem ? parseDurationToSeconds(playingItem.duration) : 0;
+
+  useEffect(() => {
+    if (playingId && !items.some((i) => i.id === playingId)) {
+      setPlayingId(null);
+      setIsPaused(false);
+      setCurrentTime(0);
+    }
+  }, [items, playingId]);
+
+  useEffect(() => {
+    if (!playingId || isPaused || totalSeconds <= 0) {
+      if (timerRef.current) {
+        clearInterval(timerRef.current);
+        timerRef.current = null;
+      }
+      return;
+    }
+    timerRef.current = setInterval(() => {
+      setCurrentTime((prev) => {
+        const next = prev + 1;
+        if (next >= totalSeconds) {
+          if (timerRef.current) {
+            clearInterval(timerRef.current);
+            timerRef.current = null;
+          }
+          setIsPaused(true);
+          return totalSeconds;
+        }
+        return next;
+      });
+    }, 1000);
+    return () => {
+      if (timerRef.current) {
+        clearInterval(timerRef.current);
+        timerRef.current = null;
+      }
+    };
+  }, [playingId, isPaused, totalSeconds]);
+
+  const handlePlay = (item: BgmResource) => {
+    if (playingId === item.id) {
+      setIsPaused(false);
+      return;
+    }
+    setPlayingId(item.id);
+    setIsPaused(false);
+    setCurrentTime(0);
+  };
+
+  const handlePause = () => {
+    setIsPaused(true);
+  };
 
   const handleAddFromModal = (trackId: string, title: string, duration: string) => {
     onAddFromModal({ id: trackId, title, duration });
@@ -83,9 +153,15 @@ export function BgmSection({
                   .map((item, idx) => (
                     <BgmListItem
                       key={item.id}
+                      variant="default"
                       item={item}
-                      index={idx * 2}
-                      onPlay={() => {}}
+                      index={idx * 2 + 1}
+                      isActive={playingId === item.id}
+                      isPlaying={playingId === item.id && !isPaused}
+                      currentTime={playingId === item.id ? currentTime : 0}
+                      onPlay={handlePlay}
+                      onPause={handlePause}
+                      onSeek={playingId === item.id ? setCurrentTime : undefined}
                       onDelete={onDelete}
                     />
                   ))}
@@ -96,9 +172,15 @@ export function BgmSection({
                   .map((item, idx) => (
                     <BgmListItem
                       key={item.id}
+                      variant="default"
                       item={item}
-                      index={idx * 2 + 1}
-                      onPlay={() => {}}
+                      index={idx * 2 + 2}
+                      isActive={playingId === item.id}
+                      isPlaying={playingId === item.id && !isPaused}
+                      currentTime={playingId === item.id ? currentTime : 0}
+                      onPlay={handlePlay}
+                      onPause={handlePause}
+                      onSeek={playingId === item.id ? setCurrentTime : undefined}
                       onDelete={onDelete}
                     />
                   ))}

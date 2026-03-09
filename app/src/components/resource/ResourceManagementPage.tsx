@@ -85,11 +85,19 @@ const initialGallery: ImageResource[] = MOCK_HAS_RESOURCES
       imageUrl: `https://placehold.co/80x80?text=G${i + 1}`,
     }))
   : [];
+/** 3~5분 랜덤 duration "MM:SS" */
+function randomBgmDuration(): string {
+  const totalSeconds = 180 + Math.floor(Math.random() * 121); // 180~300초 (3:00~5:00)
+  const m = Math.floor(totalSeconds / 60);
+  const s = totalSeconds % 60;
+  return `${String(m).padStart(2, "0")}:${String(s).padStart(2, "0")}`;
+}
+
 const initialBgm: BgmResource[] = MOCK_HAS_RESOURCES
   ? Array.from({ length: 5 }, (_, i) => ({
       id: String(i + 1),
       title: "input title",
-      duration: "00:00",
+      duration: randomBgmDuration(),
     }))
   : [];
 
@@ -155,7 +163,7 @@ export function ResourceManagementPage() {
           </div>
         </header>
 
-        <div className="flex-1 overflow-y-auto flex flex-col items-center py-8 px-5 gap-5">
+        <div className="flex-1 overflow-y-auto flex flex-col items-center py-8 px-5 gap-4">
           <ResourceBanner seriesId={seriesId} />
 
             {/* 등장인물 [정책 2, 3, 5] */}

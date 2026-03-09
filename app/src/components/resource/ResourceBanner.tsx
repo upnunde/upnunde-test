@@ -1,6 +1,7 @@
 "use client";
 
 import React, { useState, useEffect } from "react";
+import { Info } from "lucide-react";
 import { Button } from "@/components/ui/button";
 
 const STORAGE_KEY_PREFIX = "resource-mgmt-banner-dismissed";
@@ -43,7 +44,10 @@ export function ResourceBanner({ seriesId }: ResourceBannerProps) {
         <div className="flex-1 flex justify-start items-center gap-5">
           <div className="flex justify-start items-center gap-2">
             <div className="w-6 h-6 relative rounded overflow-hidden shrink-0">
-              <div className="w-5 h-5 absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 bg-primary" />
+              <Info
+                className="w-5 h-5 absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 text-primary"
+                aria-hidden
+              />
             </div>
             <div className="text-primary text-base font-bold font-['Pretendard_JP'] leading-6">
               안내

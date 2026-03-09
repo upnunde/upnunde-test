@@ -2,6 +2,7 @@
 
 import React, { useState, useEffect } from "react";
 import { useRouter, usePathname } from "next/navigation";
+import { SidebarList } from "./SidebarList";
 
 const SIDEBAR_ITEMS = [
   {
@@ -87,32 +88,23 @@ export default function AppSidebar({ defaultActiveId = "series", onSelect }: App
     if (path) router.push(path);
   };
 
+  const sidebarListItems = SIDEBAR_ITEMS.map(({ id, label, icon }) => ({
+    id,
+    label,
+    icon,
+  }));
+
   return (
     <nav className="shrink-0 w-[200px] border-r border-slate-200 bg-white py-4" aria-label="메인 메뉴">
-      <ul className="flex flex-col gap-1 px-2">
-        {SIDEBAR_ITEMS.map((item) => {
-          const isFocused = activeId === item.id;
-          const path = item.path;
-          return (
-            <li key={item.id}>
-              <button
-                type="button"
-                data-state={isFocused ? "focused" : undefined}
-                onClick={() => handleClick(item.id, path)}
-                className={`flex w-full items-center gap-3 rounded-md px-3 py-2.5 text-sm font-medium transition-colors outline-none hover:bg-slate-50 focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-2 ${
-                  isFocused ? "text-primary" : "text-slate-700"
-                }`}
-                aria-current={isFocused ? "page" : undefined}
-              >
-                <span className="flex h-6 w-6 shrink-0 items-center justify-center [&_svg]:h-5 [&_svg]:w-5" aria-hidden>
-                  {item.icon}
-                </span>
-                <span>{item.label}</span>
-              </button>
-            </li>
-          );
-        })}
-      </ul>
+      <SidebarList
+        items={sidebarListItems}
+        activeId={activeId}
+        onSelect={(id) => {
+          const item = SIDEBAR_ITEMS.find((i) => i.id === id);
+          handleClick(id, item?.path);
+        }}
+        listClassName="flex flex-col gap-1 px-2"
+      />
     </nav>
   );
 }
