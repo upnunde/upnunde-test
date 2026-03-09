@@ -15,6 +15,8 @@ export interface ResourceSectionProps {
   onAddClick: () => void;
   /** BGM은 헤더를 inline-flex로 표시 */
   headerInline?: boolean;
+  /** 설명 텍스트 색상 커스터마이징 */
+  descriptionColorClassName?: string;
 }
 
 export function ResourceSection({
@@ -25,6 +27,7 @@ export function ResourceSection({
   isEmpty,
   children,
   onAddClick,
+  descriptionColorClassName,
   headerInline = false,
 }: ResourceSectionProps) {
   return (
@@ -42,7 +45,11 @@ export function ResourceSection({
               {title}
             </h2>
           </div>
-          <p className="text-on-surface-30 text-xs font-normal font-['Pretendard_JP'] leading-4">
+          <p
+            className={`${
+              descriptionColorClassName ?? "text-on-surface-30"
+            } text-[13px] font-normal font-['Pretendard_JP'] leading-4`}
+          >
             {description}
           </p>
         </div>

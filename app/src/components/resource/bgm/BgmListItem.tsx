@@ -1,7 +1,7 @@
 "use client";
 
 import React, { useState } from "react";
-import { Play, Pause, Trash2, Plus, Minus, Check } from "lucide-react";
+import { Play, Square, Trash2, Plus, Minus, Check } from "lucide-react";
 import type { BgmResource } from "@/types/resource";
 
 /** "00:00" 형식을 초( number )로 변환 */
@@ -133,22 +133,22 @@ export function BgmListItem({
 
   return (
     <div
-      className="group w-full self-stretch py-1 pl-0 pr-0 rounded-lg inline-flex justify-center items-center gap-1 overflow-visible flex-col h-fit transition-colors cursor-pointer"
+      className="group w-full self-stretch pl-0 pr-0 rounded-lg inline-flex justify-center items-center gap-1 overflow-visible flex-col h-fit transition-colors cursor-pointer"
       onMouseEnter={() => setIsHovered(true)}
       onMouseLeave={() => setIsHovered(false)}
     >
       <div className="self-stretch flex flex-col gap-0 min-w-0 h-fit">
         <div className="self-stretch inline-flex justify-center items-start gap-1 min-h-[40px] flex-shrink-0">
           {variant === "default" && index != null && (
-            <span className="shrink-0 w-6 text-on-surface-30 text-sm font-medium font-['Pretendard_JP'] leading-5 tabular-nums">
+            <span className="shrink-0 w-6 text-on-surface-10 text-sm font-medium font-['Pretendard_JP'] leading-5 tabular-nums">
               {index}
             </span>
           )}
           <div className="flex-1 min-w-0 inline-flex flex-col justify-start items-start gap-0.5">
-            <div className="self-stretch justify-center text-on-surface-30 text-sm font-medium font-['Pretendard_JP'] leading-5 truncate">
+            <div className="self-stretch justify-center text-[rgba(22,22,22,1)] text-sm font-medium font-['Pretendard_JP'] leading-5 truncate">
               {item.title}
             </div>
-            <div className="self-stretch justify-center text-on-surface-30 text-xs font-normal font-['Pretendard_JP'] leading-4">
+            <div className="self-stretch justify-center text-[rgba(145,145,148,1)] text-[13px] font-normal font-['Pretendard_JP'] leading-4">
               {timeLabel}
             </div>
           </div>
@@ -162,10 +162,10 @@ export function BgmListItem({
                       type="button"
                       onClick={handlePlayPause}
                       className="w-8 h-8 rounded-full inline-flex justify-center items-center border border-border-20 bg-white text-on-surface-10 hover:bg-slate-50 hover:border-border-10"
-                      aria-label={isActive && isPlaying ? "일시정지" : "미리듣기"}
+                      aria-label={isActive && isPlaying ? "정지" : "미리듣기"}
                     >
                       {isActive && isPlaying ? (
-                        <Pause className="w-4 h-4 fill-current" />
+                        <Square className="w-4 h-4 fill-current" />
                       ) : (
                         <Play className="w-4 h-4 fill-current" />
                       )}
@@ -197,10 +197,10 @@ export function BgmListItem({
                     type="button"
                     onClick={handlePlayPause}
                     className="w-8 h-8 rounded-full inline-flex justify-center items-center border border-border-20 bg-white text-on-surface-10 hover:bg-slate-50 hover:border-border-10"
-                    aria-label={isActive && isPlaying ? "일시정지" : "미리듣기"}
+                    aria-label={isActive && isPlaying ? "정지" : "미리듣기"}
                   >
                     {isActive && isPlaying ? (
-                      <Pause className="w-4 h-4 fill-current" />
+                      <Square className="w-4 h-4 fill-current" />
                     ) : (
                       <Play className="w-4 h-4 fill-current" />
                     )}
@@ -240,17 +240,19 @@ export function BgmListItem({
             )}
           </div>
         </div>
-        {showProgressBar && showExpandedTime && (
+        {showProgressBar && (
           <div
-            role="slider"
-            aria-label="재생 위치"
-            aria-valuemin={0}
-            aria-valuemax={totalSeconds}
-            aria-valuenow={currentTime}
-            tabIndex={onSeek ? 0 : undefined}
-            className={`self-stretch flex-shrink-0 min-w-0 rounded-full overflow-hidden touch-none select-none relative h-fit ${onSeek ? "py-2 cursor-pointer" : "h-1.5"}`}
+            role={showExpandedTime ? "slider" : undefined}
+            aria-label={showExpandedTime ? "재생 위치" : undefined}
+            aria-valuemin={showExpandedTime ? 0 : undefined}
+            aria-valuemax={showExpandedTime ? totalSeconds : undefined}
+            aria-valuenow={showExpandedTime ? currentTime : undefined}
+            tabIndex={showExpandedTime && onSeek ? 0 : undefined}
+            className={`self-stretch flex-shrink-0 min-w-0 rounded-full overflow-hidden touch-none select-none relative h-fit ${
+              showExpandedTime && onSeek ? "py-2 cursor-pointer" : "py-2"
+            }`}
             onClick={
-              onSeek && totalSeconds > 0
+              showExpandedTime && onSeek && totalSeconds > 0
                 ? (e) => {
                     const el = e.currentTarget;
                     const rect = el.getBoundingClientRect();
@@ -261,7 +263,7 @@ export function BgmListItem({
                 : undefined
             }
             onKeyDown={
-              onSeek && totalSeconds > 0
+              showExpandedTime && onSeek && totalSeconds > 0
                 ? (e) => {
                     const step = e.shiftKey ? 10 : 1;
                     if (e.key === "ArrowLeft" || e.key === "Home") {
@@ -276,11 +278,15 @@ export function BgmListItem({
             }
           >
             {/* 트랙 배경 */}
-            <div className="absolute inset-x-0 top-1/2 -translate-y-1/2 h-1.5 rounded-full bg-surface-20 pointer-events-none" />
+            <div
+              className={`absolute inset-x-0 top-1/2 -translate-y-1/2 h-1.5 rounded-full pointer-events-none ${
+                showExpandedTime ? "bg-surface-20" : "bg-transparent"
+              }`}
+            />
             {/* 진행 바 */}
             <div
               className="absolute left-0 top-1/2 -translate-y-1/2 h-1.5 rounded-full bg-primary transition-[width] duration-150 pointer-events-none"
-              style={{ width: `${progress * 100}%` }}
+              style={{ width: `${(showExpandedTime ? progress : 0) * 100}%` }}
             />
           </div>
         )}

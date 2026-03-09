@@ -39,7 +39,7 @@ export function ResourceBanner({ seriesId }: ResourceBannerProps) {
   if (!mounted || !visible) return null;
 
   return (
-    <div className="self-stretch px-5 pt-0 inline-flex flex-col justify-start items-center gap-3">
+    <div className="self-stretch pt-0 inline-flex flex-col justify-start items-center gap-3">
       <div className="w-full max-w-[1400px] min-w-[800px] p-5 bg-surface-10 rounded-xl outline outline-1 outline-offset-[-1px] outline-border-10 inline-flex justify-center items-center gap-10">
         <div className="flex-1 flex justify-start items-center gap-5">
           <div className="flex justify-start items-center gap-2">

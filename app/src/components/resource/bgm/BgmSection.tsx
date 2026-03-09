@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState, useEffect, useRef } from "react";
+import React, { useState, useEffect, useRef, useMemo } from "react";
 import { Button } from "@/components/ui/button";
 import { BgmListItem } from "./BgmListItem";
 import { BgmListModal } from "./BgmListModal";
@@ -30,12 +30,15 @@ export interface BgmSectionProps {
   onAddFromModal: (item: BgmResource) => void;
 }
 
+const GENRE_TABS = ["판타지", "호러", "로맨스"] as const;
+const GENRE_TABS_WITH_ALL = ["전체", ...GENRE_TABS] as const;
+
 export function BgmSection({
   title,
   description,
   emptyMessage,
   addButtonLabel,
-  categoryTitle = "로맨스",
+  categoryTitle = "판타지",
   items,
   onDelete,
   onAddFromModal,
@@ -46,8 +49,17 @@ export function BgmSection({
   const [currentTime, setCurrentTime] = useState(0);
   const timerRef = useRef<ReturnType<typeof setInterval> | null>(null);
 
+  const [activeGenre, setActiveGenre] = useState<string>(categoryTitle);
+
   const playingItem = items.find((i) => i.id === playingId);
   const totalSeconds = playingItem ? parseDurationToSeconds(playingItem.duration) : 0;
+
+  const filteredItems = useMemo(() => {
+    if (items.length === 0) return items;
+    const index = GENRE_TABS.indexOf(activeGenre as (typeof GENRE_TABS)[number]);
+    if (index === -1) return items;
+    return items.filter((_, idx) => idx % GENRE_TABS.length === index);
+  }, [items, activeGenre]);
 
   useEffect(() => {
     if (playingId && !items.some((i) => i.id === playingId)) {
@@ -98,7 +110,13 @@ export function BgmSection({
   };
 
   const handlePause = () => {
-    setIsPaused(true);
+    setPlayingId(null);
+    setIsPaused(false);
+    setCurrentTime(0);
+    if (timerRef.current) {
+      clearInterval(timerRef.current);
+      timerRef.current = null;
+    }
   };
 
   const handleAddFromModal = (trackId: string, title: string, duration: string) => {
@@ -113,7 +131,7 @@ export function BgmSection({
             <h2 className="text-on-surface-10 text-base font-bold font-['Pretendard_JP'] leading-6">
               {title}
             </h2>
-            <p className="text-on-surface-30 text-[13px] font-normal font-['Pretendard_JP'] leading-4">
+            <p className="text-[rgba(145,145,148,1)] text-[13px] font-normal font-['Pretendard_JP'] leading-4">
               {description}
             </p>
           </div>
@@ -142,13 +160,43 @@ export function BgmSection({
             </Button>
           </div>
         ) : (
-          <div className="self-stretch p-5 rounded-2xl inline-flex flex-col justify-start items-start gap-2">
-            <div className="self-stretch grid grid-cols-1 gap-y-2 gap-x-5 md:grid-cols-2 md:[grid-template-rows:repeat(2,1fr)]">
-              <div className="justify-center text-on-surface-10 text-sm font-bold font-['Pretendard_JP'] leading-5 md:col-span-2">
-                {categoryTitle}
+          <div className="self-stretch px-5 pb-2 pt-2 rounded-2xl flex flex-col justify-start items-start gap-3">
+            {/* 상단 카테고리 탭 영역 - 레벨2(보조) 탭 스타일 */}
+            <div className="w-full pt-0 pb-0 mt-0 mb-1 inline-flex flex-col justify-start items-start gap-2.5">
+              <div
+                data-size="L"
+                data-underline="true"
+                className="w-full inline-flex justify-start items-center gap-4 overflow-hidden"
+                role="tablist"
+                aria-label="BGM 장르"
+              >
+                {GENRE_TABS_WITH_ALL.map((genre) => {
+                  const isActive = genre === activeGenre;
+                  return (
+                    <button
+                      key={genre}
+                      type="button"
+                      role="tab"
+                      aria-selected={isActive}
+                      className={
+                        "h-7 px-0 flex justify-center items-center min-w-0 border-b text-sm font-medium font-['Pretendard_JP'] leading-4 transition-colors " +
+                        (isActive
+                          ? "border-slate-800 text-on-surface-10"
+                          : "border-transparent text-[rgba(145,145,148,1)] hover:text-on-surface-20")
+                      }
+                      aria-current={isActive ? "page" : undefined}
+                      onClick={() => setActiveGenre(genre)}
+                    >
+                      <span className="justify-start">{genre}</span>
+                    </button>
+                  );
+                })}
               </div>
-              {items.map((item, idx) => (
-                <div key={item.id} className="min-w-0">
+            </div>
+            {/* 1단 와이드 리스트 영역 */}
+            <div className="w-full grid grid-cols-3 gap-x-10 gap-y-0">
+              {filteredItems.map((item, idx) => (
+                <div key={item.id} className="w-full">
                   <BgmListItem
                     variant="default"
                     item={item}

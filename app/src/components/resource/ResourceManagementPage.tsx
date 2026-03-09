@@ -1,7 +1,7 @@
 "use client";
 
-import React, { useState, useCallback } from "react";
-import { useRouter, useParams } from "next/navigation";
+import React, { useMemo, useState, useCallback } from "react";
+import { useRouter, useParams, useSearchParams } from "next/navigation";
 import { ChevronLeft } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { ResourceBanner } from "./ResourceBanner";
@@ -19,6 +19,8 @@ import type {
   MediaResource,
   BgmResource,
 } from "@/types/resource";
+import { PreviewScreen } from "@/components/editor/PreviewScreen";
+import type { ScriptBlock } from "@/types/editor";
 
 /** 신규 등록/상세 라우트 (정책 5, 3) - 실제 경로는 프로젝트에 맞게 변경 */
 const ROUTES = {
@@ -94,17 +96,31 @@ function randomBgmDuration(): string {
 }
 
 const initialBgm: BgmResource[] = MOCK_HAS_RESOURCES
-  ? Array.from({ length: 5 }, (_, i) => ({
-      id: String(i + 1),
-      title: "input title",
-      duration: randomBgmDuration(),
-    }))
+  ? [
+      // 판타지
+      { id: "1", title: "빛의 성가", duration: randomBgmDuration() },
+      { id: "2", title: "마법의 숲", duration: randomBgmDuration() },
+      { id: "3", title: "용자의 여정", duration: randomBgmDuration() },
+      { id: "4", title: "신성한 유적", duration: randomBgmDuration() },
+      // 호러
+      { id: "5", title: "침묵의 복도", duration: randomBgmDuration() },
+      { id: "6", title: "낡은 저택", duration: randomBgmDuration() },
+      { id: "7", title: "속삭이는 그림자", duration: randomBgmDuration() },
+      { id: "8", title: "붉은 달밤", duration: randomBgmDuration() },
+      // 로맨스
+      { id: "9", title: "봄날의 고백", duration: randomBgmDuration() },
+      { id: "10", title: "달빛 산책", duration: randomBgmDuration() },
+      { id: "11", title: "두근두근 러브송", duration: randomBgmDuration() },
+      { id: "12", title: "별빛 약속", duration: randomBgmDuration() },
+    ]
   : [];
 
 export function ResourceManagementPage() {
   const router = useRouter();
   const params = useParams();
+  const searchParams = useSearchParams();
   const seriesId = typeof params?.id === "string" ? params.id : "";
+  const showPreview = searchParams.get("preview") === "1";
 
   const [characters, setCharacters] = useState<CharacterResource[]>(initialCharacters);
   const [backgrounds, setBackgrounds] = useState<ImageResource[]>(initialBackgrounds);
@@ -130,6 +146,26 @@ export function ResourceManagementPage() {
     setDeleteModal((d) => ({ ...d, open: false }));
   }, []);
 
+  const previewBlocks = useMemo<ScriptBlock[]>(() => {
+    const bgName = backgrounds[0]?.name ?? "선택 안함";
+    const charName = characters[0]?.name ?? "선택 안함";
+    const bgmTitle = bgm[0]?.title ?? "선택 안함";
+
+    return [
+      { id: "pv-scene", type: "scene", content: "미리보기" },
+      { id: "pv-top", type: "top_desc", content: "리소스 미리보기" },
+      { id: "pv-bg", type: "background", content: bgName },
+      { id: "pv-bgm", type: "bgm", content: bgmTitle },
+      { id: "pv-char", type: "character", content: charName },
+      {
+        id: "pv-text",
+        type: "text",
+        content: "이 화면에서 등록한 리소스가 어떻게 보이는지 확인할 수 있어요.",
+        data: { speaker: charName === "선택 안함" ? "독백" : charName },
+      },
+    ];
+  }, [backgrounds, bgm, characters]);
+
   const handleBack = useCallback(() => {
     router.push("/series");
   }, [router]);
@@ -146,7 +182,7 @@ export function ResourceManagementPage() {
       <main className="flex flex-1 flex-col overflow-hidden bg-slate-50">
         {/* [정책 1] 헤더: < 리소스 관리, 뒤로가기 → /series */}
         <header className="flex h-16 shrink-0 items-center justify-center border-b border-slate-200 bg-white px-6 py-0">
-          <div className="flex w-full max-w-[1400px] min-w-[800px] items-center justify-between gap-4">
+          <div className="flex w-full max-w-[1200px] min-w-[800px] items-center justify-between gap-4">
             <div className="flex items-center justify-start gap-3">
               <Button
                 type="button"
@@ -164,7 +200,32 @@ export function ResourceManagementPage() {
         </header>
 
         <div className="flex-1 overflow-y-auto flex flex-col items-center py-8 px-5 gap-4">
-          <ResourceBanner seriesId={seriesId} />
+          <div className="w-full max-w-[1200px] min-w-[800px] flex flex-col gap-4">
+            <ResourceBanner seriesId={seriesId} />
+
+            <div className="flex w-full flex-col items-start gap-6 lg:flex-row">
+              {showPreview && (
+                <aside className="w-full lg:w-[380px] lg:shrink-0 lg:sticky lg:top-6">
+                  <div className="w-full bg-surface-10 rounded-2xl border border-border-10 p-5">
+                    <div className="flex items-center justify-between gap-3 mb-4">
+                      <div className="inline-flex flex-col justify-start items-start gap-1">
+                        <div className="text-on-surface-10 text-base font-bold font-['Pretendard_JP'] leading-6">
+                          미리보기
+                        </div>
+                        <div className="text-on-surface-30 text-[13px] font-normal font-['Pretendard_JP'] leading-4">
+                          등록한 리소스를 화면에서 확인합니다.
+                        </div>
+                      </div>
+                    </div>
+
+                    <div className="mx-auto h-[652px] w-[300px]">
+                      <PreviewScreen blocks={previewBlocks} focusedBlockId="pv-text" />
+                    </div>
+                  </div>
+                </aside>
+              )}
+
+              <div className="flex min-w-0 flex-1 flex-col gap-4">
 
             {/* 등장인물 [정책 2, 3, 5] */}
             <ResourceSection
@@ -261,6 +322,7 @@ export function ResourceManagementPage() {
               emptyMessage="등록된 미디어가 없습니다"
               addButtonLabel="미디어 등록"
               isEmpty={media.length === 0}
+              descriptionColorClassName="text-[rgba(145,145,148,1)]"
               onAddClick={() => navigateTo(ROUTES.media.new(seriesId))}
             >
               <div className="self-stretch p-0 rounded-2xl inline-flex justify-start items-start gap-4 flex-wrap content-start">
@@ -288,6 +350,7 @@ export function ResourceManagementPage() {
               emptyMessage="등록된 갤러리가 없습니다"
               addButtonLabel="갤러리 등록"
               isEmpty={gallery.length === 0}
+              descriptionColorClassName="text-[rgba(145,145,148,1)]"
               onAddClick={() => navigateTo(ROUTES.gallery.new(seriesId))}
             >
               <div className="self-stretch p-0 rounded-2xl inline-flex justify-start items-start gap-4 flex-wrap content-start">
@@ -326,6 +389,9 @@ export function ResourceManagementPage() {
               }
               onAddFromModal={(item) => setBgm((prev) => [...prev, item])}
             />
+              </div>
+            </div>
+          </div>
         </div>
       </main>
 
