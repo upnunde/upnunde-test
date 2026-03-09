@@ -90,7 +90,7 @@ export function NotificationItem({
           className="flex items-stretch gap-5 pl-[72px] pr-4 pb-4 pt-0"
         >
           <div
-            className="w-px shrink-0 self-stretch min-h-0 bg-border rounded-full"
+            className="w-px shrink-0 self-stretch min-h-0 bg-slate-100 rounded-full"
             aria-hidden
           />
           <div className="min-w-0 flex-1 flex flex-col gap-3 py-1">

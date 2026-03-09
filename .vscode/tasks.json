@@ -1,0 +1,55 @@
+{
+  "version": "2.0.0",
+  "tasks": [
+    {
+      "label": "Dev Server",
+      "type": "shell",
+      "command": "pnpm run dev",
+      "options": {
+        "cwd": "${workspaceFolder}",
+        "env": {}
+      },
+      "isBackground": true,
+      "problemMatcher": {
+        "pattern": { "regexp": "^.*$" },
+        "background": {
+          "activeOnStart": true,
+          "beginsPattern": ".",
+          "endsPattern": "Ready in|started server on|localhost"
+        }
+      },
+      "presentation": {
+        "reveal": "always",
+        "panel": "dedicated",
+        "group": "dev"
+      }
+    },
+    {
+      "label": "Open Preview",
+      "type": "shell",
+      "command": "echo",
+      "args": ["${input:openPreview}"],
+      "problemMatcher": [],
+      "presentation": {
+        "reveal": "never",
+        "echo": false,
+        "showReuseMessage": false
+      }
+    },
+    {
+      "label": "Open in Browser",
+      "type": "shell",
+      "command": "open http://localhost:3000",
+      "problemMatcher": [],
+      "presentation": { "reveal": "never" }
+    }
+  ],
+  "inputs": [
+    {
+      "id": "openPreview",
+      "type": "command",
+      "command": "simpleBrowser.show",
+      "args": ["http://localhost:3000"]
+    }
+  ]
+}
