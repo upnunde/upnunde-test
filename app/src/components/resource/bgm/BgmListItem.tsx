@@ -133,7 +133,7 @@ export function BgmListItem({
 
   return (
     <div
-      className="group w-full self-stretch py-1 pl-4 pr-2 rounded-lg inline-flex justify-center items-center gap-1 overflow-visible flex-col h-fit transition-colors cursor-pointer"
+      className="group w-full self-stretch py-1 pl-0 pr-0 rounded-lg inline-flex justify-center items-center gap-1 overflow-visible flex-col h-fit transition-colors cursor-pointer"
       onMouseEnter={() => setIsHovered(true)}
       onMouseLeave={() => setIsHovered(false)}
     >

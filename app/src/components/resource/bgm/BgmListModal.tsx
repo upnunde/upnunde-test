@@ -304,7 +304,7 @@ export function BgmListModal({ open, onClose, onAdd }: BgmListModalProps) {
             <div className="flex h-8 w-full items-center justify-between text-xs font-medium text-on-surface-30 px-4 mt-2">
               <span>리스트</span>
             </div>
-            <div className="flex-1 flex flex-col gap-0 overflow-y-auto pr-1">
+            <div className="flex-1 flex flex-col gap-1 overflow-y-auto pr-1 pl-4">
               {listTracks.map((track, idx) => {
                 const isActiveHere = playingId === track.id && playingSource === "list";
                 return (
@@ -338,7 +338,7 @@ export function BgmListModal({ open, onClose, onAdd }: BgmListModalProps) {
                 <span className="text-on-surface-20"> / {MAX_SELECTED}</span>
               </span>
             </div>
-            <div className="flex-1 flex flex-col gap-0 overflow-y-auto pr-1">
+            <div className="flex-1 flex flex-col gap-1 overflow-y-auto pr-1 pl-4">
               {selectedTracks.map((track, idx) => {
                 const isActiveHere = playingId === track.id && playingSource === "selected";
                 return (

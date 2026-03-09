@@ -143,48 +143,26 @@ export function BgmSection({
           </div>
         ) : (
           <div className="self-stretch p-5 rounded-2xl inline-flex flex-col justify-start items-start gap-2">
-            <div className="justify-center text-on-surface-10 text-base font-bold font-['Pretendard_JP'] leading-5">
-              {categoryTitle}
-            </div>
-            <div className="self-stretch inline-flex justify-start items-start gap-10">
-              <div className="flex-1 inline-flex flex-col justify-start items-start gap-0">
-                {items
-                  .filter((_, i) => i % 2 === 0)
-                  .map((item, idx) => (
-                    <BgmListItem
-                      key={item.id}
-                      variant="default"
-                      item={item}
-                      index={idx * 2 + 1}
-                      isActive={playingId === item.id}
-                      isPlaying={playingId === item.id && !isPaused}
-                      currentTime={playingId === item.id ? currentTime : 0}
-                      onPlay={handlePlay}
-                      onPause={handlePause}
-                      onSeek={playingId === item.id ? setCurrentTime : undefined}
-                      onDelete={onDelete}
-                    />
-                  ))}
+            <div className="self-stretch grid grid-cols-1 gap-y-2 gap-x-5 md:grid-cols-2 md:[grid-template-rows:repeat(2,1fr)]">
+              <div className="justify-center text-on-surface-10 text-sm font-bold font-['Pretendard_JP'] leading-5 md:col-span-2">
+                {categoryTitle}
               </div>
-              <div className="flex-1 inline-flex flex-col justify-start items-start gap-0">
-                {items
-                  .filter((_, i) => i % 2 === 1)
-                  .map((item, idx) => (
-                    <BgmListItem
-                      key={item.id}
-                      variant="default"
-                      item={item}
-                      index={idx * 2 + 2}
-                      isActive={playingId === item.id}
-                      isPlaying={playingId === item.id && !isPaused}
-                      currentTime={playingId === item.id ? currentTime : 0}
-                      onPlay={handlePlay}
-                      onPause={handlePause}
-                      onSeek={playingId === item.id ? setCurrentTime : undefined}
-                      onDelete={onDelete}
-                    />
-                  ))}
-              </div>
+              {items.map((item, idx) => (
+                <div key={item.id} className="min-w-0">
+                  <BgmListItem
+                    variant="default"
+                    item={item}
+                    index={idx + 1}
+                    isActive={playingId === item.id}
+                    isPlaying={playingId === item.id && !isPaused}
+                    currentTime={playingId === item.id ? currentTime : 0}
+                    onPlay={handlePlay}
+                    onPause={handlePause}
+                    onSeek={playingId === item.id ? setCurrentTime : undefined}
+                    onDelete={onDelete}
+                  />
+                </div>
+              ))}
             </div>
           </div>
         )}
