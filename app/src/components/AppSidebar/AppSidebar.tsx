@@ -101,7 +101,8 @@ export default function AppSidebar({ defaultActiveId = "series", onSelect }: App
         activeId={activeId}
         onSelect={(id) => {
           const item = SIDEBAR_ITEMS.find((i) => i.id === id);
-          handleClick(id, item?.path);
+          if (!item) return;
+          handleClick(item.id, item.path);
         }}
         listClassName="flex flex-col gap-1 px-2"
       />

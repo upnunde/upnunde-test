@@ -51,7 +51,7 @@ export function ConfirmDeleteModal({
         </DialogHeader>
         <div className="flex justify-end gap-2 pt-2">
           <DialogClose asChild>
-            <Button type="button" variant="outline" className="min-w-20">
+            <Button type="button" variant="outline" className="w-fit">
               취소
             </Button>
           </DialogClose>
