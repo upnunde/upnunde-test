@@ -8,7 +8,7 @@ import {
 } from "@/components/ui/dialog";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
-import { ChevronLeft, ChevronRight, Trash2 } from "lucide-react";
+import { ChevronLeft, ChevronRight, Trash2, RefreshCw } from "lucide-react";
 import { AddResourceSlot } from "@/components/resource/cards/AddResourceSlot";
 import type { CharacterExpressionSlot } from "@/types/resource";
 
@@ -244,7 +244,7 @@ export function CharacterExpressionModal({
         >
           {/* 왼쪽: 이미지 크롭 에디터 + 슬라이더 + 표정 입력 */}
           <div
-            className={`p-5 inline-flex flex-col justify-start items-center gap-5 shrink-0 ${
+            className={`p-5 inline-flex flex-col justify-start items-center gap-5 shrink-0 h-[640px] ${
               layoutShowSlotList ? "border-r border-slate-200" : "w-full"
             }`}
             style={layoutShowSlotList ? { width: "fit-content" } : undefined}
@@ -292,49 +292,50 @@ export function CharacterExpressionModal({
               ) : (
                 <span className="text-on-surface-30 text-sm">썸네일을 클릭하여 선택하세요</span>
               )}
-              {layoutShowSlotList && (
-                <>
-                  <button
-                    type="button"
-                    onClick={() => handleNavigateFilledSlots("prev")}
-                    disabled={filledSlotIndices.length <= 1}
-                    className="absolute left-2.5 top-1/2 -translate-y-1/2 w-10 h-10 p-2 bg-surface-10 rounded-[999px] shadow-[0px_2px_4px_2px_rgba(0,0,0,0.16)] inline-flex justify-center items-center overflow-hidden hover:bg-slate-100 disabled:opacity-40 disabled:pointer-events-none"
-                    aria-label="이전"
-                  >
-                    <ChevronLeft className="w-5 h-5 text-on-surface-10" />
-                  </button>
-                  <button
-                    type="button"
-                    onClick={() => handleNavigateFilledSlots("next")}
-                    disabled={filledSlotIndices.length <= 1}
-                    className="absolute right-2.5 top-1/2 -translate-y-1/2 w-10 h-10 p-2 bg-surface-10 rounded-[999px] shadow-[0px_2px_4px_2px_rgba(0,0,0,0.16)] inline-flex justify-center items-center overflow-hidden hover:bg-slate-100 disabled:opacity-40 disabled:pointer-events-none"
-                    aria-label="다음"
-                  >
-                    <ChevronRight className="w-5 h-5 text-on-surface-10" />
-                  </button>
-                </>
-              )}
             </div>
             {/* 슬라이더: primary 트랙 + 서피스 썸 (참고: w-14 채움 + w-48 빈 트랙 + thumb) */}
-            <div className="h-6 relative inline-flex justify-start items-center w-full self-stretch">
-              <div className="flex-1 flex h-2 rounded-[999px] overflow-hidden bg-surface-disabled">
-                <div className="h-full bg-primary rounded-[999px] transition-[width]" style={{ width: `${((zoom - 0.5) / 1.5) * 100}%` }} />
+            <div className="h-6 inline-flex justify-start items-center w-full self-stretch gap-4">
+              <div className="relative flex-1 h-6 inline-flex items-center gap-0">
+                <div className="flex-1 flex h-2 rounded-[999px] overflow-hidden bg-surface-disabled">
+                  <div className="h-full bg-primary rounded-[999px] transition-[width]" style={{ width: `${((zoom - 0.5) / 1.5) * 100}%` }} />
+                </div>
+                <div
+                  className="w-8 h-8 top-1/2 -translate-y-1/2 absolute bg-surface-10 rounded-full shadow-[0px_1px_2px_1px_rgba(0,0,0,0.16)] border border-border-20/10 -translate-x-1/2 pointer-events-none"
+                  style={{ left: `${((zoom - 0.5) / 1.5) * 100}%` }}
+                  aria-hidden
+                />
+                <input
+                  type="range"
+                  min={0.5}
+                  max={2}
+                  step={0.01}
+                  value={zoom}
+                  onChange={(e) => setZoom(Number(e.target.value))}
+                  className="absolute inset-0 w-full opacity-0 cursor-pointer z-[1]"
+                  aria-label="확대/축소"
+                />
               </div>
-              <div
-                className="w-8 h-8 top-1/2 -translate-y-1/2 absolute bg-surface-10 rounded-full shadow-[0px_1px_2px_1px_rgba(0,0,0,0.16)] border border-border-20/10 -translate-x-1/2 pointer-events-none"
-                style={{ left: `${((zoom - 0.5) / 1.5) * 100}%` }}
-                aria-hidden
-              />
-              <input
-                type="range"
-                min={0.5}
-                max={2}
-                step={0.01}
-                value={zoom}
-                onChange={(e) => setZoom(Number(e.target.value))}
-                className="absolute inset-0 w-full opacity-0 cursor-pointer z-[1]"
-                aria-label="확대/축소"
-              />
+              <Button
+                type="button"
+                variant="outline"
+                size="icon"
+                className="shrink-0 w-8 h-8 bg-transparent hover:bg-transparent active:bg-transparent shadow-none rounded-full border border-slate-200"
+                onClick={() => {
+                  if (selectedSlot?.id) {
+                    // 슬롯이 처음 선택됐을 때의 기본 배치(중앙, 줌 1)로 되돌림
+                    setZoom(1);
+                    setPanBySlotId((prev) => ({
+                      ...prev,
+                      [selectedSlot.id]: { x: 0, y: 0 },
+                    }));
+                  } else {
+                    setZoom(1);
+                  }
+                }}
+                aria-label="뷰 초기화"
+              >
+                <RefreshCw className="w-5 h-5" />
+              </Button>
             </div>
             {/* 표정: 라벨 + 설명 + 인풋 + 0/50 (참고 스타일) */}
             <div className="self-stretch flex flex-col justify-start items-start gap-2">
@@ -378,11 +379,33 @@ export function CharacterExpressionModal({
                 </div>
               </div>
             </div>
+            {layoutShowSlotList && (
+              <div className="mt-auto self-stretch flex justify-end gap-2">
+                <Button
+                  type="button"
+                  variant="outline"
+                  className="h-8 rounded-md outline outline-1 outline-offset-[-1px] outline-slate-200 font-['Pretendard_JP'] text-sm font-medium text-secondary-foreground px-4 w-auto"
+                  onClick={() => handleNavigateFilledSlots("prev")}
+                  disabled={filledSlotIndices.length <= 1}
+                >
+                  이전
+                </Button>
+                <Button
+                  type="button"
+                  variant="outline"
+                  className="h-8 rounded-md outline outline-1 outline-offset-[-1px] outline-slate-200 font-['Pretendard_JP'] text-sm font-medium text-secondary-foreground px-4 w-auto"
+                  onClick={() => handleNavigateFilledSlots("next")}
+                  disabled={filledSlotIndices.length <= 1}
+                >
+                  다음
+                </Button>
+              </div>
+            )}
           </div>
 
           {/* 오른쪽: 썸네일 리스트 w-24 h-40, outline-primary 선택 / outline-border 비선택 */}
           {layoutShowSlotList && (
-            <div className="self-stretch min-h-0 shrink-0 w-fit min-w-fit p-5 grid grid-cols-3 auto-rows-max gap-x-2 gap-y-4 justify-start items-start overflow-y-auto h-full">
+            <div className="self-stretch min-h-0 shrink-0 w-fit min-w-fit p-5 grid grid-cols-3 auto-rows-max gap-x-2 gap-y-4 justify-start items-start overflow-y-auto h-[640px]">
               {slots
                 .filter((s) => Boolean(s.imageUrl))
                 .map((slot) => {

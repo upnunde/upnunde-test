@@ -332,7 +332,7 @@ export function CharacterDetailPage({ isNew = true, initialData }: CharacterDeta
                     placeholder="예) 고등학생, 사진, 츤데레"
                     className="h-12 rounded-md border border-slate-200 bg-white px-3 py-2 text-sm text-on-surface-10 placeholder:text-on-surface-30 focus:outline-none focus:ring-2 focus:ring-primary"
                   />
-                  <div className="w-full inline-flex justify-center items-start gap-2">
+                  <div className="w-full inline-flex justify-end items-start gap-2">
                     {tagList.length > 0 && (
                       <div className="flex flex-wrap gap-2 w-full">
                         {tagList.map((tag) => (
@@ -348,7 +348,7 @@ export function CharacterDetailPage({ isNew = true, initialData }: CharacterDeta
                         ))}
                       </div>
                     )}
-                    <div className="text-right text-on-surface-30 text-xs font-normal leading-4">
+                    <div className="w-fit text-right text-on-surface-30 text-xs font-normal leading-4">
                       {(tags || tagList.join(", ")).length}/50
                     </div>
                   </div>
