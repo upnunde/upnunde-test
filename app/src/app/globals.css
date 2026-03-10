@@ -186,3 +186,16 @@ nextjs-portal {
   left: 0 !important;
   contain: layout;
 }
+
+@layer utilities {
+  /* "블랙 버튼"으로 사용된 bg-black 유틸을 공통 컬러로 치환 */
+  button.bg-black,
+  [data-slot="button"].bg-black {
+    background-color: #343436;
+  }
+
+  button.bg-black:hover,
+  [data-slot="button"].bg-black:hover {
+    background-color: rgba(52, 52, 54, 0.9);
+  }
+}

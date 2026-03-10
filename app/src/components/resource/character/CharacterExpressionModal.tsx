@@ -1,16 +1,15 @@
 "use client";
 
-import React, { useState, useCallback, useEffect } from "react";
+import React, { useState, useCallback, useEffect, useRef } from "react";
 import {
   Dialog,
   DialogContent,
-  DialogHeader,
-  DialogTitle,
   DialogClose,
 } from "@/components/ui/dialog";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { ChevronLeft, ChevronRight } from "lucide-react";
+import { AddResourceSlot } from "@/components/resource/cards/AddResourceSlot";
 import type { CharacterExpressionSlot } from "@/types/resource";
 
 const MAX_SLOTS = 10;
@@ -53,11 +52,7 @@ function createEmptySlot(index: number): CharacterExpressionSlot {
 }
 
 function buildSlotsFromInitial(initial: CharacterExpressionSlot[]): CharacterExpressionSlot[] {
-  const base = initial.length > 0 ? [...initial] : [];
-  while (base.length < MAX_SLOTS) {
-    base.push(createEmptySlot(base.length));
-  }
-  return base.slice(0, MAX_SLOTS);
+  return initial.slice(0, MAX_SLOTS);
 }
 
 export function CharacterExpressionModal({
@@ -67,22 +62,84 @@ export function CharacterExpressionModal({
   onSave,
 }: CharacterExpressionModalProps) {
   const [slots, setSlots] = useState<CharacterExpressionSlot[]>(() => buildSlotsFromInitial(initialSlots));
-  const [selectedIndex, setSelectedIndex] = useState<number | null>(0);
+  const [selectedIndex, setSelectedIndex] = useState<number | null>(initialSlots.length > 0 ? 0 : null);
   const [zoom, setZoom] = useState(1);
   const [expressionInput, setExpressionInput] = useState("");
   const [suggestionOpen, setSuggestionOpen] = useState(false);
+  const fileInputRef = useRef<HTMLInputElement | null>(null);
+  const [panBySlotId, setPanBySlotId] = useState<Record<string, { x: number; y: number }>>({});
+  const [isDragging, setIsDragging] = useState(false);
+  const dragRef = useRef<{
+    slotId: string;
+    pointerId: number;
+    startClientX: number;
+    startClientY: number;
+    originX: number;
+    originY: number;
+  } | null>(null);
+  const [applyBaseline, setApplyBaseline] = useState<{ slotId: string | null; expression: string; zoom: number }>(() => ({
+    slotId: initialSlots[0]?.id ?? null,
+    expression: initialSlots[0]?.expressionLabel ?? "",
+    zoom: 1,
+  }));
 
   const selectedSlot = selectedIndex !== null ? slots[selectedIndex] ?? null : null;
   /** 왼쪽 미리보기: 선택한 슬롯의 이미지 (썸네일 클릭 → 크기조절·표정 지정) */
   const previewImageUrl = selectedSlot?.imageUrl ?? null;
+  const currentPan = selectedSlot ? (panBySlotId[selectedSlot.id] ?? { x: 0, y: 0 }) : { x: 0, y: 0 };
+
+  const canApply =
+    selectedIndex !== null &&
+    Boolean(selectedSlot?.imageUrl) &&
+    applyBaseline.slotId === selectedSlot?.id &&
+    (expressionInput !== applyBaseline.expression || zoom !== applyBaseline.zoom);
+
+  const handleCropPointerDown = useCallback((e: React.PointerEvent<HTMLDivElement>) => {
+    if (!selectedSlot?.id || !previewImageUrl) return;
+    e.preventDefault();
+    dragRef.current = {
+      slotId: selectedSlot.id,
+      pointerId: e.pointerId,
+      startClientX: e.clientX,
+      startClientY: e.clientY,
+      originX: currentPan.x,
+      originY: currentPan.y,
+    };
+    setIsDragging(true);
+    (e.currentTarget as HTMLDivElement).setPointerCapture(e.pointerId);
+  }, [selectedSlot?.id, previewImageUrl, currentPan.x, currentPan.y]);
+
+  const handleCropPointerMove = useCallback((e: React.PointerEvent<HTMLDivElement>) => {
+    const drag = dragRef.current;
+    if (!drag || !selectedSlot?.id || drag.slotId !== selectedSlot.id || drag.pointerId !== e.pointerId) return;
+    const dx = e.clientX - drag.startClientX;
+    const dy = e.clientY - drag.startClientY;
+    setPanBySlotId((prev) => ({
+      ...prev,
+      [drag.slotId]: { x: drag.originX + dx, y: drag.originY + dy },
+    }));
+  }, [selectedSlot?.id]);
+
+  const handleCropPointerUp = useCallback((e: React.PointerEvent<HTMLDivElement>) => {
+    const drag = dragRef.current;
+    if (!drag || drag.pointerId !== e.pointerId) return;
+    dragRef.current = null;
+    setIsDragging(false);
+  }, []);
 
   useEffect(() => {
     if (open) {
-      setSlots(buildSlotsFromInitial(initialSlots));
-      setSelectedIndex(0);
+      const nextSlots = buildSlotsFromInitial(initialSlots);
+      setSlots(nextSlots);
+      setSelectedIndex(nextSlots.length > 0 ? 0 : null);
       setZoom(1);
       const first = initialSlots[0];
       setExpressionInput(first?.expressionLabel ?? "");
+      setApplyBaseline({
+        slotId: first?.id ?? null,
+        expression: first?.expressionLabel ?? "",
+        zoom: 1,
+      });
     }
   }, [open]);
 
@@ -100,10 +157,22 @@ export function CharacterExpressionModal({
       };
       return next;
     });
-  }, [selectedIndex, expressionInput]);
+    setApplyBaseline({
+      slotId: selectedSlot?.id ?? null,
+      expression: label,
+      zoom,
+    });
+  }, [selectedIndex, expressionInput, selectedSlot?.id, zoom]);
 
   const handleSave = useCallback(() => {
-    onSave(slots);
+    const filled = slots
+      .filter((s) => Boolean(s.imageUrl))
+      .map((s) => ({
+        ...s,
+        expressionLabel: (s.expressionLabel ?? "").trim(),
+      }))
+      .filter((s) => s.expressionLabel.length > 0 && s.expressionLabel !== "untitle");
+    onSave(filled.slice(0, MAX_SLOTS));
     onClose();
   }, [slots, onSave, onClose]);
 
@@ -119,53 +188,165 @@ export function CharacterExpressionModal({
     const slot = slots[index];
     setExpressionInput(slot?.expressionLabel ?? "");
     setZoom(1);
+    setApplyBaseline({
+      slotId: slot?.id ?? null,
+      expression: slot?.expressionLabel ?? "",
+      zoom: 1,
+    });
   }, [slots]);
 
-  /** 저장 버튼 활성화: 모든 슬롯에 썸네일 이미지 + 인풋으로 넣은 표정 이름이 있을 때만 */
-  const canSave = slots.every(
-    (slot) =>
-      Boolean(slot.imageUrl) &&
-      Boolean(slot.expressionLabel?.trim()) &&
-      slot.expressionLabel?.trim() !== "untitle"
-  );
+  const filledSlotIndices = slots
+    .map((s, i) => (s.imageUrl ? i : null))
+    .filter((i): i is number => i !== null);
+
+  const handleNavigateFilledSlots = useCallback((direction: "prev" | "next") => {
+    if (filledSlotIndices.length === 0) return;
+
+    const currentIndex = selectedIndex;
+    const currentPos = currentIndex === null ? -1 : filledSlotIndices.indexOf(currentIndex);
+    const startPos = currentPos >= 0 ? currentPos : 0;
+
+    const nextPos = direction === "next"
+      ? (startPos + 1) % filledSlotIndices.length
+      : (startPos - 1 + filledSlotIndices.length) % filledSlotIndices.length;
+
+    handleSelectSlot(filledSlotIndices[nextPos]!);
+  }, [filledSlotIndices, selectedIndex, handleSelectSlot]);
+
+  const handleFilesSelected = useCallback((e: React.ChangeEvent<HTMLInputElement>) => {
+    const files = Array.from(e.target.files ?? []);
+    if (files.length === 0) return;
+
+    setSlots((prev) => {
+      const currentImageCount = prev.filter((s) => Boolean(s.imageUrl)).length;
+      const remaining = Math.max(0, MAX_SLOTS - currentImageCount);
+      if (remaining === 0) return prev;
+
+      const filesToAdd = files.slice(0, remaining);
+      const next = [...prev];
+      let firstAddedIndex: number | null = null;
+
+      for (const file of filesToAdd) {
+        const objectUrl = URL.createObjectURL(file);
+        next.push({
+          ...createEmptySlot(next.length),
+          imageUrl: objectUrl,
+          expressionLabel: "",
+        });
+        if (firstAddedIndex === null) firstAddedIndex = next.length - 1;
+      }
+
+      if (firstAddedIndex !== null) {
+        const firstSlot = next[firstAddedIndex];
+        setSelectedIndex(firstAddedIndex);
+        setExpressionInput(firstSlot?.expressionLabel ?? "");
+        setZoom(1);
+        setApplyBaseline({
+          slotId: firstSlot?.id ?? null,
+          expression: firstSlot?.expressionLabel ?? "",
+          zoom: 1,
+        });
+      }
+
+      return next.slice(0, MAX_SLOTS);
+    });
+
+    // 같은 파일을 다시 선택할 수 있게 리셋
+    e.target.value = "";
+  }, []);
+
+  const handleAddSlot = useCallback(() => {
+    fileInputRef.current?.click();
+  }, []);
+
+  /** 저장 버튼 활성화: 등록된(이미지 있는) 슬롯들만 검사 */
+  const canSave = slots.some((s) => Boolean(s.imageUrl)) &&
+    slots
+      .filter((s) => Boolean(s.imageUrl))
+      .every((s) => Boolean(s.expressionLabel?.trim()) && s.expressionLabel.trim() !== "untitle");
 
   return (
     <Dialog open={open} onOpenChange={(o) => !o && handleClose()}>
-      <DialogContent className="w-[900px] max-w-[calc(100vw-2rem)] gap-0 p-0 bg-surface-10 rounded-2xl shadow-[0px_8px_16px_8px_rgba(0,0,0,0.16)] outline outline-1 outline-offset-[-1px] outline-slate-200 overflow-hidden flex flex-col">
-        <DialogTitle className="sr-only">표정 이미지 등록</DialogTitle>
-        <div className="inline-flex justify-center items-start min-h-0 flex-1 overflow-hidden">
+      <DialogContent
+        className="w-[min(750px,calc(100vw-2rem))] max-w-none gap-0 p-0 bg-surface-10 rounded-2xl shadow-[0px_8px_16px_8px_rgba(0,0,0,0.16)] outline outline-1 outline-offset-[-1px] outline-slate-200 overflow-hidden flex flex-col"
+      >
+        <input
+          ref={fileInputRef}
+          type="file"
+          accept="image/*"
+          multiple
+          className="sr-only"
+          onChange={handleFilesSelected}
+        />
+        <div
+          className="inline-flex justify-start items-start min-h-0 flex-1 overflow-hidden w-full"
+          style={{ width: "100%" }}
+        >
           {/* 왼쪽: 이미지 크롭 에디터 + 슬라이더 + 표정 입력 */}
-          <div className="p-5 border-r border-border-10/5 inline-flex flex-col justify-start items-center gap-5 shrink-0">
+          <div className="p-5 border-r border-slate-200 inline-flex flex-col justify-start items-center gap-5 shrink-0">
             {/* 크롭 영역 w-96 h-96 */}
-            <div className="w-96 h-96 relative rounded-md overflow-hidden bg-[repeating-conic-gradient(#e2e8f0_0%_25%,#f1f5f9_0%_50%)] bg-[length:12px_12px] flex items-center justify-center">
+            <div
+              className="w-96 h-96 relative rounded-md overflow-hidden bg-[repeating-conic-gradient(#e2e8f0_0%_25%,#f1f5f9_0%_50%)] bg-[length:12px_12px] flex items-center justify-center"
+              onPointerDownCapture={handleCropPointerDown}
+              onPointerMove={handleCropPointerMove}
+              onPointerUp={handleCropPointerUp}
+              onPointerCancel={handleCropPointerUp}
+              style={{
+                touchAction: "none",
+                cursor: previewImageUrl ? (isDragging ? "grabbing" : "grab") : "default",
+                userSelect: "none",
+              }}
+            >
               {previewImageUrl ? (
                 <>
                   <div
                     className="absolute inset-0 flex items-center justify-center"
-                    style={{ transform: `scale(${zoom})` }}
+                    style={{ transform: `translate(${currentPan.x}px, ${currentPan.y}px) scale(${zoom})` }}
                   >
                     <img
                       src={previewImageUrl}
                       alt="크롭 미리보기"
+                      draggable={false}
+                      onDragStart={(e) => e.preventDefault()}
                       className="max-w-none max-h-full w-auto h-full object-cover"
                     />
                   </div>
-                  <div className="absolute inset-0 bg-dim-20/50 pointer-events-none rounded-md" aria-hidden />
-                  <div className="absolute inset-0 outline outline-[1.54px] outline-offset-[-1.54px] outline-primary pointer-events-none rounded-md" aria-hidden />
+                  <div className="absolute inset-0 flex items-center justify-center pointer-events-none" aria-hidden>
+                    {/* 9:16 crop guide: inside is transparent, outside is dimmed via huge box-shadow */}
+                    <div className="h-full aspect-[9/16] rounded-sm relative shadow-[0_0_0_9999px_rgba(0,0,0,0.7)] outline outline-1 outline-offset-[-1px] outline-slate-200/85">
+                      <div className="absolute left-0 top-0 w-3 h-3 border-l border-t border-slate-200/85" />
+                      <div className="absolute right-0 top-0 w-3 h-3 border-r border-t border-slate-200/85" />
+                      <div className="absolute left-0 bottom-0 w-3 h-3 border-l border-b border-slate-200/85" />
+                      <div className="absolute right-0 bottom-0 w-3 h-3 border-r border-b border-slate-200/85" />
+                    </div>
+                  </div>
+                  <div className="absolute inset-0 outline outline-[1.54px] outline-offset-[-1.54px] outline-slate-200 pointer-events-none rounded-md" aria-hidden />
                 </>
               ) : (
                 <span className="text-on-surface-30 text-sm">썸네일을 클릭하여 선택하세요</span>
               )}
-              <button type="button" className="absolute left-2.5 top-1/2 -translate-y-1/2 w-10 h-10 px-5 bg-surface-10 rounded-[999px] shadow-[0px_2px_4px_2px_rgba(0,0,0,0.16)] inline-flex justify-center items-center overflow-hidden hover:bg-slate-100" aria-label="이전">
+              <button
+                type="button"
+                onClick={() => handleNavigateFilledSlots("prev")}
+                disabled={filledSlotIndices.length <= 1}
+                className="absolute left-2.5 top-1/2 -translate-y-1/2 w-10 h-10 p-2 bg-surface-10 rounded-[999px] shadow-[0px_2px_4px_2px_rgba(0,0,0,0.16)] inline-flex justify-center items-center overflow-hidden hover:bg-slate-100 disabled:opacity-40 disabled:pointer-events-none"
+                aria-label="이전"
+              >
                 <ChevronLeft className="w-5 h-5 text-on-surface-10" />
               </button>
-              <button type="button" className="absolute right-2.5 top-1/2 -translate-y-1/2 w-10 h-10 px-5 bg-surface-10 rounded-[999px] shadow-[0px_2px_4px_2px_rgba(0,0,0,0.16)] inline-flex justify-center items-center overflow-hidden hover:bg-slate-100" aria-label="다음">
+              <button
+                type="button"
+                onClick={() => handleNavigateFilledSlots("next")}
+                disabled={filledSlotIndices.length <= 1}
+                className="absolute right-2.5 top-1/2 -translate-y-1/2 w-10 h-10 p-2 bg-surface-10 rounded-[999px] shadow-[0px_2px_4px_2px_rgba(0,0,0,0.16)] inline-flex justify-center items-center overflow-hidden hover:bg-slate-100 disabled:opacity-40 disabled:pointer-events-none"
+                aria-label="다음"
+              >
                 <ChevronRight className="w-5 h-5 text-on-surface-10" />
               </button>
             </div>
             {/* 슬라이더: primary 트랙 + 서피스 썸 (참고: w-14 채움 + w-48 빈 트랙 + thumb) */}
-            <div className="h-6 relative inline-flex justify-start items-center w-56">
-              <div className="flex-1 flex h-2 rounded-[999px] overflow-hidden bg-surface-disabled/0">
+            <div className="h-6 relative inline-flex justify-start items-center w-full self-stretch">
+              <div className="flex-1 flex h-2 rounded-[999px] overflow-hidden bg-surface-disabled">
                 <div className="h-full bg-primary rounded-[999px] transition-[width]" style={{ width: `${((zoom - 0.5) / 1.5) * 100}%` }} />
               </div>
               <div
@@ -188,8 +369,8 @@ export function CharacterExpressionModal({
             <div className="self-stretch flex flex-col justify-start items-start gap-2">
               <div className="justify-center text-on-surface-10 text-base font-bold font-['Pretendard_JP'] leading-5">표정</div>
               <div className="justify-center text-on-surface-30 text-xs font-normal font-['Pretendard_JP'] leading-4">표정은 에피소드에서 인물의 감정 표현에 사용됩니다</div>
-              <div className="self-stretch rounded flex flex-col justify-center items-start gap-2 relative">
-                <div className="self-stretch h-12 px-4 bg-surface-10 rounded outline outline-1 outline-border-20/10 inline-flex justify-start items-center gap-1 overflow-hidden">
+              <div className="self-stretch rounded flex flex-col justify-center items-end gap-2 relative">
+                <div className="self-stretch">
                   <Input
                     value={expressionInput}
                     onChange={(e) => {
@@ -201,7 +382,7 @@ export function CharacterExpressionModal({
                     onBlur={() => setTimeout(() => setSuggestionOpen(false), 150)}
                     placeholder="인물의 표정을 입력하세요"
                     maxLength={EXPRESSION_MAX_LENGTH}
-                    className="flex-1 h-full min-w-0 border-0 bg-transparent outline-none font-['Pretendard_JP'] text-base font-normal leading-6 placeholder:text-on-surface-disabled/20 focus-visible:ring-0 focus-visible:ring-offset-0"
+                    className="h-12 w-full rounded-md border border-slate-200 bg-white px-3 py-2 text-sm text-on-surface-10 placeholder:text-on-surface-30 focus:outline-none focus:ring-2 focus:ring-primary shadow-none font-['Pretendard_JP']"
                   />
                 </div>
                 <div className="self-stretch inline-flex justify-end items-center gap-2">
@@ -252,19 +433,20 @@ export function CharacterExpressionModal({
               <Button
                 type="button"
                 size="sm"
-                className="h-8 w-fit font-['Pretendard_JP']"
+                className="h-8 w-fit font-['Pretendard_JP'] bg-black text-white hover:bg-black/90 focus-visible:ring-2 focus-visible:ring-black/30"
                 onClick={handleApplyToSlot}
-                disabled={selectedIndex === null}
+                disabled={!canApply}
               >
-                선택한 슬롯에 적용
+                슬롯에 적용
               </Button>
             </div>
           </div>
           </div>
 
           {/* 오른쪽: 썸네일 리스트 w-24 h-40, outline-primary 선택 / outline-border 비선택 */}
-          <div className="self-stretch p-5 inline-flex flex-col justify-start items-start overflow-y-auto min-w-0">
-            {slots.map((slot, index) => {
+          <div className="self-stretch min-h-0 shrink-0 w-fit min-w-fit p-5 grid grid-cols-3 auto-rows-max gap-x-2 gap-y-4 justify-start items-start overflow-y-auto h-full">
+            {slots.filter((s) => Boolean(s.imageUrl)).map((slot) => {
+              const index = slots.indexOf(slot);
               const isSelected = selectedIndex === index;
               const label = slot.expressionLabel?.trim() || "untitle";
               return (
@@ -272,32 +454,36 @@ export function CharacterExpressionModal({
                   <button
                     type="button"
                     onClick={() => handleSelectSlot(index)}
-                    className={`w-24 h-40 bg-surface-disabled/0 rounded-lg flex flex-col justify-center items-center gap-2 overflow-hidden cursor-pointer focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary ${
+                    className={`w-[90px] h-[160px] bg-surface-disabled/0 rounded-lg flex flex-col justify-center items-center gap-2 overflow-hidden cursor-pointer focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary ${
                       isSelected
                         ? "outline outline-2 outline-offset-[-2px] outline-primary"
                         : "outline outline-1 outline-offset-[-1px] outline-border-10/5 hover:outline-border-20"
                     }`}
                     aria-label={`표정 ${index + 1}: ${label}`}
                   >
-                    {slot.imageUrl ? (
-                      <img src={slot.imageUrl} alt="" className="w-24 h-40 object-cover object-top" />
-                    ) : (
-                      <span className="text-on-surface-30 text-xs">비어 있음</span>
-                    )}
+                    <img src={slot.imageUrl!} alt="" className="w-[90px] h-[160px] object-cover object-top" />
                   </button>
-                  <div className="self-stretch inline-flex justify-start items-center gap-2.5 overflow-hidden">
-                    <div className="flex-1 justify-center text-on-surface-30 text-base font-normal font-['Pretendard_JP'] leading-5 truncate text-center">
+                  <div className="w-[90px] inline-flex justify-start items-center gap-2.5 overflow-hidden">
+                    <div className="w-[90px] justify-center text-on-surface-20 text-sm font-normal font-['Pretendard_JP'] leading-5 truncate text-left">
                       {label}
                     </div>
                   </div>
                 </div>
               );
             })}
+
+            {slots.filter((s) => Boolean(s.imageUrl)).length < MAX_SLOTS && (
+              <AddResourceSlot
+                variant="img9:16"
+                ariaLabel="표정 추가하기"
+                onClick={handleAddSlot}
+              />
+            )}
           </div>
         </div>
 
         {/* 푸터: border-t, 취소(아웃라인) / 저장 */}
-        <div className="self-stretch p-5 border-t border-slate-200 inline-flex justify-end items-center gap-2 shrink-0">
+        <div className="self-stretch w-full p-5 border-t border-slate-200 inline-flex justify-end items-center gap-2 shrink-0">
           <DialogClose asChild>
             <Button
               type="button"
