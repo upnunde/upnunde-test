@@ -30,6 +30,7 @@ export function CharacterDetailPage({ isNew = true, initialData }: CharacterDeta
   const [name, setName] = useState("");
   const [summary, setSummary] = useState("");
   const [tags, setTags] = useState("");
+  const [tagList, setTagList] = useState<string[]>([]);
   const [greeting, setGreeting] = useState("");
   const [thumbnailUrl, setThumbnailUrl] = useState<string | null>(null);
   const [expressionSlots, setExpressionSlots] = useState<CharacterExpressionSlot[]>([]);
@@ -44,7 +45,15 @@ export function CharacterDetailPage({ isNew = true, initialData }: CharacterDeta
     if (initialData) {
       setName(initialData.name ?? "");
       setSummary(initialData.summary ?? "");
-      setTags(initialData.tags ?? "");
+      const initialTags = initialData.tags ?? "";
+      setTags("");
+      if (initialTags.trim()) {
+        const parsed = initialTags
+          .split(",")
+          .map((t) => t.trim().replace(/^#+/, ""))
+          .filter((t, idx, arr) => t.length > 0 && arr.indexOf(t) === idx);
+        setTagList(parsed);
+      }
       setGreeting(initialData.greeting ?? "");
       setThumbnailUrl(initialData.imageUrl ?? null);
       setExpressionSlots(initialData.expressions ?? []);
@@ -94,6 +103,25 @@ export function CharacterDetailPage({ isNew = true, initialData }: CharacterDeta
       if (prev && prev.startsWith("blob:")) URL.revokeObjectURL(prev);
       return objectUrl;
     });
+  }, []);
+
+  const [isComposingTag, setIsComposingTag] = useState(false);
+
+  const handleAddTag = useCallback(
+    (rawValue?: string) => {
+      const cleaned = (rawValue ?? tags).trim().replace(/,$/, "");
+      // 앞에 붙은 # 기호는 제거하고 저장 (칩 렌더 시에만 #를 붙임)
+      const value = cleaned.replace(/^#+/, "");
+      // 한 글자짜리 입력(오타 등)은 태그로 만들지 않는다
+      if (!value || value.length < 2) return;
+      setTagList((prev) => (prev.includes(value) ? prev : [...prev, value]));
+      setTags("");
+    },
+    [tags],
+  );
+
+  const handleRemoveTag = useCallback((tag: string) => {
+    setTagList((prev) => prev.filter((t) => t !== tag));
   }, []);
 
   const handleExpressionFilesChange = useCallback((e: React.ChangeEvent<HTMLInputElement>) => {
@@ -289,11 +317,40 @@ export function CharacterDetailPage({ isNew = true, initialData }: CharacterDeta
                   <Input
                     value={tags}
                     onChange={(e) => setTags(e.target.value)}
+                    onCompositionStart={() => setIsComposingTag(true)}
+                    onCompositionEnd={() => setIsComposingTag(false)}
+                    onKeyDown={(e) => {
+                      if (!isComposingTag && (e.key === "Enter" || e.key === ",")) {
+                        e.preventDefault();
+                        handleAddTag();
+                      } else if (e.key === "Backspace" && !tags && tagList.length > 0) {
+                        // 입력이 비어 있고 백스페이스를 누르면 마지막 태그 삭제
+                        e.preventDefault();
+                        setTagList((prev) => prev.slice(0, -1));
+                      }
+                    }}
                     placeholder="예) 고등학생, 사진, 츤데레"
                     className="h-12 rounded-md border border-slate-200 bg-white px-3 py-2 text-sm text-on-surface-10 placeholder:text-on-surface-30 focus:outline-none focus:ring-2 focus:ring-primary"
                   />
-                  <div className="w-full inline-flex justify-end items-center gap-2">
-                    <div className="text-right text-on-surface-30 text-xs font-normal leading-4">0/50</div>
+                  <div className="w-full inline-flex justify-center items-start gap-2">
+                    {tagList.length > 0 && (
+                      <div className="flex flex-wrap gap-2 w-full">
+                        {tagList.map((tag) => (
+                          <button
+                            key={tag}
+                            type="button"
+                            onClick={() => handleRemoveTag(tag)}
+                            className="inline-flex items-center gap-2 rounded-full border border-slate-200 bg-slate-50 px-3 py-1 text-xs text-on-surface-10 hover:bg-slate-100 hover:border-slate-300 cursor-pointer"
+                          >
+                            <span className="whitespace-nowrap">#{tag}</span>
+                            <span className="text-on-surface-30 text-[10px] leading-none">✕</span>
+                          </button>
+                        ))}
+                      </div>
+                    )}
+                    <div className="text-right text-on-surface-30 text-xs font-normal leading-4">
+                      {(tags || tagList.join(", ")).length}/50
+                    </div>
                   </div>
                 </div>
               </section>
@@ -391,7 +448,13 @@ export function CharacterDetailPage({ isNew = true, initialData }: CharacterDeta
           }}
           initialSlots={modalInitialSlots ?? expressionSlots}
           onSave={(slots) => {
-            setExpressionSlots(slots);
+            // 멀티 추가: 기존 슬롯은 유지하고, 새로 추가한 슬롯을 뒤에 쌓되 최대 10개까지만 유지
+            setExpressionSlots((prev) => {
+              const existingFilled = prev.filter((s) => s.imageUrl);
+              const newFilled = slots.filter((s) => s.imageUrl);
+              const combined = [...existingFilled, ...newFilled];
+              return combined.slice(0, 10);
+            });
             setExpressionModalOpen(false);
             setModalInitialSlots(null);
             setEditingExpressionSlotId(null);
