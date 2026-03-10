@@ -20,6 +20,8 @@ export interface ImageCardProps {
   showName?: boolean;
   onDetailClick: (item: ImageResource) => void;
   onDeleteClick: (item: ImageResource) => void;
+  /** 썸네일 클릭 시 크게 보기(라이트박스). 있으면 카드 클릭 시 이걸 호출하고, 없으면 onDetailClick 호출 */
+  onPreviewClick?: (item: ImageResource) => void;
 }
 
 const IMAGE_CARD_SIZE: Record<"img1:1" | "img16:9" | "img9:16", string> = {
@@ -37,11 +39,13 @@ export function ImageCard({
   showName = true,
   onDetailClick,
   onDeleteClick,
+  onPreviewClick,
 }: ImageCardProps) {
   const handleCardClick = (e: React.MouseEvent) => {
     const target = e.target as HTMLElement;
     if (target.closest("button")) return;
-    onDetailClick(item);
+    if (onPreviewClick) onPreviewClick(item);
+    else onDetailClick(item);
   };
 
   const sizeClass = IMAGE_CARD_SIZE[slotType];
@@ -53,7 +57,7 @@ export function ImageCard({
       role="button"
       tabIndex={0}
       onClick={handleCardClick}
-      onKeyDown={(e) => e.key === "Enter" && onDetailClick(item)}
+      onKeyDown={(e) => e.key === "Enter" && (onPreviewClick ? onPreviewClick(item) : onDetailClick(item))}
       className={cn(
         "group inline-flex flex-col justify-start items-start gap-1 cursor-pointer",
         hoveredProp !== undefined && "pointer-events-auto"
@@ -87,7 +91,7 @@ export function ImageCard({
         >
           <button
             type="button"
-            className="w-8 h-8 rounded-full bg-surface-10 inline-flex justify-center items-center text-on-surface-10 hover:bg-slate-100"
+            className="w-8 h-8 rounded-full cursor-pointer bg-surface-10 inline-flex justify-center items-center text-on-surface-10 hover:bg-slate-100"
             aria-label="상세 페이지에서 편집"
             onClick={(e) => {
               e.stopPropagation();
@@ -98,7 +102,7 @@ export function ImageCard({
           </button>
           <button
             type="button"
-            className="w-8 h-8 rounded-full bg-surface-10 inline-flex justify-center items-center text-on-surface-10 hover:bg-slate-100"
+            className="w-8 h-8 rounded-full cursor-pointer bg-surface-10 inline-flex justify-center items-center text-on-surface-10 hover:bg-slate-100"
             aria-label="삭제"
             onClick={(e) => {
               e.stopPropagation();

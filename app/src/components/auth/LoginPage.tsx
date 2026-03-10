@@ -137,7 +137,7 @@ export function LoginPage() {
             required
             value={email}
             onChange={(e) => setEmail(e.target.value)}
-            className="w-full h-14 rounded-[12px] focus-visible:border-primary focus-visible:ring-primary/50 focus-visible:ring-[3px]"
+            className="w-full h-14 rounded-[12px] focus-visible:border-2 focus-visible:border-primary focus-visible:ring-primary/50 focus-visible:ring-[3px]"
             autoComplete="email"
           />
           <Button
@@ -157,7 +157,7 @@ export function LoginPage() {
           <div className="relative">
             <button
               type="button"
-              className="relative flex w-full items-center justify-center gap-2 rounded-full border border-border bg-surface-10 px-4 h-12 text-sm font-medium text-on-surface-10 hover:bg-accent focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
+              className="relative flex w-full cursor-pointer items-center justify-center gap-2 rounded-full border border-border bg-surface-10 px-4 h-12 text-sm font-medium text-on-surface-10 hover:bg-accent focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
               aria-label="Google로 계속하기"
             >
               <span className="absolute -top-8 left-1/2 -translate-x-1/2 rounded bg-on-surface-10 px-2 py-1 text-xs font-medium text-surface-10 before:absolute before:left-1/2 before:top-full before:-translate-x-1/2 before:border-4 before:border-transparent before:border-t-on-surface-10">
@@ -170,7 +170,7 @@ export function LoginPage() {
 
           <button
             type="button"
-            className="flex w-full items-center justify-center gap-2 rounded-full border border-border bg-surface-10 px-4 h-12 text-sm font-medium text-on-surface-10 hover:bg-accent focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
+            className="flex w-full cursor-pointer items-center justify-center gap-2 rounded-full border border-border bg-surface-10 px-4 h-12 text-sm font-medium text-on-surface-10 hover:bg-accent focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
             aria-label="Apple로 계속하기"
           >
             <AppleIcon className="text-on-surface-10" />
@@ -179,7 +179,7 @@ export function LoginPage() {
 
           <button
             type="button"
-            className="flex w-full items-center justify-center gap-2 rounded-full border border-border bg-surface-10 px-4 h-12 text-sm font-medium text-on-surface-10 hover:bg-accent focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
+            className="flex w-full cursor-pointer items-center justify-center gap-2 rounded-full border border-border bg-surface-10 px-4 h-12 text-sm font-medium text-on-surface-10 hover:bg-accent focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
             aria-label="X로 계속하기"
           >
             <XIcon />
@@ -188,7 +188,7 @@ export function LoginPage() {
 
           <button
             type="button"
-            className="flex w-full items-center justify-center gap-2 rounded-full border border-border bg-surface-10 px-4 h-12 text-sm font-medium text-on-surface-10 hover:bg-accent focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
+            className="flex w-full cursor-pointer items-center justify-center gap-2 rounded-full border border-border bg-surface-10 px-4 h-12 text-sm font-medium text-on-surface-10 hover:bg-accent focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
             aria-label="LINE으로 계속하기"
           >
             <LineIcon />
@@ -200,7 +200,7 @@ export function LoginPage() {
           계정이 없으신가요?{" "}
           <Link
             href="/signup"
-            className="font-medium text-primary underline-offset-4 hover:underline"
+            className="cursor-pointer font-medium text-primary underline-offset-4 hover:underline"
           >
             가입하기
           </Link>
@@ -211,7 +211,7 @@ export function LoginPage() {
       <button
         type="button"
         onClick={() => setInquiryOpen(true)}
-        className="absolute bottom-8 right-8 rounded-md border border-border bg-surface-10 px-4 py-2 text-sm font-medium text-on-surface-10 hover:bg-accent focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
+        className="absolute bottom-8 right-8 cursor-pointer rounded-md border border-border bg-surface-10 px-4 py-2 text-sm font-medium text-on-surface-10 hover:bg-accent focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
       >
         문의하기
       </button>

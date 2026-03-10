@@ -53,7 +53,7 @@ const ToastClose = React.forwardRef<
     type="button"
     aria-label="닫기"
     className={cn(
-      "w-10 h-10 shrink-0 rounded-[999px] flex justify-center items-center overflow-hidden text-on-surface-10 hover:bg-black/5 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring",
+      "w-10 h-10 shrink-0 rounded-[999px] cursor-pointer flex justify-center items-center overflow-hidden text-on-surface-10 hover:bg-black/5 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring",
       className
     )}
     {...props}
@@ -72,7 +72,7 @@ const ToastAction = React.forwardRef<
     ref={ref}
     type="button"
     className={cn(
-      "h-8 min-w-16 shrink-0 px-2 rounded-md flex justify-center items-center gap-1 overflow-hidden text-primary text-sm font-medium leading-5 font-['Pretendard_JP',sans-serif] hover:bg-primary/10 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring",
+      "h-8 min-w-16 shrink-0 px-2 rounded-md cursor-pointer flex justify-center items-center gap-1 overflow-hidden text-primary text-sm font-medium leading-5 font-['Pretendard_JP',sans-serif] hover:bg-primary/10 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring",
       className
     )}
     {...props}

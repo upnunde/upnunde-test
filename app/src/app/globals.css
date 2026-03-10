@@ -172,6 +172,11 @@
     min-height: 100vh;
     height: 100%;
   }
+  button:not(:disabled),
+  [role="button"]:not([aria-disabled="true"]),
+  a[href] {
+    cursor: pointer;
+  }
 }
 
 /* nextjs-portal: dev overlay를 top:0, left:0에 고정하여 레이아웃 영향 방지 */

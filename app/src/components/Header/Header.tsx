@@ -25,7 +25,7 @@ export default function Header({ profileImageUrl, onProfileImageChange }: Header
       <button
         type="button"
         onClick={() => router.push("/")}
-        className="flex items-center"
+        className="flex cursor-pointer items-center"
         aria-label="로그인 화면으로 이동"
       >
         <img
@@ -39,7 +39,7 @@ export default function Header({ profileImageUrl, onProfileImageChange }: Header
           ref={profileButtonRef}
           type="button"
           onClick={() => setIsProfileModalOpen(true)}
-          className="w-9 h-9 rounded-full bg-slate-100 border border-slate-200 flex items-center justify-center hover:bg-slate-200 transition-colors overflow-hidden"
+          className="w-9 h-9 rounded-full bg-slate-100 border border-slate-200 flex cursor-pointer items-center justify-center hover:bg-slate-200 transition-colors overflow-hidden"
           aria-label="프로필 편집"
         >
           {profileImageUrl ? (

@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useCallback, useState } from "react";
+import React, { useCallback, useState, useEffect } from "react";
 import { useRouter, useParams } from "next/navigation";
 import { ChevronLeft } from "lucide-react";
 import { Button } from "@/components/ui/button";
@@ -9,13 +9,16 @@ import { Textarea } from "@/components/ui/textarea";
 import { AddResourceSlot } from "@/components/resource/cards/AddResourceSlot";
 import { Title1 } from "@/components/ui/title1";
 import { Title2 } from "@/components/ui/title2";
+import type { CharacterResource } from "@/types/resource";
 
 interface CharacterDetailPageProps {
   /** 신규 생성인지 여부 (지금은 true 만 사용) */
   isNew?: boolean;
+  /** 편집 시 기존 등장인물 데이터 – 있으면 폼에 채움 */
+  initialData?: CharacterResource | null;
 }
 
-export function CharacterDetailPage({ isNew = true }: CharacterDetailPageProps) {
+export function CharacterDetailPage({ isNew = true, initialData }: CharacterDetailPageProps) {
   const router = useRouter();
   const params = useParams();
   const seriesId = typeof params?.id === "string" ? params.id : "";
@@ -24,6 +27,15 @@ export function CharacterDetailPage({ isNew = true }: CharacterDetailPageProps) 
   const [summary, setSummary] = useState("");
   const [tags, setTags] = useState("");
   const [greeting, setGreeting] = useState("");
+
+  useEffect(() => {
+    if (initialData) {
+      setName(initialData.name ?? "");
+      setSummary(initialData.summary ?? "");
+      setTags(initialData.tags ?? "");
+      setGreeting(initialData.greeting ?? "");
+    }
+  }, [initialData]);
 
   const handleBack = useCallback(() => {
     router.push(`/series/${seriesId}/resources`);

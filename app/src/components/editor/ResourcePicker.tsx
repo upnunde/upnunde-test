@@ -108,7 +108,7 @@ export function ResourcePicker({
             type="button"
             aria-label="닫기"
             onClick={() => onOpenChange(false)}
-            className="w-8 h-8 flex items-center justify-center rounded-full hover:bg-surface-20/60 text-on-surface-30 hover:text-on-surface-10 transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary"
+            className="w-8 h-8 cursor-pointer flex items-center justify-center rounded-full hover:bg-surface-20/60 text-on-surface-30 hover:text-on-surface-10 transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary"
             style={{ marginLeft: 0, marginRight: -8 }}
           >
             <X className="w-5 h-5" aria-hidden />
@@ -126,7 +126,7 @@ export function ResourcePicker({
               <button
                 type="button"
                 onClick={() => handleSelect("")}
-                className="rounded-lg inline-flex flex-col justify-start items-center gap-2 col-span-1 focus:outline-none focus:ring-0"
+                className="rounded-lg cursor-pointer inline-flex flex-col justify-start items-center gap-2 col-span-1 focus:outline-none focus:ring-0"
               >
                 <div
                   className={cn(
@@ -162,7 +162,7 @@ export function ResourcePicker({
                   type="button"
                   onClick={() => handleSelect(item.name)}
                   className={cn(
-                    "rounded-lg inline-flex flex-col justify-start items-center gap-2 hover:bg-surface-10/40 focus:outline-none focus:ring-0",
+                    "rounded-lg cursor-pointer inline-flex flex-col justify-start items-center gap-2 hover:bg-surface-10/40 focus:outline-none focus:ring-0",
                     isCharacter ? "" : "items-start"
                   )}
                 >
@@ -214,7 +214,7 @@ export function ResourcePicker({
               <button
                 type="button"
                 onClick={() => handleSelect("")}
-                className="flex items-center gap-2 rounded px-2 py-2 text-left text-sm hover:bg-slate-100 focus:outline-none focus:ring-0"
+                className="flex cursor-pointer items-center gap-2 rounded px-2 py-2 text-left text-sm hover:bg-slate-100 focus:outline-none focus:ring-0"
               >
                 <span className="flex h-8 w-8 shrink-0 items-center justify-center rounded bg-slate-100 text-on-surface-30">
                   —
@@ -226,7 +226,7 @@ export function ResourcePicker({
                   key={item.id}
                   type="button"
                   onClick={() => handleSelect(item.name)}
-                  className="flex items-center gap-2 rounded px-2 py-2 text-left text-sm hover:bg-slate-100 focus:outline-none focus:ring-0"
+                  className="flex cursor-pointer items-center gap-2 rounded px-2 py-2 text-left text-sm hover:bg-slate-100 focus:outline-none focus:ring-0"
                 >
                   <span className="flex h-8 w-8 shrink-0 items-center justify-center rounded bg-slate-100 text-on-surface-30">
                     ♪

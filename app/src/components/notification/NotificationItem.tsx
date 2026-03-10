@@ -40,7 +40,7 @@ export function NotificationItem({
       <button
         type="button"
         onClick={() => onToggle?.()}
-        className="w-full self-stretch h-[80px] rounded-lg inline-flex justify-start items-center gap-5"
+        className="w-full cursor-pointer self-stretch h-[80px] rounded-lg inline-flex justify-start items-center gap-5"
         aria-expanded={isOpen}
         aria-controls={`notification-content-${id}`}
         id={`notification-trigger-${id}`}
@@ -73,7 +73,7 @@ export function NotificationItem({
           data-type="onlyicon"
           data-variant="outline"
           data-with-icon="true"
-          className="w-8 h-8 px-3 rounded-[999px] flex justify-center items-center overflow-hidden bg-transparent text-on-surface-30 transition-colors hover:bg-slate-50 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-2"
+          className="w-8 h-8 px-3 rounded-[999px] cursor-pointer flex justify-center items-center overflow-hidden bg-transparent text-on-surface-30 transition-colors hover:bg-slate-50 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-2"
         >
           <ChevronDown
             className={`w-3 h-3 shrink-0 ${isOpen ? "rotate-180" : ""}`}
@@ -103,14 +103,14 @@ export function NotificationItem({
               <button
                 type="button"
                 onClick={handleContactClick}
-                className="h-8 flex items-center rounded-md border border-slate-200 bg-white px-3 text-sm font-medium text-slate-700 transition-colors hover:bg-slate-50 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-2"
+                className="h-8 cursor-pointer flex items-center rounded-md border border-slate-200 bg-white px-3 text-sm font-medium text-slate-700 transition-colors hover:bg-slate-50 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-2"
               >
                 문의하기
               </button>
               <button
                 type="button"
                 onClick={handleCollapse}
-                className="h-8 rounded-md border border-slate-200 bg-white px-3 flex items-center text-sm font-medium text-slate-700 transition-colors hover:bg-slate-50 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-2"
+                className="h-8 cursor-pointer rounded-md border border-slate-200 bg-white px-3 flex items-center text-sm font-medium text-slate-700 transition-colors hover:bg-slate-50 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-2"
               >
                 접기
               </button>

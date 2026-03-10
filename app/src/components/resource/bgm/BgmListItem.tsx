@@ -161,7 +161,7 @@ export function BgmListItem({
                     <button
                       type="button"
                       onClick={handlePlayPause}
-                      className="w-8 h-8 rounded-full inline-flex justify-center items-center border border-border-20 bg-white text-on-surface-10 hover:bg-slate-50 hover:border-border-10"
+                      className="w-8 h-8 rounded-full cursor-pointer inline-flex justify-center items-center border border-border-20 bg-white text-on-surface-10 hover:bg-slate-50 hover:border-border-10"
                       aria-label={isActive && isPlaying ? "정지" : "미리듣기"}
                     >
                       {isActive && isPlaying ? (
@@ -175,7 +175,7 @@ export function BgmListItem({
                     <button
                       type="button"
                       onClick={onAdd}
-                      className="w-8 h-8 rounded-full inline-flex justify-center items-center border border-border-20 bg-white text-on-surface-10 hover:bg-slate-50 hover:border-border-10"
+                      className="w-8 h-8 rounded-full cursor-pointer inline-flex justify-center items-center border border-border-20 bg-white text-on-surface-10 hover:bg-slate-50 hover:border-border-10"
                       aria-label="선택 해제"
                     >
                       <Minus className="w-4 h-4" />
@@ -196,7 +196,7 @@ export function BgmListItem({
                   <button
                     type="button"
                     onClick={handlePlayPause}
-                    className="w-8 h-8 rounded-full inline-flex justify-center items-center border border-border-20 bg-white text-on-surface-10 hover:bg-slate-50 hover:border-border-10"
+                    className="w-8 h-8 rounded-full cursor-pointer inline-flex justify-center items-center border border-border-20 bg-white text-on-surface-10 hover:bg-slate-50 hover:border-border-10"
                     aria-label={isActive && isPlaying ? "정지" : "미리듣기"}
                   >
                     {isActive && isPlaying ? (
@@ -210,7 +210,7 @@ export function BgmListItem({
                   <button
                     type="button"
                     onClick={onAdd}
-                    className="w-8 h-8 rounded-full inline-flex justify-center items-center border border-border-20 bg-white text-on-surface-10 hover:bg-slate-50 hover:border-border-10"
+                    className="w-8 h-8 rounded-full cursor-pointer inline-flex justify-center items-center border border-border-20 bg-white text-on-surface-10 hover:bg-slate-50 hover:border-border-10"
                     aria-label="추가"
                   >
                     <Plus className="w-4 h-4" />
@@ -222,7 +222,7 @@ export function BgmListItem({
               <button
                 type="button"
                 onClick={() => onDelete(item)}
-                className="w-8 h-8 rounded-full inline-flex justify-center items-center border border-border-20 bg-white text-on-surface-10 hover:bg-slate-50 hover:border-border-10 hover:text-destructive"
+                className="w-8 h-8 rounded-full cursor-pointer inline-flex justify-center items-center border border-border-20 bg-white text-on-surface-10 hover:bg-slate-50 hover:border-border-10 hover:text-destructive"
                 aria-label="삭제"
               >
                 <Trash2 className="w-4 h-4" />
@@ -232,7 +232,7 @@ export function BgmListItem({
               <button
                 type="button"
                 onClick={() => onDelete(item)}
-                className="w-8 h-8 rounded-full inline-flex justify-center items-center border border-border-20 bg-white text-on-surface-10 hover:bg-slate-50 hover:border-border-10"
+                className="w-8 h-8 rounded-full cursor-pointer inline-flex justify-center items-center border border-border-20 bg-white text-on-surface-10 hover:bg-slate-50 hover:border-border-10"
                 aria-label="선택에서 제거"
               >
                 <Minus className="w-4 h-4" />

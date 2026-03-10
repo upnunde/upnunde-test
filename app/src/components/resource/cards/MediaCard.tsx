@@ -16,6 +16,8 @@ export interface MediaCardProps {
   showName?: boolean;
   onDetailClick: (item: MediaResource) => void;
   onDeleteClick: (item: MediaResource) => void;
+  /** 썸네일 클릭 시 크게 보기(라이트박스). 있으면 카드 클릭 시 이걸 호출 */
+  onPreviewClick?: (item: MediaResource) => void;
 }
 
 export function MediaCard({
@@ -25,11 +27,13 @@ export function MediaCard({
   showName = true,
   onDetailClick,
   onDeleteClick,
+  onPreviewClick,
 }: MediaCardProps) {
   const handleCardClick = (e: React.MouseEvent) => {
     const target = e.target as HTMLElement;
     if (target.closest("button")) return;
-    onDetailClick(item);
+    if (onPreviewClick) onPreviewClick(item);
+    else onDetailClick(item);
   };
 
   const showControls = hoveredProp === true;
@@ -39,7 +43,7 @@ export function MediaCard({
       role="button"
       tabIndex={0}
       onClick={handleCardClick}
-      onKeyDown={(e) => e.key === "Enter" && onDetailClick(item)}
+      onKeyDown={(e) => e.key === "Enter" && (onPreviewClick ? onPreviewClick(item) : onDetailClick(item))}
       className="group inline-flex flex-col justify-start items-start gap-1 cursor-pointer"
       aria-label={`${item.name} 상세 보기`}
     >
@@ -72,7 +76,7 @@ export function MediaCard({
         >
           <button
             type="button"
-            className="w-8 h-8 rounded-full bg-surface-10 inline-flex justify-center items-center text-on-surface-10 hover:bg-slate-100"
+            className="w-8 h-8 rounded-full cursor-pointer bg-surface-10 inline-flex justify-center items-center text-on-surface-10 hover:bg-slate-100"
             aria-label="상세 페이지에서 편집"
             onClick={(e) => {
               e.stopPropagation();
@@ -83,7 +87,7 @@ export function MediaCard({
           </button>
           <button
             type="button"
-            className="w-8 h-8 rounded-full bg-surface-10 inline-flex justify-center items-center text-on-surface-10 hover:bg-slate-100"
+            className="w-8 h-8 rounded-full cursor-pointer bg-surface-10 inline-flex justify-center items-center text-on-surface-10 hover:bg-slate-100"
             aria-label="삭제"
             onClick={(e) => {
               e.stopPropagation();

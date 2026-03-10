@@ -26,7 +26,7 @@ export interface SidebarListProps {
 }
 
 const DEFAULT_ITEM_CLASS =
-  "flex w-full items-center gap-3 rounded-md px-3 py-2.5 text-sm font-medium transition-colors outline-none focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-2";
+  "flex w-full cursor-pointer items-center gap-3 rounded-md px-3 py-2.5 text-sm font-medium transition-colors outline-none focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-2";
 const DEFAULT_ACTIVE_CLASS = "text-primary";
 const DEFAULT_INACTIVE_CLASS = "text-slate-700 hover:bg-slate-50";
 

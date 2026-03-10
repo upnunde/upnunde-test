@@ -209,7 +209,7 @@ export function SeriesItem({
             <button
               type="button"
               onClick={() => onViolationDetail?.(series)}
-              className="text-destructive text-sm font-medium underline focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary"
+              className="cursor-pointer text-destructive text-sm font-medium underline focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary"
             >
               자세히 보기
             </button>
@@ -246,7 +246,7 @@ export function SeriesItem({
           <button
             type="button"
             onClick={handleSeriesManage}
-            className="h-10 w-full rounded-md border px-3 text-sm font-medium transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-2 border-slate-200 bg-white text-slate-700 hover:bg-slate-50"
+            className="h-10 w-full cursor-pointer rounded-md border px-3 text-sm font-medium transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-2 border-slate-200 bg-white text-slate-700 hover:bg-slate-50"
           >
             시리즈 관리
           </button>
@@ -258,7 +258,7 @@ export function SeriesItem({
             className={`h-10 w-full rounded-md border px-3 text-sm font-medium transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-2 ${
               isDraft
                 ? "border-slate-200 text-on-surface-30 cursor-not-allowed"
-                : "border-slate-200 bg-white text-slate-700 hover:bg-slate-50"
+                : "border-slate-200 bg-white text-slate-700 hover:bg-slate-50 cursor-pointer"
             }`}
           >
             리소스 관리
@@ -271,7 +271,7 @@ export function SeriesItem({
             className={`h-10 w-full rounded-md border px-3 text-sm font-medium transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-2 ${
               isDraft
                 ? "border-slate-200 text-on-surface-30 cursor-not-allowed"
-                : "border-slate-200 bg-white text-slate-700 hover:bg-slate-50"
+                : "border-slate-200 bg-white text-slate-700 hover:bg-slate-50 cursor-pointer"
             }`}
           >
             에피소드 관리

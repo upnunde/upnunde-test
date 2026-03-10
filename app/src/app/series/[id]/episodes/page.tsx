@@ -301,14 +301,14 @@ export default function EpisodeManagementPage() {
                   <button
                     type="button"
                     onClick={handleResourceManagement}
-                    className="h-10 px-4 bg-white border border-slate-200 rounded-md text-slate-700 font-medium hover:bg-slate-100 transition-colors"
+                    className="h-10 px-4 cursor-pointer bg-white border border-slate-200 rounded-md text-slate-700 font-medium hover:bg-slate-100 transition-colors"
                   >
                     리소스 관리
                   </button>
                   <button
                     type="button"
                     onClick={handleAddEpisode}
-                    className="h-10 px-4 bg-primary text-primary-foreground hover:bg-primary/90 font-medium rounded-md transition-colors"
+                    className="h-10 px-4 cursor-pointer bg-primary text-primary-foreground hover:bg-primary/90 font-medium rounded-md transition-colors"
                   >
                     에피소드 추가
                   </button>

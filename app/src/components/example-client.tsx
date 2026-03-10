@@ -15,7 +15,7 @@ export function ExampleClient() {
       <button
         type="button"
         onClick={() => setOpen(!open)}
-        className="text-sm font-medium text-zinc-700 dark:text-zinc-300"
+        className="cursor-pointer text-sm font-medium text-zinc-700 dark:text-zinc-300"
       >
         {open ? "접기" : "펼치기"}
       </button>

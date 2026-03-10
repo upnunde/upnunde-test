@@ -15,6 +15,12 @@ export interface CharacterResource {
   id: string;
   name: string;
   imageUrl: string;
+  /** 인물 소개 (상세 페이지) */
+  summary?: string;
+  /** 해시태그 쉼표 구분 (상세 페이지) */
+  tags?: string;
+  /** 인물 인사 멘트 (상세 페이지) */
+  greeting?: string;
 }
 
 export interface ImageResource {

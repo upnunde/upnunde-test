@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useCallback, useState } from "react";
+import React, { useCallback, useEffect, useState } from "react";
 import { useRouter, useParams } from "next/navigation";
 import { ChevronLeft } from "lucide-react";
 import { Button } from "@/components/ui/button";
@@ -9,11 +9,17 @@ import { Textarea } from "@/components/ui/textarea";
 import { AddResourceSlot } from "@/components/resource/cards/AddResourceSlot";
 import { Title1 } from "@/components/ui/title1";
 import { Title2 } from "@/components/ui/title2";
+import type { ImageResource, MediaResource } from "@/types/resource";
 
 export type ImageResourceKind = "background" | "scene" | "media" | "gallery";
 
+/** 편집 시 기존 데이터. 배경/연출/갤러리는 imageUrl, 미디어는 thumbnailUrl 사용 */
+export type ImageResourceInitialData = ImageResource | MediaResource;
+
 export interface ImageResourceDetailPageProps {
   kind: ImageResourceKind;
+  /** 있으면 편집 모드: 폼에 기존 정보 채움 */
+  initialData?: ImageResourceInitialData | null;
 }
 
 function getLabels(kind: ImageResourceKind) {
@@ -67,7 +73,11 @@ function getLabels(kind: ImageResourceKind) {
   }
 }
 
-export function ImageResourceDetailPage({ kind }: ImageResourceDetailPageProps) {
+function getThumbnailUrl(data: ImageResourceInitialData): string {
+  return "thumbnailUrl" in data ? data.thumbnailUrl : data.imageUrl;
+}
+
+export function ImageResourceDetailPage({ kind, initialData }: ImageResourceDetailPageProps) {
   const router = useRouter();
   const params = useParams();
   const seriesId = typeof params?.id === "string" ? params.id : "";
@@ -76,7 +86,16 @@ export function ImageResourceDetailPage({ kind }: ImageResourceDetailPageProps) 
 
   const [name, setName] = useState("");
   const [description, setDescription] = useState("");
+  const [thumbnailUrl, setThumbnailUrl] = useState("");
   const [sceneAiMode, setSceneAiMode] = useState<"apply" | "none">("apply");
+
+  useEffect(() => {
+    if (initialData) {
+      setName(initialData.name);
+      setThumbnailUrl(getThumbnailUrl(initialData));
+      // 설명은 mock에 없으면 빈 문자열 유지
+    }
+  }, [initialData]);
 
   const handleBack = useCallback(() => {
     router.push(`/series/${seriesId}/resources`);
@@ -163,13 +182,37 @@ export function ImageResourceDetailPage({ kind }: ImageResourceDetailPageProps) 
                   subtitle
                   subtitleText={labels.thumbnailSubtitle}
                 />
-                <AddResourceSlot
-                  variant="img9:16"
-                  ariaLabel="대표 썸네일 업로드"
-                  onClick={() => {
-                    // 실제 업로드 연동은 추후 구현
-                  }}
-                />
+                {thumbnailUrl ? (
+                  <div className="flex flex-col items-start gap-2">
+                    <div className="w-24 aspect-[9/16] rounded-lg overflow-hidden border border-slate-200 bg-slate-100">
+                      <img
+                        src={thumbnailUrl}
+                        alt=""
+                        className="w-full h-full object-cover"
+                      />
+                    </div>
+                    <Button
+                      type="button"
+                      variant="outline"
+                      size="sm"
+                      className="cursor-pointer"
+                      onClick={() => {
+                        // 실제 교체 연동은 추후 구현
+                        setThumbnailUrl("");
+                      }}
+                    >
+                      이미지 변경
+                    </Button>
+                  </div>
+                ) : (
+                  <AddResourceSlot
+                    variant="img9:16"
+                    ariaLabel="대표 썸네일 업로드"
+                    onClick={() => {
+                      // 실제 업로드 연동은 추후 구현
+                    }}
+                  />
+                )}
               </section>
 
               {/* 연출장면 전용: AI채팅 적용 여부 */}
@@ -185,7 +228,7 @@ export function ImageResourceDetailPage({ kind }: ImageResourceDetailPageProps) 
                     <button
                       type="button"
                       onClick={() => setSceneAiMode("apply")}
-                      className="inline-flex items-center gap-2 text-sm font-medium text-on-surface-10"
+                      className="inline-flex items-center gap-2 text-sm font-medium text-on-surface-10 cursor-pointer"
                     >
                       <span
                         className={`flex h-4 w-4 items-center justify-center rounded-full border ${
@@ -203,7 +246,7 @@ export function ImageResourceDetailPage({ kind }: ImageResourceDetailPageProps) 
                     <button
                       type="button"
                       onClick={() => setSceneAiMode("none")}
-                      className="inline-flex items-center gap-2 text-sm font-medium text-on-surface-30"
+                      className="inline-flex items-center gap-2 text-sm font-medium text-on-surface-30 cursor-pointer"
                     >
                       <span
                         className={`flex h-4 w-4 items-center justify-center rounded-full border ${

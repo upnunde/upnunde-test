@@ -67,7 +67,7 @@ export function Pagination({
           type="button"
           onClick={handlePrev}
           disabled={!canPrev}
-          className="flex h-8 w-8 items-center justify-center text-on-surface-30 hover:text-on-surface-10 disabled:opacity-50 disabled:pointer-events-none"
+          className="flex h-8 w-8 cursor-pointer items-center justify-center text-on-surface-30 hover:text-on-surface-10 disabled:opacity-50 disabled:pointer-events-none"
           aria-label="이전 페이지"
         >
           <ChevronLeft className="h-4 w-4" />
@@ -78,7 +78,7 @@ export function Pagination({
             type="button"
             onClick={() => onPageChange(page)}
             className={
-              "h-8 w-8 rounded-full text-sm font-medium transition-colors " +
+              "h-8 w-8 rounded-full cursor-pointer text-sm font-medium transition-colors " +
               (page === currentPage
                 ? "bg-slate-800 text-white"
                 : "text-on-surface-30 hover:bg-slate-100")
@@ -93,7 +93,7 @@ export function Pagination({
           type="button"
           onClick={handleNext}
           disabled={!canNext}
-          className="flex h-8 w-8 items-center justify-center text-on-surface-30 hover:text-on-surface-10 disabled:opacity-50 disabled:pointer-events-none"
+          className="flex h-8 w-8 cursor-pointer items-center justify-center text-on-surface-30 hover:text-on-surface-10 disabled:opacity-50 disabled:pointer-events-none"
           aria-label="다음 페이지"
         >
           <ChevronRight className="h-4 w-4" />
@@ -116,7 +116,7 @@ export function Pagination({
         </div>
         <button
           type="submit"
-          className="h-8 rounded border border-slate-200 px-3 text-sm font-medium text-slate-700 transition-colors hover:bg-slate-50"
+          className="h-8 cursor-pointer rounded border border-slate-200 px-3 text-sm font-medium text-slate-700 transition-colors hover:bg-slate-50"
         >
           Go
         </button>

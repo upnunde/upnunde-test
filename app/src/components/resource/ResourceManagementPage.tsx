@@ -12,6 +12,7 @@ import { MediaCard } from "./cards/MediaCard";
 import { AddResourceSlot } from "./cards/AddResourceSlot";
 import { BgmSection } from "./bgm/BgmSection";
 import { ConfirmDeleteModal } from "./modals/ConfirmDeleteModal";
+import { ImageLightbox, type ImageLightboxItem } from "./ImageLightbox";
 import type {
   ResourceCategory,
   CharacterResource,
@@ -19,6 +20,13 @@ import type {
   MediaResource,
   BgmResource,
 } from "@/types/resource";
+import {
+  initialBackgrounds,
+  initialScenes,
+  initialMedia,
+  initialGallery,
+  initialCharacters,
+} from "@/lib/resourceMockData";
 import { PreviewScreen } from "@/components/editor/PreviewScreen";
 import { Title2 } from "@/components/ui/title2";
 import type { ScriptBlock } from "@/types/editor";
@@ -49,122 +57,6 @@ const ROUTES = {
 
 const MOCK_HAS_RESOURCES = true;
 
-const initialCharacters: CharacterResource[] = MOCK_HAS_RESOURCES
-  ? [
-      { id: "1", name: "등장인물1", imageUrl: "/character-1.png" },
-      { id: "2", name: "등장인물2", imageUrl: "/character-2.png" },
-      { id: "3", name: "등장인물3", imageUrl: "/character-3.png" },
-      { id: "4", name: "등장인물4", imageUrl: "/character-4.png" },
-    ]
-  : [];
-const initialBackgrounds: ImageResource[] = MOCK_HAS_RESOURCES
-  ? [
-      { id: "1", name: "교실", imageUrl: "/background-1.png" },
-      { id: "2", name: "강변 산책로", imageUrl: "/background-2.png" },
-      { id: "3", name: "주택가 노을", imageUrl: "/background-3.png" },
-      { id: "4", name: "베이커리_낮", imageUrl: "/background-bakery-day.png" },
-      { id: "5", name: "부엌_밤", imageUrl: "/background-kitchen-night.png" },
-      { id: "6", name: "베이커리_밤", imageUrl: "/background-bakery-night.png" },
-      { id: "7", name: "부엌_비오는날", imageUrl: "/background-kitchen-rain.png" },
-      { id: "8", name: "거리_낮", imageUrl: "/background-street-day.png" },
-      { id: "9", name: "내방_밤", imageUrl: "/background-room-night.png" },
-      { id: "10", name: "거리_밤", imageUrl: "/background-street-night.png" },
-      { id: "11", name: "내방_낮", imageUrl: "/background-room-day.png" },
-      { id: "12", name: "거리_노을", imageUrl: "/background-street-evening.png" },
-      { id: "13", name: "베이커리_노을", imageUrl: "/background-bakery-evening.png" },
-      { id: "14", name: "내방_비오는날", imageUrl: "/background-room-rain.png" },
-      { id: "15", name: "부엌_낮", imageUrl: "/background-kitchen-day.png" },
-      { id: "16", name: "베이커리_비오는날", imageUrl: "/background-bakery-rain.png" },
-      { id: "17", name: "거실_낮", imageUrl: "/background-livingroom-day.png" },
-      { id: "18", name: "내방_노을", imageUrl: "/background-room-evening.png" },
-      { id: "19", name: "부엌_노을", imageUrl: "/background-kitchen-evening.png" },
-    ]
-  : [];
-
-const SCENE_IMAGE_PATHS = [
-  "/scene-camera-act.png",
-  "/scene-accident-memory.png",
-  "/scene-cafe-step.png",
-  "/scene-hajoon-garam-tears.png",
-  "/scene-hajoon-garam-memory.png",
-  "/scene-hajoon-accident.png",
-  "/scene-hajoon-ian.png",
-  "/scene-hand-promise.png",
-  "/scene-ian-hand-moment.png",
-  "/scene-garam-play-cello.png",
-  "/scene-ian-memory.png",
-  "/scene-ian-nametag.png",
-  "/scene-hajoon-tears.png",
-  "/scene-siwoo-cat.png",
-  "/scene-siwoo-run.png",
-  "/scene-ian-tears.png",
-  "/scene-ian-post.png",
-  "/scene-smoothie.png",
-  "/scene-university-guy2.png",
-  "/scene-university-guy1.png",
-] as const;
-
-const initialScenes: ImageResource[] = MOCK_HAS_RESOURCES
-  ? SCENE_IMAGE_PATHS.map((path, index) => ({
-      id: String(index + 1),
-      name: `연출${index + 1}`,
-      imageUrl: path,
-    }))
-  : [];
-
-const GALLERY_IMAGE_PATHS = [
-  "/gallery-G3.png",
-  "/gallery-G4.png",
-  "/gallery-G5.png",
-  "/gallery-G6.png",
-  "/gallery-G7.png",
-  "/gallery-G8.png",
-  "/gallery-G9.png",
-  "/gallery-G10.png",
-  "/gallery-G11.png",
-] as const;
-
-const initialMedia: MediaResource[] = MOCK_HAS_RESOURCES
-  ? [
-      {
-        id: "1",
-        name: "베란다_노을",
-        thumbnailUrl: "/media-veranda-evening.png",
-        duration: "00:00",
-      },
-      {
-        id: "2",
-        name: "베란다_비오는날",
-        thumbnailUrl: "/media-veranda-rain.png",
-        duration: "00:00",
-      },
-      {
-        id: "3",
-        name: "베란다_밤하늘",
-        thumbnailUrl: "/media-veranda-night.png",
-        duration: "00:00",
-      },
-      {
-        id: "4",
-        name: "베란다_맑은낮",
-        thumbnailUrl: "/media-veranda-day.png",
-        duration: "00:00",
-      },
-      {
-        id: "5",
-        name: "비오는_골목길",
-        thumbnailUrl: "/media-street-rain.png",
-        duration: "00:00",
-      },
-    ]
-  : [];
-const initialGallery: ImageResource[] = MOCK_HAS_RESOURCES
-  ? Array.from({ length: GALLERY_IMAGE_PATHS.length }, (_, i) => ({
-      id: String(i + 1),
-      name: `갤러리${i + 1}`,
-      imageUrl: GALLERY_IMAGE_PATHS[i],
-    }))
-  : [];
 /** 3~5분 랜덤 duration "MM:SS" */
 function randomBgmDuration(): string {
   const totalSeconds = 180 + Math.floor(Math.random() * 121); // 180~300초 (3:00~5:00)
@@ -213,6 +105,19 @@ export function ResourceManagementPage() {
     itemName: string;
     onConfirm: () => void;
   }>({ open: false, category: "character", itemName: "", onConfirm: () => {} });
+
+  const [lightbox, setLightbox] = useState<{
+    open: boolean;
+    items: ImageLightboxItem[];
+    index: number;
+  }>({ open: false, items: [], index: 0 });
+
+  const openLightbox = useCallback((items: ImageLightboxItem[], index: number) => {
+    setLightbox({ open: true, items, index });
+  }, []);
+  const closeLightbox = useCallback(() => {
+    setLightbox((prev) => ({ ...prev, open: false }));
+  }, []);
 
   const openDeleteConfirm = useCallback(
     (category: ResourceCategory, itemName: string, onConfirm: () => void) => {
@@ -324,6 +229,14 @@ export function ResourceManagementPage() {
                         closeDeleteConfirm();
                       })
                     }
+                    onPreviewClick={(char) => {
+                      const items: ImageLightboxItem[] = characters.map((x) => ({
+                        id: x.id,
+                        imageUrl: x.imageUrl,
+                        name: x.name,
+                      }));
+                      openLightbox(items, characters.findIndex((x) => x.id === char.id));
+                    }}
                   />
                 ))}
                 <AddResourceSlot
@@ -358,6 +271,14 @@ export function ResourceManagementPage() {
                         closeDeleteConfirm();
                       })
                     }
+                    onPreviewClick={(item) => {
+                      const items: ImageLightboxItem[] = backgrounds.map((x) => ({
+                        id: x.id,
+                        imageUrl: x.imageUrl,
+                        name: x.name,
+                      }));
+                      openLightbox(items, backgrounds.findIndex((x) => x.id === item.id));
+                    }}
                   />
                 ))}
                 <AddResourceSlot variant="img9:16" onClick={() => navigateTo(ROUTES.background.new(seriesId))} />
@@ -387,6 +308,14 @@ export function ResourceManagementPage() {
                         closeDeleteConfirm();
                       })
                     }
+                    onPreviewClick={(item) => {
+                      const items: ImageLightboxItem[] = scenes.map((x) => ({
+                        id: x.id,
+                        imageUrl: x.imageUrl,
+                        name: x.name,
+                      }));
+                      openLightbox(items, scenes.findIndex((x) => x.id === item.id));
+                    }}
                   />
                 ))}
                 <AddResourceSlot variant="img9:16" onClick={() => navigateTo(ROUTES.scene.new(seriesId))} />
@@ -415,6 +344,14 @@ export function ResourceManagementPage() {
                         closeDeleteConfirm();
                       })
                     }
+                    onPreviewClick={(item) => {
+                      const items: ImageLightboxItem[] = media.map((x) => ({
+                        id: x.id,
+                        imageUrl: x.thumbnailUrl,
+                        name: x.name,
+                      }));
+                      openLightbox(items, media.findIndex((x) => x.id === item.id));
+                    }}
                   />
                 ))}
                 <AddResourceSlot variant="mov" onClick={() => navigateTo(ROUTES.media.new(seriesId))} />
@@ -446,6 +383,14 @@ export function ResourceManagementPage() {
                         closeDeleteConfirm();
                       })
                     }
+                    onPreviewClick={(item) => {
+                      const items: ImageLightboxItem[] = gallery.map((x) => ({
+                        id: x.id,
+                        imageUrl: x.imageUrl,
+                        name: x.name,
+                      }));
+                      openLightbox(items, gallery.findIndex((x) => x.id === item.id));
+                    }}
                   />
                 ))}
                 <AddResourceSlot variant="img9:16" onClick={() => navigateTo(ROUTES.gallery.new(seriesId))} />
@@ -472,6 +417,14 @@ export function ResourceManagementPage() {
           </div>
         </div>
       </main>
+
+      {/* 썸네일 크게 보기 라이트박스 */}
+      <ImageLightbox
+        open={lightbox.open}
+        onClose={closeLightbox}
+        items={lightbox.items}
+        initialIndex={lightbox.index}
+      />
 
       {/* [정책 4] 삭제 전 확인 팝업 */}
       <ConfirmDeleteModal

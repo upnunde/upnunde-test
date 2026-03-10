@@ -27,7 +27,7 @@ export function InquiryHistoryItem({
       <button
         type="button"
         onClick={() => onToggle?.()}
-        className="w-full self-stretch min-h-[72px] py-4 rounded-lg inline-flex justify-start items-center gap-4 hover:bg-slate-50/50 transition-colors"
+        className="w-full cursor-pointer self-stretch min-h-[72px] py-4 rounded-lg inline-flex justify-start items-center gap-4 hover:bg-slate-50/50 transition-colors"
         aria-expanded={isOpen}
         aria-controls={`inquiry-content-${id}`}
         id={`inquiry-trigger-${id}`}
@@ -98,7 +98,7 @@ export function InquiryHistoryItem({
                   e.stopPropagation();
                   onToggle?.();
                 }}
-                className="h-8 rounded-md border border-slate-200 bg-white px-3 text-sm font-medium text-slate-700 hover:bg-slate-50 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-2"
+                className="h-8 cursor-pointer rounded-md border border-slate-200 bg-white px-3 text-sm font-medium text-slate-700 hover:bg-slate-50 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-2"
               >
                 접기
               </button>

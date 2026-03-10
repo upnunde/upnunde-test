@@ -208,7 +208,7 @@ export default function SeriesNewPage() {
                             key={id}
                             type="button"
                             className={cn(
-                              "h-10 flex justify-center items-center gap-2.5 min-w-0 border-b-2 transition-colors font-['Pretendard_JP',sans-serif] text-base font-bold leading-6",
+                              "h-10 flex cursor-pointer justify-center items-center gap-2.5 min-w-0 border-b-2 transition-colors font-['Pretendard_JP',sans-serif] text-base font-bold leading-6",
                               activeTab === id
                                 ? "border-slate-800 text-on-surface-10"
                                 : "border-transparent text-on-surface-disabled"

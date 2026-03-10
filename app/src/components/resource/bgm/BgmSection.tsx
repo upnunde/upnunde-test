@@ -179,7 +179,7 @@ export function BgmSection({
                       role="tab"
                       aria-selected={isActive}
                       className={
-                        "h-7 px-0 flex justify-center items-center min-w-0 border-b text-sm font-medium font-['Pretendard_JP'] leading-4 transition-colors " +
+                        "h-7 px-0 flex cursor-pointer justify-center items-center min-w-0 border-b text-sm font-medium font-['Pretendard_JP'] leading-4 transition-colors " +
                         (isActive
                           ? "border-slate-800 text-on-surface-10"
                           : "border-transparent text-[rgba(145,145,148,1)] hover:text-on-surface-20")

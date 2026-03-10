@@ -51,7 +51,7 @@ export function NotificationList({
             data-height="h40"
             data-selectline="true"
             className={
-              "h-10 flex justify-center items-center gap-2.5 min-w-0 " +
+              "h-10 flex cursor-pointer justify-center items-center gap-2.5 min-w-0 " +
               (activeTab === "all"
                 ? "border-b-2 border-slate-800 text-on-surface-10 text-base font-bold font-['Pretendard_JP'] leading-6"
                 : "text-on-surface-disabled text-base font-bold font-['Pretendard_JP'] leading-6")
@@ -69,7 +69,7 @@ export function NotificationList({
             data-height="h40"
             data-selectline="true"
             className={
-              "h-10 flex justify-center items-center gap-2.5 min-w-0 " +
+              "h-10 flex cursor-pointer justify-center items-center gap-2.5 min-w-0 " +
               (activeTab === "NOTICE"
                 ? "border-b-2 border-slate-800 text-on-surface-10 text-base font-bold font-['Pretendard_JP'] leading-6"
                 : "text-on-surface-disabled text-base font-bold font-['Pretendard_JP'] leading-6")
@@ -87,7 +87,7 @@ export function NotificationList({
             data-height="h40"
             data-selectline="true"
             className={
-              "h-10 flex justify-center items-center gap-2.5 min-w-0 " +
+              "h-10 flex cursor-pointer justify-center items-center gap-2.5 min-w-0 " +
               (activeTab === "WORK_ALERT"
                 ? "border-b-2 border-slate-800 text-on-surface-10 text-base font-bold font-['Pretendard_JP'] leading-6"
                 : "text-on-surface-disabled text-base font-bold font-['Pretendard_JP'] leading-6")

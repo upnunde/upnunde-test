@@ -111,7 +111,7 @@ export function EpisodeListItem({
             <button
               type="button"
               onClick={() => onEdit?.(episode)}
-              className="flex h-9 w-9 shrink-0 items-center justify-center rounded-full border border-slate-200 text-on-surface-30 transition-colors hover:bg-slate-50 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-2"
+              className="flex h-9 w-9 shrink-0 cursor-pointer items-center justify-center rounded-full border border-slate-200 text-on-surface-30 transition-colors hover:bg-slate-50 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-2"
               aria-label="수정"
             >
               <Pencil className="h-4 w-4" aria-hidden />
@@ -119,7 +119,7 @@ export function EpisodeListItem({
             <button
               type="button"
               onClick={() => onDelete?.(episode)}
-              className="flex h-9 w-9 shrink-0 items-center justify-center rounded-full border border-slate-200 text-on-surface-30 transition-colors hover:bg-slate-50 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-2"
+              className="flex h-9 w-9 shrink-0 cursor-pointer items-center justify-center rounded-full border border-slate-200 text-on-surface-30 transition-colors hover:bg-slate-50 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-2"
               aria-label="삭제"
             >
               <Trash2 className="h-4 w-4" aria-hidden />
@@ -132,14 +132,14 @@ export function EpisodeListItem({
             <button
               type="button"
               onClick={() => onPublish?.(episode)}
-              className="h-9 shrink-0 rounded-md border border-primary px-3 text-sm font-medium text-primary transition-colors hover:bg-primary/10 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-2"
+              className="h-9 shrink-0 cursor-pointer rounded-md border border-primary px-3 text-sm font-medium text-primary transition-colors hover:bg-primary/10 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-2"
             >
               공개로 전환
             </button>
             <button
               type="button"
               onClick={() => onEdit?.(episode)}
-              className="flex h-9 w-9 shrink-0 items-center justify-center rounded-full border border-slate-200 text-on-surface-30 transition-colors hover:bg-slate-50 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-2"
+              className="flex h-9 w-9 shrink-0 cursor-pointer items-center justify-center rounded-full border border-slate-200 text-on-surface-30 transition-colors hover:bg-slate-50 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-2"
               aria-label="수정"
             >
               <Pencil className="h-4 w-4" aria-hidden />
@@ -147,7 +147,7 @@ export function EpisodeListItem({
             <button
               type="button"
               onClick={() => onDelete?.(episode)}
-              className="flex h-9 w-9 shrink-0 items-center justify-center rounded-full border border-slate-200 text-on-surface-30 transition-colors hover:bg-slate-50 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-2"
+              className="flex h-9 w-9 shrink-0 cursor-pointer items-center justify-center rounded-full border border-slate-200 text-on-surface-30 transition-colors hover:bg-slate-50 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-2"
               aria-label="삭제"
             >
               <Trash2 className="h-4 w-4" aria-hidden />
@@ -159,7 +159,7 @@ export function EpisodeListItem({
           <DropdownMenu>
             <DropdownMenuTrigger
               type="button"
-              className="flex h-9 w-9 shrink-0 items-center justify-center rounded-full border border-slate-200 text-on-surface-30 transition-colors hover:bg-slate-50 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-2"
+              className="flex h-9 w-9 shrink-0 cursor-pointer items-center justify-center rounded-full border border-slate-200 text-on-surface-30 transition-colors hover:bg-slate-50 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-2"
               aria-label="더보기"
             >
               <MoreVertical className="h-4 w-4" aria-hidden />
