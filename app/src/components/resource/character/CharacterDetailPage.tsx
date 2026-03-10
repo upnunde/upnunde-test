@@ -190,7 +190,7 @@ export function CharacterDetailPage({ isNew = true }: CharacterDetailPageProps) 
               </section>
             </div>
 
-            <div className="flex items-center justify-end gap-2 border-t border-slate-100 px-8 py-4">
+            <div className="flex items-center justify-end gap-2 px-8 py-4">
               <Button
                 type="button"
                 variant="outline"
