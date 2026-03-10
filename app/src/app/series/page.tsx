@@ -47,9 +47,7 @@ const SERIES_THUMBNAIL_IMAGES = [
 ] as const;
 
 function getRandomSeriesThumbnail(): string {
-  const total = SERIES_THUMBNAIL_IMAGES.length;
-  if (total === 0) return "";
-  const index = Math.floor(Math.random() * total);
+  const index = Math.floor(Math.random() * SERIES_THUMBNAIL_IMAGES.length);
   return SERIES_THUMBNAIL_IMAGES[index]!;
 }
 
