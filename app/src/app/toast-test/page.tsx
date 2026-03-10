@@ -15,8 +15,8 @@ export default function ToastTestPage() {
 
   return (
     <div className="flex min-h-screen flex-col items-center justify-center gap-6 p-8">
-      <h1 className="text-2xl font-bold text-slate-900">토스트 정책 테스트</h1>
-      <p className="text-sm text-slate-500">
+      <h1 className="text-2xl font-bold text-on-surface-10">토스트 정책 테스트</h1>
+      <p className="text-sm text-on-surface-30">
         하단 40px, 토스트 간격 16px, 최대 3개 · 3~5초 자동 닫힘
       </p>
       <div className="flex flex-wrap items-center justify-center gap-4">

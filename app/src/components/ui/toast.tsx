@@ -17,7 +17,7 @@ const Toast = React.forwardRef<
     role="status"
     aria-live="polite"
     className={cn(
-      "w-full max-w-[24rem] inline-flex justify-start items-center gap-4 rounded-lg bg-surface-10 py-3 shadow-[0px_6px_12px_6px_rgba(0,0,0,0.16)]",
+      "w-full max-w-[24rem] inline-flex justify-start items-center gap-4 rounded-lg bg-surface-10 py-3",
       messageOnly ? "px-4" : "pl-4 pr-2",
       "data-[state=open]:animate-in data-[state=closed]:animate-out data-[state=closed]:fade-out-0 data-[state=open]:fade-in-0",
       className

@@ -97,7 +97,7 @@ export function NotificationItem({
             {content != null && content !== "" ? (
               <p className="text-sm text-on-surface-20 whitespace-pre-wrap leading-[160%]">{content}</p>
             ) : (
-              <p className="text-sm text-slate-400">내용 없음</p>
+              <p className="text-sm text-on-surface-30">내용 없음</p>
             )}
             <div className="flex items-center justify-end gap-2">
               <button

@@ -84,7 +84,7 @@ function ChoiceRow({
       data-choice-id={choice.id}
     >
       {/* Col 1: Label */}
-      <div className="w-[80px] shrink-0 px-4 py-2 text-sm text-slate-500 self-center h-full">
+      <div className="w-[80px] shrink-0 px-4 py-2 text-sm text-on-surface-30 self-center h-full">
         선택 {index + 1}
       </div>
       {/* Col 2: Content */}
@@ -101,7 +101,7 @@ function ChoiceRow({
             onInput={adjustHeight}
             placeholder="선택지 내용"
             rows={1}
-            className="min-h-[40px] max-h-[5rem] w-full resize-none rounded-md border-0 bg-transparent px-0 py-[10px] text-sm leading-5 outline-none focus:outline-none focus:ring-0 focus:ring-offset-0 align-middle overflow-y-auto"
+            className="min-h-[40px] max-h-[5rem] w-full rounded-md border-0 bg-transparent px-0 py-[10px] text-sm leading-5 outline-none focus:outline-none focus:ring-0 focus:ring-offset-0 align-middle overflow-y-auto"
             style={{ height: CHOICE_TEXTAREA_LINE_HEIGHT_PX }}
           />
         )}
@@ -130,7 +130,7 @@ function ChoiceRow({
         <button
           type="button"
           onClick={onRemove}
-          className="p-1.5 rounded text-slate-400 hover:text-red-600 hover:bg-red-50 transition-colors opacity-0 group-hover/row:opacity-100"
+          className="p-1.5 rounded text-on-surface-30 hover:text-red-600 hover:bg-red-50 transition-colors opacity-0 group-hover/row:opacity-100"
           aria-label="선택지 삭제"
         >
           <Trash2 className="h-4 w-4" />
@@ -160,7 +160,7 @@ function SwitchToggle({
     >
       <span
         className={cn(
-          "pointer-events-none inline-block h-4 w-4 rounded-full bg-white shadow-sm ring-0 transition-transform mt-0.5",
+        "pointer-events-none inline-block h-4 w-4 rounded-full bg-white ring-0 transition-transform mt-0.5",
           checked ? "translate-x-4" : "translate-x-0.5"
         )}
       />
@@ -256,7 +256,7 @@ export function ChoiceBlockTable({
               type="button"
               variant="ghost"
               size="sm"
-              className="text-slate-600 hover:text-slate-900"
+              className="text-slate-600 hover:text-on-surface-10"
             >
               + 선택지 추가
             </Button>

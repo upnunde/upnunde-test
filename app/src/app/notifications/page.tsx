@@ -383,7 +383,7 @@ export default function NotificationsPage() {
             {/* Sub Header */}
             <div className="w-full h-[64px] shrink-0 border-b border-slate-200 bg-white flex flex-col items-center justify-center">
               <div className="w-full max-w-[1200px] min-w-[800px] p-0 flex items-center justify-start gap-4">
-                <h1 className="text-2xl font-bold text-slate-900">알림</h1>
+                <h1 className="text-2xl font-bold text-on-surface-10">알림</h1>
               </div>
             </div>
 

@@ -23,7 +23,7 @@ export function EmptyStateBanner({ className }: EmptyStateBannerProps) {
       <p className="text-base font-medium text-slate-600">
         등록된 에피소드가 없습니다.
       </p>
-      <p className="mt-2 text-sm text-slate-500">
+      <p className="mt-2 text-sm text-on-surface-30">
         에피소드를 추가하여 시리즈를 완성해 보세요.
       </p>
     </div>

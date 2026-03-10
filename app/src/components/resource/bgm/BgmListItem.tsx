@@ -145,7 +145,7 @@ export function BgmListItem({
             </span>
           )}
           <div className="flex-1 min-w-0 inline-flex flex-col justify-start items-start gap-0.5">
-            <div className="self-stretch justify-center text-[rgba(22,22,22,1)] text-sm font-medium font-['Pretendard_JP'] leading-5 truncate">
+            <div className="self-stretch justify-center text-on-surface-10 text-sm font-medium font-['Pretendard_JP'] leading-5 truncate">
               {item.title}
             </div>
             <div className="self-stretch justify-center text-[rgba(145,145,148,1)] text-[13px] font-normal font-['Pretendard_JP'] leading-4">

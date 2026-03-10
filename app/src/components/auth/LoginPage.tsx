@@ -160,7 +160,7 @@ export function LoginPage() {
               className="relative flex w-full items-center justify-center gap-2 rounded-full border border-border bg-surface-10 px-4 h-12 text-sm font-medium text-on-surface-10 hover:bg-accent focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
               aria-label="Google로 계속하기"
             >
-              <span className="absolute -top-8 left-1/2 -translate-x-1/2 rounded bg-on-surface-10 px-2 py-1 text-xs font-medium text-surface-10 shadow-sm before:absolute before:left-1/2 before:top-full before:-translate-x-1/2 before:border-4 before:border-transparent before:border-t-on-surface-10">
+              <span className="absolute -top-8 left-1/2 -translate-x-1/2 rounded bg-on-surface-10 px-2 py-1 text-xs font-medium text-surface-10 before:absolute before:left-1/2 before:top-full before:-translate-x-1/2 before:border-4 before:border-transparent before:border-t-on-surface-10">
                 최근 로그인 계정
               </span>
               <GoogleIcon />
@@ -222,7 +222,7 @@ export function LoginPage() {
           aria-describedby={undefined}
         >
           <DialogHeader>
-            <DialogTitle className="text-2xl font-bold text-slate-900">
+            <DialogTitle className="text-2xl font-bold text-on-surface-10">
               문의
             </DialogTitle>
           </DialogHeader>

@@ -84,7 +84,7 @@ export function EpisodeListItem({
         </div>
         <span
           id={`episode-title-${episode.id}`}
-          className="truncate text-base font-medium text-slate-900"
+          className="truncate text-base font-medium text-on-surface-10"
         >
           {episode.title}
         </span>
@@ -111,7 +111,7 @@ export function EpisodeListItem({
             <button
               type="button"
               onClick={() => onEdit?.(episode)}
-              className="flex h-9 w-9 shrink-0 items-center justify-center rounded-full border border-slate-200 text-slate-500 transition-colors hover:bg-slate-50 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-2"
+              className="flex h-9 w-9 shrink-0 items-center justify-center rounded-full border border-slate-200 text-on-surface-30 transition-colors hover:bg-slate-50 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-2"
               aria-label="수정"
             >
               <Pencil className="h-4 w-4" aria-hidden />
@@ -119,7 +119,7 @@ export function EpisodeListItem({
             <button
               type="button"
               onClick={() => onDelete?.(episode)}
-              className="flex h-9 w-9 shrink-0 items-center justify-center rounded-full border border-slate-200 text-slate-500 transition-colors hover:bg-slate-50 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-2"
+              className="flex h-9 w-9 shrink-0 items-center justify-center rounded-full border border-slate-200 text-on-surface-30 transition-colors hover:bg-slate-50 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-2"
               aria-label="삭제"
             >
               <Trash2 className="h-4 w-4" aria-hidden />
@@ -139,7 +139,7 @@ export function EpisodeListItem({
             <button
               type="button"
               onClick={() => onEdit?.(episode)}
-              className="flex h-9 w-9 shrink-0 items-center justify-center rounded-full border border-slate-200 text-slate-500 transition-colors hover:bg-slate-50 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-2"
+              className="flex h-9 w-9 shrink-0 items-center justify-center rounded-full border border-slate-200 text-on-surface-30 transition-colors hover:bg-slate-50 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-2"
               aria-label="수정"
             >
               <Pencil className="h-4 w-4" aria-hidden />
@@ -147,7 +147,7 @@ export function EpisodeListItem({
             <button
               type="button"
               onClick={() => onDelete?.(episode)}
-              className="flex h-9 w-9 shrink-0 items-center justify-center rounded-full border border-slate-200 text-slate-500 transition-colors hover:bg-slate-50 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-2"
+              className="flex h-9 w-9 shrink-0 items-center justify-center rounded-full border border-slate-200 text-on-surface-30 transition-colors hover:bg-slate-50 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-2"
               aria-label="삭제"
             >
               <Trash2 className="h-4 w-4" aria-hidden />
@@ -159,27 +159,27 @@ export function EpisodeListItem({
           <DropdownMenu>
             <DropdownMenuTrigger
               type="button"
-              className="flex h-9 w-9 shrink-0 items-center justify-center rounded-full border border-slate-200 text-slate-500 transition-colors hover:bg-slate-50 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-2"
+              className="flex h-9 w-9 shrink-0 items-center justify-center rounded-full border border-slate-200 text-on-surface-30 transition-colors hover:bg-slate-50 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-2"
               aria-label="더보기"
             >
               <MoreVertical className="h-4 w-4" aria-hidden />
             </DropdownMenuTrigger>
-            <DropdownMenuContent
+          <DropdownMenuContent
               align="end"
-              className="w-48 rounded-lg border border-slate-100 bg-white p-1 shadow-lg"
+              className="w-48 rounded-lg border border-slate-100 bg-white p-1"
             >
               <DropdownMenuItem
                 className="flex cursor-pointer items-center gap-2 rounded-md px-3 py-2.5 text-sm text-slate-700 outline-none hover:bg-slate-50"
                 onSelect={() => onLinkEditor?.(episode)}
               >
-                <FileText className="h-4 w-4 shrink-0 text-slate-500" aria-hidden />
+                <FileText className="h-4 w-4 shrink-0 text-on-surface-30" aria-hidden />
                 에피소드 상세
               </DropdownMenuItem>
               <DropdownMenuItem
                 className="flex cursor-pointer items-center gap-2 rounded-md px-3 py-2.5 text-sm text-slate-700 outline-none hover:bg-slate-50"
                 onSelect={() => onInquiry?.(episode)}
               >
-                <Mail className="h-4 w-4 shrink-0 text-slate-500" aria-hidden />
+                <Mail className="h-4 w-4 shrink-0 text-on-surface-30" aria-hidden />
                 문의하기
               </DropdownMenuItem>
             </DropdownMenuContent>

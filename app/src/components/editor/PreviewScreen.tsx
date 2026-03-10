@@ -159,7 +159,7 @@ export function PreviewScreen(props: PreviewScreenProps = {}) {
       <div
         className={cn(
           "relative overflow-hidden rounded-[2rem] border-[8px] border-slate-800",
-          "bg-black shadow-2xl",
+          "bg-black",
           "h-full w-full min-h-0 min-w-0"
         )}
       >
@@ -211,7 +211,7 @@ export function PreviewScreen(props: PreviewScreenProps = {}) {
             <img
               src={getCharacterUrl(currentChar)}
               alt=""
-              className="max-h-[55%] max-w-[80%] object-contain drop-shadow-lg"
+              className="max-h-[55%] max-w-[80%] object-contain"
             />
           </div>
         )}
@@ -222,8 +222,7 @@ export function PreviewScreen(props: PreviewScreenProps = {}) {
             className={cn(
               "absolute bottom-0 left-0 right-0 z-20 mx-3 mb-3 rounded-xl",
               "bg-black/75 backdrop-blur-sm",
-              "border-2 border-white/20",
-              "shadow-xl"
+              "border-2 border-white/20"
             )}
           >
             {currentSpeaker && currentSpeaker !== "독백" && (

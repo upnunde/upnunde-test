@@ -52,8 +52,8 @@ export function MediaCard({
         )}
       >
         <img src={item.thumbnailUrl} alt="" className="w-full h-full object-cover" />
-        <div className="w-full h-6 left-0 bottom-0 absolute inline-flex justify-center items-center pointer-events-none">
-          <span className="text-center text-white text-xs font-bold font-['Pretendard_JP'] leading-4 [text-shadow:0px_1px_2px_rgb(0_0_0_/_0.16)]">
+        <div className="w-full h-6 left-0 bottom-0 absolute inline-flex justify-center items-center pointer-events-none bg-black/40">
+          <span className="text-center text-white text-xs font-bold font-['Pretendard_JP'] leading-4">
             {item.duration}
           </span>
         </div>
@@ -72,7 +72,7 @@ export function MediaCard({
         >
           <button
             type="button"
-            className="w-8 h-8 rounded-full bg-surface-10 shadow-[0px_2px_4px_2px_rgba(0,0,0,0.16)] inline-flex justify-center items-center text-on-surface-10 hover:bg-slate-100"
+            className="w-8 h-8 rounded-full bg-surface-10 inline-flex justify-center items-center text-on-surface-10 hover:bg-slate-100"
             aria-label="상세 페이지에서 편집"
             onClick={(e) => {
               e.stopPropagation();
@@ -83,7 +83,7 @@ export function MediaCard({
           </button>
           <button
             type="button"
-            className="w-8 h-8 rounded-full bg-surface-10 shadow-[0px_2px_4px_2px_rgba(0,0,0,0.16)] inline-flex justify-center items-center text-on-surface-10 hover:bg-slate-100"
+            className="w-8 h-8 rounded-full bg-surface-10 inline-flex justify-center items-center text-on-surface-10 hover:bg-slate-100"
             aria-label="삭제"
             onClick={(e) => {
               e.stopPropagation();

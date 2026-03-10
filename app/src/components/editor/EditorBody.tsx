@@ -45,25 +45,25 @@ const INITIAL_SCRIPT = `-> SCENE_1
 // ========================================
 == SCENE_1 ==
 # turn: 1
-# top_desc: 엘레나의 방 / 낮
-# bg: BgRofanPrincessRoom
-# bgm: BgmRofanEnjoy
+# top_desc: 내 방 / 낮
+# bg: 내방_낮
+# bgm: 봄날의 고백
 
 한가로운 오후.
 나는 침대에 기대어 앉아 책을 읽고 있었다.
 
-# char_img: ImgMariSurprise
+# char_img: 등장인물1
 마리: 부인! 큰일 났어요! 이것 좀 보세요!
 
 급히 방으로 뛰어 들어온 마리가 사설지 한 부를 내밀었다.
 
-# char_img: ImgTabloidScandal
+# char_img: 등장인물2
 표지에는 나와 카일런, 시온 황자의 모습이 실려있었고 [황태자와 공작의 결투! 공작 부인에게 무릎 꿇다!]라는 자극적인 제목이 함께하고 있었다.
 
 {Name}: 무릎을 꿇다니?
 {Name}: 두 사람은 그저 춤을 요청했을 뿐이잖아.
 
-# char_img: ImgMariLaugh
+# char_img: 등장인물1
 마리: 제가 무도회장에 없었다는 게 너무 아쉬워요!
 마리: 멋진 두 남자를 사이에 두고 멋대로 휘두르는 부인의 모습이라니!
 
@@ -79,13 +79,13 @@ const INITIAL_SCRIPT = `-> SCENE_1
 # turn_last: 1
 
 * [아니야. 난 그날 밤 내 상대에게 만족해.]
-    # char_img: ImgMariLaugh
+    # char_img: 등장인물1
     마리: 부인 말을 들으니 그 자리에 있지 못했던 게 너무 아쉬워요!
     마리: 아, 맞다. 부인, 황궁으로부터 부인께 도착한 서신이에요.
     -> SCENE_1_LETTER
 
 * [사실은 조금 후회했어.]
-    # char_img: ImgMariLaugh
+    # char_img: 등장인물1
     마리: 부인 말을 들으니 그 자리에 있지 못했던 게 너무 아쉬워요!
     마리: 아, 맞다. 부인, 황궁으로부터 부인께 도착한 서신이에요.
     -> SCENE_1_LETTER
@@ -97,7 +97,7 @@ const INITIAL_SCRIPT = `-> SCENE_1
 나는 조심스럽게 서신을 뜯었고 [우리가 처음 만났던 그곳에서 당신을 기다리겠습니다.] 만남을 신청하는 시온 황자의 정갈한 글씨체가 보였다.
 편지지에서는 그에게서 나던 옅은 장미향이 났다.
 
-# char_img: ImgMariSurprise
+# char_img: 등장인물1
 마리: 이거 데이트 신청이죠?!
 마리: 황자 전하께서 부인께 데이트 신청을 하신 거예요!
 
@@ -111,9 +111,9 @@ const INITIAL_SCRIPT = `-> SCENE_1
 // ========================================
 == SCENE_2 ==
 # turn: 2
-# top_desc: 공작성 정원 / 낮
-# bg: BgRofanGarden
-# bgm: BgmRofanHappy
+# top_desc: 공작저택 정원 / 낮
+# bg: 거리_낮
+# bgm: 달빛 산책
 
 점심 식사 후 소화를 시키기 위해 정원을 산책하는 길이었다.
 그때, 화려한 제복을 입은 카일런이 정원 한쪽에서 나타났다.
@@ -139,7 +139,7 @@ const INITIAL_SCRIPT = `-> SCENE_1
 
 카일런: 망원경.
 
-# char_img: ImgTelescope
+# char_img: 등장인물3
 {Name}: 망원경은 왜?
 
 # char_img:
@@ -191,14 +191,14 @@ const INITIAL_SCRIPT = `-> SCENE_1
 // ========================================
 == SCENE_3 ==
 # turn: 3
-# top_desc: 엘레나의 방 / 밤
-# bg: BgRofanPrincessRoomNight
-# bgm: BgmRofanEnjoy
+# top_desc: 내 방 / 밤
+# bg: 내방_밤
+# bgm: 별빛 약속
 
 카일런과의 산책을 마치고 맞이한 밤.
 마리는 내 머리에 향유를 발라 손질해주며 물었다.
 
-# char_img: ImgMariLaugh
+# char_img: 등장인물1
 마리: 부인, 마음은 정하셨어요?
 
 {Name}: 마음이라니?
@@ -210,21 +210,21 @@ const INITIAL_SCRIPT = `-> SCENE_1
 
 * [시온 황자를 만날까 생각 중이야.]
     ~ RegressionProfileSion += 5
-    # char_img: ImgMariLaugh
+    # char_img: 등장인물1
     마리: 저도 공작님보다는 시온 황자님이 훨씬 좋아요!
     마리: 이유가 어찌 되었든 정부를 들인 일은 절대로 용서 못한다구요!
     -> SCENE_3_NIGHTMARE
 
 * [공작의 취미가 뭔지 너무 궁금해.]
     ~ RegressionProfileKylen += 5
-    # char_img: ImgMariSurprise
+    # char_img: 등장인물1
     마리: 공작님께 취미가 있을 거란 생각은 못했어요.
     마리: 나중에 저한테도 살짝 귀띔해 주실거죠?
     -> SCENE_3_NIGHTMARE
 
 * [내일 일은 내일 생각하고 싶어.]
     ~ RegressionProfileRaven += 5
-    # char_img: ImgMariNeutral
+    # char_img: 등장인물1
     마리: 저는 개인적으로 황자님을 추천해요.
     마리: 바람둥이 기질이 조금 마음에 걸리긴 하지만...
     마리: 그래도 부인을 향한 마음은 진심이신 것 같거든요.
@@ -234,18 +234,18 @@ const INITIAL_SCRIPT = `-> SCENE_1
 머리 손질을 마친 마리는 불을 끄곤 방을 나갔다.
 나는 얼마 지나지 않아 잠에 들었고, 곧 악몽에 시달리기 시작했다.
 
-# char_img: ImgForestNight
-# bgm: BgmRofanDown
-# sfx: SoundAmbientHorror
+# char_img: 등장인물2
+# bgm: 침묵의 복도
+# sfx: Wind
 나는 내가 독살당한 숲을 끝 없이 달리고 있었다.
 목구멍이 타들어 가는 듯한 고통과 함께 숨이 막혀왔고...
 
-# char_img: ImgCarriagePotion
+# char_img: 등장인물3
 독이 든 유리병의 이미지는 내 앞에서 절대 사라지지 않고 있었다.
 나는 죽음으로부터 영원히 도망칠 수 없었다.
 
 # char_img:
-# sfx: SoundStartle
+# sfx: Click
 나는 온몸이 식은땀에 젖은 채 악몽에서 깨어났다.
 
 {Name}: <i>[그리고 깨달았다. 독살범을 찾기 전까지 내 운명은 변하지 않는다는 것을 말이다.]</i>
@@ -257,16 +257,16 @@ const INITIAL_SCRIPT = `-> SCENE_1
 // ========================================
 == SCENE_4 ==
 # turn: 4
-# top_desc: 엘레나의 방 / 아침
-# bg: BgRofanPrincessRoom
-# bgm: BgmRofanDynamic
+# top_desc: 내 방 / 아침
+# bg: 내방_낮
+# bgm: 두근두근 러브송
 
 뜬 눈으로 밤을 새우고 맞이한 아침.
 나는 시중을 들러 온 마리를 보자마자 말했다.
 
 {Name}: 마리. 카일런 공작과 황자 전하께 오늘 데이트 신청은 거절한다고 전해줄래?
 
-# char_img: ImgMariSurprise
+# char_img: 등장인물1
 마리: 네? 뭐라고요?
 
 마리는 머리 위로 폭탄이라도 터진 것 같은 황당한 표정을 지었다.
@@ -287,7 +287,7 @@ const INITIAL_SCRIPT = `-> SCENE_1
 
 {Name}: <i>[베로니카 대공비와 리아는 나를 독살했을지도 모르는 유력 용의자들이었다. 일단은 이 두 사람의 동선을 파악하는 게 중요했다.]</i>
 
-# char_img: ImgMariNeutral
+# char_img: 등장인물1
 마리: 대공비 마님과 리아 아가씨요?
 
 마리는 잠시 고민하더니 떠오르는 장소 몇 개를 늘어놓았다.
@@ -301,7 +301,7 @@ const INITIAL_SCRIPT = `-> SCENE_1
 마리: 오래 전 큰 홍수가 있었을 때 침수된 이후로는 사용되지 않고 있어요.
 마리: 사용인들 사이의 소문으로는 리아 아가씨가 이곳에 자주 드나든다고 해요.
 
-# char_img: ImgMariNeutral
+# char_img: 등장인물1
 마리: 그리고 두 번째 장소는 공작성의 옥탑이에요!
 
 {Name}: 옥탑?
@@ -313,7 +313,7 @@ const INITIAL_SCRIPT = `-> SCENE_1
 
 {Name}: 베로니카 대공비가?
 
-# char_img: ImgMariNeutral
+# char_img: 등장인물1
 마리: 네! 그리고 마지막 장소는 3층 끝방이에요.
 
 # char_img: ImgInfoRoom
@@ -344,9 +344,9 @@ const INITIAL_SCRIPT = `-> SCENE_1
 == SCENE_5 ==
 # turn: 5
 # top_desc: 공작성 지하 / 밤
-# bg: BgRofanCellar
-# bgm: BgmRofanAngry
-# sfx: SoundAmbientHorror
+# bg: 부엌_비오는날
+# bgm: 붉은 달밤
+# sfx: Footsteps
 
 작은 촛불에 의지한 채 도착한 성의 지하.
 여기서 리아가 범인이라는 단서를 찾을 수 있을까?
@@ -360,7 +360,7 @@ const INITIAL_SCRIPT = `-> SCENE_1
 
 여자1: 고, 공작 부인!
 
-# char_img: ImgServantsShadow
+# char_img: 등장인물4
 검은 형체의 정체는 다름 아닌 공작성의 하인과 하녀였다.
 두 사람은 아무래도 이곳에서 은밀한 상황을 연출하고 있었던 것 같았다.
 난 잠시 할 말을 잃었고, 그들은 붉어진 얼굴을 감싸쥐곤 도망치듯 공간을 벗어났다.
@@ -425,7 +425,7 @@ function SortableBlockWrapper({
           type="button"
           variant="ghost"
           size="icon"
-          className="h-7 w-7 shrink-0 rounded p-0 text-slate-400 hover:bg-slate-100 hover:text-slate-600"
+          className="h-7 w-7 shrink-0 rounded p-0 text-on-surface-30 hover:bg-slate-100 hover:text-slate-600"
           aria-label="Add block below"
           onClick={(e) => {
             e.preventDefault();
@@ -438,7 +438,7 @@ function SortableBlockWrapper({
         </Button>
         <button
           type="button"
-          className="cursor-grab touch-none rounded px-0 py-0 w-6 h-7 mx-0 flex items-center justify-center text-slate-400 hover:bg-slate-100 hover:text-slate-600 active:cursor-grabbing mt-0 mb-0"
+          className="cursor-grab touch-none rounded px-0 py-0 w-6 h-7 mx-0 flex items-center justify-center text-on-surface-30 hover:bg-slate-100 hover:text-slate-600 active:cursor-grabbing mt-0 mb-0"
           aria-label="Drag to reorder"
           {...attributes}
           {...listeners}

@@ -51,7 +51,7 @@ export function PolicyAgreementModal({
         aria-describedby="policy-agreement-description"
       >
         <DialogHeader className="text-center">
-          <DialogTitle className="text-2xl font-bold text-slate-900 text-center">
+          <DialogTitle className="text-2xl font-bold text-on-surface-10 text-center">
             잠깐! 시작하기 전 체크
           </DialogTitle>
         </DialogHeader>

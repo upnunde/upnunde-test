@@ -20,6 +20,7 @@ import type {
   BgmResource,
 } from "@/types/resource";
 import { PreviewScreen } from "@/components/editor/PreviewScreen";
+import { Title2 } from "@/components/ui/title2";
 import type { ScriptBlock } from "@/types/editor";
 
 /** 신규 등록/상세 라우트 (정책 5, 3) - 실제 경로는 프로젝트에 맞게 변경 */
@@ -49,42 +50,119 @@ const ROUTES = {
 const MOCK_HAS_RESOURCES = true;
 
 const initialCharacters: CharacterResource[] = MOCK_HAS_RESOURCES
-  ? [{ id: "1", name: "name", imageUrl: "https://placehold.co/80x80?text=C" }]
+  ? [
+      { id: "1", name: "등장인물1", imageUrl: "/character-1.png" },
+      { id: "2", name: "등장인물2", imageUrl: "/character-2.png" },
+      { id: "3", name: "등장인물3", imageUrl: "/character-3.png" },
+      { id: "4", name: "등장인물4", imageUrl: "/character-4.png" },
+    ]
   : [];
 const initialBackgrounds: ImageResource[] = MOCK_HAS_RESOURCES
   ? [
-      { id: "1", name: "배경1", imageUrl: "https://placehold.co/120x80?text=BG1" },
-      { id: "2", name: "배경2", imageUrl: "https://placehold.co/120x80?text=BG2" },
+      { id: "1", name: "교실", imageUrl: "/background-1.png" },
+      { id: "2", name: "강변 산책로", imageUrl: "/background-2.png" },
+      { id: "3", name: "주택가 노을", imageUrl: "/background-3.png" },
+      { id: "4", name: "베이커리_낮", imageUrl: "/background-bakery-day.png" },
+      { id: "5", name: "부엌_밤", imageUrl: "/background-kitchen-night.png" },
+      { id: "6", name: "베이커리_밤", imageUrl: "/background-bakery-night.png" },
+      { id: "7", name: "부엌_비오는날", imageUrl: "/background-kitchen-rain.png" },
+      { id: "8", name: "거리_낮", imageUrl: "/background-street-day.png" },
+      { id: "9", name: "내방_밤", imageUrl: "/background-room-night.png" },
+      { id: "10", name: "거리_밤", imageUrl: "/background-street-night.png" },
+      { id: "11", name: "내방_낮", imageUrl: "/background-room-day.png" },
+      { id: "12", name: "거리_노을", imageUrl: "/background-street-evening.png" },
+      { id: "13", name: "베이커리_노을", imageUrl: "/background-bakery-evening.png" },
+      { id: "14", name: "내방_비오는날", imageUrl: "/background-room-rain.png" },
+      { id: "15", name: "부엌_낮", imageUrl: "/background-kitchen-day.png" },
+      { id: "16", name: "베이커리_비오는날", imageUrl: "/background-bakery-rain.png" },
+      { id: "17", name: "거실_낮", imageUrl: "/background-livingroom-day.png" },
+      { id: "18", name: "내방_노을", imageUrl: "/background-room-evening.png" },
+      { id: "19", name: "부엌_노을", imageUrl: "/background-kitchen-evening.png" },
     ]
   : [];
+
+const SCENE_IMAGE_PATHS = [
+  "/scene-camera-act.png",
+  "/scene-accident-memory.png",
+  "/scene-cafe-step.png",
+  "/scene-hajoon-garam-tears.png",
+  "/scene-hajoon-garam-memory.png",
+  "/scene-hajoon-accident.png",
+  "/scene-hajoon-ian.png",
+  "/scene-hand-promise.png",
+  "/scene-ian-hand-moment.png",
+  "/scene-garam-play-cello.png",
+  "/scene-ian-memory.png",
+  "/scene-ian-nametag.png",
+  "/scene-hajoon-tears.png",
+  "/scene-siwoo-cat.png",
+  "/scene-siwoo-run.png",
+  "/scene-ian-tears.png",
+  "/scene-ian-post.png",
+  "/scene-smoothie.png",
+  "/scene-university-guy2.png",
+  "/scene-university-guy1.png",
+] as const;
+
 const initialScenes: ImageResource[] = MOCK_HAS_RESOURCES
-  ? Array.from({ length: 6 }, (_, i) => ({
-      id: String(i + 1),
-      name: `연출${i + 1}`,
-      imageUrl: `https://placehold.co/80x80?text=S${i + 1}`,
+  ? SCENE_IMAGE_PATHS.map((path, index) => ({
+      id: String(index + 1),
+      name: `연출${index + 1}`,
+      imageUrl: path,
     }))
   : [];
+
+const GALLERY_IMAGE_PATHS = [
+  "/gallery-G3.png",
+  "/gallery-G4.png",
+  "/gallery-G5.png",
+  "/gallery-G6.png",
+  "/gallery-G7.png",
+  "/gallery-G8.png",
+  "/gallery-G9.png",
+  "/gallery-G10.png",
+  "/gallery-G11.png",
+] as const;
+
 const initialMedia: MediaResource[] = MOCK_HAS_RESOURCES
   ? [
       {
         id: "1",
-        name: "영상1",
-        thumbnailUrl: "https://placehold.co/120x80?text=V1",
+        name: "베란다_노을",
+        thumbnailUrl: "/media-veranda-evening.png",
         duration: "00:00",
       },
       {
         id: "2",
-        name: "영상2",
-        thumbnailUrl: "https://placehold.co/120x80?text=V2",
+        name: "베란다_비오는날",
+        thumbnailUrl: "/media-veranda-rain.png",
+        duration: "00:00",
+      },
+      {
+        id: "3",
+        name: "베란다_밤하늘",
+        thumbnailUrl: "/media-veranda-night.png",
+        duration: "00:00",
+      },
+      {
+        id: "4",
+        name: "베란다_맑은낮",
+        thumbnailUrl: "/media-veranda-day.png",
+        duration: "00:00",
+      },
+      {
+        id: "5",
+        name: "비오는_골목길",
+        thumbnailUrl: "/media-street-rain.png",
         duration: "00:00",
       },
     ]
   : [];
 const initialGallery: ImageResource[] = MOCK_HAS_RESOURCES
-  ? Array.from({ length: 8 }, (_, i) => ({
+  ? Array.from({ length: GALLERY_IMAGE_PATHS.length }, (_, i) => ({
       id: String(i + 1),
       name: `갤러리${i + 1}`,
-      imageUrl: `https://placehold.co/80x80?text=G${i + 1}`,
+      imageUrl: GALLERY_IMAGE_PATHS[i],
     }))
   : [];
 /** 3~5분 랜덤 duration "MM:SS" */
@@ -194,7 +272,7 @@ export function ResourceManagementPage() {
               >
                 <ChevronLeft className="h-5 w-5 text-slate-600" strokeWidth={2} />
               </Button>
-              <h1 className="text-2xl font-bold text-slate-900">리소스 관리</h1>
+              <h1 className="text-2xl font-bold text-on-surface-10">리소스 관리</h1>
             </div>
           </div>
         </header>
@@ -207,16 +285,13 @@ export function ResourceManagementPage() {
               {showPreview && (
                 <aside className="w-full lg:w-[380px] lg:shrink-0 lg:sticky lg:top-6">
                   <div className="w-full bg-surface-10 rounded-2xl border border-border-10 p-5">
-                    <div className="flex items-center justify-between gap-3 mb-4">
-                      <div className="inline-flex flex-col justify-start items-start gap-1">
-                        <div className="text-on-surface-10 text-base font-bold font-['Pretendard_JP'] leading-6">
-                          미리보기
-                        </div>
-                        <div className="text-on-surface-30 text-[13px] font-normal font-['Pretendard_JP'] leading-4">
-                          등록한 리소스를 화면에서 확인합니다.
-                        </div>
-                      </div>
-                    </div>
+                    <Title2
+                      text="미리보기"
+                      asSectionHeader
+                      subtitle
+                      subtitleText="등록한 리소스를 화면에서 확인합니다."
+                      className="!p-0 !border-0 mb-4"
+                    />
 
                     <div className="mx-auto h-[652px] w-[300px]">
                       <PreviewScreen blocks={previewBlocks} focusedBlockId="pv-text" />
@@ -234,6 +309,7 @@ export function ResourceManagementPage() {
               emptyMessage="등록된 등장인물이 없습니다"
               addButtonLabel="등장인물 등록"
               isEmpty={characters.length === 0}
+              descriptionColorClassName="text-[rgba(145,145,148,1)]"
               onAddClick={() => navigateTo(ROUTES.character.new(seriesId))}
             >
               <div className="self-stretch p-0 rounded-2xl inline-flex justify-start items-start gap-4 flex-wrap content-start">
@@ -264,10 +340,11 @@ export function ResourceManagementPage() {
               emptyMessage="등록된 배경이 없습니다"
               addButtonLabel="배경 등록"
               isEmpty={backgrounds.length === 0}
+              descriptionColorClassName="text-[rgba(145,145,148,1)]"
               onAddClick={() => navigateTo(ROUTES.background.new(seriesId))}
             >
               <div className="self-stretch p-0 rounded-2xl inline-flex justify-start items-start gap-4 flex-wrap content-start">
-                {backgrounds.map((bg) => (
+                {backgrounds.slice(0, 3).map((bg) => (
                   <ImageCard
                     key={bg.id}
                     item={bg}
@@ -294,6 +371,7 @@ export function ResourceManagementPage() {
               emptyMessage="등록된 연출장면이 없습니다"
               addButtonLabel="연출장면 등록"
               isEmpty={scenes.length === 0}
+              descriptionColorClassName="text-[rgba(145,145,148,1)]"
               onAddClick={() => navigateTo(ROUTES.scene.new(seriesId))}
             >
               <div className="self-stretch p-0 rounded-2xl inline-flex justify-start items-start gap-4 flex-wrap content-start">

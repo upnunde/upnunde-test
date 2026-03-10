@@ -2,6 +2,7 @@
 
 import React, { useState, useEffect, useRef, useMemo } from "react";
 import { Button } from "@/components/ui/button";
+import { Title2 } from "@/components/ui/title2";
 import { BgmListItem } from "./BgmListItem";
 import { BgmListModal } from "./BgmListModal";
 import type { BgmResource } from "@/types/resource";
@@ -49,7 +50,7 @@ export function BgmSection({
   const [currentTime, setCurrentTime] = useState(0);
   const timerRef = useRef<ReturnType<typeof setInterval> | null>(null);
 
-  const [activeGenre, setActiveGenre] = useState<string>(categoryTitle);
+  const [activeGenre, setActiveGenre] = useState<string>("전체");
 
   const playingItem = items.find((i) => i.id === playingId);
   const totalSeconds = playingItem ? parseDurationToSeconds(playingItem.duration) : 0;
@@ -127,14 +128,13 @@ export function BgmSection({
     <>
       <div className="w-full max-w-[1400px] min-w-[800px] bg-surface-10 rounded-2xl border border-border-10 flex flex-col justify-start items-start">
         <div className="w-full self-stretch px-5 pt-5 pb-3 border-b border-border-10 inline-flex justify-between items-center gap-0">
-          <div className="inline-flex flex-col justify-start items-start gap-1">
-            <h2 className="text-on-surface-10 text-base font-bold font-['Pretendard_JP'] leading-6">
-              {title}
-            </h2>
-            <p className="text-[rgba(145,145,148,1)] text-[13px] font-normal font-['Pretendard_JP'] leading-4">
-              {description}
-            </p>
-          </div>
+          <Title2
+            text={title}
+            asSectionHeader
+            subtitle
+            subtitleText={description}
+            className="!p-0 !border-0 !border-b-0 min-w-0 flex-1"
+          />
           <Button
             type="button"
             variant="outline"

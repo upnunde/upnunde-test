@@ -3,7 +3,6 @@
 import React, { useState } from "react";
 import Header from "@/components/Header/Header";
 import AppSidebar from "@/components/AppSidebar/AppSidebar";
-import { PageCard } from "@/components/layout/PageCard";
 import { InquiryForm } from "@/components/inquiry/InquiryForm";
 import { InquiryHistoryList } from "@/components/inquiry/InquiryHistoryList";
 import { Snackbar } from "@/components/episode/Snackbar";
@@ -51,12 +50,13 @@ export default function InquiryPage() {
           <main className="flex flex-1 flex-col overflow-hidden bg-slate-50">
             <div className="w-full h-[64px] shrink-0 border-b border-slate-200 bg-white flex flex-col items-center justify-center">
               <div className="w-full max-w-[1200px] min-w-[800px] p-0 flex items-center justify-start gap-4">
-                <h1 className="text-2xl font-bold text-slate-900">문의</h1>
+                <h1 className="text-2xl font-bold text-on-surface-10">문의</h1>
               </div>
             </div>
             <div className="flex-1 overflow-y-auto flex flex-col items-center py-8 gap-3">
-              <PageCard>
-                <div className="w-full pt-0 pb-0 mt-0 mb-5 border-b border-slate-200 inline-flex flex-col justify-start items-start gap-2.5">
+              <div className="w-full h-fit max-w-[1200px] min-w-[800px] rounded-2xl border border-slate-200 bg-white flex flex-col shrink-0 overflow-hidden">
+                {/* 탭 헤더 - NotificationList와 동일 구조 */}
+                <div className="self-stretch px-5 pt-0 pb-0 mt-2 mb-2 border-b border-border-10 inline-flex flex-col justify-start items-start gap-2.5">
                   <div
                     data-size="L"
                     data-underline="true"
@@ -95,22 +95,25 @@ export default function InquiryPage() {
                   </div>
                 </div>
 
-                {activeTab === "inquiry" ? (
-                  <InquiryForm
-                    onSubmit={(e) => {
-                      e.preventDefault();
-                      // TODO: 실제 문의 접수 API 연동
-                    }}
-                    onSuccess={() =>
-                      setSnackbar({ open: true, message: "문의내용을 전달하였습니다" })
-                    }
-                  />
-                ) : (
-                  <div className="flex flex-col gap-4">
-                    <InquiryHistoryList items={inquiryHistory} />
-                  </div>
-                )}
-              </PageCard>
+                {/* 콘텐츠 영역 */}
+                <div className="px-5 pt-2 pb-5">
+                  {activeTab === "inquiry" ? (
+                    <InquiryForm
+                      onSubmit={(e) => {
+                        e.preventDefault();
+                        // TODO: 실제 문의 접수 API 연동
+                      }}
+                      onSuccess={() =>
+                        setSnackbar({ open: true, message: "문의내용을 전달하였습니다" })
+                      }
+                    />
+                  ) : (
+                    <div className="flex flex-col gap-4">
+                      <InquiryHistoryList items={inquiryHistory} />
+                    </div>
+                  )}
+                </div>
+              </div>
             </div>
           </main>
         </div>

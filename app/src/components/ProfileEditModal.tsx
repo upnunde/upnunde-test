@@ -123,7 +123,7 @@ export function ProfileEditModal({ isOpen, onClose, anchorRef, onSave }: Profile
 
         {/* Header */}
         <div className="self-stretch h-16 pl-5 pr-2 pt-4 pb-2 inline-flex justify-between items-center shrink-0">
-          <div className="text-slate-800 text-lg font-bold leading-6">
+          <div className="text-on-surface-10 text-lg font-bold leading-6">
             프로필편집
           </div>
           {/* Close Button */}
@@ -156,7 +156,7 @@ export function ProfileEditModal({ isOpen, onClose, anchorRef, onSave }: Profile
               {avatarPreview ? (
                 <img src={avatarPreview} alt="프로필 미리보기" className="w-full h-full object-cover" />
               ) : (
-                <svg width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" className="text-slate-400"><path d="M19 21v-2a4 4 0 0 0-4-4H9a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
+                <svg width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" className="text-on-surface-30"><path d="M19 21v-2a4 4 0 0 0-4-4H9a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
               )}
             </div>
             {/* Edit Badge: 펜 아이콘 20x20, 클릭 시 OS 폴더(파일 선택) 열기 */}
@@ -177,7 +177,7 @@ export function ProfileEditModal({ isOpen, onClose, anchorRef, onSave }: Profile
           {/* ID Field */}
           <div className="self-stretch flex flex-col justify-start items-start gap-3">
             <div className="flex flex-col justify-start items-start gap-1">
-              <div className="text-slate-800 text-base font-bold leading-5">아이디</div>
+              <div className="text-on-surface-10 text-base font-bold leading-5">아이디</div>
             </div>
             <div className="self-stretch rounded flex flex-col justify-center items-start gap-2">
               <div className="self-stretch h-12 px-4 bg-slate-100 rounded-md border border-slate-200 inline-flex justify-start items-center overflow-hidden">
@@ -185,7 +185,7 @@ export function ProfileEditModal({ isOpen, onClose, anchorRef, onSave }: Profile
                   type="text"
                   disabled
                   value="selly@linefriends.com"
-                  className="w-full bg-transparent text-slate-500 text-base font-normal leading-6 focus:outline-none"
+                  className="w-full bg-transparent text-on-surface-30 text-base font-normal leading-6 focus:outline-none"
                 />
               </div>
             </div>
@@ -194,18 +194,18 @@ export function ProfileEditModal({ isOpen, onClose, anchorRef, onSave }: Profile
           {/* Pen Name Field */}
           <div className="self-stretch flex flex-col justify-start items-start gap-3">
             <div className="flex flex-col justify-start items-start gap-1">
-              <div className="text-slate-800 text-base font-bold leading-5">작가명</div>
+              <div className="text-on-surface-10 text-base font-bold leading-5">작가명</div>
             </div>
             <div className="self-stretch rounded flex flex-col justify-center items-start gap-2">
               <div className="self-stretch h-12 px-4 bg-white rounded-md border border-slate-200 inline-flex justify-start items-center overflow-hidden focus-within:border-slate-400 focus-within:ring-1 focus-within:ring-slate-400/30">
                 <input
                   type="text"
                   defaultValue="사자이빨닦기"
-                  className="w-full bg-transparent text-slate-900 text-base font-medium leading-6 focus:outline-none placeholder:text-slate-400"
+                  className="w-full bg-transparent text-on-surface-10 text-base font-medium leading-6 focus:outline-none placeholder:text-on-surface-30"
                 />
               </div>
               <div className="self-stretch inline-flex justify-end items-center gap-2">
-                <div className="text-right text-slate-500 text-xs font-normal leading-4">0/50</div>
+                <div className="text-right text-on-surface-30 text-xs font-normal leading-4">0/50</div>
               </div>
             </div>
           </div>
@@ -213,19 +213,18 @@ export function ProfileEditModal({ isOpen, onClose, anchorRef, onSave }: Profile
           {/* Description Field */}
           <div className="self-stretch flex flex-col justify-start items-start gap-3">
             <div className="flex flex-col justify-start items-start gap-1">
-              <div className="text-slate-800 text-base font-bold leading-5">소개</div>
+              <div className="text-on-surface-10 text-base font-bold leading-5">소개</div>
             </div>
             <div className="self-stretch max-h-[28rem] min-h-24 flex flex-col justify-start items-start gap-2">
               <div className="self-stretch h-[120px] max-h-[28rem] p-4 relative bg-white rounded-lg border border-slate-200 flex justify-start items-stretch focus-within:border-slate-400 focus-within:ring-1 focus-within:ring-slate-400/30">
                 <textarea
                   placeholder="소개 내용을 작성해주세요."
                   rows={5}
-                  className="w-full h-full bg-transparent text-slate-900 placeholder:text-slate-400 text-base font-normal leading-6 focus:outline-none resize-none"
-                  style={{ height: "100%" }}
+                  className="w-full h-full bg-transparent text-on-surface-10 placeholder:text-on-surface-30 text-base font-normal leading-6 focus:outline-none min-h-[160px]"
                 />
               </div>
               <div className="self-stretch inline-flex justify-end items-center gap-2">
-                <div className="text-right text-slate-500 text-xs font-normal leading-4">0/500</div>
+                <div className="text-right text-on-surface-30 text-xs font-normal leading-4">0/500</div>
               </div>
             </div>
           </div>

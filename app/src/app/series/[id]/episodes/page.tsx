@@ -22,14 +22,43 @@ const DEFAULT_SORT: SortOptions = {
   direction: "desc",
 };
 
-/** 에피소드 썸네일용 일러스트/아트 이미지 (60x107 크기) */
-const THUMBNAIL_ILLUSTRATIONS = [
-  "https://images.unsplash.com/photo-1512820790803-83ca734da794?w=60&h=107&fit=crop",
-  "https://images.unsplash.com/photo-1589998059171-988d41df7358?w=60&h=107&fit=crop",
-  "https://images.unsplash.com/photo-1513542789411-b6d5b059ee63?w=60&h=107&fit=crop",
-  "https://images.unsplash.com/photo-1558591718-4da6c2d5972e?w=60&h=107&fit=crop",
-  "https://images.unsplash.com/photo-1578301978018-3005759f5c85?w=60&h=107&fit=crop",
-];
+/** 에피소드 썸네일용 더미 이미지
+ *  - 리소스 관리에서 사용하는 더미 리소스 중
+ *    등장인물·연출장면(씬)을 제외한 배경/갤러리 썸네일만 사용
+ *  - 실제 서비스 연동 시에는 에피소드별 대표 썸네일 리소스로 교체 예정
+ */
+const RESOURCE_THUMBNAIL_IMAGES = [
+  // 배경
+  "/background-1.png",
+  "/background-2.png",
+  "/background-3.png",
+  "/background-bakery-day.png",
+  "/background-kitchen-night.png",
+  "/background-bakery-night.png",
+  "/background-kitchen-rain.png",
+  "/background-street-day.png",
+  "/background-room-night.png",
+  "/background-street-night.png",
+  "/background-room-day.png",
+  "/background-street-evening.png",
+  "/background-bakery-evening.png",
+  "/background-room-rain.png",
+  "/background-kitchen-day.png",
+  "/background-bakery-rain.png",
+  "/background-livingroom-day.png",
+  "/background-room-evening.png",
+  "/background-kitchen-evening.png",
+  // 갤러리
+  "/gallery-G3.png",
+  "/gallery-G4.png",
+  "/gallery-G5.png",
+  "/gallery-G6.png",
+  "/gallery-G7.png",
+  "/gallery-G8.png",
+  "/gallery-G9.png",
+  "/gallery-G10.png",
+  "/gallery-G11.png",
+] as const;
 
 /** 1~120화 더미 데이터 생성 (정책 13: 페이지네이션 동작 검증용) - 모든 목록 공개 중 */
 function buildMockEpisodes(): Episode[] {
@@ -52,7 +81,9 @@ function buildMockEpisodes(): Episode[] {
     const date = baseDate.toISOString().slice(0, 10);
     const views = Math.floor(100 + Math.random() * 5000);
     const thumbnail =
-      THUMBNAIL_ILLUSTRATIONS[(n - 1) % THUMBNAIL_ILLUSTRATIONS.length];
+      RESOURCE_THUMBNAIL_IMAGES[
+        Math.floor(Math.random() * RESOURCE_THUMBNAIL_IMAGES.length)
+      ];
 
     episodes.push({
       id,
@@ -258,14 +289,14 @@ export default function EpisodeManagementPage() {
                 >
                   <ChevronLeft className="h-5 w-5 text-slate-600" strokeWidth={2} />
                 </Button>
-                <h1 className="text-2xl font-extrabold text-slate-900">에피소드 관리</h1>
+                <h1 className="text-2xl font-extrabold text-on-surface-10">에피소드 관리</h1>
               </div>
             </header>
 
             <div className="flex-1 overflow-y-auto flex flex-col items-center py-8 gap-3">
               {/* Title & Actions - 정책 2, 3, 16 */}
               <div className="w-full max-w-[1200px] min-w-[800px] px-0 flex justify-between items-center shrink-0">
-                <h2 className="text-xl font-bold text-slate-900">{seriesTitle}</h2>
+                <h2 className="text-xl font-bold text-on-surface-10">{seriesTitle}</h2>
                 <div className="flex items-center gap-3">
                   <button
                     type="button"

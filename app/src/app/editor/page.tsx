@@ -46,7 +46,7 @@ function EditorInner() {
             >
               <ChevronLeft className="h-5 w-5 text-slate-600" strokeWidth={2} />
             </Button>
-            <h1 className="text-2xl font-extrabold text-slate-900">에피소드 생성</h1>
+            <h1 className="text-2xl font-extrabold text-on-surface-10">에피소드 생성</h1>
           </div>
         </header>
         <div className="flex min-h-0 flex-1 flex-col overflow-hidden bg-slate-50">
@@ -100,7 +100,7 @@ function EditorInner() {
 
             {/* Right Area: Phone Preview (Fixed size, sticky to stay visible when scrolling) */}
             <div className="shrink-0 sticky top-10 h-full ml-auto p-10 flex flex-col justify-start items-center">
-              <div className="w-[300px] h-[652px] relative bg-slate-100 rounded-[2rem] outline outline-8 outline-slate-800 overflow-hidden shadow-lg flex flex-col">
+              <div className="w-[300px] h-[652px] relative bg-slate-100 rounded-[2rem] outline outline-8 outline-slate-800 overflow-hidden flex flex-col">
                 <PreviewScreen />
               </div>
             </div>

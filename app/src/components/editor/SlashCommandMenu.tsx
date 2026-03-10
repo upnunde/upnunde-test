@@ -191,8 +191,8 @@ export function SlashCommandMenu({
             }}
             onKeyDown={(e) => handleOptionKeyDown(index, e)}
           >
-            <Icon className="h-4 w-4 shrink-0 text-slate-500" />
-            <span className="text-slate-800">{label}</span>
+            <Icon className="h-4 w-4 shrink-0 text-on-surface-30" />
+            <span className="text-on-surface-10">{label}</span>
           </button>
         ))}
       </div>

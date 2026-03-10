@@ -466,7 +466,7 @@ export function ScriptBlock({
             <DropdownMenuTrigger asChild>
               <button
                 type="button"
-                className="inline-flex items-center justify-center gap-0 h-7 min-w-0 p-0 m-0 text-[13px] text-slate-500 font-medium rounded-md border-0 outline-none shadow-none hover:bg-accent hover:text-accent-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring/50 focus-visible:ring-offset-0"
+                className="inline-flex items-center justify-center gap-0 h-7 min-w-0 p-0 m-0 text-[13px] text-on-surface-30 font-medium rounded-md border-0 outline-none shadow-none hover:bg-accent hover:text-accent-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring/50 focus-visible:ring-offset-0"
               >
                 {currentSpeaker}
                 <ChevronDown className="ml-1 w-3 h-3 shrink-0" />
@@ -508,7 +508,7 @@ export function ScriptBlock({
             onKeyDown={handleTextKeyDown}
             onMouseUp={handleTextMouseUp}
             placeholder="'/'를 눌러 메뉴를 선택하거나 텍스트를 입력할 수 있습니다."
-            className="w-full resize-none overflow-hidden bg-transparent focus:outline-none leading-relaxed font-medium text-[16px] text-slate-900 placeholder:text-slate-400 min-h-[2rem] py-0 mt-1 border-0 outline-none focus:ring-0"
+            className="w-full resize-none overflow-hidden bg-transparent focus:outline-none leading-relaxed font-medium text-[16px] text-on-surface-10 placeholder:text-on-surface-30 min-h-[2rem] py-0 mt-1 border-0 outline-none focus:ring-0"
             rows={1}
           />
         </div>
@@ -519,7 +519,7 @@ export function ScriptBlock({
             type="button"
             variant="ghost"
             size="icon"
-            className="h-8 w-8 text-slate-400 hover:bg-red-50 hover:text-red-500"
+            className="h-8 w-8 text-on-surface-30 hover:bg-red-50 hover:text-red-500"
             aria-label="Delete block"
             onClick={handleDeleteBlock}
           >
@@ -540,7 +540,7 @@ export function ScriptBlock({
         {selection && block.type === "text" && (
           <div
             ref={toolbarRef}
-            className="fixed z-50 flex items-center bg-[#2d2d2d] rounded-md shadow-xl border border-[#3d3d3d] overflow-visible animate-in fade-in zoom-in-95 duration-150"
+            className="fixed z-50 flex items-center bg-[#2d2d2d] rounded-md border border-[#3d3d3d] overflow-visible animate-in fade-in zoom-in-95 duration-150"
             style={{ top: selection.y, left: selection.x, transform: "translate(-50%, -100%)" }}
           >
             {/* Basic Icons */}
@@ -584,7 +584,7 @@ export function ScriptBlock({
               </DropdownMenuTrigger>
               <DropdownMenuContent
                 align="start"
-                className="w-40 p-1 bg-white rounded-lg shadow-lg border border-slate-100"
+                className="w-40 p-1 bg-white rounded-lg border border-slate-100"
                 ref={dropdownRef}
               >
                 <DropdownMenuItem
@@ -619,7 +619,7 @@ export function ScriptBlock({
               </DropdownMenuTrigger>
               <DropdownMenuContent
                 align="start"
-                className="w-44 p-1 bg-white rounded-lg shadow-lg border border-slate-100"
+                className="w-44 p-1 bg-white rounded-lg border border-slate-100"
                 ref={dropdownRef}
               >
                 <DropdownMenuItem
@@ -700,7 +700,7 @@ export function ScriptBlock({
         }}
       >
         {!hideIndex && (
-          <span className="shrink-0 text-xs font-medium text-slate-400 tabular-nums">
+          <span className="shrink-0 text-xs font-medium text-on-surface-30 tabular-nums">
             {indexLabel}
           </span>
         )}
@@ -723,7 +723,7 @@ export function ScriptBlock({
             onKeyDown={handleSceneKeyDown}
             placeholder={placeholder}
             className={cn(
-              "min-w-0 flex-1 rounded-md border-0 bg-transparent px-0 py-1.5 text-[rgba(29,41,61,1)] placeholder:text-slate-400 outline-none transition-colors focus:outline-none focus:ring-0",
+              "min-w-0 flex-1 rounded-md border-0 bg-transparent px-0 py-1.5 text-[rgba(29,41,61,1)] placeholder:text-on-surface-30 outline-none transition-colors focus:outline-none focus:ring-0",
               block.type === "scene"
                 ? "text-[24px] font-bold"
                 : "text-base font-medium leading-relaxed"
@@ -734,7 +734,7 @@ export function ScriptBlock({
               type="button"
               variant="ghost"
               size="icon"
-              className="h-8 w-8 text-slate-400 hover:bg-red-50 hover:text-red-500"
+              className="h-8 w-8 text-on-surface-30 hover:bg-red-50 hover:text-red-500"
               aria-label="Delete block"
               onClick={(e) => {
                 e.preventDefault();
@@ -780,7 +780,7 @@ export function ScriptBlock({
         }}
       >
         {!hideIndex && (
-          <span className="shrink-0 text-xs font-medium text-slate-400 tabular-nums">
+          <span className="shrink-0 text-xs font-medium text-on-surface-30 tabular-nums">
             {indexLabel}
           </span>
         )}
@@ -793,7 +793,7 @@ export function ScriptBlock({
               type="button"
               variant="ghost"
               size="icon"
-              className="h-8 w-8 text-slate-400 hover:bg-red-50 hover:text-red-500"
+              className="h-8 w-8 text-on-surface-30 hover:bg-red-50 hover:text-red-500"
               aria-label="Delete block"
               onClick={(e) => {
                 e.preventDefault();
@@ -835,7 +835,7 @@ export function ScriptBlock({
         }}
       >
         {!hideIndex && (
-          <span className="shrink-0 text-xs font-medium text-slate-400 tabular-nums">
+          <span className="shrink-0 text-xs font-medium text-on-surface-30 tabular-nums">
             {indexLabel}
           </span>
         )}
@@ -868,7 +868,7 @@ export function ScriptBlock({
               type="button"
               variant="ghost"
               size="icon"
-              className="h-8 w-8 text-slate-400 hover:bg-red-50 hover:text-red-500"
+              className="h-8 w-8 text-on-surface-30 hover:bg-red-50 hover:text-red-500"
               aria-label="Delete block"
               onClick={(e) => {
                 e.preventDefault();
@@ -897,12 +897,12 @@ export function ScriptBlock({
         tabIndex={0}
       >
         {!hideIndex && (
-          <span className="shrink-0 text-xs font-medium text-slate-400 tabular-nums">
+          <span className="shrink-0 text-xs font-medium text-on-surface-30 tabular-nums">
             {indexLabel}
           </span>
         )}
         <div className="flex flex-1 items-center gap-4">
-          <Icon className="h-4 w-4 shrink-0 text-slate-500" />
+          <Icon className="h-4 w-4 shrink-0 text-on-surface-30" />
           <span className={cn("w-24 shrink-0 text-sm font-medium", LABEL_COLOR_BY_TYPE[block.type])}>
             {label}
           </span>
@@ -950,7 +950,7 @@ export function ScriptBlock({
               type="button"
               variant="ghost"
               size="icon"
-              className="h-8 w-8 text-slate-400 hover:bg-red-50 hover:text-red-500"
+              className="h-8 w-8 text-on-surface-30 hover:bg-red-50 hover:text-red-500"
               aria-label="Delete block"
               onClick={(e) => {
                 e.preventDefault();
@@ -1017,7 +1017,7 @@ export function ScriptBlock({
         }}
       >
         {!hideIndex && (
-          <span className="shrink-0 text-xs font-medium text-slate-400 tabular-nums">
+          <span className="shrink-0 text-xs font-medium text-on-surface-30 tabular-nums">
             {indexLabel}
           </span>
         )}
@@ -1082,19 +1082,19 @@ export function ScriptBlock({
                   className="h-5 w-5 shrink-0 rounded-full object-cover"
                 />
               ) : block.type === "bgm" || block.type === "sfx" ? (
-                <span className="flex h-5 w-5 shrink-0 items-center justify-center rounded-full bg-slate-100 text-slate-500">
+                <span className="flex h-5 w-5 shrink-0 items-center justify-center rounded-full bg-slate-100 text-on-surface-30">
                   <Music className="h-3 w-3" />
                 </span>
               ) : null}
               <span
                 className={cn(
                   "min-w-0 flex-1 truncate text-[13px] font-medium",
-                  isEmpty ? "text-slate-400" : "text-[rgba(126,140,160,1)]"
+                  isEmpty ? "text-on-surface-30" : "text-[rgba(126,140,160,1)]"
                 )}
               >
                 {isEmpty ? "선택 안됨" : displayName}
               </span>
-              <ChevronDown className="ml-1 h-4 w-4 shrink-0 text-slate-400" />
+              <ChevronDown className="ml-1 h-4 w-4 shrink-0 text-on-surface-30" />
             </button>
           </ResourcePicker>
           {isCharacter && !isEmpty && (
@@ -1113,12 +1113,12 @@ export function ScriptBlock({
                   >
                     {(block.data?.expression as string) || "기본"}
                   </span>
-                  <ChevronDown className="ml-1 h-4 w-4 shrink-0 text-slate-400" />
+                  <ChevronDown className="ml-1 h-4 w-4 shrink-0 text-on-surface-30" />
                 </button>
               </DropdownMenuTrigger>
               <DropdownMenuContent
                 align="start"
-                className="w-40 p-1 bg-white rounded-lg shadow-lg border border-slate-100"
+                className="w-40 p-1 bg-white rounded-lg border border-slate-100"
               >
                 {EXPRESSIONS.map((expr) => (
                   <DropdownMenuItem
@@ -1142,7 +1142,7 @@ export function ScriptBlock({
               type="button"
               variant="ghost"
               size="icon"
-              className="h-8 w-8 text-slate-400 hover:bg-red-50 hover:text-red-500"
+              className="h-8 w-8 text-on-surface-30 hover:bg-red-50 hover:text-red-500"
               aria-label="Delete block"
               onClick={(e) => {
                 e.preventDefault();
@@ -1200,19 +1200,19 @@ export function ScriptBlock({
       onKeyDown={handleResourceBlockKeyDown}
     >
       {!hideIndex && (
-        <span className="shrink-0 text-xs font-medium text-slate-400 tabular-nums">
+        <span className="shrink-0 text-xs font-medium text-on-surface-30 tabular-nums">
           {indexLabel}
         </span>
       )}
       <div className="flex min-w-0 flex-1 items-center gap-0">
-        <Icon className="h-4 w-4 shrink-0 text-slate-500" />
+        <Icon className="h-4 w-4 shrink-0 text-on-surface-30" />
 <span className={cn("w-24 shrink-0 text-sm font-medium", LABEL_COLOR_BY_TYPE[block.type])}>
         {label}
       </span>
       <span
         className={cn(
           "min-w-0 flex-1 truncate text-sm",
-          isNone ? "text-slate-400" : "text-slate-800"
+          isNone ? "text-on-surface-30" : "text-on-surface-10"
         )}
       >
         {isNone ? "—" : block.content}
@@ -1222,7 +1222,7 @@ export function ScriptBlock({
             type="button"
             variant="ghost"
             size="icon"
-            className="h-8 w-8 text-slate-400 hover:bg-red-50 hover:text-red-500"
+            className="h-8 w-8 text-on-surface-30 hover:bg-red-50 hover:text-red-500"
             aria-label="Delete block"
             onClick={(e) => {
               e.preventDefault();

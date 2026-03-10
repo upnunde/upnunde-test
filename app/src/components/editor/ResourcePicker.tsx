@@ -98,7 +98,7 @@ export function ResourcePicker({
       <PopoverAnchor asChild>{children}</PopoverAnchor>
       <PopoverContent
         align="start"
-        className="w-fit h-96 flex flex-col justify-start items-stretch overflow-hidden p-0 bg-surface-10 rounded-2xl shadow-lg border border-[rgba(0,0,0,0.07)] outline outline-1 outline-offset-[-1px] outline-border-20/10"
+        className="w-fit h-96 flex flex-col justify-start items-stretch overflow-hidden p-0 bg-surface-10 rounded-2xl border border-[rgba(0,0,0,0.07)] outline outline-1 outline-offset-[-1px] outline-border-20/10"
         onCloseAutoFocus={(e) => e.preventDefault()}
       >
         {/* 헤더: 타이틀 + 닫기 버튼 */}
@@ -186,7 +186,7 @@ export function ResourcePicker({
                         )}
                       />
                     ) : (
-                      <div className="flex h-full w-full items-center justify-center text-xs text-slate-400">
+                      <div className="flex h-full w-full items-center justify-center text-xs text-on-surface-30">
                         —
                       </div>
                     )}
@@ -216,10 +216,10 @@ export function ResourcePicker({
                 onClick={() => handleSelect("")}
                 className="flex items-center gap-2 rounded px-2 py-2 text-left text-sm hover:bg-slate-100 focus:outline-none focus:ring-0"
               >
-                <span className="flex h-8 w-8 shrink-0 items-center justify-center rounded bg-slate-100 text-slate-500">
+                <span className="flex h-8 w-8 shrink-0 items-center justify-center rounded bg-slate-100 text-on-surface-30">
                   —
                 </span>
-                <span className="truncate font-medium text-slate-800">선택 안 함</span>
+                <span className="truncate font-medium text-on-surface-10">선택 안 함</span>
               </button>
               {items.map((item) => (
                 <button
@@ -228,10 +228,10 @@ export function ResourcePicker({
                   onClick={() => handleSelect(item.name)}
                   className="flex items-center gap-2 rounded px-2 py-2 text-left text-sm hover:bg-slate-100 focus:outline-none focus:ring-0"
                 >
-                  <span className="flex h-8 w-8 shrink-0 items-center justify-center rounded bg-slate-100 text-slate-500">
+                  <span className="flex h-8 w-8 shrink-0 items-center justify-center rounded bg-slate-100 text-on-surface-30">
                     ♪
                   </span>
-                  <span className="truncate font-medium text-slate-800">
+                  <span className="truncate font-medium text-on-surface-10">
                     {item.name}
                   </span>
                 </button>

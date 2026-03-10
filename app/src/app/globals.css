@@ -70,19 +70,21 @@
   --radius: 0.625rem;
   --background: oklch(1 0 0);
   --background-10: var(--background);
-  --foreground: oklch(0.145 0 0);
+  /* 메인 텍스트 #2B2B2B 통일 (기존 #161616 대체) */
+  --foreground: #2B2B2B;
   --card: oklch(1 0 0);
-  --card-foreground: oklch(0.145 0 0);
+  --card-foreground: #2B2B2B;
   --popover: oklch(1 0 0);
-  --popover-foreground: oklch(0.145 0 0);
+  --popover-foreground: #2B2B2B;
   --primary: #F642D4;
   --primary-foreground: #ffffff;
   --secondary: oklch(0.97 0 0);
-  --secondary-foreground: oklch(0.205 0 0);
+  --secondary-foreground: #2B2B2B;
   --muted: oklch(0.97 0 0);
-  --muted-foreground: oklch(0.556 0 0);
+  /* 보조 텍스트 #919194 통일 */
+  --muted-foreground: #919194;
   --accent: oklch(0.97 0 0);
-  --accent-foreground: oklch(0.205 0 0);
+  --accent-foreground: #2B2B2B;
   --destructive: oklch(0.577 0.245 27.325);
   --border: oklch(0.922 0 0);
   --input: oklch(0.922 0 0);
@@ -97,7 +99,7 @@
   --sidebar-primary: #F642D4;
   --sidebar-primary-foreground: oklch(0.985 0 0);
   --sidebar-accent: oklch(0.97 0 0);
-  --sidebar-accent-foreground: oklch(0.205 0 0);
+  --sidebar-accent-foreground: #2B2B2B;
   --sidebar-border: oklch(0.922 0 0);
   --sidebar-ring: oklch(0.708 0 0);
 
@@ -105,9 +107,11 @@
   --surface-10: oklch(1 0 0);
   --surface-20: #f8f8fc;
   --surface-disabled: oklch(0 0 0 / 0.05);
-  --on-surface-10: oklch(0.2 0 0);
+  /* surface01: 메인 텍스트 #2B2B2B */
+  --on-surface-10: #2B2B2B;
   --on-surface-20: #525254;
-  --on-surface-30: oklch(0.5 0 0);
+  /* surface03: 보조문구 등 보조 텍스트 공통 */
+  --on-surface-30: #919194;
   --on-surface-disabled: oklch(0 0 0 / 0.2);
   --border-10: oklch(0 0 0 / 0.07);
   --border-20: oklch(0 0 0 / 0.1);

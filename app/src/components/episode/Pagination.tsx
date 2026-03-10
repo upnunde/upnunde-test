@@ -67,7 +67,7 @@ export function Pagination({
           type="button"
           onClick={handlePrev}
           disabled={!canPrev}
-          className="flex h-8 w-8 items-center justify-center text-slate-400 hover:text-slate-900 disabled:opacity-50 disabled:pointer-events-none"
+          className="flex h-8 w-8 items-center justify-center text-on-surface-30 hover:text-on-surface-10 disabled:opacity-50 disabled:pointer-events-none"
           aria-label="이전 페이지"
         >
           <ChevronLeft className="h-4 w-4" />
@@ -81,7 +81,7 @@ export function Pagination({
               "h-8 w-8 rounded-full text-sm font-medium transition-colors " +
               (page === currentPage
                 ? "bg-slate-800 text-white"
-                : "text-slate-500 hover:bg-slate-100")
+                : "text-on-surface-30 hover:bg-slate-100")
             }
             aria-label={`${page}페이지`}
             aria-current={page === currentPage ? "page" : undefined}
@@ -93,7 +93,7 @@ export function Pagination({
           type="button"
           onClick={handleNext}
           disabled={!canNext}
-          className="flex h-8 w-8 items-center justify-center text-slate-400 hover:text-slate-900 disabled:opacity-50 disabled:pointer-events-none"
+          className="flex h-8 w-8 items-center justify-center text-on-surface-30 hover:text-on-surface-10 disabled:opacity-50 disabled:pointer-events-none"
           aria-label="다음 페이지"
         >
           <ChevronRight className="h-4 w-4" />
@@ -112,7 +112,7 @@ export function Pagination({
             className="h-8 w-12 rounded border border-slate-200 text-center text-sm outline-none focus:border-slate-400"
             aria-label="페이지 번호"
           />
-          <span className="text-sm text-slate-400">/ {totalPages}</span>
+          <span className="text-sm text-on-surface-30">/ {totalPages}</span>
         </div>
         <button
           type="submit"

@@ -86,7 +86,7 @@ export function SeriesItem({
       <div className="w-28 aspect-[9/16] shrink-0 rounded overflow-hidden relative bg-slate-200">
         {status === "DRAFT" ? (
           <div className="w-full h-full flex items-center justify-center bg-slate-200" aria-hidden>
-            <span className="text-slate-400 text-xs">썸네일 없음</span>
+            <span className="text-on-surface-30 text-xs">썸네일 없음</span>
           </div>
         ) : (
           <>
@@ -112,27 +112,27 @@ export function SeriesItem({
       <div className="flex-1 flex flex-col justify-start items-start min-w-0">
         {/* 제목 + 더보기 (정책 5, 6) */}
         <div className="w-full flex justify-between items-start gap-2">
-          <h3 className="text-lg font-bold text-slate-900 truncate flex-1 min-w-0">
+          <h3 className="text-lg font-bold text-on-surface-10 truncate flex-1 min-w-0">
             {title}
           </h3>
           <DropdownMenu open={isMenuOpen} onOpenChange={setIsMenuOpen}>
             <DropdownMenuTrigger asChild>
               <button
                 type="button"
-                className="shrink-0 w-8 h-8 -mt-1 -mr-2 rounded-full flex items-center justify-center text-slate-500 hover:bg-slate-100 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-slate-200"
+                className="shrink-0 w-8 h-8 -mt-1 -mr-2 rounded-full flex items-center justify-center text-on-surface-30 hover:bg-slate-100 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-slate-200"
                 aria-label="더보기"
               >
                 <MoreVertical className="w-5 h-5" aria-hidden />
               </button>
             </DropdownMenuTrigger>
-            <DropdownMenuContent align="end" className="w-48 rounded-lg border border-slate-100 bg-white p-1 shadow-lg">
+          <DropdownMenuContent align="end" className="w-48 rounded-lg border border-slate-100 bg-white p-1">
               {status === "PUBLIC" && (
                 <>
                   <DropdownMenuItem
                     className="flex cursor-pointer items-center gap-2 rounded-md px-3 py-2.5 text-sm text-slate-700 outline-none hover:bg-slate-50"
                     onSelect={() => onSetPrivate?.(series)}
                   >
-                    <EyeOff className="h-4 w-4 shrink-0 text-slate-500" aria-hidden />
+                    <EyeOff className="h-4 w-4 shrink-0 text-on-surface-30" aria-hidden />
                     비공개
                   </DropdownMenuItem>
                   <DropdownMenuItem
@@ -151,7 +151,7 @@ export function SeriesItem({
                     className="flex cursor-pointer items-center gap-2 rounded-md px-3 py-2.5 text-sm text-slate-700 outline-none hover:bg-slate-50"
                     onSelect={() => onSetPublic?.(series)}
                   >
-                    <Eye className="h-4 w-4 shrink-0 text-slate-500" aria-hidden />
+                    <Eye className="h-4 w-4 shrink-0 text-on-surface-30" aria-hidden />
                     공개
                   </DropdownMenuItem>
                   <DropdownMenuItem
@@ -168,7 +168,7 @@ export function SeriesItem({
                 <>
                   <DropdownMenuItem
                     disabled
-                    className="flex cursor-not-allowed items-center gap-2 rounded-md px-3 py-2.5 text-sm text-slate-400"
+                    className="flex cursor-not-allowed items-center gap-2 rounded-md px-3 py-2.5 text-sm text-on-surface-30"
                   >
                     <Eye className="h-4 w-4 shrink-0" aria-hidden />
                     공개
@@ -257,7 +257,7 @@ export function SeriesItem({
             onClick={handleResource}
             className={`h-10 w-full rounded-md border px-3 text-sm font-medium transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-2 ${
               isDraft
-                ? "border-slate-200 text-slate-400 cursor-not-allowed"
+                ? "border-slate-200 text-on-surface-30 cursor-not-allowed"
                 : "border-slate-200 bg-white text-slate-700 hover:bg-slate-50"
             }`}
           >
@@ -270,7 +270,7 @@ export function SeriesItem({
             onClick={handleEpisode}
             className={`h-10 w-full rounded-md border px-3 text-sm font-medium transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-2 ${
               isDraft
-                ? "border-slate-200 text-slate-400 cursor-not-allowed"
+                ? "border-slate-200 text-on-surface-30 cursor-not-allowed"
                 : "border-slate-200 bg-white text-slate-700 hover:bg-slate-50"
             }`}
           >

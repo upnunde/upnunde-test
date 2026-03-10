@@ -31,7 +31,7 @@ export function Snackbar({
     <div
       role="status"
       aria-live="polite"
-      className="fixed bottom-6 left-1/2 z-50 -translate-x-1/2 rounded-lg bg-slate-800 px-4 py-3 text-sm font-medium text-white shadow-lg"
+      className="fixed bottom-6 left-1/2 z-50 -translate-x-1/2 rounded-lg bg-slate-800 px-4 py-3 text-sm font-medium text-white"
     >
       {message}
     </div>

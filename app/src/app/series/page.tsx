@@ -9,12 +9,56 @@ import { SeriesDeleteModal } from "@/components/series/SeriesDeleteModal";
 import { PolicyAgreementModal } from "@/components/series/PolicyAgreementModal";
 import type { SeriesData } from "@/types/series";
 
+/** 시리즈 썸네일용 더미 이미지
+ *  - 리소스 관리에서 사용하는 배경/갤러리 더미 리소스를 활용
+ *  - 실제 서비스 연동 시에는 시리즈별 대표 썸네일 리소스로 교체 예정
+ */
+const SERIES_THUMBNAIL_IMAGES = [
+  // 배경
+  "/background-1.png",
+  "/background-2.png",
+  "/background-3.png",
+  "/background-bakery-day.png",
+  "/background-kitchen-night.png",
+  "/background-bakery-night.png",
+  "/background-kitchen-rain.png",
+  "/background-street-day.png",
+  "/background-room-night.png",
+  "/background-street-night.png",
+  "/background-room-day.png",
+  "/background-street-evening.png",
+  "/background-bakery-evening.png",
+  "/background-room-rain.png",
+  "/background-kitchen-day.png",
+  "/background-bakery-rain.png",
+  "/background-livingroom-day.png",
+  "/background-room-evening.png",
+  "/background-kitchen-evening.png",
+  // 갤러리
+  "/gallery-G3.png",
+  "/gallery-G4.png",
+  "/gallery-G5.png",
+  "/gallery-G6.png",
+  "/gallery-G7.png",
+  "/gallery-G8.png",
+  "/gallery-G9.png",
+  "/gallery-G10.png",
+  "/gallery-G11.png",
+] as const;
+
+function getRandomSeriesThumbnail(): string {
+  const total = SERIES_THUMBNAIL_IMAGES.length;
+  if (total === 0) return "";
+  const index = Math.floor(Math.random() * total);
+  return SERIES_THUMBNAIL_IMAGES[index]!;
+}
+
 /** 기본(공개), 비공개, 작성중, 이용금지 4가지 상태 더미 */
 const MOCK_SERIES: SeriesData[] = [
   {
     id: "1",
     title: "꽃에게는 독이 필요하다",
-    thumbnailUrl: "https://placehold.co/200x350?text=Thumbnail",
+    thumbnailUrl: getRandomSeriesThumbnail(),
     status: "PUBLIC",
     createdAt: "2025-12-01T09:00:00.000Z",
     episodeCount: 120,
@@ -23,7 +67,7 @@ const MOCK_SERIES: SeriesData[] = [
   {
     id: "2",
     title: "달빛 아래 그대",
-    thumbnailUrl: "https://placehold.co/200x350?text=Thumbnail",
+    thumbnailUrl: getRandomSeriesThumbnail(),
     status: "PRIVATE",
     createdAt: "2025-11-15T14:30:00.000Z",
     episodeCount: 50,
@@ -32,7 +76,7 @@ const MOCK_SERIES: SeriesData[] = [
   {
     id: "4",
     title: "가이드 위반 작품",
-    thumbnailUrl: "https://placehold.co/200x350?text=Thumbnail",
+    thumbnailUrl: getRandomSeriesThumbnail(),
     status: "BANNED",
     createdAt: "2025-10-01T00:00:00.000Z",
     episodeCount: 10,
@@ -116,7 +160,7 @@ export default function SeriesListPage() {
             {/* Sub Header */}
             <div className="w-full h-[64px] shrink-0 border-b border-slate-200 bg-white flex flex-col items-center justify-center">
               <div className="w-full max-w-[1200px] min-w-[800px] p-0 flex items-center justify-start gap-4">
-                <h1 className="text-2xl font-bold text-slate-900">시리즈</h1>
+                <h1 className="text-2xl font-bold text-on-surface-10">시리즈</h1>
               </div>
             </div>
 

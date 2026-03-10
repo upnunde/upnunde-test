@@ -1,8 +1,9 @@
 "use client";
 
 import React, { useState } from "react";
-import { ChevronDown } from "lucide-react";
+import { ChevronDown, Plus } from "lucide-react";
 import { Button } from "@/components/ui/button";
+import { Title1 } from "@/components/ui/title1";
 
 export type InquiryCategory = "account" | "payment" | "bug" | "etc";
 
@@ -56,15 +57,12 @@ export function InquiryForm({
     <form onSubmit={handleSubmit} className={className}>
       {/* 문의 유형 */}
       <div className="flex flex-col gap-1">
-        <label
-          htmlFor={`${prefix}inquiry-category`}
-          className="flex items-center justify-start text-sm font-bold text-slate-900"
-        >
-          문의 유형<span className="text-red-500 px-1 h-fit w-fit align-middle -mt-1">*</span>
-        </label>
-        <p className="text-xs text-slate-400">
-          문의 내용을 가장 잘 설명하는 유형을 선택해 주세요.
-        </p>
+        <Title1
+          text="문의 유형*"
+          showDot
+          subtitle
+          subtitleText="문의 내용을 가장 잘 설명하는 유형을 선택해 주세요."
+        />
         <div className="relative mt-1 w-full">
           <select
             id={`${prefix}inquiry-category`}
@@ -72,7 +70,7 @@ export function InquiryForm({
             onChange={(e) =>
               setCategory(e.target.value as InquiryCategory)
             }
-            className="h-10 w-full appearance-none rounded-md border border-slate-200 bg-white pl-3 pr-3 text-sm text-slate-900 outline-none focus:outline-none focus:ring-2 focus:ring-primary"
+            className="h-10 w-full appearance-none rounded-md border border-slate-200 bg-white pl-3 pr-3 text-sm text-on-surface-10 outline-none focus:outline-none focus:ring-2 focus:ring-primary"
           >
             <option value="account">계정 / 로그인</option>
             <option value="payment">결제 / 정산</option>
@@ -88,42 +86,38 @@ export function InquiryForm({
 
       {/* 제목 */}
       <div className="flex flex-col gap-1">
-        <label
-          htmlFor={`${prefix}inquiry-title`}
-          className="flex items-center justify-start text-sm font-bold text-slate-900"
-        >
-          제목<span className="text-red-500 px-1 h-fit w-fit align-middle -mt-1">*</span>
-        </label>
-        <p className="text-xs text-slate-400">제목을 입력해주세요.</p>
+        <Title1
+          text="제목*"
+          showDot
+          subtitle
+          subtitleText="제목을 입력해주세요."
+        />
         <input
           id={`${prefix}inquiry-title`}
           type="text"
           value={title}
           onChange={(e) => setTitle(e.target.value)}
           placeholder="제목을 입력해주세요."
-          className="mt-1 h-12 rounded-md border border-slate-200 bg-white px-3 py-2 text-sm text-slate-900 placeholder:text-slate-400 focus:outline-none focus:ring-2 focus:ring-primary"
+          className="mt-1 h-12 rounded-md border border-slate-200 bg-white px-3 py-2 text-sm text-on-surface-10 placeholder:text-on-surface-30 focus:outline-none focus:ring-2 focus:ring-primary"
           required
         />
       </div>
 
       {/* 상세내용 작성 */}
       <div className="flex flex-col gap-1">
-        <label
-          htmlFor={`${prefix}inquiry-content`}
-          className="flex items-center justify-start text-sm font-bold text-slate-900"
-        >
-          상세내용 작성<span className="text-red-500 px-1 h-fit w-fit align-middle -mt-1">*</span>
-        </label>
-        <p className="text-xs text-slate-400">
-          내용을 최대한 상세하게 작성해 주세요.
-        </p>
+        <Title1
+          text="상세내용 작성*"
+          showDot
+          subtitle
+          subtitleText="내용을 최대한 상세하게 작성해 주세요."
+        />
         <textarea
           id={`${prefix}inquiry-content`}
           rows={6}
           value={content}
           onChange={(e) => setContent(e.target.value)}
           placeholder="상세내용을 작성해 주세요."
-          className="mt-1 resize-none rounded-md border border-slate-200 bg-white px-3 py-2 text-sm text-slate-900 placeholder:text-slate-400 focus:outline-none focus:ring-2 focus:ring-primary"
+          className="mt-1 min-h-[160px] rounded-md border border-slate-200 bg-white px-3 py-2 text-sm text-on-surface-10 placeholder:text-on-surface-30 focus:outline-none focus:ring-2 focus:ring-primary"
           required
         />
         <p className="text-xs text-on-surface-30">
@@ -134,40 +128,36 @@ export function InquiryForm({
 
       {/* 이메일 */}
       <div className="flex flex-col gap-1">
-        <label
-          htmlFor={`${prefix}inquiry-email`}
-          className="flex items-center justify-start text-sm font-bold text-slate-900"
-        >
-          이메일
-        </label>
-        <p className="text-xs text-slate-400">
-          답변이 필요하신 경우 이메일 주소를 남겨주세요.
-        </p>
+        <Title1
+          text="이메일"
+          showDot={false}
+          subtitle
+          subtitleText="답변이 필요하신 경우 이메일 주소를 남겨주세요."
+        />
         <input
           id={`${prefix}inquiry-email`}
           type="email"
           value={email}
           onChange={(e) => setEmail(e.target.value)}
           placeholder="이메일 주소를 입력해주세요."
-          className="mt-1 h-12 rounded-md border border-slate-200 bg-white px-3 py-2 text-sm text-slate-900 placeholder:text-slate-400 focus:outline-none focus:ring-2 focus:ring-primary"
+          className="mt-1 h-12 rounded-md border border-slate-200 bg-white px-3 py-2 text-sm text-on-surface-10 placeholder:text-on-surface-30 focus:outline-none focus:ring-2 focus:ring-primary"
         />
       </div>
 
       {/* 이미지 파일 첨부 */}
       <div className="flex flex-col gap-1 pb-2">
-        <label className="flex items-center justify-start text-sm font-bold text-slate-900">
-          이미지 파일 첨부
-        </label>
-        <p className="text-xs text-slate-400">최대 5개의 파일 업로드 가능</p>
-        <p className="text-xs text-slate-400">
-          지원되는 파일 유형: jpg, png, gif, webp, heic, tiff
-        </p>
+        <Title1
+          text="이미지 파일 첨부"
+          showDot={false}
+          subtitle
+          subtitleText="최대 5개의 파일 업로드 가능. 지원되는 파일 유형: jpg, png, gif, webp, heic, tiff"
+        />
         <div className="mt-2">
           <label
             htmlFor={`${prefix}inquiry-attachments`}
             className="flex w-[120px] h-[120px] cursor-pointer items-center justify-center rounded-lg border border-dashed border-border-20 bg-white text-muted-foreground transition-colors hover:border-border-10 hover:bg-white"
           >
-            <span className="text-2xl leading-none">+</span>
+            <Plus className="w-5 h-5" aria-hidden />
           </label>
           <input
             id={`${prefix}inquiry-attachments`}

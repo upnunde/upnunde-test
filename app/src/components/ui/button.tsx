@@ -13,21 +13,21 @@ const buttonVariants = cva(
         destructive:
           "bg-destructive text-white hover:bg-destructive/90 focus-visible:ring-destructive/20 dark:focus-visible:ring-destructive/40 dark:bg-destructive/60",
         outline:
-          "border bg-background shadow-xs hover:bg-accent hover:text-accent-foreground dark:bg-input/30 dark:border-input dark:hover:bg-input/50",
+          "border bg-background hover:bg-accent hover:text-accent-foreground dark:bg-input/30 dark:border-input dark:hover:bg-input/50",
         secondary:
           "bg-secondary text-secondary-foreground hover:bg-secondary/80",
         ghost:
           "hover:bg-accent hover:text-accent-foreground dark:hover:bg-accent/50",
         link: "text-primary underline-offset-4 hover:underline",
-        /** 추가 버튼 (호버 시 표시되는 플로팅 메뉴용) - 공통 스타일 */
+        /** 추가 버튼 (호버 시 표시되는 플로팅 메뉴용) - 공통 스타일 (drop shadow 제거) */
         addMenu:
-          "rounded-full bg-white shadow-[0_2px_8px_rgba(0,0,0,0.15)] ring-1 ring-slate-900/20 text-slate-900 hover:bg-white hover:shadow-[0_4px_12px_rgba(0,0,0,0.2)]",
+          "rounded-full bg-white ring-1 ring-slate-900/20 text-on-surface-10 hover:bg-white",
       },
       size: {
         default: "h-9 px-4 py-2 has-[>svg]:px-3",
         xs: "h-6 gap-1 rounded-md px-2 text-xs has-[>svg]:px-1.5 [&_svg:not([class*='size-'])]:size-3",
         sm: "h-8 rounded-md gap-1.5 px-3 has-[>svg]:px-2.5",
-        lg: "h-10 rounded-md px-6 has-[>svg]:px-4",
+        lg: "h-10 rounded-md px-4 has-[>svg]:px-4",
         icon: "size-9",
         "icon-xs": "size-6 rounded-md [&_svg:not([class*='size-'])]:size-3",
         "icon-sm": "size-8",

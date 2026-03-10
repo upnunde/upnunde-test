@@ -37,7 +37,7 @@ export function EditorSubHeader({ title = "에피소드 제목" }: EditorSubHead
         >
           <ChevronLeft className="h-5 w-5" strokeWidth={2} />
         </Button>
-        <h1 className="text-2xl font-extrabold text-slate-900">{title}</h1>
+        <h1 className="text-2xl font-extrabold text-on-surface-10">{title}</h1>
       </div>
       <div className="flex items-center gap-2">
         <Button type="button" variant="outline" size="sm" className="h-10 shadow-none bg-slate-50">

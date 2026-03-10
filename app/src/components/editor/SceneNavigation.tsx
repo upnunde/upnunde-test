@@ -108,14 +108,14 @@ export function SceneNavigation({
           )}
         >
           {!collapsed && (
-            <h2 className="text-sm font-semibold text-slate-900 flex items-center gap-2">
+            <h2 className="text-sm font-semibold text-on-surface-10 flex items-center gap-2">
               씬 목록
             </h2>
           )}
           <button
             type="button"
             onClick={onToggleCollapsed}
-            className="inline-flex h-10 w-10 items-center justify-center rounded-md text-slate-500 hover:bg-slate-100 hover:text-slate-900 transition-colors"
+            className="inline-flex h-10 w-10 items-center justify-center rounded-md text-on-surface-30 hover:bg-slate-100 hover:text-on-surface-10 transition-colors"
             aria-label={collapsed ? "씬 목록 펼치기" : "씬 목록 최소화"}
           >
             <Menu className="h-5 w-5" aria-hidden="true" />
@@ -124,7 +124,7 @@ export function SceneNavigation({
 
         {!collapsed &&
           (scenes.length === 0 ? (
-            <div className="px-3 py-2 text-sm text-slate-400 text-center">
+            <div className="px-3 py-2 text-sm text-on-surface-30 text-center">
               씬이 없습니다
             </div>
           ) : (
@@ -137,7 +137,7 @@ export function SceneNavigation({
 
                 const rowContent = (
                   <div className="flex items-center gap-3 min-w-0">
-                    <span className="text-xs text-slate-400 font-mono tabular-nums shrink-0">
+                    <span className="text-xs text-on-surface-30 font-mono tabular-nums shrink-0">
                       {String(sceneNumber).padStart(2, "0")}
                     </span>
                     {isEditing ? (
