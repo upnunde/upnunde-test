@@ -28,11 +28,13 @@ export function CharacterDetailPage({ isNew = true, initialData }: CharacterDeta
   const [summary, setSummary] = useState("");
   const [tags, setTags] = useState("");
   const [greeting, setGreeting] = useState("");
+  const [thumbnailUrl, setThumbnailUrl] = useState<string | null>(null);
   const [expressionSlots, setExpressionSlots] = useState<CharacterExpressionSlot[]>([]);
   const [expressionModalOpen, setExpressionModalOpen] = useState(false);
   /** 추가하기 → 파일 선택 후 이 슬롯으로 모달을 연다 */
   const [modalInitialSlots, setModalInitialSlots] = useState<CharacterExpressionSlot[] | null>(null);
   const expressionFileInputRef = useRef<HTMLInputElement>(null);
+  const thumbnailFileInputRef = useRef<HTMLInputElement>(null);
 
   useEffect(() => {
     if (initialData) {
@@ -40,9 +42,18 @@ export function CharacterDetailPage({ isNew = true, initialData }: CharacterDeta
       setSummary(initialData.summary ?? "");
       setTags(initialData.tags ?? "");
       setGreeting(initialData.greeting ?? "");
+      setThumbnailUrl(initialData.thumbnailUrl ?? null);
       setExpressionSlots(initialData.expressions ?? []);
     }
   }, [initialData]);
+
+  useEffect(() => {
+    return () => {
+      if (thumbnailUrl && thumbnailUrl.startsWith("blob:")) {
+        URL.revokeObjectURL(thumbnailUrl);
+      }
+    };
+  }, [thumbnailUrl]);
 
   const handleBack = useCallback(() => {
     router.push(`/series/${seriesId}/resources`);
@@ -56,6 +67,22 @@ export function CharacterDetailPage({ isNew = true, initialData }: CharacterDeta
   /** 추가하기 클릭 → OS 파일 선택 (최대 10장) → 선택한 수만큼 슬롯 채워서 모달 오픈 */
   const handleExpressionAddClick = useCallback(() => {
     expressionFileInputRef.current?.click();
+  }, []);
+
+  const handleThumbnailAddClick = useCallback(() => {
+    thumbnailFileInputRef.current?.click();
+  }, []);
+
+  const handleThumbnailFileChange = useCallback((e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = (e.target.files ?? [])[0];
+    e.target.value = "";
+    if (!file || !file.type.startsWith("image/")) return;
+
+    const objectUrl = URL.createObjectURL(file);
+    setThumbnailUrl((prev) => {
+      if (prev && prev.startsWith("blob:")) URL.revokeObjectURL(prev);
+      return objectUrl;
+    });
   }, []);
 
   const handleExpressionFilesChange = useCallback((e: React.ChangeEvent<HTMLInputElement>) => {
@@ -161,13 +188,22 @@ export function CharacterDetailPage({ isNew = true, initialData }: CharacterDeta
                       subtitle
                       subtitleText="독자에게 가장 먼저 보여질 캐릭터 이미지를 등록해 주세요."
                     />
-                    <AddResourceSlot
-                      variant="character"
-                      ariaLabel="대표 썸네일 추가"
-                      onClick={() => {
-                        // 실제 업로드 연동은 추후 구현
-                      }}
-                    />
+                    {thumbnailUrl ? (
+                      <button
+                        type="button"
+                        onClick={handleThumbnailAddClick}
+                        className="w-28 h-28 rounded-lg overflow-hidden border border-slate-200 bg-slate-100 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary"
+                        aria-label="대표 썸네일 변경"
+                      >
+                        <img src={thumbnailUrl} alt="" className="w-full h-full object-cover object-center" />
+                      </button>
+                    ) : (
+                      <AddResourceSlot
+                        variant="character"
+                        ariaLabel="대표 썸네일 추가"
+                        onClick={handleThumbnailAddClick}
+                      />
+                    )}
                   </div>
 
                   <div className="flex flex-col gap-3">
@@ -177,7 +213,7 @@ export function CharacterDetailPage({ isNew = true, initialData }: CharacterDeta
                       subtitle
                       subtitleText="다양한 감정을 표현할 수 있는 표정을 여러 장까지 등록해 둘 수 있어요. (최대 10개)"
                     />
-                    <div className="flex flex-wrap gap-3 items-end">
+                    <div className="flex flex-wrap gap-3 items-start">
                       {expressionSlots.filter((s) => s.imageUrl).map((slot) => (
                         <div
                           key={slot.id}
@@ -190,7 +226,7 @@ export function CharacterDetailPage({ isNew = true, initialData }: CharacterDeta
                               className="w-full h-full object-cover object-top"
                             />
                           </div>
-                          <span className="text-xs text-on-surface-30 truncate w-full text-center">
+                          <span className="w-[90px] text-xs text-on-surface-10 truncate text-left">
                             {slot.expressionLabel || "untitle"}
                           </span>
                         </div>
@@ -278,6 +314,14 @@ export function CharacterDetailPage({ isNew = true, initialData }: CharacterDeta
         className="hidden"
         aria-label="표정 이미지 선택 (최대 10장)"
         onChange={handleExpressionFilesChange}
+      />
+      <input
+        ref={thumbnailFileInputRef}
+        type="file"
+        accept="image/*"
+        className="sr-only"
+        aria-label="대표 썸네일 이미지 선택"
+        onChange={handleThumbnailFileChange}
       />
       <CharacterExpressionModal
         open={expressionModalOpen}
