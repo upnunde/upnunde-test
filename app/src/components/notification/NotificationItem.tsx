@@ -40,7 +40,7 @@ export function NotificationItem({
       <button
         type="button"
         onClick={() => onToggle?.()}
-        className="w-full cursor-pointer self-stretch h-[80px] rounded-lg inline-flex justify-start items-center gap-5"
+        className="w-full cursor-pointer self-stretch h-[80px] rounded-lg inline-flex justify-start items-center gap-5 transition-colors hover:bg-slate-50 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-inset"
         aria-expanded={isOpen}
         aria-controls={`notification-content-${id}`}
         id={`notification-trigger-${id}`}

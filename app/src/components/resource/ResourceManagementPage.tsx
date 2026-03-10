@@ -163,9 +163,9 @@ export function ResourceManagementPage() {
   return (
     <>
       <main className="flex flex-1 flex-col overflow-hidden bg-slate-50">
-        {/* [정책 1] 헤더: < 리소스 관리, 뒤로가기 → /series */}
-        <header className="flex h-16 shrink-0 items-center justify-center border-b border-slate-200 bg-white px-6 py-0">
-          <div className="flex w-full max-w-[1200px] min-w-[800px] items-center justify-between gap-4">
+        {/* [정책 1] 헤더 (레이아웃 가이드: margin 40, max-width 1200, min-width 640) */}
+        <header className="flex h-16 shrink-0 items-center justify-center border-b border-slate-200 bg-white px-10 py-0">
+          <div className="flex w-full max-w-[1200px] min-w-[640px] items-center justify-between gap-4">
             <div className="flex items-center justify-start gap-3">
               <Button
                 type="button"
@@ -182,8 +182,8 @@ export function ResourceManagementPage() {
           </div>
         </header>
 
-        <div className="flex-1 overflow-y-auto flex flex-col items-center py-8 px-5 gap-4">
-          <div className="w-full max-w-[1200px] min-w-[800px] flex flex-col gap-4">
+        <div className="flex-1 overflow-y-auto flex flex-col items-center py-8 px-10 gap-4">
+          <div className="w-full max-w-[1200px] min-w-[640px] mx-auto flex flex-col gap-4">
             <ResourceBanner seriesId={seriesId} />
 
             <div className="flex w-full flex-col items-start gap-6 lg:flex-row">

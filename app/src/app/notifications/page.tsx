@@ -380,14 +380,15 @@ export default function NotificationsPage() {
         <AppSidebar defaultActiveId="notification" />
         <div className="flex min-w-0 flex-1 flex-col overflow-hidden">
           <main className="flex flex-1 flex-col overflow-hidden bg-slate-50">
-            {/* Sub Header */}
-            <div className="w-full h-[64px] shrink-0 border-b border-slate-200 bg-white flex flex-col items-center justify-center">
-              <div className="w-full max-w-[1200px] min-w-[800px] p-0 flex items-center justify-start gap-4">
+            {/* Sub Header (레이아웃 가이드: margin 40, max-width 1200, min-width 640) */}
+            <div className="w-full h-[64px] shrink-0 border-b border-slate-200 bg-white flex flex-col items-center justify-center px-10">
+              <div className="w-full max-w-[1200px] min-w-[640px] flex items-center justify-start gap-4">
                 <h1 className="text-2xl font-bold text-on-surface-10">알림</h1>
               </div>
             </div>
 
-            <div className="flex-1 overflow-y-auto flex flex-col items-center py-8 gap-3">
+            <div className="flex-1 overflow-y-auto flex flex-col items-center py-8 gap-3 px-10">
+              <div className="w-full max-w-[1200px] min-w-[640px] mx-auto">
               <NotificationList
                 notifications={paginatedNotifications}
                 onContactClick={handleContactClick}
@@ -402,6 +403,7 @@ export default function NotificationsPage() {
                   ) : undefined
                 }
               />
+              </div>
             </div>
           </main>
         </div>

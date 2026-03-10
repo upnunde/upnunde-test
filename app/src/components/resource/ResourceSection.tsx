@@ -32,7 +32,7 @@ export function ResourceSection({
   headerInline = false,
 }: ResourceSectionProps) {
   return (
-    <div className="w-full max-w-[1400px] min-w-[800px] bg-surface-10 rounded-2xl border border-border-10 flex flex-col justify-start items-start">
+    <div className="w-full max-w-[1200px] min-w-[640px] bg-surface-10 rounded-2xl border border-border-10 flex flex-col justify-start items-start">
       <Title2
         text={title}
         asSectionHeader

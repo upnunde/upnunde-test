@@ -9,7 +9,7 @@ import {
   DropdownMenuItem,
 } from "@/components/ui/dropdown-menu";
 import type { SeriesData, SeriesStatus } from "@/types/series";
-import { formatSeriesDate, formatSeriesViewCount } from "@/lib/formatSeries";
+import { formatSeriesDateOrRelative, formatSeriesViewCount } from "@/lib/formatSeries";
 
 export interface SeriesItemProps {
   series: SeriesData;
@@ -63,7 +63,7 @@ export function SeriesItem({
   const isBanned = status === "BANNED";
   const isPrivate = status === "PRIVATE";
 
-  const dateStr = formatSeriesDate(createdAt);
+  const dateStr = formatSeriesDateOrRelative(createdAt);
   const viewStr = formatSeriesViewCount(viewCount);
 
   const handleResource = () => {

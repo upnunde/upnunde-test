@@ -87,14 +87,9 @@ export function Title2({
   );
 
   return (
-    <div
-      className={cn(
-        "px-5 py-4 rounded-[5px] overflow-hidden inline-flex justify-start items-start gap-12 min-w-0",
-        className
-      )}
-    >
+    <>
       {/* 왼쪽: 타이틀 + 점 + 가이드 아이콘 */}
-      <div className="inline-flex flex-col justify-start items-start gap-1">
+      <div className={cn("inline-flex flex-col justify-start items-start gap-1", className)}>
         {titleRow}
       </div>
       {/* 오른쪽: subtitle 사용 시 타이틀 + 점 + 가이드 + 보조문구 */}
@@ -106,6 +101,6 @@ export function Title2({
           </div>
         </div>
       )}
-    </div>
+    </>
   );
 }

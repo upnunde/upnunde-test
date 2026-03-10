@@ -31,7 +31,7 @@ export function EpisodeForm() {
   }, [rawScript, setBlocks, setCurrentView]);
 
   return (
-    <div className="mx-auto w-full max-w-[1200px] min-w-[800px] rounded-xl border border-slate-200 bg-white shadow-none">
+    <div className="mx-auto w-full max-w-[1200px] min-w-[640px] rounded-xl border border-slate-200 bg-white shadow-none">
       <Title2 text="에피소드" asSectionHeader />
 
       <PageCard className="mx-0 max-w-none min-w-0 border-0 rounded-none px-5 pt-5 pb-5 shadow-none">

@@ -36,7 +36,7 @@ export function NotificationList({
   return (
     <div
       className={
-        "w-full h-fit max-w-[1200px] min-w-[800px] rounded-2xl border border-slate-200 bg-white flex flex-col shrink-0 overflow-hidden " +
+        "w-full h-fit rounded-2xl border border-slate-200 bg-white flex flex-col shrink-0 overflow-hidden " +
         (className ?? "")
       }
     >

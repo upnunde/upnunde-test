@@ -9,10 +9,10 @@ import {
   Dialog,
   DialogContent,
   DialogHeader,
-  DialogTitle,
 } from "@/components/ui/dialog";
 import { InquiryForm } from "@/components/inquiry/InquiryForm";
 import { Snackbar } from "@/components/episode/Snackbar";
+import { Title2 } from "@/components/ui/title2";
 import { cn } from "@/lib/utils";
 
 /* 소셜 로고 인라인 SVG (플랫폼 공식 비주얼) */
@@ -221,10 +221,8 @@ export function LoginPage() {
           className="min-w-[480px] max-w-[640px] w-full rounded-xl border border-slate-200 bg-white px-5 pt-2 pb-5 shadow-none"
           aria-describedby={undefined}
         >
-          <DialogHeader>
-            <DialogTitle className="text-2xl font-bold text-on-surface-10">
-              문의
-            </DialogTitle>
+          <DialogHeader className="flex flex-col justify-center items-start gap-0 border-none p-0 pt-2">
+            <Title2 text="문의" showDot={false} showGuide={false} subtitle={false} />
           </DialogHeader>
           <InquiryForm
             idPrefix="modal"

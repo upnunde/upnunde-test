@@ -9,7 +9,7 @@ import {
   DropdownMenuItem,
 } from "@/components/ui/dropdown-menu";
 import type { Episode, EpisodeStatus } from "@/types/episode";
-import { formatViews, formatDate } from "@/lib/formatEpisode";
+import { formatViews, formatDateOrRelative } from "@/lib/formatEpisode";
 
 const STATUS_LABEL: Record<EpisodeStatus, string> = {
   DRAFT: "임시저장",
@@ -44,7 +44,7 @@ export function EpisodeListItem({
 }: EpisodeListItemProps) {
   const { status, date, views } = episode;
   const isDraft = status === "DRAFT";
-  const dateDisplay = isDraft ? "-" : formatDate(date);
+  const dateDisplay = isDraft ? "-" : formatDateOrRelative(date);
   const viewsDisplay = isDraft ? "-" : formatViews(views);
 
   const handleRowClick = (e: React.MouseEvent) => {

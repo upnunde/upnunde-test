@@ -109,8 +109,8 @@ export function ImageResourceDetailPage({ kind, initialData }: ImageResourceDeta
   return (
     <main className="flex flex-1 flex-col overflow-hidden bg-slate-50">
       {/* 상단 서브 헤더 */}
-      <header className="flex h-16 shrink-0 items-center justify-center border-b border-slate-200 bg-white px-6 py-0">
-        <div className="flex w-full max-w-[1200px] min-w-[800px] items-center justify-between gap-4">
+      <header className="flex h-16 shrink-0 items-center justify-center border-b border-slate-200 bg-white px-10 py-0">
+        <div className="flex w-full max-w-[1200px] min-w-[640px] items-center justify-between gap-4">
           <div className="flex items-center justify-start gap-3">
             <Button
               type="button"
@@ -127,8 +127,8 @@ export function ImageResourceDetailPage({ kind, initialData }: ImageResourceDeta
         </div>
       </header>
 
-      <div className="flex-1 overflow-y-auto flex flex-col items-center py-8 px-5 gap-4">
-        <div className="w-full max-w-[1200px] min-w-[800px]">
+      <div className="flex-1 overflow-y-auto flex flex-col items-center py-8 px-10 gap-4">
+        <div className="w-full max-w-[1200px] min-w-[640px] mx-auto">
           <div className="w-full rounded-2xl border border-slate-200 bg-white">
             <Title2
               text={labels.sectionTitle}
@@ -246,7 +246,7 @@ export function ImageResourceDetailPage({ kind, initialData }: ImageResourceDeta
                     <button
                       type="button"
                       onClick={() => setSceneAiMode("none")}
-                      className="inline-flex items-center gap-2 text-sm font-medium text-on-surface-30 cursor-pointer"
+                      className="inline-flex items-center gap-2 text-sm font-medium text-on-surface-10 cursor-pointer"
                     >
                       <span
                         className={`flex h-4 w-4 items-center justify-center rounded-full border ${

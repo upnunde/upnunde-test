@@ -1,15 +1,16 @@
 "use client";
 
-import React, { useCallback, useState, useEffect } from "react";
+import React, { useCallback, useState, useEffect, useRef } from "react";
 import { useRouter, useParams } from "next/navigation";
 import { ChevronLeft } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import { AddResourceSlot } from "@/components/resource/cards/AddResourceSlot";
+import { CharacterExpressionModal } from "@/components/resource/character/CharacterExpressionModal";
 import { Title1 } from "@/components/ui/title1";
 import { Title2 } from "@/components/ui/title2";
-import type { CharacterResource } from "@/types/resource";
+import type { CharacterResource, CharacterExpressionSlot } from "@/types/resource";
 
 interface CharacterDetailPageProps {
   /** 신규 생성인지 여부 (지금은 true 만 사용) */
@@ -27,6 +28,11 @@ export function CharacterDetailPage({ isNew = true, initialData }: CharacterDeta
   const [summary, setSummary] = useState("");
   const [tags, setTags] = useState("");
   const [greeting, setGreeting] = useState("");
+  const [expressionSlots, setExpressionSlots] = useState<CharacterExpressionSlot[]>([]);
+  const [expressionModalOpen, setExpressionModalOpen] = useState(false);
+  /** 추가하기 → 파일 선택 후 이 슬롯으로 모달을 연다 */
+  const [modalInitialSlots, setModalInitialSlots] = useState<CharacterExpressionSlot[] | null>(null);
+  const expressionFileInputRef = useRef<HTMLInputElement>(null);
 
   useEffect(() => {
     if (initialData) {
@@ -34,6 +40,7 @@ export function CharacterDetailPage({ isNew = true, initialData }: CharacterDeta
       setSummary(initialData.summary ?? "");
       setTags(initialData.tags ?? "");
       setGreeting(initialData.greeting ?? "");
+      setExpressionSlots(initialData.expressions ?? []);
     }
   }, [initialData]);
 
@@ -46,11 +53,36 @@ export function CharacterDetailPage({ isNew = true, initialData }: CharacterDeta
     router.push(`/series/${seriesId}/resources`);
   }, [router, seriesId]);
 
+  /** 추가하기 클릭 → OS 파일 선택 (최대 10장) → 선택한 수만큼 슬롯 채워서 모달 오픈 */
+  const handleExpressionAddClick = useCallback(() => {
+    expressionFileInputRef.current?.click();
+  }, []);
+
+  const handleExpressionFilesChange = useCallback((e: React.ChangeEvent<HTMLInputElement>) => {
+    const files = Array.from(e.target.files ?? []).filter((f) => f.type.startsWith("image/")).slice(0, 10);
+    e.target.value = "";
+    if (files.length === 0) return;
+    const newSlots: CharacterExpressionSlot[] = files.map((file, i) => ({
+      id: `expr-${i}-${Date.now()}`,
+      expressionLabel: "",
+      imageUrl: URL.createObjectURL(file),
+    }));
+    while (newSlots.length < 10) {
+      newSlots.push({
+        id: `expr-${newSlots.length}-${Date.now()}`,
+        expressionLabel: "",
+        imageUrl: undefined,
+      });
+    }
+    setModalInitialSlots(newSlots);
+    setExpressionModalOpen(true);
+  }, []);
+
   return (
     <main className="flex flex-1 flex-col overflow-hidden bg-slate-50">
       {/* 상단 서브 헤더 - 리소스 관리/에피소드 관리와 동일 톤 */}
-      <header className="flex h-16 shrink-0 items-center justify-center border-b border-slate-200 bg-white px-6 py-0">
-        <div className="flex w-full max-w-[1200px] min-w-[800px] items-center justify-between gap-4">
+      <header className="flex h-16 shrink-0 items-center justify-center border-b border-slate-200 bg-white px-10 py-0">
+        <div className="flex w-full max-w-[1200px] min-w-[640px] items-center justify-between gap-4">
           <div className="flex items-center justify-start gap-3">
             <Button
               type="button"
@@ -67,8 +99,8 @@ export function CharacterDetailPage({ isNew = true, initialData }: CharacterDeta
         </div>
       </header>
 
-      <div className="flex-1 overflow-y-auto flex flex-col items-center py-8 px-5 gap-4">
-        <div className="w-full max-w-[1200px] min-w-[800px]">
+      <div className="flex-1 overflow-y-auto flex flex-col items-center py-8 px-10 gap-4">
+        <div className="w-full max-w-[1200px] min-w-[640px] mx-auto">
           <div className="w-full rounded-2xl border border-slate-200 bg-white">
             <Title2
               text="인물정보"
@@ -143,15 +175,30 @@ export function CharacterDetailPage({ isNew = true, initialData }: CharacterDeta
                       text="표정"
                       showDot={false}
                       subtitle
-                      subtitleText="다양한 감정을 표현할 수 있는 표정을 여러 장까지 등록해 둘 수 있어요."
+                      subtitleText="다양한 감정을 표현할 수 있는 표정을 여러 장까지 등록해 둘 수 있어요. (최대 10개)"
                     />
-                    <div className="flex flex-wrap gap-3">
+                    <div className="flex flex-wrap gap-3 items-end">
+                      {expressionSlots.filter((s) => s.imageUrl).map((slot) => (
+                        <div
+                          key={slot.id}
+                          className="inline-flex flex-col justify-start items-start gap-1 w-[90px]"
+                        >
+                          <div className="w-[90px] h-[160px] rounded-lg overflow-hidden border border-slate-200 bg-slate-100">
+                            <img
+                              src={slot.imageUrl}
+                              alt=""
+                              className="w-full h-full object-cover object-top"
+                            />
+                          </div>
+                          <span className="text-xs text-on-surface-30 truncate w-full text-center">
+                            {slot.expressionLabel || "untitle"}
+                          </span>
+                        </div>
+                      ))}
                       <AddResourceSlot
-                        variant="character"
-                        ariaLabel="표정 이미지 추가"
-                        onClick={() => {
-                          // 실제 업로드 연동은 추후 구현
-                        }}
+                        variant="img9:16"
+                        ariaLabel="썸네일로 변경"
+                        onClick={handleExpressionAddClick}
                       />
                     </div>
                   </div>
@@ -222,6 +269,29 @@ export function CharacterDetailPage({ isNew = true, initialData }: CharacterDeta
           </div>
         </div>
       </div>
+
+      <input
+        ref={expressionFileInputRef}
+        type="file"
+        accept="image/*"
+        multiple
+        className="hidden"
+        aria-label="표정 이미지 선택 (최대 10장)"
+        onChange={handleExpressionFilesChange}
+      />
+      <CharacterExpressionModal
+        open={expressionModalOpen}
+        onClose={() => {
+          setExpressionModalOpen(false);
+          setModalInitialSlots(null);
+        }}
+        initialSlots={modalInitialSlots ?? expressionSlots}
+        onSave={(slots) => {
+          setExpressionSlots(slots);
+          setExpressionModalOpen(false);
+          setModalInitialSlots(null);
+        }}
+      />
     </main>
   );
 }

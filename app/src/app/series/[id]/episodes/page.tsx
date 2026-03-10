@@ -248,10 +248,10 @@ export default function EpisodeManagementPage() {
     setSnackbarState((s) => ({ ...s, open: false }));
   }, []);
 
-  /** 정책 10: 링크 에디터(읽기 전용) 진입 */
+  /** 정책 10: 에피소드 상세(수정 불가 잉크 에디터 미리보기) 진입 */
   const handleLinkEditor = useCallback(
     (episode: Episode) => {
-      router.push(`/series/${seriesId}/episodes/${episode.id}/links`);
+      router.push(`/series/${seriesId}/episodes/${episode.id}/detail`);
     },
     [router, seriesId]
   );
@@ -276,9 +276,9 @@ export default function EpisodeManagementPage() {
         <AppSidebar defaultActiveId="series" />
         <div className="flex min-w-0 flex-1 flex-col overflow-hidden">
           <main className="flex flex-1 flex-col overflow-hidden bg-slate-50">
-            {/* Sub Header - EditorInner와 동일 스타일 (뒤로가기 + 제목) */}
-            <header className="flex h-16 shrink-0 items-center justify-center border-b border-slate-200 bg-white px-6 py-0">
-              <div className="flex w-full max-w-[1200px] min-w-[800px] items-center justify-start gap-3">
+            {/* Sub Header (레이아웃 가이드: margin 40, max-width 1200, min-width 640) */}
+            <header className="flex h-16 shrink-0 items-center justify-center border-b border-slate-200 bg-white px-10 py-0">
+              <div className="flex w-full max-w-[1200px] min-w-[640px] items-center justify-start gap-3">
                 <Button
                   type="button"
                   variant="outline"
@@ -293,9 +293,10 @@ export default function EpisodeManagementPage() {
               </div>
             </header>
 
-            <div className="flex-1 overflow-y-auto flex flex-col items-center py-8 gap-3">
+            <div className="flex-1 overflow-y-auto flex flex-col items-center py-8 gap-3 px-10">
+              <div className="w-full max-w-[1200px] min-w-[640px] mx-auto flex flex-col gap-3">
               {/* Title & Actions - 정책 2, 3, 16 */}
-              <div className="w-full max-w-[1200px] min-w-[800px] px-0 flex justify-between items-center shrink-0">
+              <div className="w-full px-0 flex justify-between items-center shrink-0">
                 <h2 className="text-xl font-bold text-on-surface-10">{seriesTitle}</h2>
                 <div className="flex items-center gap-3">
                   <button
@@ -317,7 +318,7 @@ export default function EpisodeManagementPage() {
 
               {/* 정책 14, 15: 빈 화면 배너 또는 리스트/페이지네이션 */}
               {showEmptyBanner ? (
-                <div className="w-full max-w-[1200px] min-w-[800px] px-10">
+                <div className="w-full px-10">
                   <EmptyStateBanner />
                 </div>
               ) : (
@@ -342,6 +343,7 @@ export default function EpisodeManagementPage() {
                   }
                 />
               )}
+              </div>
             </div>
           </main>
         </div>

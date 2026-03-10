@@ -36,7 +36,7 @@ export function EpisodeList({
   return (
     <div
       className={
-        "w-full max-w-[1200px] min-w-[800px] mx-10 bg-white rounded-2xl border border-slate-200 flex flex-col shrink-0 overflow-hidden " +
+        "w-full bg-white rounded-2xl border border-slate-200 flex flex-col shrink-0 overflow-hidden " +
         (className ?? "")
       }
     >
