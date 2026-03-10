@@ -466,7 +466,11 @@ export function CharacterExpressionModal({
                     <img src={slot.imageUrl!} alt="" className="w-[90px] h-[160px] object-cover object-top" />
                   </button>
                   <div className="w-[90px] inline-flex justify-start items-center gap-2.5 overflow-hidden">
-                    <div className="w-[90px] justify-center text-on-surface-20 text-sm font-normal font-['Pretendard_JP'] leading-5 truncate text-left">
+                    <div
+                      className={`w-[90px] justify-center text-sm font-normal font-['Pretendard_JP'] leading-5 truncate text-left ${
+                        label === "untitle" ? "text-on-surface-disabled" : "text-on-surface-20"
+                      }`}
+                    >
                       {label}
                     </div>
                   </div>
