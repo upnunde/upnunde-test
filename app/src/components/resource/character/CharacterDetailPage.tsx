@@ -2,12 +2,15 @@
 
 import React, { useCallback, useState, useEffect, useRef } from "react";
 import { useRouter, useParams } from "next/navigation";
-import { ChevronLeft } from "lucide-react";
+import { ChevronLeft, Pencil, Trash2 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import { AddResourceSlot } from "@/components/resource/cards/AddResourceSlot";
-import { CharacterExpressionModal } from "@/components/resource/character/CharacterExpressionModal";
+import {
+  CharacterExpressionMultiModal,
+  CharacterExpressionSingleModal,
+} from "@/components/resource/character/CharacterExpressionModal";
 import { Title1 } from "@/components/ui/title1";
 import { Title2 } from "@/components/ui/title2";
 import type { CharacterResource, CharacterExpressionSlot } from "@/types/resource";
@@ -33,6 +36,7 @@ export function CharacterDetailPage({ isNew = true, initialData }: CharacterDeta
   const [expressionModalOpen, setExpressionModalOpen] = useState(false);
   /** 추가하기 → 파일 선택 후 이 슬롯으로 모달을 연다 */
   const [modalInitialSlots, setModalInitialSlots] = useState<CharacterExpressionSlot[] | null>(null);
+  const [editingExpressionSlotId, setEditingExpressionSlotId] = useState<string | null>(null);
   const expressionFileInputRef = useRef<HTMLInputElement>(null);
   const thumbnailFileInputRef = useRef<HTMLInputElement>(null);
 
@@ -42,7 +46,7 @@ export function CharacterDetailPage({ isNew = true, initialData }: CharacterDeta
       setSummary(initialData.summary ?? "");
       setTags(initialData.tags ?? "");
       setGreeting(initialData.greeting ?? "");
-      setThumbnailUrl(initialData.thumbnailUrl ?? null);
+      setThumbnailUrl(initialData.imageUrl ?? null);
       setExpressionSlots(initialData.expressions ?? []);
     }
   }, [initialData]);
@@ -66,7 +70,14 @@ export function CharacterDetailPage({ isNew = true, initialData }: CharacterDeta
 
   /** 추가하기 클릭 → OS 파일 선택 (최대 10장) → 선택한 수만큼 슬롯 채워서 모달 오픈 */
   const handleExpressionAddClick = useCallback(() => {
+    setEditingExpressionSlotId(null);
     expressionFileInputRef.current?.click();
+  }, []);
+
+  const handleExpressionEditClick = useCallback((slot: CharacterExpressionSlot) => {
+    setEditingExpressionSlotId(slot.id);
+    setModalInitialSlots([slot]);
+    setExpressionModalOpen(true);
   }, []);
 
   const handleThumbnailAddClick = useCallback(() => {
@@ -217,16 +228,41 @@ export function CharacterDetailPage({ isNew = true, initialData }: CharacterDeta
                       {expressionSlots.filter((s) => s.imageUrl).map((slot) => (
                         <div
                           key={slot.id}
-                          className="inline-flex flex-col justify-start items-start gap-1 w-[90px]"
+                          className="inline-flex flex-col justify-start items-start gap-1 w-[90px] group"
                         >
-                          <div className="w-[90px] h-[160px] rounded-lg overflow-hidden border border-slate-200 bg-slate-100">
+                          <div className="w-[90px] h-[160px] rounded-lg overflow-hidden border border-slate-200 bg-slate-100 relative">
                             <img
                               src={slot.imageUrl}
                               alt=""
                               className="w-full h-full object-cover object-top"
                             />
+                            {/* 어두운 오버레이 */}
+                            <div className="absolute inset-0 w-full h-full bg-black/10 opacity-0 group-hover:opacity-100 transition-opacity pointer-events-none" />
+                            {/* 편집 / 삭제 아이콘 버튼 (9:16 썸네일과 동일 스타일) */}
+                            <div className="absolute right-1 top-1 flex flex-col justify-center items-start gap-1 opacity-0 group-hover:opacity-100 transition-opacity">
+                              <button
+                                type="button"
+                                className="w-8 h-8 rounded-full cursor-pointer bg-surface-10 inline-flex justify-center items-center text-on-surface-10 hover:bg-slate-100"
+                                aria-label="표정 편집"
+                                onClick={() => handleExpressionEditClick(slot)}
+                              >
+                                <Pencil className="w-4 h-4" />
+                              </button>
+                              <button
+                                type="button"
+                                className="w-8 h-8 rounded-full cursor-pointer bg-surface-10 inline-flex justify-center items-center text-on-surface-10 hover:bg-slate-100"
+                                aria-label="표정 삭제"
+                                onClick={() =>
+                                  setExpressionSlots((prev) =>
+                                    prev.filter((s) => s.id !== slot.id)
+                                  )
+                                }
+                              >
+                                <Trash2 className="w-4 h-4" />
+                              </button>
+                            </div>
                           </div>
-                          <span className="w-[90px] text-xs text-on-surface-10 truncate text-left">
+                          <span className="w-[90px] text-xs text-on-surface-10 truncate whitespace-nowrap text-left">
                             {slot.expressionLabel || "untitle"}
                           </span>
                         </div>
@@ -323,19 +359,45 @@ export function CharacterDetailPage({ isNew = true, initialData }: CharacterDeta
         aria-label="대표 썸네일 이미지 선택"
         onChange={handleThumbnailFileChange}
       />
-      <CharacterExpressionModal
-        open={expressionModalOpen}
-        onClose={() => {
-          setExpressionModalOpen(false);
-          setModalInitialSlots(null);
-        }}
-        initialSlots={modalInitialSlots ?? expressionSlots}
-        onSave={(slots) => {
-          setExpressionSlots(slots);
-          setExpressionModalOpen(false);
-          setModalInitialSlots(null);
-        }}
-      />
+      {editingExpressionSlotId ? (
+        <CharacterExpressionSingleModal
+          open={expressionModalOpen}
+          onClose={() => {
+            setExpressionModalOpen(false);
+            setModalInitialSlots(null);
+            setEditingExpressionSlotId(null);
+          }}
+          initialSlots={modalInitialSlots ?? expressionSlots}
+          onSave={(slots) => {
+            const edited = slots[0];
+            setExpressionSlots((prev) => {
+              if (!edited || !edited.imageUrl) {
+                return prev.filter((s) => s.id !== editingExpressionSlotId);
+              }
+              return prev.map((s) => (s.id === editingExpressionSlotId ? { ...s, ...edited } : s));
+            });
+            setExpressionModalOpen(false);
+            setModalInitialSlots(null);
+            setEditingExpressionSlotId(null);
+          }}
+        />
+      ) : (
+        <CharacterExpressionMultiModal
+          open={expressionModalOpen}
+          onClose={() => {
+            setExpressionModalOpen(false);
+            setModalInitialSlots(null);
+            setEditingExpressionSlotId(null);
+          }}
+          initialSlots={modalInitialSlots ?? expressionSlots}
+          onSave={(slots) => {
+            setExpressionSlots(slots);
+            setExpressionModalOpen(false);
+            setModalInitialSlots(null);
+            setEditingExpressionSlotId(null);
+          }}
+        />
+      )}
     </main>
   );
 }

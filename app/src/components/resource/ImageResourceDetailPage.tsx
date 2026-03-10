@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useCallback, useEffect, useState } from "react";
+import React, { useCallback, useEffect, useRef, useState } from "react";
 import { useRouter, useParams } from "next/navigation";
 import { ChevronLeft } from "lucide-react";
 import { Button } from "@/components/ui/button";
@@ -88,6 +88,7 @@ export function ImageResourceDetailPage({ kind, initialData }: ImageResourceDeta
   const [description, setDescription] = useState("");
   const [thumbnailUrl, setThumbnailUrl] = useState("");
   const [sceneAiMode, setSceneAiMode] = useState<"apply" | "none">("apply");
+  const thumbnailFileInputRef = useRef<HTMLInputElement | null>(null);
 
   useEffect(() => {
     if (initialData) {
@@ -97,6 +98,14 @@ export function ImageResourceDetailPage({ kind, initialData }: ImageResourceDeta
     }
   }, [initialData]);
 
+  useEffect(() => {
+    return () => {
+      if (thumbnailUrl && thumbnailUrl.startsWith("blob:")) {
+        URL.revokeObjectURL(thumbnailUrl);
+      }
+    };
+  }, [thumbnailUrl]);
+
   const handleBack = useCallback(() => {
     router.push(`/series/${seriesId}/resources`);
   }, [router, seriesId]);
@@ -105,6 +114,27 @@ export function ImageResourceDetailPage({ kind, initialData }: ImageResourceDeta
     // TODO: 실제 저장 로직은 추후 API 연동 시 구현
     router.push(`/series/${seriesId}/resources`);
   }, [router, seriesId]);
+
+  const handleThumbnailClick = useCallback(() => {
+    thumbnailFileInputRef.current?.click();
+  }, []);
+
+  const handleThumbnailFileChange = useCallback(
+    (e: React.ChangeEvent<HTMLInputElement>) => {
+      const file = (e.target.files ?? [])[0];
+      e.target.value = "";
+      if (!file || !file.type.startsWith("image/")) return;
+
+      const objectUrl = URL.createObjectURL(file);
+      setThumbnailUrl((prev) => {
+        if (prev && prev.startsWith("blob:")) {
+          URL.revokeObjectURL(prev);
+        }
+        return objectUrl;
+      });
+    },
+    [],
+  );
 
   return (
     <main className="flex flex-1 flex-col overflow-hidden bg-slate-50">
@@ -183,34 +213,25 @@ export function ImageResourceDetailPage({ kind, initialData }: ImageResourceDeta
                   subtitleText={labels.thumbnailSubtitle}
                 />
                 {thumbnailUrl ? (
-                  <div className="flex flex-col items-start gap-2">
-                    <div className="w-24 aspect-[9/16] rounded-lg overflow-hidden border border-slate-200 bg-slate-100">
+                  <button
+                    type="button"
+                    onClick={handleThumbnailClick}
+                    className="w-[90px] h-[160px] rounded-lg overflow-hidden border border-slate-200 bg-slate-100 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary cursor-pointer"
+                    aria-label="대표 썸네일 변경"
+                  >
+                    <div className="w-[90px] h-[160px]">
                       <img
                         src={thumbnailUrl}
                         alt=""
                         className="w-full h-full object-cover"
                       />
                     </div>
-                    <Button
-                      type="button"
-                      variant="outline"
-                      size="sm"
-                      className="cursor-pointer"
-                      onClick={() => {
-                        // 실제 교체 연동은 추후 구현
-                        setThumbnailUrl("");
-                      }}
-                    >
-                      이미지 변경
-                    </Button>
-                  </div>
+                  </button>
                 ) : (
                   <AddResourceSlot
                     variant="img9:16"
                     ariaLabel="대표 썸네일 업로드"
-                    onClick={() => {
-                      // 실제 업로드 연동은 추후 구현
-                    }}
+                    onClick={handleThumbnailClick}
                   />
                 )}
               </section>
@@ -286,6 +307,14 @@ export function ImageResourceDetailPage({ kind, initialData }: ImageResourceDeta
           </div>
         </div>
       </div>
+      <input
+        ref={thumbnailFileInputRef}
+        type="file"
+        accept="image/*"
+        className="sr-only"
+        aria-label="대표 썸네일 이미지 선택"
+        onChange={handleThumbnailFileChange}
+      />
     </main>
   );
 }
