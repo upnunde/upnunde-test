@@ -152,8 +152,8 @@ export default function SeriesNewPage() {
         <div className="flex min-w-0 flex-1 flex-col overflow-hidden">
           <main className="flex flex-1 flex-col overflow-hidden bg-slate-50">
             {/* Sub Header (레이아웃 가이드: margin 40, max-width 1200, min-width 640) */}
-            <header className="flex h-16 shrink-0 items-center justify-center border-b border-slate-200 bg-white px-10 py-0">
-              <div className="flex w-full max-w-[1200px] min-w-[640px] items-center justify-between gap-4">
+            <header className="flex h-16 shrink-0 items-center justify-center border-b border-slate-200 bg-white px-5 py-0">
+              <div className="flex w-full max-w-[1200px] items-center justify-between gap-4">
                 <div className="flex items-center justify-start gap-3">
                   <Button
                     type="button"
@@ -189,8 +189,8 @@ export default function SeriesNewPage() {
               </div>
             </header>
 
-            <div className="flex-1 overflow-y-auto flex flex-col items-center py-8 gap-3 px-10">
-              <div className="w-full max-w-[1200px] min-w-[640px] mx-auto flex gap-5">
+            <div className="flex-1 overflow-y-auto flex flex-col items-center py-8 gap-3 px-5">
+              <div className="w-full max-w-[1200px] mx-auto flex gap-5">
                 {/* 왼쪽: 폼 영역 */}
                 <div className="flex-1 min-w-0">
                   <PageCard className="h-fit rounded-2xl flex flex-col shrink-0 overflow-hidden px-0 pt-0 pb-0">

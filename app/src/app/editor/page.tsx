@@ -50,7 +50,7 @@ function EditorInner() {
           </div>
         </header>
         <div className="flex min-h-0 flex-1 flex-col overflow-hidden bg-slate-50">
-          <div className="flex-1 overflow-y-auto flex flex-col items-center py-8 gap-3">
+          <div className="flex-1 overflow-y-auto flex flex-col items-center py-8 px-5 gap-3">
             <EpisodeForm />
           </div>
         </div>
