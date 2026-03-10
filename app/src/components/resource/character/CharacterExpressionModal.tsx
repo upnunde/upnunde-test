@@ -96,6 +96,8 @@ export function CharacterExpressionModal({
 
   const handleCropPointerDown = useCallback((e: React.PointerEvent<HTMLDivElement>) => {
     if (!selectedSlot?.id || !previewImageUrl) return;
+    // 버튼(이전/다음 등) 클릭은 드래그로 가로채지 않기
+    if (e.target instanceof Element && e.target.closest("button")) return;
     e.preventDefault();
     dragRef.current = {
       slotId: selectedSlot.id,
@@ -287,7 +289,7 @@ export function CharacterExpressionModal({
             {/* 크롭 영역 w-96 h-96 */}
             <div
               className="w-96 h-96 relative rounded-md overflow-hidden bg-[repeating-conic-gradient(#e2e8f0_0%_25%,#f1f5f9_0%_50%)] bg-[length:12px_12px] flex items-center justify-center"
-              onPointerDownCapture={handleCropPointerDown}
+              onPointerDown={handleCropPointerDown}
               onPointerMove={handleCropPointerMove}
               onPointerUp={handleCropPointerUp}
               onPointerCancel={handleCropPointerUp}
