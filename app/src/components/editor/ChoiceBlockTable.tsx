@@ -44,8 +44,45 @@ function createAiChoice(): ChoiceItem {
   };
 }
 
-const CHOICE_TEXTAREA_LINE_HEIGHT_PX = 40; // 디폴트 높이 40px, 텍스트에 따라 확장
-const CHOICE_TEXTAREA_MAX_LINES = 2;
+const CHOICE_TEXTAREA_MIN_HEIGHT_PX = 40;
+
+/** 선택지 내용 전용 텍스트 필드. 영역 고정 확장이 아니라 텍스트 줄 수에 따라 높이만 가변 확장 */
+function ChoiceTextField({
+  value,
+  onChange,
+  placeholder,
+}: {
+  value: string;
+  onChange: (value: string) => void;
+  placeholder: string;
+}) {
+  const textareaRef = useRef<HTMLTextAreaElement>(null);
+
+  const adjustHeight = useCallback(() => {
+    const ta = textareaRef.current;
+    if (!ta) return;
+    ta.style.height = "0";
+    const contentHeight = ta.scrollHeight;
+    ta.style.height = `${Math.max(CHOICE_TEXTAREA_MIN_HEIGHT_PX, contentHeight)}px`;
+  }, []);
+
+  useEffect(() => {
+    adjustHeight();
+  }, [value, adjustHeight]);
+
+  return (
+    <textarea
+      ref={textareaRef}
+      value={value}
+      onChange={(e) => onChange(e.target.value)}
+      onInput={adjustHeight}
+      placeholder={placeholder}
+      rows={1}
+      className="min-h-[40px] w-full rounded-md border-0 bg-transparent px-0 py-[10px] text-sm leading-5 outline-none focus:outline-none focus:ring-0 focus:ring-offset-0 align-middle overflow-hidden resize-none"
+      style={{ height: CHOICE_TEXTAREA_MIN_HEIGHT_PX }}
+    />
+  );
+}
 
 function ChoiceRow({
   index,
@@ -61,22 +98,6 @@ function ChoiceRow({
   sceneOptions: SceneOption[];
 }) {
   const isAiMode = choice.isAiMode === true;
-  const textareaRef = useRef<HTMLTextAreaElement>(null);
-
-  const adjustHeight = useCallback(() => {
-    const ta = textareaRef.current;
-    if (!ta) return;
-    ta.style.height = "auto";
-    const capped = Math.min(
-      ta.scrollHeight,
-      CHOICE_TEXTAREA_LINE_HEIGHT_PX * CHOICE_TEXTAREA_MAX_LINES
-    );
-    ta.style.height = `${capped}px`;
-  }, []);
-
-  useEffect(() => {
-    adjustHeight();
-  }, [choice.text, adjustHeight]);
 
   return (
     <div
@@ -87,22 +108,17 @@ function ChoiceRow({
       <div className="w-[80px] shrink-0 px-4 py-2 text-sm text-on-surface-30 self-center h-full">
         선택 {index + 1}
       </div>
-      {/* Col 2: Content */}
+      {/* Col 2: Content - 텍스트 필드 분리, 줄 길이에 따라 가변 확장 */}
       <div className="flex-1 min-w-0 min-h-[40px] p-0 flex items-center">
         {isAiMode ? (
           <span className="text-sm font-semibold text-primary">
             ✨ AI 모드로 직접 대화
           </span>
         ) : (
-          <textarea
-            ref={textareaRef}
+          <ChoiceTextField
             value={choice.text}
-            onChange={(e) => onUpdate({ text: e.target.value })}
-            onInput={adjustHeight}
+            onChange={(text) => onUpdate({ text })}
             placeholder="선택지 내용"
-            rows={1}
-            className="min-h-[40px] max-h-[5rem] w-full rounded-md border-0 bg-transparent px-0 py-[10px] text-sm leading-5 outline-none focus:outline-none focus:ring-0 focus:ring-offset-0 align-middle overflow-y-auto"
-            style={{ height: CHOICE_TEXTAREA_LINE_HEIGHT_PX }}
           />
         )}
       </div>
