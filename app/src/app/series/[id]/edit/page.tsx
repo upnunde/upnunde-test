@@ -9,6 +9,8 @@ import { PageCard } from "@/components/layout/PageCard";
 import { Button } from "@/components/ui/button";
 import { Title1 } from "@/components/ui/title1";
 import { cn } from "@/lib/utils";
+import { CharacterExpressionSingleModal, ImageCropOnlyModal } from "@/components/resource/character/CharacterExpressionModal";
+import type { CharacterExpressionSlot } from "@/types/resource";
 
 type SeriesEditTab = "image" | "info" | "worldview";
 
@@ -30,6 +32,9 @@ export default function SeriesEditPage() {
 
   const [coverPreviewUrl, setCoverPreviewUrl] = useState<string | null>(null);
   const [logoPreviewUrl, setLogoPreviewUrl] = useState<string | null>(null);
+  /** 파일 선택 직후 모달에만 넘기고, 저장하기 전까지 썸네일에 반영하지 않을 URL */
+  const [pendingCoverUrl, setPendingCoverUrl] = useState<string | null>(null);
+  const [pendingLogoUrl, setPendingLogoUrl] = useState<string | null>(null);
 
   const [fieldErrors, setFieldErrors] = useState({
     cover: false,
@@ -42,8 +47,13 @@ export default function SeriesEditPage() {
     persona: false,
   });
 
+  const [expressionModalOpen, setExpressionModalOpen] = useState(false);
+  const [expressionModalMode, setExpressionModalMode] = useState<"cover" | "logo">("cover");
+
   const coverRef = useRef<HTMLLabelElement | null>(null);
   const logoRef = useRef<HTMLLabelElement | null>(null);
+  const coverFileInputRef = useRef<HTMLInputElement | null>(null);
+  const logoFileInputRef = useRef<HTMLInputElement | null>(null);
   const titleRef = useRef<HTMLInputElement | null>(null);
   const summaryRef = useRef<HTMLTextAreaElement | null>(null);
   const keywordsRef = useRef<HTMLInputElement | null>(null);
@@ -59,8 +69,14 @@ export default function SeriesEditPage() {
       if (logoPreviewUrl) {
         URL.revokeObjectURL(logoPreviewUrl);
       }
+      if (pendingCoverUrl) {
+        URL.revokeObjectURL(pendingCoverUrl);
+      }
+      if (pendingLogoUrl) {
+        URL.revokeObjectURL(pendingLogoUrl);
+      }
     };
-  }, [coverPreviewUrl, logoPreviewUrl]);
+  }, [coverPreviewUrl, logoPreviewUrl, pendingCoverUrl, pendingLogoUrl]);
 
   const MAX_TITLE = 50;
   const MAX_SUMMARY = 100;
@@ -93,6 +109,99 @@ export default function SeriesEditPage() {
       ref.current?.focus?.();
     }, 0);
   };
+
+  const openExpressionModalForCover = useCallback((e: React.MouseEvent) => {
+    e.preventDefault();
+    if (coverPreviewUrl) {
+      setExpressionModalMode("cover");
+      setExpressionModalOpen(true);
+    } else {
+      coverFileInputRef.current?.click();
+    }
+  }, [coverPreviewUrl]);
+
+  const openExpressionModalForLogo = useCallback((e: React.MouseEvent) => {
+    e.preventDefault();
+    if (logoPreviewUrl) {
+      setExpressionModalMode("logo");
+      setExpressionModalOpen(true);
+    } else {
+      logoFileInputRef.current?.click();
+    }
+  }, [logoPreviewUrl]);
+
+  const getExpressionModalInitialSlots = useCallback((): CharacterExpressionSlot[] => {
+    if (expressionModalMode === "cover") {
+      const url = pendingCoverUrl ?? coverPreviewUrl;
+      if (url) {
+        return [{ id: "series-cover", expressionLabel: "", imageUrl: url }];
+      }
+    }
+    if (expressionModalMode === "logo") {
+      const url = pendingLogoUrl ?? logoPreviewUrl;
+      if (url) {
+        return [{ id: "series-logo", expressionLabel: "", imageUrl: url }];
+      }
+    }
+    return [];
+  }, [expressionModalMode, pendingCoverUrl, pendingLogoUrl, coverPreviewUrl, logoPreviewUrl]);
+
+  const handleExpressionModalSave = useCallback(
+    (slots: CharacterExpressionSlot[]) => {
+      const slot = slots[0];
+      if (!slot?.imageUrl) return;
+      const sourceUrl = slot.imageUrl;
+      const isCover = expressionModalMode === "cover";
+
+      const applyUrl = (url: string) => {
+        if (isCover) {
+          setCoverPreviewUrl((prev) => {
+            if (prev && prev !== url) URL.revokeObjectURL(prev);
+            return url;
+          });
+          setPendingCoverUrl(null);
+          setHasCoverImage(true);
+          setFieldErrors((prev) => ({ ...prev, cover: false }));
+        } else {
+          setLogoPreviewUrl((prev) => {
+            if (prev && prev !== url) URL.revokeObjectURL(prev);
+            return url;
+          });
+          setPendingLogoUrl(null);
+          setHasLogoImage(true);
+          setFieldErrors((prev) => ({ ...prev, logo: false }));
+        }
+        setExpressionModalOpen(false);
+      };
+
+      if (sourceUrl.startsWith("blob:")) {
+        fetch(sourceUrl)
+          .then((res) => res.blob())
+          .then((blob) => {
+            const ownedUrl = URL.createObjectURL(blob);
+            applyUrl(ownedUrl);
+          })
+          .catch(() => {
+            applyUrl(sourceUrl);
+          });
+      } else {
+        applyUrl(sourceUrl);
+      }
+    },
+    [expressionModalMode]
+  );
+
+  const handleExpressionModalClose = useCallback(() => {
+    if (pendingCoverUrl) {
+      URL.revokeObjectURL(pendingCoverUrl);
+      setPendingCoverUrl(null);
+    }
+    if (pendingLogoUrl) {
+      URL.revokeObjectURL(pendingLogoUrl);
+      setPendingLogoUrl(null);
+    }
+    setExpressionModalOpen(false);
+  }, [pendingCoverUrl, pendingLogoUrl]);
 
   const handleSubmit = () => {
     const errors = {
@@ -233,15 +342,23 @@ export default function SeriesEditPage() {
                             />
                             <label
                               ref={coverRef}
-                              htmlFor="series-cover-edit"
+                              role="button"
+                              tabIndex={0}
+                              onClick={openExpressionModalForCover}
+                              onKeyDown={(e) => {
+                                if (e.key === "Enter" || e.key === " ") {
+                                  e.preventDefault();
+                                  openExpressionModalForCover(e as unknown as React.MouseEvent);
+                                }
+                              }}
                               className={cn(
                                 "mt-2 flex w-[90px] h-[160px] cursor-pointer items-center justify-center rounded-lg border border-dashed bg-white overflow-hidden",
                                 fieldErrors.cover ? "border-destructive" : "border-border-20"
                               )}
-                              tabIndex={-1}
                             >
                               {coverPreviewUrl ? (
                                 <img
+                                  key={coverPreviewUrl}
                                   src={coverPreviewUrl}
                                   alt="대표이미지 미리보기"
                                   className="w-full h-full object-cover"
@@ -267,26 +384,22 @@ export default function SeriesEditPage() {
                               )}
                             </label>
                             <input
+                              ref={coverFileInputRef}
                               id="series-cover-edit"
                               type="file"
                               accept="image/*"
                               className="hidden"
                               onChange={(e) => {
                                 const file = e.target.files?.[0];
-                                const hasFile = !!file;
-                                setHasCoverImage(hasFile);
-                                if (hasFile) {
-                                  setFieldErrors((prev) => ({ ...prev, cover: false }));
-                                  setCoverPreviewUrl((prev) => {
+                                if (file) {
+                                  setPendingCoverUrl((prev) => {
                                     if (prev) URL.revokeObjectURL(prev);
-                                    return URL.createObjectURL(file as File);
+                                    return URL.createObjectURL(file);
                                   });
-                                } else {
-                                  setCoverPreviewUrl((prev) => {
-                                    if (prev) URL.revokeObjectURL(prev);
-                                    return null;
-                                  });
+                                  setExpressionModalMode("cover");
+                                  setExpressionModalOpen(true);
                                 }
+                                e.target.value = "";
                               }}
                             />
                           </div>
@@ -300,15 +413,23 @@ export default function SeriesEditPage() {
                             />
                             <label
                               ref={logoRef}
-                              htmlFor="series-logo-edit"
+                              role="button"
+                              tabIndex={0}
+                              onClick={openExpressionModalForLogo}
+                              onKeyDown={(e) => {
+                                if (e.key === "Enter" || e.key === " ") {
+                                  e.preventDefault();
+                                  openExpressionModalForLogo(e as unknown as React.MouseEvent);
+                                }
+                              }}
                               className={cn(
                                 "mt-2 flex w-[90px] h-[160px] cursor-pointer items-center justify-center rounded-lg border border-dashed bg-white overflow-hidden",
                                 fieldErrors.logo ? "border-destructive" : "border-border-20"
                               )}
-                              tabIndex={-1}
                             >
                               {logoPreviewUrl ? (
                                 <img
+                                  key={logoPreviewUrl}
                                   src={logoPreviewUrl}
                                   alt="로고 미리보기"
                                   className="w-full h-full object-cover"
@@ -334,26 +455,22 @@ export default function SeriesEditPage() {
                               )}
                             </label>
                             <input
+                              ref={logoFileInputRef}
                               id="series-logo-edit"
                               type="file"
                               accept=".png,image/png"
                               className="hidden"
                               onChange={(e) => {
                                 const file = e.target.files?.[0];
-                                const hasFile = !!file;
-                                setHasLogoImage(hasFile);
-                                if (hasFile) {
-                                  setFieldErrors((prev) => ({ ...prev, logo: false }));
-                                  setLogoPreviewUrl((prev) => {
+                                if (file) {
+                                  setPendingLogoUrl((prev) => {
                                     if (prev) URL.revokeObjectURL(prev);
-                                    return URL.createObjectURL(file as File);
+                                    return URL.createObjectURL(file);
                                   });
-                                } else {
-                                  setLogoPreviewUrl((prev) => {
-                                    if (prev) URL.revokeObjectURL(prev);
-                                    return null;
-                                  });
+                                  setExpressionModalMode("logo");
+                                  setExpressionModalOpen(true);
                                 }
+                                e.target.value = "";
                               }}
                             />
                           </div>
@@ -602,14 +719,42 @@ export default function SeriesEditPage() {
                   <p className="text-base font-semibold text-slate-700">미리보기</p>
                   <div className="w-full flex justify-center">
                     <div className="w-[300px] h-[652px] relative bg-slate-100 rounded-[2rem] outline outline-8 outline-slate-800 overflow-hidden flex flex-col">
-                      <div className="flex-1 bg-slate-300 flex flex-col justify-end items-center pb-4">
-                        <button
-                          type="button"
-                          className="flex items-center justify-center gap-2 rounded-md bg-slate-900 px-4 py-2.5 text-sm font-medium text-white hover:bg-slate-800 transition-colors"
-                        >
-                          <Play className="w-4 h-4" aria-hidden />
-                          지금 플레이
-                        </button>
+                      <div className="flex-1 min-h-0 flex flex-col justify-end items-center pb-4 bg-slate-300 relative">
+                        {coverPreviewUrl ? (
+                          <>
+                            <img
+                              key={coverPreviewUrl}
+                              src={coverPreviewUrl}
+                              alt="시리즈 대표이미지 미리보기"
+                              className="absolute inset-0 w-full h-full object-cover object-center"
+                            />
+                            {logoPreviewUrl && (
+                              <img
+                                key={logoPreviewUrl}
+                                src={logoPreviewUrl}
+                                alt="로고 미리보기"
+                                className="absolute inset-0 w-full h-full object-contain z-10 pointer-events-none"
+                              />
+                            )}
+                            <div className="relative z-20 w-full flex justify-center">
+                              <button
+                                type="button"
+                                className="flex items-center justify-center gap-2 rounded-md bg-slate-900 px-4 py-2.5 text-sm font-medium text-white hover:bg-slate-800 transition-colors"
+                              >
+                                <Play className="w-4 h-4" aria-hidden />
+                                지금 플레이
+                              </button>
+                            </div>
+                          </>
+                        ) : (
+                          <button
+                            type="button"
+                            className="flex items-center justify-center gap-2 rounded-md bg-slate-900 px-4 py-2.5 text-sm font-medium text-white hover:bg-slate-800 transition-colors"
+                          >
+                            <Play className="w-4 h-4" aria-hidden />
+                            지금 플레이
+                          </button>
+                        )}
                       </div>
                     </div>
                   </div>
@@ -619,6 +764,13 @@ export default function SeriesEditPage() {
           </main>
         </div>
       </div>
+
+      <ImageCropOnlyModal
+        open={expressionModalOpen}
+        onClose={handleExpressionModalClose}
+        initialSlots={getExpressionModalInitialSlots()}
+        onSave={handleExpressionModalSave}
+      />
     </div>
   );
 }

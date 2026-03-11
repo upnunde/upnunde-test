@@ -43,6 +43,8 @@ export interface CharacterExpressionModalProps {
   onSave: (slots: CharacterExpressionSlot[]) => void;
   /** 우측 썸네일 리스트(멀티 슬롯 관리) 노출 여부. 단일 편집 모달에서는 false. */
   showSlotList?: boolean;
+  /** 표정 라벨/설명/인풋 섹션 노출 여부. false면 이미지 크롭만 사용 (시리즈 대표이미지·로고 등). */
+  showExpressionSection?: boolean;
 }
 
 function createEmptySlot(index: number): CharacterExpressionSlot {
@@ -63,6 +65,7 @@ export function CharacterExpressionModal({
   initialSlots = [],
   onSave,
   showSlotList = true,
+  showExpressionSection = true,
 }: CharacterExpressionModalProps) {
   // 레이아웃용 showSlotList는 모달이 열린 동안 고정하여,
   // 부모에서 prop이 변경되더라도 폭이 순간적으로 바뀌지 않도록 한다.
@@ -136,16 +139,23 @@ export function CharacterExpressionModal({
   }, [open]);
 
   const handleSave = useCallback(() => {
-    const filled = slots
-      .filter((s) => Boolean(s.imageUrl))
-      .map((s) => ({
-        ...s,
-        expressionLabel: (s.expressionLabel ?? "").trim(),
-      }))
-      .filter((s) => s.expressionLabel.length > 0 && s.expressionLabel !== "untitle");
-    onSave(filled.slice(0, MAX_SLOTS));
+    if (showExpressionSection) {
+      const filled = slots
+        .filter((s) => Boolean(s.imageUrl))
+        .map((s) => ({
+          ...s,
+          expressionLabel: (s.expressionLabel ?? "").trim(),
+        }))
+        .filter((s) => s.expressionLabel.length > 0 && s.expressionLabel !== "untitle");
+      onSave(filled.slice(0, MAX_SLOTS));
+    } else {
+      const filled = slots
+        .filter((s) => Boolean(s.imageUrl))
+        .map((s) => ({ ...s, expressionLabel: s.expressionLabel ?? "" }));
+      onSave(filled.slice(0, MAX_SLOTS));
+    }
     onClose();
-  }, [slots, onSave, onClose]);
+  }, [slots, onSave, onClose, showExpressionSection]);
 
   const handleClose = useCallback(() => {
     setExpressionInput("");
@@ -220,11 +230,13 @@ export function CharacterExpressionModal({
     fileInputRef.current?.click();
   }, []);
 
-  /** 저장 버튼 활성화: 등록된(이미지 있는) 슬롯들만 검사 */
-  const canSave = slots.some((s) => Boolean(s.imageUrl)) &&
-    slots
-      .filter((s) => Boolean(s.imageUrl))
-      .every((s) => Boolean(s.expressionLabel?.trim()) && s.expressionLabel.trim() !== "untitle");
+  /** 저장 버튼 활성화: 등록된(이미지 있는) 슬롯만 검사. 표정 섹션 있을 때는 라벨 필수 */
+  const canSave = showExpressionSection
+    ? slots.some((s) => Boolean(s.imageUrl)) &&
+      slots
+        .filter((s) => Boolean(s.imageUrl))
+        .every((s) => Boolean(s.expressionLabel?.trim()) && s.expressionLabel.trim() !== "untitle")
+    : slots.some((s) => Boolean(s.imageUrl));
 
   return (
     <Dialog open={open} onOpenChange={(o) => !o && handleClose()}>
@@ -244,7 +256,7 @@ export function CharacterExpressionModal({
         >
           {/* 왼쪽: 이미지 크롭 에디터 + 슬라이더 + 표정 입력 */}
           <div
-            className={`p-5 inline-flex flex-col justify-start items-center gap-5 shrink-0 h-[640px] ${
+            className={`p-5 inline-flex flex-col justify-start items-center gap-5 shrink-0 h-fit ${
               layoutShowSlotList ? "border-r border-slate-200" : "w-full"
             }`}
             style={layoutShowSlotList ? { width: "fit-content" } : undefined}
@@ -337,48 +349,50 @@ export function CharacterExpressionModal({
                 <RefreshCw className="w-5 h-5" />
               </Button>
             </div>
-            {/* 표정: 라벨 + 설명 + 인풋 + 0/50 (참고 스타일) */}
-            <div className="self-stretch flex flex-col justify-start items-start gap-2">
-              <div className="justify-center text-on-surface-10 text-base font-bold font-['Pretendard_JP'] leading-5">
-                표정
-              </div>
-              <div className="justify-center text-on-surface-30 text-xs font-normal font-['Pretendard_JP'] leading-4">
-                표정은 에피소드에서 인물의 감정 표현에 사용됩니다
-              </div>
-              <div className="self-stretch rounded flex flex-col justify-center items-end gap-2 relative">
-                <div className="self-stretch">
-                  <Input
-                    value={expressionInput}
-                    onChange={(e) => {
-                      const v = e.target.value.slice(0, EXPRESSION_MAX_LENGTH);
-                      setExpressionInput(v);
-                      setSuggestionOpen(true);
-                      if (selectedIndex !== null) {
-                        setSlots((prev) => {
-                          const next = [...prev];
-                          if (!next[selectedIndex]) return prev;
-                          next[selectedIndex] = {
-                            ...next[selectedIndex]!,
-                            expressionLabel: v,
-                          };
-                          return next;
-                        });
-                      }
-                    }}
-                    onFocus={() => setSuggestionOpen(true)}
-                    onBlur={() => setTimeout(() => setSuggestionOpen(false), 150)}
-                    placeholder="인물의 표정을 입력하세요"
-                    maxLength={EXPRESSION_MAX_LENGTH}
-                    className="h-12 w-full rounded-md border border-slate-200 bg-white px-3 py-2 text-sm text-on-surface-10 placeholder:text-on-surface-30 focus:outline-none focus:ring-2 focus:ring-primary shadow-none font-['Pretendard_JP']"
-                  />
+            {/* 표정: 라벨 + 설명 + 인풋 + 0/50 (showExpressionSection일 때만) */}
+            {showExpressionSection && (
+              <div className="self-stretch flex flex-col justify-start items-start gap-2">
+                <div className="justify-center text-on-surface-10 text-base font-bold font-['Pretendard_JP'] leading-5">
+                  표정
                 </div>
-                <div className="self-stretch inline-flex justify-end items-center gap-2">
-                  <span className="text-right justify-center text-on-surface-30 text-xs font-normal font-['Pretendard_JP'] leading-4 tabular-nums">
-                    {expressionInput.length}/{EXPRESSION_MAX_LENGTH}
-                  </span>
+                <div className="justify-center text-on-surface-30 text-xs font-normal font-['Pretendard_JP'] leading-4">
+                  표정은 에피소드에서 인물의 감정 표현에 사용됩니다
+                </div>
+                <div className="self-stretch rounded flex flex-col justify-center items-end gap-2 relative">
+                  <div className="self-stretch">
+                    <Input
+                      value={expressionInput}
+                      onChange={(e) => {
+                        const v = e.target.value.slice(0, EXPRESSION_MAX_LENGTH);
+                        setExpressionInput(v);
+                        setSuggestionOpen(true);
+                        if (selectedIndex !== null) {
+                          setSlots((prev) => {
+                            const next = [...prev];
+                            if (!next[selectedIndex]) return prev;
+                            next[selectedIndex] = {
+                              ...next[selectedIndex]!,
+                              expressionLabel: v,
+                            };
+                            return next;
+                          });
+                        }
+                      }}
+                      onFocus={() => setSuggestionOpen(true)}
+                      onBlur={() => setTimeout(() => setSuggestionOpen(false), 150)}
+                      placeholder="인물의 표정을 입력하세요"
+                      maxLength={EXPRESSION_MAX_LENGTH}
+                      className="h-12 w-full rounded-md border border-slate-200 bg-white px-3 py-2 text-sm text-on-surface-10 placeholder:text-on-surface-30 focus:outline-none focus:ring-2 focus:ring-primary shadow-none font-['Pretendard_JP']"
+                    />
+                  </div>
+                  <div className="self-stretch inline-flex justify-end items-center gap-2">
+                    <span className="text-right justify-center text-on-surface-30 text-xs font-normal font-['Pretendard_JP'] leading-4 tabular-nums">
+                      {expressionInput.length}/{EXPRESSION_MAX_LENGTH}
+                    </span>
+                  </div>
                 </div>
               </div>
-            </div>
+            )}
             {layoutShowSlotList && (
               <div className="mt-auto self-stretch flex justify-end gap-2">
                 <Button
@@ -490,4 +504,9 @@ export function CharacterExpressionSingleModal(props: Omit<CharacterExpressionMo
 /** 멀티 관리용: 좌측 크롭 + 우측 썸네일 리스트를 모두 사용하는 멀티 타입 모달 */
 export function CharacterExpressionMultiModal(props: Omit<CharacterExpressionModalProps, "showSlotList">) {
   return <CharacterExpressionModal {...props} showSlotList />;
+}
+
+/** 이미지 크롭 전용: 표정 라벨/인풋 없이 크롭·줌만 (시리즈 대표이미지·로고 등) */
+export function ImageCropOnlyModal(props: Omit<CharacterExpressionModalProps, "showSlotList" | "showExpressionSection">) {
+  return <CharacterExpressionModal {...props} showSlotList={false} showExpressionSection={false} />;
 }

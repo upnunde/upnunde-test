@@ -79,7 +79,7 @@ export function ImageLightbox({
             <img
               src={item.imageUrl}
               alt={item.name ?? "미리보기"}
-              className="w-full h-full object-contain bg-slate-900/50"
+              className="w-full h-full object-cover object-center"
             />
           )}
         </div>
