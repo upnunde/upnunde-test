@@ -21,7 +21,12 @@ export function ProfileEditModal({ isOpen, onClose, anchorRef, onSave }: Profile
   const router = useRouter();
   const [position, setPosition] = useState<{ top: number; left: number; maxHeight: number } | null>(null);
   const [avatarPreview, setAvatarPreview] = useState<string | null>(null);
+  const [penName, setPenName] = useState("사자이빨닦기");
+  const [description, setDescription] = useState("");
   const cardRef = useRef<HTMLDivElement>(null);
+
+  const MAX_PEN_NAME = 50;
+  const MAX_DESCRIPTION = 500;
   const fileInputRef = useRef<HTMLInputElement>(null);
 
   const handleAvatarFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -200,12 +205,14 @@ export function ProfileEditModal({ isOpen, onClose, anchorRef, onSave }: Profile
               <div className="self-stretch h-12 px-4 bg-white rounded-md border border-slate-200 inline-flex justify-start items-center overflow-hidden focus-within:border-slate-400 focus-within:ring-1 focus-within:ring-slate-400/30">
                 <input
                   type="text"
-                  defaultValue="사자이빨닦기"
+                  value={penName}
+                  onChange={(e) => setPenName(e.target.value.slice(0, MAX_PEN_NAME))}
+                  maxLength={MAX_PEN_NAME}
                   className="w-full bg-transparent text-on-surface-10 text-base font-medium leading-6 focus:outline-none placeholder:text-on-surface-30"
                 />
               </div>
               <div className="self-stretch inline-flex justify-end items-center gap-2">
-                <div className="text-right text-on-surface-30 text-xs font-normal leading-4">0/50</div>
+                <div className="text-right text-on-surface-30 text-xs font-normal leading-4 tabular-nums">{penName.length}/{MAX_PEN_NAME}</div>
               </div>
             </div>
           </div>
@@ -220,11 +227,14 @@ export function ProfileEditModal({ isOpen, onClose, anchorRef, onSave }: Profile
                 <textarea
                   placeholder="소개 내용을 작성해주세요."
                   rows={5}
+                  value={description}
+                  onChange={(e) => setDescription(e.target.value.slice(0, MAX_DESCRIPTION))}
+                  maxLength={MAX_DESCRIPTION}
                   className="w-full h-full bg-transparent text-on-surface-10 placeholder:text-on-surface-30 text-base font-normal leading-6 focus:outline-none min-h-[160px]"
                 />
               </div>
               <div className="self-stretch inline-flex justify-end items-center gap-2">
-                <div className="text-right text-on-surface-30 text-xs font-normal leading-4">0/500</div>
+                <div className="text-right text-on-surface-30 text-xs font-normal leading-4 tabular-nums">{description.length}/{MAX_DESCRIPTION}</div>
               </div>
             </div>
           </div>

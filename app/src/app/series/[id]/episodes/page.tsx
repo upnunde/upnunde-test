@@ -4,7 +4,6 @@ import React, { useState, useMemo, useCallback } from "react";
 import { useRouter, useParams } from "next/navigation";
 import { ChevronLeft } from "lucide-react";
 import Header from "@/components/Header/Header";
-import AppSidebar from "@/components/AppSidebar/AppSidebar";
 import { EpisodeList } from "@/components/episode/EpisodeList";
 import { EpisodeListItem } from "@/components/episode/EpisodeListItem";
 import { EmptyStateBanner } from "@/components/episode/EmptyStateBanner";
@@ -273,7 +272,6 @@ export default function EpisodeManagementPage() {
     <div className="flex flex-col h-screen w-full bg-white overflow-hidden">
       <Header profileImageUrl={profileImageUrl} onProfileImageChange={setProfileImageUrl} />
       <div className="flex flex-1 overflow-hidden bg-slate-50">
-        <AppSidebar defaultActiveId="series" />
         <div className="flex min-w-0 flex-1 flex-col overflow-hidden">
           <main className="flex flex-1 flex-col overflow-hidden bg-slate-50">
             {/* Sub Header (레이아웃 가이드: margin 40, max-width 1200, min-width 640) */}

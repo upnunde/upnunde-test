@@ -3,7 +3,6 @@
 import React, { useState, useEffect } from "react";
 import { useRouter, useParams } from "next/navigation";
 import Header from "@/components/Header/Header";
-import AppSidebar from "@/components/AppSidebar/AppSidebar";
 import { CharacterDetailPage } from "@/components/resource/character/CharacterDetailPage";
 import { getCharacterById } from "@/lib/resourceMockData";
 
@@ -30,7 +29,6 @@ export default function SeriesCharacterEditPage() {
     <div className="flex flex-col h-screen w-full bg-white overflow-hidden">
       <Header profileImageUrl={profileImageUrl} onProfileImageChange={setProfileImageUrl} />
       <div className="flex flex-1 overflow-hidden bg-slate-50">
-        <AppSidebar defaultActiveId="series" />
         <div className="flex min-w-0 flex-1 flex-col overflow-hidden">
           <CharacterDetailPage isNew={false} initialData={initialData ?? undefined} />
         </div>

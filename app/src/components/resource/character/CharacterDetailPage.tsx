@@ -107,6 +107,11 @@ export function CharacterDetailPage({ isNew = true, initialData }: CharacterDeta
 
   const [isComposingTag, setIsComposingTag] = useState(false);
 
+  const MAX_NAME = 30;
+  const MAX_SUMMARY = 50;
+  const MAX_TAGS = 50;
+  const MAX_GREETING = 300;
+
   const handleAddTag = useCallback(
     (rawValue?: string) => {
       const cleaned = (rawValue ?? tags).trim().replace(/,$/, "");
@@ -186,12 +191,13 @@ export function CharacterDetailPage({ isNew = true, initialData }: CharacterDeta
                 <div className="flex flex-col justify-center items-start gap-2">
                   <Input
                     value={name}
-                    onChange={(e) => setName(e.target.value)}
+                    onChange={(e) => setName(e.target.value.slice(0, MAX_NAME))}
+                    maxLength={MAX_NAME}
                     placeholder="예) 한하루"
                     className="h-12 rounded-md border border-slate-200 bg-white px-3 py-2 text-sm text-on-surface-10 placeholder:text-on-surface-30 focus:outline-none focus:ring-2 focus:ring-primary shadow-none"
                   />
                   <div className="w-full inline-flex justify-end items-center gap-2">
-                    <div className="text-right text-on-surface-30 text-xs font-normal leading-4">0/30</div>
+                    <div className="text-right text-on-surface-30 text-xs font-normal leading-4 tabular-nums">{name.length}/{MAX_NAME}</div>
                   </div>
                 </div>
               </section>
@@ -207,12 +213,13 @@ export function CharacterDetailPage({ isNew = true, initialData }: CharacterDeta
                 <div className="flex flex-col justify-center items-start gap-2">
                   <Input
                     value={summary}
-                    onChange={(e) => setSummary(e.target.value)}
+                    onChange={(e) => setSummary(e.target.value.slice(0, MAX_SUMMARY))}
+                    maxLength={MAX_SUMMARY}
                     placeholder="예) 사람의 소리를 볼 수 있는 소리 수집가 소년"
                     className="h-12 rounded-md border border-slate-200 bg-white px-3 py-2 text-sm text-on-surface-10 placeholder:text-on-surface-30 focus:outline-none focus:ring-2 focus:ring-primary"
                   />
                   <div className="w-full inline-flex justify-end items-center gap-2">
-                    <div className="text-right text-on-surface-30 text-xs font-normal leading-4">0/50</div>
+                    <div className="text-right text-on-surface-30 text-xs font-normal leading-4 tabular-nums">{summary.length}/{MAX_SUMMARY}</div>
                   </div>
                 </div>
               </section>
@@ -316,7 +323,8 @@ export function CharacterDetailPage({ isNew = true, initialData }: CharacterDeta
                 <div className="flex flex-col justify-center items-start gap-2">
                   <Input
                     value={tags}
-                    onChange={(e) => setTags(e.target.value)}
+                    onChange={(e) => setTags(e.target.value.slice(0, MAX_TAGS))}
+                    maxLength={MAX_TAGS}
                     onCompositionStart={() => setIsComposingTag(true)}
                     onCompositionEnd={() => setIsComposingTag(false)}
                     onKeyDown={(e) => {
@@ -348,8 +356,8 @@ export function CharacterDetailPage({ isNew = true, initialData }: CharacterDeta
                         ))}
                       </div>
                     )}
-                    <div className="w-fit text-right text-on-surface-30 text-xs font-normal leading-4">
-                      {(tags || tagList.join(", ")).length}/50
+                    <div className="w-fit text-right text-on-surface-30 text-xs font-normal leading-4 tabular-nums">
+                      {tags.length}/{MAX_TAGS}
                     </div>
                   </div>
                 </div>
@@ -367,12 +375,13 @@ export function CharacterDetailPage({ isNew = true, initialData }: CharacterDeta
                   <Textarea
                     rows={5}
                     value={greeting}
-                    onChange={(e) => setGreeting(e.target.value)}
+                    onChange={(e) => setGreeting(e.target.value.slice(0, MAX_GREETING))}
+                    maxLength={MAX_GREETING}
                     placeholder="예) 안녕, 오늘도 사진 찍으러 나갈 준비됐지?"
                     className="resize-y rounded-md border border-slate-200 bg-white px-3 py-2 text-sm text-on-surface-10 placeholder:text-on-surface-30 focus:outline-none focus:ring-2 focus:ring-primary w-full min-h-[80px]"
                   />
                   <div className="w-full inline-flex justify-end items-center gap-2">
-                    <div className="text-right text-on-surface-30 text-xs font-normal leading-4">0/300</div>
+                    <div className="text-right text-on-surface-30 text-xs font-normal leading-4 tabular-nums">{greeting.length}/{MAX_GREETING}</div>
                   </div>
                 </div>
               </section>

@@ -4,7 +4,6 @@ import React, { useState, useCallback, useRef, useEffect } from "react";
 import { useRouter, useParams } from "next/navigation";
 import { ChevronLeft, Play } from "lucide-react";
 import Header from "@/components/Header/Header";
-import AppSidebar from "@/components/AppSidebar/AppSidebar";
 import { PageCard } from "@/components/layout/PageCard";
 import { Button } from "@/components/ui/button";
 import { Title1 } from "@/components/ui/title1";
@@ -259,7 +258,6 @@ export default function SeriesEditPage() {
     <div className="flex flex-col h-screen w-full bg-white overflow-hidden">
       <Header profileImageUrl={profileImageUrl} onProfileImageChange={setProfileImageUrl} />
       <div className="flex flex-1 overflow-hidden bg-slate-50">
-        <AppSidebar defaultActiveId="series" />
         <div className="flex min-w-0 flex-1 flex-col overflow-hidden">
           <main className="flex flex-1 flex-col overflow-hidden bg-slate-50">
             {/* 레이아웃 가이드: margin 40, max-width 1200, min-width 640 */}
