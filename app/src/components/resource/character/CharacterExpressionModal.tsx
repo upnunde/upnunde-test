@@ -45,6 +45,10 @@ export interface CharacterExpressionModalProps {
   showSlotList?: boolean;
   /** 표정 라벨/설명/인풋 섹션 노출 여부. false면 이미지 크롭만 사용 (시리즈 대표이미지·로고 등). */
   showExpressionSection?: boolean;
+  /** 크롭 비율: 기본은 9:16, 캐릭터 정면 등은 square */
+  cropAspect?: "square" | "9/16";
+  /** 크롭 가이드(딤드 오버레이) 노출 여부 */
+  showCropGuide?: boolean;
 }
 
 function createEmptySlot(index: number): CharacterExpressionSlot {
@@ -66,6 +70,8 @@ export function CharacterExpressionModal({
   onSave,
   showSlotList = true,
   showExpressionSection = true,
+  cropAspect = "9/16",
+  showCropGuide = showExpressionSection,
 }: CharacterExpressionModalProps) {
   // 레이아웃용 showSlotList는 모달이 열린 동안 고정하여,
   // 부모에서 prop이 변경되더라도 폭이 순간적으로 바뀌지 않도록 한다.
@@ -261,11 +267,11 @@ export function CharacterExpressionModal({
             }`}
             style={layoutShowSlotList ? { width: "fit-content" } : undefined}
           >
-            {/* 크롭 영역: 9:16 고정 비율 박스 */}
+            {/* 크롭 영역: 비율에 따라 9:16 또는 1:1 */}
             <div
               className={`h-[400px] ${
                 layoutShowSlotList ? "w-[320px]" : "w-[400px]"
-              } aspect-[9/16] relative rounded-md overflow-hidden bg-[repeating-conic-gradient(#e2e8f0_0%_25%,#f1f5f9_0%_50%)] bg-[length:12px_12px] flex items-center justify-center`}
+              } ${cropAspect === "square" ? "aspect-square" : "aspect-[9/16]"} relative rounded-md overflow-hidden bg-[repeating-conic-gradient(#e2e8f0_0%_25%,#f1f5f9_0%_50%)] bg-[length:12px_12px] flex items-center justify-center`}
               onPointerDown={handleCropPointerDown}
               onPointerMove={handleCropPointerMove}
               onPointerUp={handleCropPointerUp}
@@ -290,15 +296,17 @@ export function CharacterExpressionModal({
                       className="max-w-none max-h-full w-auto h-full object-cover"
                     />
                   </div>
-                  <div className="absolute inset-0 flex items-center justify-center pointer-events-none" aria-hidden>
-                    {/* 9:16 crop guide: inside is transparent, outside is dimmed via huge box-shadow */}
-                    <div className="h-full aspect-[9/16] rounded-sm relative shadow-[0_0_0_9999px_rgba(0,0,0,0.7)] outline outline-1 outline-offset-[-1px] outline-slate-200/85">
-                      <div className="absolute left-0 top-0 w-3 h-3 border-l border-t border-slate-200/85" />
-                      <div className="absolute right-0 top-0 w-3 h-3 border-r border-t border-slate-200/85" />
-                      <div className="absolute left-0 bottom-0 w-3 h-3 border-l border-b border-slate-200/85" />
-                      <div className="absolute right-0 bottom-0 w-3 h-3 border-r border-b border-slate-200/85" />
+                  {showCropGuide && cropAspect === "9/16" && (
+                    <div className="absolute inset-0 flex items-center justify-center pointer-events-none" aria-hidden>
+                      {/* 9:16 crop guide: inside is transparent, outside is dimmed via huge box-shadow */}
+                      <div className="h-full aspect-[9/16] rounded-sm relative shadow-[0_0_0_9999px_rgba(0,0,0,0.7)] outline outline-1 outline-offset-[-1px] outline-slate-200/85">
+                        <div className="absolute left-0 top-0 w-3 h-3 border-l border-t border-slate-200/85" />
+                        <div className="absolute right-0 top-0 w-3 h-3 border-r border-t border-slate-200/85" />
+                        <div className="absolute left-0 bottom-0 w-3 h-3 border-l border-b border-slate-200/85" />
+                        <div className="absolute right-0 bottom-0 w-3 h-3 border-r border-b border-slate-200/85" />
+                      </div>
                     </div>
-                  </div>
+                  )}
                   <div className="absolute inset-0 outline outline-[1.54px] outline-offset-[-1.54px] outline-slate-200 pointer-events-none rounded-md" aria-hidden />
                 </>
               ) : (
@@ -506,7 +514,39 @@ export function CharacterExpressionMultiModal(props: Omit<CharacterExpressionMod
   return <CharacterExpressionModal {...props} showSlotList />;
 }
 
-/** 이미지 크롭 전용: 표정 라벨/인풋 없이 크롭·줌만 (시리즈 대표이미지·로고 등) */
-export function ImageCropOnlyModal(props: Omit<CharacterExpressionModalProps, "showSlotList" | "showExpressionSection">) {
-  return <CharacterExpressionModal {...props} showSlotList={false} showExpressionSection={false} />;
+/** 이미지 크롭 전용 (1:1): 표정 라벨/인풋 없이 크롭·줌만 – 캐릭터 정면 등 */
+export function ImageCropSquareModal(
+  props: Omit<CharacterExpressionModalProps, "showSlotList" | "showExpressionSection" | "cropAspect" | "showCropGuide">,
+) {
+  return (
+    <CharacterExpressionModal
+      {...props}
+      showSlotList={false}
+      showExpressionSection={false}
+      cropAspect="square"
+      showCropGuide={false}
+    />
+  );
+}
+
+/** 이미지 크롭 전용 (9:16): 표정 라벨/인풋 없이 크롭·줌만 – 썸네일/연출장면 등 */
+export function ImageCropPosterModal(
+  props: Omit<CharacterExpressionModalProps, "showSlotList" | "showExpressionSection" | "cropAspect" | "showCropGuide">,
+) {
+  return (
+    <CharacterExpressionModal
+      {...props}
+      showSlotList={false}
+      showExpressionSection={false}
+      cropAspect="9/16"
+      showCropGuide
+    />
+  );
+}
+
+/** 기존 이름 유지: 기본은 9:16 포스터용으로 동작 */
+export function ImageCropOnlyModal(
+  props: Omit<CharacterExpressionModalProps, "showSlotList" | "showExpressionSection" | "cropAspect" | "showCropGuide">,
+) {
+  return <ImageCropPosterModal {...props} />;
 }

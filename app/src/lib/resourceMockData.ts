@@ -121,6 +121,38 @@ const CHARACTER_LIST: CharacterResource[] = MOCK_HAS_RESOURCES
         tags: "예술, 꿈, 감성",
         greeting: "이 풍경, 한 번 담아볼까.",
       },
+      {
+        id: "5",
+        name: "등장인물5",
+        imageUrl: "/character-5.png",
+        summary: "차분하고 신비로운 분위기의 청년",
+        tags: "차분함, 미스터리, 음악",
+        greeting: ".... 신경 쓰지 마, 난 그냥 보고 있을 뿐이야.",
+      },
+      {
+        id: "6",
+        name: "등장인물6",
+        imageUrl: "/character-6.png",
+        summary: "냉철한 카리스마를 가진 엘리트",
+        tags: "엘리트, 카리스마, 냉정",
+        greeting: "이 정도 일로 흔들리면, 여기까지 오지도 못했겠지.",
+      },
+      {
+        id: "7",
+        name: "등장인물7",
+        imageUrl: "/character-7.png",
+        summary: "밝고 다정한 분위기의 친구",
+        tags: "다정함, 친구, 긍정",
+        greeting: "왔어? 오늘도 재밌는 하루로 만들어 보자.",
+      },
+      {
+        id: "8",
+        name: "등장인물8",
+        imageUrl: "/character-8.png",
+        summary: "도시적인 이미지의 프로페셔널 커리어우먼",
+        tags: "커리어우먼, 냉철, 프로",
+        greeting: "반가워요. 오늘 협의할 안건부터 정리해 볼까요?",
+      },
     ]
   : [];
 

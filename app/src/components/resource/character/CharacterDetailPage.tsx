@@ -10,6 +10,7 @@ import { AddResourceSlot } from "@/components/resource/cards/AddResourceSlot";
 import {
   CharacterExpressionMultiModal,
   CharacterExpressionSingleModal,
+  ImageCropSquareModal,
 } from "@/components/resource/character/CharacterExpressionModal";
 import { Title1 } from "@/components/ui/title1";
 import { Title2 } from "@/components/ui/title2";
@@ -33,6 +34,9 @@ export function CharacterDetailPage({ isNew = true, initialData }: CharacterDeta
   const [tagList, setTagList] = useState<string[]>([]);
   const [greeting, setGreeting] = useState("");
   const [thumbnailUrl, setThumbnailUrl] = useState<string | null>(null);
+  const [thumbnailModalOpen, setThumbnailModalOpen] = useState(false);
+  const [thumbnailModalInitialSlots, setThumbnailModalInitialSlots] = useState<CharacterExpressionSlot[] | null>(null);
+  const [pendingThumbnailUrl, setPendingThumbnailUrl] = useState<string | null>(null);
   const [expressionSlots, setExpressionSlots] = useState<CharacterExpressionSlot[]>([]);
   const [expressionModalOpen, setExpressionModalOpen] = useState(false);
   /** 추가하기 → 파일 선택 후 이 슬롯으로 모달을 연다 */
@@ -65,8 +69,11 @@ export function CharacterDetailPage({ isNew = true, initialData }: CharacterDeta
       if (thumbnailUrl && thumbnailUrl.startsWith("blob:")) {
         URL.revokeObjectURL(thumbnailUrl);
       }
+      if (pendingThumbnailUrl && pendingThumbnailUrl.startsWith("blob:")) {
+        URL.revokeObjectURL(pendingThumbnailUrl);
+      }
     };
-  }, [thumbnailUrl]);
+  }, [thumbnailUrl, pendingThumbnailUrl]);
 
   const handleBack = useCallback(() => {
     router.push(`/series/${seriesId}/resources`);
@@ -90,8 +97,15 @@ export function CharacterDetailPage({ isNew = true, initialData }: CharacterDeta
   }, []);
 
   const handleThumbnailAddClick = useCallback(() => {
+    if (thumbnailUrl) {
+      setThumbnailModalInitialSlots([
+        { id: "character-thumbnail", expressionLabel: "", imageUrl: thumbnailUrl },
+      ]);
+      setThumbnailModalOpen(true);
+      return;
+    }
     thumbnailFileInputRef.current?.click();
-  }, []);
+  }, [thumbnailUrl]);
 
   const handleThumbnailFileChange = useCallback((e: React.ChangeEvent<HTMLInputElement>) => {
     const file = (e.target.files ?? [])[0];
@@ -99,10 +113,14 @@ export function CharacterDetailPage({ isNew = true, initialData }: CharacterDeta
     if (!file || !file.type.startsWith("image/")) return;
 
     const objectUrl = URL.createObjectURL(file);
-    setThumbnailUrl((prev) => {
+    setPendingThumbnailUrl((prev) => {
       if (prev && prev.startsWith("blob:")) URL.revokeObjectURL(prev);
       return objectUrl;
     });
+    setThumbnailModalInitialSlots([
+      { id: "character-thumbnail", expressionLabel: "", imageUrl: objectUrl },
+    ]);
+    setThumbnailModalOpen(true);
   }, []);
 
   const [isComposingTag, setIsComposingTag] = useState(false);
@@ -424,6 +442,36 @@ export function CharacterDetailPage({ isNew = true, initialData }: CharacterDeta
         className="sr-only"
         aria-label="대표 썸네일 이미지 선택"
         onChange={handleThumbnailFileChange}
+      />
+      <ImageCropSquareModal
+        open={thumbnailModalOpen}
+        onClose={() => {
+          setThumbnailModalOpen(false);
+          setThumbnailModalInitialSlots(null);
+          setPendingThumbnailUrl((prev) => {
+            if (prev && prev.startsWith("blob:")) URL.revokeObjectURL(prev);
+            return null;
+          });
+        }}
+        initialSlots={thumbnailModalInitialSlots ?? []}
+        onSave={(slots) => {
+          const saved = slots[0];
+          if (saved?.imageUrl) {
+            setThumbnailUrl((prev) => {
+              // 모달 저장 결과로 교체되므로 기존 blob URL 정리
+              if (prev && prev.startsWith("blob:") && prev !== saved.imageUrl) {
+                URL.revokeObjectURL(prev);
+              }
+              return saved.imageUrl ?? null;
+            });
+          }
+          setThumbnailModalOpen(false);
+          setThumbnailModalInitialSlots(null);
+          setPendingThumbnailUrl((prev) => {
+            if (prev && prev.startsWith("blob:") && prev !== saved?.imageUrl) URL.revokeObjectURL(prev);
+            return null;
+          });
+        }}
       />
       {editingExpressionSlotId ? (
         <CharacterExpressionSingleModal

@@ -9,6 +9,7 @@ import { Textarea } from "@/components/ui/textarea";
 import { AddResourceSlot } from "@/components/resource/cards/AddResourceSlot";
 import { Title1 } from "@/components/ui/title1";
 import { Title2 } from "@/components/ui/title2";
+import { ImageCropPosterModal } from "@/components/resource/character/CharacterExpressionModal";
 import type { ImageResource, MediaResource } from "@/types/resource";
 
 export type ImageResourceKind = "background" | "scene" | "media" | "gallery";
@@ -87,6 +88,10 @@ export function ImageResourceDetailPage({ kind, initialData }: ImageResourceDeta
   const [name, setName] = useState("");
   const [description, setDescription] = useState("");
   const [thumbnailUrl, setThumbnailUrl] = useState("");
+  const [thumbnailModalOpen, setThumbnailModalOpen] = useState(false);
+  const [thumbnailModalInitialSlots, setThumbnailModalInitialSlots] =
+    useState<{ id: string; expressionLabel: string; imageUrl?: string }[] | null>(null);
+  const [pendingThumbnailUrl, setPendingThumbnailUrl] = useState<string | null>(null);
   const [sceneAiMode, setSceneAiMode] = useState<"apply" | "none">("apply");
   const thumbnailFileInputRef = useRef<HTMLInputElement | null>(null);
 
@@ -103,8 +108,11 @@ export function ImageResourceDetailPage({ kind, initialData }: ImageResourceDeta
       if (thumbnailUrl && thumbnailUrl.startsWith("blob:")) {
         URL.revokeObjectURL(thumbnailUrl);
       }
+      if (pendingThumbnailUrl && pendingThumbnailUrl.startsWith("blob:")) {
+        URL.revokeObjectURL(pendingThumbnailUrl);
+      }
     };
-  }, [thumbnailUrl]);
+  }, [thumbnailUrl, pendingThumbnailUrl]);
 
   const handleBack = useCallback(() => {
     router.push(`/series/${seriesId}/resources`);
@@ -116,8 +124,15 @@ export function ImageResourceDetailPage({ kind, initialData }: ImageResourceDeta
   }, [router, seriesId]);
 
   const handleThumbnailClick = useCallback(() => {
+    if (thumbnailUrl) {
+      setThumbnailModalInitialSlots([
+        { id: "image-thumbnail", expressionLabel: "", imageUrl: thumbnailUrl },
+      ]);
+      setThumbnailModalOpen(true);
+      return;
+    }
     thumbnailFileInputRef.current?.click();
-  }, []);
+  }, [thumbnailUrl]);
 
   const handleThumbnailFileChange = useCallback(
     (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -126,12 +141,16 @@ export function ImageResourceDetailPage({ kind, initialData }: ImageResourceDeta
       if (!file || !file.type.startsWith("image/")) return;
 
       const objectUrl = URL.createObjectURL(file);
-      setThumbnailUrl((prev) => {
+      setPendingThumbnailUrl((prev) => {
         if (prev && prev.startsWith("blob:")) {
           URL.revokeObjectURL(prev);
         }
         return objectUrl;
       });
+      setThumbnailModalInitialSlots([
+        { id: "image-thumbnail", expressionLabel: "", imageUrl: objectUrl },
+      ]);
+      setThumbnailModalOpen(true);
     },
     [],
   );
@@ -314,6 +333,39 @@ export function ImageResourceDetailPage({ kind, initialData }: ImageResourceDeta
         className="sr-only"
         aria-label="대표 썸네일 이미지 선택"
         onChange={handleThumbnailFileChange}
+      />
+      <ImageCropPosterModal
+        open={thumbnailModalOpen}
+        onClose={() => {
+          setThumbnailModalOpen(false);
+          setThumbnailModalInitialSlots(null);
+          setPendingThumbnailUrl((prev) => {
+            if (prev && prev.startsWith("blob:")) {
+              URL.revokeObjectURL(prev);
+            }
+            return null;
+          });
+        }}
+        initialSlots={thumbnailModalInitialSlots ?? []}
+        onSave={(slots) => {
+          const saved = slots[0];
+          if (saved?.imageUrl) {
+            setThumbnailUrl((prev) => {
+              if (prev && prev.startsWith("blob:") && prev !== saved.imageUrl) {
+                URL.revokeObjectURL(prev);
+              }
+              return saved.imageUrl ?? "";
+            });
+          }
+          setThumbnailModalOpen(false);
+          setThumbnailModalInitialSlots(null);
+          setPendingThumbnailUrl((prev) => {
+            if (prev && prev.startsWith("blob:") && prev !== saved?.imageUrl) {
+              URL.revokeObjectURL(prev);
+            }
+            return null;
+          });
+        }}
       />
     </main>
   );

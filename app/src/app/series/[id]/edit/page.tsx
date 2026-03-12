@@ -2,7 +2,7 @@
 
 import React, { useState, useCallback, useRef, useEffect } from "react";
 import { useRouter, useParams } from "next/navigation";
-import { ChevronLeft, Play } from "lucide-react";
+import { ChevronLeft } from "lucide-react";
 import Header from "@/components/Header/Header";
 import { PageCard } from "@/components/layout/PageCard";
 import { Button } from "@/components/ui/button";
@@ -298,8 +298,8 @@ export default function SeriesEditPage() {
               </div>
             </header>
 
-            <div className="flex-1 overflow-y-auto flex flex-col items-center py-8 gap-3 px-5">
-              <div className="w-full max-w-[1200px] mx-auto flex gap-10">
+            <div className="flex-1 overflow-y-auto flex flex-col items-center py-8 gap-3 px-10">
+              <div className="w-full max-w-[1200px] mx-auto flex gap-5">
                 <div className="flex-1 min-w-0">
                   <PageCard className="h-fit rounded-2xl flex flex-col shrink-0 overflow-hidden px-0 pt-0 pb-0">
                     <div className="self-stretch px-5 pt-0 pb-0 mt-2 mb-2 border-b border-border-10 inline-flex flex-col justify-start items-start gap-2.5">
@@ -350,17 +350,54 @@ export default function SeriesEditPage() {
                                 }
                               }}
                               className={cn(
-                                "mt-2 flex w-[90px] h-[160px] cursor-pointer items-center justify-center rounded-lg border border-dashed bg-white overflow-hidden",
+                                "mt-2 flex w-[90px] h-[160px] cursor-pointer items-center justify-center rounded-lg border border-dashed bg-white overflow-hidden relative group",
                                 fieldErrors.cover ? "border-destructive" : "border-border-20"
                               )}
                             >
                               {coverPreviewUrl ? (
-                                <img
-                                  key={coverPreviewUrl}
-                                  src={coverPreviewUrl}
-                                  alt="대표이미지 미리보기"
-                                  className="w-full h-full object-cover"
-                                />
+                                <>
+                                  <img
+                                    key={coverPreviewUrl}
+                                    src={coverPreviewUrl}
+                                    alt="대표이미지 미리보기"
+                                    className="w-full h-full object-cover"
+                                  />
+                                  <button
+                                    type="button"
+                                    aria-label="대표이미지 삭제"
+                                    onClick={(e) => {
+                                      e.preventDefault();
+                                      e.stopPropagation();
+                                      setCoverPreviewUrl((prev) => {
+                                        if (prev && prev.startsWith("blob:")) {
+                                          URL.revokeObjectURL(prev);
+                                        }
+                                        return null;
+                                      });
+                                      setHasCoverImage(false);
+                                    }}
+                                    className="hidden group-hover:inline-flex absolute top-1 right-1 w-8 h-8 rounded-full bg-surface-10 text-on-surface-10 hover:bg-slate-100 items-center justify-center cursor-pointer shadow-sm"
+                                  >
+                                    <svg
+                                      xmlns="http://www.w3.org/2000/svg"
+                                      width="16"
+                                      height="16"
+                                      viewBox="0 0 24 24"
+                                      fill="none"
+                                      stroke="currentColor"
+                                      strokeWidth="2"
+                                      strokeLinecap="round"
+                                      strokeLinejoin="round"
+                                      aria-hidden="true"
+                                    >
+                                      <path d="M3 6h18" />
+                                      <path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6" />
+                                      <path d="M8 6V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2" />
+                                      <line x1="10" y1="11" x2="10" y2="17" />
+                                      <line x1="14" y1="11" x2="14" y2="17" />
+                                    </svg>
+                                  </button>
+                                </>
                               ) : (
                                 <div className="w-6 h-6 relative flex items-center justify-center text-on-surface-10">
                                   <svg
@@ -421,17 +458,54 @@ export default function SeriesEditPage() {
                                 }
                               }}
                               className={cn(
-                                "mt-2 flex w-[90px] h-[160px] cursor-pointer items-center justify-center rounded-lg border border-dashed bg-white overflow-hidden",
+                                "mt-2 flex w-[90px] h-[160px] cursor-pointer items-center justify-center rounded-lg border border-dashed bg-white overflow-hidden relative group",
                                 fieldErrors.logo ? "border-destructive" : "border-border-20"
                               )}
                             >
                               {logoPreviewUrl ? (
-                                <img
-                                  key={logoPreviewUrl}
-                                  src={logoPreviewUrl}
-                                  alt="로고 미리보기"
-                                  className="w-full h-full object-cover"
-                                />
+                                <>
+                                  <img
+                                    key={logoPreviewUrl}
+                                    src={logoPreviewUrl}
+                                    alt="로고 미리보기"
+                                    className="w-full h-full object-contain bg-slate-900/10"
+                                  />
+                                  <button
+                                    type="button"
+                                    aria-label="로고 삭제"
+                                    onClick={(e) => {
+                                      e.preventDefault();
+                                      e.stopPropagation();
+                                      setLogoPreviewUrl((prev) => {
+                                        if (prev && prev.startsWith("blob:")) {
+                                          URL.revokeObjectURL(prev);
+                                        }
+                                        return null;
+                                      });
+                                      setHasLogoImage(false);
+                                    }}
+                                    className="hidden group-hover:inline-flex absolute top-1 right-1 w-8 h-8 rounded-full bg-surface-10 text-on-surface-10 hover:bg-slate-100 items-center justify-center cursor-pointer shadow-sm"
+                                  >
+                                    <svg
+                                      xmlns="http://www.w3.org/2000/svg"
+                                      width="16"
+                                      height="16"
+                                      viewBox="0 0 24 24"
+                                      fill="none"
+                                      stroke="currentColor"
+                                      strokeWidth="2"
+                                      strokeLinecap="round"
+                                      strokeLinejoin="round"
+                                      aria-hidden="true"
+                                    >
+                                      <path d="M3 6h18" />
+                                      <path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6" />
+                                      <path d="M8 6V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2" />
+                                      <line x1="10" y1="11" x2="10" y2="17" />
+                                      <line x1="14" y1="11" x2="14" y2="17" />
+                                    </svg>
+                                  </button>
+                                </>
                               ) : (
                                 <div className="w-6 h-6 relative flex items-center justify-center text-on-surface-10">
                                   <svg
@@ -716,17 +790,17 @@ export default function SeriesEditPage() {
                 <div className="w-[300px] shrink-0 flex flex-col gap-3">
                   <p className="text-base font-semibold text-slate-700">미리보기</p>
                   <div className="w-full flex justify-center">
-                    <div className="w-[300px] h-[652px] relative bg-slate-100 rounded-[2rem] outline outline-8 outline-slate-800 overflow-hidden flex flex-col">
-                      <div className="flex-1 min-h-0 flex flex-col justify-end items-center pb-4 bg-slate-300 relative">
-                        {coverPreviewUrl ? (
+                    <div className="w-[300px] aspect-[9/16] relative bg-transparent rounded-[2rem] outline outline-8 outline-slate-800 overflow-hidden flex flex-col">
+                      <div className="relative w-full flex-1">
+                        {coverPreviewUrl || logoPreviewUrl ? (
                           <>
                             <img
-                              key={coverPreviewUrl}
-                              src={coverPreviewUrl}
+                              key={coverPreviewUrl || logoPreviewUrl}
+                              src={coverPreviewUrl || logoPreviewUrl!}
                               alt="시리즈 대표이미지 미리보기"
-                              className="absolute inset-0 w-full h-full object-cover object-center"
+                              className="block w-full h-full object-cover object-center bg-slate-900/50"
                             />
-                            {logoPreviewUrl && (
+                            {coverPreviewUrl && logoPreviewUrl && (
                               <img
                                 key={logoPreviewUrl}
                                 src={logoPreviewUrl}
@@ -734,25 +808,8 @@ export default function SeriesEditPage() {
                                 className="absolute inset-0 w-full h-full object-contain z-10 pointer-events-none"
                               />
                             )}
-                            <div className="relative z-20 w-full flex justify-center">
-                              <button
-                                type="button"
-                                className="flex items-center justify-center gap-2 rounded-md bg-slate-900 px-4 py-2.5 text-sm font-medium text-white hover:bg-slate-800 transition-colors"
-                              >
-                                <Play className="w-4 h-4" aria-hidden />
-                                지금 플레이
-                              </button>
-                            </div>
                           </>
-                        ) : (
-                          <button
-                            type="button"
-                            className="flex items-center justify-center gap-2 rounded-md bg-slate-900 px-4 py-2.5 text-sm font-medium text-white hover:bg-slate-800 transition-colors"
-                          >
-                            <Play className="w-4 h-4" aria-hidden />
-                            지금 플레이
-                          </button>
-                        )}
+                        ) : null}
                       </div>
                     </div>
                   </div>

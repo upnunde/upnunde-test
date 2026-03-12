@@ -466,9 +466,13 @@ export function ScriptBlock({
             <DropdownMenuTrigger asChild>
               <button
                 type="button"
-                className="inline-flex items-center justify-center gap-0 h-7 min-w-0 p-0 m-0 text-[13px] text-on-surface-30 font-medium rounded-md border-0 outline-none shadow-none hover:bg-accent hover:text-accent-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring/50 focus-visible:ring-offset-0"
+                className="inline-flex items-center justify-center gap-0 h-7 max-w-[64px] min-w-0 p-0 m-0 text-[13px] text-on-surface-30 font-medium rounded-md border-0 outline-none shadow-none hover:bg-accent hover:text-accent-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring/50 focus-visible:ring-offset-0 overflow-hidden"
               >
-                {currentSpeaker}
+                <span className="min-w-0 whitespace-nowrap">
+                  {currentSpeaker.length > 3
+                    ? `${currentSpeaker.slice(0, 3)}..`
+                    : currentSpeaker}
+                </span>
                 <ChevronDown className="ml-1 w-3 h-3 shrink-0" />
               </button>
             </DropdownMenuTrigger>

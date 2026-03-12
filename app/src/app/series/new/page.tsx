@@ -4,11 +4,12 @@ import React, { useState, useCallback, useRef, useEffect } from "react";
 import { useRouter } from "next/navigation";
 import { ChevronLeft, Play } from "lucide-react";
 import Header from "@/components/Header/Header";
-import AppSidebar from "@/components/AppSidebar/AppSidebar";
 import { PageCard } from "@/components/layout/PageCard";
 import { Button } from "@/components/ui/button";
 import { Title1 } from "@/components/ui/title1";
 import { cn } from "@/lib/utils";
+import { ImageCropOnlyModal } from "@/components/resource/character/CharacterExpressionModal";
+import type { CharacterExpressionSlot } from "@/types/resource";
 
 type SeriesCreateTab = "image" | "info" | "worldview";
 
@@ -28,6 +29,9 @@ export default function SeriesNewPage() {
 
   const [coverPreviewUrl, setCoverPreviewUrl] = useState<string | null>(null);
   const [logoPreviewUrl, setLogoPreviewUrl] = useState<string | null>(null);
+  /** 파일 선택 직후 모달에만 넘기고, 저장하기 전까지 썸네일에 반영하지 않을 URL */
+  const [pendingCoverUrl, setPendingCoverUrl] = useState<string | null>(null);
+  const [pendingLogoUrl, setPendingLogoUrl] = useState<string | null>(null);
 
   const [fieldErrors, setFieldErrors] = useState({
     cover: false,
@@ -40,8 +44,13 @@ export default function SeriesNewPage() {
     persona: false,
   });
 
+  const [expressionModalOpen, setExpressionModalOpen] = useState(false);
+  const [expressionModalMode, setExpressionModalMode] = useState<"cover" | "logo">("cover");
+
   const coverRef = useRef<HTMLLabelElement | null>(null);
   const logoRef = useRef<HTMLLabelElement | null>(null);
+  const coverFileInputRef = useRef<HTMLInputElement | null>(null);
+  const logoFileInputRef = useRef<HTMLInputElement | null>(null);
   const titleRef = useRef<HTMLInputElement | null>(null);
   const summaryRef = useRef<HTMLTextAreaElement | null>(null);
   const keywordsRef = useRef<HTMLInputElement | null>(null);
@@ -68,8 +77,14 @@ export default function SeriesNewPage() {
       if (logoPreviewUrl) {
         URL.revokeObjectURL(logoPreviewUrl);
       }
+      if (pendingCoverUrl) {
+        URL.revokeObjectURL(pendingCoverUrl);
+      }
+      if (pendingLogoUrl) {
+        URL.revokeObjectURL(pendingLogoUrl);
+      }
     };
-  }, [coverPreviewUrl, logoPreviewUrl]);
+  }, [coverPreviewUrl, logoPreviewUrl, pendingCoverUrl, pendingLogoUrl]);
 
   const isFormValid =
     hasCoverImage &&
@@ -91,6 +106,99 @@ export default function SeriesNewPage() {
       ref.current?.focus?.();
     }, 0);
   };
+
+  const openExpressionModalForCover = useCallback((e: React.MouseEvent) => {
+    e.preventDefault();
+    if (coverPreviewUrl) {
+      setExpressionModalMode("cover");
+      setExpressionModalOpen(true);
+    } else {
+      coverFileInputRef.current?.click();
+    }
+  }, [coverPreviewUrl]);
+
+  const openExpressionModalForLogo = useCallback((e: React.MouseEvent) => {
+    e.preventDefault();
+    if (logoPreviewUrl) {
+      setExpressionModalMode("logo");
+      setExpressionModalOpen(true);
+    } else {
+      logoFileInputRef.current?.click();
+    }
+  }, [logoPreviewUrl]);
+
+  const getExpressionModalInitialSlots = useCallback((): CharacterExpressionSlot[] => {
+    if (expressionModalMode === "cover") {
+      const url = pendingCoverUrl ?? coverPreviewUrl;
+      if (url) {
+        return [{ id: "series-cover-new", expressionLabel: "", imageUrl: url }];
+      }
+    }
+    if (expressionModalMode === "logo") {
+      const url = pendingLogoUrl ?? logoPreviewUrl;
+      if (url) {
+        return [{ id: "series-logo-new", expressionLabel: "", imageUrl: url }];
+      }
+    }
+    return [];
+  }, [expressionModalMode, pendingCoverUrl, pendingLogoUrl, coverPreviewUrl, logoPreviewUrl]);
+
+  const handleExpressionModalSave = useCallback(
+    (slots: CharacterExpressionSlot[]) => {
+      const slot = slots[0];
+      if (!slot?.imageUrl) return;
+      const sourceUrl = slot.imageUrl;
+      const isCover = expressionModalMode === "cover";
+
+      const applyUrl = (url: string) => {
+        if (isCover) {
+          setCoverPreviewUrl((prev) => {
+            if (prev && prev !== url) URL.revokeObjectURL(prev);
+            return url;
+          });
+          setPendingCoverUrl(null);
+          setHasCoverImage(true);
+          setFieldErrors((prev) => ({ ...prev, cover: false }));
+        } else {
+          setLogoPreviewUrl((prev) => {
+            if (prev && prev !== url) URL.revokeObjectURL(prev);
+            return url;
+          });
+          setPendingLogoUrl(null);
+          setHasLogoImage(true);
+          setFieldErrors((prev) => ({ ...prev, logo: false }));
+        }
+        setExpressionModalOpen(false);
+      };
+
+      if (sourceUrl.startsWith("blob:")) {
+        fetch(sourceUrl)
+          .then((res) => res.blob())
+          .then((blob) => {
+            const ownedUrl = URL.createObjectURL(blob);
+            applyUrl(ownedUrl);
+          })
+          .catch(() => {
+            applyUrl(sourceUrl);
+          });
+      } else {
+        applyUrl(sourceUrl);
+      }
+    },
+    [expressionModalMode]
+  );
+
+  const handleExpressionModalClose = useCallback(() => {
+    if (pendingCoverUrl) {
+      URL.revokeObjectURL(pendingCoverUrl);
+      setPendingCoverUrl(null);
+    }
+    if (pendingLogoUrl) {
+      URL.revokeObjectURL(pendingLogoUrl);
+      setPendingLogoUrl(null);
+    }
+    setExpressionModalOpen(false);
+  }, [pendingCoverUrl, pendingLogoUrl]);
 
   const handleSubmit = () => {
     const errors = {
@@ -148,7 +256,6 @@ export default function SeriesNewPage() {
     <div className="flex flex-col h-screen w-full bg-white overflow-hidden">
       <Header profileImageUrl={profileImageUrl} onProfileImageChange={setProfileImageUrl} />
       <div className="flex flex-1 overflow-hidden bg-slate-50">
-        <AppSidebar defaultActiveId="series" />
         <div className="flex min-w-0 flex-1 flex-col overflow-hidden">
           <main className="flex flex-1 flex-col overflow-hidden bg-slate-50">
             {/* Sub Header (레이아웃 가이드: margin 40, max-width 1200, min-width 640) */}
@@ -190,7 +297,7 @@ export default function SeriesNewPage() {
             </header>
 
             <div className="flex-1 overflow-y-auto flex flex-col items-center py-8 gap-3 px-5">
-              <div className="w-full max-w-[1200px] mx-auto flex gap-5">
+              <div className="w-full max-w-[1200px] mx-auto flex gap-10">
                 {/* 왼쪽: 폼 영역 */}
                 <div className="flex-1 min-w-0">
                   <PageCard className="h-fit rounded-2xl flex flex-col shrink-0 overflow-hidden px-0 pt-0 pb-0">
@@ -234,19 +341,64 @@ export default function SeriesNewPage() {
                             />
                             <label
                               ref={coverRef}
-                              htmlFor="series-cover"
+                              role="button"
+                              tabIndex={0}
+                              onClick={openExpressionModalForCover}
+                              onKeyDown={(e) => {
+                                if (e.key === "Enter" || e.key === " ") {
+                                  e.preventDefault();
+                                  openExpressionModalForCover(e as unknown as React.MouseEvent);
+                                }
+                              }}
                               className={cn(
-                                "mt-2 flex w-[90px] h-[160px] cursor-pointer items-center justify-center rounded-lg border border-dashed bg-white overflow-hidden",
+                                "mt-2 flex w-[90px] h-[160px] cursor-pointer items-center justify-center rounded-lg border border-dashed bg-white overflow-hidden relative group",
                                 fieldErrors.cover ? "border-destructive" : "border-border-20"
                               )}
-                              tabIndex={-1}
                             >
                               {coverPreviewUrl ? (
-                                <img
-                                  src={coverPreviewUrl}
-                                  alt="대표이미지 미리보기"
-                                  className="w-full h-full object-cover"
-                                />
+                                <>
+                                  <img
+                                    key={coverPreviewUrl}
+                                    src={coverPreviewUrl}
+                                    alt="대표이미지 미리보기"
+                                    className="w-full h-full object-cover"
+                                  />
+                                  <button
+                                    type="button"
+                                    aria-label="대표이미지 삭제"
+                                    onClick={(e) => {
+                                      e.preventDefault();
+                                      e.stopPropagation();
+                                      setCoverPreviewUrl((prev) => {
+                                        if (prev && prev.startsWith("blob:")) {
+                                          URL.revokeObjectURL(prev);
+                                        }
+                                        return null;
+                                      });
+                                      setHasCoverImage(false);
+                                    }}
+                                    className="hidden group-hover:inline-flex absolute top-1 right-1 w-8 h-8 rounded-full bg-surface-10 text-on-surface-10 hover:bg-slate-100 items-center justify-center cursor-pointer shadow-sm"
+                                  >
+                                    <svg
+                                      xmlns="http://www.w3.org/2000/svg"
+                                      width="16"
+                                      height="16"
+                                      viewBox="0 0 24 24"
+                                      fill="none"
+                                      stroke="currentColor"
+                                      strokeWidth="2"
+                                      strokeLinecap="round"
+                                      strokeLinejoin="round"
+                                      aria-hidden="true"
+                                    >
+                                      <path d="M3 6h18" />
+                                      <path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6" />
+                                      <path d="M8 6V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2" />
+                                      <line x1="10" y1="11" x2="10" y2="17" />
+                                      <line x1="14" y1="11" x2="14" y2="17" />
+                                    </svg>
+                                  </button>
+                                </>
                               ) : (
                                 <div className="w-6 h-6 relative flex items-center justify-center text-on-surface-10">
                                   <svg
@@ -268,26 +420,22 @@ export default function SeriesNewPage() {
                               )}
                             </label>
                             <input
+                              ref={coverFileInputRef}
                               id="series-cover"
                               type="file"
                               accept="image/*"
                               className="hidden"
                               onChange={(e) => {
                                 const file = e.target.files?.[0];
-                                const hasFile = !!file;
-                                setHasCoverImage(hasFile);
-                                if (hasFile) {
-                                  setFieldErrors((prev) => ({ ...prev, cover: false }));
-                                  setCoverPreviewUrl((prev) => {
+                                if (file) {
+                                  setPendingCoverUrl((prev) => {
                                     if (prev) URL.revokeObjectURL(prev);
-                                    return URL.createObjectURL(file as File);
+                                    return URL.createObjectURL(file);
                                   });
-                                } else {
-                                  setCoverPreviewUrl((prev) => {
-                                    if (prev) URL.revokeObjectURL(prev);
-                                    return null;
-                                  });
+                                  setExpressionModalMode("cover");
+                                  setExpressionModalOpen(true);
                                 }
+                                e.target.value = "";
                               }}
                             />
                           </div>
@@ -302,19 +450,64 @@ export default function SeriesNewPage() {
                             />
                             <label
                               ref={logoRef}
-                              htmlFor="series-logo"
+                              role="button"
+                              tabIndex={0}
+                              onClick={openExpressionModalForLogo}
+                              onKeyDown={(e) => {
+                                if (e.key === "Enter" || e.key === " ") {
+                                  e.preventDefault();
+                                  openExpressionModalForLogo(e as unknown as React.MouseEvent);
+                                }
+                              }}
                               className={cn(
-                                "mt-2 flex w-[90px] h-[160px] cursor-pointer items-center justify-center rounded-lg border border-dashed bg-white overflow-hidden",
+                                "mt-2 flex w-[90px] h-[160px] cursor-pointer items-center justify-center rounded-lg border border-dashed bg-white overflow-hidden relative group",
                                 fieldErrors.logo ? "border-destructive" : "border-border-20"
                               )}
-                              tabIndex={-1}
                             >
                               {logoPreviewUrl ? (
-                                <img
-                                  src={logoPreviewUrl}
-                                  alt="로고 미리보기"
-                                  className="w-full h-full object-cover"
-                                />
+                                <>
+                                  <img
+                                    key={logoPreviewUrl}
+                                    src={logoPreviewUrl}
+                                    alt="로고 미리보기"
+                                    className="w-full h-full object-contain bg-slate-900/10"
+                                  />
+                                  <button
+                                    type="button"
+                                    aria-label="로고 삭제"
+                                    onClick={(e) => {
+                                      e.preventDefault();
+                                      e.stopPropagation();
+                                      setLogoPreviewUrl((prev) => {
+                                        if (prev && prev.startsWith("blob:")) {
+                                          URL.revokeObjectURL(prev);
+                                        }
+                                        return null;
+                                      });
+                                      setHasLogoImage(false);
+                                    }}
+                                    className="hidden group-hover:inline-flex absolute top-1 right-1 w-8 h-8 rounded-full bg-surface-10 text-on-surface-10 hover:bg-slate-100 items-center justify-center cursor-pointer shadow-sm"
+                                  >
+                                    <svg
+                                      xmlns="http://www.w3.org/2000/svg"
+                                      width="16"
+                                      height="16"
+                                      viewBox="0 0 24 24"
+                                      fill="none"
+                                      stroke="currentColor"
+                                      strokeWidth="2"
+                                      strokeLinecap="round"
+                                      strokeLinejoin="round"
+                                      aria-hidden="true"
+                                    >
+                                      <path d="M3 6h18" />
+                                      <path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6" />
+                                      <path d="M8 6V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2" />
+                                      <line x1="10" y1="11" x2="10" y2="17" />
+                                      <line x1="14" y1="11" x2="14" y2="17" />
+                                    </svg>
+                                  </button>
+                                </>
                               ) : (
                                 <div className="w-6 h-6 relative flex items-center justify-center text-on-surface-10">
                                   <svg
@@ -336,26 +529,22 @@ export default function SeriesNewPage() {
                               )}
                             </label>
                             <input
+                              ref={logoFileInputRef}
                               id="series-logo"
                               type="file"
                               accept=".png,image/png"
                               className="hidden"
                               onChange={(e) => {
                                 const file = e.target.files?.[0];
-                                const hasFile = !!file;
-                                setHasLogoImage(hasFile);
-                                if (hasFile) {
-                                  setFieldErrors((prev) => ({ ...prev, logo: false }));
-                                  setLogoPreviewUrl((prev) => {
+                                if (file) {
+                                  setPendingLogoUrl((prev) => {
                                     if (prev) URL.revokeObjectURL(prev);
-                                    return URL.createObjectURL(file as File);
+                                    return URL.createObjectURL(file);
                                   });
-                                } else {
-                                  setLogoPreviewUrl((prev) => {
-                                    if (prev) URL.revokeObjectURL(prev);
-                                    return null;
-                                  });
+                                  setExpressionModalMode("logo");
+                                  setExpressionModalOpen(true);
                                 }
+                                e.target.value = "";
                               }}
                             />
                           </div>
@@ -610,15 +799,26 @@ export default function SeriesNewPage() {
                 <div className="w-[300px] shrink-0 flex flex-col gap-3">
                   <p className="text-base font-semibold text-slate-700">미리보기</p>
                   <div className="w-full flex justify-center">
-                    <div className="w-[300px] h-[652px] relative bg-slate-100 rounded-[2rem] outline outline-8 outline-slate-800 overflow-hidden flex flex-col">
-                      <div className="flex-1 bg-slate-300 flex flex-col justify-end items-center pb-4">
-                        <button
-                          type="button"
-                          className="flex items-center justify-center gap-2 rounded-md bg-slate-900 px-4 py-2.5 text-sm font-medium text-white hover:bg-slate-800 transition-colors"
-                        >
-                          <Play className="w-4 h-4" aria-hidden />
-                          지금 플레이
-                        </button>
+                    <div className="w-[300px] aspect-[9/16] relative bg-transparent rounded-[2rem] outline outline-8 outline-slate-800 overflow-hidden flex flex-col">
+                      <div className="relative w-full flex-1">
+                        {coverPreviewUrl || logoPreviewUrl ? (
+                          <>
+                            <img
+                              key={coverPreviewUrl || logoPreviewUrl}
+                              src={coverPreviewUrl || logoPreviewUrl!}
+                              alt="시리즈 대표이미지 미리보기"
+                              className="block w-full h-full object-cover object-center bg-slate-900/50"
+                            />
+                            {coverPreviewUrl && logoPreviewUrl && (
+                              <img
+                                key={logoPreviewUrl}
+                                src={logoPreviewUrl}
+                                alt="로고 미리보기"
+                                className="absolute inset-0 w-full h-full object-contain z-10 pointer-events-none"
+                              />
+                            )}
+                          </>
+                        ) : null}
                       </div>
                     </div>
                   </div>
@@ -628,6 +828,12 @@ export default function SeriesNewPage() {
           </main>
         </div>
       </div>
+      <ImageCropOnlyModal
+        open={expressionModalOpen}
+        onClose={handleExpressionModalClose}
+        initialSlots={getExpressionModalInitialSlots()}
+        onSave={handleExpressionModalSave}
+      />
     </div>
   );
 }

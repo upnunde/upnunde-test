@@ -158,7 +158,7 @@ export function PreviewScreen(props: PreviewScreenProps = {}) {
       {/* Smartphone frame: fills parent (300×652), rounded corners, black border, notch */}
       <div
         className={cn(
-          "relative overflow-hidden rounded-[2rem] border-[8px] border-slate-800",
+          "relative overflow-hidden rounded-[2rem]",
           "bg-black",
           "h-full w-full min-h-0 min-w-0"
         )}

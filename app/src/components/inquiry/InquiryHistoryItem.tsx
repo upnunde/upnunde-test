@@ -84,7 +84,7 @@ export function InquiryHistoryItem({
               </div>
             )}
             {status === "answered" && (
-              <div className="rounded-lg border border-slate-200 bg-slate-50/50 px-4 py-3">
+              <div className="rounded-lg bg-slate-50/50 px-4 py-3">
                 <p className="text-[13px] font-bold text-on-surface-30 mb-1">답변</p>
                 <p className="text-sm text-on-surface-20">
                   문의해 주셔서 감사합니다. 검토 후 연락드리겠습니다.
