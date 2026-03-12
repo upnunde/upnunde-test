@@ -241,40 +241,46 @@ export function SeriesItem({
           </div>
         </div>
 
-        {/* 하단 관리 버튼: 모든 상태에서 활성화 */}
-        <div className="self-stretch inline-flex justify-start items-start gap-2 pt-0">
+        {/* 하단 관리 버튼: 모든 상태에서 활성화 (가로 영역 내에서 3등분, 버튼 폭 가변) */}
+        <div className="self-stretch flex justify-start items-start gap-2 pt-0">
           <button
             type="button"
             onClick={handleSeriesManage}
-            className="h-10 w-full cursor-pointer rounded-md border px-3 text-sm font-medium transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-2 border-slate-200 bg-white text-slate-700 hover:bg-slate-50"
+            className="h-10 flex-1 min-w-0 cursor-pointer rounded-md border px-3 text-sm font-medium transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-2 border-slate-200 bg-white text-slate-700 hover:bg-slate-50 flex items-center"
           >
-            시리즈 관리
+            <span className="block w-full overflow-hidden text-ellipsis whitespace-nowrap text-center">
+              시리즈 관리
+            </span>
           </button>
           <button
             type="button"
             disabled={isDraft}
             title={isDraft ? "시리즈 작성 완료 후 이용 가능합니다" : undefined}
             onClick={handleResource}
-            className={`h-10 w-full rounded-md border px-3 text-sm font-medium transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-2 ${
+            className={`h-10 flex-1 min-w-0 rounded-md border px-3 text-sm font-medium transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-2 flex items-center ${
               isDraft
                 ? "border-slate-200 text-on-surface-30 cursor-not-allowed"
                 : "border-slate-200 bg-white text-slate-700 hover:bg-slate-50 cursor-pointer"
             }`}
           >
-            리소스 관리
+            <span className="block w-full overflow-hidden text-ellipsis whitespace-nowrap text-center">
+              리소스 관리
+            </span>
           </button>
           <button
             type="button"
             disabled={isDraft}
             title={isDraft ? "시리즈 작성 완료 후 이용 가능합니다" : undefined}
             onClick={handleEpisode}
-            className={`h-10 w-full rounded-md border px-3 text-sm font-medium transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-2 ${
+            className={`h-10 flex-1 min-w-0 rounded-md border px-3 text-sm font-medium transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-2 flex items-center ${
               isDraft
                 ? "border-slate-200 text-on-surface-30 cursor-not-allowed"
                 : "border-slate-200 bg-white text-slate-700 hover:bg-slate-50 cursor-pointer"
             }`}
           >
-            에피소드 관리
+            <span className="block w-full overflow-hidden text-ellipsis whitespace-nowrap text-center">
+              에피소드 관리
+            </span>
           </button>
         </div>
       </div>
