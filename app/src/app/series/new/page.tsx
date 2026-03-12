@@ -300,7 +300,10 @@ export default function SeriesNewPage() {
               <div className="w-full max-w-[1200px] mx-auto flex gap-10">
                 {/* 왼쪽: 폼 영역 */}
                 <div className="flex-1 min-w-0">
-                  <PageCard className="h-fit rounded-2xl flex flex-col shrink-0 overflow-hidden px-0 pt-0 pb-0">
+                  <PageCard
+                    fullWidth
+                    className="h-fit rounded-2xl flex flex-col shrink-0 overflow-hidden px-0 pt-0 pb-0"
+                  >
                     {/* 탭: 이미지, 정보, 세계관 (문의 페이지와 동일 스타일) */}
                     <div className="self-stretch px-5 pt-0 pb-0 mt-2 mb-2 border-b border-border-10 inline-flex flex-col justify-start items-start gap-2.5">
                       <div className="self-stretch inline-flex justify-start items-center gap-4 overflow-hidden">
@@ -796,7 +799,7 @@ export default function SeriesNewPage() {
                 </div>
 
                 {/* 오른쪽: 미리보기 (공통 레이아웃) */}
-                <div className="w-[300px] shrink-0 flex flex-col gap-3">
+                <div className="flex flex-col gap-3 w-full max-w-[300px] basis-[28%]">
                   <p className="text-base font-semibold text-slate-700">미리보기</p>
                   <div className="w-full flex justify-center">
                     <div className="w-[300px] aspect-[9/16] relative bg-transparent rounded-[2rem] outline outline-8 outline-slate-800 overflow-hidden flex flex-col">

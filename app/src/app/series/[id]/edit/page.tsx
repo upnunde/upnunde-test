@@ -301,7 +301,10 @@ export default function SeriesEditPage() {
             <div className="flex-1 overflow-y-auto flex flex-col items-center py-8 gap-3 px-10">
               <div className="w-full max-w-[1200px] mx-auto flex gap-5">
                 <div className="flex-1 min-w-0">
-                  <PageCard className="h-fit rounded-2xl flex flex-col shrink-0 overflow-hidden px-0 pt-0 pb-0">
+                  <PageCard
+                    fullWidth
+                    className="h-fit rounded-2xl flex flex-col shrink-0 overflow-hidden px-0 pt-0 pb-0"
+                  >
                     <div className="self-stretch px-5 pt-0 pb-0 mt-2 mb-2 border-b border-border-10 inline-flex flex-col justify-start items-start gap-2.5">
                       <div className="self-stretch inline-flex justify-start items-center gap-4 overflow-hidden">
                         {(
@@ -790,7 +793,7 @@ export default function SeriesEditPage() {
                 <div className="w-[300px] shrink-0 flex flex-col gap-3">
                   <p className="text-base font-semibold text-slate-700">미리보기</p>
                   <div className="w-full flex justify-center">
-                    <div className="w-[300px] aspect-[9/16] relative bg-transparent rounded-[2rem] outline outline-8 outline-slate-800 overflow-hidden flex flex-col">
+                    <div className="w-full aspect-[9/16] relative bg-transparent rounded-[2rem] outline outline-8 outline-slate-800 overflow-hidden flex flex-col">
                       <div className="relative w-full flex-1">
                         {coverPreviewUrl || logoPreviewUrl ? (
                           <>

@@ -24,7 +24,7 @@ export default function Header({ profileImageUrl, onProfileImageChange }: Header
     <header className="flex h-14 shrink-0 items-center justify-between border-b border-slate-200 bg-white px-4">
       <button
         type="button"
-        onClick={() => router.push("/")}
+        onClick={() => router.push("/login")}
         className="flex cursor-pointer items-center"
         aria-label="로그인 화면으로 이동"
       >
