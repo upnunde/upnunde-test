@@ -42,6 +42,7 @@ const ROOT_CLASS_COMPACT = "min-w-0 flex-1 min-h-[36px] h-[36px]";
 function SortableBlockWrapper({
   block,
   index,
+  hasIssue,
   updateBlock,
   addBlock,
   removeBlock,
@@ -49,6 +50,7 @@ function SortableBlockWrapper({
 }: {
   block: import("@/types/editor").ScriptBlock;
   index: number;
+  hasIssue: boolean;
   updateBlock: (id: string, content: string, data?: Record<string, any>) => void;
   addBlock: (index: number, type: import("@/types/editor").BlockType, content?: string) => string;
   removeBlock: (id: string) => void;
@@ -124,7 +126,11 @@ function SortableBlockWrapper({
           "shrink-0 text-[13px] font-medium tabular-nums w-10 h-full flex items-center justify-start pt-0 mt-0",
           block.type === "text" && "mt-2",
           block.type === "choice" && "mt-[10px]",
-          isFocused ? "text-primary" : "text-[rgba(197,207,221,1)]"
+          isFocused
+            ? "text-primary"
+            : hasIssue
+              ? "text-rose-600"
+              : "text-[rgba(197,207,221,1)]"
         )}
       >
         {String(index).padStart(2, "0")}
@@ -292,6 +298,39 @@ export default function EditorBody() {
     useSensor(PointerSensor, { activationConstraint: { distance: 8 } })
   );
 
+  const issueBlockIds = React.useMemo(() => {
+    const ids = new Set<string>();
+
+    for (const block of blocks) {
+      if (["scene", "top_desc", "text", "direction"].includes(block.type)) {
+        if (!block.content?.trim()) ids.add(block.id);
+      }
+
+      if (block.type === "choice") {
+        const choices = Array.isArray(block.data?.choices) ? block.data?.choices : [];
+        if (choices.length === 0) {
+          ids.add(block.id);
+        } else {
+          for (const c of choices) {
+            if (!c.text?.trim() || !c.nextScene?.trim()) {
+              ids.add(block.id);
+              break;
+            }
+          }
+        }
+      }
+    }
+
+    const eventStarts = blocks.filter((b) => b.type === "event").length;
+    const eventEnds = blocks.filter((b) => b.type === "event_end").length;
+    if (eventStarts !== eventEnds) {
+      const firstEvent = blocks.find((b) => b.type === "event") ?? blocks.find((b) => b.type === "event_end");
+      if (firstEvent) ids.add(firstEvent.id);
+    }
+
+    return ids;
+  }, [blocks]);
+
   return (
     <div className="min-h-full w-full cursor-text">
       <DndContext
@@ -322,6 +361,7 @@ export default function EditorBody() {
                   <SortableBlockWrapper
                     block={block}
                     index={i + 1}
+                    hasIssue={issueBlockIds.has(block.id)}
                     updateBlock={updateBlock}
                     addBlock={addBlock}
                     removeBlock={removeBlock}

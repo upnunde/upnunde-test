@@ -1,7 +1,8 @@
- "use client";
+"use client";
 
 import React, { useMemo, useState, useRef, useEffect } from "react";
 import { Menu } from "lucide-react";
+import { Button } from "@/components/ui/button";
 import { useEditorStore } from "@/store/useEditorStore";
 import { cn } from "@/lib/utils";
 
@@ -19,6 +20,7 @@ export function SceneNavigation({
   const blocks = useEditorStore((s) => s.blocks);
   const focusBlockId = useEditorStore((s) => s.focusBlockId);
   const updateBlock = useEditorStore((s) => s.updateBlock);
+  const setFocusBlockId = useEditorStore((s) => s.setFocusBlockId);
 
   const [editingBlockId, setEditingBlockId] = useState<string | null>(null);
   const [editValue, setEditValue] = useState("");
@@ -61,6 +63,21 @@ export function SceneNavigation({
     }, NAV_DELAY_MS);
   };
 
+  const navigateToBlock = (blockId: string) => {
+    clearPendingNav();
+    setEditingBlockId(null);
+    setEditValue("");
+    setFocusBlockId(blockId);
+    if (onSceneClick) {
+      onSceneClick(blockId);
+      return;
+    }
+    const element = document.getElementById(`block-${blockId}`);
+    if (element) {
+      element.scrollIntoView({ behavior: "smooth", block: "center", inline: "nearest" });
+    }
+  };
+
   const startEdit = (e: React.MouseEvent, block: { id: string; content?: string }) => {
     e.preventDefault();
     e.stopPropagation();
@@ -77,6 +94,87 @@ export function SceneNavigation({
     return blocks
       .map((block, index) => ({ block, index }))
       .filter(({ block }) => block.type === "scene");
+  }, [blocks]);
+
+  type IssueKind = "error" | "missing";
+  type EditorIssue = {
+    kind: IssueKind;
+    blockId: string;
+    title: string;
+    detail?: string;
+  };
+
+  const issues = useMemo<EditorIssue[]>(() => {
+    const next: EditorIssue[] = [];
+
+    for (const block of blocks) {
+      // "누락" 기본 규칙: 텍스트성 블록인데 내용이 비어 있음
+      if (["scene", "top_desc", "text", "direction"].includes(block.type)) {
+        if (!block.content?.trim()) {
+          const title =
+            block.type === "scene"
+              ? "씬 제목 누락"
+              : block.type === "top_desc"
+                ? "상단 설명 누락"
+                : block.type === "text"
+                  ? "대사/서술 누락"
+                  : "연출 텍스트 누락";
+          next.push({
+            kind: "missing",
+            blockId: block.id,
+            title,
+          });
+        }
+      }
+
+      // 선택지 블록 검증: 선택지 텍스트/다음 씬 누락
+      if (block.type === "choice") {
+        const choices = Array.isArray(block.data?.choices) ? block.data?.choices : [];
+        if (choices.length === 0) {
+          next.push({
+            kind: "error",
+            blockId: block.id,
+            title: "선택지 항목 없음",
+            detail: "선택지 블록에 항목이 없습니다.",
+          });
+        } else {
+          choices.forEach((c, idx) => {
+            const n = idx + 1;
+            if (!c.text?.trim()) {
+              next.push({
+                kind: "missing",
+                blockId: block.id,
+                title: `선택지 ${n} 문구 누락`,
+              });
+            }
+            if (!c.nextScene?.trim()) {
+              next.push({
+                kind: "missing",
+                blockId: block.id,
+                title: `선택지 ${n} 다음 씬 누락`,
+              });
+            }
+          });
+        }
+      }
+    }
+
+    // 이벤트 블록 개수 불일치(간단한 경고)
+    const eventStarts = blocks.filter((b) => b.type === "event").length;
+    const eventEnds = blocks.filter((b) => b.type === "event_end").length;
+    if (eventStarts !== eventEnds) {
+      const firstEvent = blocks.find((b) => b.type === "event") ?? blocks.find((b) => b.type === "event_end");
+      if (firstEvent) {
+        next.push({
+          kind: "error",
+          blockId: firstEvent.id,
+          title: "이벤트 시작/종료 불일치",
+          detail: `event: ${eventStarts}개, event_end: ${eventEnds}개`,
+        });
+      }
+    }
+
+    return next;
   }, [blocks]);
 
   const commitEdit = (blockId: string, currentContent: string) => {
@@ -112,14 +210,16 @@ export function SceneNavigation({
               씬 목록
             </h2>
           )}
-          <button
+          <Button
             type="button"
+            variant="outline"
+            size="icon"
             onClick={onToggleCollapsed}
-            className="inline-flex h-10 w-10 items-center justify-center rounded-md text-on-surface-30 hover:bg-slate-100 hover:text-on-surface-10 transition-colors"
+            className="h-9 w-9 shrink-0 rounded-full border-slate-200 shadow-none text-on-surface-30"
             aria-label={collapsed ? "씬 목록 펼치기" : "씬 목록 최소화"}
           >
             <Menu className="h-5 w-5" aria-hidden="true" />
-          </button>
+          </Button>
         </div>
 
         {!collapsed &&
@@ -202,6 +302,74 @@ export function SceneNavigation({
             </ul>
           ))}
       </nav>
+
+      {/* 최하단: 오류/누락 알림 박스 (hover 시 상세 리스트 노출, 클릭 시 해당 위치로 이동) */}
+      {!collapsed && (
+        <div className="mt-auto px-2 pb-2">
+          <div className="relative group">
+            <button
+              type="button"
+              className={cn(
+                "w-full rounded-lg border px-3 py-2 text-left transition-colors",
+                issues.length > 0
+                  ? "border-rose-300 bg-rose-50 text-rose-900 hover:bg-rose-100"
+                  : "border-slate-200 bg-slate-50 text-slate-500 hover:bg-slate-100"
+              )}
+              aria-label="오류 및 누락 알림"
+            >
+              <div className="flex items-center justify-between gap-3">
+                <div className="text-sm font-semibold">
+                  {issues.length > 0 ? "오류/누락 있음" : "오류/누락 없음"}
+                </div>
+                <div className="text-xs tabular-nums">
+                  {issues.length}건
+                </div>
+              </div>
+              <div className="mt-1 text-xs opacity-80">
+                호버하면 상세 목록이 표시됩니다
+              </div>
+            </button>
+
+            {/* Hover list */}
+            {issues.length > 0 && (
+              <div
+                className="absolute left-0 right-0 bottom-full mb-0 hidden group-hover:block z-50"
+                role="dialog"
+                aria-label="오류 및 누락 상세"
+              >
+                <div className="rounded-lg border border-slate-200 bg-white shadow-lg overflow-hidden">
+                  <div className="px-3 py-2 border-b border-slate-200 bg-slate-50">
+                    <div className="text-xs font-semibold text-slate-700">오류/누락 목록</div>
+                    <div className="text-[11px] text-slate-500">클릭하면 해당 위치로 이동합니다</div>
+                  </div>
+                  <ul className="max-h-60 overflow-y-auto py-1">
+                    {issues.map((it, idx) => (
+                      <li key={`${it.blockId}-${idx}`}>
+                        <button
+                          type="button"
+                          className={cn(
+                            "w-full px-3 py-2 text-left text-xs hover:bg-slate-100 transition-colors",
+                            it.kind === "error" ? "text-rose-700" : "text-rose-700"
+                          )}
+                          onClick={() => navigateToBlock(it.blockId)}
+                        >
+                          <div className="flex items-start justify-between gap-2">
+                            <div className="font-medium">{it.title}</div>
+                            <div className="shrink-0 text-[10px] uppercase opacity-70">
+                              {it.kind}
+                            </div>
+                          </div>
+                          {it.detail && <div className="mt-0.5 text-[11px] text-slate-500">{it.detail}</div>}
+                        </button>
+                      </li>
+                    ))}
+                  </ul>
+                </div>
+              </div>
+            )}
+          </div>
+        </div>
+      )}
     </div>
   );
 }
