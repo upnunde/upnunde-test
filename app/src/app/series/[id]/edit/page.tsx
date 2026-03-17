@@ -793,7 +793,7 @@ export default function SeriesEditPage() {
                 <div className="w-[300px] shrink-0 flex flex-col gap-3">
                   <p className="text-base font-semibold text-slate-700">미리보기</p>
                   <div className="w-full flex justify-center">
-                    <div className="w-full aspect-[9/16] relative bg-transparent rounded-[2rem] outline outline-8 outline-slate-800 overflow-hidden flex flex-col">
+                    <div className="w-full aspect-[9/16] relative bg-transparent rounded-[2rem] outline outline-[4px] outline-slate-800 overflow-hidden flex flex-col">
                       <div className="relative w-full flex-1">
                         {coverPreviewUrl || logoPreviewUrl ? (
                           <>

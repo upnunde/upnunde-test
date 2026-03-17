@@ -33,7 +33,10 @@ export function CharacterDetailPage({ isNew = true, initialData }: CharacterDeta
   const [tags, setTags] = useState("");
   const [tagList, setTagList] = useState<string[]>([]);
   const [greeting, setGreeting] = useState("");
+  // 썸네일 표시용 URL (크롭된 결과)
   const [thumbnailUrl, setThumbnailUrl] = useState<string | null>(null);
+  // 항상 최초 원본 이미지를 유지하기 위한 URL (재크롭 시 이 값을 기준으로 다시 자른다)
+  const [thumbnailOriginalUrl, setThumbnailOriginalUrl] = useState<string | null>(null);
   const [thumbnailModalOpen, setThumbnailModalOpen] = useState(false);
   const [thumbnailModalInitialSlots, setThumbnailModalInitialSlots] = useState<CharacterExpressionSlot[] | null>(null);
   const [pendingThumbnailUrl, setPendingThumbnailUrl] = useState<string | null>(null);
@@ -59,7 +62,9 @@ export function CharacterDetailPage({ isNew = true, initialData }: CharacterDeta
         setTagList(parsed);
       }
       setGreeting(initialData.greeting ?? "");
+      // 서버에서 내려온 값은 "원본"이라고 가정하고 둘 다 동일하게 세팅
       setThumbnailUrl(initialData.imageUrl ?? null);
+      setThumbnailOriginalUrl(initialData.imageUrl ?? null);
       setExpressionSlots(initialData.expressions ?? []);
     }
   }, [initialData]);
@@ -69,11 +74,14 @@ export function CharacterDetailPage({ isNew = true, initialData }: CharacterDeta
       if (thumbnailUrl && thumbnailUrl.startsWith("blob:")) {
         URL.revokeObjectURL(thumbnailUrl);
       }
+      if (thumbnailOriginalUrl && thumbnailOriginalUrl.startsWith("blob:")) {
+        URL.revokeObjectURL(thumbnailOriginalUrl);
+      }
       if (pendingThumbnailUrl && pendingThumbnailUrl.startsWith("blob:")) {
         URL.revokeObjectURL(pendingThumbnailUrl);
       }
     };
-  }, [thumbnailUrl, pendingThumbnailUrl]);
+  }, [thumbnailUrl, thumbnailOriginalUrl, pendingThumbnailUrl]);
 
   const handleBack = useCallback(() => {
     router.push(`/series/${seriesId}/resources`);
@@ -97,15 +105,17 @@ export function CharacterDetailPage({ isNew = true, initialData }: CharacterDeta
   }, []);
 
   const handleThumbnailAddClick = useCallback(() => {
-    if (thumbnailUrl) {
+    // 이미 한 번 등록했다면, 크롭 기준은 항상 "원본"을 사용한다.
+    const baseUrl = thumbnailOriginalUrl ?? thumbnailUrl;
+    if (baseUrl) {
       setThumbnailModalInitialSlots([
-        { id: "character-thumbnail", expressionLabel: "", imageUrl: thumbnailUrl },
+        { id: "character-thumbnail", expressionLabel: "", imageUrl: baseUrl },
       ]);
       setThumbnailModalOpen(true);
       return;
     }
     thumbnailFileInputRef.current?.click();
-  }, [thumbnailUrl]);
+  }, [thumbnailUrl, thumbnailOriginalUrl]);
 
   const handleThumbnailFileChange = useCallback((e: React.ChangeEvent<HTMLInputElement>) => {
     const file = (e.target.files ?? [])[0];
@@ -113,6 +123,11 @@ export function CharacterDetailPage({ isNew = true, initialData }: CharacterDeta
     if (!file || !file.type.startsWith("image/")) return;
 
     const objectUrl = URL.createObjectURL(file);
+    // 최초 선택한 파일 URL은 "원본"으로 계속 유지한다.
+    setThumbnailOriginalUrl((prev) => {
+      if (prev && prev.startsWith("blob:")) URL.revokeObjectURL(prev);
+      return objectUrl;
+    });
     setPendingThumbnailUrl((prev) => {
       if (prev && prev.startsWith("blob:")) URL.revokeObjectURL(prev);
       return objectUrl;

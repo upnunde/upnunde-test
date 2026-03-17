@@ -1,14 +1,5 @@
-"use client";
-
-import { useEffect } from "react";
-import { useRouter } from "next/navigation";
+import { LoginPage } from "@/components/auth/LoginPage";
 
 export default function Home() {
-  const router = useRouter();
-
-  useEffect(() => {
-    router.replace("/series/new");
-  }, [router]);
-
-  return null;
+  return <LoginPage />;
 }

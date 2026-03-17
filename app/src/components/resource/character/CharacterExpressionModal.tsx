@@ -63,6 +63,64 @@ function buildSlotsFromInitial(initial: CharacterExpressionSlot[]): CharacterExp
   return initial.slice(0, MAX_SLOTS);
 }
 
+/**
+ * 이미지 URL과 pan/zoom을 이용해 크롭 뷰포트에 해당하는 영역을 캔버스로 렌더링한 뒤 blob URL로 반환.
+ * 모달의 크롭 영역과 동일한 좌표계(중앙 기준 pan, scale)를 사용한다.
+ */
+function cropImageToBlobUrl(
+  imageUrl: string,
+  pan: { x: number; y: number },
+  zoom: number,
+  viewportW: number,
+  viewportH: number,
+): Promise<string> {
+  return new Promise((resolve, reject) => {
+    const img = new Image();
+    img.crossOrigin = "anonymous";
+    img.onload = () => {
+      try {
+        const nw = img.naturalWidth;
+        const nh = img.naturalHeight;
+        const displayH = viewportH;
+        const displayW = (nw / nh) * viewportH;
+        const srcX = nw / 2 - (nh * (viewportW / 2 + pan.x)) / (zoom * viewportH);
+        const srcY = nh / 2 - (nh * (viewportH / 2 + pan.y)) / (zoom * viewportH);
+        const srcW = (nh * viewportW) / (zoom * viewportH);
+        const srcH = nh / zoom;
+        const sx = Math.max(0, Math.min(nw, srcX));
+        const sy = Math.max(0, Math.min(nh, srcY));
+        const sw = Math.max(1, Math.min(nw - sx, srcW));
+        const sh = Math.max(1, Math.min(nh - sy, srcH));
+
+        const canvas = document.createElement("canvas");
+        canvas.width = viewportW;
+        canvas.height = viewportH;
+        const ctx = canvas.getContext("2d");
+        if (!ctx) {
+          reject(new Error("Canvas 2d context not available"));
+          return;
+        }
+        ctx.drawImage(img, sx, sy, sw, sh, 0, 0, viewportW, viewportH);
+        canvas.toBlob(
+          (blob) => {
+            if (!blob) {
+              reject(new Error("toBlob failed"));
+              return;
+            }
+            resolve(URL.createObjectURL(blob));
+          },
+          "image/png",
+          0.95,
+        );
+      } catch (e) {
+        reject(e);
+      }
+    };
+    img.onerror = () => reject(new Error("Image load failed"));
+    img.src = imageUrl;
+  });
+}
+
 export function CharacterExpressionModal({
   open,
   onClose,
@@ -79,8 +137,10 @@ export function CharacterExpressionModal({
   const [slots, setSlots] = useState<CharacterExpressionSlot[]>(() => buildSlotsFromInitial(initialSlots));
   const [selectedIndex, setSelectedIndex] = useState<number | null>(initialSlots.length > 0 ? 0 : null);
   const [zoom, setZoom] = useState(1);
+  const [zoomBySlotId, setZoomBySlotId] = useState<Record<string, number>>({});
   const [expressionInput, setExpressionInput] = useState("");
   const [suggestionOpen, setSuggestionOpen] = useState(false);
+  const [saving, setSaving] = useState(false);
   const fileInputRef = useRef<HTMLInputElement | null>(null);
   const [panBySlotId, setPanBySlotId] = useState<Record<string, { x: number; y: number }>>({});
   const [isDragging, setIsDragging] = useState(false);
@@ -139,29 +199,58 @@ export function CharacterExpressionModal({
       setSlots(nextSlots);
       setSelectedIndex(nextSlots.length > 0 ? 0 : null);
       setZoom(1);
+      setZoomBySlotId({});
+      setPanBySlotId({});
       const first = initialSlots[0];
       setExpressionInput(first?.expressionLabel ?? "");
     }
   }, [open]);
 
-  const handleSave = useCallback(() => {
-    if (showExpressionSection) {
-      const filled = slots
-        .filter((s) => Boolean(s.imageUrl))
-        .map((s) => ({
-          ...s,
-          expressionLabel: (s.expressionLabel ?? "").trim(),
-        }))
-        .filter((s) => s.expressionLabel.length > 0 && s.expressionLabel !== "untitle");
-      onSave(filled.slice(0, MAX_SLOTS));
-    } else {
-      const filled = slots
-        .filter((s) => Boolean(s.imageUrl))
-        .map((s) => ({ ...s, expressionLabel: s.expressionLabel ?? "" }));
-      onSave(filled.slice(0, MAX_SLOTS));
+  const handleSave = useCallback(async () => {
+    const viewportW = layoutShowSlotList ? 320 : 400;
+    const viewportH = cropAspect === "square" ? viewportW : Math.round((viewportW * 16) / 9);
+
+    const baseFilled =
+      showExpressionSection
+        ? slots
+            .filter((s) => Boolean(s.imageUrl))
+            .map((s) => ({
+              ...s,
+              expressionLabel: (s.expressionLabel ?? "").trim(),
+            }))
+            .filter((s) => s.expressionLabel.length > 0 && s.expressionLabel !== "untitle")
+        : slots
+            .filter((s) => Boolean(s.imageUrl))
+            .map((s) => ({ ...s, expressionLabel: s.expressionLabel ?? "" }));
+
+    setSaving(true);
+    try {
+      const withCroppedUrls = await Promise.all(
+        baseFilled.map(async (s) => {
+          if (!s.imageUrl) return s;
+          const pan = panBySlotId[s.id] ?? { x: 0, y: 0 };
+          const slotZoom = zoomBySlotId[s.id] ?? 1;
+          const croppedUrl = await cropImageToBlobUrl(s.imageUrl, pan, slotZoom, viewportW, viewportH);
+          return { ...s, imageUrl: croppedUrl };
+        }),
+      );
+      onSave(withCroppedUrls.slice(0, MAX_SLOTS));
+      onClose();
+    } catch (err) {
+      console.error("Crop/save failed:", err);
+    } finally {
+      setSaving(false);
     }
-    onClose();
-  }, [slots, onSave, onClose, showExpressionSection]);
+  }, [
+    slots,
+    layoutShowSlotList,
+    cropAspect,
+    showExpressionSection,
+    panBySlotId,
+    zoomBySlotId,
+    onSave,
+    onClose,
+  ]);
 
   const handleClose = useCallback(() => {
     setExpressionInput("");
@@ -174,8 +263,8 @@ export function CharacterExpressionModal({
     setSelectedIndex(index);
     const slot = slots[index];
     setExpressionInput(slot?.expressionLabel ?? "");
-    setZoom(1);
-  }, [slots]);
+    setZoom(slot ? (zoomBySlotId[slot.id] ?? 1) : 1);
+  }, [slots, zoomBySlotId]);
 
   const filledSlotIndices = slots
     .map((s, i) => (s.imageUrl ? i : null))
@@ -330,7 +419,13 @@ export function CharacterExpressionModal({
                   max={2}
                   step={0.01}
                   value={zoom}
-                  onChange={(e) => setZoom(Number(e.target.value))}
+                  onChange={(e) => {
+                    const v = Number(e.target.value);
+                    setZoom(v);
+                    if (selectedSlot?.id) {
+                      setZoomBySlotId((prev) => ({ ...prev, [selectedSlot.id]: v }));
+                    }
+                  }}
                   className="absolute inset-0 w-full opacity-0 cursor-pointer z-[1]"
                   aria-label="확대/축소"
                 />
@@ -342,8 +437,8 @@ export function CharacterExpressionModal({
                 className="shrink-0 w-8 h-8 bg-transparent hover:bg-transparent active:bg-transparent shadow-none rounded-full border border-slate-200"
                 onClick={() => {
                   if (selectedSlot?.id) {
-                    // 슬롯이 처음 선택됐을 때의 기본 배치(중앙, 줌 1)로 되돌림
                     setZoom(1);
+                    setZoomBySlotId((prev) => ({ ...prev, [selectedSlot.id]: 1 }));
                     setPanBySlotId((prev) => ({
                       ...prev,
                       [selectedSlot.id]: { x: 0, y: 0 },
@@ -494,9 +589,9 @@ export function CharacterExpressionModal({
             type="button"
             className="min-w-20 h-10 rounded-md font-['Pretendard_JP'] text-base font-medium"
             onClick={handleSave}
-            disabled={!canSave}
+            disabled={!canSave || saving}
           >
-            저장
+            {saving ? "저장 중…" : "저장"}
           </Button>
         </div>
       </DialogContent>
