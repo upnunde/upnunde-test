@@ -133,7 +133,7 @@ export function BgmListItem({
 
   return (
     <div
-      className="group w-full self-stretch pl-0 pr-0 rounded-lg inline-flex justify-center items-center gap-1 overflow-visible flex-col h-fit transition-colors cursor-pointer"
+      className="group w-full self-stretch pl-3 pr-3 pt-2 pb-2 rounded-[4px] inline-flex justify-center items-center gap-1 overflow-visible flex-col h-fit transition-colors cursor-pointer hover:bg-surface-20"
       onMouseEnter={() => setIsHovered(true)}
       onMouseLeave={() => setIsHovered(false)}
     >
@@ -240,7 +240,7 @@ export function BgmListItem({
             )}
           </div>
         </div>
-        {showProgressBar && (
+        {showProgressBar && showExpandedTime && (
           <div
             role={showExpandedTime ? "slider" : undefined}
             aria-label={showExpandedTime ? "재생 위치" : undefined}
@@ -248,8 +248,8 @@ export function BgmListItem({
             aria-valuemax={showExpandedTime ? totalSeconds : undefined}
             aria-valuenow={showExpandedTime ? currentTime : undefined}
             tabIndex={showExpandedTime && onSeek ? 0 : undefined}
-            className={`self-stretch flex-shrink-0 min-w-0 rounded-full overflow-hidden touch-none select-none relative h-fit ${
-              showExpandedTime && onSeek ? "py-2 cursor-pointer" : "py-2"
+            className={`self-stretch flex-shrink-0 min-w-0 rounded-full overflow-hidden touch-none select-none relative h-fit py-2 ${
+              onSeek ? "cursor-pointer" : ""
             }`}
             onClick={
               showExpandedTime && onSeek && totalSeconds > 0

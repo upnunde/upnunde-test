@@ -201,7 +201,7 @@ export function SceneNavigation({
       >
         <div
           className={cn(
-            "flex items-center gap-2 py-2",
+            "flex items-center gap-2 py-1.5",
             collapsed ? "justify-center" : "justify-between px-1"
           )}
         >

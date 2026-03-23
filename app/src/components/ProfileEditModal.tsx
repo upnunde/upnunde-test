@@ -230,7 +230,7 @@ export function ProfileEditModal({ isOpen, onClose, anchorRef, onSave }: Profile
                   value={description}
                   onChange={(e) => setDescription(e.target.value.slice(0, MAX_DESCRIPTION))}
                   maxLength={MAX_DESCRIPTION}
-                  className="w-full h-full bg-transparent text-on-surface-10 placeholder:text-on-surface-30 text-base font-normal leading-6 focus:outline-none min-h-[160px]"
+                  className="w-full h-full bg-transparent text-on-surface-10 placeholder:text-on-surface-30 text-base font-normal leading-6 focus:outline-none min-h-[160px] max-h-[400px]"
                 />
               </div>
               <div className="self-stretch inline-flex justify-end items-center gap-2">

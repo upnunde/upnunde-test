@@ -117,7 +117,7 @@ export function InquiryForm({
           value={content}
           onChange={(e) => setContent(e.target.value)}
           placeholder="상세내용을 작성해 주세요."
-          className="mt-1 min-h-[160px] rounded-md border border-slate-200 bg-white px-3 py-2 text-sm text-on-surface-10 placeholder:text-on-surface-30 focus:outline-none focus:ring-2 focus:ring-primary"
+          className="mt-1 min-h-[160px] max-h-[400px] rounded-md border border-slate-200 bg-white px-3 py-2 text-sm text-on-surface-10 placeholder:text-on-surface-30 focus:outline-none focus:ring-2 focus:ring-primary"
           required
         />
         <p className="text-xs text-on-surface-30">

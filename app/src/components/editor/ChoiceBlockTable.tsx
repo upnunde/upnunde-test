@@ -45,6 +45,7 @@ function createAiChoice(): ChoiceItem {
 }
 
 const CHOICE_TEXTAREA_MIN_HEIGHT_PX = 40;
+const CHOICE_TEXTAREA_MAX_HEIGHT_PX = 400;
 
 /** 선택지 내용 전용 텍스트 필드. 영역 고정 확장이 아니라 텍스트 줄 수에 따라 높이만 가변 확장 */
 function ChoiceTextField({
@@ -63,7 +64,12 @@ function ChoiceTextField({
     if (!ta) return;
     ta.style.height = "0";
     const contentHeight = ta.scrollHeight;
-    ta.style.height = `${Math.max(CHOICE_TEXTAREA_MIN_HEIGHT_PX, contentHeight)}px`;
+    const nextHeight = Math.min(
+      CHOICE_TEXTAREA_MAX_HEIGHT_PX,
+      Math.max(CHOICE_TEXTAREA_MIN_HEIGHT_PX, contentHeight)
+    );
+    ta.style.height = `${nextHeight}px`;
+    ta.style.overflowY = contentHeight > CHOICE_TEXTAREA_MAX_HEIGHT_PX ? "auto" : "hidden";
   }, []);
 
   useEffect(() => {
@@ -78,7 +84,7 @@ function ChoiceTextField({
       onInput={adjustHeight}
       placeholder={placeholder}
       rows={1}
-      className="min-h-[40px] w-full rounded-md border-0 bg-transparent px-0 py-[10px] text-sm leading-5 outline-none focus:outline-none focus:ring-0 focus:ring-offset-0 align-middle overflow-hidden resize-none"
+      className="min-h-[40px] max-h-[400px] w-full rounded-md border-0 bg-transparent px-0 py-[10px] text-sm leading-5 outline-none focus:outline-none focus:ring-0 focus:ring-offset-0 align-middle overflow-hidden resize-none"
       style={{ height: CHOICE_TEXTAREA_MIN_HEIGHT_PX }}
     />
   );

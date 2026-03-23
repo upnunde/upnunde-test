@@ -620,7 +620,7 @@ export default function SeriesNewPage() {
                               }}
                               placeholder="시리즈 요약 내용을 작성해주세요."
                               className={cn(
-                                "mt-1 resize-y rounded-md border bg-white px-3 py-2 text-sm text-on-surface-10 placeholder:text-on-surface-30 focus:outline-none focus:ring-2 w-full min-h-[160px]",
+                                "mt-1 resize-y rounded-md border bg-white px-3 py-2 text-sm text-on-surface-10 placeholder:text-on-surface-30 focus:outline-none focus:ring-2 w-full min-h-[160px] max-h-[400px]",
                                 fieldErrors.summary
                                   ? "border-destructive focus:ring-destructive/40"
                                   : "border-slate-200 focus:ring-primary"
@@ -684,7 +684,7 @@ export default function SeriesNewPage() {
                               }}
                               placeholder="세계관 내용을 작성해주세요."
                               className={cn(
-                                "mt-1 resize-y rounded-md border bg-white px-3 py-2 text-sm text-on-surface-10 placeholder:text-on-surface-30 focus:outline-none focus:ring-2 w-full min-h-[160px]",
+                                "mt-1 resize-y rounded-md border bg-white px-3 py-2 text-sm text-on-surface-10 placeholder:text-on-surface-30 focus:outline-none focus:ring-2 w-full min-h-[160px] max-h-[400px]",
                                 fieldErrors.worldview
                                   ? "border-destructive focus:ring-destructive/40"
                                   : "border-slate-200 focus:ring-primary"
@@ -739,7 +739,7 @@ export default function SeriesNewPage() {
                               }}
                               placeholder="세계관 프롬프트를 작성해주세요."
                               className={cn(
-                                "mt-1 resize-y rounded-md border bg-white px-3 py-2 text-sm text-on-surface-10 placeholder:text-on-surface-30 focus:outline-none focus:ring-2 w-full min-h-[160px]",
+                                "mt-1 resize-y rounded-md border bg-white px-3 py-2 text-sm text-on-surface-10 placeholder:text-on-surface-30 focus:outline-none focus:ring-2 w-full min-h-[160px] max-h-[400px]",
                                 fieldErrors.prompt
                                   ? "border-destructive focus:ring-destructive/40"
                                   : "border-slate-200 focus:ring-primary"

@@ -21,19 +21,21 @@ export default function Header({ profileImageUrl, onProfileImageChange }: Header
   const profileButtonRef = useRef<HTMLButtonElement>(null);
 
   return (
-    <header className="flex h-14 shrink-0 items-center justify-between border-b border-slate-200 bg-white px-4">
-      <button
-        type="button"
-        onClick={() => router.push("/login")}
-        className="flex cursor-pointer items-center"
-        aria-label="로그인 화면으로 이동"
-      >
-        <img
-          src="/renovel-studio-logo.png"
-          alt="RE:NOVEL Studio"
-          className="h-5 object-contain object-left"
-        />
-      </button>
+    <header className="flex h-14 shrink-0 items-center justify-between border-b border-slate-200 bg-white pl-0 pr-4">
+      <div className="flex w-[240px] self-stretch items-center pl-4">
+        <button
+          type="button"
+          onClick={() => router.push("/login")}
+          className="flex cursor-pointer items-center"
+          aria-label="로그인 화면으로 이동"
+        >
+          <img
+            src="/renovel-studio-logo.png"
+            alt="RE:NOVEL Studio"
+            className="h-5 object-contain object-left"
+          />
+        </button>
+      </div>
       <div className="flex items-center">
         <button
           ref={profileButtonRef}

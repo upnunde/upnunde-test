@@ -95,7 +95,7 @@ export default function AppSidebar({ defaultActiveId = "series", onSelect }: App
   }));
 
   return (
-    <nav className="shrink-0 w-[200px] border-r border-slate-200 bg-white py-4" aria-label="메인 메뉴">
+    <nav className="shrink-0 w-[240px] border-r border-slate-200 bg-white py-4" aria-label="메인 메뉴">
       <SidebarList
         items={sidebarListItems}
         activeId={activeId}

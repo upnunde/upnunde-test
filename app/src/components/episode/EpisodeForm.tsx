@@ -107,7 +107,7 @@ export function EpisodeForm() {
               value={history}
               onChange={(e) => setHistory(e.target.value)}
               placeholder="지난 사건의 히스토리를 작성해 주세요."
-              className="min-h-[160px] rounded-md border border-slate-200 bg-white px-3 py-2 text-sm text-on-surface-10 placeholder:text-on-surface-30 focus:outline-none focus:ring-2 focus:ring-primary"
+              className="min-h-[160px] max-h-[400px] rounded-md border border-slate-200 bg-white px-3 py-2 text-sm text-on-surface-10 placeholder:text-on-surface-30 focus:outline-none focus:ring-2 focus:ring-primary"
             />
             <div className="flex justify-end text-xs text-on-surface-30">
               {history.length}/{MAX_HISTORY}
@@ -128,7 +128,7 @@ export function EpisodeForm() {
               value={rawScript}
               onChange={(e) => setRawScript(e.target.value)}
               placeholder="에피소드 대본을 상세하게 작성해 주세요."
-              className="min-h-[160px] rounded-md border border-slate-200 bg-white px-3 py-2 text-sm text-on-surface-10 placeholder:text-on-surface-30 focus:outline-none focus:ring-2 focus:ring-primary"
+              className="min-h-[160px] max-h-[400px] rounded-md border border-slate-200 bg-white px-3 py-2 text-sm text-on-surface-10 placeholder:text-on-surface-30 focus:outline-none focus:ring-2 focus:ring-primary"
             />
             <div className="flex justify-end text-xs text-on-surface-30">
               {rawScript.length}/{MAX_SCRIPT}

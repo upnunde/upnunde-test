@@ -286,7 +286,7 @@ export function BgmListModal({ open, onClose, onAdd }: BgmListModalProps) {
 
         <div className="flex h-[400px]">
           {/* 장르 목록 */}
-          <div className="w-[160px] border-r border-border-10 bg-surface-10 px-5 py-4 flex flex-col gap-3">
+          <div className="w-[160px] border-r border-border-10 bg-surface-10 pl-5 pr-2 py-4 flex flex-col gap-3">
             <div className="text-xs font-medium text-on-surface-30">장르</div>
             <SidebarList
               items={GENRES.map((g) => ({ id: g, label: g }))}
@@ -302,10 +302,10 @@ export function BgmListModal({ open, onClose, onAdd }: BgmListModalProps) {
 
           {/* 리스트 - 우측(선택한 음악)과 동일한 레이아웃 구조 */}
           <div className="flex-1 min-w-0 border-r border-border-10 px-2 py-0 flex flex-col gap-0">
-            <div className="flex h-8 w-full items-center justify-between text-xs font-medium text-on-surface-30 px-4 mt-2">
+            <div className="flex h-8 w-full items-center justify-between text-xs font-medium text-on-surface-30 px-3 mt-2">
               <span>리스트</span>
             </div>
-            <div className="flex-1 flex flex-col gap-1 overflow-y-auto pr-1 pl-4">
+            <div className="flex-1 flex flex-col gap-1 overflow-y-auto pr-0 pl-0 [scrollbar-width:none] [&::-webkit-scrollbar]:hidden">
               {listTracks.map((track, idx) => {
                 const isActiveHere = playingId === track.id && playingSource === "list";
                 return (
@@ -332,14 +332,14 @@ export function BgmListModal({ open, onClose, onAdd }: BgmListModalProps) {
 
           {/* 선택한 음악 - 좌측(리스트)과 동일한 레이아웃 구조 */}
           <div className="flex-1 min-w-0 px-2 py-0 flex flex-col gap-0">
-            <div className="flex h-8 w-full items-center justify-between text-xs font-medium text-on-surface-30 px-4 mt-2">
+            <div className="flex h-8 w-full items-center justify-between text-xs font-medium text-on-surface-30 px-3 mt-2">
               <span>선택한 음악</span>
               <span className="text-on-surface-20">
                 <span className="text-on-surface-10">{selectedTracks.length}</span>
                 <span className="text-on-surface-20"> / {MAX_SELECTED}</span>
               </span>
             </div>
-            <div className="flex-1 flex flex-col gap-1 overflow-y-auto pr-1 pl-4">
+            <div className="flex-1 flex flex-col gap-1 overflow-y-auto pr-0 pl-0 [scrollbar-width:none] [&::-webkit-scrollbar]:hidden">
               {selectedTracks.map((track, idx) => {
                 const isActiveHere = playingId === track.id && playingSource === "selected";
                 return (
