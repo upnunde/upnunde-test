@@ -44,9 +44,6 @@ function createAiChoice(): ChoiceItem {
   };
 }
 
-const CHOICE_TEXTAREA_MIN_HEIGHT_PX = 40;
-const CHOICE_TEXTAREA_MAX_HEIGHT_PX = 400;
-
 /** 선택지 내용 전용 텍스트 필드. 영역 고정 확장이 아니라 텍스트 줄 수에 따라 높이만 가변 확장 */
 function ChoiceTextField({
   value,
@@ -62,14 +59,9 @@ function ChoiceTextField({
   const adjustHeight = useCallback(() => {
     const ta = textareaRef.current;
     if (!ta) return;
-    ta.style.height = "0";
-    const contentHeight = ta.scrollHeight;
-    const nextHeight = Math.min(
-      CHOICE_TEXTAREA_MAX_HEIGHT_PX,
-      Math.max(CHOICE_TEXTAREA_MIN_HEIGHT_PX, contentHeight)
-    );
-    ta.style.height = `${nextHeight}px`;
-    ta.style.overflowY = contentHeight > CHOICE_TEXTAREA_MAX_HEIGHT_PX ? "auto" : "hidden";
+    ta.style.height = "auto";
+    ta.style.height = `${ta.scrollHeight}px`;
+    ta.style.overflowY = "hidden";
   }, []);
 
   useEffect(() => {
@@ -84,8 +76,8 @@ function ChoiceTextField({
       onInput={adjustHeight}
       placeholder={placeholder}
       rows={1}
-      className="min-h-[40px] max-h-[400px] w-full rounded-md border-0 bg-transparent px-0 py-[10px] text-sm leading-5 outline-none focus:outline-none focus:ring-0 focus:ring-offset-0 align-middle overflow-hidden resize-none"
-      style={{ height: CHOICE_TEXTAREA_MIN_HEIGHT_PX }}
+      className="w-full rounded-md border-0 bg-transparent px-0 py-0 text-sm leading-5 outline-none focus:outline-none focus:ring-0 focus:ring-offset-0 align-middle overflow-hidden resize-none"
+      style={{ height: "fit-content" }}
     />
   );
 }
@@ -104,18 +96,21 @@ function ChoiceRow({
   sceneOptions: SceneOption[];
 }) {
   const isAiMode = choice.isAiMode === true;
+  const selectedSceneLabel =
+    sceneOptions.find((opt) => opt.value === choice.nextScene)?.label ?? "Scene 선택";
 
   return (
     <div
-      className="group/row flex border-b border-slate-100 items-center min-h-10"
+      className="group/row flex border-b border-slate-100 items-stretch min-h-[40px]"
       data-choice-id={choice.id}
     >
       {/* Col 1: Label */}
-      <div className="w-[80px] shrink-0 px-4 py-2 text-sm text-on-surface-30 self-center h-full">
+      <div className="relative w-[80px] shrink-0 min-h-[40px] px-3 py-0 text-sm text-on-surface-30 self-stretch flex items-center">
         선택 {index + 1}
+        <div className="pointer-events-none absolute inset-y-0 right-0 w-px bg-slate-100" />
       </div>
       {/* Col 2: Content - 텍스트 필드 분리, 줄 길이에 따라 가변 확장 */}
-      <div className="flex-1 min-w-0 min-h-[40px] p-0 flex items-center">
+      <div className="relative flex-1 min-w-0 min-h-[40px] px-3 py-1 self-stretch flex items-center">
         {isAiMode ? (
           <span className="text-sm font-semibold text-primary">
             ✨ AI 모드로 직접 대화
@@ -127,13 +122,15 @@ function ChoiceRow({
             placeholder="선택지 내용"
           />
         )}
+        <div className="pointer-events-none absolute inset-y-0 right-0 w-px bg-slate-100" />
       </div>
       {/* Col 3: Scene 전환 드롭다운 */}
-      <div className="w-48 shrink-0 px-4 py-0 h-full">
+      <div className="relative w-[200px] min-w-[160px] max-w-[200px] shrink-0 min-h-[40px] px-3 py-0 self-stretch flex items-center">
         <select
           value={choice.nextScene}
           onChange={(e) => onUpdate({ nextScene: e.target.value })}
-          className="h-9 w-full min-w-0 rounded-md border-0 bg-transparent px-0 py-1 text-sm outline-none focus:outline-none focus:ring-0 focus:ring-offset-0"
+          title={selectedSceneLabel}
+          className="h-9 w-full min-w-0 rounded-md border-0 bg-transparent px-0 py-1 pr-2 text-sm overflow-hidden text-ellipsis whitespace-nowrap outline-none focus:outline-none focus:ring-0 focus:ring-offset-0"
         >
           <option value="">Scene 선택</option>
           {sceneOptions.map((opt) => (
@@ -142,9 +139,10 @@ function ChoiceRow({
             </option>
           ))}
         </select>
+        <div className="pointer-events-none absolute inset-y-0 right-0 w-px bg-slate-100" />
       </div>
       {/* Col 4: Actions */}
-      <div className="w-[140px] shrink-0 px-4 py-2 flex items-center justify-between gap-2">
+      <div className="w-[120px] min-w-[100px] max-w-[120px] shrink-0 min-h-[40px] px-3 py-0 self-stretch flex items-center justify-between gap-2">
         <SwitchToggle
           checked={choice.isPaid}
           onCheckedChange={(checked) => onUpdate({ isPaid: checked })}
@@ -252,12 +250,10 @@ export function ChoiceBlockTable({
     >
       {/* Header */}
       <div className="flex border-b border-slate-200 bg-slate-50/80 text-slate-600 text-xs font-medium min-h-9">
-        <div className="w-20 shrink-0 px-4 flex items-center">선택</div>
-        <div className="flex-1 min-w-0 px-0 flex items-center">내용</div>
-        <div className="w-48 shrink-0 px-4 flex items-center">Scene 전환</div>
-        <div className="w-[140px] shrink-0 px-4 flex items-center">
-          선택지 유료로 전환
-        </div>
+        <div className="w-20 shrink-0 px-3 flex items-center border-r border-slate-200">선택</div>
+        <div className="flex-1 min-w-0 px-3 flex items-center border-r border-slate-200">내용</div>
+        <div className="w-[200px] min-w-[160px] max-w-[200px] shrink-0 px-3 flex items-center border-r border-slate-200">Scene 전환</div>
+        <div className="w-[120px] min-w-[100px] max-w-[120px] shrink-0 px-3 flex items-center">유료 전환</div>
       </div>
       {/* Rows */}
       {choices.map((choice, index) => (

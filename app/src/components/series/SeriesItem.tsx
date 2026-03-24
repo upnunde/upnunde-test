@@ -58,6 +58,7 @@ export function SeriesItem({
 }: SeriesItemProps) {
   const { id, title, thumbnailUrl, status, createdAt, episodeCount, viewCount } = series;
   const [isMenuOpen, setIsMenuOpen] = useState(false);
+  const [navigatingAction, setNavigatingAction] = useState<"series" | "resource" | "episode" | null>(null);
 
   const isDraft = status === "DRAFT";
   const isBanned = status === "BANNED";
@@ -68,15 +69,18 @@ export function SeriesItem({
 
   const handleResource = () => {
     if (isDraft) return;
+    setNavigatingAction("resource");
     onResourceManage?.(series);
   };
 
   const handleEpisode = () => {
     if (isDraft) return;
+    setNavigatingAction("episode");
     onEpisodeManage?.(series);
   };
 
   const handleSeriesManage = () => {
+    setNavigatingAction("series");
     onSeriesManage?.(series);
   };
 
@@ -246,40 +250,41 @@ export function SeriesItem({
           <button
             type="button"
             onClick={handleSeriesManage}
+            disabled={navigatingAction !== null}
             className="h-10 flex-1 min-w-0 cursor-pointer rounded-md border px-3 text-sm font-medium transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-2 border-slate-200 bg-white text-slate-700 hover:bg-slate-50 flex items-center"
           >
             <span className="block w-full overflow-hidden text-ellipsis whitespace-nowrap text-center">
-              시리즈 관리
+              {navigatingAction === "series" ? "이동 중..." : "시리즈 관리"}
             </span>
           </button>
           <button
             type="button"
-            disabled={isDraft}
+            disabled={isDraft || navigatingAction !== null}
             title={isDraft ? "시리즈 작성 완료 후 이용 가능합니다" : undefined}
             onClick={handleResource}
             className={`h-10 flex-1 min-w-0 rounded-md border px-3 text-sm font-medium transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-2 flex items-center ${
-              isDraft
+              isDraft || navigatingAction !== null
                 ? "border-slate-200 text-on-surface-30 cursor-not-allowed"
                 : "border-slate-200 bg-white text-slate-700 hover:bg-slate-50 cursor-pointer"
             }`}
           >
             <span className="block w-full overflow-hidden text-ellipsis whitespace-nowrap text-center">
-              리소스 관리
+              {navigatingAction === "resource" ? "이동 중..." : "리소스 관리"}
             </span>
           </button>
           <button
             type="button"
-            disabled={isDraft}
+            disabled={isDraft || navigatingAction !== null}
             title={isDraft ? "시리즈 작성 완료 후 이용 가능합니다" : undefined}
             onClick={handleEpisode}
             className={`h-10 flex-1 min-w-0 rounded-md border px-3 text-sm font-medium transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-2 flex items-center ${
-              isDraft
+              isDraft || navigatingAction !== null
                 ? "border-slate-200 text-on-surface-30 cursor-not-allowed"
                 : "border-slate-200 bg-white text-slate-700 hover:bg-slate-50 cursor-pointer"
             }`}
           >
             <span className="block w-full overflow-hidden text-ellipsis whitespace-nowrap text-center">
-              에피소드 관리
+              {navigatingAction === "episode" ? "이동 중..." : "에피소드 관리"}
             </span>
           </button>
         </div>

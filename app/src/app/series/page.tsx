@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState, useCallback } from "react";
+import React, { useState, useCallback, useEffect } from "react";
 import { useRouter } from "next/navigation";
 import Header from "@/components/Header/Header";
 import AppSidebar from "@/components/AppSidebar/AppSidebar";
@@ -91,6 +91,14 @@ export default function SeriesListPage() {
   const [seriesList, setSeriesList] = useState<SeriesData[]>(MOCK_SERIES);
   const [seriesToDelete, setSeriesToDelete] = useState<SeriesData | null>(null);
   const [policyModalOpen, setPolicyModalOpen] = useState(false);
+
+  useEffect(() => {
+    for (const series of seriesList) {
+      router.prefetch(`/series/${series.id}/episodes`);
+      router.prefetch(`/series/${series.id}/resources`);
+      router.prefetch(`/series/${series.id}/edit`);
+    }
+  }, [router, seriesList]);
 
   const handleEpisodeManage = useCallback(
     (series: SeriesData) => {

@@ -55,7 +55,13 @@ export function CharacterCard({
             : "bg-surface-disabled/0 outline-border-20"
         )}
       >
-        <img src={character.imageUrl} alt="" className="w-28 h-28 object-cover" />
+        <img
+          src={character.imageUrl}
+          alt=""
+          className="w-28 h-28 object-cover"
+          loading="lazy"
+          decoding="async"
+        />
         <div
           className={cn(
             "absolute inset-0 w-full h-full bg-black/10 transition-opacity pointer-events-none",

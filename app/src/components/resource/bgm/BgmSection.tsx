@@ -1,10 +1,10 @@
 "use client";
 
 import React, { useState, useEffect, useRef, useMemo } from "react";
+import dynamic from "next/dynamic";
 import { Button } from "@/components/ui/button";
 import { Title2 } from "@/components/ui/title2";
 import { BgmListItem } from "./BgmListItem";
-import { BgmListModal } from "./BgmListModal";
 import type { BgmResource } from "@/types/resource";
 
 /** "00:00" 형식을 초로 변환 */
@@ -33,6 +33,11 @@ export interface BgmSectionProps {
 
 const GENRE_TABS = ["판타지", "호러", "로맨스"] as const;
 const GENRE_TABS_WITH_ALL = ["전체", ...GENRE_TABS] as const;
+
+const BgmListModal = dynamic(
+  () => import("./BgmListModal").then((mod) => mod.BgmListModal),
+  { ssr: false }
+);
 
 export function BgmSection({
   title,

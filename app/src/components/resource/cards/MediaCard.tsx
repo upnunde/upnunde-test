@@ -55,7 +55,13 @@ export function MediaCard({
             : "bg-surface-disabled/0 outline-border-20"
         )}
       >
-        <img src={item.thumbnailUrl} alt="" className="w-full h-full object-cover" />
+        <img
+          src={item.thumbnailUrl}
+          alt=""
+          className="w-full h-full object-cover"
+          loading="lazy"
+          decoding="async"
+        />
         <div className="w-full h-6 left-0 bottom-0 absolute inline-flex justify-center items-center pointer-events-none bg-black/40">
           <span className="text-center text-white text-xs font-bold font-['Pretendard_JP'] leading-4">
             {item.duration}

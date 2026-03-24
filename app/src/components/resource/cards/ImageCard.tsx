@@ -73,7 +73,15 @@ export function ImageCard({
             : "bg-surface-disabled/0 outline-border-20 outline outline-1 outline-offset-[-1px]"
         )}
       >
-        {registered && <img src={item.imageUrl} alt="" className={cn(sizeClass, imgClass)} />}
+        {registered && (
+          <img
+            src={item.imageUrl}
+            alt=""
+            className={cn(sizeClass, imgClass)}
+            loading="lazy"
+            decoding="async"
+          />
+        )}
         {/* 호버 시 어두운 오버레이 */}
         <div
           className={cn(

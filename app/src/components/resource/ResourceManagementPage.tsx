@@ -1,6 +1,7 @@
 "use client";
 
 import React, { useMemo, useState, useCallback } from "react";
+import dynamic from "next/dynamic";
 import { useRouter, useParams, useSearchParams } from "next/navigation";
 import { ChevronLeft } from "lucide-react";
 import { Button } from "@/components/ui/button";
@@ -12,7 +13,7 @@ import { MediaCard } from "./cards/MediaCard";
 import { AddResourceSlot } from "./cards/AddResourceSlot";
 import { BgmSection } from "./bgm/BgmSection";
 import { ConfirmDeleteModal } from "./modals/ConfirmDeleteModal";
-import { ImageLightbox, type ImageLightboxItem } from "./ImageLightbox";
+import type { ImageLightboxItem } from "./ImageLightbox";
 import type {
   ResourceCategory,
   CharacterResource,
@@ -85,6 +86,11 @@ const initialBgm: BgmResource[] = MOCK_HAS_RESOURCES
     ]
   : [];
 
+const ImageLightbox = dynamic(
+  () => import("./ImageLightbox").then((mod) => mod.ImageLightbox),
+  { ssr: false }
+);
+
 export function ResourceManagementPage() {
   const router = useRouter();
   const params = useParams();
@@ -98,6 +104,8 @@ export function ResourceManagementPage() {
   const [media, setMedia] = useState<MediaResource[]>(initialMedia);
   const [gallery, setGallery] = useState<ImageResource[]>(initialGallery);
   const [bgm, setBgm] = useState<BgmResource[]>(initialBgm);
+  const [showAllScenes, setShowAllScenes] = useState(false);
+  const [showAllGallery, setShowAllGallery] = useState(false);
 
   const [deleteModal, setDeleteModal] = useState<{
     open: boolean;
@@ -159,6 +167,9 @@ export function ResourceManagementPage() {
     },
     [router]
   );
+
+  const visibleScenes = showAllScenes ? scenes : scenes.slice(0, 6);
+  const visibleGallery = showAllGallery ? gallery : gallery.slice(0, 6);
 
   return (
     <>
@@ -296,7 +307,7 @@ export function ResourceManagementPage() {
               onAddClick={() => navigateTo(ROUTES.scene.new(seriesId))}
             >
               <div className="self-stretch p-0 rounded-2xl inline-flex justify-start items-start gap-4 flex-wrap content-start">
-                {scenes.map((s) => (
+                {visibleScenes.map((s) => (
                   <ImageCard
                     key={s.id}
                     item={s}
@@ -320,6 +331,19 @@ export function ResourceManagementPage() {
                 ))}
                 <AddResourceSlot variant="img9:16" onClick={() => navigateTo(ROUTES.scene.new(seriesId))} />
               </div>
+              {scenes.length > 6 && (
+                <div className="mt-3">
+                  <Button
+                    type="button"
+                    variant="outline"
+                    size="sm"
+                    className="h-9 border-border-20 text-on-surface-10"
+                    onClick={() => setShowAllScenes((prev) => !prev)}
+                  >
+                    {showAllScenes ? "접기" : `더보기 (${scenes.length - 6}개)`}
+                  </Button>
+                </div>
+              )}
             </ResourceSection>
 
             {/* 미디어 [정책 7, 3, 5] */}
@@ -369,7 +393,7 @@ export function ResourceManagementPage() {
               onAddClick={() => navigateTo(ROUTES.gallery.new(seriesId))}
             >
               <div className="self-stretch p-0 rounded-2xl inline-flex justify-start items-start gap-4 flex-wrap content-start">
-                {gallery.map((g) => (
+                {visibleGallery.map((g) => (
                   <ImageCard
                     key={g.id}
                     item={g}
@@ -395,6 +419,19 @@ export function ResourceManagementPage() {
                 ))}
                 <AddResourceSlot variant="img9:16" onClick={() => navigateTo(ROUTES.gallery.new(seriesId))} />
               </div>
+              {gallery.length > 6 && (
+                <div className="mt-3">
+                  <Button
+                    type="button"
+                    variant="outline"
+                    size="sm"
+                    className="h-9 border-border-20 text-on-surface-10"
+                    onClick={() => setShowAllGallery((prev) => !prev)}
+                  >
+                    {showAllGallery ? "접기" : `더보기 (${gallery.length - 6}개)`}
+                  </Button>
+                </div>
+              )}
             </ResourceSection>
 
             {/* BGM [정책 8, 9, 10] */}
