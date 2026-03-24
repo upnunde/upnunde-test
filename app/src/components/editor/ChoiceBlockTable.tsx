@@ -143,7 +143,7 @@ function ChoiceRow({
         <div className="pointer-events-none absolute inset-y-0 right-0 w-px bg-slate-100" />
       </div>
       {/* Col 2: Content - 텍스트 필드 분리, 줄 길이에 따라 가변 확장 */}
-      <div className="relative flex-1 min-w-0 min-h-[40px] px-3 py-1 self-stretch flex items-center">
+      <div className="relative flex-1 min-w-[200px] min-h-[40px] px-3 py-1 self-stretch flex items-center">
         {isAiMode ? (
           <span className="text-sm font-semibold text-primary">
             ✨ AI 모드로 직접 대화
@@ -300,7 +300,7 @@ export function ChoiceBlockTable({
       {/* Header */}
       <div className="flex border-b border-slate-200 bg-slate-50/80 text-slate-600 text-xs font-medium min-h-9">
         <div className="w-20 shrink-0 px-3 flex items-center border-r border-slate-200">선택</div>
-        <div className="flex-1 min-w-0 px-3 flex items-center border-r border-slate-200">내용</div>
+        <div className="flex-1 min-w-[200px] px-3 flex items-center border-r border-slate-200">내용</div>
         <div className="w-[200px] min-w-[160px] max-w-[200px] shrink-0 px-3 flex items-center border-r border-slate-200">Scene 전환</div>
         <div className="w-[120px] min-w-[100px] max-w-[120px] shrink-0 px-3 flex items-center">유료 전환</div>
       </div>

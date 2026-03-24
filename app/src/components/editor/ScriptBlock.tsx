@@ -20,6 +20,7 @@ import {
 import type { ScriptBlock as ScriptBlockType, BlockType } from "@/types/editor";
 import { useEditorStore } from "@/store/useEditorStore";
 import { CHARACTERS, BACKGROUNDS, BGMS, SFX } from "@/lib/mockData";
+import { initialCharacters } from "@/lib/resourceMockData";
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -107,8 +108,16 @@ function getRandomNameFromList<T extends { name: string }>(items: T[]): string {
   return items[index]?.name ?? "";
 }
 
-/** 캐릭터 블록용 표정 옵션 */
-const EXPRESSIONS = ["기본", "웃음", "슬픔", "화남", "놀람", "당황", "무표정"] as const;
+const DEFAULT_CHARACTER_EXPRESSION = "기본";
+
+function getCharacterExpressionOptions(characterName: string): string[] {
+  const target = initialCharacters.find((c) => c.name === characterName);
+  const labels = (target?.expressions ?? [])
+    .map((slot) => slot.expressionLabel?.trim() ?? "")
+    .filter((label): label is string => label.length > 0 && label !== "untitle");
+  const deduped = Array.from(new Set(labels));
+  return deduped.length > 0 ? deduped : [DEFAULT_CHARACTER_EXPRESSION];
+}
 
 /** 텍스트(대사) 블록 전용: 높이 내용에 맞춤, 패딩/갭 별도 적용, 세로 상단 정렬 */
 const TEXT_BLOCK_ROOT_CLASSES =
@@ -995,6 +1004,15 @@ export function ScriptBlock({
     const isEmpty = !displayName || displayName === "none";
     const labelKo = PICKER_LABEL_KO[block.type] ?? label;
     const labelColorClass = LABEL_COLOR_BY_TYPE[block.type];
+    const characterExpressionOptions =
+      block.type === "character"
+        ? getCharacterExpressionOptions(displayName)
+        : [DEFAULT_CHARACTER_EXPRESSION];
+    const currentExpressionRaw = (block.data?.expression as string | undefined)?.trim() ?? "";
+    const currentExpression =
+      characterExpressionOptions.includes(currentExpressionRaw) && currentExpressionRaw.length > 0
+        ? currentExpressionRaw
+        : characterExpressionOptions[0] ?? DEFAULT_CHARACTER_EXPRESSION;
 
     return (
       <div
@@ -1050,9 +1068,15 @@ export function ScriptBlock({
             isOpen={isPickerOpen}
             onOpenChange={setPickerOpen}
             onSelect={(value) => {
-              updateBlock(block.id, value);
               if (block.type === "character") {
+                const nextOptions = getCharacterExpressionOptions(value);
                 requestAnimationFrame(() => setExpressionMenuOpen(true));
+                updateBlock(block.id, value, {
+                  ...(block.data ?? {}),
+                  expression: nextOptions[0] ?? DEFAULT_CHARACTER_EXPRESSION,
+                });
+              } else {
+                updateBlock(block.id, value);
               }
             }}
             onClose={() => setPickerOpen(false)}
@@ -1124,7 +1148,7 @@ export function ScriptBlock({
                       "min-w-0 flex-1 truncate text-[13px] font-medium text-[rgba(126,140,160,1)]"
                     )}
                   >
-                    {(block.data?.expression as string) || "기본"}
+                    {currentExpression}
                   </span>
                   <ChevronDown className="ml-1 h-4 w-4 shrink-0 text-on-surface-30" />
                 </button>
@@ -1133,7 +1157,7 @@ export function ScriptBlock({
                 align="start"
                 className="w-40 p-1 bg-white rounded-lg border border-slate-100"
               >
-                {EXPRESSIONS.map((expr) => (
+                {characterExpressionOptions.map((expr) => (
                   <DropdownMenuItem
                     key={expr}
                     onClick={() =>

@@ -96,6 +96,11 @@ const CHARACTER_LIST: CharacterResource[] = MOCK_HAS_RESOURCES
         summary: "사람의 소리를 볼 수 있는 소리 수집가 소년",
         tags: "고등학생, 사진, 츤데레",
         greeting: "안녕, 오늘도 사진 찍으러 나갈 준비됐지?",
+        expressions: [
+          { id: "char-1-exp-1", expressionLabel: "기본", imageUrl: "/character-1.png" },
+          { id: "char-1-exp-2", expressionLabel: "미소", imageUrl: "/character-1.png" },
+          { id: "char-1-exp-3", expressionLabel: "당황", imageUrl: "/character-1.png" },
+        ],
       },
       {
         id: "2",
@@ -104,6 +109,12 @@ const CHARACTER_LIST: CharacterResource[] = MOCK_HAS_RESOURCES
         summary: "밝고 활발한 성격의 단짝 친구",
         tags: "친구, 밝음, 유머",
         greeting: "오늘 뭐 할 거야? 나랑 놀자!",
+        expressions: [
+          { id: "char-2-exp-1", expressionLabel: "기본", imageUrl: "/character-2.png" },
+          { id: "char-2-exp-2", expressionLabel: "환한 웃음", imageUrl: "/character-2.png" },
+          { id: "char-2-exp-3", expressionLabel: "삐짐", imageUrl: "/character-2.png" },
+          { id: "char-2-exp-4", expressionLabel: "장난기", imageUrl: "/character-2.png" },
+        ],
       },
       {
         id: "3",
@@ -112,6 +123,11 @@ const CHARACTER_LIST: CharacterResource[] = MOCK_HAS_RESOURCES
         summary: "차분하고 신중한 반장",
         tags: "반장, 책임감, 성실",
         greeting: "오늘도 수업 잘 부탁해.",
+        expressions: [
+          { id: "char-3-exp-1", expressionLabel: "무표정", imageUrl: "/character-3.png" },
+          { id: "char-3-exp-2", expressionLabel: "엄격", imageUrl: "/character-3.png" },
+          { id: "char-3-exp-3", expressionLabel: "걱정", imageUrl: "/character-3.png" },
+        ],
       },
       {
         id: "4",
@@ -120,6 +136,11 @@ const CHARACTER_LIST: CharacterResource[] = MOCK_HAS_RESOURCES
         summary: "몽상가 기질의 예술 소년",
         tags: "예술, 꿈, 감성",
         greeting: "이 풍경, 한 번 담아볼까.",
+        expressions: [
+          { id: "char-4-exp-1", expressionLabel: "기본", imageUrl: "/character-4.png" },
+          { id: "char-4-exp-2", expressionLabel: "사색", imageUrl: "/character-4.png" },
+          { id: "char-4-exp-3", expressionLabel: "감탄", imageUrl: "/character-4.png" },
+        ],
       },
       {
         id: "5",
@@ -128,6 +149,10 @@ const CHARACTER_LIST: CharacterResource[] = MOCK_HAS_RESOURCES
         summary: "차분하고 신비로운 분위기의 청년",
         tags: "차분함, 미스터리, 음악",
         greeting: ".... 신경 쓰지 마, 난 그냥 보고 있을 뿐이야.",
+        expressions: [
+          { id: "char-5-exp-1", expressionLabel: "무표정", imageUrl: "/character-5.png" },
+          { id: "char-5-exp-2", expressionLabel: "냉소", imageUrl: "/character-5.png" },
+        ],
       },
       {
         id: "6",
@@ -136,6 +161,11 @@ const CHARACTER_LIST: CharacterResource[] = MOCK_HAS_RESOURCES
         summary: "냉철한 카리스마를 가진 엘리트",
         tags: "엘리트, 카리스마, 냉정",
         greeting: "이 정도 일로 흔들리면, 여기까지 오지도 못했겠지.",
+        expressions: [
+          { id: "char-6-exp-1", expressionLabel: "기본", imageUrl: "/character-6.png" },
+          { id: "char-6-exp-2", expressionLabel: "단호", imageUrl: "/character-6.png" },
+          { id: "char-6-exp-3", expressionLabel: "분노", imageUrl: "/character-6.png" },
+        ],
       },
       {
         id: "7",
@@ -144,6 +174,12 @@ const CHARACTER_LIST: CharacterResource[] = MOCK_HAS_RESOURCES
         summary: "밝고 다정한 분위기의 친구",
         tags: "다정함, 친구, 긍정",
         greeting: "왔어? 오늘도 재밌는 하루로 만들어 보자.",
+        expressions: [
+          { id: "char-7-exp-1", expressionLabel: "기본", imageUrl: "/character-7.png" },
+          { id: "char-7-exp-2", expressionLabel: "활짝 웃음", imageUrl: "/character-7.png" },
+          { id: "char-7-exp-3", expressionLabel: "놀람", imageUrl: "/character-7.png" },
+          { id: "char-7-exp-4", expressionLabel: "울먹임", imageUrl: "/character-7.png" },
+        ],
       },
       {
         id: "8",
@@ -152,6 +188,12 @@ const CHARACTER_LIST: CharacterResource[] = MOCK_HAS_RESOURCES
         summary: "도시적인 이미지의 프로페셔널 커리어우먼",
         tags: "커리어우먼, 냉철, 프로",
         greeting: "반가워요. 오늘 협의할 안건부터 정리해 볼까요?",
+        expressions: [
+          { id: "char-8-exp-1", expressionLabel: "기본", imageUrl: "/character-8.png" },
+          { id: "char-8-exp-2", expressionLabel: "미소", imageUrl: "/character-8.png" },
+          { id: "char-8-exp-3", expressionLabel: "곤란", imageUrl: "/character-8.png" },
+          { id: "char-8-exp-4", expressionLabel: "집중", imageUrl: "/character-8.png" },
+        ],
       },
     ]
   : [];
