@@ -8,6 +8,7 @@ import { EditorSubHeader } from "@/components/editor/EditorSubHeader";
 import EditorBody from "@/components/editor/EditorBody";
 import { SceneNavigation } from "@/components/editor/SceneNavigation";
 import { PreviewScreen } from "@/components/editor/PreviewScreen";
+import { IPhone15ProFrame } from "@/components/preview/IPhone15ProFrame";
 import { EpisodeForm } from "@/components/episode/EpisodeForm";
 import { useEditorStore } from "@/store/useEditorStore";
 import { useSceneClickHandler } from "@/hooks/useSceneClickHandler";
@@ -100,9 +101,9 @@ function EditorInner() {
 
             {/* Right Area: Phone Preview (Fixed size, sticky to stay visible when scrolling) */}
             <div className="shrink-0 sticky top-10 h-full ml-auto p-10 flex flex-col justify-start items-center">
-              <div className="w-[300px] h-[652px] relative bg-slate-100 rounded-[2rem] outline outline-[4px] outline-slate-800 overflow-hidden flex flex-col">
+              <IPhone15ProFrame>
                 <PreviewScreen />
-              </div>
+              </IPhone15ProFrame>
             </div>
           </div>
         </main>

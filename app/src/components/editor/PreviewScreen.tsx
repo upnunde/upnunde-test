@@ -155,91 +155,76 @@ export function PreviewScreen(props: PreviewScreenProps = {}) {
       className="relative flex h-full min-h-0 w-full flex-shrink-0 items-stretch justify-stretch overflow-hidden overscroll-none"
       style={{ height: "100%", overflow: "hidden" }}
     >
-      {/* Smartphone frame: fills parent (300×652), rounded corners, black border, notch */}
-      <div
-        className={cn(
-          "relative overflow-hidden rounded-[2rem]",
-          "bg-black",
-          "h-full w-full min-h-0 min-w-0"
-        )}
-      >
-        {/* Notch */}
+      {/* Top-left badge: current top_desc (from state up to focused block) */}
+      {currentTopDesc && (
         <div
-          className="absolute left-1/2 top-0 z-30 h-6 w-32 -translate-x-1/2 rounded-b-2xl bg-black"
-          aria-hidden
-        />
-
-        {/* Top-left badge: current top_desc (from state up to focused block) */}
-        {currentTopDesc && (
-          <div
-            className="absolute left-3 top-8 z-20 max-w-[calc(100%-24px)] rounded-lg border border-white/20 bg-black/60 px-3 py-2 backdrop-blur-sm"
-            role="status"
-          >
-            <p className="text-xs leading-relaxed text-white/95">
-              {currentTopDesc}
-            </p>
-          </div>
-        )}
-
-        {/* Optional: BGM label (state persisted for future audio playback) */}
-        {currentBgm && (
-          <div
-            className="absolute right-3 top-8 z-20 rounded-lg border border-white/20 bg-black/60 px-2 py-1 text-[10px] text-white/80"
-            role="status"
-            aria-label={`BGM: ${currentBgm}`}
-          >
-            ♪ {currentBgm}
-          </div>
-        )}
-
-        {/* Layer 1: BG (absolute fill) — from accumulated state up to focused block */}
-        <div className="absolute inset-0 z-0">
-          {currentBg != null && currentBg !== "" ? (
-            <img
-              src={getBackgroundUrl(currentBg)}
-              alt=""
-              className="h-full w-full object-cover object-center"
-            />
-          ) : (
-            <div className="h-full w-full bg-gradient-to-b from-slate-800 to-slate-900" />
-          )}
+          className="absolute left-3 top-10 z-20 max-w-[calc(100%-24px)] rounded-lg border border-white/20 bg-black/60 px-3 py-2 backdrop-blur-sm"
+          role="status"
+        >
+          <p className="text-xs leading-relaxed text-white/95">
+            {currentTopDesc}
+          </p>
         </div>
+      )}
 
-        {/* Layer 2: Character (centered) — from accumulated state */}
-        {currentChar != null && currentChar !== "" && (
-          <div className="absolute inset-0 z-10 flex items-end justify-center pb-24 pointer-events-none">
-            <img
-              src={getCharacterUrl(currentChar)}
-              alt=""
-              className="max-h-[55%] max-w-[80%] object-contain"
-            />
-          </div>
-        )}
+      {/* Optional: BGM label (state persisted for future audio playback) */}
+      {currentBgm && (
+        <div
+          className="absolute right-3 top-10 z-20 rounded-lg border border-white/20 bg-black/60 px-2 py-1 text-[10px] text-white/80"
+          role="status"
+          aria-label={`BGM: ${currentBgm}`}
+        >
+          ♪ {currentBgm}
+        </div>
+      )}
 
-        {/* Layer 3: Visual Novel style text box — speaker from focused text block only; hide nameplate when "독백" */}
-        {currentDialogue && (
-          <div
-            className={cn(
-              "absolute bottom-0 left-0 right-0 z-20 mx-3 mb-3 rounded-xl",
-              "bg-black/75 backdrop-blur-sm",
-              "border-2 border-white/20"
-            )}
-          >
-            {currentSpeaker && currentSpeaker !== "독백" && (
-              <div className="border-b border-white/10 px-4 py-2">
-                <span className="text-sm font-semibold text-amber-300/95">
-                  {currentSpeaker}
-                </span>
-              </div>
-            )}
-            <div className="min-h-[64px] px-4 py-3">
-              <p className="text-white/95 text-sm leading-relaxed whitespace-pre-wrap">
-                {currentDialogue}
-              </p>
-            </div>
-          </div>
+      {/* Layer 1: BG (absolute fill) — from accumulated state up to focused block */}
+      <div className="absolute inset-0 z-0">
+        {currentBg != null && currentBg !== "" ? (
+          <img
+            src={getBackgroundUrl(currentBg)}
+            alt=""
+            className="h-full w-full object-cover object-center"
+          />
+        ) : (
+          <div className="h-full w-full bg-gradient-to-b from-slate-800 to-slate-900" />
         )}
       </div>
+
+      {/* Layer 2: Character (centered) — from accumulated state */}
+      {currentChar != null && currentChar !== "" && (
+        <div className="absolute inset-0 z-10 flex items-end justify-center pb-24 pointer-events-none">
+          <img
+            src={getCharacterUrl(currentChar)}
+            alt=""
+            className="max-h-[55%] max-w-[80%] object-contain"
+          />
+        </div>
+      )}
+
+      {/* Layer 3: Visual Novel style text box — speaker from focused text block only; hide nameplate when "독백" */}
+      {currentDialogue && (
+        <div
+          className={cn(
+            "absolute bottom-0 left-0 right-0 z-20 mx-3 mb-3 rounded-xl",
+            "bg-black/75 backdrop-blur-sm",
+            "border-2 border-white/20"
+          )}
+        >
+          {currentSpeaker && currentSpeaker !== "독백" && (
+            <div className="border-b border-white/10 px-4 py-2">
+              <span className="text-sm font-semibold text-amber-300/95">
+                {currentSpeaker}
+              </span>
+            </div>
+          )}
+          <div className="min-h-[64px] px-4 py-3">
+            <p className="text-white/95 text-sm leading-relaxed whitespace-pre-wrap">
+              {currentDialogue}
+            </p>
+          </div>
+        </div>
+      )}
     </div>
   );
 }

@@ -10,6 +10,7 @@ import { Title1 } from "@/components/ui/title1";
 import { cn } from "@/lib/utils";
 import { CharacterExpressionSingleModal, ImageCropOnlyModal } from "@/components/resource/character/CharacterExpressionModal";
 import type { CharacterExpressionSlot } from "@/types/resource";
+import { IPhone15ProFrame } from "@/components/preview/IPhone15ProFrame";
 
 type SeriesEditTab = "image" | "info" | "worldview";
 
@@ -471,7 +472,7 @@ export default function SeriesEditPage() {
                                     key={logoPreviewUrl}
                                     src={logoPreviewUrl}
                                     alt="로고 미리보기"
-                                    className="w-full h-full object-contain bg-slate-900/10"
+                                    className="w-full h-full object-cover"
                                   />
                                   <button
                                     type="button"
@@ -793,8 +794,8 @@ export default function SeriesEditPage() {
                 <div className="w-[300px] shrink-0 flex flex-col gap-3">
                   <p className="text-base font-semibold text-slate-700">미리보기</p>
                   <div className="w-full flex justify-center">
-                    <div className="w-full aspect-[9/16] relative bg-transparent rounded-[2rem] outline outline-[4px] outline-slate-800 overflow-hidden flex flex-col">
-                      <div className="relative w-full flex-1">
+                    <IPhone15ProFrame>
+                      <div className="relative w-full h-full">
                         {coverPreviewUrl || logoPreviewUrl ? (
                           <>
                             <img
@@ -808,13 +809,13 @@ export default function SeriesEditPage() {
                                 key={logoPreviewUrl}
                                 src={logoPreviewUrl}
                                 alt="로고 미리보기"
-                                className="absolute inset-0 w-full h-full object-contain z-10 pointer-events-none"
+                                className="absolute inset-0 w-full h-full object-cover z-10 pointer-events-none"
                               />
                             )}
                           </>
                         ) : null}
                       </div>
-                    </div>
+                    </IPhone15ProFrame>
                   </div>
                 </div>
               </div>

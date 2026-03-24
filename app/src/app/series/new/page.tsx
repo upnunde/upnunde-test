@@ -10,6 +10,7 @@ import { Title1 } from "@/components/ui/title1";
 import { cn } from "@/lib/utils";
 import { ImageCropOnlyModal } from "@/components/resource/character/CharacterExpressionModal";
 import type { CharacterExpressionSlot } from "@/types/resource";
+import { IPhone15ProFrame } from "@/components/preview/IPhone15ProFrame";
 
 type SeriesCreateTab = "image" | "info" | "worldview";
 
@@ -473,7 +474,7 @@ export default function SeriesNewPage() {
                                     key={logoPreviewUrl}
                                     src={logoPreviewUrl}
                                     alt="로고 미리보기"
-                                    className="w-full h-full object-contain bg-slate-900/10"
+                                    className="w-full h-full object-cover"
                                   />
                                   <button
                                     type="button"
@@ -799,11 +800,11 @@ export default function SeriesNewPage() {
                 </div>
 
                 {/* 오른쪽: 미리보기 (공통 레이아웃) */}
-                <div className="flex flex-col gap-3 w-full max-w-[300px] basis-[28%]">
+                <div className="w-[300px] shrink-0 flex flex-col gap-3">
                   <p className="text-base font-semibold text-slate-700">미리보기</p>
                   <div className="w-full flex justify-center">
-                    <div className="w-[300px] aspect-[9/16] relative bg-transparent rounded-[2rem] outline outline-8 outline-slate-800 overflow-hidden flex flex-col">
-                      <div className="relative w-full flex-1">
+                    <IPhone15ProFrame>
+                      <div className="relative w-full h-full">
                         {coverPreviewUrl || logoPreviewUrl ? (
                           <>
                             <img
@@ -817,13 +818,13 @@ export default function SeriesNewPage() {
                                 key={logoPreviewUrl}
                                 src={logoPreviewUrl}
                                 alt="로고 미리보기"
-                                className="absolute inset-0 w-full h-full object-contain z-10 pointer-events-none"
+                                className="absolute inset-0 w-full h-full object-cover z-10 pointer-events-none"
                               />
                             )}
                           </>
                         ) : null}
                       </div>
-                    </div>
+                    </IPhone15ProFrame>
                   </div>
                 </div>
               </div>
