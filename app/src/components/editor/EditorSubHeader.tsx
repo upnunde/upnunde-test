@@ -2,6 +2,7 @@
 
 import { ChevronLeft } from "lucide-react";
 import { useRouter } from "next/navigation";
+import { useMemo } from "react";
 import { useEditorStore } from "@/store/useEditorStore";
 import { Button } from "@/components/ui/button";
 
@@ -12,8 +13,29 @@ export interface EditorSubHeaderProps {
 
 export function EditorSubHeader({ title = "에피소드 제목" }: EditorSubHeaderProps) {
   const router = useRouter();
+  const blocks = useEditorStore((s) => s.blocks);
   const currentView = useEditorStore((s) => s.currentView);
   const setCurrentView = useEditorStore((s) => s.setCurrentView);
+
+  const hasValidationIssues = useMemo(() => {
+    for (const block of blocks) {
+      if (["scene", "top_desc", "text", "direction"].includes(block.type) && !block.content?.trim()) {
+        return true;
+      }
+
+      if (block.type === "choice") {
+        const choices = Array.isArray(block.data?.choices) ? block.data.choices : [];
+        if (choices.length === 0) return true;
+        for (const c of choices) {
+          if (!c.text?.trim() || !c.nextScene?.trim()) return true;
+        }
+      }
+    }
+
+    const eventStarts = blocks.filter((b) => b.type === "event").length;
+    const eventEnds = blocks.filter((b) => b.type === "event_end").length;
+    return eventStarts !== eventEnds;
+  }, [blocks]);
 
   const handleBack = () => {
     if (currentView === "editor") setCurrentView("form");
@@ -46,7 +68,8 @@ export function EditorSubHeader({ title = "에피소드 제목" }: EditorSubHead
         <Button
           type="button"
           size="sm"
-          className="h-10 shadow-none bg-primary text-primary-foreground hover:bg-primary/90"
+          disabled={hasValidationIssues}
+          className="h-10 shadow-none bg-primary text-primary-foreground hover:bg-primary/90 disabled:bg-primary/40 disabled:hover:bg-primary/40"
           onClick={handleSubmit}
         >
           등록하기

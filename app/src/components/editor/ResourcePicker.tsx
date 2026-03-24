@@ -98,7 +98,7 @@ export function ResourcePicker({
       <PopoverAnchor asChild>{children}</PopoverAnchor>
       <PopoverContent
         align="start"
-        className="w-fit h-96 flex flex-col justify-start items-stretch overflow-hidden p-0 bg-surface-10 rounded-2xl border border-[rgba(0,0,0,0.07)] outline outline-1 outline-offset-[-1px] outline-border-20/10"
+        className="w-fit max-h-[420px] flex flex-col justify-start items-stretch overflow-hidden p-0 bg-surface-10 rounded-2xl border border-[rgba(0,0,0,0.07)] outline outline-1 outline-offset-[-1px] outline-border-20/10"
         onCloseAutoFocus={(e) => e.preventDefault()}
       >
         {/* 헤더: 타이틀 + 닫기 버튼 */}
@@ -141,9 +141,23 @@ export function ResourcePicker({
                   <div
                     className={cn(
                       isCharacter ? "w-24 h-24" : "w-24 h-44",
-                      "left-0 top-0 absolute bg-surface-disabled/60"
+                      "left-0 top-0 absolute bg-surface-disabled/30"
                     )}
-                  />
+                  >
+                    <div
+                      className="absolute inset-0"
+                      aria-hidden
+                    >
+                      <svg
+                        className="absolute inset-0 h-full w-full text-border-20"
+                        viewBox="0 0 100 100"
+                        preserveAspectRatio="none"
+                        aria-hidden
+                      >
+                        <line x1="0" y1="100" x2="100" y2="0" stroke="currentColor" strokeWidth="2" />
+                      </svg>
+                    </div>
+                  </div>
                 </div>
                 <div
                   className={cn(
@@ -216,7 +230,7 @@ export function ResourcePicker({
                 onClick={() => handleSelect("")}
                 className="flex cursor-pointer items-center gap-2 rounded px-2 py-2 text-left text-sm hover:bg-slate-100 focus:outline-none focus:ring-0"
               >
-                <span className="flex h-8 w-8 shrink-0 items-center justify-center rounded bg-slate-100 text-on-surface-30">
+                <span className="flex h-8 w-8 shrink-0 items-center justify-center rounded bg-slate-100 text-on-surface-disabled/60">
                   —
                 </span>
                 <span className="truncate font-medium text-on-surface-10">선택 안 함</span>
