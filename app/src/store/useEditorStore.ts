@@ -81,6 +81,13 @@ const MAX_UNDO = 50;
 interface EditorState {
   blocks: ScriptBlock[];
   focusBlockId: string | null;
+  issueFocus:
+    | {
+        blockId: string;
+        choiceIndex?: number;
+        field?: "text" | "nextScene";
+      }
+    | null;
   currentView: CurrentView;
   rawScript: string;
   undoStack: ScriptBlock[][];
@@ -90,6 +97,8 @@ interface EditorState {
 interface EditorActions {
   setBlocks: (blocks: ScriptBlock[]) => void;
   setFocusBlockId: (id: string | null) => void;
+  setIssueFocus: (issue: EditorState["issueFocus"]) => void;
+  clearIssueFocus: () => void;
   setCurrentView: (view: CurrentView) => void;
   setRawScript: (script: string) => void;
   undo: () => void;
@@ -116,6 +125,7 @@ function pushUndo(state: EditorState): Partial<EditorState> {
 export const useEditorStore = create<EditorStore>((set) => ({
   blocks: [],
   focusBlockId: null,
+  issueFocus: null,
   currentView: "form",
   rawScript: "",
   undoStack: [],
@@ -124,6 +134,10 @@ export const useEditorStore = create<EditorStore>((set) => ({
   setBlocks: (blocks) => set({ blocks }),
 
   setFocusBlockId: (focusBlockId) => set({ focusBlockId }),
+
+  setIssueFocus: (issueFocus) => set({ issueFocus }),
+
+  clearIssueFocus: () => set({ issueFocus: null }),
 
   setCurrentView: (currentView) => set({ currentView }),
 

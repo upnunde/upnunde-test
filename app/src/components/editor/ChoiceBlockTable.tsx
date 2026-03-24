@@ -11,6 +11,7 @@ import {
   DropdownMenuItem,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
+import { useEditorStore } from "@/store/useEditorStore";
 
 export interface SceneOption {
   value: string;
@@ -49,10 +50,12 @@ function ChoiceTextField({
   value,
   onChange,
   placeholder,
+  className,
 }: {
   value: string;
   onChange: (value: string) => void;
   placeholder: string;
+  className?: string;
 }) {
   const textareaRef = useRef<HTMLTextAreaElement>(null);
 
@@ -76,19 +79,24 @@ function ChoiceTextField({
       onInput={adjustHeight}
       placeholder={placeholder}
       rows={1}
-      className="w-full rounded-md border-0 bg-transparent px-0 py-0 text-sm leading-5 outline-none focus:outline-none focus:ring-0 focus:ring-offset-0 align-middle overflow-hidden resize-none"
+      className={cn(
+        "w-full rounded-md border-0 bg-transparent px-0 py-0 text-sm leading-5 outline-none focus:outline-none focus:ring-0 focus:ring-offset-0 align-middle overflow-hidden resize-none",
+        className
+      )}
       style={{ height: "fit-content" }}
     />
   );
 }
 
 function ChoiceRow({
+  blockId,
   index,
   choice,
   onUpdate,
   onRemove,
   sceneOptions = [],
 }: {
+  blockId: string;
   index: number;
   choice: ChoiceItem;
   onUpdate: (patch: Partial<ChoiceItem>) => void;
@@ -96,8 +104,33 @@ function ChoiceRow({
   sceneOptions: SceneOption[];
 }) {
   const isAiMode = choice.isAiMode === true;
+  const issueFocus = useEditorStore((s) => s.issueFocus);
+  const clearIssueFocus = useEditorStore((s) => s.clearIssueFocus);
   const selectedSceneLabel =
     sceneOptions.find((opt) => opt.value === choice.nextScene)?.label ?? "Scene 선택";
+  const isSceneUnselected = !choice.nextScene?.trim();
+  const isIssueFocusedChoice = issueFocus?.blockId === blockId && issueFocus?.choiceIndex === index;
+  const isTextIssueFocused =
+    isIssueFocusedChoice && issueFocus?.field === "text";
+  const isNextSceneIssueFocused =
+    isIssueFocusedChoice && issueFocus?.field === "nextScene";
+
+  useEffect(() => {
+    if (!isIssueFocusedChoice) return;
+    if (issueFocus?.field === "text" && choice.text?.trim()) {
+      clearIssueFocus();
+      return;
+    }
+    if (issueFocus?.field === "nextScene" && choice.nextScene?.trim()) {
+      clearIssueFocus();
+    }
+  }, [
+    isIssueFocusedChoice,
+    issueFocus?.field,
+    choice.text,
+    choice.nextScene,
+    clearIssueFocus,
+  ]);
 
   return (
     <div
@@ -118,8 +151,14 @@ function ChoiceRow({
         ) : (
           <ChoiceTextField
             value={choice.text}
-            onChange={(text) => onUpdate({ text })}
+            onChange={(text) => {
+              onUpdate({ text });
+              if (isTextIssueFocused && text.trim()) {
+                clearIssueFocus();
+              }
+            }}
             placeholder="선택지 내용"
+            className={isTextIssueFocused ? "text-destructive placeholder:text-destructive/60" : ""}
           />
         )}
         <div className="pointer-events-none absolute inset-y-0 right-0 w-px bg-slate-100" />
@@ -128,9 +167,19 @@ function ChoiceRow({
       <div className="relative w-[200px] min-w-[160px] max-w-[200px] shrink-0 min-h-[40px] px-3 py-0 self-stretch flex items-center">
         <select
           value={choice.nextScene}
-          onChange={(e) => onUpdate({ nextScene: e.target.value })}
+          onChange={(e) => {
+            const nextScene = e.target.value;
+            onUpdate({ nextScene });
+            if (isNextSceneIssueFocused && nextScene.trim()) {
+              clearIssueFocus();
+            }
+          }}
           title={selectedSceneLabel}
-          className="h-9 w-full min-w-0 rounded-md border-0 bg-transparent px-0 py-1 pr-2 text-sm overflow-hidden text-ellipsis whitespace-nowrap outline-none focus:outline-none focus:ring-0 focus:ring-offset-0"
+          className={cn(
+            "h-9 w-full min-w-0 rounded-md border-0 bg-transparent px-0 py-1 pr-2 text-sm overflow-hidden text-ellipsis whitespace-nowrap outline-none focus:outline-none focus:ring-0 focus:ring-offset-0",
+            isSceneUnselected ? "text-on-surface-30" : "text-on-surface-10",
+            isNextSceneIssueFocused && "text-destructive"
+          )}
         >
           <option value="">Scene 선택</option>
           {sceneOptions.map((opt) => (
@@ -258,6 +307,7 @@ export function ChoiceBlockTable({
       {/* Rows */}
       {choices.map((choice, index) => (
         <ChoiceRow
+          blockId={blockId}
           key={choice.id}
           index={index}
           choice={choice}

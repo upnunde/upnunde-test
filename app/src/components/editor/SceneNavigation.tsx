@@ -21,6 +21,8 @@ export function SceneNavigation({
   const focusBlockId = useEditorStore((s) => s.focusBlockId);
   const updateBlock = useEditorStore((s) => s.updateBlock);
   const setFocusBlockId = useEditorStore((s) => s.setFocusBlockId);
+  const setIssueFocus = useEditorStore((s) => s.setIssueFocus);
+  const clearIssueFocus = useEditorStore((s) => s.clearIssueFocus);
 
   const [editingBlockId, setEditingBlockId] = useState<string | null>(null);
   const [editValue, setEditValue] = useState("");
@@ -49,6 +51,7 @@ export function SceneNavigation({
 
   const handleSceneClick = (blockId: string) => {
     if (editingBlockId) return;
+    clearIssueFocus();
     clearPendingNav();
     pendingNavTimeoutRef.current = setTimeout(() => {
       pendingNavTimeoutRef.current = null;
@@ -63,10 +66,13 @@ export function SceneNavigation({
     }, NAV_DELAY_MS);
   };
 
-  const navigateToBlock = (blockId: string) => {
+  const navigateToBlock = (blockId: string, options?: { preserveIssueFocus?: boolean }) => {
     clearPendingNav();
     setEditingBlockId(null);
     setEditValue("");
+    if (!options?.preserveIssueFocus) {
+      clearIssueFocus();
+    }
     setFocusBlockId(blockId);
     if (onSceneClick) {
       onSceneClick(blockId);
@@ -184,6 +190,17 @@ export function SceneNavigation({
     }
     setEditingBlockId(null);
     setEditValue("");
+  };
+
+  const applyIssueFocus = (issue: EditorIssue) => {
+    const choiceFieldMatch = issue.title.match(/^선택지\s+(\d+)\s+(문구|다음 씬)\s+누락$/);
+    if (choiceFieldMatch) {
+      const choiceIndex = Number(choiceFieldMatch[1]) - 1;
+      const field = choiceFieldMatch[2] === "문구" ? "text" : "nextScene";
+      setIssueFocus({ blockId: issue.blockId, choiceIndex, field });
+      return;
+    }
+    setIssueFocus({ blockId: issue.blockId });
   };
 
   const cancelEdit = () => {
@@ -351,7 +368,10 @@ export function SceneNavigation({
                             "w-full px-3 py-2 text-left text-xs hover:bg-slate-100 transition-colors",
                             it.kind === "error" ? "text-rose-700" : "text-rose-700"
                           )}
-                          onClick={() => navigateToBlock(it.blockId)}
+                          onClick={() => {
+                            applyIssueFocus(it);
+                            navigateToBlock(it.blockId, { preserveIssueFocus: true });
+                          }}
                         >
                           <div className="flex items-start justify-between gap-2">
                             <div className="font-medium">{it.title}</div>
