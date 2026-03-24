@@ -152,6 +152,7 @@ export function ScriptBlock({
 
   const textareaRef = useRef<HTMLTextAreaElement | null>(null);
   const pendingSelectionRef = useRef<number | null>(null);
+  const enterSplitLockRef = useRef(false);
   const toolbarRef = useRef<HTMLDivElement | null>(null);
   const dropdownRef = useRef<HTMLDivElement | null>(null);
   const [selection, setSelection] = useState<{
@@ -265,6 +266,11 @@ export function ScriptBlock({
       }
 
       if (e.key === "Enter" && !e.shiftKey) {
+        if (enterSplitLockRef.current) {
+          e.preventDefault();
+          return;
+        }
+        enterSplitLockRef.current = true;
         e.preventDefault();
         const afterCursor = ta.value.slice(pos);
         const beforeCursor = ta.value.slice(0, pos);
@@ -276,6 +282,9 @@ export function ScriptBlock({
             : undefined;
         const newId = addBlock(index, "text", afterCursor, speakerData);
         focusBlock(newId);
+        requestAnimationFrame(() => {
+          enterSplitLockRef.current = false;
+        });
         return;
       }
 
