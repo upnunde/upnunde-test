@@ -149,7 +149,7 @@ export function ResourcePicker({
                       aria-hidden
                     >
                       <svg
-                        className="absolute inset-0 h-full w-full text-border-20"
+                        className="absolute inset-0 h-full w-full text-border-20/20"
                         viewBox="0 0 100 100"
                         preserveAspectRatio="none"
                         aria-hidden
