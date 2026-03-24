@@ -2,7 +2,7 @@
 
 import { ChevronLeft } from "lucide-react";
 import { useRouter } from "next/navigation";
-import { useMemo } from "react";
+import { useMemo, useState } from "react";
 import { useEditorStore } from "@/store/useEditorStore";
 import { Button } from "@/components/ui/button";
 
@@ -16,6 +16,9 @@ export function EditorSubHeader({ title = "에피소드 제목" }: EditorSubHead
   const blocks = useEditorStore((s) => s.blocks);
   const currentView = useEditorStore((s) => s.currentView);
   const setCurrentView = useEditorStore((s) => s.setCurrentView);
+  const [savedSnapshot, setSavedSnapshot] = useState<string | null>(null);
+
+  const blocksSnapshot = useMemo(() => JSON.stringify(blocks), [blocks]);
 
   const hasValidationIssues = useMemo(() => {
     for (const block of blocks) {
@@ -46,6 +49,13 @@ export function EditorSubHeader({ title = "에피소드 제목" }: EditorSubHead
     router.push("/series/1/episodes");
   };
 
+  const handleTemporarySave = () => {
+    // TODO: 실제 임시저장 API 연동 시 저장 성공 시점에 snapshot 갱신
+    setSavedSnapshot(blocksSnapshot);
+  };
+
+  const hasChangesSinceSave = savedSnapshot == null || savedSnapshot !== blocksSnapshot;
+
   return (
     <header className="mx-auto flex h-16 w-full min-w-[800px] shrink-0 items-center justify-between px-10">
       <div className="flex items-center gap-3">
@@ -62,8 +72,14 @@ export function EditorSubHeader({ title = "에피소드 제목" }: EditorSubHead
         <h1 className="text-2xl font-extrabold text-on-surface-10">{title}</h1>
       </div>
       <div className="flex items-center gap-2">
-        <Button type="button" variant="outline" size="sm" className="h-10 shadow-none bg-slate-50">
-          임시저장
+        <Button
+          type="button"
+          variant="outline"
+          size="sm"
+          className="h-10 shadow-none bg-slate-50"
+          onClick={hasChangesSinceSave ? handleTemporarySave : handleBack}
+        >
+          {hasChangesSinceSave ? "임시저장" : "나가기"}
         </Button>
         <Button
           type="button"
