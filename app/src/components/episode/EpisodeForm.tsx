@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useCallback } from "react";
+import { useState, useCallback, useRef, useEffect } from "react";
 import { useEditorStore, createBlock } from "@/store/useEditorStore";
 import { parseScriptToBlocks } from "@/utils/scriptParser";
 import { Button } from "@/components/ui/button";
@@ -8,6 +8,7 @@ import { PageCard } from "@/components/layout/PageCard";
 import { AddResourceSlot } from "@/components/resource/cards/AddResourceSlot";
 import { Title1 } from "@/components/ui/title1";
 import { Title2 } from "@/components/ui/title2";
+import { ImageCropPosterModal } from "@/components/resource/character/CharacterExpressionModal";
 
 const MAX_TITLE = 50;
 const MAX_SUMMARY = 100;
@@ -23,12 +24,61 @@ export function EpisodeForm() {
   const [title, setTitle] = useState("");
   const [summary, setSummary] = useState("");
   const [history, setHistory] = useState("");
+  const [thumbnailUrl, setThumbnailUrl] = useState("");
+  const [thumbnailModalOpen, setThumbnailModalOpen] = useState(false);
+  const [thumbnailModalInitialSlots, setThumbnailModalInitialSlots] =
+    useState<{ id: string; expressionLabel: string; imageUrl?: string }[] | null>(null);
+  const [pendingThumbnailUrl, setPendingThumbnailUrl] = useState<string | null>(null);
+  const thumbnailFileInputRef = useRef<HTMLInputElement | null>(null);
 
   const handleConvertToEditor = useCallback(() => {
     const parsed = parseScriptToBlocks(rawScript);
     setBlocks(parsed.length > 0 ? parsed : [createBlock("text", "")]);
     setCurrentView("editor");
   }, [rawScript, setBlocks, setCurrentView]);
+
+  useEffect(() => {
+    return () => {
+      if (thumbnailUrl && thumbnailUrl.startsWith("blob:")) {
+        URL.revokeObjectURL(thumbnailUrl);
+      }
+      if (pendingThumbnailUrl && pendingThumbnailUrl.startsWith("blob:")) {
+        URL.revokeObjectURL(pendingThumbnailUrl);
+      }
+    };
+  }, [thumbnailUrl, pendingThumbnailUrl]);
+
+  const handleThumbnailClick = useCallback(() => {
+    if (thumbnailUrl) {
+      setThumbnailModalInitialSlots([
+        { id: "episode-thumbnail", expressionLabel: "", imageUrl: thumbnailUrl },
+      ]);
+      setThumbnailModalOpen(true);
+      return;
+    }
+    thumbnailFileInputRef.current?.click();
+  }, [thumbnailUrl]);
+
+  const handleThumbnailFileChange = useCallback(
+    (e: React.ChangeEvent<HTMLInputElement>) => {
+      const file = (e.target.files ?? [])[0];
+      e.target.value = "";
+      if (!file || !file.type.startsWith("image/")) return;
+
+      const objectUrl = URL.createObjectURL(file);
+      setPendingThumbnailUrl((prev) => {
+        if (prev && prev.startsWith("blob:")) {
+          URL.revokeObjectURL(prev);
+        }
+        return objectUrl;
+      });
+      setThumbnailModalInitialSlots([
+        { id: "episode-thumbnail", expressionLabel: "", imageUrl: objectUrl },
+      ]);
+      setThumbnailModalOpen(true);
+    },
+    [],
+  );
 
   return (
     <div className="mx-auto w-full max-w-[1200px] min-w-[640px] rounded-xl border border-slate-200 bg-white shadow-none">
@@ -78,7 +128,7 @@ export function EpisodeForm() {
             </div>
           </div>
 
-          {/* 대표 이미지 (img1:1 타입 슬롯과 동일 스타일) */}
+          {/* 대표 이미지 (9:16 썸네일 + 단일 크롭 모달) */}
           <div className="flex flex-col gap-3 pb-5">
             <Title1
               text="대표 이미지*"
@@ -86,11 +136,22 @@ export function EpisodeForm() {
               subtitle
               subtitleText="에피소드 대표 이미지를 등록해주세요."
             />
-            <AddResourceSlot
-              variant="img1:1"
-              ariaLabel="대표 이미지 업로드"
-              onClick={() => {}}
-            />
+            {thumbnailUrl ? (
+              <button
+                type="button"
+                onClick={handleThumbnailClick}
+                className="w-[90px] h-[160px] rounded-lg overflow-hidden border border-slate-200 bg-slate-100 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary cursor-pointer"
+                aria-label="대표 이미지 업로드"
+              >
+                <img src={thumbnailUrl} alt="" className="w-full h-full object-cover" />
+              </button>
+            ) : (
+              <AddResourceSlot
+                variant="img9:16"
+                ariaLabel="대표 이미지 업로드"
+                onClick={handleThumbnailClick}
+              />
+            )}
           </div>
 
           {/* 지난 사건 히스토리 */}
@@ -149,6 +210,47 @@ export function EpisodeForm() {
           </Button>
         </div>
       </PageCard>
+      <input
+        ref={thumbnailFileInputRef}
+        type="file"
+        accept="image/*"
+        className="sr-only"
+        aria-label="대표 이미지 업로드"
+        onChange={handleThumbnailFileChange}
+      />
+      <ImageCropPosterModal
+        open={thumbnailModalOpen}
+        onClose={() => {
+          setThumbnailModalOpen(false);
+          setThumbnailModalInitialSlots(null);
+          setPendingThumbnailUrl((prev) => {
+            if (prev && prev.startsWith("blob:")) {
+              URL.revokeObjectURL(prev);
+            }
+            return null;
+          });
+        }}
+        initialSlots={thumbnailModalInitialSlots ?? []}
+        onSave={(slots) => {
+          const saved = slots[0];
+          if (saved?.imageUrl) {
+            setThumbnailUrl((prev) => {
+              if (prev && prev.startsWith("blob:") && prev !== saved.imageUrl) {
+                URL.revokeObjectURL(prev);
+              }
+              return saved.imageUrl ?? "";
+            });
+          }
+          setThumbnailModalOpen(false);
+          setThumbnailModalInitialSlots(null);
+          setPendingThumbnailUrl((prev) => {
+            if (prev && prev.startsWith("blob:") && prev !== saved?.imageUrl) {
+              URL.revokeObjectURL(prev);
+            }
+            return null;
+          });
+        }}
+      />
     </div>
   );
 }
