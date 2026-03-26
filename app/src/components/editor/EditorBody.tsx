@@ -271,7 +271,17 @@ export default function EditorBody() {
   const handleBackgroundClick = useCallback(
     (e: React.MouseEvent<HTMLDivElement>) => {
       if (e.target !== e.currentTarget) return;
+      // 빈 줄(블록 사이 갭) 클릭으로는 이동/생성이 일어나지 않도록,
+      // 마지막 블록 "아래 영역"을 클릭한 경우에만 기존 동작을 허용한다.
       const lastBlock = blocks[blocks.length - 1];
+      if (!lastBlock) return;
+      const lastBlockEl = document.getElementById(`block-${lastBlock.id}`);
+      if (!lastBlockEl) return;
+
+      const clickY = e.clientY;
+      const lastBottom = lastBlockEl.getBoundingClientRect().bottom;
+      if (clickY <= lastBottom) return;
+
       if (lastBlock?.type === "text" && !lastBlock.content.trim()) {
         focusBlock(lastBlock.id);
       } else {

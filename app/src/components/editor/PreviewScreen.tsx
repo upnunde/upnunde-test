@@ -1,7 +1,7 @@
 "use client";
 
 import React, { useMemo } from "react";
-import type { ScriptBlock } from "@/types/editor";
+import type { ChoiceItem, ScriptBlock } from "@/types/editor";
 import { useEditorStore } from "@/store/useEditorStore";
 import { CHARACTERS, BACKGROUNDS } from "@/lib/mockData";
 import { cn } from "@/lib/utils";
@@ -32,6 +32,7 @@ export interface AccumulatedState {
   currentSpeaker: string;
   currentTopDesc: string;
   currentDialogue: string;
+  currentChoices: ChoiceItem[];
 }
 
 /**
@@ -56,6 +57,7 @@ function computeAccumulatedState(
       currentSpeaker: "",
       currentTopDesc: "",
       currentDialogue: "",
+      currentChoices: [],
     };
   }
 
@@ -113,6 +115,10 @@ function computeAccumulatedState(
     focusedBlock?.type === "text" ? (focusedBlock.data?.speaker ?? "독백") : "";
   const currentDialogue =
     focusedBlock?.type === "text" ? (focusedBlock.content ?? "") : "";
+  const currentChoices =
+    focusedBlock?.type === "choice" && Array.isArray(focusedBlock.data?.choices)
+      ? focusedBlock.data.choices
+      : [];
 
   return {
     currentBg,
@@ -121,6 +127,7 @@ function computeAccumulatedState(
     currentSpeaker,
     currentTopDesc,
     currentDialogue,
+    currentChoices,
   };
 }
 
@@ -148,6 +155,7 @@ export function PreviewScreen(props: PreviewScreenProps = {}) {
     currentSpeaker,
     currentTopDesc,
     currentDialogue,
+    currentChoices,
   } = state;
 
   return (
@@ -222,6 +230,46 @@ export function PreviewScreen(props: PreviewScreenProps = {}) {
             <p className="text-white/95 text-sm leading-relaxed whitespace-pre-wrap">
               {currentDialogue}
             </p>
+          </div>
+        </div>
+      )}
+
+      {/* Layer 4: Choice preview — visible when focused block is a choice block */}
+      {currentChoices.length > 0 && (
+        <div
+          className={cn(
+            "absolute bottom-0 left-0 right-0 z-20 mx-3 mb-3 rounded-xl",
+            "bg-black/75 backdrop-blur-sm",
+            "border-2 border-white/20 p-2"
+          )}
+        >
+          <div className="mb-2 px-2 text-[11px] font-semibold tracking-wide text-white/70">
+            선택지
+          </div>
+          <div className="flex flex-col gap-2">
+            {currentChoices.map((choice, idx) => (
+              <div
+                key={choice.id || `${choice.text}-${idx}`}
+                className="rounded-lg border border-white/15 bg-white/10 px-3 py-2"
+              >
+                <div className="flex items-center gap-2">
+                  {choice.isPaid && (
+                    <img
+                      src="/choice-paid-icon.png"
+                      alt=""
+                      width={16}
+                      height={16}
+                      className="h-4 w-4 shrink-0"
+                    />
+                  )}
+                  <p className="text-sm leading-relaxed text-white/95">
+                    {choice.isAiMode
+                      ? "✨ AI 모드로 직접 대화"
+                      : (choice.text?.trim() || `선택 ${idx + 1}`)}
+                  </p>
+                </div>
+              </div>
+            ))}
           </div>
         </div>
       )}
