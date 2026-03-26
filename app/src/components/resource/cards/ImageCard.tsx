@@ -125,7 +125,7 @@ export function ImageCard({
         <div className="self-stretch inline-flex justify-start items-center gap-2.5 overflow-hidden">
           <span
             className={cn(
-              "flex-1 text-[14px] font-normal font-['Pretendard_JP'] leading-5 truncate text-left justify-start",
+              "flex-1 text-[13px] font-normal font-['Pretendard_JP'] leading-5 truncate text-left justify-start",
               error ? "text-error-on-error-container" : "text-on-surface-10"
             )}
           >

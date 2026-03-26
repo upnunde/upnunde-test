@@ -74,7 +74,16 @@ export function ImageLightbox({
         onClick={(e) => e.stopPropagation()}
       >
         {/* 이미지 프레임 */}
-        <div className="w-96 h-[640px] relative bg-border-10/5 rounded-2xl outline outline-4 outline-offset-[-4px] outline-white overflow-hidden shadow-xl">
+        <div
+          className="w-96 h-[640px] relative rounded-2xl outline outline-4 outline-offset-[-4px] outline-white overflow-hidden shadow-xl"
+          style={{
+            backgroundColor: "#f8fafc",
+            backgroundImage:
+              "linear-gradient(45deg, #e5e7eb 25%, transparent 25%), linear-gradient(-45deg, #e5e7eb 25%, transparent 25%), linear-gradient(45deg, transparent 75%, #e5e7eb 75%), linear-gradient(-45deg, transparent 75%, #e5e7eb 75%)",
+            backgroundSize: "16px 16px",
+            backgroundPosition: "0 0, 0 8px, 8px -8px, -8px 0",
+          }}
+        >
           {item && (
             <img
               src={item.imageUrl}
