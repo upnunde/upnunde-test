@@ -44,7 +44,7 @@ export function CharacterCard({
       tabIndex={0}
       onClick={handleCardClick}
       onKeyDown={(e) => e.key === "Enter" && (onPreviewClick ? onPreviewClick(character) : handleCardClick(e as unknown as React.MouseEvent))}
-      className="group inline-flex flex-col justify-start items-start gap-1 cursor-pointer"
+      className="group inline-flex w-28 flex-col justify-start items-start gap-1 cursor-pointer"
       aria-label={`${character.name} 상세 보기`}
     >
       <div

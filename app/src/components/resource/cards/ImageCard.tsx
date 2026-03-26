@@ -30,6 +30,12 @@ const IMAGE_CARD_SIZE: Record<"img1:1" | "img16:9" | "img9:16", string> = {
   "img9:16": "w-[90px] h-[160px]",
 };
 
+const IMAGE_CARD_WIDTH: Record<"img1:1" | "img16:9" | "img9:16", string> = {
+  "img1:1": "w-24",
+  "img16:9": "w-24",
+  "img9:16": "w-[90px]",
+};
+
 export function ImageCard({
   item,
   slotType = "img16:9",
@@ -49,6 +55,7 @@ export function ImageCard({
   };
 
   const sizeClass = IMAGE_CARD_SIZE[slotType];
+  const widthClass = IMAGE_CARD_WIDTH[slotType];
   const imgClass = "w-full h-full object-cover";
   const showControls = hoveredProp === true;
 
@@ -60,6 +67,7 @@ export function ImageCard({
       onKeyDown={(e) => e.key === "Enter" && (onPreviewClick ? onPreviewClick(item) : onDetailClick(item))}
       className={cn(
         "group inline-flex flex-col justify-start items-start gap-1 cursor-pointer",
+        widthClass,
         hoveredProp !== undefined && "pointer-events-auto"
       )}
       aria-label={`${item.name} 상세 보기`}

@@ -44,7 +44,7 @@ export function MediaCard({
       tabIndex={0}
       onClick={handleCardClick}
       onKeyDown={(e) => e.key === "Enter" && (onPreviewClick ? onPreviewClick(item) : onDetailClick(item))}
-      className="group inline-flex flex-col justify-start items-start gap-1 cursor-pointer"
+      className="group inline-flex w-[90px] flex-col justify-start items-start gap-1 cursor-pointer"
       aria-label={`${item.name} 상세 보기`}
     >
       <div
