@@ -77,7 +77,7 @@ const LABEL_COLOR_BY_TYPE: Record<BlockType, string> = {
   top_desc: "text-primary",
   text: "text-zinc-600",
   background: "text-blue-600",
-  bgm: "text-rose-600",
+  bgm: "text-fuchsia-600",
   sfx: "text-orange-500",
   character: "text-violet-600",
   gallery: "text-teal-600",
@@ -474,7 +474,7 @@ export function ScriptBlock({
     return (
       <div className={cn(TEXT_BLOCK_ROOT_CLASSES, rootClassName)}>
         {/* Left column: block index + speaker dropdown — shrink-0 so content never overlaps */}
-        <div className="flex items-center justify-start gap-0 shrink-0 pt-0 w-[80px] mt-1">
+        <div className="flex items-center justify-start gap-0 shrink-0 pt-0 w-[80px] mt-1 pr-2">
           {!hideIndex && (
             <span className="text-sm font-medium text-slate-300 w-5 text-right tabular-nums">
               {indexLabel}
@@ -484,12 +484,10 @@ export function ScriptBlock({
             <DropdownMenuTrigger asChild>
               <button
                 type="button"
-                className="inline-flex items-center justify-center gap-0 h-7 max-w-[64px] min-w-0 p-0 m-0 text-[13px] text-on-surface-30 font-medium rounded-md border-0 outline-none shadow-none hover:bg-accent hover:text-accent-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring/50 focus-visible:ring-offset-0 overflow-hidden"
+                className="inline-flex w-full items-center justify-start gap-0 h-7 min-w-0 p-0 m-0 text-[13px] text-on-surface-30 font-medium rounded-md border-0 outline-none shadow-none hover:bg-accent hover:text-accent-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring/50 focus-visible:ring-offset-0 overflow-hidden"
               >
-                <span className="min-w-0 whitespace-nowrap">
-                  {currentSpeaker.length > 3
-                    ? `${currentSpeaker.slice(0, 3)}..`
-                    : currentSpeaker}
+                <span className="inline-block w-fit max-w-[56px] text-left truncate">
+                  {currentSpeaker}
                 </span>
                 <ChevronDown className="ml-1 w-3 h-3 shrink-0" />
               </button>

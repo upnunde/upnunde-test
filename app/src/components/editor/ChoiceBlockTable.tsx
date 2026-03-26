@@ -291,6 +291,7 @@ export function ChoiceBlockTable({
   }, [choices, onChange]);
 
   const hasAiChoice = choices.some((c) => c.isAiMode);
+  const isAtMaxChoices = choices.length >= 4;
 
   return (
     <div
@@ -317,32 +318,34 @@ export function ChoiceBlockTable({
         />
       ))}
       {/* Footer: Task 4 - Dropdown with "선택지 추가" and "✨ AI 모드로 직접 대화" */}
-      <div className="flex h-[40px] items-center justify-start px-1 py-2">
-        <DropdownMenu>
-          <DropdownMenuTrigger asChild>
-            <Button
-              type="button"
-              variant="ghost"
-              size="sm"
-              className="text-slate-600 hover:text-on-surface-10"
-            >
-              + 선택지 추가
-            </Button>
-          </DropdownMenuTrigger>
-          <DropdownMenuContent align="start">
-            <DropdownMenuItem onClick={handleAddNormalChoice}>
-              선택지 추가
-            </DropdownMenuItem>
-            <DropdownMenuItem
-              onClick={handleAddAiChoice}
-              disabled={hasAiChoice}
-              className={cn("text-primary", hasAiChoice && "opacity-50")}
-            >
-              ✨ AI 모드로 직접 대화
-            </DropdownMenuItem>
-          </DropdownMenuContent>
-        </DropdownMenu>
-      </div>
+      {!isAtMaxChoices && (
+        <div className="flex h-[40px] items-center justify-start px-1 py-2">
+          <DropdownMenu>
+            <DropdownMenuTrigger asChild>
+              <Button
+                type="button"
+                variant="ghost"
+                size="sm"
+                className="text-slate-600 hover:text-on-surface-10"
+              >
+                + 선택지 추가
+              </Button>
+            </DropdownMenuTrigger>
+            <DropdownMenuContent align="start">
+              <DropdownMenuItem onClick={handleAddNormalChoice}>
+                선택지 추가
+              </DropdownMenuItem>
+              <DropdownMenuItem
+                onClick={handleAddAiChoice}
+                disabled={hasAiChoice}
+                className={cn("text-primary", hasAiChoice && "opacity-50")}
+              >
+                ✨ AI 모드로 직접 대화
+              </DropdownMenuItem>
+            </DropdownMenuContent>
+          </DropdownMenu>
+        </div>
+      )}
     </div>
   );
 }

@@ -173,7 +173,7 @@ export function ResourceManagementPage() {
 
   return (
     <>
-      <main className="flex flex-1 flex-col overflow-hidden bg-slate-50">
+      <main className="flex min-h-0 flex-1 flex-col bg-slate-50">
         {/* [정책 1] 헤더 (레이아웃 가이드: margin 40, max-width 1200, min-width 640) */}
         <header className="flex h-16 shrink-0 items-center justify-center border-b border-slate-200 bg-white px-10 py-0">
           <div className="flex w-full max-w-[1200px] min-w-[640px] items-center justify-between gap-4">
@@ -193,7 +193,7 @@ export function ResourceManagementPage() {
           </div>
         </header>
 
-        <div className="flex-1 overflow-y-auto flex flex-col items-center py-8 px-10 gap-4">
+        <div className="min-h-0 flex-1 overflow-y-auto flex flex-col items-center py-8 px-10 gap-4">
           <div className="w-full max-w-[1200px] min-w-[640px] mx-auto flex flex-col gap-4">
             <ResourceBanner seriesId={seriesId} />
 
@@ -331,19 +331,6 @@ export function ResourceManagementPage() {
                 ))}
                 <AddResourceSlot variant="img9:16" onClick={() => navigateTo(ROUTES.scene.new(seriesId))} />
               </div>
-              {scenes.length > 6 && (
-                <div className="mt-3">
-                  <Button
-                    type="button"
-                    variant="outline"
-                    size="sm"
-                    className="h-9 border-border-20 text-on-surface-10"
-                    onClick={() => setShowAllScenes((prev) => !prev)}
-                  >
-                    {showAllScenes ? "접기" : `더보기 (${scenes.length - 6}개)`}
-                  </Button>
-                </div>
-              )}
             </ResourceSection>
 
             {/* 미디어 [정책 7, 3, 5] */}
@@ -419,19 +406,6 @@ export function ResourceManagementPage() {
                 ))}
                 <AddResourceSlot variant="img9:16" onClick={() => navigateTo(ROUTES.gallery.new(seriesId))} />
               </div>
-              {gallery.length > 6 && (
-                <div className="mt-3">
-                  <Button
-                    type="button"
-                    variant="outline"
-                    size="sm"
-                    className="h-9 border-border-20 text-on-surface-10"
-                    onClick={() => setShowAllGallery((prev) => !prev)}
-                  >
-                    {showAllGallery ? "접기" : `더보기 (${gallery.length - 6}개)`}
-                  </Button>
-                </div>
-              )}
             </ResourceSection>
 
             {/* BGM [정책 8, 9, 10] */}
