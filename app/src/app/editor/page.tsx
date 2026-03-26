@@ -51,7 +51,7 @@ function EditorInner() {
           </div>
         </header>
         <div className="flex min-h-0 flex-1 flex-col overflow-hidden bg-slate-50">
-          <div className="flex-1 overflow-y-auto flex flex-col items-center py-8 px-5 gap-3">
+          <div className="flex min-h-0 flex-1 flex-col items-center gap-3 overflow-y-auto overscroll-none py-8 px-5">
             <EpisodeForm />
           </div>
         </div>
@@ -60,18 +60,18 @@ function EditorInner() {
   }
 
   return (
-    <div className="flex h-screen flex-col bg-white">
+    <div className="flex h-screen flex-col overflow-hidden bg-white">
       {/* 1. Global Top Header (Logo, User Avatar) - Full Width */}
       <Header profileImageUrl={profileImageUrl} onProfileImageChange={setProfileImageUrl} />
 
       {/* 2. Main Flex Container */}
-      <div className="flex flex-1 overflow-hidden relative">
+      <div className="relative flex min-h-0 flex-1 overflow-hidden">
         {/* 2-1. Left Sidebar (Scene List) - Fixed Width, Full Height */}
         <aside
           className={
             isSceneSidebarCollapsed
-              ? "w-fit shrink-0 border-r border-slate-200 bg-white overflow-y-auto px-2"
-              : "w-[240px] shrink-0 border-r border-slate-200 bg-white overflow-y-auto"
+              ? "w-fit shrink-0 border-r border-slate-200 bg-white overflow-y-auto overscroll-none px-2"
+              : "w-[240px] shrink-0 border-r border-slate-200 bg-white overflow-y-auto overscroll-none"
           }
         >
           <SceneNavigation
@@ -94,7 +94,7 @@ function EditorInner() {
           <div className="flex flex-1 w-full min-h-0 overflow-hidden bg-white justify-center items-start">
             {/* Left Area: bordered panel fixed in view, only inner content scrolls */}
             <div className="flex flex-1 min-h-0 h-full w-full flex-col border-r border-slate-200 overflow-hidden">
-              <div className="py-10 px-0 flex-1 min-h-0 overflow-y-auto">
+              <div className="py-10 px-0 flex-1 min-h-0 overflow-y-auto overscroll-none">
                 <EditorBody />
               </div>
             </div>

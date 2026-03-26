@@ -24,9 +24,9 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en" className="h-full min-h-screen">
+    <html lang="en" className="h-full min-h-screen overflow-hidden overscroll-none">
       <body
-        className={`${geistSans.variable} ${geistMono.variable} antialiased m-0 flex min-h-screen w-full flex-col p-0`}
+        className={`${geistSans.variable} ${geistMono.variable} antialiased m-0 flex h-screen min-h-screen w-full flex-col overflow-hidden overscroll-none p-0`}
         style={{ minHeight: "100vh", height: "100%", width: "100%" }}
       >
         {children}
