@@ -268,7 +268,7 @@ export function ResourceManagementPage() {
               onAddClick={() => navigateTo(ROUTES.background.new(seriesId))}
             >
               <div className="self-stretch p-0 rounded-2xl inline-flex justify-start items-start gap-4 flex-wrap content-start">
-                {backgrounds.slice(0, 3).map((bg) => (
+                {backgrounds.map((bg) => (
                   <ImageCard
                     key={bg.id}
                     item={bg}
