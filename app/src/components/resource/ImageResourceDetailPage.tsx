@@ -190,8 +190,7 @@ export function ImageResourceDetailPage({ kind, initialData }: ImageResourceDeta
               <section className="flex flex-col gap-2">
                 <Title1
                   text={labels.nameLabel}
-                  showDot
-                  subtitle
+                  variant="title-subtitle-dot"
                   subtitleText={labels.nameSubtitle}
                 />
                 <div className="flex flex-col justify-center items-start gap-2">
@@ -208,8 +207,7 @@ export function ImageResourceDetailPage({ kind, initialData }: ImageResourceDeta
               <section className="flex flex-col gap-2">
                 <Title1
                   text={labels.descriptionLabel}
-                  showDot
-                  subtitle
+                  variant="title-subtitle-dot"
                   subtitleText={labels.descriptionSubtitle}
                 />
                 <div className="flex flex-col justify-start items-start gap-2">
@@ -227,8 +225,7 @@ export function ImageResourceDetailPage({ kind, initialData }: ImageResourceDeta
               <section className="flex flex-col gap-3">
                 <Title1
                   text={labels.thumbnailLabel}
-                  showDot={false}
-                  subtitle
+                  variant="title-subtitle"
                   subtitleText={labels.thumbnailSubtitle}
                 />
                 {thumbnailUrl ? (
@@ -260,8 +257,7 @@ export function ImageResourceDetailPage({ kind, initialData }: ImageResourceDeta
                 <section className="flex flex-col gap-2">
                   <Title1
                     text="AI채팅 적용 여부*"
-                    showDot
-                    subtitle
+                    variant="title-subtitle-dot"
                     subtitleText="이 연출장면을 AI 자동 전개에 사용할지 여부를 선택해 주세요."
                   />
                   <div className="flex items-center gap-6 mt-1">

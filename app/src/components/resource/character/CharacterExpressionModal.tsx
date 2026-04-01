@@ -358,9 +358,7 @@ export function CharacterExpressionModal({
           >
             {/* 크롭 영역: 비율에 따라 9:16 또는 1:1 */}
             <div
-              className={`h-[400px] ${
-                layoutShowSlotList ? "w-[320px]" : "w-[400px]"
-              } ${cropAspect === "square" ? "aspect-square" : "aspect-[9/16]"} relative rounded-md overflow-hidden bg-[repeating-conic-gradient(#e2e8f0_0%_25%,#f1f5f9_0%_50%)] bg-[length:12px_12px] flex items-center justify-center`}
+              className={`h-[400px] w-[400px] ${cropAspect === "square" ? "aspect-square" : "aspect-[9/16]"} relative rounded-md overflow-hidden bg-[repeating-conic-gradient(#e2e8f0_0%_25%,#f1f5f9_0%_50%)] bg-[length:12px_12px] flex items-center justify-center`}
               onPointerDown={handleCropPointerDown}
               onPointerMove={handleCropPointerMove}
               onPointerUp={handleCropPointerUp}

@@ -64,6 +64,8 @@
   --color-primary-on-primary-container: var(--primary-on-primary-container);
   --color-error-error-container: var(--error-error-container);
   --color-error-on-error-container: var(--error-on-error-container);
+  /** Title1/2 필수 표시 점 등 솔리드 에러 컬러 (`bg-error-error`) */
+  --color-error-error: var(--error-error);
 }
 
 :root {
@@ -124,6 +126,7 @@
   /* Error state (resource cards, validation) */
   --error-error-container: oklch(0.97 0.02 15);
   --error-on-error-container: oklch(0.45 0.15 25);
+  --error-error: oklch(0.55 0.22 27);
 }
 
 .dark {
@@ -160,6 +163,7 @@
   --sidebar-ring: oklch(0.556 0 0);
   --error-error-container: oklch(0.35 0.08 25);
   --error-on-error-container: oklch(0.95 0.02 15);
+  --error-error: oklch(0.7 0.18 25);
 }
 
 @layer base {

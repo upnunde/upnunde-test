@@ -217,8 +217,7 @@ export function CharacterDetailPage({ isNew = true, initialData }: CharacterDeta
               <section className="flex flex-col gap-2">
                 <Title1
                   text="이름*"
-                  showDot
-                  subtitle
+                  variant="title-subtitle-dot"
                   subtitleText="캐릭터의 이름을 입력해 주세요."
                 />
                 <div className="flex flex-col justify-center items-start gap-2">
@@ -239,8 +238,7 @@ export function CharacterDetailPage({ isNew = true, initialData }: CharacterDeta
               <section className="flex flex-col gap-2">
                 <Title1
                   text="인물 소개*"
-                  showDot
-                  subtitle
+                  variant="title-subtitle-dot"
                   subtitleText="한 줄로 인물의 특징이 드러나도록 정리해 주세요."
                 />
                 <div className="flex flex-col justify-center items-start gap-2">
@@ -263,8 +261,7 @@ export function CharacterDetailPage({ isNew = true, initialData }: CharacterDeta
                   <div className="flex flex-col gap-3">
                     <Title1
                       text="대표 썸네일"
-                      showDot={false}
-                      subtitle
+                      variant="title-subtitle"
                       subtitleText="독자에게 가장 먼저 보여질 캐릭터 이미지를 등록해 주세요."
                     />
                     {thumbnailUrl ? (
@@ -288,8 +285,7 @@ export function CharacterDetailPage({ isNew = true, initialData }: CharacterDeta
                   <div className="flex flex-col gap-3">
                     <Title1
                       text="표정"
-                      showDot={false}
-                      subtitle
+                      variant="title-subtitle"
                       subtitleText="다양한 감정을 표현할 수 있는 표정을 여러 장까지 등록해 둘 수 있어요. (최대 10개)"
                     />
                     <div className="flex flex-wrap gap-3 items-start">
@@ -349,8 +345,7 @@ export function CharacterDetailPage({ isNew = true, initialData }: CharacterDeta
               <section className="flex flex-col gap-2">
                 <Title1
                   text="해시태그"
-                  showDot={false}
-                  subtitle
+                  variant="title-subtitle"
                   subtitleText="캐릭터를 한눈에 파악할 수 있는 키워드를 입력해 주세요. 쉼표로 구분됩니다."
                 />
                 <div className="flex flex-col justify-center items-start gap-2">
@@ -400,8 +395,7 @@ export function CharacterDetailPage({ isNew = true, initialData }: CharacterDeta
               <section className="flex flex-col gap-2">
                 <Title1
                   text="인물 인사"
-                  showDot={false}
-                  subtitle
+                  variant="title-subtitle"
                   subtitleText="캐릭터의 말투와 성격이 드러나는 짧은 소개 멘트를 작성해 주세요."
                 />
                 <div className="flex flex-col justify-start items-start gap-2">

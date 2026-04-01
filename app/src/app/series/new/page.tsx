@@ -339,8 +339,7 @@ export default function SeriesNewPage() {
                           <div className="flex flex-col gap-1">
                             <Title1
                               text="대표이미지*"
-                              showDot
-                              subtitle
+                              variant="title-subtitle-dot"
                               subtitleText="시리즈를 대표하는 공식 이미지입니다. 부적절한 이미지는 사용이 제한됩니다."
                             />
                             <label
@@ -448,8 +447,7 @@ export default function SeriesNewPage() {
                           <div className="flex flex-col gap-1">
                             <Title1
                               text="로고*"
-                              showDot
-                              subtitle
+                              variant="title-subtitle-dot"
                               subtitleText="배경이 투명한 png파일을 사용하세요."
                             />
                             <label
@@ -572,8 +570,7 @@ export default function SeriesNewPage() {
                           <div className="flex flex-col gap-1">
                             <Title1
                               text="시리즈 제목*"
-                              showDot
-                              subtitle
+                              variant="title-subtitle-dot"
                               subtitleText="요약 내용이 AI 전개의 가이드라인이 된다는 기술적 사실을 전달합니다."
                             />
                             <input
@@ -604,8 +601,7 @@ export default function SeriesNewPage() {
                           <div className="flex flex-col gap-1">
                             <Title1
                               text="시리즈 요약*"
-                              showDot
-                              subtitle
+                              variant="title-subtitle-dot"
                               subtitleText="작품의 핵심 컨셉을 한 줄로 요약하여 독자의 흥미와 클릭을 유도하세요"
                             />
                             <textarea
@@ -636,8 +632,7 @@ export default function SeriesNewPage() {
                           <div className="flex flex-col gap-1">
                             <Title1
                               text="키워드*"
-                              showDot
-                              subtitle
+                              variant="title-subtitle-dot"
                               subtitleText="세계관은 모든 에피소드의 배경과 논리를 구성하는 기준이 됩니다."
                             />
                             <input
@@ -668,8 +663,7 @@ export default function SeriesNewPage() {
                           <div className="flex flex-col gap-1">
                             <Title1
                               text="세계관 설명*"
-                              showDot
-                              subtitle
+                              variant="title-subtitle-dot"
                               subtitleText="독자들이 작품의 배경과 규칙을 쉽고 깊이 있게 이해할 수 있도록 자유롭게 설명해 주세요."
                             />
                             <textarea
@@ -723,8 +717,7 @@ export default function SeriesNewPage() {
                           <div className="flex flex-col gap-1">
                             <Title1
                               text="세계관 프롬프트*"
-                              showDot
-                              subtitle
+                              variant="title-subtitle-dot"
                               subtitleText="세계관은 모든 에피소드의 배경과 논리를 구성하는 절대적인 기준이 됩니다. 설정이 구체적일수록 AI가 원작의 의도에서 벗어나지 않고 일관성 있는 전개를 이어갈 수 있습니다."
                             />
                             <textarea
@@ -755,8 +748,7 @@ export default function SeriesNewPage() {
                           <div className="flex flex-col gap-1">
                             <Title1
                               text="페르소나*"
-                              showDot
-                              subtitle
+                              variant="title-subtitle-dot"
                               subtitleText="작품의 핵심 컨셉을 한 줄로 요약하여 독자의 흥미와 클릭을 유도하세요"
                             />
                             <input

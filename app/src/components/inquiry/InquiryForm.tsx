@@ -59,8 +59,7 @@ export function InquiryForm({
       <div className="flex flex-col gap-1">
         <Title1
           text="문의 유형*"
-          showDot
-          subtitle
+          variant="title-subtitle-dot"
           subtitleText="문의 내용을 가장 잘 설명하는 유형을 선택해 주세요."
         />
         <div className="relative mt-1 w-full">
@@ -88,8 +87,7 @@ export function InquiryForm({
       <div className="flex flex-col gap-1">
         <Title1
           text="제목*"
-          showDot
-          subtitle
+          variant="title-subtitle-dot"
           subtitleText="제목을 입력해주세요."
         />
         <input
@@ -107,8 +105,7 @@ export function InquiryForm({
       <div className="flex flex-col gap-1">
         <Title1
           text="상세내용 작성*"
-          showDot
-          subtitle
+          variant="title-subtitle-dot"
           subtitleText="내용을 최대한 상세하게 작성해 주세요."
         />
         <textarea
@@ -130,8 +127,7 @@ export function InquiryForm({
       <div className="flex flex-col gap-1">
         <Title1
           text="이메일"
-          showDot={false}
-          subtitle
+          variant="title-subtitle"
           subtitleText="답변이 필요하신 경우 이메일 주소를 남겨주세요."
         />
         <input
@@ -148,8 +144,7 @@ export function InquiryForm({
       <div className="flex flex-col gap-1 pb-2">
         <Title1
           text="이미지 파일 첨부"
-          showDot={false}
-          subtitle
+          variant="title-subtitle"
           subtitleText="최대 5개의 파일 업로드 가능. 지원되는 파일 유형: jpg, png, gif, webp, heic, tiff"
         />
         <div className="mt-2">

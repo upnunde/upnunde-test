@@ -90,8 +90,7 @@ export function EpisodeForm() {
           <div className="flex flex-col gap-3">
             <Title1
               text="에피소드 제목*"
-              showDot
-              subtitle
+              variant="title-subtitle-dot"
               subtitleText="에피소드 제목을 입력해주세요."
             />
             <input
@@ -111,8 +110,7 @@ export function EpisodeForm() {
           <div className="flex flex-col gap-3">
             <Title1
               text="에피소드 요약*"
-              showDot
-              subtitle
+              variant="title-subtitle-dot"
               subtitleText="에피소드를 한 줄로 소개해주세요."
             />
             <input
@@ -132,8 +130,7 @@ export function EpisodeForm() {
           <div className="flex flex-col gap-3 pb-5">
             <Title1
               text="대표 이미지*"
-              showDot
-              subtitle
+              variant="title-subtitle-dot"
               subtitleText="에피소드 대표 이미지를 등록해주세요."
             />
             {thumbnailUrl ? (
@@ -158,8 +155,7 @@ export function EpisodeForm() {
           <div className="flex flex-col gap-3">
             <Title1
               text="지난 사건 히스토리*"
-              showDot
-              subtitle
+              variant="title-subtitle-dot"
               subtitleText="지난 사건의 히스토리를 작성해 주세요."
             />
             <textarea
@@ -179,8 +175,7 @@ export function EpisodeForm() {
           <div className="flex flex-col gap-3">
             <Title1
               text="에피소드 대본*"
-              showDot
-              subtitle
+              variant="title-subtitle-dot"
               subtitleText="에피소드 대본을 상세하게 작성해 주세요."
             />
             <textarea
