@@ -34,7 +34,7 @@ function getLabels(kind: ImageResourceKind) {
         descriptionLabel: "배경 설명*",
         descriptionSubtitle:
           "화면 상의 분위기나 시각적 특성을 한 줄로 요약해 주세요. 장면 묘시에 대한 간단한 설명입니다.",
-        thumbnailLabel: "대표 썸네일*",
+        thumbnailLabel: "대표 썸네일",
         thumbnailSubtitle: "부가정보에 표시되는 썸네일입니다.",
       };
     case "scene":
@@ -45,7 +45,7 @@ function getLabels(kind: ImageResourceKind) {
         nameSubtitle: "연출 컷을 직관적으로 구분할 수 있는 이름을 입력해 주세요.",
         descriptionLabel: "연출 설명*",
         descriptionSubtitle: "장면의 핵심 연출 의도를 한 줄로 요약해 주세요.",
-        thumbnailLabel: "대표 썸네일*",
+        thumbnailLabel: "대표 썸네일",
         thumbnailSubtitle: "연출이 대표적으로 드러나는 이미지를 등록해 주세요.",
       };
     case "media":
@@ -56,7 +56,7 @@ function getLabels(kind: ImageResourceKind) {
         nameSubtitle: "영상·이미지 등을 구분할 수 있는 이름을 입력해 주세요.",
         descriptionLabel: "미디어 설명*",
         descriptionSubtitle: "어떤 상황에서 사용되는 미디어인지 간단히 설명해 주세요.",
-        thumbnailLabel: "대표 썸네일*",
+        thumbnailLabel: "대표 썸네일",
         thumbnailSubtitle: "리스트와 미리보기에서 사용될 대표 이미지를 등록해 주세요.",
       };
     case "gallery":
@@ -68,7 +68,7 @@ function getLabels(kind: ImageResourceKind) {
         nameSubtitle: "CG/삽화 장면을 구분할 수 있는 이름을 입력해 주세요.",
         descriptionLabel: "갤러리 설명*",
         descriptionSubtitle: "장면의 스토리적 의미를 한 줄로 요약해 주세요.",
-        thumbnailLabel: "대표 썸네일*",
+        thumbnailLabel: "대표 썸네일",
         thumbnailSubtitle: "갤러리 목록에서 먼저 보여질 이미지를 등록해 주세요.",
       };
   }
@@ -225,7 +225,7 @@ export function ImageResourceDetailPage({ kind, initialData }: ImageResourceDeta
               <section className="flex flex-col gap-3">
                 <Title1
                   text={labels.thumbnailLabel}
-                  variant="title-subtitle"
+                  variant="title-subtitle-dot"
                   subtitleText={labels.thumbnailSubtitle}
                 />
                 {thumbnailUrl ? (
