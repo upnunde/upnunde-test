@@ -2,7 +2,7 @@
 
 import React, { useCallback, useEffect, useRef, useState } from "react";
 import { useRouter, useParams } from "next/navigation";
-import { ChevronLeft } from "lucide-react";
+import { ChevronLeft, Pencil, Trash2 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
@@ -134,6 +134,19 @@ export function ImageResourceDetailPage({ kind, initialData }: ImageResourceDeta
     thumbnailFileInputRef.current?.click();
   }, [thumbnailUrl]);
 
+  const handleThumbnailRemove = useCallback(() => {
+    setThumbnailModalOpen(false);
+    setThumbnailModalInitialSlots(null);
+    setThumbnailUrl((prev) => {
+      if (prev && prev.startsWith("blob:")) URL.revokeObjectURL(prev);
+      return "";
+    });
+    setPendingThumbnailUrl((prev) => {
+      if (prev && prev.startsWith("blob:")) URL.revokeObjectURL(prev);
+      return null;
+    });
+  }, []);
+
   const handleThumbnailFileChange = useCallback(
     (e: React.ChangeEvent<HTMLInputElement>) => {
       const file = (e.target.files ?? [])[0];
@@ -229,20 +242,47 @@ export function ImageResourceDetailPage({ kind, initialData }: ImageResourceDeta
                   subtitleText={labels.thumbnailSubtitle}
                 />
                 {thumbnailUrl ? (
-                  <button
-                    type="button"
-                    onClick={handleThumbnailClick}
-                    className="w-[90px] h-[160px] rounded-lg overflow-hidden border border-slate-200 bg-slate-100 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary cursor-pointer"
-                    aria-label="대표 썸네일 변경"
-                  >
-                    <div className="w-[90px] h-[160px]">
-                      <img
-                        src={thumbnailUrl}
-                        alt=""
-                        className="w-full h-full object-cover"
-                      />
+                  <div className="inline-flex flex-col justify-start items-start gap-1 w-[90px] group">
+                    <div className="w-[90px] h-[160px] rounded-lg overflow-hidden border border-slate-200 bg-slate-100 relative">
+                      <button
+                        type="button"
+                        onClick={handleThumbnailClick}
+                        className="absolute inset-0 z-0 flex h-full w-full cursor-pointer focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-0"
+                        aria-label="대표 썸네일 변경"
+                      >
+                        <img
+                          src={thumbnailUrl}
+                          alt=""
+                          className="w-full h-full object-cover pointer-events-none"
+                        />
+                      </button>
+                      <div className="absolute inset-0 z-[1] bg-black/10 opacity-0 group-hover:opacity-100 transition-opacity pointer-events-none" />
+                      <div className="absolute right-1 top-1 z-[2] flex flex-col justify-center items-start gap-1 opacity-0 group-hover:opacity-100 transition-opacity pointer-events-none group-hover:pointer-events-auto">
+                        <button
+                          type="button"
+                          className="w-8 h-8 rounded-full cursor-pointer bg-surface-10 inline-flex justify-center items-center text-on-surface-10 hover:bg-slate-100"
+                          aria-label="대표 썸네일 편집"
+                          onClick={(e) => {
+                            e.stopPropagation();
+                            handleThumbnailClick();
+                          }}
+                        >
+                          <Pencil className="w-4 h-4" />
+                        </button>
+                        <button
+                          type="button"
+                          className="w-8 h-8 rounded-full cursor-pointer bg-surface-10 inline-flex justify-center items-center text-on-surface-10 hover:bg-slate-100"
+                          aria-label="대표 썸네일 삭제"
+                          onClick={(e) => {
+                            e.stopPropagation();
+                            handleThumbnailRemove();
+                          }}
+                        >
+                          <Trash2 className="w-4 h-4" />
+                        </button>
+                      </div>
                     </div>
-                  </button>
+                  </div>
                 ) : (
                   <AddResourceSlot
                     variant="img9:16"

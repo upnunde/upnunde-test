@@ -117,6 +117,23 @@ export function CharacterDetailPage({ isNew = true, initialData }: CharacterDeta
     thumbnailFileInputRef.current?.click();
   }, [thumbnailUrl, thumbnailOriginalUrl]);
 
+  const handleThumbnailRemove = useCallback(() => {
+    setThumbnailModalOpen(false);
+    setThumbnailModalInitialSlots(null);
+    setThumbnailUrl((prev) => {
+      if (prev && prev.startsWith("blob:")) URL.revokeObjectURL(prev);
+      return null;
+    });
+    setThumbnailOriginalUrl((prev) => {
+      if (prev && prev.startsWith("blob:")) URL.revokeObjectURL(prev);
+      return null;
+    });
+    setPendingThumbnailUrl((prev) => {
+      if (prev && prev.startsWith("blob:")) URL.revokeObjectURL(prev);
+      return null;
+    });
+  }, []);
+
   const handleThumbnailFileChange = useCallback((e: React.ChangeEvent<HTMLInputElement>) => {
     const file = (e.target.files ?? [])[0];
     e.target.value = "";
@@ -265,14 +282,47 @@ export function CharacterDetailPage({ isNew = true, initialData }: CharacterDeta
                       subtitleText="독자에게 가장 먼저 보여질 캐릭터 이미지를 등록해 주세요."
                     />
                     {thumbnailUrl ? (
-                      <button
-                        type="button"
-                        onClick={handleThumbnailAddClick}
-                        className="w-28 h-28 rounded-lg overflow-hidden border border-slate-200 bg-slate-100 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary"
-                        aria-label="대표 썸네일 변경"
-                      >
-                        <img src={thumbnailUrl} alt="" className="w-full h-full object-cover object-center" />
-                      </button>
+                      <div className="inline-flex flex-col justify-start items-start gap-1 w-28 group">
+                        <div className="w-28 h-28 rounded-lg overflow-hidden border border-slate-200 bg-slate-100 relative">
+                          <button
+                            type="button"
+                            onClick={handleThumbnailAddClick}
+                            className="absolute inset-0 z-0 flex h-full w-full cursor-pointer focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-0"
+                            aria-label="대표 썸네일 변경"
+                          >
+                            <img
+                              src={thumbnailUrl}
+                              alt=""
+                              className="h-full w-full object-cover object-center pointer-events-none"
+                            />
+                          </button>
+                          <div className="absolute inset-0 z-[1] bg-black/10 opacity-0 group-hover:opacity-100 transition-opacity pointer-events-none" />
+                          <div className="absolute right-1 top-1 z-[2] flex flex-col justify-center items-start gap-1 opacity-0 group-hover:opacity-100 transition-opacity pointer-events-none group-hover:pointer-events-auto">
+                            <button
+                              type="button"
+                              className="w-8 h-8 rounded-full cursor-pointer bg-surface-10 inline-flex justify-center items-center text-on-surface-10 hover:bg-slate-100"
+                              aria-label="대표 썸네일 편집"
+                              onClick={(e) => {
+                                e.stopPropagation();
+                                handleThumbnailAddClick();
+                              }}
+                            >
+                              <Pencil className="w-4 h-4" />
+                            </button>
+                            <button
+                              type="button"
+                              className="w-8 h-8 rounded-full cursor-pointer bg-surface-10 inline-flex justify-center items-center text-on-surface-10 hover:bg-slate-100"
+                              aria-label="대표 썸네일 삭제"
+                              onClick={(e) => {
+                                e.stopPropagation();
+                                handleThumbnailRemove();
+                              }}
+                            >
+                              <Trash2 className="w-4 h-4" />
+                            </button>
+                          </div>
+                        </div>
+                      </div>
                     ) : (
                       <AddResourceSlot
                         variant="character"
@@ -303,7 +353,7 @@ export function CharacterDetailPage({ isNew = true, initialData }: CharacterDeta
                             {/* 어두운 오버레이 */}
                             <div className="absolute inset-0 w-full h-full bg-black/10 opacity-0 group-hover:opacity-100 transition-opacity pointer-events-none" />
                             {/* 편집 / 삭제 아이콘 버튼 (9:16 썸네일과 동일 스타일) */}
-                            <div className="absolute right-1 top-1 flex flex-col justify-center items-start gap-1 opacity-0 group-hover:opacity-100 transition-opacity">
+                            <div className="absolute right-1 top-1 flex flex-col justify-center items-start gap-1 opacity-0 group-hover:opacity-100 transition-opacity pointer-events-none group-hover:pointer-events-auto">
                               <button
                                 type="button"
                                 className="w-8 h-8 rounded-full cursor-pointer bg-surface-10 inline-flex justify-center items-center text-on-surface-10 hover:bg-slate-100"
