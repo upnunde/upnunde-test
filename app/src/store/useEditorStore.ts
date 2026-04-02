@@ -1,6 +1,6 @@
 import { create } from "zustand";
 import type { ScriptBlock, BlockType, ChoiceItem } from "@/types/editor";
-import { BACKGROUNDS, CHARACTERS, BGMS, SFX } from "@/lib/mockData";
+import { BACKGROUNDS, CHARACTERS, BGMS, SFX, VIDEOS } from "@/lib/mockData";
 
 function generateId(): string {
   if (typeof crypto !== "undefined" && crypto.randomUUID) {
@@ -33,6 +33,8 @@ function getDefaultResourceContent(type: BlockType): string {
       return SFX[0]?.name || "Door_Open";
     case "gallery":
       return "gallery_1";
+    case "video":
+      return VIDEOS[0]?.name || "동영상1";
     default:
       return "";
   }
@@ -44,7 +46,7 @@ export function createBlock(
   data?: Record<string, any>
 ): ScriptBlock {
   // For resource blocks, use default dummy value if content is empty
-  const resourceTypes: BlockType[] = ["background", "bgm", "sfx", "character", "gallery"];
+  const resourceTypes: BlockType[] = ["background", "bgm", "sfx", "character", "gallery", "video"];
   const defaultContent = resourceTypes.includes(type) && !content 
     ? getDefaultResourceContent(type) 
     : content;
@@ -63,9 +65,9 @@ export function createBlock(
       },
     };
   }
-  // Text blocks: default speaker to "독백" when not provided
+  // Text blocks: default speaker to "나레이션" when not provided
   if (type === "text") {
-    const textData = { ...(data ?? {}), speaker: data?.speaker ?? "독백" };
+    const textData = { ...(data ?? {}), speaker: data?.speaker ?? "나레이션" };
     return { ...base, data: textData };
   }
   return {

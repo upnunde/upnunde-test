@@ -6,6 +6,7 @@ import {
   Image,
   Music,
   User,
+  Film,
   ImagePlus,
   Sliders,
   ListChecks,
@@ -19,7 +20,7 @@ import {
 } from "lucide-react";
 import type { ScriptBlock as ScriptBlockType, BlockType } from "@/types/editor";
 import { useEditorStore } from "@/store/useEditorStore";
-import { CHARACTERS, BACKGROUNDS, BGMS, SFX } from "@/lib/mockData";
+import { CHARACTERS, BACKGROUNDS, BGMS, SFX, VIDEOS } from "@/lib/mockData";
 import { initialCharacters } from "@/lib/resourceMockData";
 import {
   DropdownMenu,
@@ -36,12 +37,12 @@ import { ResourcePicker } from "./ResourcePicker";
 import { ChoiceBlockTable } from "./ChoiceBlockTable";
 import { cn } from "@/lib/utils";
 
-const RESOURCE_TYPES: BlockType[] = ["background", "bgm", "sfx", "character", "gallery", "choice"];
+const RESOURCE_TYPES: BlockType[] = ["background", "bgm", "sfx", "character", "gallery", "video", "choice"];
 
-const PICKER_RESOURCE_TYPES: BlockType[] = ["background", "character", "bgm", "sfx", "gallery"];
+const PICKER_RESOURCE_TYPES: BlockType[] = ["background", "character", "bgm", "sfx", "gallery", "video", "event"];
 
 const TYPE_LABELS: Record<BlockType, string> = {
-  scene: "Scene",
+  scene: "씬",
   top_desc: "Situation Info",
   text: "Text",
   background: "Background",
@@ -49,6 +50,7 @@ const TYPE_LABELS: Record<BlockType, string> = {
   sfx: "SFX",
   character: "Character",
   gallery: "Gallery",
+  video: "Video",
   direction: "Direction",
   choice: "Choice",
   event: "Event",
@@ -61,13 +63,14 @@ const PICKER_LABEL_KO: Record<BlockType, string> = {
   top_desc: "상황정보",
   text: "텍스트",
   background: "배경",
-  bgm: "BGM",
-  sfx: "SFX",
+  bgm: "배경음악",
+  sfx: "효과음",
   character: "캐릭터",
   gallery: "갤러리",
+  video: "동영상",
   direction: "연출",
   choice: "선택",
-  event: "이벤트",
+  event: "씬 전환",
   event_end: "이벤트 종료",
 };
 
@@ -81,6 +84,7 @@ const LABEL_COLOR_BY_TYPE: Record<BlockType, string> = {
   sfx: "text-orange-500",
   character: "text-violet-600",
   gallery: "text-teal-600",
+  video: "text-rose-600",
   direction: "text-indigo-600",
   choice: "text-cyan-600",
   event: "text-amber-600",
@@ -96,6 +100,7 @@ const TYPE_ICONS: Record<BlockType, React.ElementType> = {
   sfx: Music,
   character: User,
   gallery: ImagePlus,
+  video: Film,
   direction: Sliders,
   choice: ListChecks,
   event: Type,
@@ -179,6 +184,7 @@ export function ScriptBlock({
     Boolean(block.data?.isNew && PICKER_RESOURCE_TYPES.includes(block.type))
   );
   const [expressionMenuOpen, setExpressionMenuOpen] = useState(false);
+  const [videoOptionMenuOpen, setVideoOptionMenuOpen] = useState(false);
 
   const indexLabel = String(index).padStart(2, "0");
   const prevBlock = index > 0 ? blocks[index - 1] : null;
@@ -196,6 +202,8 @@ export function ScriptBlock({
         return getRandomNameFromList(SFX) || "Door_Open";
       case "gallery":
         return "gallery_1";
+      case "video":
+        return getRandomNameFromList(VIDEOS) || "동영상1";
       default:
         return "";
     }
@@ -287,7 +295,7 @@ export function ScriptBlock({
         // index is 1-based; store expects 0-based insert position = index. Inherit speaker from previous block when it's text.
         const speakerData =
           prevBlock?.type === "text"
-            ? { speaker: prevBlock.data?.speaker ?? "독백" }
+            ? { speaker: prevBlock.data?.speaker ?? "나레이션" }
             : undefined;
         const newId = addBlock(index, "text", afterCursor, speakerData);
         focusBlock(newId);
@@ -464,17 +472,17 @@ export function ScriptBlock({
     }
   }, [block.type, block.content]);
 
-  // Text block: dialogue with per-block speaker dropdown (default "독백")
+  // Text block: dialogue with per-block speaker dropdown (default "나레이션")
   // Rigid two-column flex layout so wrapped lines don't flow under the left controls (Notion-style).
   if (block.type === "text") {
-    const currentSpeaker = block.data?.speaker ?? "독백";
+    const currentSpeaker = block.data?.speaker ?? "나레이션";
     const updateSpeaker = (speaker: string) =>
       updateBlock(block.id, block.content, { ...(block.data ?? {}), speaker });
 
     return (
       <div className={cn(TEXT_BLOCK_ROOT_CLASSES, rootClassName)}>
         {/* Left column: block index + speaker dropdown — shrink-0 so content never overlaps */}
-        <div className="flex items-center justify-start gap-0 shrink-0 pt-0 w-[80px] mt-1 pr-2">
+        <div className="flex items-center justify-start gap-0 shrink-0 pt-0 w-[100px] mt-1 pr-2">
           {!hideIndex && (
             <span className="text-sm font-medium text-slate-300 w-5 text-right tabular-nums">
               {indexLabel}
@@ -486,15 +494,15 @@ export function ScriptBlock({
                 type="button"
                 className="inline-flex w-full items-center justify-start gap-0 h-7 min-w-0 p-0 m-0 text-[13px] text-on-surface-30 font-medium rounded-md border-0 outline-none shadow-none hover:bg-accent hover:text-accent-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring/50 focus-visible:ring-offset-0 overflow-hidden"
               >
-                <span className="inline-block w-fit max-w-[56px] text-left truncate">
+                <span className="inline-block w-fit max-w-[76px] text-left truncate">
                   {currentSpeaker}
                 </span>
                 <ChevronDown className="ml-1 w-3 h-3 shrink-0" />
               </button>
             </DropdownMenuTrigger>
             <DropdownMenuContent>
-              <DropdownMenuItem onClick={() => updateSpeaker("독백")}>
-                독백
+              <DropdownMenuItem onClick={() => updateSpeaker("나레이션")}>
+                나레이션
               </DropdownMenuItem>
               <DropdownMenuSeparator />
               <DropdownMenuLabel className="text-muted-foreground text-xs font-normal px-2 py-1.5">
@@ -672,8 +680,8 @@ export function ScriptBlock({
     );
   }
 
-  // Scene & top_desc & event & event_end: Two-Box — Label + editable Value (no picker)
-  if (block.type === "scene" || block.type === "top_desc" || block.type === "event" || block.type === "event_end") {
+  // Scene & top_desc: Two-Box — Label + editable Value (no picker)
+  if (block.type === "scene" || block.type === "top_desc") {
     const sceneOrder =
       block.type === "scene"
         ? blocks.slice(0, index).filter((b) => b.type === "scene").length
@@ -683,18 +691,14 @@ export function ScriptBlock({
         ? `# 씬 ${String(sceneOrder).padStart(2, "0")}`
         : block.type === "top_desc"
         ? "# 상황정보"
-        : block.type === "event"
-        ? "# 이벤트"
-        : "# 이벤트 종료";
+        : "# 상황정보";
     const labelColorClass = LABEL_COLOR_BY_TYPE[block.type];
     const placeholder =
       block.type === "scene"
         ? "씬 제목"
         : block.type === "top_desc"
         ? "상황정보를 입력하세요"
-        : block.type === "event"
-        ? "이벤트 이름"
-        : "종료됨";
+        : "상황정보를 입력하세요";
 
     const sceneContent = (
       <div
@@ -725,7 +729,7 @@ export function ScriptBlock({
           </span>
         )}
         <div className="flex min-w-0 flex-1 w-full items-center gap-0">
-          <div className="shrink-0 w-20">
+          <div className="shrink-0 w-[100px]">
             <span
               className={cn(
                 "text-sm font-medium",
@@ -860,7 +864,7 @@ export function ScriptBlock({
           </span>
         )}
         <div className="flex min-w-0 flex-1 items-start gap-0">
-          <div className="w-20 shrink-0 mt-[3px]">
+          <div className="w-[100px] shrink-0 mt-[3px]">
             <span className={cn("shrink-0 text-[13px] font-medium pt-0", LABEL_COLOR_BY_TYPE.choice)}>
               # 선택지
             </span>
@@ -878,8 +882,8 @@ export function ScriptBlock({
               sceneOptions={blocks
                 .filter((b) => b.type === "scene")
                 .map((b, i) => ({
-                  value: b.content?.trim() || `Scene_${i + 1}`,
-                  label: b.content?.trim() || `Scene_${i + 1}`,
+                  value: b.content?.trim() || `씬_${i + 1}`,
+                  label: b.content?.trim() || `씬_${i + 1}`,
                 }))}
             />
           </div>
@@ -990,6 +994,8 @@ export function ScriptBlock({
   if (PICKER_RESOURCE_TYPES.includes(block.type)) {
     const displayName = block.content?.trim() || "";
     const isCharacter = block.type === "character";
+    const isVideo = block.type === "video";
+    const isSceneTransition = block.type === "event";
     const isBackground = block.type === "background";
     const characterItem = isCharacter
       ? CHARACTERS.find((c) => c.name === displayName)
@@ -1002,6 +1008,19 @@ export function ScriptBlock({
     const isEmpty = !displayName || displayName === "none";
     const labelKo = PICKER_LABEL_KO[block.type] ?? label;
     const labelColorClass = LABEL_COLOR_BY_TYPE[block.type];
+    const sceneItems = isSceneTransition
+      ? blocks
+          .map((b, idx) => ({ b, idx }))
+          .filter(({ b }) => b.type === "scene")
+          .map(({ b, idx }) => {
+            const sceneNumber = blocks.slice(0, idx).filter((x) => x.type === "scene").length + 1;
+            const sceneTitle = b.content?.trim() || `씬 ${sceneNumber}`;
+            return {
+              id: b.id,
+              name: `${String(sceneNumber).padStart(2, "0")} ${sceneTitle}`,
+            };
+          })
+      : undefined;
     const characterExpressionOptions =
       block.type === "character"
         ? getCharacterExpressionOptions(displayName)
@@ -1011,6 +1030,9 @@ export function ScriptBlock({
       characterExpressionOptions.includes(currentExpressionRaw) && currentExpressionRaw.length > 0
         ? currentExpressionRaw
         : characterExpressionOptions[0] ?? DEFAULT_CHARACTER_EXPRESSION;
+
+    const currentVideoPlayback = (block.data?.playback as "loop" | "once" | undefined) ?? "loop";
+    const currentVideoPlaybackLabel = currentVideoPlayback === "once" ? "한 번만" : "무한루프";
 
     return (
       <div
@@ -1051,7 +1073,7 @@ export function ScriptBlock({
           </span>
         )}
         <div className="flex min-w-0 flex-1 items-center gap-0">
-          <div className="w-20 shrink-0 flex items-center">
+          <div className="w-[100px] shrink-0 flex items-center">
             <span
               className={cn(
                 "w-fit font-medium text-[13px]",
@@ -1065,6 +1087,7 @@ export function ScriptBlock({
             type={block.type}
             isOpen={isPickerOpen}
             onOpenChange={setPickerOpen}
+            itemsOverride={sceneItems}
             onSelect={(value) => {
               if (block.type === "character") {
                 const nextOptions = getCharacterExpressionOptions(value);
@@ -1073,6 +1096,16 @@ export function ScriptBlock({
                   ...(block.data ?? {}),
                   expression: nextOptions[0] ?? DEFAULT_CHARACTER_EXPRESSION,
                 });
+              } else if (block.type === "video") {
+                requestAnimationFrame(() => setVideoOptionMenuOpen(true));
+                updateBlock(block.id, value, {
+                  ...(block.data ?? {}),
+                  playback: (block.data?.playback as "loop" | "once" | undefined) ?? "loop",
+                });
+              } else if (block.type === "event") {
+                // 씬 전환: 선택한 씬 라벨을 content로 저장하고, 원본 scene block id도 같이 저장
+                const selected = sceneItems?.find((it) => it.name === value);
+                updateBlock(block.id, value, { ...(block.data ?? {}), sceneId: selected?.id });
               } else {
                 updateBlock(block.id, value);
               }
@@ -1119,6 +1152,10 @@ export function ScriptBlock({
               ) : block.type === "bgm" || block.type === "sfx" ? (
                 <span className="flex h-5 w-5 shrink-0 items-center justify-center rounded-full bg-slate-100 text-on-surface-30">
                   <Music className="h-3 w-3" />
+                </span>
+              ) : isVideo ? (
+                <span className="flex h-5 w-5 shrink-0 items-center justify-center rounded-full bg-slate-100 text-on-surface-30">
+                  <Film className="h-3 w-3" />
                 </span>
               ) : null}
               <span
@@ -1169,6 +1206,50 @@ export function ScriptBlock({
                     {expr}
                   </DropdownMenuItem>
                 ))}
+              </DropdownMenuContent>
+            </DropdownMenu>
+          )}
+          {isVideo && !isEmpty && (
+            <DropdownMenu open={videoOptionMenuOpen} onOpenChange={setVideoOptionMenuOpen}>
+              <DropdownMenuTrigger asChild>
+                <button
+                  type="button"
+                  onClick={(e) => e.stopPropagation()}
+                  onFocus={onFocusBlock}
+                  className="ml-2 flex h-8 min-w-0 w-fit cursor-pointer items-center gap-1 rounded-md border border-slate-200 bg-white px-2 py-1.5 transition-all hover:bg-slate-50 focus:outline-none focus:ring-0 active:scale-[0.98]"
+                >
+                  <span className="min-w-0 flex-1 truncate text-[13px] font-medium text-[rgba(126,140,160,1)]">
+                    {currentVideoPlaybackLabel}
+                  </span>
+                  <ChevronDown className="ml-1 h-4 w-4 shrink-0 text-on-surface-30" />
+                </button>
+              </DropdownMenuTrigger>
+              <DropdownMenuContent
+                align="start"
+                className="w-40 p-1 bg-white rounded-lg border border-slate-100"
+              >
+                <DropdownMenuItem
+                  onClick={() =>
+                    updateBlock(block.id, block.content, {
+                      ...(block.data ?? {}),
+                      playback: "loop",
+                    })
+                  }
+                  className="flex items-center px-3 py-2.5 cursor-pointer text-sm text-slate-700 hover:bg-slate-50 focus:bg-slate-50 rounded-md"
+                >
+                  무한루프
+                </DropdownMenuItem>
+                <DropdownMenuItem
+                  onClick={() =>
+                    updateBlock(block.id, block.content, {
+                      ...(block.data ?? {}),
+                      playback: "once",
+                    })
+                  }
+                  className="flex items-center px-3 py-2.5 cursor-pointer text-sm text-slate-700 hover:bg-slate-50 focus:bg-slate-50 rounded-md"
+                >
+                  한 번만
+                </DropdownMenuItem>
               </DropdownMenuContent>
             </DropdownMenu>
           )}

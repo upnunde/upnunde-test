@@ -110,7 +110,7 @@ export function parseScriptToBlocks(text: string): ScriptBlock[] {
     const sceneMarkerMatch = trimmed.match(SCENE_MARKER_REGEX);
     if (sceneMarkerMatch) {
       const n = parseInt(sceneMarkerMatch[1], 10);
-      const title = sceneTitlesByNumber[n] ?? `Scene ${n}`;
+      const title = sceneTitlesByNumber[n] ?? `씬 ${n}`;
       blocks.push({
         id: generateId(),
         type: "scene",

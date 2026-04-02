@@ -112,7 +112,7 @@ function computeAccumulatedState(
 
   // Transient State: speaker and dialogue ONLY from the focused text block
   const currentSpeaker =
-    focusedBlock?.type === "text" ? (focusedBlock.data?.speaker ?? "독백") : "";
+    focusedBlock?.type === "text" ? (focusedBlock.data?.speaker ?? "나레이션") : "";
   const currentDialogue =
     focusedBlock?.type === "text" ? (focusedBlock.content ?? "") : "";
   const currentChoices =
@@ -210,7 +210,7 @@ export function PreviewScreen(props: PreviewScreenProps = {}) {
         </div>
       )}
 
-      {/* Layer 3: Visual Novel style text box — speaker from focused text block only; hide nameplate when "독백" */}
+      {/* Layer 3: Visual Novel style text box — speaker from focused text block only; hide nameplate when "나레이션" */}
       {currentDialogue && (
         <div
           className={cn(
@@ -219,7 +219,7 @@ export function PreviewScreen(props: PreviewScreenProps = {}) {
             "border-2 border-white/20"
           )}
         >
-          {currentSpeaker && currentSpeaker !== "독백" && (
+          {currentSpeaker && currentSpeaker !== "나레이션" && (
             <div className="border-b border-white/10 px-4 py-2">
               <span className="text-sm font-semibold text-amber-300/95">
                 {currentSpeaker}

@@ -165,21 +165,6 @@ export function SceneNavigation({
       }
     }
 
-    // 이벤트 블록 개수 불일치(간단한 경고)
-    const eventStarts = blocks.filter((b) => b.type === "event").length;
-    const eventEnds = blocks.filter((b) => b.type === "event_end").length;
-    if (eventStarts !== eventEnds) {
-      const firstEvent = blocks.find((b) => b.type === "event") ?? blocks.find((b) => b.type === "event_end");
-      if (firstEvent) {
-        next.push({
-          kind: "error",
-          blockId: firstEvent.id,
-          title: "이벤트 시작/종료 불일치",
-          detail: `event: ${eventStarts}개, event_end: ${eventEnds}개`,
-        });
-      }
-    }
-
     return next;
   }, [blocks]);
 

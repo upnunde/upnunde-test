@@ -18,6 +18,7 @@ import {
   CHARACTERS,
   BGMS,
   SFX,
+  VIDEOS,
 } from "@/lib/mockData";
 import { useEditorStore } from "@/store/useEditorStore";
 
@@ -37,13 +38,13 @@ const ALL_OPTIONS: { type: BlockType; label: string; icon: React.ElementType }[]
   { type: "scene", label: "씬", icon: Heading },
   { type: "top_desc", label: "상황정보", icon: Film },
   { type: "background", label: "배경", icon: Image },
-  { type: "bgm", label: "BGM", icon: Music },
-  { type: "sfx", label: "SFX", icon: Music },
+  { type: "bgm", label: "배경음악", icon: Music },
+  { type: "sfx", label: "효과음", icon: Music },
   { type: "character", label: "캐릭터", icon: User },
   { type: "gallery", label: "갤러리", icon: ImagePlus },
+  { type: "video", label: "동영상", icon: Film },
   { type: "choice", label: "선택", icon: ListChecks },
-  { type: "event", label: "이벤트", icon: Sparkles },
-  { type: "event_end", label: "이벤트 종료", icon: Sparkles },
+  { type: "event", label: "씬 전환", icon: Sparkles },
 ];
 
 function getDefaultPayloadForType(
@@ -66,6 +67,12 @@ function getDefaultPayloadForType(
       return SFX[0]
         ? { type: "sfx", content: SFX[0].name, data: { isNew: true } }
         : null;
+    case "video":
+      return VIDEOS[0]
+        ? { type: "video", content: VIDEOS[0].name, data: { isNew: true } }
+        : null;
+    case "event":
+      return { type: "event", content: "", data: { isNew: true } };
     default:
       return null;
   }
@@ -77,27 +84,8 @@ export function SlashCommandMenu({
   onClose,
   targetBlockId,
 }: SlashCommandMenuProps) {
-  const blocks = useEditorStore((s) => s.blocks);
   const buttonRefs = useRef<(HTMLButtonElement | null)[]>([]);
-
-  // Calculate isEventActive: check blocks above the target block
-  const targetIndex = blocks.findIndex((b) => b.id === targetBlockId);
-  const precedingBlocks = targetIndex >= 0 ? blocks.slice(0, targetIndex) : [];
-  const lastEventBlock = [...precedingBlocks].reverse().find(
-    (b) => b.type === "event" || b.type === "event_end"
-  );
-  const isEventActive = lastEventBlock?.type === "event";
-
-  // Filter options based on event state
-  const OPTIONS = ALL_OPTIONS.filter((option) => {
-    if (isEventActive) {
-      // If event is active, hide "event" option
-      return option.type !== "event";
-    } else {
-      // If no event is active, hide "event_end" option
-      return option.type !== "event_end";
-    }
-  });
+  const OPTIONS = ALL_OPTIONS;
 
   // 기본 포커스: 메뉴 열리면 첫 항목에 포커스
   useEffect(() => {

@@ -60,6 +60,11 @@ const BLOCK_TYPE_STYLES: Record<
     className:
       "border-l-4 border-l-primary bg-primary/10 dark:bg-primary/20",
   },
+  video: {
+    label: "동영상",
+    className:
+      "border-l-4 border-l-rose-500 bg-rose-50/30 dark:bg-rose-950/20",
+  },
   direction: {
     label: "Direction",
     className:
@@ -91,6 +96,7 @@ const ALL_BLOCK_TYPES: BlockType[] = [
   "bgm",
   "sfx",
   "gallery",
+  "video",
   "direction",
   "choice",
   "event",

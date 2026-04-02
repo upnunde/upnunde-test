@@ -152,7 +152,7 @@ export function ResourceManagementPage() {
         id: "pv-text",
         type: "text",
         content: "이 화면에서 등록한 리소스가 어떻게 보이는지 확인할 수 있어요.",
-        data: { speaker: charName === "선택 안함" ? "독백" : charName },
+        data: { speaker: charName === "선택 안함" ? "나레이션" : charName },
       },
     ];
   }, [backgrounds, bgm, characters]);

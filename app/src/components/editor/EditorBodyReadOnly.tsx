@@ -14,6 +14,7 @@ const LABEL_COLOR_BY_TYPE: Record<BlockType, string> = {
   sfx: "text-orange-500",
   character: "text-violet-600",
   gallery: "text-amber-600",
+  video: "text-rose-600",
   direction: "text-slate-500",
   choice: "text-teal-600",
   event: "text-pink-600",
@@ -21,7 +22,7 @@ const LABEL_COLOR_BY_TYPE: Record<BlockType, string> = {
 };
 
 const TYPE_LABELS: Record<BlockType, string> = {
-  scene: "Scene",
+  scene: "씬",
   top_desc: "Situation Info",
   text: "Text",
   background: "Background",
@@ -29,6 +30,7 @@ const TYPE_LABELS: Record<BlockType, string> = {
   sfx: "SFX",
   character: "Character",
   gallery: "Gallery",
+  video: "Video",
   direction: "Direction",
   choice: "선택지",
   event: "Event",

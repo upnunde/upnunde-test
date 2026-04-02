@@ -27,6 +27,12 @@ export interface GalleryItem {
   url: string;
 }
 
+export interface VideoItem {
+  id: string;
+  name: string;
+  fileUrl: string;
+}
+
 export const BACKGROUNDS: BackgroundItem[] = [
   { id: "bg-1", name: "교실", url: "/background-1.png" },
   { id: "bg-2", name: "강변 산책로", url: "/background-2.png" },
@@ -93,4 +99,10 @@ export const GALLERIES: GalleryItem[] = [
   { id: "gallery-7", name: "갤러리7", url: "/gallery-G9.png" },
   { id: "gallery-8", name: "갤러리8", url: "/gallery-G10.png" },
   { id: "gallery-9", name: "갤러리9", url: "/gallery-G11.png" },
+];
+
+export const VIDEOS: VideoItem[] = [
+  { id: "video-1", name: "동영상1", fileUrl: "/video/video-1.mp4" },
+  { id: "video-2", name: "동영상2", fileUrl: "/video/video-2.mp4" },
+  { id: "video-3", name: "동영상3", fileUrl: "/video/video-3.mp4" },
 ];

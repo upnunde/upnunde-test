@@ -223,13 +223,13 @@ export function ImageResourceDetailPage({ kind, initialData }: ImageResourceDeta
                   variant="title-subtitle-dot"
                   subtitleText={labels.descriptionSubtitle}
                 />
-                <div className="flex flex-col justify-start items-start gap-2">
+                <div className="flex flex-col justify-center items-start gap-2">
                   <Textarea
                     rows={4}
                     value={description}
                     onChange={(e) => setDescription(e.target.value)}
                     placeholder="설명을 입력해 주세요."
-                    className="resize-y rounded-md border border-slate-200 bg-white px-3 py-2 text-sm text-on-surface-10 placeholder:text-on-surface-30 focus:outline-none focus:ring-2 focus:ring-primary w-full min-h-[96px]"
+                    className="min-h-[96px] max-h-[400px] w-full resize-y rounded-md border border-slate-200 bg-white px-3 py-2 text-sm text-on-surface-10 placeholder:text-on-surface-30 shadow-none focus:outline-none focus:ring-2 focus:ring-primary"
                   />
                 </div>
               </section>
