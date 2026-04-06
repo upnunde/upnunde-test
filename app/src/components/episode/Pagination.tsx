@@ -4,6 +4,7 @@ import React, { useState, useEffect } from "react";
 import { ChevronLeft, ChevronRight } from "lucide-react";
 
 const PAGE_SIZE = 10;
+const MAX_VISIBLE_PAGES = 9;
 
 export interface PaginationProps {
   /** 현재 페이지 (1-based) */
@@ -30,6 +31,13 @@ export function Pagination({
   const totalPages = Math.max(1, Math.ceil(totalItems / pageSize));
   const canPrev = currentPage > 1;
   const canNext = currentPage < totalPages;
+  const currentGroupStart =
+    Math.floor((currentPage - 1) / MAX_VISIBLE_PAGES) * MAX_VISIBLE_PAGES + 1;
+  const currentGroupEnd = Math.min(totalPages, currentGroupStart + MAX_VISIBLE_PAGES - 1);
+  const visiblePages = Array.from(
+    { length: currentGroupEnd - currentGroupStart + 1 },
+    (_, i) => currentGroupStart + i
+  );
 
   /** 입력 필드와 현재 페이지 위치값 매칭 */
   const [pageInputValue, setPageInputValue] = useState(String(currentPage));
@@ -72,7 +80,7 @@ export function Pagination({
         >
           <ChevronLeft className="h-4 w-4" />
         </button>
-        {Array.from({ length: totalPages }, (_, i) => i + 1).map((page) => (
+        {visiblePages.map((page) => (
           <button
             key={page}
             type="button"

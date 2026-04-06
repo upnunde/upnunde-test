@@ -36,50 +36,46 @@ export function NotificationItem({
   };
 
   return (
-    <div className={`border-slate-100 ${isLast ? "" : "border-b"}`}>
+    <div
+      className={`border-slate-100 transition-colors hover:bg-slate-50 ${isLast ? "" : "border-b"}`}
+    >
       <button
         type="button"
         onClick={() => onToggle?.()}
-        className="w-full cursor-pointer self-stretch h-[80px] rounded-lg inline-flex justify-start items-center gap-5 transition-colors hover:bg-slate-50 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-inset"
+        className="w-[calc(100%-40px)] mx-5 cursor-pointer self-stretch h-[80px] rounded-lg inline-flex justify-start items-center gap-5 transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-inset"
         aria-expanded={isOpen}
         aria-controls={`notification-content-${id}`}
         id={`notification-trigger-${id}`}
       >
-        <div className="w-[72px] h-8 p-2 bg-primary-primary-container rounded flex justify-center items-center gap-2.5">
-          <div className="justify-start text-primary text-sm font-medium font-['Pretendard_JP'] leading-5">
-            {notification.category === "NOTICE" ? "공지" : "작품알림"}
+        <div
+          className={`w-[72px] h-8 p-2 rounded flex justify-center items-center gap-2.5 ${
+            category === "NOTICE"
+              ? "bg-blue-100 text-blue-700"
+              : "bg-green-100 text-green-700"
+          }`}
+        >
+          <div className="justify-start text-sm font-medium font-['Pretendard_JP'] leading-5">
+            {category === "NOTICE" ? "공지" : "작품알림"}
           </div>
         </div>
         <div className="flex-1 inline-flex flex-col justify-center items-start gap-1">
           <div className="inline-flex justify-start items-center gap-5">
             <div className="flex justify-start items-start gap-1">
               <div className="justify-start text-on-surface-10 text-[15px] font-semibold font-['Pretendard_JP'] leading-5">
-                {notification.title}
+                {title}
               </div>
             </div>
           </div>
           <div className="justify-start text-on-surface-30 text-xs font-normal font-['Pretendard_JP'] leading-4">
-            {notification.date}
+            {date}
           </div>
         </div>
-        <button
-          type="button"
-          aria-label={isOpen ? "알림 접기" : "알림 펼치기"}
-          data-disabled="false"
-          data-error="false"
-          data-level="ghost"
-          data-size="h32"
-          data-state="false"
-          data-type="onlyicon"
-          data-variant="outline"
-          data-with-icon="true"
-          className="w-8 h-8 px-3 rounded-[999px] cursor-pointer flex justify-center items-center overflow-hidden bg-transparent text-on-surface-30 transition-colors hover:bg-slate-50 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-2"
-        >
+        <div className="w-8 h-8 px-3 rounded-[999px] flex justify-center items-center overflow-hidden bg-transparent text-on-surface-30">
           <ChevronDown
             className={`w-3 h-3 shrink-0 ${isOpen ? "rotate-180" : ""}`}
             aria-hidden
           />
-        </button>
+        </div>
       </button>
 
       {isOpen && (
@@ -87,7 +83,7 @@ export function NotificationItem({
           id={`notification-content-${id}`}
           role="region"
           aria-labelledby={`notification-trigger-${id}`}
-          className="flex items-stretch gap-5 pl-[72px] pr-4 pb-4 pt-0"
+          className="flex items-stretch gap-5 pl-[90px] pr-4 pb-4 pt-0"
         >
           <div
             className="w-px shrink-0 self-stretch min-h-0 bg-slate-100 rounded-full"

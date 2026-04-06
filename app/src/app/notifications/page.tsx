@@ -10,8 +10,9 @@ import type { NotificationData } from "@/types/notification";
 
 /** 알림 목록: 페이지당 20개, 21개부터 페이지네이션 운영 */
 const PAGE_SIZE = 20;
+const MOCK_NOTIFICATION_COUNT = 500;
 
-/** 알림 50개 더미 데이터 (펼쳤을 때 상세 내용 포함) */
+/** 공지/작품알림 랜덤 더미 데이터 생성 */
 function buildMockNotifications(): NotificationData[] {
   const titles: { category: NotificationData["category"]; title: string; content: string }[] = [
     {
@@ -332,23 +333,19 @@ function buildMockNotifications(): NotificationData[] {
     "2025.12.20",
   ] as const;
 
-  // 랜덤한 순서로 섞어서 NOTICE / WORK_ALERT가 규칙적으로 보이지 않도록 처리
-  const shuffled = [...titles];
-  for (let i = shuffled.length - 1; i > 0; i -= 1) {
-    const j = Math.floor(Math.random() * (i + 1));
-    const tmp = shuffled[i];
-    shuffled[i] = shuffled[j];
-    shuffled[j] = tmp;
-  }
+  return Array.from({ length: MOCK_NOTIFICATION_COUNT }, (_, index) => {
+    const item = titles[Math.floor(Math.random() * titles.length)];
+    const date = dateFormats[Math.floor(Math.random() * dateFormats.length)];
 
-  return shuffled.map((item, index) => ({
-    id: index + 1,
-    category: item.category,
-    title: item.title,
-    content: item.content,
-    date: dateFormats[index % dateFormats.length],
-    isRead: index % 3 === 0 ? false : true,
-  }));
+    return {
+      id: index + 1,
+      category: item.category,
+      title: item.title,
+      content: item.content,
+      date,
+      isRead: Math.random() >= 0.35,
+    };
+  });
 }
 
 const MOCK_NOTIFICATIONS: NotificationData[] = buildMockNotifications();
