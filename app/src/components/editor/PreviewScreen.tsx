@@ -5,6 +5,7 @@ import type { ChoiceItem, ScriptBlock } from "@/types/editor";
 import { useEditorStore } from "@/store/useEditorStore";
 import { CHARACTERS, BACKGROUNDS } from "@/lib/mockData";
 import { cn } from "@/lib/utils";
+import { resolveSpeakerDisplay } from "@/lib/speakerPersona";
 
 const EMPTY_RESOURCE = ["none", "선택 안함", "선택 안됨", ""];
 
@@ -46,7 +47,8 @@ export interface AccumulatedState {
  */
 function computeAccumulatedState(
   blocks: ScriptBlock[],
-  focusedBlockId: string | null
+  focusedBlockId: string | null,
+  seriesPersona: string
 ): AccumulatedState {
   // Safety check: return empty state if blocks array is empty or invalid
   if (!blocks || blocks.length === 0) {
@@ -112,7 +114,9 @@ function computeAccumulatedState(
 
   // Transient State: speaker and dialogue ONLY from the focused text block
   const currentSpeaker =
-    focusedBlock?.type === "text" ? (focusedBlock.data?.speaker ?? "나레이션") : "";
+    focusedBlock?.type === "text"
+      ? resolveSpeakerDisplay(focusedBlock.data?.speaker, seriesPersona)
+      : "";
   const currentDialogue =
     focusedBlock?.type === "text" ? (focusedBlock.content ?? "") : "";
   const currentChoices =
@@ -140,13 +144,14 @@ export interface PreviewScreenProps {
 export function PreviewScreen(props: PreviewScreenProps = {}) {
   const storeBlocks = useEditorStore((s) => s.blocks);
   const storeFocusedBlockId = useEditorStore((s) => s.focusBlockId);
+  const seriesPersona = useEditorStore((s) => s.seriesPersona);
 
   const blocks = props.blocks ?? storeBlocks;
   const focusedBlockId = props.focusedBlockId !== undefined ? props.focusedBlockId : storeFocusedBlockId;
 
   const state = useMemo(
-    () => computeAccumulatedState(blocks, focusedBlockId),
-    [blocks, focusedBlockId]
+    () => computeAccumulatedState(blocks, focusedBlockId, seriesPersona),
+    [blocks, focusedBlockId, seriesPersona]
   );
   const {
     currentBg,

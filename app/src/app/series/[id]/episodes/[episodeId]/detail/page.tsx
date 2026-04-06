@@ -10,7 +10,7 @@ import { PreviewScreen } from "@/components/editor/PreviewScreen";
 import { IPhone15ProFrame } from "@/components/preview/IPhone15ProFrame";
 import { SceneNavigation } from "@/components/editor/SceneNavigation";
 import { parseScriptToBlocks } from "@/utils/scriptParser";
-import { useEditorStore } from "@/store/useEditorStore";
+import { useEditorStore, hydrateSeriesPersonaFromSession } from "@/store/useEditorStore";
 import { useSceneClickHandler } from "@/hooks/useSceneClickHandler";
 import { INITIAL_SCRIPT } from "@/lib/initialScript";
 
@@ -23,6 +23,10 @@ export default function EpisodeDetailPage() {
   const [profileImageUrl, setProfileImageUrl] = useState<string | null>(null);
   const [isSceneSidebarCollapsed, setIsSceneSidebarCollapsed] = useState(false);
   const handleSceneClick = useSceneClickHandler();
+
+  useEffect(() => {
+    hydrateSeriesPersonaFromSession();
+  }, []);
 
   useEffect(() => {
     const parsed = parseScriptToBlocks(INITIAL_SCRIPT);

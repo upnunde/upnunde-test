@@ -32,11 +32,24 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import { Button } from "@/components/ui/button";
+import {
+  Dialog,
+  DialogContent,
+  DialogHeader,
+  DialogTitle,
+} from "@/components/ui/dialog";
+import { Input } from "@/components/ui/input";
 import { getCaretCoordinates } from "@/lib/caretPosition";
 import { SlashCommandMenu, type SlashSelectPayload } from "./SlashCommandMenu";
 import { ResourcePicker } from "./ResourcePicker";
 import { ChoiceBlockTable } from "./ChoiceBlockTable";
 import { cn } from "@/lib/utils";
+import {
+  SPEAKER_PERSONA_TOKEN,
+  formatPersonaSpeakerLabel,
+  isPersonaSpeakerToken,
+  resolveSpeakerDisplay,
+} from "@/lib/speakerPersona";
 import { LABEL_COLOR_BY_TYPE } from "@/lib/blockLabelColors";
 import { BLOCK_LABEL_KO } from "@/lib/blockTypeLabels";
 
@@ -128,6 +141,7 @@ export function ScriptBlock({
   rootClassName,
 }: ScriptBlockProps) {
   const blocks = useEditorStore((s) => s.blocks);
+  const seriesPersona = useEditorStore((s) => s.seriesPersona);
   const focusBlockId = useEditorStore((s) => s.focusBlockId);
   const updateBlockType = useEditorStore((s) => s.updateBlockType);
   const setFocusBlockId = useEditorStore((s) => s.setFocusBlockId);
@@ -154,6 +168,8 @@ export function ScriptBlock({
   );
   const [expressionMenuOpen, setExpressionMenuOpen] = useState(false);
   const [videoOptionMenuOpen, setVideoOptionMenuOpen] = useState(false);
+  const [speakerCustomModalOpen, setSpeakerCustomModalOpen] = useState(false);
+  const [speakerDraft, setSpeakerDraft] = useState("");
 
   const indexLabel = String(index).padStart(2, "0");
   const prevBlock = index > 0 ? blocks[index - 1] : null;
@@ -444,9 +460,27 @@ export function ScriptBlock({
   // Text block: dialogue with per-block speaker dropdown (default "나레이션")
   // Rigid two-column flex layout so wrapped lines don't flow under the left controls (Notion-style).
   if (block.type === "text") {
-    const currentSpeaker = block.data?.speaker ?? "나레이션";
+    const rawSpeaker = block.data?.speaker;
+    const speakerDisplay = resolveSpeakerDisplay(rawSpeaker, seriesPersona);
     const updateSpeaker = (speaker: string) =>
       updateBlock(block.id, block.content, { ...(block.data ?? {}), speaker });
+
+    const openCustomSpeakerModal = () => {
+      if (rawSpeaker === undefined || rawSpeaker === "") {
+        setSpeakerDraft("");
+      } else if (isPersonaSpeakerToken(rawSpeaker)) {
+        setSpeakerDraft(seriesPersona.trim());
+      } else {
+        setSpeakerDraft(String(rawSpeaker));
+      }
+      setSpeakerCustomModalOpen(true);
+    };
+
+    const applyCustomSpeaker = () => {
+      const name = speakerDraft.trim();
+      updateSpeaker(name || "나레이션");
+      setSpeakerCustomModalOpen(false);
+    };
 
     return (
       <div className={cn(TEXT_BLOCK_ROOT_CLASSES, rootClassName)}>
@@ -464,18 +498,24 @@ export function ScriptBlock({
                 className="inline-flex w-full items-center justify-start gap-0 h-7 min-w-0 p-0 m-0 text-[13px] text-on-surface-30 font-medium rounded-md border-0 outline-none shadow-none hover:bg-accent hover:text-accent-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring/50 focus-visible:ring-offset-0 overflow-hidden"
               >
                 <span className="inline-block w-fit max-w-[76px] text-left truncate">
-                  {currentSpeaker}
+                  {speakerDisplay}
                 </span>
                 <ChevronDown className="ml-1 w-3 h-3 shrink-0" />
               </button>
             </DropdownMenuTrigger>
-            <DropdownMenuContent>
+            <DropdownMenuContent align="start" className="min-w-[200px]">
               <DropdownMenuItem onClick={() => updateSpeaker("나레이션")}>
                 나레이션
               </DropdownMenuItem>
+              <DropdownMenuItem onClick={() => updateSpeaker(SPEAKER_PERSONA_TOKEN)}>
+                {formatPersonaSpeakerLabel(seriesPersona)}
+              </DropdownMenuItem>
+              <DropdownMenuItem onSelect={() => openCustomSpeakerModal()}>
+                직접 입력
+              </DropdownMenuItem>
               <DropdownMenuSeparator />
               <DropdownMenuLabel className="text-muted-foreground text-xs font-normal px-2 py-1.5">
-                캐릭터
+                등장인물
               </DropdownMenuLabel>
               {CHARACTERS.map((c) => (
                 <DropdownMenuItem
@@ -493,6 +533,39 @@ export function ScriptBlock({
               ))}
             </DropdownMenuContent>
           </DropdownMenu>
+
+          <Dialog open={speakerCustomModalOpen} onOpenChange={setSpeakerCustomModalOpen}>
+            <DialogContent className="sm:max-w-md">
+              <DialogHeader>
+                <DialogTitle className="text-lg">화자 이름</DialogTitle>
+              </DialogHeader>
+              <Input
+                value={speakerDraft}
+                onChange={(e) => setSpeakerDraft(e.target.value)}
+                placeholder="이름을 입력하세요"
+                aria-label="화자 이름"
+                autoFocus
+                onKeyDown={(e) => {
+                  if (e.key === "Enter") {
+                    e.preventDefault();
+                    applyCustomSpeaker();
+                  }
+                }}
+              />
+              <div className="flex justify-end gap-2 pt-2">
+                <Button
+                  type="button"
+                  variant="outline"
+                  onClick={() => setSpeakerCustomModalOpen(false)}
+                >
+                  취소
+                </Button>
+                <Button type="button" onClick={applyCustomSpeaker}>
+                  적용
+                </Button>
+              </div>
+            </DialogContent>
+          </Dialog>
         </div>
 
         {/* Right column: text content — flex-1 min-w-0 so text wraps within column */}

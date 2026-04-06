@@ -44,7 +44,9 @@ export function SeriesList({
   });
 
   return (
-    <div className={`w-full max-w-[1200px] grid grid-cols-2 gap-4 ${className ?? ""}`}>
+    <div
+      className={`grid w-full max-w-[1200px] grid-cols-[repeat(auto-fit,minmax(min(100%,480px),1fr))] gap-4 ${className ?? ""}`}
+    >
       {orderedSeries.map((series) => (
         <SeriesItem
           key={series.id}
@@ -58,7 +60,7 @@ export function SeriesList({
           onViolationDetail={onViolationDetail}
         />
       ))}
-      <div>
+      <div className="min-w-0">
         <button
           type="button"
           onClick={onCreateSeries}

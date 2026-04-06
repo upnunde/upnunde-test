@@ -218,10 +218,10 @@ export function LoginPage() {
 
       <Dialog open={inquiryOpen} onOpenChange={setInquiryOpen}>
         <DialogContent
-          className="min-w-[480px] max-w-[640px] w-full rounded-xl border border-slate-200 bg-white px-5 pt-2 pb-5 shadow-none"
+          className="flex max-h-[min(90vh,calc(100vh-160px))] min-h-0 w-full min-w-[480px] max-w-[640px] flex-col gap-0 overflow-hidden rounded-xl border border-slate-200 bg-white px-0 pt-2 pb-0 shadow-none"
           aria-describedby={undefined}
         >
-          <DialogHeader className="flex flex-col justify-center items-start gap-0 border-none p-0 pt-2">
+          <DialogHeader className="shrink-0 flex flex-col justify-center items-start gap-0 border-none p-0 px-5 pt-2 pb-2">
             <Title2 text="문의" showDot={false} showGuide={false} subtitle={false} />
           </DialogHeader>
           <InquiryForm
@@ -233,7 +233,8 @@ export function LoginPage() {
               setSnackbar({ open: true, message: "문의내용을 전달하였습니다" });
             }}
             onCancel={() => setInquiryOpen(false)}
-            className="flex flex-col gap-10 pt-2"
+            className="flex flex-col gap-10 px-5 pt-5 pb-5"
+            rootClassName="min-h-0 flex-1 flex-col"
           />
         </DialogContent>
       </Dialog>

@@ -1,9 +1,10 @@
 "use client";
 
-import React, { useState } from "react";
+import React, { useId, useState } from "react";
 import { ChevronDown, Plus } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Title1 } from "@/components/ui/title1";
+import { cn } from "@/lib/utils";
 
 export type InquiryCategory = "account" | "payment" | "bug" | "etc";
 
@@ -16,8 +17,10 @@ export interface InquiryFormProps {
   onSuccess?: () => void;
   /** 취소 클릭 시 콜백 (모달에서는 닫기) */
   onCancel?: () => void;
-  /** 폼 내부 스타일용 (간격 등). 기본: flex flex-col gap-10 */
+  /** 스크롤되는 `<form>` 필드 영역 클래스 */
   className?: string;
+  /** 바깥 래퍼 (form + 푸터). 모달에서 `flex-1 min-h-0` 등으로 높이 제한 시 함께 사용 */
+  rootClassName?: string;
 }
 
 const defaultSubmit = (e: React.FormEvent<HTMLFormElement>) => {
@@ -32,8 +35,10 @@ export function InquiryForm({
   onSuccess,
   onCancel,
   className = "flex flex-col gap-10",
+  rootClassName,
 }: InquiryFormProps) {
   const prefix = idPrefix ? `${idPrefix}-` : "";
+  const formDomId = `${prefix}inquiry-form-${useId().replace(/:/g, "")}`;
   const [category, setCategory] = useState<InquiryCategory>("account");
   const [title, setTitle] = useState("");
   const [content, setContent] = useState("");
@@ -54,7 +59,12 @@ export function InquiryForm({
   };
 
   return (
-    <form onSubmit={handleSubmit} className={className}>
+    <div className={cn("flex min-h-0 flex-1 flex-col overflow-hidden", rootClassName)}>
+      <form
+        id={formDomId}
+        onSubmit={handleSubmit}
+        className={cn("min-h-0 flex-1 overflow-y-auto", className)}
+      >
       {/* 문의 유형 */}
       <div className="flex flex-col gap-1">
         <Title1
@@ -163,22 +173,31 @@ export function InquiryForm({
           />
         </div>
       </div>
+      </form>
 
-      {/* 버튼 영역 */}
-      <div className="mt-4 flex items-center justify-end gap-3">
-        <Button
-          type="button"
-          variant="outline"
-          size="sm"
-          className="px-5"
-          onClick={handleCancel}
-        >
-          취소
-        </Button>
-        <Button type="submit" size="sm" className="px-5" disabled={!title || !content}>
-          제출
-        </Button>
+      {/* form과 동일 레벨 — 모달 하단 고정 */}
+      <div className="mx-0 mt-0 w-full shrink-0 bg-white px-5 pt-5 pb-5">
+        <div className="flex items-center justify-end gap-3">
+          <Button
+            type="button"
+            variant="outline"
+            size="sm"
+            className="px-5"
+            onClick={handleCancel}
+          >
+            취소
+          </Button>
+          <Button
+            type="submit"
+            form={formDomId}
+            size="sm"
+            className="px-5"
+            disabled={!title || !content}
+          >
+            제출
+          </Button>
+        </div>
       </div>
-    </form>
+    </div>
   );
 }

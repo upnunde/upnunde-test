@@ -81,9 +81,9 @@ export function SeriesItem({
   };
 
   return (
-    <div className="w-full flex gap-5 pl-5 pr-5 py-5 rounded-xl border border-slate-200 bg-white">
+    <div className="flex min-w-0 w-full flex-col gap-5 py-5 pl-5 pr-5 min-[480px]:flex-row rounded-xl border border-slate-200 bg-white">
       {/* 썸네일 영역 (정책 6, 8, 9, 10) */}
-      <div className="w-28 aspect-[9/16] shrink-0 rounded overflow-hidden relative bg-slate-200">
+      <div className="aspect-[9/16] w-28 max-[479px]:self-center shrink-0 overflow-hidden rounded bg-slate-200 relative">
         {status === "DRAFT" ? (
           <div className="w-full h-full flex items-center justify-center bg-slate-200" aria-hidden>
             <span className="text-on-surface-30 text-xs">썸네일 없음</span>

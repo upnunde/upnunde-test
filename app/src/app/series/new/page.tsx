@@ -11,6 +11,7 @@ import { cn } from "@/lib/utils";
 import { ImageCropOnlyModal } from "@/components/resource/character/CharacterExpressionModal";
 import type { CharacterExpressionSlot } from "@/types/resource";
 import { IPhone15ProFrame } from "@/components/preview/IPhone15ProFrame";
+import { useEditorStore } from "@/store/useEditorStore";
 
 type SeriesCreateTab = "image" | "info" | "worldview";
 
@@ -58,6 +59,7 @@ export default function SeriesNewPage() {
   const worldviewRef = useRef<HTMLTextAreaElement | null>(null);
   const promptRef = useRef<HTMLTextAreaElement | null>(null);
   const personaRef = useRef<HTMLInputElement | null>(null);
+  const setSeriesPersona = useEditorStore((s) => s.setSeriesPersona);
 
   const MAX_TITLE = 50;
   const MAX_SUMMARY = 100;
@@ -86,6 +88,10 @@ export default function SeriesNewPage() {
       }
     };
   }, [coverPreviewUrl, logoPreviewUrl, pendingCoverUrl, pendingLogoUrl]);
+
+  useEffect(() => {
+    setSeriesPersona(persona);
+  }, [persona, setSeriesPersona]);
 
   const isFormValid =
     hasCoverImage &&

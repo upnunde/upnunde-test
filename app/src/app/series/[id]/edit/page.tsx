@@ -11,6 +11,7 @@ import { cn } from "@/lib/utils";
 import { CharacterExpressionSingleModal, ImageCropOnlyModal } from "@/components/resource/character/CharacterExpressionModal";
 import type { CharacterExpressionSlot } from "@/types/resource";
 import { IPhone15ProFrame } from "@/components/preview/IPhone15ProFrame";
+import { useEditorStore } from "@/store/useEditorStore";
 
 type SeriesEditTab = "image" | "info" | "worldview";
 
@@ -60,6 +61,11 @@ export default function SeriesEditPage() {
   const worldviewRef = useRef<HTMLTextAreaElement | null>(null);
   const promptRef = useRef<HTMLTextAreaElement | null>(null);
   const personaRef = useRef<HTMLInputElement | null>(null);
+  const setSeriesPersona = useEditorStore((s) => s.setSeriesPersona);
+
+  useEffect(() => {
+    setSeriesPersona(persona);
+  }, [persona, setSeriesPersona]);
 
   useEffect(() => {
     return () => {

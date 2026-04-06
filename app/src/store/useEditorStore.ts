@@ -80,7 +80,11 @@ export type CurrentView = "form" | "editor";
 
 const MAX_UNDO = 50;
 
+const SERIES_PERSONA_STORAGE_KEY = "novelseries:seriesPersona";
+
 interface EditorState {
+  /** 시리즈 정보 탭에서 입력한 페르소나 — 화자 "나 (…)" 표시에 사용 */
+  seriesPersona: string;
   blocks: ScriptBlock[];
   focusBlockId: string | null;
   issueFocus:
@@ -103,6 +107,7 @@ interface EditorActions {
   clearIssueFocus: () => void;
   setCurrentView: (view: CurrentView) => void;
   setRawScript: (script: string) => void;
+  setSeriesPersona: (persona: string) => void;
   undo: () => void;
   redo: () => void;
   addBlock: (index: number, type: BlockType, content?: string, data?: Record<string, any>) => string; // returns new block id
@@ -125,6 +130,7 @@ function pushUndo(state: EditorState): Partial<EditorState> {
 }
 
 export const useEditorStore = create<EditorStore>((set) => ({
+  seriesPersona: "",
   blocks: [],
   focusBlockId: null,
   issueFocus: null,
@@ -144,6 +150,17 @@ export const useEditorStore = create<EditorStore>((set) => ({
   setCurrentView: (currentView) => set({ currentView }),
 
   setRawScript: (rawScript) => set({ rawScript }),
+
+  setSeriesPersona: (seriesPersona) => {
+    set({ seriesPersona });
+    if (typeof window !== "undefined") {
+      try {
+        sessionStorage.setItem(SERIES_PERSONA_STORAGE_KEY, seriesPersona);
+      } catch {
+        /* ignore quota / private mode */
+      }
+    }
+  },
 
   undo: () =>
     set((state) => {
@@ -217,3 +234,14 @@ export const useEditorStore = create<EditorStore>((set) => ({
       return { ...undoPatch, blocks };
     }),
 }));
+
+/** 에디터 진입 시 같은 탭에서 시리즈 편집에 저장된 페르소나 복원 */
+export function hydrateSeriesPersonaFromSession(): void {
+  if (typeof window === "undefined") return;
+  try {
+    const v = sessionStorage.getItem(SERIES_PERSONA_STORAGE_KEY);
+    if (v != null) useEditorStore.setState({ seriesPersona: v });
+  } catch {
+    /* ignore */
+  }
+}

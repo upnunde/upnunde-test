@@ -15,7 +15,7 @@ import {
   useSortable,
 } from "@dnd-kit/sortable";
 import { CSS } from "@dnd-kit/utilities";
-import { useEditorStore } from "@/store/useEditorStore";
+import { useEditorStore, hydrateSeriesPersonaFromSession } from "@/store/useEditorStore";
 import { parseScriptToBlocks } from "@/utils/scriptParser";
 import { createBlock } from "@/store/useEditorStore";
 import { INITIAL_SCRIPT } from "@/lib/initialScript";
@@ -165,6 +165,10 @@ export default function EditorBody() {
   const updateBlock = useEditorStore((s) => s.updateBlock);
   const removeBlock = useEditorStore((s) => s.removeBlock);
   const reorderBlocks = useEditorStore((s) => s.reorderBlocks);
+
+  useEffect(() => {
+    hydrateSeriesPersonaFromSession();
+  }, []);
 
   useEffect(() => {
     const parsed = parseScriptToBlocks(INITIAL_SCRIPT);

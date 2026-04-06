@@ -1,7 +1,8 @@
 "use client";
 
-import React from "react";
-import { useEditorStore } from "@/store/useEditorStore";
+import React, { useEffect } from "react";
+import { useEditorStore, hydrateSeriesPersonaFromSession } from "@/store/useEditorStore";
+import { resolveSpeakerDisplay } from "@/lib/speakerPersona";
 import type { ScriptBlock } from "@/types/editor";
 import { cn } from "@/lib/utils";
 import { LABEL_COLOR_BY_TYPE } from "@/lib/blockLabelColors";
@@ -25,9 +26,10 @@ function ReadOnlyBlockRow({
   const indexLabel = String(lineIndex).padStart(2, "0");
   const labelColorClass = LABEL_COLOR_BY_TYPE[block.type];
   const labelKo = BLOCK_LABEL_KO[block.type];
+  const seriesPersona = useEditorStore((s) => s.seriesPersona);
 
   if (block.type === "text") {
-    const speaker = block.data?.speaker ?? "나레이션";
+    const speaker = resolveSpeakerDisplay(block.data?.speaker, seriesPersona);
     return (
       <div className="group flex min-h-[36px] h-fit items-start justify-start gap-0">
         <span className={cn(INDEX_COL_CLASS, "mt-2")}>{indexLabel}</span>
@@ -117,6 +119,12 @@ function ReadOnlyBlockRow({
 /** 수정 불가 잉크 에디터 뷰(미리보기). 스토어의 blocks를 읽기 전용으로 표시 — 에디터와 동일한 한글 `#` 라벨·열 폭 */
 export function EditorBodyReadOnly() {
   const blocks = useEditorStore((s) => s.blocks);
+  const focusBlockId = useEditorStore((s) => s.focusBlockId);
+  const setFocusBlockId = useEditorStore((s) => s.setFocusBlockId);
+
+  useEffect(() => {
+    hydrateSeriesPersonaFromSession();
+  }, []);
 
   if (!blocks || blocks.length === 0) {
     return (
@@ -133,9 +141,32 @@ export function EditorBodyReadOnly() {
           const isScene = block.type === "scene";
           const prevBlock = i > 0 ? blocks[i - 1] : null;
           const showDivider = isScene && prevBlock && prevBlock.type !== "scene";
+          const isSelected = focusBlockId === block.id;
 
           return (
-            <div key={block.id} id={`block-${block.id}`} data-block-id={block.id}>
+            <div
+              key={block.id}
+              id={`block-${block.id}`}
+              data-block-id={block.id}
+              role="button"
+              tabIndex={0}
+              aria-current={isSelected ? "true" : undefined}
+              aria-label={`원고 블록 ${i + 1}, 클릭하면 미리보기에 반영`}
+              onClick={() => setFocusBlockId(block.id)}
+              onKeyDown={(e) => {
+                if (e.key === "Enter" || e.key === " ") {
+                  e.preventDefault();
+                  setFocusBlockId(block.id);
+                }
+              }}
+              className={cn(
+                "rounded-lg px-1 -mx-1 py-0.5 text-left outline-none transition-colors",
+                "focus-visible:ring-2 focus-visible:ring-primary/40 focus-visible:ring-offset-2",
+                isSelected
+                  ? "bg-primary/10 ring-2 ring-inset ring-primary/25"
+                  : "hover:bg-slate-50/90"
+              )}
+            >
               {showDivider && (
                 <div className="flex items-center gap-2 px-[48px] py-10">
                   <div className="flex-1 border-t border-slate-200" />
