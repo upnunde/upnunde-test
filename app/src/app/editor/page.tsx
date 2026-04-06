@@ -13,6 +13,7 @@ import { EpisodeForm } from "@/components/episode/EpisodeForm";
 import { useEditorStore } from "@/store/useEditorStore";
 import { useSceneClickHandler } from "@/hooks/useSceneClickHandler";
 import { Button } from "@/components/ui/button";
+import { Dialog, DialogContent } from "@/components/ui/dialog";
 
 function EditorInner() {
   const router = useRouter();
@@ -22,6 +23,7 @@ function EditorInner() {
   const handleSceneClick = useSceneClickHandler();
   const [profileImageUrl, setProfileImageUrl] = useState<string | null>(null);
   const [isSceneSidebarCollapsed, setIsSceneSidebarCollapsed] = useState(false);
+  const [isRecreateModalOpen, setIsRecreateModalOpen] = useState(false);
 
   useEffect(() => {
     if (searchParams.get("view") === "form") {
@@ -87,7 +89,10 @@ function EditorInner() {
         <main className="flex min-w-0 flex-1 flex-col overflow-hidden">
           {/* 2-2-a. Sub Header (Back, Title, Actions) */}
           <div className="w-full border-b border-slate-200">
-            <EditorSubHeader title="에피소드 에디터" />
+            <EditorSubHeader
+              title="에피소드 에디터"
+              onRecreate={() => setIsRecreateModalOpen(true)}
+            />
           </div>
 
           {/* Container: fixed height, no scroll — only inner content scrolls */}
@@ -111,6 +116,19 @@ function EditorInner() {
         {/* 2-3. Profile modal portal target (DOM order: 프로필 아이콘 바로 아래 위치용) */}
         <div id="profile-modal-portal" className="absolute left-0 top-0 w-0 h-0 overflow-visible" aria-hidden />
       </div>
+      <Dialog open={isRecreateModalOpen} onOpenChange={setIsRecreateModalOpen}>
+        <DialogContent
+          className="h-[min(90vh,calc(100vh-80px))] w-[min(92vw,760px)] max-w-[760px] min-w-[560px] overflow-y-auto border-0 bg-transparent p-0 shadow-none"
+          aria-describedby={undefined}
+        >
+          <EpisodeForm
+            onCancel={() => setIsRecreateModalOpen(false)}
+            onConverted={() => setIsRecreateModalOpen(false)}
+            containerClassName="max-w-[760px] min-w-[560px]"
+            stickyFooter
+          />
+        </DialogContent>
+      </Dialog>
     </div>
   );
 }

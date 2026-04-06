@@ -6,25 +6,56 @@ import { parseScriptToBlocks } from "@/utils/scriptParser";
 import { Button } from "@/components/ui/button";
 import { PageCard } from "@/components/layout/PageCard";
 import { AddResourceSlot } from "@/components/resource/cards/AddResourceSlot";
+import { ImageCard } from "@/components/resource/cards/ImageCard";
 import { Title1 } from "@/components/ui/title1";
 import { Title2 } from "@/components/ui/title2";
 import { ImageCropPosterModal } from "@/components/resource/character/CharacterExpressionModal";
+import { cn } from "@/lib/utils";
+import { initialBackgrounds } from "@/lib/resourceMockData";
+import type { ImageResource } from "@/types/resource";
 
 const MAX_TITLE = 50;
 const MAX_SUMMARY = 100;
 const MAX_HISTORY = 5000;
 const MAX_SCRIPT = 5000;
+const DUMMY_TITLE = "새벽의 문턱에서";
+const DUMMY_SUMMARY = "봉인된 문이 열리며 주인공이 첫 선택의 대가를 마주합니다.";
+const DUMMY_HISTORY =
+  "지난 화에서 주인공은 금서 보관실에서 오래된 열쇠를 발견했습니다. " +
+  "열쇠에는 정체불명의 문양이 새겨져 있었고, 그 문양은 마을 외곽 폐성당의 지하 문과 일치했습니다. " +
+  "동료들은 위험을 경고했지만 주인공은 진실을 확인하기 위해 새벽에 홀로 성당으로 향합니다.";
+const DUMMY_SCRIPT = `[scene] 폐성당 지하 입구
+[top_desc] 차가운 안개가 계단을 타고 올라온다.
+[text speaker="나레이션"] 새벽 다섯 시, 성당의 종은 울리지 않았다.
+[text speaker="나 (페르소나 닉네임)"] 이 문이 정말 모든 시작점이라면, 지금 열어야 해.
+[direction] 주인공이 열쇠를 문에 꽂고 천천히 돌린다.
+[event] 낡은 문이 열리며 푸른 빛이 새어 나온다.
+[text speaker="나레이션"] 문틈 너머로 오래전 사라진 이름이 속삭인다.
+[event_end]`;
+const DUMMY_THUMBNAIL = initialBackgrounds[0]?.imageUrl ?? "/background-1.png";
 
-export function EpisodeForm() {
+export interface EpisodeFormProps {
+  onCancel?: () => void;
+  onConverted?: () => void;
+  containerClassName?: string;
+  stickyFooter?: boolean;
+}
+
+export function EpisodeForm({
+  onCancel,
+  onConverted,
+  containerClassName,
+  stickyFooter = false,
+}: EpisodeFormProps) {
   const rawScript = useEditorStore((s) => s.rawScript);
   const setRawScript = useEditorStore((s) => s.setRawScript);
   const setBlocks = useEditorStore((s) => s.setBlocks);
   const setCurrentView = useEditorStore((s) => s.setCurrentView);
 
-  const [title, setTitle] = useState("");
-  const [summary, setSummary] = useState("");
-  const [history, setHistory] = useState("");
-  const [thumbnailUrl, setThumbnailUrl] = useState("");
+  const [title, setTitle] = useState(DUMMY_TITLE);
+  const [summary, setSummary] = useState(DUMMY_SUMMARY);
+  const [history, setHistory] = useState(DUMMY_HISTORY);
+  const [thumbnailUrl, setThumbnailUrl] = useState(DUMMY_THUMBNAIL);
   const [thumbnailModalOpen, setThumbnailModalOpen] = useState(false);
   const [thumbnailModalInitialSlots, setThumbnailModalInitialSlots] =
     useState<{ id: string; expressionLabel: string; imageUrl?: string }[] | null>(null);
@@ -35,7 +66,14 @@ export function EpisodeForm() {
     const parsed = parseScriptToBlocks(rawScript);
     setBlocks(parsed.length > 0 ? parsed : [createBlock("text", "")]);
     setCurrentView("editor");
-  }, [rawScript, setBlocks, setCurrentView]);
+    onConverted?.();
+  }, [onConverted, rawScript, setBlocks, setCurrentView]);
+
+  useEffect(() => {
+    if (!rawScript.trim()) {
+      setRawScript(DUMMY_SCRIPT);
+    }
+  }, [rawScript, setRawScript]);
 
   useEffect(() => {
     return () => {
@@ -59,6 +97,21 @@ export function EpisodeForm() {
     thumbnailFileInputRef.current?.click();
   }, [thumbnailUrl]);
 
+  const handleThumbnailRemove = useCallback(() => {
+    setThumbnailUrl((prev) => {
+      if (prev && prev.startsWith("blob:")) {
+        URL.revokeObjectURL(prev);
+      }
+      return "";
+    });
+  }, []);
+
+  const thumbnailItem: ImageResource = {
+    id: "episode-thumbnail",
+    name: "대표 이미지",
+    imageUrl: thumbnailUrl,
+  };
+
   const handleThumbnailFileChange = useCallback(
     (e: React.ChangeEvent<HTMLInputElement>) => {
       const file = (e.target.files ?? [])[0];
@@ -80,11 +133,51 @@ export function EpisodeForm() {
     [],
   );
 
+  const isFormComplete =
+    title.trim().length > 0 &&
+    summary.trim().length > 0 &&
+    history.trim().length > 0 &&
+    rawScript.trim().length > 0 &&
+    thumbnailUrl.trim().length > 0;
+
+  const footer = (
+    <div
+      className={cn(
+        "flex justify-end gap-2",
+        stickyFooter
+          ? "sticky bottom-0 border-t border-slate-200 bg-white px-5 py-4"
+          : "mt-8",
+      )}
+    >
+      <Button type="button" variant="outline" onClick={onCancel}>
+        취소
+      </Button>
+      <Button
+        type="button"
+        onClick={handleConvertToEditor}
+        disabled={!isFormComplete}
+      >
+        에디터 변환하기
+      </Button>
+    </div>
+  );
+
   return (
-    <div className="mx-auto w-full max-w-[1200px] min-w-[640px] rounded-xl border border-slate-200 bg-white shadow-none">
+    <div
+      className={cn(
+        "mx-auto w-full max-w-[1200px] min-w-[640px] rounded-xl border border-slate-200 bg-white shadow-none",
+        stickyFooter && "flex min-h-0 h-full flex-col overflow-hidden",
+        containerClassName,
+      )}
+    >
       <Title2 text="에피소드" asSectionHeader />
 
-      <PageCard className="mx-0 max-w-none min-w-0 border-0 rounded-none px-5 pt-5 pb-5 shadow-none">
+      <PageCard
+        className={cn(
+          "mx-0 max-w-none min-w-0 border-0 rounded-none px-5 pt-5 pb-5 shadow-none",
+          stickyFooter && "min-h-0 flex-1 overflow-y-auto",
+        )}
+      >
         <div className="mt-0 flex flex-col gap-6">
           {/* 에피소드 제목 */}
           <div className="flex flex-col gap-3">
@@ -134,14 +227,13 @@ export function EpisodeForm() {
               subtitleText="에피소드 대표 이미지를 등록해주세요."
             />
             {thumbnailUrl ? (
-              <button
-                type="button"
-                onClick={handleThumbnailClick}
-                className="w-[90px] h-[160px] rounded-lg overflow-hidden border border-slate-200 bg-slate-100 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary cursor-pointer"
-                aria-label="대표 이미지 업로드"
-              >
-                <img src={thumbnailUrl} alt="" className="w-full h-full object-cover" />
-              </button>
+              <ImageCard
+                item={thumbnailItem}
+                slotType="img9:16"
+                showName={false}
+                onDetailClick={handleThumbnailClick}
+                onDeleteClick={handleThumbnailRemove}
+              />
             ) : (
               <AddResourceSlot
                 variant="img9:16"
@@ -192,19 +284,9 @@ export function EpisodeForm() {
           </div>
         </div>
 
-        {/* Footer buttons */}
-        <div className="mt-8 flex justify-end gap-2">
-          <Button type="button" variant="outline">
-            취소
-          </Button>
-          <Button
-            type="button"
-            onClick={handleConvertToEditor}
-          >
-            에디터 변환하기
-          </Button>
-        </div>
+        {!stickyFooter && footer}
       </PageCard>
+      {stickyFooter && footer}
       <input
         ref={thumbnailFileInputRef}
         type="file"

@@ -40,7 +40,7 @@ export function NotificationList({
         (className ?? "")
       }
     >
-      <div className="self-stretch px-5 pt-0 pb-0 mt-2 mb-2 border-b border-border-10 inline-flex flex-col justify-start items-start gap-2.5">
+      <div className="self-stretch px-5 pt-0 pb-0 mt-2 mb-0 border-b border-border-10 inline-flex flex-col justify-start items-start gap-2.5">
         <div
           data-size="L"
           data-underline="true"
@@ -102,21 +102,23 @@ export function NotificationList({
           </button>
         </div>
       </div>
-      <ul className="flex flex-col px-5" role="list">
-        {filteredNotifications.map((notification, index) => (
-          <li key={notification.id}>
-            <NotificationItem
-              notification={notification}
-              onContactClick={onContactClick}
-              isLast={index === filteredNotifications.length - 1}
-              isOpen={expandedId === notification.id}
-              onToggle={() =>
-                setExpandedId((prev) => (prev === notification.id ? null : notification.id))
-              }
-            />
-          </li>
-        ))}
-      </ul>
+      <div className="pt-0 pb-0">
+        <ul className="flex flex-col" role="list">
+          {filteredNotifications.map((notification, index) => (
+            <li key={notification.id}>
+              <NotificationItem
+                notification={notification}
+                onContactClick={onContactClick}
+                isLast={index === filteredNotifications.length - 1}
+                isOpen={expandedId === notification.id}
+                onToggle={() =>
+                  setExpandedId((prev) => (prev === notification.id ? null : notification.id))
+                }
+              />
+            </li>
+          ))}
+        </ul>
+      </div>
       {footer != null ? footer : null}
     </div>
   );

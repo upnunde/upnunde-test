@@ -34,7 +34,7 @@ export function InquiryForm({
   onSubmit = defaultSubmit,
   onSuccess,
   onCancel,
-  className = "flex flex-col gap-10",
+  className = "flex flex-col gap-10 px-5",
   rootClassName,
 }: InquiryFormProps) {
   const prefix = idPrefix ? `${idPrefix}-` : "";

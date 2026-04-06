@@ -37,12 +37,12 @@ export function NotificationItem({
 
   return (
     <div
-      className={`border-slate-100 transition-colors hover:bg-slate-50 ${isLast ? "" : "border-b"}`}
+      className={`${isLast ? "" : "border-b border-slate-100"} transition-colors hover:bg-slate-50`}
     >
       <button
         type="button"
         onClick={() => onToggle?.()}
-        className="w-[calc(100%-40px)] mx-5 cursor-pointer self-stretch h-[80px] rounded-lg inline-flex justify-start items-center gap-5 transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-inset"
+        className="mx-5 w-[calc(100%-40px)] cursor-pointer self-stretch h-[80px] rounded-lg inline-flex justify-start items-center gap-5 transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-inset"
         aria-expanded={isOpen}
         aria-controls={`notification-content-${id}`}
         id={`notification-trigger-${id}`}
@@ -83,7 +83,7 @@ export function NotificationItem({
           id={`notification-content-${id}`}
           role="region"
           aria-labelledby={`notification-trigger-${id}`}
-          className="flex items-stretch gap-5 pl-[90px] pr-4 pb-4 pt-0"
+          className="flex items-stretch gap-5 pl-[90px] pr-5 pb-5 pt-0"
         >
           <div
             className="w-px shrink-0 self-stretch min-h-0 bg-slate-100 rounded-full"

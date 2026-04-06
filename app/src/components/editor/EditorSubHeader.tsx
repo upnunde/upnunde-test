@@ -6,19 +6,23 @@ import { useMemo, useState } from "react";
 import { useEditorStore } from "@/store/useEditorStore";
 import { Button } from "@/components/ui/button";
 import { Snackbar } from "@/components/episode/Snackbar";
+import { Dialog, DialogContent } from "@/components/ui/dialog";
 
 export interface EditorSubHeaderProps {
   /** 제목 (예: "에피소드 제목") */
   title?: string;
+  /** 다시 만들기 클릭 시 동작 (없으면 기본: 폼 화면 전환) */
+  onRecreate?: () => void;
 }
 
-export function EditorSubHeader({ title = "에피소드 제목" }: EditorSubHeaderProps) {
+export function EditorSubHeader({ title = "에피소드 제목", onRecreate }: EditorSubHeaderProps) {
   const router = useRouter();
   const blocks = useEditorStore((s) => s.blocks);
   const currentView = useEditorStore((s) => s.currentView);
   const setCurrentView = useEditorStore((s) => s.setCurrentView);
   const [savedSnapshot, setSavedSnapshot] = useState<string | null>(null);
   const [snackbar, setSnackbar] = useState({ open: false, message: "" });
+  const [isBackConfirmOpen, setIsBackConfirmOpen] = useState(false);
 
   const blocksSnapshot = useMemo(() => JSON.stringify(blocks), [blocks]);
 
@@ -42,8 +46,20 @@ export function EditorSubHeader({ title = "에피소드 제목" }: EditorSubHead
     return eventStarts !== eventEnds;
   }, [blocks]);
 
+  const goToEpisodeList = () => {
+    if (currentView === "editor") {
+      router.push("/series/1/episodes");
+      return;
+    }
+    setCurrentView("form");
+  };
+
   const handleBack = () => {
-    if (currentView === "editor") setCurrentView("form");
+    if (hasChangesSinceSave) {
+      setIsBackConfirmOpen(true);
+      return;
+    }
+    goToEpisodeList();
   };
 
   /** 변경 없음일 때 '나가기' — 에피소드 목록(관리) 화면으로 이동 (에디터 폼 뒤로가기와 동일 경로) */
@@ -60,6 +76,13 @@ export function EditorSubHeader({ title = "에피소드 제목" }: EditorSubHead
     // TODO: 실제 임시저장 API 연동 시 저장 성공 시점에 snapshot 갱신
     setSavedSnapshot(blocksSnapshot);
     setSnackbar({ open: true, message: "임시저장을 완료했습니다" });
+  };
+  const handleRecreate = () => {
+    if (onRecreate) {
+      onRecreate();
+      return;
+    }
+    setCurrentView("form");
   };
 
   const hasChangesSinceSave = savedSnapshot == null || savedSnapshot !== blocksSnapshot;
@@ -85,7 +108,16 @@ export function EditorSubHeader({ title = "에피소드 제목" }: EditorSubHead
             type="button"
             variant="outline"
             size="sm"
-            className="h-10 shadow-none bg-slate-50"
+            className="h-10 shadow-none bg-white"
+            onClick={handleRecreate}
+          >
+            다시 만들기
+          </Button>
+          <Button
+            type="button"
+            variant="outline"
+            size="sm"
+            className="h-10 shadow-none bg-white"
             onClick={hasChangesSinceSave ? handleTemporarySave : handleExitToEpisodeList}
           >
             {hasChangesSinceSave ? "임시저장" : "나가기"}
@@ -107,6 +139,33 @@ export function EditorSubHeader({ title = "에피소드 제목" }: EditorSubHead
         autoHideDuration={2000}
         onClose={() => setSnackbar((s) => ({ ...s, open: false }))}
       />
+      <Dialog open={isBackConfirmOpen} onOpenChange={setIsBackConfirmOpen}>
+        <DialogContent className="w-[min(92vw,420px)] max-w-[420px] border border-slate-200 bg-white p-5 shadow-none">
+          <div className="space-y-2">
+            <p className="text-base font-semibold text-on-surface-10">
+              아직 작업을 저장하지 않았어요.
+            </p>
+            <p className="text-sm text-on-surface-20">
+              정말 나가시겠어요? 임시저장 후 나갈 수 있어요.
+            </p>
+          </div>
+          <div className="mt-5 flex justify-end gap-2">
+            <Button type="button" variant="outline" onClick={() => setIsBackConfirmOpen(false)}>
+              취소
+            </Button>
+            <Button
+              type="button"
+              onClick={() => {
+                handleTemporarySave();
+                setIsBackConfirmOpen(false);
+                goToEpisodeList();
+              }}
+            >
+              임시저장
+            </Button>
+          </div>
+        </DialogContent>
+      </Dialog>
     </>
   );
 }

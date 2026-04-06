@@ -23,36 +23,46 @@ export function InquiryHistoryItem({
   const { id, category, title, content, email, status, createdAt } = item;
 
   return (
-    <div className={`border-slate-100 ${isLast ? "" : "border-b"}`}>
+    <div
+      className={`border-slate-100 transition-colors hover:bg-slate-50 ${isLast ? "" : "border-b"}`}
+    >
       <button
         type="button"
         onClick={() => onToggle?.()}
-        className="w-full cursor-pointer self-stretch min-h-[72px] py-4 rounded-lg inline-flex justify-start items-center gap-4 hover:bg-slate-50/50 transition-colors"
+        className="w-[calc(100%-40px)] mx-5 cursor-pointer self-stretch h-[80px] rounded-lg inline-flex justify-start items-center gap-5 transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-inset"
         aria-expanded={isOpen}
         aria-controls={`inquiry-content-${id}`}
         id={`inquiry-trigger-${id}`}
       >
-        <span
-          className={`shrink-0 text-xs font-medium px-2 py-1 rounded ${
+        <div
+          className={`w-[72px] h-8 p-2 rounded flex justify-center items-center gap-2.5 ${
             status === "answered"
               ? "bg-slate-100 text-on-surface-20"
               : "bg-primary-primary-container text-primary"
           }`}
         >
-          {INQUIRY_STATUS_LABEL[status]}
-        </span>
-        <div className="flex-1 min-w-0 inline-flex flex-col justify-center items-start gap-0.5 text-left">
-          <span className="text-on-surface-10 text-[15px] font-semibold truncate max-w-full block">
-            {title}
-          </span>
-          <span className="text-on-surface-30 text-xs">
-            {createdAt}
-          </span>
+          <div className="justify-start text-sm font-medium font-['Pretendard_JP'] leading-5">
+            {INQUIRY_STATUS_LABEL[status]}
+          </div>
         </div>
-        <ChevronDown
-          className={`w-5 h-5 shrink-0 text-on-surface-30 transition-transform ${isOpen ? "rotate-180" : ""}`}
-          aria-hidden
-        />
+        <div className="flex-1 inline-flex flex-col justify-center items-start gap-1">
+          <div className="inline-flex justify-start items-center gap-5">
+            <div className="flex justify-start items-start gap-1">
+              <div className="justify-start text-on-surface-10 text-[15px] font-semibold font-['Pretendard_JP'] leading-5">
+                {title}
+              </div>
+            </div>
+          </div>
+          <div className="justify-start text-on-surface-30 text-xs font-normal font-['Pretendard_JP'] leading-4">
+            {createdAt}
+          </div>
+        </div>
+        <div className="w-8 h-8 px-3 rounded-[999px] flex justify-center items-center overflow-hidden bg-transparent text-on-surface-30">
+          <ChevronDown
+            className={`w-3 h-3 shrink-0 ${isOpen ? "rotate-180" : ""}`}
+            aria-hidden
+          />
+        </div>
       </button>
 
       {isOpen && (
@@ -60,7 +70,7 @@ export function InquiryHistoryItem({
           id={`inquiry-content-${id}`}
           role="region"
           aria-labelledby={`inquiry-trigger-${id}`}
-          className="flex items-stretch gap-5 pl-[54px] pr-5 pb-5 pt-0"
+          className="flex items-stretch gap-5 pl-[90px] pr-5 pb-5 pt-0"
         >
           <div
             className="w-px shrink-0 self-stretch min-h-0 bg-slate-100 rounded-full"
@@ -84,7 +94,7 @@ export function InquiryHistoryItem({
               </div>
             )}
             {status === "answered" && (
-              <div className="rounded-lg bg-slate-50/50 px-4 py-3">
+              <div className="rounded-lg bg-slate-50/50 px-4 py-3 text-on-surface-30">
                 <p className="text-[13px] font-bold text-on-surface-30 mb-1">답변</p>
                 <p className="text-sm text-on-surface-20">
                   문의해 주셔서 감사합니다. 검토 후 연락드리겠습니다.

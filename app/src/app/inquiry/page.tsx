@@ -98,7 +98,7 @@ export default function InquiryPage() {
                 </div>
 
                 {/* 콘텐츠 영역 */}
-                <div className="px-5 pt-2 pb-5">
+                <div className="pt-2 pb-5">
                   {activeTab === "inquiry" ? (
                     <InquiryForm
                       onSubmit={(e) => {

@@ -309,7 +309,7 @@ export default function EpisodeManagementPage() {
                     onClick={handleAddEpisode}
                     className="h-10 px-4 cursor-pointer bg-primary text-primary-foreground hover:bg-primary/90 font-medium rounded-md transition-colors"
                   >
-                    에피소드 추가
+                    에피소드 만들기
                   </button>
                 </div>
               </div>
