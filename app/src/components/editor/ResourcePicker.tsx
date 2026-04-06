@@ -64,7 +64,7 @@ const PICKER_TITLE: Record<BlockType, string> = {
   gallery: "갤러리",
   video: "동영상",
   text: "텍스트",
-  top_desc: "상황정보",
+  top_desc: "장면정보",
   choice: "선택지",
   event: "씬 전환",
   event_end: "이벤트 종료",

@@ -44,12 +44,12 @@ export function CharacterCard({
       tabIndex={0}
       onClick={handleCardClick}
       onKeyDown={(e) => e.key === "Enter" && (onPreviewClick ? onPreviewClick(character) : handleCardClick(e as unknown as React.MouseEvent))}
-      className="group inline-flex w-28 flex-col justify-start items-start gap-1 cursor-pointer"
+      className="group inline-flex w-[90px] flex-col justify-start items-start gap-1 cursor-pointer"
       aria-label={`${character.name} 상세 보기`}
     >
       <div
         className={cn(
-          "w-28 h-28 rounded-lg outline outline-1 outline-offset-[-1px] flex flex-col justify-center items-center gap-2 overflow-hidden relative",
+          "w-[90px] h-[160px] rounded-lg outline outline-1 outline-offset-[-1px] flex flex-col justify-center items-center gap-2 overflow-hidden relative",
           error
             ? "bg-error-error-container outline-error-on-error-container"
             : "bg-surface-disabled/0 outline-border-20"
@@ -58,7 +58,7 @@ export function CharacterCard({
         <img
           src={character.imageUrl}
           alt=""
-          className="w-28 h-28 object-cover"
+          className="absolute inset-0 h-full w-full object-cover object-top"
           loading="lazy"
           decoding="async"
         />

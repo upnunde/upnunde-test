@@ -31,7 +31,7 @@ const BLOCK_TYPE_STYLES: Record<
       "border-l-4 border-l-neutral-400 bg-neutral-50/50 dark:bg-neutral-900/30",
   },
   top_desc: {
-    label: "상단 설명",
+    label: "장면정보",
     className:
       "border-l-4 border-l-slate-500 bg-slate-50/40 dark:bg-slate-900/30",
   },

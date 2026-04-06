@@ -10,7 +10,7 @@ import { AddResourceSlot } from "@/components/resource/cards/AddResourceSlot";
 import {
   CharacterExpressionMultiModal,
   CharacterExpressionSingleModal,
-  ImageCropSquareModal,
+  ImageCropOnlyModal,
 } from "@/components/resource/character/CharacterExpressionModal";
 import { Title1 } from "@/components/ui/title1";
 import { Title2 } from "@/components/ui/title2";
@@ -282,8 +282,8 @@ export function CharacterDetailPage({ isNew = true, initialData }: CharacterDeta
                       subtitleText="독자에게 가장 먼저 보여질 캐릭터 이미지를 등록해 주세요."
                     />
                     {thumbnailUrl ? (
-                      <div className="inline-flex flex-col justify-start items-start gap-1 w-28 group">
-                        <div className="w-28 h-28 rounded-lg overflow-hidden border border-slate-200 bg-slate-100 relative">
+                      <div className="inline-flex flex-col justify-start items-start gap-1 w-[90px] group">
+                        <div className="w-[90px] h-[160px] rounded-lg overflow-hidden border border-slate-200 bg-slate-100 relative">
                           <button
                             type="button"
                             onClick={handleThumbnailAddClick}
@@ -325,7 +325,7 @@ export function CharacterDetailPage({ isNew = true, initialData }: CharacterDeta
                       </div>
                     ) : (
                       <AddResourceSlot
-                        variant="character"
+                        variant="img9:16"
                         ariaLabel="대표 썸네일 추가"
                         onClick={handleThumbnailAddClick}
                       />
@@ -502,7 +502,7 @@ export function CharacterDetailPage({ isNew = true, initialData }: CharacterDeta
         aria-label="대표 썸네일 이미지 선택"
         onChange={handleThumbnailFileChange}
       />
-      <ImageCropSquareModal
+      <ImageCropOnlyModal
         open={thumbnailModalOpen}
         onClose={() => {
           setThumbnailModalOpen(false);

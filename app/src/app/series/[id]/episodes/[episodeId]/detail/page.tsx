@@ -71,7 +71,7 @@ export default function EpisodeDetailPage() {
 
             <div className="flex flex-1 w-full min-h-0 overflow-hidden bg-white justify-center items-start">
               <div className="flex flex-1 min-h-0 h-full w-full flex-col border-r border-slate-200 overflow-hidden">
-                <div className="py-10 px-6 flex-1 min-h-0 overflow-y-auto">
+                <div className="py-10 px-0 flex-1 min-h-0 overflow-y-auto overscroll-none">
                   <EditorBodyReadOnly />
                 </div>
               </div>

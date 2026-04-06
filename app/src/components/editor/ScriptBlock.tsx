@@ -7,6 +7,7 @@ import {
   Music,
   User,
   Film,
+  Clapperboard,
   ImagePlus,
   Sliders,
   ListChecks,
@@ -36,6 +37,8 @@ import { SlashCommandMenu, type SlashSelectPayload } from "./SlashCommandMenu";
 import { ResourcePicker } from "./ResourcePicker";
 import { ChoiceBlockTable } from "./ChoiceBlockTable";
 import { cn } from "@/lib/utils";
+import { LABEL_COLOR_BY_TYPE } from "@/lib/blockLabelColors";
+import { BLOCK_LABEL_KO } from "@/lib/blockTypeLabels";
 
 const RESOURCE_TYPES: BlockType[] = ["background", "bgm", "sfx", "character", "gallery", "video", "choice"];
 
@@ -43,7 +46,7 @@ const PICKER_RESOURCE_TYPES: BlockType[] = ["background", "character", "bgm", "s
 
 const TYPE_LABELS: Record<BlockType, string> = {
   scene: "씬",
-  top_desc: "Situation Info",
+  top_desc: "장면정보",
   text: "Text",
   background: "Background",
   bgm: "BGM",
@@ -57,43 +60,9 @@ const TYPE_LABELS: Record<BlockType, string> = {
   event_end: "Event End",
 };
 
-/** Two-Box: Korean label for picker resource types */
-const PICKER_LABEL_KO: Record<BlockType, string> = {
-  scene: "씬",
-  top_desc: "상황정보",
-  text: "텍스트",
-  background: "배경",
-  bgm: "배경음악",
-  sfx: "효과음",
-  character: "캐릭터",
-  gallery: "갤러리",
-  video: "동영상",
-  direction: "연출",
-  choice: "선택",
-  event: "씬 전환",
-  event_end: "이벤트 종료",
-};
-
-/** 카테고리별 안내문구 고유 색상 (겹치지 않음, 채도 차이 적용) */
-const LABEL_COLOR_BY_TYPE: Record<BlockType, string> = {
-  scene: "text-emerald-600",
-  top_desc: "text-primary",
-  text: "text-zinc-600",
-  background: "text-blue-600",
-  bgm: "text-fuchsia-600",
-  sfx: "text-orange-500",
-  character: "text-violet-600",
-  gallery: "text-teal-600",
-  video: "text-rose-600",
-  direction: "text-indigo-600",
-  choice: "text-cyan-600",
-  event: "text-amber-600",
-  event_end: "text-amber-700",
-};
-
 const TYPE_ICONS: Record<BlockType, React.ElementType> = {
   scene: Type,
-  top_desc: Type,
+  top_desc: Clapperboard,
   text: Type,
   background: Image,
   bgm: Music,
@@ -689,16 +658,10 @@ export function ScriptBlock({
     const labelText =
       block.type === "scene"
         ? `# 씬 ${String(sceneOrder).padStart(2, "0")}`
-        : block.type === "top_desc"
-        ? "# 상황정보"
-        : "# 상황정보";
+        : "# 장면정보";
     const labelColorClass = LABEL_COLOR_BY_TYPE[block.type];
     const placeholder =
-      block.type === "scene"
-        ? "씬 제목"
-        : block.type === "top_desc"
-        ? "상황정보를 입력하세요"
-        : "상황정보를 입력하세요";
+      block.type === "scene" ? "씬 제목" : "장면정보를 입력하세요";
 
     const sceneContent = (
       <div
@@ -1006,7 +969,7 @@ export function ScriptBlock({
     const thumbnailUrl = characterItem?.url ?? backgroundItem?.url ?? null;
     const hasImageThumbnail = Boolean(thumbnailUrl);
     const isEmpty = !displayName || displayName === "none";
-    const labelKo = PICKER_LABEL_KO[block.type] ?? label;
+    const labelKo = BLOCK_LABEL_KO[block.type] ?? label;
     const labelColorClass = LABEL_COLOR_BY_TYPE[block.type];
     const sceneItems = isSceneTransition
       ? blocks

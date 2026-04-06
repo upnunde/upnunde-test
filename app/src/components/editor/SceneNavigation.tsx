@@ -121,7 +121,7 @@ export function SceneNavigation({
             block.type === "scene"
               ? "씬 제목 누락"
               : block.type === "top_desc"
-                ? "상단 설명 누락"
+                ? "장면정보 누락"
                 : block.type === "text"
                   ? "대사/서술 누락"
                   : "연출 텍스트 누락";
