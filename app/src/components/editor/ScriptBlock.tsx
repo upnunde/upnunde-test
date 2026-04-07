@@ -96,6 +96,18 @@ function getRandomNameFromList<T extends { name: string }>(items: T[]): string {
 }
 
 const DEFAULT_CHARACTER_EXPRESSION = "기본";
+const EFFECT_OPTIONS = [
+  { key: "shake", label: "흔들림" },
+  { key: "flash", label: "플래시" },
+  { key: "zoom_in", label: "줌 인" },
+  { key: "slow_motion", label: "슬로우 모션" },
+  { key: "dramatic", label: "드라마틱 강조" },
+] as const;
+const COLOR_OPTIONS = [
+  { key: "rose", hex: "#F15F62", label: "레드" },
+  { key: "mint", hex: "#94DBB4", label: "그린" },
+  { key: "sky", hex: "#87DFFF", label: "블루" },
+] as const;
 
 function getCharacterExpressionOptions(characterName: string): string[] {
   const target = initialCharacters.find((c) => c.name === characterName);
@@ -170,6 +182,8 @@ export function ScriptBlock({
   const [videoOptionMenuOpen, setVideoOptionMenuOpen] = useState(false);
   const [speakerCustomModalOpen, setSpeakerCustomModalOpen] = useState(false);
   const [speakerDraft, setSpeakerDraft] = useState("");
+  const [effectMenuOpen, setEffectMenuOpen] = useState(false);
+  const [colorMenuOpen, setColorMenuOpen] = useState(false);
 
   const indexLabel = String(index).padStart(2, "0");
   const prevBlock = index > 0 ? blocks[index - 1] : null;
@@ -237,10 +251,16 @@ export function ScriptBlock({
       const end = textareaRef.current.selectionEnd;
 
       if (start !== end) {
+        const ta = textareaRef.current;
+        const rect = ta.getBoundingClientRect();
+        const startCoords = getCaretCoordinates(ta, start);
+        const endCoords = getCaretCoordinates(ta, end);
+        const centerX = rect.left + (startCoords.left + endCoords.left) / 2;
+
         setSelection({
           start,
           end,
-          x: e.clientX,
+          x: centerX,
           y: e.clientY - 40,
         });
       } else {
@@ -399,20 +419,33 @@ export function ScriptBlock({
   // 에디터 영역 밖 클릭 시 플로팅 툴바 숨김
   useEffect(() => {
     if (!selection) return;
-    const handleDocumentMouseDown = (event: MouseEvent) => {
+    const handleDocumentClick = (event: MouseEvent) => {
+      // Keep toolbar alive while either formatting menu is open.
+      if (effectMenuOpen || colorMenuOpen) return;
       const target = event.target as Node | null;
       if (!target) return;
       if (textareaRef.current && textareaRef.current.contains(target)) return;
       if (toolbarRef.current && toolbarRef.current.contains(target)) return;
       if (dropdownRef.current && dropdownRef.current.contains(target)) return;
+      // Radix DropdownMenu is rendered via Portal; inspect composed path and keep toolbar open.
+      const path = event.composedPath();
+      const clickedInsideDropdown = path.some((node) => {
+        if (!(node instanceof Element)) return false;
+        if (node.matches("[data-slot='dropdown-menu-content']")) return true;
+        if (node.matches("[data-slot='dropdown-menu-trigger']")) return true;
+        if (node.matches("[data-radix-menu-content]")) return true;
+        if (node.getAttribute("role") === "menu") return true;
+        return false;
+      });
+      if (clickedInsideDropdown) return;
       setSelection(null);
     };
 
-    document.addEventListener("mousedown", handleDocumentMouseDown);
+    document.addEventListener("click", handleDocumentClick);
     return () => {
-      document.removeEventListener("mousedown", handleDocumentMouseDown);
+      document.removeEventListener("click", handleDocumentClick);
     };
-  }, [selection]);
+  }, [selection, effectMenuOpen, colorMenuOpen]);
 
   const handleSceneKeyDown = useCallback(
     (e: React.KeyboardEvent<HTMLInputElement>) => {
@@ -464,6 +497,16 @@ export function ScriptBlock({
     const speakerDisplay = resolveSpeakerDisplay(rawSpeaker, seriesPersona);
     const updateSpeaker = (speaker: string) =>
       updateBlock(block.id, block.content, { ...(block.data ?? {}), speaker });
+    const selectedEffect = (block.data?.effect as string | undefined) ?? EFFECT_OPTIONS[0].key;
+    const selectedColor = (block.data?.textColor as string | undefined) ?? COLOR_OPTIONS[0].hex;
+    const applyEffect = (effect: (typeof EFFECT_OPTIONS)[number]["key"]) => {
+      updateBlock(block.id, block.content, { ...(block.data ?? {}), effect });
+      applyTag(`<effect=${effect}>`, "</effect>");
+    };
+    const applyColor = (hex: (typeof COLOR_OPTIONS)[number]["hex"]) => {
+      updateBlock(block.id, block.content, { ...(block.data ?? {}), textColor: hex });
+      applyTag(`<color=${hex}>`, "</color>");
+    };
 
     const openCustomSpeakerModal = () => {
       if (rawSpeaker === undefined || rawSpeaker === "") {
@@ -610,7 +653,7 @@ export function ScriptBlock({
         {selection && block.type === "text" && (
           <div
             ref={toolbarRef}
-            className="fixed z-50 flex items-center bg-[#2d2d2d] rounded-md border border-[#3d3d3d] overflow-visible animate-in fade-in zoom-in-95 duration-150"
+            className="fixed z-[120] flex items-center bg-[#2d2d2d] rounded-md border border-[#3d3d3d] overflow-visible"
             style={{ top: selection.y, left: selection.x, transform: "translate(-50%, -100%)" }}
           >
             {/* Basic Icons */}
@@ -645,75 +688,81 @@ export function ScriptBlock({
             <div className="w-px h-5 bg-[#4d4d4d] mx-1" />
 
             {/* Effect Dropdown */}
-            <DropdownMenu>
+            <DropdownMenu
+              modal={false}
+              open={effectMenuOpen}
+              onOpenChange={(open) => {
+                setEffectMenuOpen(open);
+                if (open) setColorMenuOpen(false);
+              }}
+            >
               <DropdownMenuTrigger
                 className="flex items-center gap-1 px-3 py-2 text-sm text-slate-300 hover:text-white transition-colors outline-none"
-                onPointerDown={(e) => e.preventDefault()}
               >
                 이펙트 <ChevronDown className="w-3.5 h-3.5" />
               </DropdownMenuTrigger>
               <DropdownMenuContent
                 align="start"
-                className="w-40 p-1 bg-white rounded-lg border border-slate-100"
+                portalled={false}
+                className="z-[110] w-40 p-1 bg-white rounded-lg border border-slate-100"
                 ref={dropdownRef}
               >
-                <DropdownMenuItem
-                  onClick={() => applyTag("<effect=fear>", "</effect>")}
-                  className="flex items-center px-3 py-2.5 cursor-pointer text-sm text-slate-700 hover:bg-slate-50 focus:bg-slate-50 rounded-md"
-                >
-                  <span className="ml-5">공포, 떨림</span>
-                </DropdownMenuItem>
-                <DropdownMenuItem
-                  onClick={() => applyTag("<effect=dizzy>", "</effect>")}
-                  className="flex items-center px-3 py-2.5 cursor-pointer text-sm text-slate-700 hover:bg-slate-50 focus:bg-slate-50 rounded-md relative"
-                >
-                  <Check className="w-4 h-4 mr-1 absolute left-2" />
-                  <span className="ml-5">어지러움</span>
-                </DropdownMenuItem>
-                <DropdownMenuItem
-                  onClick={() => applyTag("<effect=joy>", "</effect>")}
-                  className="flex items-center px-3 py-2.5 cursor-pointer text-sm text-slate-700 hover:bg-slate-50 focus:bg-slate-50 rounded-md"
-                >
-                  <span className="ml-5">즐거움</span>
-                </DropdownMenuItem>
+                {EFFECT_OPTIONS.map((effect) => {
+                  const isSelected = selectedEffect === effect.key;
+                  return (
+                    <DropdownMenuItem
+                      key={effect.key}
+                      onClick={() => applyEffect(effect.key)}
+                      className="flex items-center px-3 py-2.5 cursor-pointer text-sm text-slate-700 hover:bg-slate-50 focus:bg-slate-50 rounded-md relative"
+                    >
+                      {isSelected ? (
+                        <Check className="w-4 h-4 mr-1 absolute left-2" />
+                      ) : null}
+                      <span className="ml-5">{effect.label}</span>
+                    </DropdownMenuItem>
+                  );
+                })}
               </DropdownMenuContent>
             </DropdownMenu>
 
             {/* Color Dropdown */}
-            <DropdownMenu>
+            <DropdownMenu
+              modal={false}
+              open={colorMenuOpen}
+              onOpenChange={(open) => {
+                setColorMenuOpen(open);
+                if (open) setEffectMenuOpen(false);
+              }}
+            >
               <DropdownMenuTrigger
                 className="flex items-center gap-1 px-3 py-2 text-sm text-slate-300 hover:text-white transition-colors outline-none"
-                onPointerDown={(e) => e.preventDefault()}
               >
                 컬러 <ChevronDown className="w-3.5 h-3.5" />
               </DropdownMenuTrigger>
               <DropdownMenuContent
                 align="start"
-                className="w-44 p-1 bg-white rounded-lg border border-slate-100"
+                portalled={false}
+                className="z-[110] w-44 p-1 bg-white rounded-lg border border-slate-100"
                 ref={dropdownRef}
               >
-                <DropdownMenuItem
-                  onClick={() => applyTag("<color=green>", "</color>")}
-                  className="flex items-center px-3 py-2.5 cursor-pointer text-sm text-slate-700 hover:bg-slate-50 focus:bg-slate-50 rounded-md"
-                >
-                  <div className="w-4 h-4 rounded-full bg-emerald-300 ml-5 mr-2" />
-                  <span>공포, 떨림</span>
-                </DropdownMenuItem>
-                <DropdownMenuItem
-                  onClick={() => applyTag("<color=red>", "</color>")}
-                  className="flex items-center px-3 py-2.5 cursor-pointer text-sm text-slate-700 hover:bg-slate-50 focus:bg-slate-50 rounded-md relative"
-                >
-                  <Check className="w-4 h-4 absolute left-2" />
-                  <div className="w-4 h-4 rounded-full bg-red-400 ml-5 mr-2" />
-                  <span>어지러움</span>
-                </DropdownMenuItem>
-                <DropdownMenuItem
-                  onClick={() => applyTag("<color=blue>", "</color>")}
-                  className="flex items-center px-3 py-2.5 cursor-pointer text-sm text-slate-700 hover:bg-slate-50 focus:bg-slate-50 rounded-md"
-                >
-                  <div className="w-4 h-4 rounded-full bg-sky-300 ml-5 mr-2" />
-                  <span>즐거움</span>
-                </DropdownMenuItem>
+                {COLOR_OPTIONS.map((color) => {
+                  return (
+                    <DropdownMenuItem
+                      key={color.hex}
+                      onClick={() => applyColor(color.hex)}
+                      className="flex items-center px-3 py-2.5 cursor-pointer text-sm text-slate-700 hover:bg-slate-50 focus:bg-slate-50 rounded-md"
+                    >
+                      <span className="inline-flex items-center gap-2">
+                        <span
+                          className="h-5 w-5 rounded-full border border-slate-200"
+                          style={{ backgroundColor: color.hex }}
+                          aria-hidden
+                        />
+                        <span>{color.label}</span>
+                      </span>
+                    </DropdownMenuItem>
+                  );
+                })}
               </DropdownMenuContent>
             </DropdownMenu>
           </div>

@@ -7,7 +7,6 @@ import { INQUIRY_STATUS_LABEL, INQUIRY_CATEGORY_LABEL } from "@/types/inquiry";
 
 export interface InquiryHistoryItemProps {
   item: InquiryHistoryItemType;
-  isLast?: boolean;
   /** 펼침 여부 (부모에서 제어, 한 번에 하나만 펼쳐짐) */
   isOpen?: boolean;
   /** 펼치기/접기 토글 시 호출 */
@@ -16,16 +15,13 @@ export interface InquiryHistoryItemProps {
 
 export function InquiryHistoryItem({
   item,
-  isLast,
   isOpen = false,
   onToggle,
 }: InquiryHistoryItemProps) {
   const { id, category, title, content, email, status, createdAt } = item;
 
   return (
-    <div
-      className={`border-slate-100 transition-colors hover:bg-slate-50 ${isLast ? "" : "border-b"}`}
-    >
+    <div className="transition-colors hover:bg-slate-50">
       <button
         type="button"
         onClick={() => onToggle?.()}

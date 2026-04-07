@@ -8,8 +8,6 @@ export interface NotificationItemProps {
   notification: NotificationData;
   /** 문의하기 클릭 시 실행할 핸들러 (부모에서 전달) */
   onContactClick?: (notification: NotificationData) => void;
-  /** 목록의 마지막 항목인 경우 true (하단 보더 제거) */
-  isLast?: boolean;
   /** 펼침 여부 (부모에서 제어, 한 번에 하나만 펼쳐짐) */
   isOpen?: boolean;
   /** 펼치기/접기 토글 시 호출 */
@@ -19,7 +17,6 @@ export interface NotificationItemProps {
 export function NotificationItem({
   notification,
   onContactClick,
-  isLast,
   isOpen = false,
   onToggle,
 }: NotificationItemProps) {
@@ -36,9 +33,7 @@ export function NotificationItem({
   };
 
   return (
-    <div
-      className={`${isLast ? "" : "border-b border-slate-100"} transition-colors hover:bg-slate-50`}
-    >
+    <div className="transition-colors hover:bg-slate-50">
       <button
         type="button"
         onClick={() => onToggle?.()}

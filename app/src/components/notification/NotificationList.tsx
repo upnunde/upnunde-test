@@ -105,17 +105,26 @@ export function NotificationList({
       <div className="pt-0 pb-0">
         <ul className="flex flex-col" role="list">
           {filteredNotifications.map((notification, index) => (
-            <li key={notification.id}>
-              <NotificationItem
-                notification={notification}
-                onContactClick={onContactClick}
-                isLast={index === filteredNotifications.length - 1}
-                isOpen={expandedId === notification.id}
-                onToggle={() =>
-                  setExpandedId((prev) => (prev === notification.id ? null : notification.id))
-                }
-              />
-            </li>
+            <React.Fragment key={notification.id}>
+              {index > 0 ? (
+                <li aria-hidden className="list-none">
+                  <div
+                    className="mx-5 my-0 h-px bg-slate-100"
+                    role="separator"
+                  />
+                </li>
+              ) : null}
+              <li>
+                <NotificationItem
+                  notification={notification}
+                  onContactClick={onContactClick}
+                  isOpen={expandedId === notification.id}
+                  onToggle={() =>
+                    setExpandedId((prev) => (prev === notification.id ? null : notification.id))
+                  }
+                />
+              </li>
+            </React.Fragment>
           ))}
         </ul>
       </div>

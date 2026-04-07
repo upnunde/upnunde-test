@@ -23,18 +23,27 @@ export function InquiryHistoryList({ items }: InquiryHistoryListProps) {
   }
 
   return (
-    <ul className="flex flex-col">
+    <ul className="flex flex-col" role="list">
       {items.map((item, index) => (
-        <li key={item.id}>
-          <InquiryHistoryItem
-            item={item}
-            isLast={index === items.length - 1}
-            isOpen={expandedId === item.id}
-            onToggle={() =>
-              setExpandedId((prev) => (prev === item.id ? null : item.id))
-            }
-          />
-        </li>
+        <React.Fragment key={item.id}>
+          {index > 0 ? (
+            <li aria-hidden className="list-none">
+              <div
+                className="mx-5 my-0 h-px bg-slate-100"
+                role="separator"
+              />
+            </li>
+          ) : null}
+          <li>
+            <InquiryHistoryItem
+              item={item}
+              isOpen={expandedId === item.id}
+              onToggle={() =>
+                setExpandedId((prev) => (prev === item.id ? null : item.id))
+              }
+            />
+          </li>
+        </React.Fragment>
       ))}
     </ul>
   );

@@ -58,7 +58,7 @@ export default function InquiryPage() {
               <div className="w-full max-w-[1200px] mx-auto">
               <div className="w-full h-fit rounded-2xl border border-slate-200 bg-white flex flex-col shrink-0 overflow-hidden">
                 {/* 탭 헤더 - NotificationList와 동일 구조 */}
-                <div className="self-stretch px-5 pt-0 pb-0 mt-2 mb-2 border-b border-border-10 inline-flex flex-col justify-start items-start gap-2.5">
+                <div className="self-stretch px-5 pt-0 pb-0 mt-2 mb-0 border-b border-border-10 inline-flex flex-col justify-start items-start gap-2.5">
                   <div
                     data-size="L"
                     data-underline="true"
@@ -98,7 +98,7 @@ export default function InquiryPage() {
                 </div>
 
                 {/* 콘텐츠 영역 */}
-                <div className="pt-2 pb-5">
+                <div className="pt-0 pb-0">
                   {activeTab === "inquiry" ? (
                     <InquiryForm
                       onSubmit={(e) => {
