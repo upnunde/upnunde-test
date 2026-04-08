@@ -528,6 +528,8 @@ export function ScriptBlock({
       updateBlock(block.id, block.content, { ...(block.data ?? {}), speaker });
     const selectedEffect = (block.data?.effect as string | undefined) ?? EFFECT_OPTIONS[0].key;
     const selectedColor = (block.data?.textColor as string | undefined) ?? COLOR_OPTIONS[0].hex;
+    const hasInlineTagToken = /<[^>]+>/.test(block.content);
+    const highlightedSegments = block.content.split(/(<[^>]+>)/g);
     const applyEffect = (effect: (typeof EFFECT_OPTIONS)[number]["key"]) => {
       updateBlock(block.id, block.content, { ...(block.data ?? {}), effect });
       applyTag(`<effect=${effect}>`, "</effect>");
@@ -641,17 +643,37 @@ export function ScriptBlock({
         </div>
 
         {/* Right column: text content — flex-1 min-w-0 so text wraps within column */}
-        <TextareaAutosize
-          ref={textareaRef}
-          value={block.content}
-          onChange={(e) => updateBlock(block.id, e.target.value)}
-          onFocus={onFocusBlock}
-          onKeyDown={handleTextKeyDown}
-          onMouseUp={handleTextMouseUp}
-          placeholder="'/'를 눌러 메뉴를 선택하거나 텍스트를 입력할 수 있습니다."
-          className="flex-1 min-w-0 h-fit w-full resize-none overflow-hidden bg-transparent focus:outline-none leading-relaxed font-medium text-[16px] text-on-surface-10 placeholder:text-on-surface-30 min-h-[2rem] py-0 mt-1 border-0 outline-none focus:ring-0"
-          rows={1}
-        />
+        <div className="relative flex-1 min-w-0">
+          {hasInlineTagToken && (
+            <div
+              aria-hidden
+              className="pointer-events-none absolute inset-0 z-0 min-h-[2rem] py-0 mt-1 leading-relaxed font-medium text-[16px] whitespace-pre-wrap break-words"
+            >
+              {highlightedSegments.map((segment, idx) => {
+                const isTag = /^<[^>]+>$/.test(segment);
+                return (
+                  <span key={`${idx}-${segment}`} className={isTag ? "text-primary" : undefined}>
+                    {segment}
+                  </span>
+                );
+              })}
+            </div>
+          )}
+          <TextareaAutosize
+            ref={textareaRef}
+            value={block.content}
+            onChange={(e) => updateBlock(block.id, e.target.value)}
+            onFocus={onFocusBlock}
+            onKeyDown={handleTextKeyDown}
+            onMouseUp={handleTextMouseUp}
+            placeholder="'/'를 눌러 메뉴를 선택하거나 텍스트를 입력할 수 있습니다."
+            className={cn(
+              "relative z-10 flex-1 min-w-0 h-fit w-full resize-none overflow-hidden bg-transparent focus:outline-none leading-relaxed font-medium text-[16px] placeholder:text-on-surface-30 min-h-[2rem] py-0 mt-1 border-0 outline-none focus:ring-0",
+              hasInlineTagToken ? "text-transparent caret-on-surface-10" : "text-on-surface-10"
+            )}
+            rows={1}
+          />
+        </div>
 
         <Button
           type="button"

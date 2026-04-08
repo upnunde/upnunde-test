@@ -14,6 +14,12 @@ function isEmptyResource(content: string | undefined): boolean {
   return !v || EMPTY_RESOURCE.includes(v);
 }
 
+/** Remove inline control tags like <effect=...>, </effect>, <color=...> for preview-only text */
+function stripInlineTags(content: string | undefined): string {
+  if (!content) return "";
+  return content.replace(/<[^>]*>/g, "");
+}
+
 /** Resolve background name to image URL from mock data, or fallback */
 function getBackgroundUrl(name: string): string {
   const item = BACKGROUNDS.find((b) => b.name === name);
@@ -104,7 +110,7 @@ function computeAccumulatedState(
       currentBgm = isEmptyResource(block.content) ? null : (block.content?.trim() ?? null);
     }
     if (block.type === "top_desc") {
-      currentTopDesc = block.content?.trim() ?? "";
+      currentTopDesc = stripInlineTags(block.content?.trim() ?? "");
     }
     if (block.type === "character") {
       currentChar = isEmptyResource(block.content) ? null : (block.content?.trim() ?? null);
@@ -118,7 +124,7 @@ function computeAccumulatedState(
       ? resolveSpeakerDisplay(focusedBlock.data?.speaker, seriesPersona)
       : "";
   const currentDialogue =
-    focusedBlock?.type === "text" ? (focusedBlock.content ?? "") : "";
+    focusedBlock?.type === "text" ? stripInlineTags(focusedBlock.content ?? "") : "";
   const currentChoices =
     focusedBlock?.type === "choice" && Array.isArray(focusedBlock.data?.choices)
       ? focusedBlock.data.choices

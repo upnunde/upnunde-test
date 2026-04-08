@@ -1,6 +1,6 @@
 "use client";
 
-import { useMemo } from "react";
+import { useCallback, useEffect, useMemo, useRef } from "react";
 import { X } from "lucide-react";
 import {
   Popover,
@@ -81,6 +81,7 @@ export function ResourcePicker({
   itemsOverride,
   children,
 }: ResourcePickerProps) {
+  const optionButtonRefs = useRef<(HTMLButtonElement | null)[]>([]);
   const items = useMemo(() => {
     const base = itemsOverride ?? getItemsForType(type);
     // 외부에서 순서를 정의해 주입한 경우(장면 전환 목록 등)에는 그대로 유지한다.
@@ -101,6 +102,62 @@ export function ResourcePicker({
   const isCharacter = type === "character";
   const isSceneTransition = type === "event";
   const title = PICKER_TITLE[type] ?? "리소스";
+  const gridColumns = 3;
+
+  const optionCount = imageMode
+    ? 1 + items.length
+    : items.length + (isSceneTransition ? 0 : 1);
+
+  const focusFirstOption = useCallback(() => {
+    requestAnimationFrame(() => {
+      optionButtonRefs.current[0]?.focus();
+    });
+  }, []);
+
+  useEffect(() => {
+    if (!isOpen) return;
+    optionButtonRefs.current = optionButtonRefs.current.slice(0, optionCount);
+    focusFirstOption();
+  }, [isOpen, optionCount, focusFirstOption]);
+
+  const focusOption = (index: number) => {
+    const clamped = Math.max(0, Math.min(index, optionCount - 1));
+    optionButtonRefs.current[clamped]?.focus();
+  };
+
+  const handleOptionKeyDown = (index: number, e: React.KeyboardEvent<HTMLButtonElement>) => {
+    if (e.key === "Escape") {
+      e.preventDefault();
+      onOpenChange(false);
+      onClose();
+      return;
+    }
+
+    if (imageMode) {
+      if (e.key === "ArrowRight") {
+        e.preventDefault();
+        focusOption(index + 1);
+      } else if (e.key === "ArrowLeft") {
+        e.preventDefault();
+        focusOption(index - 1);
+      } else if (e.key === "ArrowDown") {
+        e.preventDefault();
+        focusOption(index + gridColumns);
+      } else if (e.key === "ArrowUp") {
+        e.preventDefault();
+        focusOption(index - gridColumns);
+      }
+      return;
+    }
+
+    if (e.key === "ArrowDown") {
+      e.preventDefault();
+      focusOption(index + 1);
+    } else if (e.key === "ArrowUp") {
+      e.preventDefault();
+      focusOption(index - 1);
+    }
+  };
 
   return (
     <Popover open={isOpen} onOpenChange={onOpenChange}>
@@ -109,6 +166,10 @@ export function ResourcePicker({
         align="start"
         className="w-fit max-h-[420px] flex flex-col justify-start items-stretch overflow-hidden p-0 bg-surface-10 rounded-2xl border border-[rgba(0,0,0,0.07)] outline outline-1 outline-offset-[-1px] outline-border-20/10"
         onCloseAutoFocus={(e) => e.preventDefault()}
+        onOpenAutoFocus={(e) => {
+          e.preventDefault();
+          focusFirstOption();
+        }}
       >
         {/* 헤더: 타이틀 + 닫기 버튼 */}
         <div className="flex w-full items-center justify-between px-5 py-3">
@@ -135,6 +196,10 @@ export function ResourcePicker({
               <button
                 type="button"
                 onClick={() => handleSelect("")}
+                ref={(el) => {
+                  optionButtonRefs.current[0] = el;
+                }}
+                onKeyDown={(e) => handleOptionKeyDown(0, e)}
                 className="rounded-lg cursor-pointer inline-flex flex-col justify-start items-center gap-2 col-span-1 focus:outline-none focus:ring-0"
               >
                 <div
@@ -179,11 +244,15 @@ export function ResourcePicker({
                   </div>
                 </div>
               </button>
-              {items.map((item) => (
+              {items.map((item, idx) => (
                 <button
                   key={item.id}
                   type="button"
                   onClick={() => handleSelect(item.name)}
+                  ref={(el) => {
+                    optionButtonRefs.current[idx + 1] = el;
+                  }}
+                  onKeyDown={(e) => handleOptionKeyDown(idx + 1, e)}
                   className={cn(
                     "rounded-lg cursor-pointer inline-flex flex-col justify-start items-center gap-2 hover:bg-surface-10/40 focus:outline-none focus:ring-0",
                     isCharacter ? "" : "items-start"
@@ -238,6 +307,10 @@ export function ResourcePicker({
                 <button
                   type="button"
                   onClick={() => handleSelect("")}
+                  ref={(el) => {
+                    optionButtonRefs.current[0] = el;
+                  }}
+                  onKeyDown={(e) => handleOptionKeyDown(0, e)}
                   className="flex cursor-pointer items-center gap-2 rounded px-2 py-2 text-left text-sm hover:bg-slate-100 focus:outline-none focus:ring-0"
                 >
                   <span className="flex h-8 w-8 shrink-0 items-center justify-center rounded bg-slate-100 text-on-surface-disabled/60">
@@ -246,11 +319,17 @@ export function ResourcePicker({
                   <span className="truncate font-medium text-on-surface-10">선택 안 함</span>
                 </button>
               )}
-              {items.map((item) => (
+              {items.map((item, idx) => (
                 <button
                   key={item.id}
                   type="button"
                   onClick={() => handleSelect(item.name)}
+                  ref={(el) => {
+                    optionButtonRefs.current[idx + (isSceneTransition ? 0 : 1)] = el;
+                  }}
+                  onKeyDown={(e) =>
+                    handleOptionKeyDown(idx + (isSceneTransition ? 0 : 1), e)
+                  }
                   className="flex cursor-pointer items-center gap-2 rounded px-2 py-2 text-left text-sm hover:bg-slate-100 focus:outline-none focus:ring-0"
                 >
                   {!isSceneTransition && (
