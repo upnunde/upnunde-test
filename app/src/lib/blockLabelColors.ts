@@ -1,7 +1,7 @@
 import type { BlockType } from "@/types/editor";
 
 /**
- * 블록 타입 라벨(# 동영상 등) 색상.
+ * 블록 타입 라벨(#동영상 등) 색상.
  * 에러·검증 실패 UI(rose/red)와 혼동되지 않도록 rose·밝은 빨강 계열은 사용하지 않습니다.
  */
 export const LABEL_COLOR_BY_TYPE: Record<BlockType, string> = {

@@ -39,7 +39,7 @@ const SLASH_COMMANDS: SlashCommand[] = [
   {
     id: "background",
     label: "배경 설정",
-    description: "씬의 배경을 설정합니다",
+    description: "장면의 배경을 설정합니다",
     icon: "photo",
     emoji: "🏰",
     category: "resource",

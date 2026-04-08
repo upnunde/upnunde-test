@@ -52,6 +52,7 @@
   --color-surface-disabled: var(--surface-disabled);
   --color-on-surface-10: var(--on-surface-10);
   --color-on-surface-20: var(--on-surface-20);
+  --color-on-surface-03: var(--on-surface-03);
   --color-on-surface-30: var(--on-surface-30);
   --color-on-surface-disabled: var(--on-surface-disabled);
   --color-border-10: var(--border-10);
@@ -112,6 +113,7 @@
   /* surface01: 메인 텍스트 #2B2B2B */
   --on-surface-10: #2B2B2B;
   --on-surface-20: #525254;
+  --on-surface-03: #919194;
   /* surface03: 보조문구 등 보조 텍스트 공통 */
   --on-surface-30: #919194;
   --on-surface-disabled: oklch(0 0 0 / 0.2);

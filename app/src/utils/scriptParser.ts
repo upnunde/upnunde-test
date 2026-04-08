@@ -16,7 +16,7 @@ const SCENE_MARKER_REGEX = /^==\s*SCENE_?(\d+)\s*==$/i;
 /** Match `== Scene Name ==` (legacy fallback: plain title, no turn/sceneNumber) */
 const SCENE_LEGACY_REGEX = /^==\s*(.+?)\s*==$/;
 
-/** Match `# tag: value` */
+/** Match `#tag: value` (optional space after # still accepted) */
 const TAG_REGEX = /^#\s*(\w+):\s*(.*)$/;
 
 /** Match legacy choice line: * [ text ] — extract text inside brackets */
@@ -37,7 +37,7 @@ function parseSpeakerLine(line: string): { speaker: string; content: string } | 
   const speaker = line.slice(0, colonIdx).trim();
   const content = line.slice(colonIdx + 1).trim();
   if (!speaker || content === "") return null;
-  // Avoid treating "# tag: value" or "== x ==" as speaker
+  // Avoid treating "#tag: value" or "== x ==" as speaker
   if (line.startsWith("#") || line.startsWith("==")) return null;
   return { speaker, content };
 }
@@ -110,7 +110,7 @@ export function parseScriptToBlocks(text: string): ScriptBlock[] {
     const sceneMarkerMatch = trimmed.match(SCENE_MARKER_REGEX);
     if (sceneMarkerMatch) {
       const n = parseInt(sceneMarkerMatch[1], 10);
-      const title = sceneTitlesByNumber[n] ?? `씬 ${n}`;
+      const title = sceneTitlesByNumber[n] ?? `장면 ${n}`;
       blocks.push({
         id: generateId(),
         type: "scene",
@@ -131,7 +131,7 @@ export function parseScriptToBlocks(text: string): ScriptBlock[] {
       continue;
     }
 
-    // # tag: value
+    // #tag: value
     const tagMatch = trimmed.match(TAG_REGEX);
     if (tagMatch) {
       const [, tag, value] = tagMatch;

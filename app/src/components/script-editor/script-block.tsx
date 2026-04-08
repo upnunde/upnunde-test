@@ -21,7 +21,7 @@ const BLOCK_TYPE_STYLES: Record<
   { label: string; className: string }
 > = {
   scene: {
-    label: "씬",
+    label: "장면",
     className:
       "border-l-4 border-l-amber-500 bg-amber-50/50 dark:bg-amber-950/20",
   },

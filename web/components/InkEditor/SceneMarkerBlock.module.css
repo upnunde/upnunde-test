@@ -40,7 +40,7 @@
 }
 
 .sceneTitle:empty::before {
-  content: "씬 제목을 입력하세요";
+  content: "장면 제목을 입력하세요";
   color: var(--on-surface-30, rgba(145, 145, 148, 1));
   font-weight: 400;
 }

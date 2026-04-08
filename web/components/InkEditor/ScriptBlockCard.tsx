@@ -179,7 +179,7 @@ export default function ScriptBlockCard({
   const handleCategorySelect = useCallback(
     (category: CategoryKey) => {
       if (category === "scene") {
-        // 씬 추가
+        // 장면 추가
         if (onAddAfterScene) {
           onAddAfterScene();
         }

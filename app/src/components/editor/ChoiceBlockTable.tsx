@@ -22,8 +22,9 @@ export interface ChoiceBlockTableProps {
   blockId: string;
   choices: ChoiceItem[];
   onChange: (newChoices: ChoiceItem[]) => void;
-  /** 생성된 씬 목록 (씬 전환 드롭다운용) */
+  /** 생성된 장면 목록 (장면 전환 드롭다운용) */
   sceneOptions?: SceneOption[];
+  className?: string;
 }
 
 function createEmptyChoice(): ChoiceItem {
@@ -107,7 +108,7 @@ function ChoiceRow({
   const issueFocus = useEditorStore((s) => s.issueFocus);
   const clearIssueFocus = useEditorStore((s) => s.clearIssueFocus);
   const selectedSceneLabel =
-    sceneOptions.find((opt) => opt.value === choice.nextScene)?.label ?? "씬 선택";
+    sceneOptions.find((opt) => opt.value === choice.nextScene)?.label ?? "장면 선택";
   const isSceneUnselected = !choice.nextScene?.trim();
   const isIssueFocusedChoice = issueFocus?.blockId === blockId && issueFocus?.choiceIndex === index;
   const isTextIssueFocused =
@@ -163,7 +164,7 @@ function ChoiceRow({
         )}
         <div className="pointer-events-none absolute inset-y-0 right-0 w-px bg-slate-100" />
       </div>
-      {/* Col 3: 씬 전환 드롭다운 */}
+      {/* Col 3: 장면 전환 드롭다운 */}
       <div className="relative w-[200px] min-w-[160px] max-w-[200px] shrink-0 min-h-[40px] px-3 py-0 self-stretch flex items-center">
         <select
           value={choice.nextScene}
@@ -181,7 +182,7 @@ function ChoiceRow({
             isNextSceneIssueFocused && "text-destructive"
           )}
         >
-          <option value="">씬 선택</option>
+          <option value="">장면 선택</option>
           {sceneOptions.map((opt) => (
             <option key={opt.value} value={opt.value}>
               {opt.label}
@@ -242,6 +243,7 @@ export function ChoiceBlockTable({
   choices,
   onChange,
   sceneOptions = [],
+  className,
 }: ChoiceBlockTableProps) {
   // 선택지는 최소 2개(선택 1, 선택 2)가 기본 구조
   useEffect(() => {
@@ -295,14 +297,17 @@ export function ChoiceBlockTable({
 
   return (
     <div
-      className="border border-slate-200 rounded-md bg-white overflow-hidden"
+      className={cn(
+        "border border-slate-200 rounded-md bg-white overflow-hidden",
+        className
+      )}
       data-block-id={blockId}
     >
       {/* Header */}
       <div className="flex border-b border-slate-200 bg-slate-50/80 text-slate-600 text-xs font-medium min-h-9">
         <div className="w-20 shrink-0 px-3 flex items-center border-r border-slate-200">선택</div>
         <div className="flex-1 min-w-[200px] px-3 flex items-center border-r border-slate-200">내용</div>
-        <div className="w-[200px] min-w-[160px] max-w-[200px] shrink-0 px-3 flex items-center border-r border-slate-200">씬 전환</div>
+        <div className="w-[200px] min-w-[160px] max-w-[200px] shrink-0 px-3 flex items-center border-r border-slate-200">장면 전환</div>
         <div className="w-[120px] min-w-[100px] max-w-[120px] shrink-0 px-3 flex items-center">유료 전환</div>
       </div>
       {/* Rows */}

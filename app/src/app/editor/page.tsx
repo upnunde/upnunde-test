@@ -72,7 +72,7 @@ function EditorInner() {
         <aside
           className={
             isSceneSidebarCollapsed
-              ? "w-fit shrink-0 border-r border-slate-200 bg-white overflow-y-auto overscroll-none px-2"
+              ? "relative z-20 w-fit shrink-0 border-r border-slate-200 bg-white overflow-visible px-2"
               : "w-[240px] shrink-0 border-r border-slate-200 bg-white overflow-y-auto overscroll-none"
           }
         >

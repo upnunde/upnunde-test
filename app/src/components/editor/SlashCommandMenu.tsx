@@ -37,7 +37,7 @@ export interface SlashCommandMenuProps {
 
 /** 문장 내 안내문구(PICKER_LABEL_KO)와 동일한 한글 라벨 */
 const ALL_OPTIONS: { type: BlockType; label: string; icon: React.ElementType }[] = [
-  { type: "scene", label: "씬추가", icon: Heading },
+  { type: "scene", label: "장면추가", icon: Heading },
   { type: "top_desc", label: "장면정보", icon: Clapperboard },
   { type: "background", label: "배경", icon: Image },
   { type: "bgm", label: "배경음악", icon: Music },
@@ -46,7 +46,7 @@ const ALL_OPTIONS: { type: BlockType; label: string; icon: React.ElementType }[]
   { type: "gallery", label: "갤러리", icon: ImagePlus },
   { type: "video", label: "동영상", icon: Film },
   { type: "choice", label: "선택지", icon: ListChecks },
-  { type: "event", label: "씬 전환", icon: Sparkles },
+  { type: "event", label: "장면 전환", icon: Sparkles },
 ];
 
 function getDefaultPayloadForType(

@@ -41,7 +41,7 @@ export default function EpisodeDetailPage() {
     <div className="flex flex-col h-screen w-full bg-white overflow-hidden">
       <Header profileImageUrl={profileImageUrl} onProfileImageChange={setProfileImageUrl} />
       <div className="flex flex-1 overflow-hidden relative">
-        {/* 씬 위치 찾아가는 사이드바 (잉크 에디터와 동일) */}
+        {/* 장면 위치 찾아가는 사이드바 (잉크 에디터와 동일) */}
         <aside
           className={
             isSceneSidebarCollapsed

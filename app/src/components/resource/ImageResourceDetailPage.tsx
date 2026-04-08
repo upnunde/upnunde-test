@@ -55,7 +55,7 @@ function getLabels(kind: ImageResourceKind) {
         nameLabel: "미디어 이름*",
         nameSubtitle: "영상·이미지 등을 구분할 수 있는 이름을 입력해 주세요.",
         descriptionLabel: "미디어 설명*",
-        descriptionSubtitle: "어떤 상황에서 사용되는 미디어인지 간단히 설명해 주세요.",
+        descriptionSubtitle: "어떤 장면에서 사용되는 미디어인지 간단히 설명해 주세요.",
         thumbnailLabel: "대표 썸네일",
         thumbnailSubtitle: "리스트와 미리보기에서 사용될 대표 이미지를 등록해 주세요.",
       };

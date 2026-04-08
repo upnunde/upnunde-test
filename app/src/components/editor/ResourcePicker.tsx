@@ -60,13 +60,13 @@ const PICKER_TITLE: Record<BlockType, string> = {
   background: "배경",
   bgm: "배경음악",
   sfx: "효과음",
-  scene: "씬",
+  scene: "장면",
   gallery: "갤러리",
   video: "동영상",
   text: "텍스트",
   top_desc: "장면정보",
   choice: "선택지",
-  event: "씬 전환",
+  event: "장면 전환",
   event_end: "이벤트 종료",
   direction: "연출",
 };
@@ -83,7 +83,7 @@ export function ResourcePicker({
 }: ResourcePickerProps) {
   const items = useMemo(() => {
     const base = itemsOverride ?? getItemsForType(type);
-    // 외부에서 순서를 정의해 주입한 경우(씬 전환 목록 등)에는 그대로 유지한다.
+    // 외부에서 순서를 정의해 주입한 경우(장면 전환 목록 등)에는 그대로 유지한다.
     if (itemsOverride) return [...base];
     // 데모용 더미 리소스는 목록 내에서 랜덤 배치
     return [...base].sort(() => Math.random() - 0.5);

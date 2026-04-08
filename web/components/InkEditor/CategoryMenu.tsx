@@ -15,7 +15,7 @@ interface CategoryItem {
 }
 
 const CATEGORIES: CategoryItem[] = [
-  { key: "scene", label: "씬추가", icon: "plus" },
+  { key: "scene", label: "장면추가", icon: "plus" },
   { key: "character", label: "캐릭터", icon: "profile_circle" },
   { key: "background", label: "배경", icon: "photo" },
   { key: "direction", label: "연출", icon: "star" },
@@ -75,7 +75,7 @@ export default function CategoryMenu({
   const isCategoryDisabled = (categoryKey: CategoryKey): boolean => {
     switch (categoryKey) {
       case "scene":
-        // 씬추가는 항상 활성화
+        // 장면추가는 항상 활성화
         return false;
       case "character":
         return !!getBlockAttribute(block, "characterId");

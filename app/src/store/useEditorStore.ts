@@ -79,8 +79,16 @@ export function createBlock(
 export type CurrentView = "form" | "editor";
 
 const MAX_UNDO = 50;
+const MAX_SCRIPT_HISTORY = 50;
 
 const SERIES_PERSONA_STORAGE_KEY = "novelseries:seriesPersona";
+
+export interface ScriptHistoryEntry {
+  id: string;
+  blocks: ScriptBlock[];
+  savedAt: number;
+  source: "created" | "temporary";
+}
 
 interface EditorState {
   /** 시리즈 정보 탭에서 입력한 페르소나 — 화자 "나 (…)" 표시에 사용 */
@@ -98,6 +106,8 @@ interface EditorState {
   rawScript: string;
   undoStack: ScriptBlock[][];
   redoStack: ScriptBlock[][];
+  /** 임시저장 시점별 스크립트 스냅샷 (최신이 앞) */
+  scriptHistory: ScriptHistoryEntry[];
 }
 
 interface EditorActions {
@@ -115,6 +125,10 @@ interface EditorActions {
   removeBlock: (id: string) => void;
   reorderBlocks: (oldIndex: number, newIndex: number) => void;
   updateBlockType: (id: string, type: BlockType) => void;
+  /** 현재 블록 상태를 히스토리에 추가 */
+  addScriptHistoryEntry: (source?: ScriptHistoryEntry["source"]) => void;
+  /** 히스토리 항목을 에디터에 불러오기 */
+  loadScriptHistoryEntry: (id: string) => void;
 }
 
 export type EditorStore = EditorState & EditorActions;
@@ -138,6 +152,7 @@ export const useEditorStore = create<EditorStore>((set) => ({
   rawScript: "",
   undoStack: [],
   redoStack: [],
+  scriptHistory: [],
 
   setBlocks: (blocks) => set({ blocks }),
 
@@ -232,6 +247,26 @@ export const useEditorStore = create<EditorStore>((set) => ({
         return b;
       });
       return { ...undoPatch, blocks };
+    }),
+
+  addScriptHistoryEntry: (source = "temporary") =>
+    set((state) => {
+      const entry: ScriptHistoryEntry = {
+        id: generateId(),
+        blocks: cloneBlocks(state.blocks),
+        savedAt: Date.now(),
+        source,
+      };
+      const scriptHistory = [entry, ...state.scriptHistory].slice(0, MAX_SCRIPT_HISTORY);
+      return { scriptHistory };
+    }),
+
+  loadScriptHistoryEntry: (id) =>
+    set((state) => {
+      const entry = state.scriptHistory.find((e) => e.id === id);
+      if (!entry) return state;
+      const undoPatch = pushUndo(state);
+      return { ...undoPatch, blocks: cloneBlocks(entry.blocks), redoStack: [] };
     }),
 }));
 

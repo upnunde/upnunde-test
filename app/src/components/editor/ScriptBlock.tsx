@@ -58,7 +58,7 @@ const RESOURCE_TYPES: BlockType[] = ["background", "bgm", "sfx", "character", "g
 const PICKER_RESOURCE_TYPES: BlockType[] = ["background", "character", "bgm", "sfx", "gallery", "video", "event"];
 
 const TYPE_LABELS: Record<BlockType, string> = {
-  scene: "씬",
+  scene: "장면",
   top_desc: "장면정보",
   text: "Text",
   background: "Background",
@@ -120,11 +120,11 @@ function getCharacterExpressionOptions(characterName: string): string[] {
 
 /** 텍스트(대사) 블록 전용: 높이 내용에 맞춤, 패딩/갭 별도 적용, 세로 상단 정렬 */
 const TEXT_BLOCK_ROOT_CLASSES =
-  "relative flex items-start justify-center w-full group/row gap-0 py-0 rounded-lg border-0 outline-none hover:bg-slate-50/50 focus-within:bg-white min-w-0 flex-1 min-h-[36px] h-fit";
+  "relative flex items-start justify-center w-full group/row gap-0 py-0 rounded-lg border-0 outline-none focus-within:bg-white min-w-0 flex-1 min-h-[36px] h-fit";
 
-/** 한 줄 블록 전용 (씬/캐릭터/연출/배경 등): 높이 36px, px-0 py-1, gap-4 */
+/** 한 줄 블록 전용 (장면/캐릭터/연출/배경 등): 높이 36px, px-0 py-1, gap-4 */
 const COMPACT_BLOCK_ROOT_CLASSES =
-  "group flex items-center justify-start rounded-lg border-0 outline-none hover:bg-slate-50/50 focus-within:bg-white min-w-0 flex-1 min-h-[36px] h-[36px] px-0 py-1 gap-4 select-none";
+  "flex items-center justify-start rounded-lg border-0 outline-none focus-within:bg-white min-w-0 flex-1 min-h-[36px] h-[36px] px-0 py-1 gap-4 select-none";
 
 /** 삭제 버튼 아이콘 공통 크기 20x20 */
 const DELETE_ICON_CLASS = "h-5 w-5";
@@ -391,6 +391,35 @@ export function ScriptBlock({
     [block.id, index, blocks, removeBlock, focusBlock]
   );
 
+  const handleResourceBlockKeyDown = useCallback(
+    (e: React.KeyboardEvent<HTMLDivElement>) => {
+      if (e.key === "Delete") {
+        handleDeleteBlock(e);
+        return;
+      }
+      if (e.key === "Enter" || e.key === " ") {
+        e.preventDefault();
+        setResourceEditing(true);
+        return;
+      }
+      const currentIdx = index - 1;
+      if (e.key === "ArrowUp") {
+        if (currentIdx > 0) {
+          e.preventDefault();
+          focusBlock(blocks[currentIdx - 1].id);
+          return;
+        }
+      } else if (e.key === "ArrowDown") {
+        if (currentIdx < blocks.length - 1) {
+          e.preventDefault();
+          focusBlock(blocks[currentIdx + 1].id);
+          return;
+        }
+      }
+    },
+    [index, blocks, focusBlock, setResourceEditing, handleDeleteBlock]
+  );
+
   const applyTag = useCallback(
     (openTag: string, closeTag: string) => {
       if (!selection || !textareaRef.current) return;
@@ -612,33 +641,28 @@ export function ScriptBlock({
         </div>
 
         {/* Right column: text content — flex-1 min-w-0 so text wraps within column */}
-        <div className="flex-1 min-w-0 h-fit flex items-center">
-          <TextareaAutosize
-            ref={textareaRef}
-            value={block.content}
-            onChange={(e) => updateBlock(block.id, e.target.value)}
-            onFocus={onFocusBlock}
-            onKeyDown={handleTextKeyDown}
-            onMouseUp={handleTextMouseUp}
-            placeholder="'/'를 눌러 메뉴를 선택하거나 텍스트를 입력할 수 있습니다."
-            className="w-full resize-none overflow-hidden bg-transparent focus:outline-none leading-relaxed font-medium text-[16px] text-on-surface-10 placeholder:text-on-surface-30 min-h-[2rem] py-0 mt-1 border-0 outline-none focus:ring-0"
-            rows={1}
-          />
-        </div>
+        <TextareaAutosize
+          ref={textareaRef}
+          value={block.content}
+          onChange={(e) => updateBlock(block.id, e.target.value)}
+          onFocus={onFocusBlock}
+          onKeyDown={handleTextKeyDown}
+          onMouseUp={handleTextMouseUp}
+          placeholder="'/'를 눌러 메뉴를 선택하거나 텍스트를 입력할 수 있습니다."
+          className="flex-1 min-w-0 h-fit w-full resize-none overflow-hidden bg-transparent focus:outline-none leading-relaxed font-medium text-[16px] text-on-surface-10 placeholder:text-on-surface-30 min-h-[2rem] py-0 mt-1 border-0 outline-none focus:ring-0"
+          rows={1}
+        />
 
-        {/* Delete block on hover */}
-        <div className="opacity-0 group-hover/row:opacity-100 shrink-0 flex items-center">
-          <Button
-            type="button"
-            variant="ghost"
-            size="icon"
-            className="h-8 w-8 text-on-surface-30 hover:bg-red-50 hover:text-red-500"
-            aria-label="Delete block"
-            onClick={handleDeleteBlock}
-          >
-            <Trash2 className={DELETE_ICON_CLASS} />
-          </Button>
-        </div>
+        <Button
+          type="button"
+          variant="ghost"
+          size="icon"
+          className="ml-auto shrink-0 opacity-0 transition-opacity group-hover/row:opacity-100 h-8 w-8 text-on-surface-30 hover:bg-red-50 hover:text-red-500"
+          aria-label="Delete block"
+          onClick={handleDeleteBlock}
+        >
+          <Trash2 className={DELETE_ICON_CLASS} />
+        </Button>
 
         {slashMenuPosition && (
           <SlashCommandMenu
@@ -779,11 +803,11 @@ export function ScriptBlock({
         : 0;
     const labelText =
       block.type === "scene"
-        ? `# 씬 ${String(sceneOrder).padStart(2, "0")}`
-        : "# 장면정보";
+        ? `#장면 ${String(sceneOrder).padStart(2, "0")}`
+        : "#장면정보";
     const labelColorClass = LABEL_COLOR_BY_TYPE[block.type];
     const placeholder =
-      block.type === "scene" ? "씬 제목" : "장면정보를 입력하세요";
+      block.type === "scene" ? "장면 제목" : "장면정보를 입력하세요";
 
     const sceneContent = (
       <div
@@ -814,16 +838,14 @@ export function ScriptBlock({
           </span>
         )}
         <div className="flex min-w-0 flex-1 w-full items-center gap-0">
-          <div className="shrink-0 w-[100px]">
-            <span
-              className={cn(
-                "text-sm font-medium",
-                labelColorClass
-              )}
-            >
-              {labelText}
-            </span>
-          </div>
+          <span
+            className={cn(
+              "block shrink-0 w-[100px] text-sm font-medium",
+              labelColorClass
+            )}
+          >
+            {labelText}
+          </span>
           <input
             type="text"
             value={block.content}
@@ -838,27 +860,25 @@ export function ScriptBlock({
                 : "text-base font-medium leading-relaxed"
             )}
           />
-          <div className="ml-auto flex shrink-0 items-center opacity-0 transition-opacity group-hover:opacity-100">
-            <Button
-              type="button"
-              variant="ghost"
-              size="icon"
-              className="h-8 w-8 text-on-surface-30 hover:bg-red-50 hover:text-red-500"
-              aria-label="Delete block"
-              onClick={(e) => {
-                e.preventDefault();
-                e.stopPropagation();
-                removeBlock(block.id);
-              }}
-            >
-              <Trash2 className={DELETE_ICON_CLASS} />
-            </Button>
-          </div>
+          <Button
+            type="button"
+            variant="ghost"
+            size="icon"
+            className="ml-auto shrink-0 opacity-0 transition-opacity group-hover:opacity-100 h-8 w-8 text-on-surface-30 hover:bg-red-50 hover:text-red-500"
+            aria-label="Delete block"
+            onClick={(e) => {
+              e.preventDefault();
+              e.stopPropagation();
+              removeBlock(block.id);
+            }}
+          >
+            <Trash2 className={DELETE_ICON_CLASS} />
+          </Button>
         </div>
       </div>
     );
 
-    // 씬 블록 포함, 배경/텍스트 등과 동일한 한 줄(32px) 구조
+    // 장면 블록 포함, 배경/텍스트 등과 동일한 한 줄(32px) 구조
     return sceneContent;
   }
 
@@ -897,28 +917,26 @@ export function ScriptBlock({
           <span className={cn("shrink-0 text-sm font-medium", LABEL_COLOR_BY_TYPE.direction)}>
             {labelText}
           </span>
-          <div className="ml-auto flex shrink-0 items-center opacity-0 transition-opacity group-hover:opacity-100">
-            <Button
-              type="button"
-              variant="ghost"
-              size="icon"
-              className="h-8 w-8 text-on-surface-30 hover:bg-red-50 hover:text-red-500"
-              aria-label="Delete block"
-              onClick={(e) => {
-                e.preventDefault();
-                e.stopPropagation();
-                removeBlock(block.id);
-              }}
-            >
-              <Trash2 className={DELETE_ICON_CLASS} />
-            </Button>
-          </div>
+          <Button
+            type="button"
+            variant="ghost"
+            size="icon"
+            className="ml-auto shrink-0 opacity-0 transition-opacity group-hover:opacity-100 h-8 w-8 text-on-surface-30 hover:bg-red-50 hover:text-red-500"
+            aria-label="Delete block"
+            onClick={(e) => {
+              e.preventDefault();
+              e.stopPropagation();
+              removeBlock(block.id);
+            }}
+          >
+            <Trash2 className={DELETE_ICON_CLASS} />
+          </Button>
         </div>
       </div>
     );
   }
 
-  // Choice block: [# 선택지] + ChoiceBlockTable — 높이 고정 없이 내용만큼 확장
+  // Choice block: [#선택지] + ChoiceBlockTable — 높이 고정 없이 내용만큼 확장
   if (block.type === "choice") {
     return (
       <div
@@ -949,45 +967,45 @@ export function ScriptBlock({
           </span>
         )}
         <div className="flex min-w-0 flex-1 items-start gap-0">
-          <div className="w-[100px] shrink-0 mt-[3px]">
-            <span className={cn("shrink-0 text-[13px] font-medium pt-0", LABEL_COLOR_BY_TYPE.choice)}>
-              # 선택지
-            </span>
-          </div>
-          <div className="min-w-0 flex-1">
-            <ChoiceBlockTable
-              blockId={block.id}
-              choices={block.data?.choices ?? []}
-              onChange={(newChoices) =>
-                updateBlock(block.id, "", {
-                  ...(block.data ?? {}),
-                  choices: newChoices,
-                })
-              }
-              sceneOptions={blocks
-                .filter((b) => b.type === "scene")
-                .map((b, i) => ({
-                  value: b.content?.trim() || `씬_${i + 1}`,
-                  label: b.content?.trim() || `씬_${i + 1}`,
-                }))}
-            />
-          </div>
-          <div className="ml-auto flex shrink-0 items-center opacity-0 transition-opacity group-hover:opacity-100">
-            <Button
-              type="button"
-              variant="ghost"
-              size="icon"
-              className="h-8 w-8 text-on-surface-30 hover:bg-red-50 hover:text-red-500"
-              aria-label="Delete block"
-              onClick={(e) => {
-                e.preventDefault();
-                e.stopPropagation();
-                removeBlock(block.id);
-              }}
-            >
-              <Trash2 className={DELETE_ICON_CLASS} />
-            </Button>
-          </div>
+          <span
+            className={cn(
+              "block w-[100px] shrink-0 mt-[4px] text-[13px] font-medium pt-0",
+              LABEL_COLOR_BY_TYPE.choice
+            )}
+          >
+            #선택지
+          </span>
+          <ChoiceBlockTable
+            className="min-w-0 flex-1"
+            blockId={block.id}
+            choices={block.data?.choices ?? []}
+            onChange={(newChoices) =>
+              updateBlock(block.id, "", {
+                ...(block.data ?? {}),
+                choices: newChoices,
+              })
+            }
+            sceneOptions={blocks
+              .filter((b) => b.type === "scene")
+              .map((b, i) => ({
+                value: b.content?.trim() || `장면_${i + 1}`,
+                label: b.content?.trim() || `장면_${i + 1}`,
+              }))}
+          />
+          <Button
+            type="button"
+            variant="ghost"
+            size="icon"
+            className="ml-auto shrink-0 opacity-0 transition-opacity group-hover:opacity-100 h-8 w-8 text-on-surface-30 hover:bg-red-50 hover:text-red-500"
+            aria-label="Delete block"
+            onClick={(e) => {
+              e.preventDefault();
+              e.stopPropagation();
+              removeBlock(block.id);
+            }}
+          >
+            <Trash2 className={DELETE_ICON_CLASS} />
+          </Button>
         </div>
       </div>
     );
@@ -1054,22 +1072,20 @@ export function ScriptBlock({
             className="min-w-[120px] flex-1 rounded border-0 bg-white px-2 py-1.5 text-sm outline-none focus:outline-none focus:ring-0"
             autoFocus
           />
-          <div className="ml-auto flex shrink-0 items-center opacity-0 transition-opacity group-hover:opacity-100">
-            <Button
-              type="button"
-              variant="ghost"
-              size="icon"
-              className="h-8 w-8 text-on-surface-30 hover:bg-red-50 hover:text-red-500"
-              aria-label="Delete block"
-              onClick={(e) => {
-                e.preventDefault();
-                e.stopPropagation();
-                removeBlock(block.id);
-              }}
-            >
-              <Trash2 className={DELETE_ICON_CLASS} />
-            </Button>
-          </div>
+          <Button
+            type="button"
+            variant="ghost"
+            size="icon"
+            className="ml-auto shrink-0 opacity-0 transition-opacity group-hover:opacity-100 h-8 w-8 text-on-surface-30 hover:bg-red-50 hover:text-red-500"
+            aria-label="Delete block"
+            onClick={(e) => {
+              e.preventDefault();
+              e.stopPropagation();
+              removeBlock(block.id);
+            }}
+          >
+            <Trash2 className={DELETE_ICON_CLASS} />
+          </Button>
         </div>
       </div>
     );
@@ -1099,7 +1115,7 @@ export function ScriptBlock({
           .filter(({ b }) => b.type === "scene")
           .map(({ b, idx }) => {
             const sceneNumber = blocks.slice(0, idx).filter((x) => x.type === "scene").length + 1;
-            const sceneTitle = b.content?.trim() || `씬 ${sceneNumber}`;
+            const sceneTitle = b.content?.trim() || `장면 ${sceneNumber}`;
             return {
               id: b.id,
               name: `${String(sceneNumber).padStart(2, "0")} ${sceneTitle}`,
@@ -1158,16 +1174,14 @@ export function ScriptBlock({
           </span>
         )}
         <div className="flex min-w-0 flex-1 items-center gap-0">
-          <div className="w-[100px] shrink-0 flex items-center">
-            <span
-              className={cn(
-                "w-fit font-medium text-[13px]",
-                labelColorClass
-              )}
-            >
-              # {labelKo}
-            </span>
-          </div>
+          <span
+            className={cn(
+              "block w-[100px] shrink-0 font-medium text-[13px]",
+              labelColorClass
+            )}
+          >
+            {`#${labelKo}`}
+          </span>
           <ResourcePicker
             type={block.type}
             isOpen={isPickerOpen}
@@ -1188,7 +1202,7 @@ export function ScriptBlock({
                   playback: (block.data?.playback as "loop" | "once" | undefined) ?? "loop",
                 });
               } else if (block.type === "event") {
-                // 씬 전환: 선택한 씬 라벨을 content로 저장하고, 원본 scene block id도 같이 저장
+                // 장면 전환: 선택한 장면 라벨을 content로 저장하고, 원본 scene block id도 같이 저장
                 const selected = sceneItems?.find((it) => it.name === value);
                 updateBlock(block.id, value, { ...(block.data ?? {}), sceneId: selected?.id });
               } else {
@@ -1338,56 +1352,24 @@ export function ScriptBlock({
               </DropdownMenuContent>
             </DropdownMenu>
           )}
-          <div className="ml-auto flex shrink-0 items-center opacity-0 transition-opacity group-hover:opacity-100">
-            <Button
-              type="button"
-              variant="ghost"
-              size="icon"
-              className="h-8 w-8 text-on-surface-30 hover:bg-red-50 hover:text-red-500"
-              aria-label="Delete block"
-              onClick={(e) => {
-                e.preventDefault();
-                e.stopPropagation();
-                removeBlock(block.id);
-              }}
-            >
-              <Trash2 className={DELETE_ICON_CLASS} />
-            </Button>
-          </div>
+          <Button
+            type="button"
+            variant="ghost"
+            size="icon"
+            className="ml-auto shrink-0 opacity-0 transition-opacity group-hover:opacity-100 h-8 w-8 text-on-surface-30 hover:bg-red-50 hover:text-red-500"
+            aria-label="Delete block"
+            onClick={(e) => {
+              e.preventDefault();
+              e.stopPropagation();
+              removeBlock(block.id);
+            }}
+          >
+            <Trash2 className={DELETE_ICON_CLASS} />
+          </Button>
         </div>
       </div>
     );
   }
-
-  const handleResourceBlockKeyDown = useCallback(
-    (e: React.KeyboardEvent<HTMLDivElement>) => {
-      if (e.key === "Delete") {
-        handleDeleteBlock(e);
-        return;
-      }
-      if (e.key === "Enter" || e.key === " ") {
-        e.preventDefault();
-        setResourceEditing(true);
-        return;
-      }
-      // Arrow keys: move focus between all blocks
-      const currentIdx = index - 1;
-      if (e.key === "ArrowUp") {
-        if (currentIdx > 0) {
-          e.preventDefault();
-          focusBlock(blocks[currentIdx - 1].id);
-          return;
-        }
-      } else if (e.key === "ArrowDown") {
-        if (currentIdx < blocks.length - 1) {
-          e.preventDefault();
-          focusBlock(blocks[currentIdx + 1].id);
-          return;
-        }
-      }
-    },
-    [index, blocks, focusBlock, setResourceEditing, handleDeleteBlock]
-  );
 
   return (
     <div
@@ -1407,33 +1389,31 @@ export function ScriptBlock({
       )}
       <div className="flex min-w-0 flex-1 items-center gap-0">
         <Icon className="h-4 w-4 shrink-0 text-on-surface-30" />
-<span className={cn("w-24 shrink-0 text-sm font-medium", LABEL_COLOR_BY_TYPE[block.type])}>
-        {label}
-      </span>
-      <span
-        className={cn(
-          "min-w-0 flex-1 truncate text-sm",
-          isNone ? "text-on-surface-30" : "text-on-surface-10"
-        )}
-      >
-        {isNone ? "—" : block.content}
-      </span>
-        <div className="ml-auto flex shrink-0 items-center opacity-0 transition-opacity group-hover:opacity-100">
-          <Button
-            type="button"
-            variant="ghost"
-            size="icon"
-            className="h-8 w-8 text-on-surface-30 hover:bg-red-50 hover:text-red-500"
-            aria-label="Delete block"
-            onClick={(e) => {
-              e.preventDefault();
-              e.stopPropagation();
-              removeBlock(block.id);
-            }}
-          >
-            <Trash2 className={DELETE_ICON_CLASS} />
-          </Button>
-        </div>
+        <span className={cn("w-24 shrink-0 text-sm font-medium", LABEL_COLOR_BY_TYPE[block.type])}>
+          {label}
+        </span>
+        <span
+          className={cn(
+            "min-w-0 flex-1 truncate text-sm",
+            isNone ? "text-on-surface-30" : "text-on-surface-10"
+          )}
+        >
+          {isNone ? "—" : block.content}
+        </span>
+        <Button
+          type="button"
+          variant="ghost"
+          size="icon"
+          className="ml-auto shrink-0 opacity-0 transition-opacity group-hover:opacity-100 h-8 w-8 text-on-surface-30 hover:bg-red-50 hover:text-red-500"
+          aria-label="Delete block"
+          onClick={(e) => {
+            e.preventDefault();
+            e.stopPropagation();
+            removeBlock(block.id);
+          }}
+        >
+          <Trash2 className={DELETE_ICON_CLASS} />
+        </Button>
       </div>
     </div>
   );

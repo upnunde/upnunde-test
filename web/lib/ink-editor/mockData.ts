@@ -317,10 +317,10 @@ export const INITIAL_BLOCKS: EpisodeBlock[] = [
     return block;
   })(),
   
-  // 상황 설명: 덕훈이 정의의 사도처럼
+  // 장면 설명: 덕훈이 정의의 사도처럼
   (() => {
     const block = createScriptBlock(
-      "(상황 설명) 덕훈이 정의의 사도처럼 수풀 뒤에서 뛰쳐나온다.",
+      "(장면 설명) 덕훈이 정의의 사도처럼 수풀 뒤에서 뛰쳐나온다.",
       "description"
     );
     return block;
@@ -342,10 +342,10 @@ export const INITIAL_BLOCKS: EpisodeBlock[] = [
     return block;
   })(),
   
-  // 상황 설명: 너무 놀란 유나가
+  // 장면 설명: 너무 놀란 유나가
   (() => {
     const block = createScriptBlock(
-      "(상황 설명) 너무 놀란 유나가 실수로 펜슬을 떨어뜨린다. 덕훈이 재빨리 그것을 주워 들고 비장하게 외친다.",
+      "(장면 설명) 너무 놀란 유나가 실수로 펜슬을 떨어뜨린다. 덕훈이 재빨리 그것을 주워 들고 비장하게 외친다.",
       "description"
     );
     return block;
@@ -367,10 +367,10 @@ export const INITIAL_BLOCKS: EpisodeBlock[] = [
     return block;
   })(),
   
-  // 상황 설명: 덕훈의 손에 들려 있는 것은
+  // 장면 설명: 덕훈의 손에 들려 있는 것은
   (() => {
     const block = createScriptBlock(
-      "(상황 설명) 덕훈의 손에 들려 있는 것은 그냥 평범한 화장품, 검은색 립 라이너 펜슬이다. 유나의 얼굴이 터질 것처럼 새빨개진다.",
+      "(장면 설명) 덕훈의 손에 들려 있는 것은 그냥 평범한 화장품, 검은색 립 라이너 펜슬이다. 유나의 얼굴이 터질 것처럼 새빨개진다.",
       "description"
     );
     return block;
@@ -424,10 +424,10 @@ export const INITIAL_BLOCKS: EpisodeBlock[] = [
     return block;
   })(),
   
-  // 상황 설명: 유나는 덕훈의 손에서
+  // 장면 설명: 유나는 덕훈의 손에서
   (() => {
     const block = createScriptBlock(
-      "(상황 설명) 유나는 덕훈의 손에서 립 라이너를 낚아채듯 뺏어서는, 울상이 되어 빛의 속도로 도망친다.",
+      "(장면 설명) 유나는 덕훈의 손에서 립 라이너를 낚아채듯 뺏어서는, 울상이 되어 빛의 속도로 도망친다.",
       "description"
     );
     return block;

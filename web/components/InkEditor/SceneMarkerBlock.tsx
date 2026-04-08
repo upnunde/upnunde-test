@@ -55,7 +55,7 @@ export default function SceneMarkerBlock({
             onChange={handleTitleChange}
             onBlur={handleTitleBlur}
             onKeyDown={handleTitleKeyDown}
-            placeholder="씬 제목을 입력하세요"
+            placeholder="장면 제목을 입력하세요"
             autoFocus
           />
         ) : (
@@ -63,7 +63,7 @@ export default function SceneMarkerBlock({
             className={styles.sceneTitle}
             onClick={() => setIsEditing(true)}
           >
-            {title || "씬 제목을 입력하세요"}
+            {title || "장면 제목을 입력하세요"}
           </h2>
         )}
       </div>

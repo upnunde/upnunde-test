@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useEffect, useCallback } from "react";
+import React, { useEffect, useCallback, Fragment } from "react";
 import {
   DndContext,
   closestCenter,
@@ -26,17 +26,17 @@ import { ScriptBlock } from "./ScriptBlock";
 
 /** 텍스트(대사) 블록: 행 높이 36px, 세로 가변 확장 가능 */
 const WRAPPER_CLASS_TEXT =
-  "group flex min-h-[36px] h-fit items-start justify-center gap-0";
+  "group flex min-h-[36px] h-fit items-start justify-center gap-0 rounded-lg hover:bg-slate-50/50";
 const ROOT_CLASS_TEXT = "min-w-0 flex-1 min-h-[36px] h-fit";
 
 /** 선택지 블록: 최소 높이 36px, 내용에 따라 확장 */
 const WRAPPER_CLASS_CHOICE =
-  "group flex min-h-[36px] h-fit items-start justify-center gap-0";
+  "group flex min-h-[36px] h-fit items-start justify-center gap-0 rounded-lg hover:bg-slate-50/50";
 const ROOT_CLASS_CHOICE = "min-w-0 flex-1 min-h-[36px]";
 
-/** 한 줄 블록 (씬/캐릭터/연출/배경 등): 고정 높이 36px, px-0 py-1 */
+/** 한 줄 블록 (장면/캐릭터/연출/배경 등): 고정 높이 36px, px-0 py-1 */
 const WRAPPER_CLASS_COMPACT =
-  "group flex h-full items-center justify-start gap-0";
+  "group flex h-full items-center justify-start gap-0 rounded-lg hover:bg-slate-50/50";
 const ROOT_CLASS_COMPACT = "min-w-0 flex-1 min-h-[36px] h-[36px]";
 
 function SortableBlockWrapper({
@@ -125,7 +125,7 @@ function SortableBlockWrapper({
         className={cn(
           "shrink-0 text-[13px] font-medium tabular-nums w-10 h-full flex items-center justify-start pt-0 mt-0",
           block.type === "text" && "mt-2",
-          block.type === "choice" && "mt-[10px]",
+          block.type === "choice" && "mt-[8px]",
           isFocused
             ? "text-primary"
             : hasIssue
@@ -357,7 +357,7 @@ export default function EditorBody() {
           strategy={verticalListSortingStrategy}
         >
           <div
-            className="ml-2 mr-5 flex min-h-full max-w-[1400px] flex-col gap-2"
+            className="ml-2 mr-2 flex min-h-full max-w-[1400px] flex-col gap-2"
             onClick={handleBackgroundClick}
           >
             {blocks.map((block, i) => {
@@ -366,11 +366,9 @@ export default function EditorBody() {
               const showDivider = isScene && prevBlock && prevBlock.type !== "scene";
 
               return (
-                <div key={block.id}>
+                <Fragment key={block.id}>
                   {showDivider && (
-                    <div className="flex items-center gap-2 px-[48px] py-10">
-                      <div className="flex-1 border-t border-slate-200"></div>
-                    </div>
+                    <div className="mx-0 my-10 border-t border-slate-200" />
                   )}
                   <SortableBlockWrapper
                     block={block}
@@ -381,7 +379,7 @@ export default function EditorBody() {
                     removeBlock={removeBlock}
                     focusBlock={focusBlock}
                   />
-                </div>
+                </Fragment>
               );
             })}
           </div>

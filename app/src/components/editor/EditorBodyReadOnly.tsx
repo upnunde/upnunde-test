@@ -56,7 +56,7 @@ function ReadOnlyBlockRow({
         <span className={cn(INDEX_COL_CLASS, "mt-[10px]")}>{indexLabel}</span>
         <div className="flex min-w-0 flex-1 items-start gap-0">
           <div className="w-[100px] shrink-0 mt-[3px]">
-            <span className={cn("shrink-0 text-[13px] font-medium pt-0", labelColorClass)}># 선택지</span>
+            <span className={cn("shrink-0 text-[13px] font-medium pt-0", labelColorClass)}>#선택지</span>
           </div>
           <div className="min-w-0 flex-1 flex flex-col gap-0.5 py-1">
             {choices.map((c, i) => (
@@ -78,7 +78,7 @@ function ReadOnlyBlockRow({
         <div className="flex min-w-0 flex-1 items-center gap-0">
           <div className="w-[100px] shrink-0">
             <span className={cn("text-sm font-medium", labelColorClass)}>
-              # 씬 {String(sceneOrdinal).padStart(2, "0")}
+              {`#장면 ${String(sceneOrdinal).padStart(2, "0")}`}
             </span>
           </div>
           <span className="min-w-0 flex-1 text-[24px] font-bold text-on-surface-10 truncate">{block.content || "—"}</span>
@@ -93,7 +93,7 @@ function ReadOnlyBlockRow({
         <span className={cn(INDEX_COL_CLASS, "mt-0 h-full")}>{indexLabel}</span>
         <div className="flex min-w-0 flex-1 items-center gap-0">
           <div className="w-[100px] shrink-0">
-            <span className={cn("text-sm font-medium", labelColorClass)}># 장면정보</span>
+            <span className={cn("text-sm font-medium", labelColorClass)}>#장면정보</span>
           </div>
           <span className="min-w-0 flex-1 text-base font-medium leading-relaxed text-on-surface-10 truncate">
             {block.content || "—"}
@@ -108,7 +108,7 @@ function ReadOnlyBlockRow({
       <span className={cn(INDEX_COL_CLASS, "mt-0 h-full")}>{indexLabel}</span>
       <div className="flex min-w-0 flex-1 items-center gap-0">
         <div className="w-[100px] shrink-0 flex items-center">
-          <span className={cn("w-fit font-medium text-[13px]", labelColorClass)}># {labelKo}</span>
+          <span className={cn("w-fit font-medium text-[13px]", labelColorClass)}>{`#${labelKo}`}</span>
         </div>
         <span className="min-w-0 flex-1 truncate text-sm text-on-surface-10">{block.content || "—"}</span>
       </div>
@@ -136,7 +136,7 @@ export function EditorBodyReadOnly() {
 
   return (
     <div className="min-h-full w-full cursor-default select-text">
-      <div className="ml-2 mr-5 flex min-h-full max-w-[1400px] flex-col gap-2">
+      <div className="ml-2 mr-2 flex min-h-full max-w-[1400px] flex-col gap-2">
         {blocks.map((block, i) => {
           const isScene = block.type === "scene";
           const prevBlock = i > 0 ? blocks[i - 1] : null;

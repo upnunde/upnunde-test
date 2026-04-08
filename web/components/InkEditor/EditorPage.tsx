@@ -52,20 +52,20 @@ export default function EditorPage() {
     [blocks]
   );
 
-  // 씬 추가 (ScriptBlockCard에서 호출)
+  // 장면 추가 (ScriptBlockCard에서 호출)
   const handleAddSceneAfter = useCallback(
     (afterBlockId: string) => {
       const afterIndex = blocks.findIndex((block) => block.id === afterBlockId);
       if (afterIndex === -1) return;
 
-      // 다음 씬 번호 계산
+      // 다음 장면 번호 계산
       const sceneCount = blocks.filter((b) => b.type === "scene").length;
       const newScene = createSceneMarker(sceneCount + 1, "");
       const newBlocks = [...blocks];
       newBlocks.splice(afterIndex + 1, 0, newScene);
       setBlocks(newBlocks);
 
-      // 새 씬에 포커스
+      // 새 장면에 포커스
       setTimeout(() => {
         const newSceneElement = document.querySelector(
           `[data-block-id="${newScene.id}"] input`

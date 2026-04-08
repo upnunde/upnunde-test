@@ -33,18 +33,18 @@ export function serializeBlocksToScript(blocks: ScriptBlock[]): string {
     }
 
     if (block.type === "top_desc") {
-      lines.push(`# top_desc: ${block.content}`);
+      lines.push(`#top_desc: ${block.content}`);
       continue;
     }
 
     const tag = TYPE_TO_TAG[block.type];
     if (tag) {
       const value = block.content === "none" ? "//" : block.content;
-      lines.push(`# ${tag}: ${value}`);
+      lines.push(`#${tag}: ${value}`);
       continue;
     }
 
-    // text — dialogue only; speaker is implied by the last # character block above
+    // text — dialogue only; speaker is implied by the last character (#char_img) block above
     lines.push(block.content);
   }
 

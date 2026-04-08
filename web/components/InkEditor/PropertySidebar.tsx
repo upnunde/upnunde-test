@@ -78,7 +78,7 @@ export default function PropertySidebar({
                       title: e.target.value,
                     })
                   }
-                  placeholder="씬 제목을 입력하세요"
+                  placeholder="장면 제목을 입력하세요"
                 />
               </div>
 

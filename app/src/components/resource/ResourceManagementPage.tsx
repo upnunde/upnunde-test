@@ -299,7 +299,7 @@ export function ResourceManagementPage() {
             {/* 연출장면 [정책 6, 3, 5] */}
             <ResourceSection
               title="연출장면"
-              description="스토리를 풍부하게 만들어 줄 특정 상황에 맞는 이미지, 일러스트를 등록합니다."
+              description="스토리를 풍부하게 만들어 줄 특정 장면에 맞는 이미지, 일러스트를 등록합니다."
               emptyMessage="등록된 연출장면이 없습니다"
               addButtonLabel="연출장면 등록"
               isEmpty={scenes.length === 0}

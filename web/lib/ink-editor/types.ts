@@ -9,7 +9,7 @@
 export type BlockType = "scene" | "script";
 
 /**
- * Scene Marker - 씬 구간 구분을 위한 이정표
+ * Scene Marker - 장면 구간 구분을 위한 이정표
  */
 export interface SceneMarker {
   type: "scene";

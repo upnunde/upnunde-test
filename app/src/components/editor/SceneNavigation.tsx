@@ -1,7 +1,7 @@
 "use client";
 
 import React, { useMemo, useState, useRef, useEffect } from "react";
-import { Menu } from "lucide-react";
+import { AlertTriangle, Menu } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { useEditorStore } from "@/store/useEditorStore";
 import { cn } from "@/lib/utils";
@@ -26,8 +26,10 @@ export function SceneNavigation({
 
   const [editingBlockId, setEditingBlockId] = useState<string | null>(null);
   const [editValue, setEditValue] = useState("");
+  const [collapsedIssueOpen, setCollapsedIssueOpen] = useState(false);
   const inputRef = useRef<HTMLInputElement>(null);
   const pendingNavTimeoutRef = useRef<ReturnType<typeof setTimeout> | null>(null);
+  const collapsedIssueWrapRef = useRef<HTMLDivElement>(null);
 
   // 편집 모드 진입 시 input 포커스 (다음 틱에 실행해 DOM 반영 후 포커스 유지)
   useEffect(() => {
@@ -87,7 +89,7 @@ export function SceneNavigation({
   const startEdit = (e: React.MouseEvent, block: { id: string; content?: string }) => {
     e.preventDefault();
     e.stopPropagation();
-    clearPendingNav(); // 더블클릭이면 예약된 씬 이동 취소
+    clearPendingNav(); // 더블클릭이면 예약된 장면 이동 취소
     setEditingBlockId(block.id);
     setEditValue(block.content?.trim() ?? "");
   };
@@ -95,7 +97,7 @@ export function SceneNavigation({
   // 언마운트 시 예약된 타이머 정리
   useEffect(() => () => clearPendingNav(), []);
 
-  // 씬 블록들만 필터링하고 인덱스 정보 포함
+  // 장면 블록들만 필터링하고 인덱스 정보 포함
   const scenes = useMemo(() => {
     return blocks
       .map((block, index) => ({ block, index }))
@@ -119,7 +121,7 @@ export function SceneNavigation({
         if (!block.content?.trim()) {
           const title =
             block.type === "scene"
-              ? "씬 제목 누락"
+              ? "장면 제목 누락"
               : block.type === "top_desc"
                 ? "장면정보 누락"
                 : block.type === "text"
@@ -133,7 +135,7 @@ export function SceneNavigation({
         }
       }
 
-      // 선택지 블록 검증: 선택지 텍스트/다음 씬 누락
+      // 선택지 블록 검증: 선택지 텍스트/다음 장면 누락
       if (block.type === "choice") {
         const choices = Array.isArray(block.data?.choices) ? block.data?.choices : [];
         if (choices.length === 0) {
@@ -157,7 +159,7 @@ export function SceneNavigation({
               next.push({
                 kind: "missing",
                 blockId: block.id,
-                title: `선택지 ${n} 다음 씬 누락`,
+                title: `선택지 ${n} 다음 장면 누락`,
               });
             }
           });
@@ -178,7 +180,7 @@ export function SceneNavigation({
   };
 
   const applyIssueFocus = (issue: EditorIssue) => {
-    const choiceFieldMatch = issue.title.match(/^선택지\s+(\d+)\s+(문구|다음 씬)\s+누락$/);
+    const choiceFieldMatch = issue.title.match(/^선택지\s+(\d+)\s+(문구|다음 장면)\s+누락$/);
     if (choiceFieldMatch) {
       const choiceIndex = Number(choiceFieldMatch[1]) - 1;
       const field = choiceFieldMatch[2] === "문구" ? "text" : "nextScene";
@@ -193,23 +195,42 @@ export function SceneNavigation({
     setEditValue("");
   };
 
+  useEffect(() => {
+    if (!collapsed) {
+      setCollapsedIssueOpen(false);
+    }
+  }, [collapsed]);
+
+  useEffect(() => {
+    if (!collapsedIssueOpen) return;
+    const handleOutsidePointerDown = (event: PointerEvent) => {
+      if (!collapsedIssueWrapRef.current) return;
+      const target = event.target;
+      if (target instanceof Node && !collapsedIssueWrapRef.current.contains(target)) {
+        setCollapsedIssueOpen(false);
+      }
+    };
+    document.addEventListener("pointerdown", handleOutsidePointerDown);
+    return () => document.removeEventListener("pointerdown", handleOutsidePointerDown);
+  }, [collapsedIssueOpen]);
+
   return (
     <div className="flex h-full flex-col">
       <nav
         className={cn(
           "flex-1 overflow-y-auto pt-2",
-          collapsed ? "px-0" : "px-2"
+          collapsed ? "px-0" : "px-1"
         )}
       >
         <div
           className={cn(
             "flex items-center gap-2 py-1.5",
-            collapsed ? "justify-center" : "justify-between px-1"
+            collapsed ? "justify-center" : "justify-between pl-3 pr-2"
           )}
         >
           {!collapsed && (
             <h2 className="text-sm font-semibold text-on-surface-10 flex items-center gap-2">
-              씬 목록
+              장면 목록
             </h2>
           )}
           <Button
@@ -218,7 +239,7 @@ export function SceneNavigation({
             size="icon"
             onClick={onToggleCollapsed}
             className="h-9 w-9 shrink-0 rounded-full border-slate-200 shadow-none text-on-surface-30"
-            aria-label={collapsed ? "씬 목록 펼치기" : "씬 목록 최소화"}
+            aria-label={collapsed ? "장면 목록 펼치기" : "장면 목록 최소화"}
           >
             <Menu className="h-5 w-5" aria-hidden="true" />
           </Button>
@@ -227,14 +248,14 @@ export function SceneNavigation({
         {!collapsed &&
           (scenes.length === 0 ? (
             <div className="px-3 py-2 text-sm text-on-surface-30 text-center">
-              씬이 없습니다
+              장면이 없습니다
             </div>
           ) : (
             <ul className="space-y-1 px-1">
               {scenes.map(({ block, index }) => {
                 const sceneNumber = blocks.slice(0, index).filter((b) => b.type === "scene").length + 1;
                 const isActive = focusBlockId === block.id;
-                const sceneTitle = block.content?.trim() || `씬 ${sceneNumber}`;
+                const sceneTitle = block.content?.trim() || `장면 ${sceneNumber}`;
                 const isEditing = editingBlockId === block.id;
 
                 const rowContent = (
@@ -259,7 +280,7 @@ export function SceneNavigation({
                         }}
                         onClick={(e) => e.stopPropagation()}
                         className="flex-1 min-w-0 rounded px-1 py-0.5 text-[14px] font-medium bg-white border border-slate-300 focus:outline-none focus:ring-1 focus:ring-slate-400 focus:border-slate-400"
-                        aria-label="씬 제목 편집"
+                        aria-label="장면 제목 편집"
                       />
                     ) : (
                       <span
@@ -356,6 +377,75 @@ export function SceneNavigation({
                           onClick={() => {
                             applyIssueFocus(it);
                             navigateToBlock(it.blockId, { preserveIssueFocus: true });
+                          }}
+                        >
+                          <div className="flex items-start justify-between gap-2">
+                            <div className="font-medium">{it.title}</div>
+                            <div className="shrink-0 text-[10px] uppercase opacity-70">
+                              {it.kind}
+                            </div>
+                          </div>
+                          {it.detail && <div className="mt-0.5 text-[11px] text-slate-500">{it.detail}</div>}
+                        </button>
+                      </li>
+                    ))}
+                  </ul>
+                </div>
+              </div>
+            )}
+          </div>
+        </div>
+      )}
+
+      {/* 접힘 상태: 오류 아이콘 고정 노출 + 클릭 시 상세 */}
+      {collapsed && (
+        <div className="mt-auto pb-2">
+          <div ref={collapsedIssueWrapRef} className="relative">
+            <button
+              type="button"
+              onClick={() => setCollapsedIssueOpen((prev) => !prev)}
+              className={cn(
+                "relative mx-auto flex h-10 w-10 items-center justify-center rounded-lg border transition-colors",
+                issues.length > 0
+                  ? "border-rose-300 bg-rose-50 text-rose-900 hover:bg-rose-100"
+                  : "border-slate-200 bg-slate-50 text-slate-500 hover:bg-slate-100"
+              )}
+              aria-label={issues.length > 0 ? `오류 및 누락 알림 ${issues.length}건` : "오류 및 누락 없음"}
+              aria-expanded={collapsedIssueOpen}
+              aria-haspopup="dialog"
+            >
+              <AlertTriangle className="h-4 w-4" aria-hidden="true" />
+              {issues.length > 0 && (
+                <span className="absolute -right-1 -top-1 min-w-4 rounded-full bg-rose-600 px-1 text-[10px] leading-4 text-white">
+                  {issues.length > 99 ? "99+" : issues.length}
+                </span>
+              )}
+            </button>
+
+            {collapsedIssueOpen && issues.length > 0 && (
+              <div
+                className="absolute bottom-full left-0 z-[80] mb-2 w-[280px]"
+                role="dialog"
+                aria-label="오류 및 누락 상세"
+              >
+                <div className="rounded-lg border border-slate-200 bg-white shadow-lg overflow-hidden">
+                  <div className="px-3 py-2 border-b border-slate-200 bg-slate-50">
+                    <div className="text-xs font-semibold text-slate-700">오류/누락 목록</div>
+                    <div className="text-[11px] text-slate-500">클릭하면 해당 위치로 이동합니다</div>
+                  </div>
+                  <ul className="max-h-60 overflow-y-auto py-1">
+                    {issues.map((it, idx) => (
+                      <li key={`${it.blockId}-${idx}`}>
+                        <button
+                          type="button"
+                          className={cn(
+                            "w-full px-3 py-2 text-left text-xs hover:bg-slate-100 transition-colors",
+                            it.kind === "error" ? "text-rose-700" : "text-rose-700"
+                          )}
+                          onClick={() => {
+                            applyIssueFocus(it);
+                            navigateToBlock(it.blockId, { preserveIssueFocus: true });
+                            setCollapsedIssueOpen(false);
                           }}
                         >
                           <div className="flex items-start justify-between gap-2">
