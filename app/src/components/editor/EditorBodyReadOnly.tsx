@@ -136,7 +136,7 @@ export function EditorBodyReadOnly() {
 
   return (
     <div className="min-h-full w-full cursor-default select-text">
-      <div className="ml-2 mr-2 flex min-h-full max-w-[1400px] flex-col gap-2">
+      <div className="mx-auto flex min-h-full w-full max-w-[1400px] flex-col gap-2 px-2">
         {blocks.map((block, i) => {
           const isScene = block.type === "scene";
           const prevBlock = i > 0 ? blocks[i - 1] : null;

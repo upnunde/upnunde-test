@@ -357,7 +357,7 @@ export default function EditorBody() {
           strategy={verticalListSortingStrategy}
         >
           <div
-            className="ml-2 mr-2 flex min-h-full max-w-[1400px] flex-col gap-2"
+            className="mx-auto flex min-h-full w-full max-w-[1400px] flex-col gap-2 px-2"
             onClick={handleBackgroundClick}
           >
             {blocks.map((block, i) => {
