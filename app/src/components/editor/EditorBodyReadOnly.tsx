@@ -52,13 +52,15 @@ function ReadOnlyBlockRow({
   if (block.type === "choice") {
     const choices = block.data?.choices ?? [];
     return (
-      <div className="group flex min-h-[36px] h-fit items-start justify-start gap-0">
-        <span className={cn(INDEX_COL_CLASS, "mt-[10px]")}>{indexLabel}</span>
+      <div className="group flex h-fit w-full min-h-10 items-start justify-start gap-0 rounded bg-white py-1">
+        <span className="flex h-fit min-h-8 w-10 shrink-0 items-center justify-start font-medium tabular-nums text-xs leading-4 text-on-surface-disabled">
+          {indexLabel}
+        </span>
         <div className="flex min-w-0 flex-1 items-start gap-0">
-          <div className="w-[100px] shrink-0 mt-[3px]">
-            <span className={cn("shrink-0 text-[13px] font-medium pt-0", labelColorClass)}>#선택지</span>
+          <div className="flex w-24 min-w-14 shrink-0 items-center justify-start overflow-hidden pt-0.5 min-h-8">
+            <span className={cn("text-xs font-medium leading-4", labelColorClass)}>#선택지</span>
           </div>
-          <div className="min-w-0 flex-1 flex flex-col gap-0.5 py-1">
+          <div className="flex min-w-0 flex-1 flex-col gap-0.5 py-1">
             {choices.map((c, i) => (
               <span key={c.id} className="text-sm text-on-surface-10">
                 {i + 1}. {c.text || "—"}
@@ -136,7 +138,7 @@ export function EditorBodyReadOnly() {
 
   return (
     <div className="min-h-full w-full cursor-default select-text">
-      <div className="mx-auto flex min-h-full w-full max-w-[1400px] flex-col gap-2 px-2">
+      <div className="mx-auto flex min-h-full w-full max-w-[1400px] flex-col gap-1 px-2">
         {blocks.map((block, i) => {
           const isScene = block.type === "scene";
           const prevBlock = i > 0 ? blocks[i - 1] : null;

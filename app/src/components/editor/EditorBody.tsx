@@ -24,15 +24,15 @@ import { Button } from "@/components/ui/button";
 import { Plus } from "lucide-react";
 import { ScriptBlock } from "./ScriptBlock";
 
-/** 텍스트(대사) 블록: 행 높이 36px, 세로 가변 확장 가능 */
+/** 텍스트(대사) 블록: 디자인 시안과 동일 — min-h-10·py-1·bg-white·rounded·flex 행 */
 const WRAPPER_CLASS_TEXT =
-  "group flex min-h-[36px] h-fit items-start justify-center gap-0 rounded-lg hover:bg-slate-50/50";
-const ROOT_CLASS_TEXT = "min-w-0 flex-1 min-h-[36px] h-fit";
+  "group group/row relative flex h-fit w-full min-h-10 items-start justify-start gap-0 rounded bg-white py-1 outline-none hover:bg-slate-50/50 focus-within:bg-white";
+const ROOT_CLASS_TEXT = "min-h-8 min-w-0 flex-1 h-fit";
 
-/** 선택지 블록: 최소 높이 36px, 내용에 따라 확장 */
+/** 선택지 블록: 텍스트 행과 동일 래퍼( min-h-10·py-1·bg-white·rounded·group/row ) */
 const WRAPPER_CLASS_CHOICE =
-  "group flex min-h-[36px] h-fit items-start justify-center gap-0 rounded-lg hover:bg-slate-50/50";
-const ROOT_CLASS_CHOICE = "min-w-0 flex-1 min-h-[36px]";
+  "group group/row relative flex h-fit w-full min-h-10 items-start justify-start gap-0 rounded bg-white py-1 outline-none hover:bg-slate-50/50 focus-within:bg-white";
+const ROOT_CLASS_CHOICE = "min-h-8 min-w-0 flex-1 h-fit";
 
 /** 한 줄 블록 (장면/캐릭터/연출/배경 등): 고정 높이 36px, px-0 py-1 */
 const WRAPPER_CLASS_COMPACT =
@@ -88,12 +88,12 @@ function SortableBlockWrapper({
         isDragging && "opacity-50"
       )}
     >
-      <div className="relative flex items-start justify-center gap-0 opacity-0 transition-opacity group-hover:opacity-100 shrink-0 w-fit h-fit mt-1 mb-1">
+      <div className="relative flex shrink-0 items-center justify-start gap-0 opacity-0 transition-opacity group-hover:opacity-100">
         <Button
           type="button"
           variant="ghost"
           size="icon"
-          className="h-7 w-7 shrink-0 rounded p-0 text-on-surface-30 hover:bg-slate-100 hover:text-slate-600"
+          className="h-8 w-6 shrink-0 rounded-full p-0 text-on-surface-30 hover:bg-slate-100 hover:text-slate-600"
           aria-label="Add block below"
           onClick={(e) => {
             e.preventDefault();
@@ -106,7 +106,7 @@ function SortableBlockWrapper({
         </Button>
         <button
           type="button"
-          className="cursor-grab touch-none rounded px-0 py-0 w-6 h-7 mx-0 flex items-center justify-center text-on-surface-30 hover:bg-slate-100 hover:text-slate-600 active:cursor-grabbing mt-0 mb-0"
+          className="flex h-8 w-6 shrink-0 cursor-grab touch-none items-center justify-center rounded-full p-0 text-on-surface-30 hover:bg-slate-100 hover:text-slate-600 active:cursor-grabbing"
           aria-label="Drag to reorder"
           {...attributes}
           {...listeners}
@@ -123,14 +123,17 @@ function SortableBlockWrapper({
       </div>
       <span
         className={cn(
-          "shrink-0 text-[13px] font-medium tabular-nums w-10 h-full flex items-center justify-start pt-0 mt-0",
-          block.type === "text" && "mt-2",
-          block.type === "choice" && "mt-[8px]",
+          "flex w-10 shrink-0 justify-start font-medium tabular-nums",
+          block.type === "text" || block.type === "choice"
+            ? "min-h-8 items-center text-xs leading-4"
+            : "mt-0 h-full items-center pt-0 text-[13px]",
           isFocused
             ? "text-primary"
             : hasIssue
               ? "text-rose-600"
-              : "text-[rgba(197,207,221,1)]"
+              : block.type === "text" || block.type === "choice"
+                ? "text-on-surface-disabled"
+                : "text-[rgba(197,207,221,1)]"
         )}
       >
         {String(index).padStart(2, "0")}
@@ -357,7 +360,7 @@ export default function EditorBody() {
           strategy={verticalListSortingStrategy}
         >
           <div
-            className="mx-auto flex min-h-full w-full max-w-[1400px] flex-col gap-2 px-2"
+            className="mx-auto flex min-h-full w-full max-w-[1400px] flex-col gap-1 px-2"
             onClick={handleBackgroundClick}
           >
             {blocks.map((block, i) => {

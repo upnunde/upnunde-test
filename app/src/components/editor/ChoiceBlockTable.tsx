@@ -135,7 +135,7 @@ function ChoiceRow({
 
   return (
     <div
-      className="group/row flex border-b border-slate-100 items-stretch min-h-[40px]"
+      className="group/choice-row flex border-b border-slate-100 items-stretch min-h-[40px]"
       data-choice-id={choice.id}
     >
       {/* Col 1: Label */}
@@ -200,7 +200,7 @@ function ChoiceRow({
         <button
           type="button"
           onClick={onRemove}
-          className="p-1.5 rounded text-on-surface-30 hover:text-red-600 hover:bg-red-50 transition-colors opacity-0 group-hover/row:opacity-100"
+          className="p-1.5 rounded text-on-surface-30 opacity-0 transition-opacity transition-colors group-hover/choice-row:opacity-100 group-focus-within/choice-row:opacity-100 hover:text-red-600 hover:bg-red-50"
           aria-label="선택지 삭제"
         >
           <Trash2 className="h-4 w-4" />

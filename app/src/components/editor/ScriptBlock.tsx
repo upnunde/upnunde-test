@@ -118,10 +118,6 @@ function getCharacterExpressionOptions(characterName: string): string[] {
   return deduped.length > 0 ? deduped : [DEFAULT_CHARACTER_EXPRESSION];
 }
 
-/** 텍스트(대사) 블록 전용: 높이 내용에 맞춤, 패딩/갭 별도 적용, 세로 상단 정렬 */
-const TEXT_BLOCK_ROOT_CLASSES =
-  "relative flex items-start justify-center w-full group/row gap-0 py-0 rounded-lg border-0 outline-none focus-within:bg-white min-w-0 flex-1 min-h-[36px] h-fit";
-
 /** 한 줄 블록 전용 (장면/캐릭터/연출/배경 등): 높이 36px, px-0 py-1, gap-4 */
 const COMPACT_BLOCK_ROOT_CLASSES =
   "flex items-center justify-start rounded-lg border-0 outline-none focus-within:bg-white min-w-0 flex-1 min-h-[36px] h-[36px] px-0 py-1 gap-4 select-none";
@@ -557,9 +553,9 @@ export function ScriptBlock({
     };
 
     return (
-      <div className={cn(TEXT_BLOCK_ROOT_CLASSES, rootClassName)}>
-        {/* Left column: block index + speaker dropdown — shrink-0 so content never overlaps */}
-        <div className="flex items-center justify-start gap-0 shrink-0 pt-0 w-[100px] mt-1 pr-2">
+      <>
+        {/* Left column: 화자 — 시안 w-24 min-w-14 min-h-8 */}
+        <div className="flex min-h-8 w-24 min-w-14 shrink-0 items-center justify-start gap-0 overflow-hidden">
           {!hideIndex && (
             <span className="text-sm font-medium text-slate-300 w-5 text-right tabular-nums">
               {indexLabel}
@@ -569,12 +565,12 @@ export function ScriptBlock({
             <DropdownMenuTrigger asChild>
               <button
                 type="button"
-                className="inline-flex w-full items-center justify-start gap-0 h-7 min-w-0 p-0 m-0 text-[13px] text-on-surface-30 font-medium rounded-md border-0 outline-none shadow-none hover:bg-accent hover:text-accent-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring/50 focus-visible:ring-offset-0 overflow-hidden"
+                className="inline-flex h-8 min-h-8 w-full min-w-0 items-center justify-start gap-0.5 rounded-none border-0 p-0 text-left text-xs font-medium leading-4 text-on-surface-30 shadow-none outline-none focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring/50 focus-visible:ring-offset-0 overflow-hidden"
               >
-                <span className="inline-block w-fit max-w-[76px] text-left truncate">
+                <span className="inline-block min-w-0 max-w-[5.5rem] truncate text-left">
                   {speakerDisplay}
                 </span>
-                <ChevronDown className="ml-1 w-3 h-3 shrink-0" />
+                <ChevronDown className="h-4 w-4 shrink-0" />
               </button>
             </DropdownMenuTrigger>
             <DropdownMenuContent align="start" className="min-w-[200px]">
@@ -642,12 +638,17 @@ export function ScriptBlock({
           </Dialog>
         </div>
 
-        {/* Right column: text content — flex-1 min-w-0 so text wraps within column */}
-        <div className="relative flex-1 min-w-0">
+        {/* Right column: text content — stretch to row height; top-align so multi-line height matches hover row */}
+        <div
+          className={cn(
+            "relative flex min-h-8 min-w-0 flex-1 items-start justify-start self-stretch",
+            rootClassName
+          )}
+        >
           {hasInlineTagToken && (
             <div
               aria-hidden
-              className="pointer-events-none absolute inset-0 z-0 min-h-[2rem] py-0 mt-1 leading-relaxed font-medium text-[16px] whitespace-pre-wrap break-words"
+              className="pointer-events-none absolute inset-0 z-0 min-h-8 pt-1 pb-0 text-base font-medium leading-6 whitespace-pre-wrap break-words text-on-surface-20"
             >
               {highlightedSegments.map((segment, idx) => {
                 const isTag = /^<[^>]+>$/.test(segment);
@@ -668,8 +669,8 @@ export function ScriptBlock({
             onMouseUp={handleTextMouseUp}
             placeholder="'/'를 눌러 메뉴를 선택하거나 텍스트를 입력할 수 있습니다."
             className={cn(
-              "relative z-10 flex-1 min-w-0 h-fit w-full resize-none overflow-hidden bg-transparent focus:outline-none leading-relaxed font-medium text-[16px] placeholder:text-on-surface-30 min-h-[2rem] py-0 mt-1 border-0 outline-none focus:ring-0",
-              hasInlineTagToken ? "text-transparent caret-on-surface-10" : "text-on-surface-10"
+              "relative z-10 min-h-8 h-fit min-w-0 w-full flex-1 resize-none overflow-hidden border-0 bg-transparent pt-1 pb-0 text-base font-medium leading-6 outline-none placeholder:text-on-surface-30 focus:outline-none focus:ring-0",
+              hasInlineTagToken ? "text-transparent caret-on-surface-10" : "text-on-surface-20"
             )}
             rows={1}
           />
@@ -679,7 +680,7 @@ export function ScriptBlock({
           type="button"
           variant="ghost"
           size="icon"
-          className="ml-auto shrink-0 opacity-0 transition-opacity group-hover/row:opacity-100 h-8 w-8 text-on-surface-30 hover:bg-red-50 hover:text-red-500"
+          className="ml-auto h-8 w-8 shrink-0 rounded-full p-0 text-on-surface-30 opacity-0 transition-opacity hover:bg-red-50 hover:text-red-500 group-hover/row:opacity-100"
           aria-label="Delete block"
           onClick={handleDeleteBlock}
         >
@@ -813,7 +814,7 @@ export function ScriptBlock({
             </DropdownMenu>
           </div>
         )}
-      </div>
+      </>
     );
   }
 
@@ -958,12 +959,12 @@ export function ScriptBlock({
     );
   }
 
-  // Choice block: [#선택지] + ChoiceBlockTable — 높이 고정 없이 내용만큼 확장
+  // Choice block: [#선택지] + ChoiceBlockTable — 텍스트 행과 동일 열 간격(라벨 w-24, 삭제 group-hover/row)
   if (block.type === "choice") {
     return (
       <div
         className={cn(
-          "group flex items-start justify-start gap-4 min-w-0 flex-1 px-0 py-1 min-h-0",
+          "flex w-full min-w-0 flex-1 items-start gap-0 outline-none min-h-0",
           rootClassName
         )}
         tabIndex={0}
@@ -988,47 +989,45 @@ export function ScriptBlock({
             {indexLabel}
           </span>
         )}
-        <div className="flex min-w-0 flex-1 items-start gap-0">
-          <span
-            className={cn(
-              "block w-[100px] shrink-0 mt-[4px] text-[13px] font-medium pt-0",
-              LABEL_COLOR_BY_TYPE.choice
-            )}
-          >
-            #선택지
-          </span>
-          <ChoiceBlockTable
-            className="min-w-0 flex-1"
-            blockId={block.id}
-            choices={block.data?.choices ?? []}
-            onChange={(newChoices) =>
-              updateBlock(block.id, "", {
-                ...(block.data ?? {}),
-                choices: newChoices,
-              })
-            }
-            sceneOptions={blocks
-              .filter((b) => b.type === "scene")
-              .map((b, i) => ({
-                value: b.content?.trim() || `장면_${i + 1}`,
-                label: b.content?.trim() || `장면_${i + 1}`,
-              }))}
-          />
-          <Button
-            type="button"
-            variant="ghost"
-            size="icon"
-            className="ml-auto shrink-0 opacity-0 transition-opacity group-hover:opacity-100 h-8 w-8 text-on-surface-30 hover:bg-red-50 hover:text-red-500"
-            aria-label="Delete block"
-            onClick={(e) => {
-              e.preventDefault();
-              e.stopPropagation();
-              removeBlock(block.id);
-            }}
-          >
-            <Trash2 className={DELETE_ICON_CLASS} />
-          </Button>
-        </div>
+        <span
+          className={cn(
+            "flex shrink-0 items-center justify-start overflow-hidden pt-0.5 w-24 min-w-14 min-h-8 text-xs font-medium leading-4",
+            LABEL_COLOR_BY_TYPE.choice
+          )}
+        >
+          #선택지
+        </span>
+        <ChoiceBlockTable
+          className="min-w-0 flex-1"
+          blockId={block.id}
+          choices={block.data?.choices ?? []}
+          onChange={(newChoices) =>
+            updateBlock(block.id, "", {
+              ...(block.data ?? {}),
+              choices: newChoices,
+            })
+          }
+          sceneOptions={blocks
+            .filter((b) => b.type === "scene")
+            .map((b, i) => ({
+              value: b.content?.trim() || `장면_${i + 1}`,
+              label: b.content?.trim() || `장면_${i + 1}`,
+            }))}
+        />
+        <Button
+          type="button"
+          variant="ghost"
+          size="icon"
+          className="ml-auto h-8 w-8 shrink-0 rounded-full p-0 text-on-surface-30 opacity-0 transition-opacity hover:bg-red-50 hover:text-red-500 group-hover/row:opacity-100"
+          aria-label="Delete block"
+          onClick={(e) => {
+            e.preventDefault();
+            e.stopPropagation();
+            removeBlock(block.id);
+          }}
+        >
+          <Trash2 className={DELETE_ICON_CLASS} />
+        </Button>
       </div>
     );
   }
