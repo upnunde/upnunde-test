@@ -21,7 +21,7 @@ import {
 } from "lucide-react";
 import type { ScriptBlock as ScriptBlockType, BlockType } from "@/types/editor";
 import { useEditorStore } from "@/store/useEditorStore";
-import { CHARACTERS, BACKGROUNDS, BGMS, SFX, VIDEOS } from "@/lib/mockData";
+import { CHARACTERS, BACKGROUNDS, BGMS, SFX, GALLERIES, VIDEOS } from "@/lib/mockData";
 import { initialCharacters } from "@/lib/resourceMockData";
 import {
   DropdownMenu,
