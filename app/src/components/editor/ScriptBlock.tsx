@@ -89,6 +89,66 @@ const TYPE_ICONS: Record<BlockType, React.ElementType> = {
   event_end: Type,
 };
 
+function hashString(value: string): number {
+  let hash = 0;
+  for (let i = 0; i < value.length; i++) {
+    hash = (hash << 5) - hash + value.charCodeAt(i);
+    hash |= 0;
+  }
+  return hash;
+}
+
+function pickFallbackNameBySeed(
+  names: string[],
+  seedValue: string | undefined,
+  fallbackSeed: string
+): string {
+  if (names.length === 0) return "";
+  const seed = (seedValue?.trim() || fallbackSeed);
+  const idx = Math.abs(hashString(seed)) % names.length;
+  return names[idx] ?? names[0] ?? "";
+}
+
+function resolveRegisteredResourceName(type: BlockType, value: string | undefined): string {
+  const raw = (value ?? "").trim();
+  const empty = raw === "" || raw === "none";
+
+  switch (type) {
+    case "background": {
+      const names = BACKGROUNDS.map((x) => x.name);
+      if (!empty && names.includes(raw)) return raw;
+      return pickFallbackNameBySeed(names, raw, "__bg_fallback__");
+    }
+    case "character": {
+      const names = CHARACTERS.map((x) => x.name);
+      if (!empty && names.includes(raw)) return raw;
+      return pickFallbackNameBySeed(names, raw, "__char_fallback__");
+    }
+    case "bgm": {
+      const names = BGMS.map((x) => x.name);
+      if (!empty && names.includes(raw)) return raw;
+      return pickFallbackNameBySeed(names, raw, "__bgm_fallback__");
+    }
+    case "sfx": {
+      const names = SFX.map((x) => x.name);
+      if (!empty && names.includes(raw)) return raw;
+      return pickFallbackNameBySeed(names, raw, "__sfx_fallback__");
+    }
+    case "gallery": {
+      const names = GALLERIES.map((x) => x.name);
+      if (!empty && names.includes(raw)) return raw;
+      return pickFallbackNameBySeed(names, raw, "__gallery_fallback__");
+    }
+    case "video": {
+      const names = VIDEOS.map((x) => x.name);
+      if (!empty && names.includes(raw)) return raw;
+      return pickFallbackNameBySeed(names, raw, "__video_fallback__");
+    }
+    default:
+      return raw;
+  }
+}
+
 function getRandomNameFromList<T extends { name: string }>(items: T[]): string {
   if (!items.length) return "";
   const index = Math.floor(Math.random() * items.length);
@@ -300,8 +360,12 @@ export function ScriptBlock({
             : undefined;
         const newId = addBlock(index, "text", afterCursor, speakerData);
         focusBlock(newId);
+        // Unlock on the same timing window as focusBlock's double-rAF focus move.
+        // This prevents a quick "/" right after Enter from being handled by the previous block.
         requestAnimationFrame(() => {
-          enterSplitLockRef.current = false;
+          requestAnimationFrame(() => {
+            enterSplitLockRef.current = false;
+          });
         });
         return;
       }
@@ -505,6 +569,15 @@ export function ScriptBlock({
     }
   }, [isPickerOpen, block.id, block.content, block.data?.isNew, block.type, updateBlock]);
 
+  // 등록되지 않은 리소스 값은 등록 목록 내 값으로 자동 정규화한다.
+  useEffect(() => {
+    if (!PICKER_RESOURCE_TYPES.includes(block.type)) return;
+    if (block.type === "event") return;
+    const normalized = resolveRegisteredResourceName(block.type, block.content);
+    if (!normalized || normalized === block.content) return;
+    updateBlock(block.id, normalized, block.data);
+  }, [block.id, block.type, block.content, block.data, updateBlock]);
+
   // 한 글자 삭제 후 커서 위치 유지
   useLayoutEffect(() => {
     if (block.type !== "text") return;
@@ -554,8 +627,8 @@ export function ScriptBlock({
 
     return (
       <>
-        {/* Left column: 화자 — 시안 w-24 min-w-14 min-h-8 */}
-        <div className="flex min-h-8 w-24 min-w-14 shrink-0 items-center justify-start gap-0 overflow-hidden">
+        {/* Left column: 화자 — 시안 w-[100px] min-w-14 min-h-8 */}
+        <div className="flex min-h-8 w-[100px] min-w-14 shrink-0 items-center justify-start gap-0 overflow-hidden pr-3">
           {!hideIndex && (
             <span className="text-sm font-medium text-slate-300 w-5 text-right tabular-nums">
               {indexLabel}
@@ -565,9 +638,9 @@ export function ScriptBlock({
             <DropdownMenuTrigger asChild>
               <button
                 type="button"
-                className="inline-flex h-8 min-h-8 w-full min-w-0 items-center justify-start gap-0.5 rounded-none border-0 p-0 text-left text-xs font-medium leading-4 text-on-surface-30 shadow-none outline-none focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring/50 focus-visible:ring-offset-0 overflow-hidden"
+                className="inline-flex h-8 min-h-8 w-full min-w-0 items-center justify-start gap-0.5 rounded-none border-0 py-0 pl-0 pr-2 text-left text-xs font-medium leading-4 text-on-surface-30 shadow-none outline-none focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring/50 focus-visible:ring-offset-0 overflow-hidden"
               >
-                <span className="inline-block min-w-0 max-w-[5.5rem] truncate text-left">
+                <span className="inline-block min-w-0 w-fit truncate text-left">
                   {speakerDisplay}
                 </span>
                 <ChevronDown className="h-4 w-4 shrink-0" />
@@ -959,7 +1032,7 @@ export function ScriptBlock({
     );
   }
 
-  // Choice block: [#선택지] + ChoiceBlockTable — 텍스트 행과 동일 열 간격(라벨 w-24, 삭제 group-hover/row)
+  // Choice block: [#선택지] + ChoiceBlockTable — 텍스트 행과 동일 열 간격(라벨 w-[100px], 삭제 group-hover/row)
   if (block.type === "choice") {
     return (
       <div
@@ -991,7 +1064,7 @@ export function ScriptBlock({
         )}
         <span
           className={cn(
-            "flex shrink-0 items-center justify-start overflow-hidden pt-0.5 w-24 min-w-14 min-h-8 text-xs font-medium leading-4",
+            "flex shrink-0 items-center justify-start overflow-hidden pt-0.5 w-[100px] min-w-14 min-h-8 text-xs font-medium leading-4",
             LABEL_COLOR_BY_TYPE.choice
           )}
         >
@@ -1051,7 +1124,7 @@ export function ScriptBlock({
         )}
         <div className="flex flex-1 items-center gap-4">
           <Icon className="h-4 w-4 shrink-0 text-on-surface-30" />
-          <span className={cn("w-24 shrink-0 text-sm font-medium", LABEL_COLOR_BY_TYPE[block.type])}>
+          <span className={cn("w-[100px] shrink-0 text-sm font-medium", LABEL_COLOR_BY_TYPE[block.type])}>
             {label}
           </span>
           <input
@@ -1114,7 +1187,10 @@ export function ScriptBlock({
 
   // Picker resource types: Two-Box design — Label box + Value box
   if (PICKER_RESOURCE_TYPES.includes(block.type)) {
-    const displayName = block.content?.trim() || "";
+    const displayName =
+      block.type === "event"
+        ? (block.content?.trim() || "")
+        : resolveRegisteredResourceName(block.type, block.content);
     const isCharacter = block.type === "character";
     const isVideo = block.type === "video";
     const isSceneTransition = block.type === "event";
@@ -1410,7 +1486,7 @@ export function ScriptBlock({
       )}
       <div className="flex min-w-0 flex-1 items-center gap-0">
         <Icon className="h-4 w-4 shrink-0 text-on-surface-30" />
-        <span className={cn("w-24 shrink-0 text-sm font-medium", LABEL_COLOR_BY_TYPE[block.type])}>
+        <span className={cn("w-[100px] shrink-0 text-sm font-medium", LABEL_COLOR_BY_TYPE[block.type])}>
           {label}
         </span>
         <span

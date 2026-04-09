@@ -3,7 +3,7 @@
 import React, { useMemo } from "react";
 import type { ChoiceItem, ScriptBlock } from "@/types/editor";
 import { useEditorStore } from "@/store/useEditorStore";
-import { CHARACTERS, BACKGROUNDS } from "@/lib/mockData";
+import { CHARACTERS, BACKGROUNDS, BGMS } from "@/lib/mockData";
 import { cn } from "@/lib/utils";
 import { resolveSpeakerDisplay } from "@/lib/speakerPersona";
 
@@ -23,13 +23,46 @@ function stripInlineTags(content: string | undefined): string {
 /** Resolve background name to image URL from mock data, or fallback */
 function getBackgroundUrl(name: string): string {
   const item = BACKGROUNDS.find((b) => b.name === name);
-  return item ? item.url : `https://picsum.photos/seed/${encodeURIComponent(name)}/400/700`;
+  if (item) return item.url;
+  const fallback = pickFallbackBySeed(BACKGROUNDS, name, "__bg_fallback__");
+  return fallback?.url ?? "";
 }
 
 /** Resolve character name to image URL from mock data, or fallback */
 function getCharacterUrl(name: string): string {
   const item = CHARACTERS.find((c) => c.name === name);
-  return item ? item.url : `https://api.dicebear.com/7.x/avataaars/svg?seed=${encodeURIComponent(name)}`;
+  if (item) return item.url;
+  const fallback = pickFallbackBySeed(CHARACTERS, name, "__char_fallback__");
+  return fallback?.url ?? "";
+}
+
+/** Unknown resource는 등록된 리소스 풀에서 시드 기반으로 랜덤 선택 */
+function pickFallbackBySeed<T>(
+  items: T[],
+  seedValue: string | undefined,
+  fallbackSeed: string
+): T | null {
+  if (items.length === 0) return null;
+  const seed = (seedValue?.trim() || fallbackSeed);
+  const idx = Math.abs(hashString(seed)) % items.length;
+  return items[idx] ?? items[0] ?? null;
+}
+
+function hashString(value: string): number {
+  let hash = 0;
+  for (let i = 0; i < value.length; i++) {
+    hash = (hash << 5) - hash + value.charCodeAt(i);
+    hash |= 0;
+  }
+  return hash;
+}
+
+function resolveBgmName(name: string | null): string | null {
+  if (!name) return null;
+  const matched = BGMS.find((b) => b.name === name);
+  if (matched) return matched.name;
+  const fallback = pickFallbackBySeed(BGMS, name, "__bgm_fallback__");
+  return fallback?.name ?? null;
 }
 
 export interface AccumulatedState {
@@ -168,6 +201,7 @@ export function PreviewScreen(props: PreviewScreenProps = {}) {
     currentDialogue,
     currentChoices,
   } = state;
+  const displayBgm = resolveBgmName(currentBgm);
 
   return (
     <div
@@ -187,13 +221,13 @@ export function PreviewScreen(props: PreviewScreenProps = {}) {
       )}
 
       {/* Optional: BGM label (state persisted for future audio playback) */}
-      {currentBgm && (
+      {displayBgm && (
         <div
           className="absolute right-3 top-10 z-20 rounded-lg border border-white/20 bg-black/60 px-2 py-1 text-[10px] text-white/80"
           role="status"
-          aria-label={`BGM: ${currentBgm}`}
+          aria-label={`BGM: ${displayBgm}`}
         >
-          ♪ {currentBgm}
+          ♪ {displayBgm}
         </div>
       )}
 
