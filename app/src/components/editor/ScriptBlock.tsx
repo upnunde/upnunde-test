@@ -21,7 +21,7 @@ import {
 } from "lucide-react";
 import type { ScriptBlock as ScriptBlockType, BlockType } from "@/types/editor";
 import { useEditorStore } from "@/store/useEditorStore";
-import { CHARACTERS, BACKGROUNDS, BGMS, SFX, GALLERIES, VIDEOS } from "@/lib/mockData";
+import { CHARACTERS, BACKGROUNDS, BGMS, SFX, VIDEOS, GALLERIES } from "@/lib/mockData";
 import { initialCharacters } from "@/lib/resourceMockData";
 import {
   DropdownMenu,
@@ -112,36 +112,37 @@ function pickFallbackNameBySeed(
 function resolveRegisteredResourceName(type: BlockType, value: string | undefined): string {
   const raw = (value ?? "").trim();
   const empty = raw === "" || raw === "none";
+  if (empty) return "";
 
   switch (type) {
     case "background": {
       const names = BACKGROUNDS.map((x) => x.name);
-      if (!empty && names.includes(raw)) return raw;
+      if (names.includes(raw)) return raw;
       return pickFallbackNameBySeed(names, raw, "__bg_fallback__");
     }
     case "character": {
       const names = CHARACTERS.map((x) => x.name);
-      if (!empty && names.includes(raw)) return raw;
+      if (names.includes(raw)) return raw;
       return pickFallbackNameBySeed(names, raw, "__char_fallback__");
     }
     case "bgm": {
       const names = BGMS.map((x) => x.name);
-      if (!empty && names.includes(raw)) return raw;
+      if (names.includes(raw)) return raw;
       return pickFallbackNameBySeed(names, raw, "__bgm_fallback__");
     }
     case "sfx": {
       const names = SFX.map((x) => x.name);
-      if (!empty && names.includes(raw)) return raw;
+      if (names.includes(raw)) return raw;
       return pickFallbackNameBySeed(names, raw, "__sfx_fallback__");
     }
     case "gallery": {
       const names = GALLERIES.map((x) => x.name);
-      if (!empty && names.includes(raw)) return raw;
+      if (names.includes(raw)) return raw;
       return pickFallbackNameBySeed(names, raw, "__gallery_fallback__");
     }
     case "video": {
       const names = VIDEOS.map((x) => x.name);
-      if (!empty && names.includes(raw)) return raw;
+      if (names.includes(raw)) return raw;
       return pickFallbackNameBySeed(names, raw, "__video_fallback__");
     }
     default:
@@ -334,13 +335,17 @@ export function ScriptBlock({
       const pos = ta.selectionStart;
 
       if (e.key === "/") {
-        const coords = getCaretCoordinates(ta, pos);
-        const rect = ta.getBoundingClientRect();
-        setSlashMenuPosition({
-          top: rect.top + coords.top + coords.height,
-          left: rect.left + coords.left,
-        });
-        return;
+        // 슬래시 명령은 "빈 텍스트 블록"에서만 허용한다.
+        if (ta.value.trim().length === 0) {
+          const coords = getCaretCoordinates(ta, pos);
+          const rect = ta.getBoundingClientRect();
+          setSlashMenuPosition({
+            top: rect.top + coords.top + coords.height,
+            left: rect.left + coords.left,
+          });
+          return;
+        }
+        setSlashMenuPosition(null);
       }
 
       if (e.key === "Enter" && !e.shiftKey) {
@@ -1286,12 +1291,20 @@ export function ScriptBlock({
             itemsOverride={sceneItems}
             onSelect={(value) => {
               if (block.type === "character") {
-                const nextOptions = getCharacterExpressionOptions(value);
-                requestAnimationFrame(() => setExpressionMenuOpen(true));
-                updateBlock(block.id, value, {
-                  ...(block.data ?? {}),
-                  expression: nextOptions[0] ?? DEFAULT_CHARACTER_EXPRESSION,
-                });
+                if (!value.trim()) {
+                  setExpressionMenuOpen(false);
+                  updateBlock(block.id, value, {
+                    ...(block.data ?? {}),
+                    expression: DEFAULT_CHARACTER_EXPRESSION,
+                  });
+                } else {
+                  const nextOptions = getCharacterExpressionOptions(value);
+                  requestAnimationFrame(() => setExpressionMenuOpen(true));
+                  updateBlock(block.id, value, {
+                    ...(block.data ?? {}),
+                    expression: nextOptions[0] ?? DEFAULT_CHARACTER_EXPRESSION,
+                  });
+                }
               } else if (block.type === "video") {
                 requestAnimationFrame(() => setVideoOptionMenuOpen(true));
                 updateBlock(block.id, value, {

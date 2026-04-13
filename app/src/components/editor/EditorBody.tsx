@@ -329,7 +329,8 @@ export default function EditorBody() {
           ids.add(block.id);
         } else {
           for (const c of choices) {
-            if (!c.text?.trim() || !c.nextScene?.trim()) {
+            const textMissing = !c.isAiMode && !c.text?.trim();
+            if (textMissing || !c.nextScene?.trim()) {
               ids.add(block.id);
               break;
             }

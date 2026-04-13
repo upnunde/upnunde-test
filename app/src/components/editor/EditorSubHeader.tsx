@@ -55,7 +55,8 @@ export function EditorSubHeader({ title = "에피소드 제목", onRecreate }: E
         const choices = Array.isArray(block.data?.choices) ? block.data.choices : [];
         if (choices.length === 0) return true;
         for (const c of choices) {
-          if (!c.text?.trim() || !c.nextScene?.trim()) return true;
+          const textMissing = !c.isAiMode && !c.text?.trim();
+          if (textMissing || !c.nextScene?.trim()) return true;
         }
       }
     }

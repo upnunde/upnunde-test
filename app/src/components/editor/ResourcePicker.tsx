@@ -172,7 +172,7 @@ export function ResourcePicker({
         }}
       >
         {/* 헤더: 타이틀 + 닫기 버튼 */}
-        <div className="flex w-full items-center justify-between px-5 py-3">
+        <div className="flex w-full items-center justify-between px-5 py-2">
           <div className="text-on-surface-10 text-base font-bold leading-6">{title}</div>
           <button
             type="button"
@@ -188,7 +188,7 @@ export function ResourcePicker({
         <div
           className={cn(
             "flex-1 max-h-full overflow-y-auto",
-            imageMode ? "px-5 pt-2 pb-5 grid grid-cols-3 gap-4 w-fit" : "p-2 flex flex-col gap-0.5"
+            imageMode ? "px-5 pt-0 pb-5 grid grid-cols-3 gap-4 w-fit" : "pt-0 px-2 pb-2 flex flex-col gap-0.5"
           )}
         >
           {imageMode ? (

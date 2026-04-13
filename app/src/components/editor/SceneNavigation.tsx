@@ -148,7 +148,8 @@ export function SceneNavigation({
         } else {
           choices.forEach((c, idx) => {
             const n = idx + 1;
-            if (!c.text?.trim()) {
+            // AI 모드 선택지는 문구 입력을 쓰지 않으므로 빈 text는 누락으로 보지 않음
+            if (!c.isAiMode && !c.text?.trim()) {
               next.push({
                 kind: "missing",
                 blockId: block.id,
@@ -347,9 +348,6 @@ export function SceneNavigation({
                 <div className="text-xs tabular-nums">
                   {issues.length}건
                 </div>
-              </div>
-              <div className="mt-1 text-xs opacity-80">
-                호버하면 상세 목록이 표시됩니다
               </div>
             </button>
 
