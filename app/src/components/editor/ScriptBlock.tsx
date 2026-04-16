@@ -941,7 +941,7 @@ export function ScriptBlock({
         <div className="flex min-w-0 flex-1 w-full items-center gap-0">
           <span
             className={cn(
-              "block shrink-0 w-[100px] text-sm font-medium",
+              "block shrink-0 w-[100px] text-[13px] font-medium",
               labelColorClass
             )}
           >
@@ -1015,7 +1015,7 @@ export function ScriptBlock({
           </span>
         )}
         <div className="flex min-w-0 flex-1 w-full items-center gap-0">
-          <span className={cn("shrink-0 text-sm font-medium", LABEL_COLOR_BY_TYPE.direction)}>
+          <span className={cn("shrink-0 text-[13px] font-medium", LABEL_COLOR_BY_TYPE.direction)}>
             {labelText}
           </span>
           <Button
@@ -1129,7 +1129,7 @@ export function ScriptBlock({
         )}
         <div className="flex flex-1 items-center gap-4">
           <Icon className="h-4 w-4 shrink-0 text-on-surface-30" />
-          <span className={cn("w-[100px] shrink-0 text-sm font-medium", LABEL_COLOR_BY_TYPE[block.type])}>
+          <span className={cn("w-[100px] shrink-0 text-[13px] font-medium", LABEL_COLOR_BY_TYPE[block.type])}>
             {label}
           </span>
           <input
@@ -1200,13 +1200,18 @@ export function ScriptBlock({
     const isVideo = block.type === "video";
     const isSceneTransition = block.type === "event";
     const isBackground = block.type === "background";
+    const isGallery = block.type === "gallery";
     const characterItem = isCharacter
       ? CHARACTERS.find((c) => c.name === displayName)
       : null;
     const backgroundItem = isBackground
       ? BACKGROUNDS.find((b) => b.name === displayName)
       : null;
-    const thumbnailUrl = characterItem?.url ?? backgroundItem?.url ?? null;
+    const galleryItem = isGallery
+      ? GALLERIES.find((g) => g.name === displayName)
+      : null;
+    const thumbnailUrl =
+      characterItem?.url ?? backgroundItem?.url ?? galleryItem?.url ?? null;
     const hasImageThumbnail = Boolean(thumbnailUrl);
     const isEmpty = !displayName || displayName === "none";
     const labelKo = BLOCK_LABEL_KO[block.type] ?? label;
@@ -1499,7 +1504,7 @@ export function ScriptBlock({
       )}
       <div className="flex min-w-0 flex-1 items-center gap-0">
         <Icon className="h-4 w-4 shrink-0 text-on-surface-30" />
-        <span className={cn("w-[100px] shrink-0 text-sm font-medium", LABEL_COLOR_BY_TYPE[block.type])}>
+        <span className={cn("w-[100px] shrink-0 text-[13px] font-medium", LABEL_COLOR_BY_TYPE[block.type])}>
           {label}
         </span>
         <span

@@ -18,6 +18,16 @@ export interface ImageCardProps {
   error?: boolean;
   /** 하단 이름 라벨 표시 여부 */
   showName?: boolean;
+  /** hover 액션(오버레이 + 편집/삭제 버튼) 표시 여부 */
+  showActions?: boolean;
+  /** 선택 상태일 때 primary 아웃라인 강조 */
+  selected?: boolean;
+  /** 외곽 래퍼 커스텀 클래스 (폭/레이아웃 오버라이드) */
+  containerClassName?: string;
+  /** 썸네일 프레임 커스텀 클래스 */
+  frameClassName?: string;
+  /** 실제 이미지 커스텀 클래스 */
+  imageClassName?: string;
   onDetailClick: (item: ImageResource) => void;
   onDeleteClick: (item: ImageResource) => void;
   /** 썸네일 클릭 시 크게 보기(라이트박스). 있으면 카드 클릭 시 이걸 호출하고, 없으면 onDetailClick 호출 */
@@ -43,6 +53,11 @@ export function ImageCard({
   hovered: hoveredProp,
   error = false,
   showName = true,
+  showActions = true,
+  selected = false,
+  containerClassName,
+  frameClassName,
+  imageClassName,
   onDetailClick,
   onDeleteClick,
   onPreviewClick,
@@ -57,7 +72,7 @@ export function ImageCard({
   const sizeClass = IMAGE_CARD_SIZE[slotType];
   const widthClass = IMAGE_CARD_WIDTH[slotType];
   const imgClass = "w-full h-full object-cover";
-  const showControls = hoveredProp === true;
+  const showControls = showActions && hoveredProp === true;
 
   return (
     <div
@@ -68,7 +83,8 @@ export function ImageCard({
       className={cn(
         "group inline-flex flex-col justify-start items-start gap-1 cursor-pointer",
         widthClass,
-        hoveredProp !== undefined && "pointer-events-auto"
+        hoveredProp !== undefined && "pointer-events-auto",
+        containerClassName
       )}
       aria-label={`${item.name} 상세 보기`}
     >
@@ -78,56 +94,62 @@ export function ImageCard({
           "rounded-lg outline outline-1 outline-offset-[-1px] flex flex-col justify-center items-center gap-2 overflow-hidden relative",
           error
             ? "bg-error-error-container outline-error-on-error-container"
-            : "bg-surface-disabled/0 outline-border-20 outline outline-1 outline-offset-[-1px]"
+            : "bg-surface-disabled/0 outline-border-20 outline outline-1 outline-offset-[-1px]",
+          selected && !error && "outline-2 outline-offset-[-2px] outline-primary",
+          frameClassName
         )}
       >
         {registered && (
           <img
             src={item.imageUrl}
             alt=""
-            className={cn(sizeClass, imgClass)}
+            className={cn(sizeClass, imgClass, imageClassName)}
             loading="lazy"
             decoding="async"
           />
         )}
         {/* 호버 시 어두운 오버레이 */}
-        <div
-          className={cn(
-            "absolute inset-0 w-full h-full bg-black/10 transition-opacity pointer-events-none",
-            showControls ? "opacity-100" : "opacity-0 group-hover:opacity-100"
-          )}
-          aria-hidden
-        />
-        {/* 편집/삭제 버튼 */}
-        <div
-          className={cn(
-            "absolute right-1 top-1 flex flex-col justify-center items-start gap-1 transition-opacity",
-            showControls ? "opacity-100" : "opacity-0 group-hover:opacity-100"
-          )}
-        >
-          <button
-            type="button"
-            className="w-8 h-8 rounded-full cursor-pointer bg-surface-10 inline-flex justify-center items-center text-on-surface-10 hover:bg-slate-100"
-            aria-label="상세 페이지에서 편집"
-            onClick={(e) => {
-              e.stopPropagation();
-              onDetailClick(item);
-            }}
-          >
-            <Pencil className="w-4 h-4" />
-          </button>
-          <button
-            type="button"
-            className="w-8 h-8 rounded-full cursor-pointer bg-surface-10 inline-flex justify-center items-center text-on-surface-10 hover:bg-slate-100"
-            aria-label="삭제"
-            onClick={(e) => {
-              e.stopPropagation();
-              onDeleteClick(item);
-            }}
-          >
-            <Trash2 className="w-4 h-4" />
-          </button>
-        </div>
+        {showActions && (
+          <>
+            <div
+              className={cn(
+                "absolute inset-0 w-full h-full bg-black/10 transition-opacity pointer-events-none",
+                showControls ? "opacity-100" : "opacity-0 group-hover:opacity-100"
+              )}
+              aria-hidden
+            />
+            {/* 편집/삭제 버튼 */}
+            <div
+              className={cn(
+                "absolute right-1 top-1 flex flex-col justify-center items-start gap-1 transition-opacity",
+                showControls ? "opacity-100" : "opacity-0 group-hover:opacity-100"
+              )}
+            >
+              <button
+                type="button"
+                className="w-8 h-8 rounded-full cursor-pointer bg-surface-10 inline-flex justify-center items-center text-on-surface-10 hover:bg-slate-100"
+                aria-label="상세 페이지에서 편집"
+                onClick={(e) => {
+                  e.stopPropagation();
+                  onDetailClick(item);
+                }}
+              >
+                <Pencil className="w-4 h-4" />
+              </button>
+              <button
+                type="button"
+                className="w-8 h-8 rounded-full cursor-pointer bg-surface-10 inline-flex justify-center items-center text-on-surface-10 hover:bg-slate-100"
+                aria-label="삭제"
+                onClick={(e) => {
+                  e.stopPropagation();
+                  onDeleteClick(item);
+                }}
+              >
+                <Trash2 className="w-4 h-4" />
+              </button>
+            </div>
+          </>
+        )}
       </div>
       {showName && (
         <div className="self-stretch inline-flex justify-start items-center gap-2.5 overflow-hidden">

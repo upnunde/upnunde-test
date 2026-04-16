@@ -79,7 +79,7 @@ function ReadOnlyBlockRow({
         <span className={cn(INDEX_COL_CLASS, "mt-0 h-full")}>{indexLabel}</span>
         <div className="flex min-w-0 flex-1 items-center gap-0">
           <div className="w-[100px] shrink-0">
-            <span className={cn("text-sm font-medium", labelColorClass)}>
+            <span className={cn("text-[13px] font-medium", labelColorClass)}>
               {`#장면 ${String(sceneOrdinal).padStart(2, "0")}`}
             </span>
           </div>
@@ -95,7 +95,7 @@ function ReadOnlyBlockRow({
         <span className={cn(INDEX_COL_CLASS, "mt-0 h-full")}>{indexLabel}</span>
         <div className="flex min-w-0 flex-1 items-center gap-0">
           <div className="w-[100px] shrink-0">
-            <span className={cn("text-sm font-medium", labelColorClass)}>#장면정보</span>
+            <span className={cn("text-[13px] font-medium", labelColorClass)}>#장면정보</span>
           </div>
           <span className="min-w-0 flex-1 text-base font-medium leading-relaxed text-on-surface-10 truncate">
             {block.content || "—"}

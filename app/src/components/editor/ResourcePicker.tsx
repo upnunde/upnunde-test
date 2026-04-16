@@ -12,6 +12,7 @@ import type { BlockType } from "@/types/editor";
 import { cn } from "@/lib/utils";
 
 const PICKER_TYPES: BlockType[] = ["background", "character", "bgm", "sfx", "gallery", "video", "event"];
+const EPISODE_END_LABEL = "에피소드 종료";
 
 export interface ResourcePickerProps {
   type: BlockType;
@@ -53,6 +54,33 @@ function getItemsForType(type: BlockType): {
 
 function isImageType(type: BlockType): boolean {
   return type === "background" || type === "character" || type === "gallery";
+}
+
+/** Inset ring layer above image (z-10) so it is not covered by the resource */
+function ThumbnailFrameOverlay({
+  isCharacter,
+  isActive,
+  className,
+}: {
+  isCharacter: boolean;
+  /** Strong ring when selected */
+  isActive: boolean;
+  className?: string;
+}) {
+  return (
+    <span
+      aria-hidden
+      className={cn(
+        "pointer-events-none absolute inset-0 z-10",
+        isCharacter ? "rounded-[999px]" : "rounded-lg",
+        isActive
+          ? "ring-2 ring-inset ring-primary"
+          : "ring-1 ring-inset ring-border-20/10",
+        "group-focus-visible:ring-2 group-focus-visible:ring-inset group-focus-visible:ring-primary",
+        className
+      )}
+    />
+  );
 }
 
 const PICKER_TITLE: Record<BlockType, string> = {
@@ -104,9 +132,7 @@ export function ResourcePicker({
   const title = PICKER_TITLE[type] ?? "리소스";
   const gridColumns = 3;
 
-  const optionCount = imageMode
-    ? 1 + items.length
-    : items.length + (isSceneTransition ? 0 : 1);
+  const optionCount = imageMode ? 1 + items.length : items.length + 1;
 
   const focusFirstOption = useCallback(() => {
     requestAnimationFrame(() => {
@@ -178,7 +204,7 @@ export function ResourcePicker({
             type="button"
             aria-label="닫기"
             onClick={() => onOpenChange(false)}
-            className="w-8 h-8 cursor-pointer flex items-center justify-center rounded-full hover:bg-surface-20/60 text-on-surface-30 hover:text-on-surface-10 transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary"
+            className="w-8 h-8 cursor-pointer flex items-center justify-center rounded-full hover:bg-surface-20/60 text-on-surface-30 hover:text-on-surface-10 transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-inset focus-visible:ring-primary"
             style={{ marginLeft: 0, marginRight: -8 }}
           >
             <X className="w-5 h-5" aria-hidden />
@@ -200,22 +226,19 @@ export function ResourcePicker({
                   optionButtonRefs.current[0] = el;
                 }}
                 onKeyDown={(e) => handleOptionKeyDown(0, e)}
-                className="rounded-lg cursor-pointer inline-flex flex-col justify-start items-center gap-2 col-span-1 focus:outline-none focus:ring-0"
+                className="group rounded-lg cursor-pointer inline-flex flex-col justify-start items-center gap-2 col-span-1 focus:outline-none focus:ring-0"
               >
                 <div
                   className={cn(
                     isCharacter
                       ? "w-24 h-24 relative bg-surface-disabled-10/0 rounded-[999px] overflow-hidden"
-                      : "w-24 h-44 relative bg-surface-disabled-10/0 rounded-lg overflow-hidden",
-                    selectedName === ""
-                      ? "outline outline-2 outline-primary"
-                      : "outline outline-1 outline-offset-[-1px] outline-border-20/10"
+                      : "w-24 h-44 relative bg-surface-disabled-10/0 rounded-lg overflow-hidden"
                   )}
                 >
                   <div
                     className={cn(
                       isCharacter ? "w-24 h-24" : "w-24 h-44",
-                      "left-0 top-0 absolute bg-surface-disabled/30"
+                      "left-0 top-0 absolute z-0 bg-surface-disabled/30"
                     )}
                   >
                     <div
@@ -232,6 +255,10 @@ export function ResourcePicker({
                       </svg>
                     </div>
                   </div>
+                  <ThumbnailFrameOverlay
+                    isCharacter={isCharacter}
+                    isActive={selectedName === ""}
+                  />
                 </div>
                 <div
                   className={cn(
@@ -254,7 +281,7 @@ export function ResourcePicker({
                   }}
                   onKeyDown={(e) => handleOptionKeyDown(idx + 1, e)}
                   className={cn(
-                    "rounded-lg cursor-pointer inline-flex flex-col justify-start items-center gap-2 hover:bg-surface-10/40 focus:outline-none focus:ring-0",
+                    "group rounded-lg cursor-pointer inline-flex flex-col justify-start items-center gap-2 hover:bg-surface-10/40 focus:outline-none focus:ring-0",
                     isCharacter ? "" : "items-start"
                   )}
                 >
@@ -262,10 +289,7 @@ export function ResourcePicker({
                     className={cn(
                       isCharacter
                         ? "w-[100px] h-[100px] relative rounded-[999px] overflow-hidden border border-[rgba(0,0,0,0.07)]"
-                        : "w-24 h-44 relative rounded-lg overflow-hidden bg-surface-disabled-10/0",
-                      selectedName === item.name
-                        ? "outline outline-2 outline-primary"
-                        : "outline outline-1 outline-offset-[-1px] outline-border-20/10"
+                        : "w-24 h-44 relative rounded-lg overflow-hidden bg-surface-disabled-10/0"
                     )}
                   >
                     {"url" in item && item.url ? (
@@ -274,14 +298,18 @@ export function ResourcePicker({
                         alt={item.name}
                         className={cn(
                           isCharacter ? "w-[100px] h-[100px]" : "w-24 h-44 border border-[rgba(0,0,0,0.07)]",
-                          "left-0 top-0 absolute object-cover"
+                          "left-0 top-0 absolute z-0 object-cover"
                         )}
                       />
                     ) : (
-                      <div className="flex h-full w-full items-center justify-center text-xs text-on-surface-30">
+                      <div className="relative z-0 flex h-full w-full items-center justify-center text-xs text-on-surface-30">
                         —
                       </div>
                     )}
+                    <ThumbnailFrameOverlay
+                      isCharacter={isCharacter}
+                      isActive={selectedName === item.name}
+                    />
                   </div>
                   <div
                     className={cn(
@@ -311,7 +339,7 @@ export function ResourcePicker({
                     optionButtonRefs.current[0] = el;
                   }}
                   onKeyDown={(e) => handleOptionKeyDown(0, e)}
-                  className="flex cursor-pointer items-center gap-2 rounded px-2 py-2 text-left text-sm hover:bg-slate-100 focus:outline-none focus:ring-0"
+                  className="flex cursor-pointer items-center gap-2 rounded px-2 py-2 text-left text-sm hover:bg-slate-100 focus:outline-none focus-visible:ring-2 focus-visible:ring-inset focus-visible:ring-primary/40 focus:ring-0"
                 >
                   <span className="flex h-8 w-8 shrink-0 items-center justify-center rounded bg-slate-100 text-on-surface-disabled/60">
                     —
@@ -330,7 +358,7 @@ export function ResourcePicker({
                   onKeyDown={(e) =>
                     handleOptionKeyDown(idx + (isSceneTransition ? 0 : 1), e)
                   }
-                  className="flex cursor-pointer items-center gap-2 rounded px-2 py-2 text-left text-sm hover:bg-slate-100 focus:outline-none focus:ring-0"
+                  className="flex cursor-pointer items-center gap-2 rounded px-2 py-2 text-left text-sm hover:bg-slate-100 focus:outline-none focus-visible:ring-2 focus-visible:ring-inset focus-visible:ring-primary/40 focus:ring-0"
                 >
                   {!isSceneTransition && (
                     <span className="flex h-8 w-8 shrink-0 items-center justify-center rounded bg-slate-100 text-on-surface-30">
@@ -342,6 +370,23 @@ export function ResourcePicker({
                   </span>
                 </button>
               ))}
+              {isSceneTransition && (
+                <div className="mt-1 border-t border-border-10 pt-1">
+                  <button
+                    type="button"
+                    onClick={() => handleSelect(EPISODE_END_LABEL)}
+                    ref={(el) => {
+                      optionButtonRefs.current[items.length] = el;
+                    }}
+                    onKeyDown={(e) => handleOptionKeyDown(items.length, e)}
+                    className="flex w-full cursor-pointer items-center gap-2 rounded px-2 py-2 text-left text-sm hover:bg-slate-100 focus:outline-none focus-visible:ring-2 focus-visible:ring-inset focus-visible:ring-primary/40 focus:ring-0"
+                  >
+                    <span className="truncate font-medium text-on-surface-10">
+                      {EPISODE_END_LABEL}
+                    </span>
+                  </button>
+                </div>
+              )}
             </>
           )}
         </div>

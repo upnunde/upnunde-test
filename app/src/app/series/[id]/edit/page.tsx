@@ -2,7 +2,7 @@
 
 import React, { useState, useCallback, useRef, useEffect } from "react";
 import { useRouter, useParams } from "next/navigation";
-import { ChevronLeft } from "lucide-react";
+import { ChevronLeft, ChevronRight } from "lucide-react";
 import Header from "@/components/Header/Header";
 import { PageCard } from "@/components/layout/PageCard";
 import { Button } from "@/components/ui/button";
@@ -11,6 +11,12 @@ import { cn } from "@/lib/utils";
 import { CharacterExpressionSingleModal, ImageCropOnlyModal } from "@/components/resource/character/CharacterExpressionModal";
 import type { CharacterExpressionSlot } from "@/types/resource";
 import { IPhone15ProFrame } from "@/components/preview/IPhone15ProFrame";
+import {
+  DEFAULT_FRAME_THEME_ITEM_COUNT,
+  FrameThemeSelector,
+  type FrameThemePagerState,
+  type FrameThemeSelectorHandle,
+} from "@/components/series/FrameThemeSelector";
 import { useEditorStore } from "@/store/useEditorStore";
 
 type SeriesEditTab = "image" | "info" | "worldview";
@@ -27,6 +33,13 @@ export default function SeriesEditPage() {
   const [worldviewDescription, setWorldviewDescription] = useState("");
   const [worldviewPrompt, setWorldviewPrompt] = useState("");
   const [persona, setPersona] = useState("");
+  const [selectedFrameThemeId, setSelectedFrameThemeId] = useState("");
+  const frameThemeSelectorRef = useRef<FrameThemeSelectorHandle>(null);
+  const [frameThemePager, setFrameThemePager] = useState<FrameThemePagerState>({
+    canGoPrev: false,
+    canGoNext: false,
+    needsPager: false,
+  });
 
   const [hasCoverImage, setHasCoverImage] = useState(false);
   const [hasLogoImage, setHasLogoImage] = useState(false);
@@ -94,6 +107,10 @@ export default function SeriesEditPage() {
   const handleBack = useCallback(() => {
     router.push("/series");
   }, [router]);
+
+  const handleFrameThemePagerChange = useCallback((state: FrameThemePagerState) => {
+    setFrameThemePager(state);
+  }, []);
 
   const isFormValid =
     hasCoverImage &&
@@ -545,6 +562,48 @@ export default function SeriesEditPage() {
                                 }
                                 e.target.value = "";
                               }}
+                            />
+                          </div>
+
+                          <div className="flex flex-col gap-1">
+                            <div className="flex items-end justify-end gap-3">
+                              <Title1
+                                className="min-w-0 flex-1"
+                                text="디자인 테마*"
+                                variant="title-subtitle-dot"
+                                subtitleText="말풍선을 포함한 화면 전체 테마 세트를 선택하세요."
+                              />
+                              {frameThemePager.needsPager ? (
+                                <div className="inline-flex shrink-0 items-center gap-2 pt-0.5">
+                                  <span className="whitespace-nowrap text-xs text-on-surface-30">
+                                    총 {DEFAULT_FRAME_THEME_ITEM_COUNT}개
+                                  </span>
+                                  <button
+                                    type="button"
+                                    aria-label="이전 테마 목록"
+                                    onClick={() => frameThemeSelectorRef.current?.goPrev()}
+                                    disabled={!frameThemePager.canGoPrev}
+                                    className="inline-flex h-7 w-7 items-center justify-center rounded-full border border-slate-200 bg-white text-slate-600 transition-colors hover:bg-slate-50 focus:outline-none focus-visible:ring-2 focus-visible:ring-primary/40 disabled:cursor-not-allowed disabled:opacity-40"
+                                  >
+                                    <ChevronLeft className="h-4 w-4" />
+                                  </button>
+                                  <button
+                                    type="button"
+                                    aria-label="다음 테마 목록"
+                                    onClick={() => frameThemeSelectorRef.current?.goNext()}
+                                    disabled={!frameThemePager.canGoNext}
+                                    className="inline-flex h-7 w-7 items-center justify-center rounded-full border border-slate-200 bg-white text-slate-600 transition-colors hover:bg-slate-50 focus:outline-none focus-visible:ring-2 focus-visible:ring-primary/40 disabled:cursor-not-allowed disabled:opacity-40"
+                                  >
+                                    <ChevronRight className="h-4 w-4" />
+                                  </button>
+                                </div>
+                              ) : null}
+                            </div>
+                            <FrameThemeSelector
+                              ref={frameThemeSelectorRef}
+                              selectedThemeId={selectedFrameThemeId}
+                              onSelectTheme={setSelectedFrameThemeId}
+                              onPagerChange={handleFrameThemePagerChange}
                             />
                           </div>
 
