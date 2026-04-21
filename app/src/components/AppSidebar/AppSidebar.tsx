@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState, useEffect } from "react";
+import React from "react";
 import { useRouter, usePathname } from "next/navigation";
 import { SidebarList } from "./SidebarList";
 
@@ -62,28 +62,22 @@ export interface AppSidebarProps {
   onSelect?: (id: SidebarItemId) => void;
 }
 
+function deriveActiveId(pathname: string | null, fallback: SidebarItemId): SidebarItemId {
+  if (!pathname) return fallback;
+  if (pathname.startsWith("/notifications")) return "notification";
+  if (pathname.startsWith("/inquiry")) return "inquiry";
+  if (pathname.startsWith("/guide")) return "guide";
+  if (pathname.startsWith("/series")) return "series";
+  return fallback;
+}
+
 export default function AppSidebar({ defaultActiveId = "series", onSelect }: AppSidebarProps) {
   const router = useRouter();
   const pathname = usePathname();
-  const [activeId, setActiveId] = useState<SidebarItemId>(defaultActiveId);
-
-  useEffect(() => {
-    if (!pathname) return;
-    const idFromPath =
-      pathname.startsWith("/notifications")
-        ? "notification"
-        : pathname.startsWith("/inquiry")
-          ? "inquiry"
-          : pathname.startsWith("/guide")
-            ? "guide"
-            : pathname.startsWith("/series")
-              ? "series"
-              : undefined;
-    if (idFromPath) setActiveId(idFromPath);
-  }, [pathname]);
+  /** 라우트 경로에서 직접 파생 — 별도의 setState 동기화가 필요 없음 */
+  const activeId = deriveActiveId(pathname, defaultActiveId);
 
   const handleClick = (id: SidebarItemId, path?: string) => {
-    setActiveId(id);
     onSelect?.(id);
     if (path) router.push(path);
   };

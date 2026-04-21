@@ -39,7 +39,7 @@ export default function InquiryPage() {
   const [profileImageUrl, setProfileImageUrl] = useState<string | null>(null);
   const [activeTab, setActiveTab] = useState<InquiryTab>("inquiry");
   const [snackbar, setSnackbar] = useState({ open: false, message: "" });
-  const [inquiryHistory, setInquiryHistory] = useState<InquiryHistoryItem[]>(MOCK_INQUIRY_HISTORY);
+  const [inquiryHistory] = useState<InquiryHistoryItem[]>(MOCK_INQUIRY_HISTORY);
 
   return (
     <div className="flex flex-col h-screen w-full bg-white overflow-hidden">

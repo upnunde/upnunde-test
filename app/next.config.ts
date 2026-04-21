@@ -8,6 +8,12 @@ const nextConfig: NextConfig = {
   turbopack: {
     root: appRoot,
   },
+  images: {
+    remotePatterns: [
+      { protocol: "https", hostname: "github.com" },
+      { protocol: "https", hostname: "avatars.githubusercontent.com" },
+    ],
+  },
   async headers() {
     return [
       {

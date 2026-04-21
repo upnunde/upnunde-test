@@ -1,6 +1,7 @@
 "use client";
 
 import { useCallback, useEffect, useLayoutEffect, useRef, useState } from "react";
+import NextImage from "next/image";
 import TextareaAutosize from "react-textarea-autosize";
 import {
   Image,
@@ -19,7 +20,7 @@ import {
   Underline,
   Check,
 } from "lucide-react";
-import type { ScriptBlock as ScriptBlockType, BlockType } from "@/types/editor";
+import type { ScriptBlock as ScriptBlockType, ScriptBlockData, BlockType } from "@/types/editor";
 import { useEditorStore } from "@/store/useEditorStore";
 import { CHARACTERS, BACKGROUNDS, BGMS, SFX, VIDEOS, GALLERIES } from "@/lib/mockData";
 import { initialCharacters } from "@/lib/resourceMockData";
@@ -189,8 +190,8 @@ const DELETE_ICON_CLASS = "h-5 w-5";
 export interface ScriptBlockProps {
   block: ScriptBlockType;
   index: number;
-  updateBlock: (id: string, content: string, data?: Record<string, any>) => void;
-  addBlock: (index: number, type: BlockType, content?: string, data?: Record<string, any>) => string;
+  updateBlock: (id: string, content: string, data?: ScriptBlockData) => void;
+  addBlock: (index: number, type: BlockType, content?: string, data?: ScriptBlockData) => string;
   removeBlock: (id: string) => void;
   focusBlock: (id: string) => void;
   /** When true, do not render the index label (e.g. when parent renders it) */
@@ -211,7 +212,6 @@ export function ScriptBlock({
 }: ScriptBlockProps) {
   const blocks = useEditorStore((s) => s.blocks);
   const seriesPersona = useEditorStore((s) => s.seriesPersona);
-  const focusBlockId = useEditorStore((s) => s.focusBlockId);
   const updateBlockType = useEditorStore((s) => s.updateBlockType);
   const setFocusBlockId = useEditorStore((s) => s.setFocusBlockId);
   const onFocusBlock = useCallback(() => setFocusBlockId(block.id), [block.id, setFocusBlockId]);
@@ -244,7 +244,6 @@ export function ScriptBlock({
 
   const indexLabel = String(index).padStart(2, "0");
   const prevBlock = index > 0 ? blocks[index - 1] : null;
-  const isResourceType = RESOURCE_TYPES.includes(block.type);
 
   const getDefaultResourceContent = useCallback((type: BlockType): string => {
     switch (type) {
@@ -601,7 +600,6 @@ export function ScriptBlock({
     const updateSpeaker = (speaker: string) =>
       updateBlock(block.id, block.content, { ...(block.data ?? {}), speaker });
     const selectedEffect = (block.data?.effect as string | undefined) ?? EFFECT_OPTIONS[0].key;
-    const selectedColor = (block.data?.textColor as string | undefined) ?? COLOR_OPTIONS[0].hex;
     const hasInlineTagToken = /<[^>]+>/.test(block.content);
     const highlightedSegments = block.content.split(/(<[^>]+>)/g);
     const applyEffect = (effect: (typeof EFFECT_OPTIONS)[number]["key"]) => {
@@ -671,9 +669,11 @@ export function ScriptBlock({
                   onClick={() => updateSpeaker(c.name)}
                   className="flex items-center gap-2"
                 >
-                  <img
+                  <NextImage
                     src={c.url}
                     alt=""
+                    width={24}
+                    height={24}
                     className="size-6 shrink-0 rounded-full object-cover bg-slate-100"
                   />
                   {c.name}
@@ -1355,12 +1355,14 @@ export function ScriptBlock({
                   }
                 }
               }}
-              className="flex h-8 min-w-0 w-fit cursor-pointer items-center gap-1 rounded-md border border-slate-200 bg-white px-2 py-1.5 transition-all hover:bg-slate-50 focus:outline-none focus:ring-0 active:scale-[0.98]"
+              className="flex h-8 min-w-0 w-fit cursor-pointer items-center gap-1 rounded-md border border-slate-200 bg-white px-2 py-1.5 transition-colors duration-150 hover:bg-slate-50 focus:outline-none focus:ring-0 active:scale-[0.98]"
             >
               {hasImageThumbnail ? (
-                <img
+                <NextImage
                   src={thumbnailUrl!}
                   alt={displayName}
+                  width={20}
+                  height={20}
                   className="h-5 w-5 shrink-0 rounded-full object-cover"
                 />
               ) : block.type === "bgm" || block.type === "sfx" ? (
@@ -1390,7 +1392,7 @@ export function ScriptBlock({
                   type="button"
                   onClick={(e) => e.stopPropagation()}
                   onFocus={onFocusBlock}
-                  className="ml-2 flex h-8 min-w-0 w-fit cursor-pointer items-center gap-1 rounded-md border border-slate-200 bg-white px-2 py-1.5 transition-all hover:bg-slate-50 focus:outline-none focus:ring-0 active:scale-[0.98]"
+                  className="ml-2 flex h-8 min-w-0 w-fit cursor-pointer items-center gap-1 rounded-md border border-slate-200 bg-white px-2 py-1.5 transition-colors duration-150 hover:bg-slate-50 focus:outline-none focus:ring-0 active:scale-[0.98]"
                 >
                   <span
                     className={cn(
@@ -1430,7 +1432,7 @@ export function ScriptBlock({
                   type="button"
                   onClick={(e) => e.stopPropagation()}
                   onFocus={onFocusBlock}
-                  className="ml-2 flex h-8 min-w-0 w-fit cursor-pointer items-center gap-1 rounded-md border border-slate-200 bg-white px-2 py-1.5 transition-all hover:bg-slate-50 focus:outline-none focus:ring-0 active:scale-[0.98]"
+                  className="ml-2 flex h-8 min-w-0 w-fit cursor-pointer items-center gap-1 rounded-md border border-slate-200 bg-white px-2 py-1.5 transition-colors duration-150 hover:bg-slate-50 focus:outline-none focus:ring-0 active:scale-[0.98]"
                 >
                   <span className="min-w-0 flex-1 truncate text-[13px] font-medium text-[rgba(126,140,160,1)]">
                     {currentVideoPlaybackLabel}
@@ -1489,7 +1491,7 @@ export function ScriptBlock({
   return (
     <div
       className={cn(COMPACT_BLOCK_ROOT_CLASSES, "cursor-pointer", isNone && "opacity-70", rootClassName)}
-      onClick={(e) => {
+      onClick={() => {
         onFocusBlock();
         setResourceEditing(true);
       }}

@@ -1,7 +1,8 @@
 "use client";
 
 import React, { useCallback, useState, useEffect, useRef } from "react";
-import { useRouter, useParams } from "next/navigation";
+import Image from "next/image";
+import { useRouter, usePathname } from "next/navigation";
 import { ChevronLeft, Pencil, Trash2 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -25,22 +26,33 @@ interface CharacterDetailPageProps {
 
 export function CharacterDetailPage({ isNew = true, initialData }: CharacterDetailPageProps) {
   const router = useRouter();
-  const params = useParams();
-  const seriesId = typeof params?.id === "string" ? params.id : "";
+  const pathname = usePathname();
+  const seriesId = React.useMemo(() => {
+    const segments = pathname.split("/").filter(Boolean);
+    return segments[1] ?? "";
+  }, [pathname]);
 
-  const [name, setName] = useState("");
-  const [summary, setSummary] = useState("");
+  const parseInitialTagList = (raw: string | undefined): string[] => {
+    if (!raw || !raw.trim()) return [];
+    return raw
+      .split(",")
+      .map((t) => t.trim().replace(/^#+/, ""))
+      .filter((t, idx, arr) => t.length > 0 && arr.indexOf(t) === idx);
+  };
+
+  const [name, setName] = useState<string>(() => initialData?.name ?? "");
+  const [summary, setSummary] = useState<string>(() => initialData?.summary ?? "");
   const [tags, setTags] = useState("");
-  const [tagList, setTagList] = useState<string[]>([]);
-  const [greeting, setGreeting] = useState("");
+  const [tagList, setTagList] = useState<string[]>(() => parseInitialTagList(initialData?.tags));
+  const [greeting, setGreeting] = useState<string>(() => initialData?.greeting ?? "");
   // 썸네일 표시용 URL (크롭된 결과)
-  const [thumbnailUrl, setThumbnailUrl] = useState<string | null>(null);
+  const [thumbnailUrl, setThumbnailUrl] = useState<string | null>(() => initialData?.imageUrl ?? null);
   // 항상 최초 원본 이미지를 유지하기 위한 URL (재크롭 시 이 값을 기준으로 다시 자른다)
-  const [thumbnailOriginalUrl, setThumbnailOriginalUrl] = useState<string | null>(null);
+  const [thumbnailOriginalUrl, setThumbnailOriginalUrl] = useState<string | null>(() => initialData?.imageUrl ?? null);
   const [thumbnailModalOpen, setThumbnailModalOpen] = useState(false);
   const [thumbnailModalInitialSlots, setThumbnailModalInitialSlots] = useState<CharacterExpressionSlot[] | null>(null);
   const [pendingThumbnailUrl, setPendingThumbnailUrl] = useState<string | null>(null);
-  const [expressionSlots, setExpressionSlots] = useState<CharacterExpressionSlot[]>([]);
+  const [expressionSlots, setExpressionSlots] = useState<CharacterExpressionSlot[]>(() => initialData?.expressions ?? []);
   const [expressionModalOpen, setExpressionModalOpen] = useState(false);
   /** 추가하기 → 파일 선택 후 이 슬롯으로 모달을 연다 */
   const [modalInitialSlots, setModalInitialSlots] = useState<CharacterExpressionSlot[] | null>(null);
@@ -48,26 +60,21 @@ export function CharacterDetailPage({ isNew = true, initialData }: CharacterDeta
   const expressionFileInputRef = useRef<HTMLInputElement>(null);
   const thumbnailFileInputRef = useRef<HTMLInputElement>(null);
 
-  useEffect(() => {
+  /** initialData 참조 변경 시 폼 값 재동기화 — render 중 setState 패턴 */
+  const [initialDataSnapshot, setInitialDataSnapshot] = useState(initialData);
+  if (initialData !== initialDataSnapshot) {
+    setInitialDataSnapshot(initialData);
     if (initialData) {
       setName(initialData.name ?? "");
       setSummary(initialData.summary ?? "");
-      const initialTags = initialData.tags ?? "";
       setTags("");
-      if (initialTags.trim()) {
-        const parsed = initialTags
-          .split(",")
-          .map((t) => t.trim().replace(/^#+/, ""))
-          .filter((t, idx, arr) => t.length > 0 && arr.indexOf(t) === idx);
-        setTagList(parsed);
-      }
+      setTagList(parseInitialTagList(initialData.tags));
       setGreeting(initialData.greeting ?? "");
-      // 서버에서 내려온 값은 "원본"이라고 가정하고 둘 다 동일하게 세팅
       setThumbnailUrl(initialData.imageUrl ?? null);
       setThumbnailOriginalUrl(initialData.imageUrl ?? null);
       setExpressionSlots(initialData.expressions ?? []);
     }
-  }, [initialData]);
+  }
 
   useEffect(() => {
     return () => {
@@ -290,10 +297,13 @@ export function CharacterDetailPage({ isNew = true, initialData }: CharacterDeta
                             className="absolute inset-0 z-0 flex h-full w-full cursor-pointer focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-0"
                             aria-label="대표 썸네일 변경"
                           >
-                            <img
+                            <Image
                               src={thumbnailUrl}
                               alt=""
-                              className="h-full w-full object-cover object-center pointer-events-none"
+                              fill
+                              sizes="90px"
+                              unoptimized
+                              className="object-cover object-center pointer-events-none"
                             />
                           </button>
                           <div className="absolute inset-0 z-[1] bg-black/10 opacity-0 group-hover:opacity-100 transition-opacity pointer-events-none" />
@@ -345,10 +355,13 @@ export function CharacterDetailPage({ isNew = true, initialData }: CharacterDeta
                           className="inline-flex flex-col justify-start items-start gap-1 w-[90px] group"
                         >
                           <div className="w-[90px] h-[160px] rounded-lg overflow-hidden border border-slate-200 bg-slate-100 relative">
-                            <img
-                              src={slot.imageUrl}
+                            <Image
+                              src={slot.imageUrl ?? ""}
                               alt=""
-                              className="w-full h-full object-cover object-top"
+                              fill
+                              sizes="90px"
+                              unoptimized
+                              className="object-cover object-top"
                             />
                             {/* 어두운 오버레이 */}
                             <div className="absolute inset-0 w-full h-full bg-black/10 opacity-0 group-hover:opacity-100 transition-opacity pointer-events-none" />

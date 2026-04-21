@@ -8,7 +8,6 @@ import {
   FocusEvent,
 } from "react";
 import type { ScriptBlock, BlockType } from "@/types/editor";
-import { Button } from "@/components/ui/button";
 import {
   Popover,
   PopoverContent,
@@ -156,7 +155,7 @@ export function ScriptBlock({
   }, [block.id, onContentChange]);
 
   const handleBlur = useCallback(
-    (e: FocusEvent<HTMLDivElement>) => {
+    (_e: FocusEvent<HTMLDivElement>) => {
       const text = contentRef.current?.textContent ?? "";
       if (text !== block.content) {
         onContentChange(block.id, text);

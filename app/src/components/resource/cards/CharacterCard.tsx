@@ -1,6 +1,7 @@
 "use client";
 
 import React from "react";
+import Image from "next/image";
 import { Pencil, Trash2 } from "lucide-react";
 import type { CharacterResource } from "@/types/resource";
 import { cn } from "@/lib/utils";
@@ -55,12 +56,12 @@ export function CharacterCard({
             : "bg-surface-disabled/0 outline-border-20"
         )}
       >
-        <img
+        <Image
           src={character.imageUrl}
           alt=""
-          className="absolute inset-0 h-full w-full object-cover object-top"
-          loading="lazy"
-          decoding="async"
+          fill
+          sizes="90px"
+          className="object-cover object-top"
         />
         <div
           className={cn(

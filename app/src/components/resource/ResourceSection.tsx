@@ -14,9 +14,7 @@ export interface ResourceSectionProps {
   children: React.ReactNode;
   /** [정책 5] 신규 등록 버튼 클릭 시 호출 (카테고리별 신규 등록 페이지로 라우팅) */
   onAddClick: () => void;
-  /** BGM은 헤더를 inline-flex로 표시 */
-  headerInline?: boolean;
-  /** 설명 텍스트 색상 커스터마이징 */
+  /** 설명 텍스트 색상 커스터마이징 (현재는 미반영, 호환용) */
   descriptionColorClassName?: string;
 }
 
@@ -28,8 +26,7 @@ export function ResourceSection({
   isEmpty,
   children,
   onAddClick,
-  descriptionColorClassName,
-  headerInline = false,
+  descriptionColorClassName: _descriptionColorClassName,
 }: ResourceSectionProps) {
   return (
     <div className="w-full max-w-[1200px] min-w-[640px] bg-surface-10 rounded-2xl border border-border-10 flex flex-col justify-start items-start">

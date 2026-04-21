@@ -1,6 +1,7 @@
 "use client";
 
 import React from "react";
+import Image from "next/image";
 import { Pencil, Trash2 } from "lucide-react";
 import type { ImageResource, MediaSlotType } from "@/types/resource";
 import { cn } from "@/lib/utils";
@@ -100,12 +101,12 @@ export function ImageCard({
         )}
       >
         {registered && (
-          <img
+          <Image
             src={item.imageUrl}
             alt=""
-            className={cn(sizeClass, imgClass, imageClassName)}
-            loading="lazy"
-            decoding="async"
+            fill
+            sizes="96px"
+            className={cn(imgClass, imageClassName)}
           />
         )}
         {/* 호버 시 어두운 오버레이 */}

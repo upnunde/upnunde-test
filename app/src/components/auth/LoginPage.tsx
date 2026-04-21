@@ -1,6 +1,7 @@
- "use client";
+"use client";
 
-import React, { useState } from "react";
+import React, { useCallback, useState } from "react";
+import Image from "next/image";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { Button } from "@/components/ui/button";
@@ -99,10 +100,14 @@ export function LoginPage() {
   const [inquiryOpen, setInquiryOpen] = useState(false);
   const [snackbar, setSnackbar] = useState({ open: false, message: "" });
 
-  const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
-    e.preventDefault();
+  const goToSeries = useCallback(() => {
     // TODO: 이메일 로그인 연동
     router.push("/series");
+  }, [router]);
+
+  const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
+    goToSeries();
   };
 
   return (
@@ -110,11 +115,12 @@ export function LoginPage() {
       {/* 중앙 콘텐츠: 열 방향 Flexbox */}
       <main className="flex w-full max-w-[400px] flex-col items-center gap-6">
         <div className="flex w-full flex-col items-center gap-3 pb-4">
-          <img
+          <Image
             src="/renovel-studio-logo.png"
             alt="RE:NOVEL Studio"
             width={187}
             height={40}
+            priority
             className="h-10 w-auto"
           />
           <h1 className="text-center text-[32px] font-bold text-foreground">
@@ -141,10 +147,11 @@ export function LoginPage() {
             autoComplete="email"
           />
           <Button
-            type="submit"
+            type="button"
             variant="default"
             size="lg"
             className="w-full h-12 rounded-full bg-black text-white hover:bg-black/90"
+            onClick={goToSeries}
           >
             계속하기
           </Button>

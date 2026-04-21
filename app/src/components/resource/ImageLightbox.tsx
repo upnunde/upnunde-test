@@ -1,6 +1,7 @@
 "use client";
 
 import React, { useCallback, useEffect, useState } from "react";
+import Image from "next/image";
 import { ChevronLeft, ChevronRight, X } from "lucide-react";
 import { cn } from "@/lib/utils";
 
@@ -26,15 +27,21 @@ export function ImageLightbox({
   className,
 }: ImageLightboxProps) {
   const [index, setIndex] = useState(initialIndex);
+  /** open / initialIndex / items 길이 변경 시 인덱스를 다시 정렬 — effect 대신 render-during-set 패턴 */
+  const [snapshot, setSnapshot] = useState({ open, initialIndex, length: items.length });
+  if (
+    snapshot.open !== open ||
+    snapshot.initialIndex !== initialIndex ||
+    snapshot.length !== items.length
+  ) {
+    setSnapshot({ open, initialIndex, length: items.length });
+    setIndex(Math.min(Math.max(0, initialIndex), Math.max(0, items.length - 1)));
+  }
 
   const item = items[index];
   const hasMultiple = items.length > 1;
   const canPrev = hasMultiple && index > 0;
   const canNext = hasMultiple && index < items.length - 1;
-
-  useEffect(() => {
-    setIndex(Math.min(Math.max(0, initialIndex), items.length - 1));
-  }, [open, initialIndex, items.length]);
 
   const goPrev = useCallback(() => {
     if (canPrev) setIndex((i) => i - 1);
@@ -85,10 +92,12 @@ export function ImageLightbox({
           }}
         >
           {item && (
-            <img
+            <Image
               src={item.imageUrl}
               alt={item.name ?? "미리보기"}
-              className="w-full h-full object-cover object-center"
+              fill
+              sizes="384px"
+              className="object-cover object-center"
             />
           )}
         </div>

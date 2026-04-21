@@ -1,11 +1,10 @@
 "use client";
 
 import React, { useState, useMemo, useCallback } from "react";
-import { useRouter, useParams } from "next/navigation";
+import { useRouter, usePathname } from "next/navigation";
 import { ChevronLeft } from "lucide-react";
 import Header from "@/components/Header/Header";
 import { EpisodeList } from "@/components/episode/EpisodeList";
-import { EpisodeListItem } from "@/components/episode/EpisodeListItem";
 import { EmptyStateBanner } from "@/components/episode/EmptyStateBanner";
 import { Pagination } from "@/components/episode/Pagination";
 import { PublishConfirmModal, DeleteConfirmModal } from "@/components/episode/ConfirmModals";
@@ -148,12 +147,15 @@ const MOCK_EPISODES: Episode[] = buildMockEpisodes();
 
 export default function EpisodeManagementPage() {
   const router = useRouter();
-  const params = useParams();
-  const seriesId = String(params?.id ?? "1");
+  const pathname = usePathname();
+  const seriesId = useMemo(() => {
+    const segments = pathname.split("/").filter(Boolean);
+    return segments[1] ?? "1";
+  }, [pathname]);
 
   const [profileImageUrl, setProfileImageUrl] = useState<string | null>(null);
   const [episodes, setEpisodes] = useState<Episode[]>(MOCK_EPISODES);
-  const [sortOptions, setSortOptions] = useState<SortOptions>(DEFAULT_SORT);
+  const [sortOptions] = useState<SortOptions>(DEFAULT_SORT);
   const [currentPage, setCurrentPage] = useState(1);
   const [isPublishModalOpen, setIsPublishModalOpen] = useState(false);
   const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);

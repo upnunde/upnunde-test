@@ -1,14 +1,15 @@
 "use client";
 
 import React, { useState, useCallback, useRef, useEffect } from "react";
-import { useRouter, useParams } from "next/navigation";
+import Image from "next/image";
+import { useRouter } from "next/navigation";
 import { ChevronLeft, ChevronRight } from "lucide-react";
 import Header from "@/components/Header/Header";
 import { PageCard } from "@/components/layout/PageCard";
 import { Button } from "@/components/ui/button";
 import { Title1 } from "@/components/ui/title1";
 import { cn } from "@/lib/utils";
-import { CharacterExpressionSingleModal, ImageCropOnlyModal } from "@/components/resource/character/CharacterExpressionModal";
+import { ImageCropOnlyModal } from "@/components/resource/character/CharacterExpressionModal";
 import type { CharacterExpressionSlot } from "@/types/resource";
 import { IPhone15ProFrame } from "@/components/preview/IPhone15ProFrame";
 import {
@@ -23,8 +24,6 @@ type SeriesEditTab = "image" | "info" | "worldview";
 
 export default function SeriesEditPage() {
   const router = useRouter();
-  const params = useParams();
-  const seriesId = typeof params.id === "string" ? params.id : "";
   const [profileImageUrl, setProfileImageUrl] = useState<string | null>(null);
   const [activeTab, setActiveTab] = useState<SeriesEditTab>("image");
   const [seriesTitle, setSeriesTitle] = useState("");
@@ -375,11 +374,14 @@ export default function SeriesEditPage() {
                             >
                               {coverPreviewUrl ? (
                                 <>
-                                  <img
+                                  <Image
                                     key={coverPreviewUrl}
                                     src={coverPreviewUrl}
                                     alt="대표이미지 미리보기"
-                                    className="w-full h-full object-cover"
+                                    fill
+                                    sizes="90px"
+                                    unoptimized
+                                    className="object-cover"
                                   />
                                   <button
                                     type="button"
@@ -482,11 +484,14 @@ export default function SeriesEditPage() {
                             >
                               {logoPreviewUrl ? (
                                 <>
-                                  <img
+                                  <Image
                                     key={logoPreviewUrl}
                                     src={logoPreviewUrl}
                                     alt="로고 미리보기"
-                                    className="w-full h-full object-cover"
+                                    fill
+                                    sizes="90px"
+                                    unoptimized
+                                    className="object-cover"
                                   />
                                   <button
                                     type="button"
@@ -848,18 +853,24 @@ export default function SeriesEditPage() {
                       <div className="relative w-full h-full">
                         {coverPreviewUrl || logoPreviewUrl ? (
                           <>
-                            <img
+                            <Image
                               key={coverPreviewUrl || logoPreviewUrl}
                               src={coverPreviewUrl || logoPreviewUrl!}
                               alt="시리즈 대표이미지 미리보기"
-                              className="block w-full h-full object-cover object-center bg-slate-900/50"
+                              fill
+                              sizes="300px"
+                              unoptimized
+                              className="object-cover object-center bg-slate-900/50"
                             />
                             {coverPreviewUrl && logoPreviewUrl && (
-                              <img
+                              <Image
                                 key={logoPreviewUrl}
                                 src={logoPreviewUrl}
                                 alt="로고 미리보기"
-                                className="absolute inset-0 w-full h-full object-cover z-10 pointer-events-none"
+                                fill
+                                sizes="300px"
+                                unoptimized
+                                className="object-cover z-10 pointer-events-none"
                               />
                             )}
                           </>

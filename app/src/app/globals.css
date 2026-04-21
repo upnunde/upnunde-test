@@ -187,14 +187,6 @@
   }
 }
 
-/* nextjs-portal: dev overlay를 top:0, left:0에 고정하여 레이아웃 영향 방지 */
-nextjs-portal {
-  position: fixed !important;
-  top: 0 !important;
-  left: 0 !important;
-  contain: layout;
-}
-
 @layer utilities {
   /* "블랙 버튼"으로 사용된 bg-black 유틸을 공통 컬러로 치환 */
   button.bg-black,

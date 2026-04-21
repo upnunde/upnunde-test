@@ -8,7 +8,8 @@
   "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "dev": "cd app && npm run dev"
+    "dev": "cd app && npm run dev",
+    "clean": "cd app && npm run clean"
   },
   "dependencies": {
     "@dnd-kit/core": "^6.3.1",

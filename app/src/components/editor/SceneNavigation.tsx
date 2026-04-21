@@ -26,7 +26,9 @@ export function SceneNavigation({
 
   const [editingBlockId, setEditingBlockId] = useState<string | null>(null);
   const [editValue, setEditValue] = useState("");
-  const [collapsedIssueOpen, setCollapsedIssueOpen] = useState(false);
+  const [collapsedIssueOpenRaw, setCollapsedIssueOpen] = useState(false);
+  /** 사이드바가 펼쳐진 상태에서는 알림 패널 자체가 표시되지 않으므로 강제로 닫힌 것으로 간주 */
+  const collapsedIssueOpen = collapsed && collapsedIssueOpenRaw;
   const inputRef = useRef<HTMLInputElement>(null);
   const pendingNavTimeoutRef = useRef<ReturnType<typeof setTimeout> | null>(null);
   const collapsedIssueWrapRef = useRef<HTMLDivElement>(null);
@@ -171,7 +173,7 @@ export function SceneNavigation({
     return next;
   }, [blocks]);
 
-  const commitEdit = (blockId: string, currentContent: string) => {
+  const commitEdit = (blockId: string, _currentContent: string) => {
     const trimmed = editValue.trim();
     if (trimmed) {
       updateBlock(blockId, trimmed);
@@ -195,12 +197,6 @@ export function SceneNavigation({
     setEditingBlockId(null);
     setEditValue("");
   };
-
-  useEffect(() => {
-    if (!collapsed) {
-      setCollapsedIssueOpen(false);
-    }
-  }, [collapsed]);
 
   useEffect(() => {
     if (!collapsedIssueOpen) return;

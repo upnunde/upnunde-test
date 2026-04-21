@@ -252,7 +252,7 @@ export function ChoiceBlockTable({
     } else if (choices.length === 1) {
       onChange([...choices, createEmptyChoice()]);
     }
-  }, [choices.length, onChange]);
+  }, [choices, onChange]);
 
   const handleUpdate = useCallback(
     (index: number, patch: Partial<ChoiceItem>) => {

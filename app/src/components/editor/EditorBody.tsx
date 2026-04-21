@@ -51,7 +51,7 @@ function SortableBlockWrapper({
   block: import("@/types/editor").ScriptBlock;
   index: number;
   hasIssue: boolean;
-  updateBlock: (id: string, content: string, data?: Record<string, any>) => void;
+  updateBlock: (id: string, content: string, data?: import("@/types/editor").ScriptBlockData) => void;
   addBlock: (index: number, type: import("@/types/editor").BlockType, content?: string) => string;
   removeBlock: (id: string) => void;
   focusBlock: (id: string) => void;

@@ -1,7 +1,7 @@
 "use client";
 
-import React, { useState, useEffect } from "react";
-import { useRouter, useParams } from "next/navigation";
+import React, { useState, useEffect, useMemo } from "react";
+import { useRouter, usePathname } from "next/navigation";
 import { ChevronLeft } from "lucide-react";
 import Header from "@/components/Header/Header";
 import { Button } from "@/components/ui/button";
@@ -17,8 +17,11 @@ import { INITIAL_SCRIPT } from "@/lib/initialScript";
 /** 에피소드 상세(수정 불가 잉크 에디터 미리보기) */
 export default function EpisodeDetailPage() {
   const router = useRouter();
-  const params = useParams();
-  const seriesId = String(params?.id ?? "");
+  const pathname = usePathname();
+  const seriesId = useMemo(() => {
+    const segments = pathname.split("/").filter(Boolean);
+    return segments[1] ?? "";
+  }, [pathname]);
   const setBlocks = useEditorStore((s) => s.setBlocks);
   const [profileImageUrl, setProfileImageUrl] = useState<string | null>(null);
   const [isSceneSidebarCollapsed, setIsSceneSidebarCollapsed] = useState(false);

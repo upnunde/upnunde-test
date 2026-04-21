@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useSyncExternalStore } from "react";
 
 /** 토스트 유형: A(기본), B(닫기), C(액션) */
 export type ToastVariant = "default" | "withClose" | "withAction";
@@ -18,14 +18,15 @@ export interface ToastItem {
 const MAX_TOASTS = 3;
 const DEFAULT_DURATION = 4000;
 
-type Listener = (toasts: ToastItem[]) => void;
+type Listener = () => void;
 
 let toasts: ToastItem[] = [];
 const listeners = new Set<Listener>();
 
+const EMPTY_TOASTS: ToastItem[] = [];
+
 function notify() {
-  const snapshot = [...toasts];
-  listeners.forEach((fn) => fn(snapshot));
+  listeners.forEach((fn) => fn());
 }
 
 const timers = new Map<string, ReturnType<typeof setTimeout>>();
@@ -50,7 +51,7 @@ export function addToast(options: Omit<ToastItem, "id">): string {
     timers.delete(removed.id);
   }
   const item: ToastItem = { ...options, id };
-  toasts.push(item);
+  toasts = [...toasts, item];
   scheduleAutoDismiss(item);
   notify();
   return id;
@@ -68,17 +69,23 @@ function remove(id: string) {
   notify();
 }
 
-export function useToastStore() {
-  const [snapshot, setSnapshot] = useState<ToastItem[]>([]);
+function subscribe(callback: Listener) {
+  listeners.add(callback);
+  return () => {
+    listeners.delete(callback);
+  };
+}
 
-  useEffect(() => {
-    setSnapshot([...toasts]);
-    const listener: Listener = (next) => setSnapshot(next);
-    listeners.add(listener);
-    return () => {
-      listeners.delete(listener);
-    };
-  }, []); // eslint-disable-line react-hooks/exhaustive-deps -- subscribe once on mount
+function getSnapshot() {
+  return toasts;
+}
+
+function getServerSnapshot() {
+  return EMPTY_TOASTS;
+}
+
+export function useToastStore() {
+  const snapshot = useSyncExternalStore(subscribe, getSnapshot, getServerSnapshot);
 
   return {
     toasts: snapshot,

@@ -110,12 +110,15 @@ export const FrameThemeSelector = forwardRef<FrameThemeSelectorHandle, FrameThem
 
     const totalPages = themePages.length;
     const needsPager = totalPages > 1;
-    const canGoPrev = activePage > 0;
-    const canGoNext = activePage < totalPages - 1;
 
-    useEffect(() => {
-      setActivePage((prev) => Math.min(prev, Math.max(0, totalPages - 1)));
-    }, [totalPages]);
+    /** totalPages가 줄어들 때 activePage가 범위를 넘으면 클램프 — render 중 setState 패턴 */
+    const maxPage = Math.max(0, totalPages - 1);
+    if (activePage > maxPage) {
+      setActivePage(maxPage);
+    }
+    const clampedPage = Math.min(activePage, maxPage);
+    const canGoPrev = clampedPage > 0;
+    const canGoNext = clampedPage < totalPages - 1;
 
     const goPrev = useCallback(() => {
       setActivePage((prev) => Math.max(0, prev - 1));
@@ -169,7 +172,7 @@ export const FrameThemeSelector = forwardRef<FrameThemeSelectorHandle, FrameThem
         >
           <div
             className="flex w-full transition-transform duration-300 ease-out"
-            style={{ transform: `translateX(-${activePage * 100}%)` }}
+            style={{ transform: `translateX(-${clampedPage * 100}%)` }}
           >
             {themePages.map((page, pageIndex) => (
               <div key={`page-${pageIndex}`} className="w-full shrink-0">
@@ -216,7 +219,7 @@ export const FrameThemeSelector = forwardRef<FrameThemeSelectorHandle, FrameThem
                 aria-label={`${idx + 1}페이지로 이동`}
                 onClick={() => setActivePage(idx)}
                 className={`h-1.5 rounded-full transition-all ${
-                  idx === activePage ? "w-5 bg-slate-700" : "w-1.5 bg-slate-300 hover:bg-slate-400"
+                  idx === clampedPage ? "w-5 bg-slate-700" : "w-1.5 bg-slate-300 hover:bg-slate-400"
                 }`}
               />
             ))}

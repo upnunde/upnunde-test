@@ -1,7 +1,7 @@
 "use client";
 
 import { Suspense, useState, useEffect } from "react";
-import { useRouter, useSearchParams } from "next/navigation";
+import { useRouter } from "next/navigation";
 import { ChevronLeft } from "lucide-react";
 import Header from "@/components/Header/Header";
 import { EditorSubHeader } from "@/components/editor/EditorSubHeader";
@@ -13,11 +13,10 @@ import { EpisodeForm } from "@/components/episode/EpisodeForm";
 import { useEditorStore } from "@/store/useEditorStore";
 import { useSceneClickHandler } from "@/hooks/useSceneClickHandler";
 import { Button } from "@/components/ui/button";
-import { Dialog, DialogContent } from "@/components/ui/dialog";
+import { Dialog, DialogContent, DialogTitle } from "@/components/ui/dialog";
 
 function EditorInner() {
   const router = useRouter();
-  const searchParams = useSearchParams();
   const currentView = useEditorStore((s) => s.currentView);
   const setCurrentView = useEditorStore((s) => s.setCurrentView);
   const handleSceneClick = useSceneClickHandler();
@@ -26,11 +25,11 @@ function EditorInner() {
   const [isRecreateModalOpen, setIsRecreateModalOpen] = useState(false);
 
   useEffect(() => {
-    if (searchParams.get("view") === "form") {
+    if (typeof window !== "undefined" && new URLSearchParams(window.location.search).get("view") === "form") {
       setCurrentView("form");
       router.replace("/editor");
     }
-  }, [searchParams, setCurrentView, router]);
+  }, [setCurrentView, router]);
 
   if (currentView === "form") {
     return (
@@ -121,6 +120,7 @@ function EditorInner() {
           className="h-[min(90vh,calc(100vh-80px))] w-[min(92vw,760px)] max-w-[760px] min-w-[560px] overflow-y-auto border-0 bg-transparent p-0 shadow-none"
           aria-describedby={undefined}
         >
+          <DialogTitle className="sr-only">에피소드 생성</DialogTitle>
           <EpisodeForm
             onCancel={() => setIsRecreateModalOpen(false)}
             onConverted={() => setIsRecreateModalOpen(false)}

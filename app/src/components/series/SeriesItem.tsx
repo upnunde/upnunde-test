@@ -1,6 +1,7 @@
 "use client";
 
 import React, { useState } from "react";
+import Image from "next/image";
 import { MoreVertical, Eye, EyeOff, Trash2, Calendar, Layers } from "lucide-react";
 import {
   DropdownMenu,
@@ -56,7 +57,7 @@ export function SeriesItem({
   onDelete,
   onViolationDetail,
 }: SeriesItemProps) {
-  const { id, title, thumbnailUrl, status, createdAt, episodeCount, viewCount } = series;
+  const { title, thumbnailUrl, status, createdAt, episodeCount, viewCount } = series;
   const [isMenuOpen, setIsMenuOpen] = useState(false);
 
   const isDraft = status === "DRAFT";
@@ -91,10 +92,12 @@ export function SeriesItem({
         ) : (
           <>
             {thumbnailUrl && (
-              <img
+              <Image
                 src={thumbnailUrl}
                 alt=""
-                className="w-full h-full object-cover"
+                fill
+                sizes="112px"
+                className="object-cover"
               />
             )}
             {(isPrivate || isBanned) && (

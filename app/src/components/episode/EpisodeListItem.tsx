@@ -1,6 +1,7 @@
 "use client";
 
 import React from "react";
+import Image from "next/image";
 import { Pencil, Trash2, MoreVertical, FileText, Mail } from "lucide-react";
 import {
   DropdownMenu,
@@ -27,6 +28,7 @@ export interface EpisodeListItemProps {
   /** 정책 10: 링크 에디터(읽기 전용) 화면 진입 */
   onLinkEditor?: (episode: Episode) => void;
   /** 정책 11: 통계 화면(조회수 등) 진입 */
+  /** 통계 화면 라우팅 핸들러 (현재 미연동) */
   onStats?: (episode: Episode) => void;
   /** 문의하기 클릭 시 (문의 페이지/모달 등) */
   onInquiry?: (episode: Episode) => void;
@@ -39,7 +41,7 @@ export function EpisodeListItem({
   onEdit,
   onDelete,
   onLinkEditor,
-  onStats,
+  onStats: _onStats,
   onInquiry,
 }: EpisodeListItemProps) {
   const { status, date, views } = episode;
@@ -74,12 +76,13 @@ export function EpisodeListItem({
 
       {/* 썸네일 & 제목 */}
       <div className="flex min-w-0 flex-1 items-center gap-4">
-        <div className="h-[107px] w-[60px] shrink-0 overflow-hidden rounded border border-slate-200 bg-slate-200">
-          <img
+        <div className="relative h-[107px] w-[60px] shrink-0 overflow-hidden rounded border border-slate-200 bg-slate-200">
+          <Image
             src={episode.thumbnail}
             alt=""
-            className="h-full w-full object-cover"
-            loading="lazy"
+            fill
+            sizes="60px"
+            className="object-cover"
           />
         </div>
         <span

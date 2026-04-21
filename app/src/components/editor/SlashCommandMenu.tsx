@@ -22,7 +22,6 @@ import {
   VIDEOS,
   GALLERIES,
 } from "@/lib/mockData";
-import { useEditorStore } from "@/store/useEditorStore";
 
 export type SlashSelectPayload =
   | BlockType
@@ -32,7 +31,8 @@ export interface SlashCommandMenuProps {
   position: { top: number; left: number };
   onSelect: (payload: SlashSelectPayload) => void;
   onClose: () => void;
-  targetBlockId: string;
+  /** 향후 블록 단위 컨텍스트 식별용 (현재는 미사용) */
+  targetBlockId?: string;
 }
 
 /** 문장 내 안내문구(PICKER_LABEL_KO)와 동일한 한글 라벨 */
@@ -88,7 +88,6 @@ export function SlashCommandMenu({
   position,
   onSelect,
   onClose,
-  targetBlockId,
 }: SlashCommandMenuProps) {
   const buttonRefs = useRef<(HTMLButtonElement | null)[]>([]);
   const OPTIONS = ALL_OPTIONS;
@@ -98,6 +97,18 @@ export function SlashCommandMenu({
     buttonRefs.current = buttonRefs.current.slice(0, OPTIONS.length);
     buttonRefs.current[0]?.focus();
   }, [OPTIONS.length]);
+
+  /** 백드롭이 투명이라 메뉴만 닫힌 뒤에도 레이어가 남으면 호버·클릭이 전부 막힌 것처럼 보임 — 포커스 위치와 관계없이 Escape로 닫기 */
+  useEffect(() => {
+    const onKeyDown = (e: KeyboardEvent) => {
+      if (e.key === "Escape") {
+        e.preventDefault();
+        onClose();
+      }
+    };
+    window.addEventListener("keydown", onKeyDown);
+    return () => window.removeEventListener("keydown", onKeyDown);
+  }, [onClose]);
 
   const handleOptionKeyDown = (index: number, e: React.KeyboardEvent<HTMLButtonElement>) => {
     if (e.key === "ArrowDown") {
@@ -171,6 +182,7 @@ export function SlashCommandMenu({
             }}
             type="button"
             role="option"
+            aria-selected={false}
             className={cn(
               "flex w-full cursor-pointer items-center gap-2 px-3 py-2 text-left text-sm",
               "hover:bg-slate-100 focus:bg-slate-100 focus:outline-none"

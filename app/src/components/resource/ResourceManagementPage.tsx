@@ -1,8 +1,8 @@
 "use client";
 
-import React, { useMemo, useState, useCallback } from "react";
+import React, { useMemo, useState, useCallback, useEffect } from "react";
 import dynamic from "next/dynamic";
-import { useRouter, useParams, useSearchParams } from "next/navigation";
+import { useRouter, usePathname } from "next/navigation";
 import { ChevronLeft } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { ResourceBanner } from "./ResourceBanner";
@@ -93,10 +93,22 @@ const ImageLightbox = dynamic(
 
 export function ResourceManagementPage() {
   const router = useRouter();
-  const params = useParams();
-  const searchParams = useSearchParams();
-  const seriesId = typeof params?.id === "string" ? params.id : "";
-  const showPreview = searchParams.get("preview") === "1";
+  const pathname = usePathname();
+  const seriesId = useMemo(() => {
+    const segments = pathname.split("/").filter(Boolean);
+    return segments[1] ?? "";
+  }, [pathname]);
+  const [showPreview, setShowPreview] = useState(false);
+
+  useEffect(() => {
+    const updatePreviewFlag = () => {
+      if (typeof window === "undefined") return;
+      setShowPreview(new URLSearchParams(window.location.search).get("preview") === "1");
+    };
+    updatePreviewFlag();
+    window.addEventListener("popstate", updatePreviewFlag);
+    return () => window.removeEventListener("popstate", updatePreviewFlag);
+  }, []);
 
   const [characters, setCharacters] = useState<CharacterResource[]>(initialCharacters);
   const [backgrounds, setBackgrounds] = useState<ImageResource[]>(initialBackgrounds);
@@ -104,8 +116,8 @@ export function ResourceManagementPage() {
   const [media, setMedia] = useState<MediaResource[]>(initialMedia);
   const [gallery, setGallery] = useState<ImageResource[]>(initialGallery);
   const [bgm, setBgm] = useState<BgmResource[]>(initialBgm);
-  const [showAllScenes, setShowAllScenes] = useState(false);
-  const [showAllGallery, setShowAllGallery] = useState(false);
+  const [showAllScenes, _setShowAllScenes] = useState(false);
+  const [showAllGallery, _setShowAllGallery] = useState(false);
 
   const [deleteModal, setDeleteModal] = useState<{
     open: boolean;

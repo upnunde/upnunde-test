@@ -1,6 +1,7 @@
 "use client";
 
 import React from "react";
+import Image from "next/image";
 import { Pencil, Trash2 } from "lucide-react";
 import type { MediaResource } from "@/types/resource";
 import { cn } from "@/lib/utils";
@@ -55,12 +56,12 @@ export function MediaCard({
             : "bg-surface-disabled/0 outline-border-20"
         )}
       >
-        <img
+        <Image
           src={item.thumbnailUrl}
           alt=""
-          className="w-full h-full object-cover"
-          loading="lazy"
-          decoding="async"
+          fill
+          sizes="90px"
+          className="object-cover"
         />
         <div className="w-full h-6 left-0 bottom-0 absolute inline-flex justify-center items-center pointer-events-none bg-black/40">
           <span className="text-center text-white text-xs font-bold font-['Pretendard_JP'] leading-4">

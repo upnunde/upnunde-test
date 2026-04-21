@@ -1,17 +1,22 @@
 "use client";
 
-import React, { useState, useEffect } from "react";
-import { useRouter, useParams } from "next/navigation";
+import React, { useState, useEffect, useMemo } from "react";
+import { useRouter, usePathname } from "next/navigation";
 import Header from "@/components/Header/Header";
 import { CharacterDetailPage } from "@/components/resource/character/CharacterDetailPage";
 import { getCharacterById } from "@/lib/resourceMockData";
 
 export default function SeriesCharacterEditPage() {
   const [profileImageUrl, setProfileImageUrl] = useState<string | null>(null);
-  const params = useParams();
+  const pathname = usePathname();
   const router = useRouter();
-  const seriesId = typeof params?.id === "string" ? params.id : "";
-  const itemId = typeof params?.itemId === "string" ? params.itemId : "";
+  const { seriesId, itemId } = useMemo(() => {
+    const segments = pathname.split("/").filter(Boolean);
+    return {
+      seriesId: segments[1] ?? "",
+      itemId: segments[segments.length - 1] ?? "",
+    };
+  }, [pathname]);
 
   const initialData = itemId ? getCharacterById(itemId) : undefined;
 

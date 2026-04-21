@@ -1,5 +1,5 @@
 import { create } from "zustand";
-import type { ScriptBlock, BlockType, ChoiceItem } from "@/types/editor";
+import type { ScriptBlock, ScriptBlockData, BlockType, ChoiceItem } from "@/types/editor";
 import { BACKGROUNDS, CHARACTERS, BGMS, SFX, VIDEOS } from "@/lib/mockData";
 
 function generateId(): string {
@@ -43,7 +43,7 @@ function getDefaultResourceContent(type: BlockType): string {
 export function createBlock(
   type: BlockType,
   content: string = "",
-  data?: Record<string, any>
+  data?: ScriptBlockData
 ): ScriptBlock {
   // For resource blocks, use default dummy value if content is empty
   const resourceTypes: BlockType[] = ["background", "bgm", "sfx", "character", "gallery", "video"];
@@ -120,8 +120,8 @@ interface EditorActions {
   setSeriesPersona: (persona: string) => void;
   undo: () => void;
   redo: () => void;
-  addBlock: (index: number, type: BlockType, content?: string, data?: Record<string, any>) => string; // returns new block id
-  updateBlock: (id: string, content: string, data?: Record<string, any>) => void;
+  addBlock: (index: number, type: BlockType, content?: string, data?: ScriptBlockData) => string; // returns new block id
+  updateBlock: (id: string, content: string, data?: ScriptBlockData) => void;
   removeBlock: (id: string) => void;
   reorderBlocks: (oldIndex: number, newIndex: number) => void;
   updateBlockType: (id: string, type: BlockType) => void;

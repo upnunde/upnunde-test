@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState, useEffect } from "react";
+import React, { useState, useSyncExternalStore } from "react";
 import { Info } from "lucide-react";
 import { Button } from "@/components/ui/button";
 
@@ -11,32 +11,37 @@ export interface ResourceBannerProps {
   seriesId: string;
 }
 
-export function ResourceBanner({ seriesId }: ResourceBannerProps) {
-  const [visible, setVisible] = useState(false);
-  const [mounted, setMounted] = useState(false);
+/** 클라이언트 마운트 여부를 setState 없이 읽기 위한 더미 subscribe */
+const subscribeNoop = () => () => {};
 
-  useEffect(() => {
-    setMounted(true);
-    const key = `${STORAGE_KEY_PREFIX}-${seriesId}`;
+export function ResourceBanner({ seriesId }: ResourceBannerProps) {
+  /** SSR과 CSR의 hydration 결과가 일치하도록 — 서버에서는 false, 클라이언트에서는 true */
+  const isClient = useSyncExternalStore(
+    subscribeNoop,
+    () => true,
+    () => false
+  );
+
+  const [dismissed, setDismissed] = useState<boolean>(() => {
+    if (typeof window === "undefined") return false;
     try {
-      const dismissed = localStorage.getItem(key);
-      setVisible(dismissed !== "true");
+      return localStorage.getItem(`${STORAGE_KEY_PREFIX}-${seriesId}`) === "true";
     } catch {
-      setVisible(true);
+      return false;
     }
-  }, [seriesId]);
+  });
 
   const handleClose = () => {
     const key = `${STORAGE_KEY_PREFIX}-${seriesId}`;
     try {
       localStorage.setItem(key, "true");
     } catch {
-      // ignore
+      // ignore quota / private mode
     }
-    setVisible(false);
+    setDismissed(true);
   };
 
-  if (!mounted || !visible) return null;
+  if (!isClient || dismissed) return null;
 
   return (
     <div className="self-stretch pt-0 inline-flex flex-col justify-start items-center gap-3">

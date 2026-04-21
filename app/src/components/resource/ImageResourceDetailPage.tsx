@@ -1,7 +1,8 @@
 "use client";
 
 import React, { useCallback, useEffect, useRef, useState } from "react";
-import { useRouter, useParams } from "next/navigation";
+import Image from "next/image";
+import { useRouter, usePathname } from "next/navigation";
 import { ChevronLeft, Pencil, Trash2 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -80,14 +81,19 @@ function getThumbnailUrl(data: ImageResourceInitialData): string {
 
 export function ImageResourceDetailPage({ kind, initialData }: ImageResourceDetailPageProps) {
   const router = useRouter();
-  const params = useParams();
-  const seriesId = typeof params?.id === "string" ? params.id : "";
+  const pathname = usePathname();
+  const seriesId = React.useMemo(() => {
+    const segments = pathname.split("/").filter(Boolean);
+    return segments[1] ?? "";
+  }, [pathname]);
 
   const labels = getLabels(kind);
 
-  const [name, setName] = useState("");
+  const [name, setName] = useState<string>(() => initialData?.name ?? "");
   const [description, setDescription] = useState("");
-  const [thumbnailUrl, setThumbnailUrl] = useState("");
+  const [thumbnailUrl, setThumbnailUrl] = useState<string>(() =>
+    initialData ? getThumbnailUrl(initialData) : ""
+  );
   const [thumbnailModalOpen, setThumbnailModalOpen] = useState(false);
   const [thumbnailModalInitialSlots, setThumbnailModalInitialSlots] =
     useState<{ id: string; expressionLabel: string; imageUrl?: string }[] | null>(null);
@@ -95,13 +101,15 @@ export function ImageResourceDetailPage({ kind, initialData }: ImageResourceDeta
   const [sceneAiMode, setSceneAiMode] = useState<"apply" | "none">("apply");
   const thumbnailFileInputRef = useRef<HTMLInputElement | null>(null);
 
-  useEffect(() => {
+  /** initialData 참조 변경 시 폼 값 재동기화 — render 중 setState 패턴 */
+  const [initialDataSnapshot, setInitialDataSnapshot] = useState(initialData);
+  if (initialData !== initialDataSnapshot) {
+    setInitialDataSnapshot(initialData);
     if (initialData) {
       setName(initialData.name);
       setThumbnailUrl(getThumbnailUrl(initialData));
-      // 설명은 mock에 없으면 빈 문자열 유지
     }
-  }, [initialData]);
+  }
 
   useEffect(() => {
     return () => {
@@ -250,10 +258,13 @@ export function ImageResourceDetailPage({ kind, initialData }: ImageResourceDeta
                         className="absolute inset-0 z-0 flex h-full w-full cursor-pointer focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-0"
                         aria-label="대표 썸네일 변경"
                       >
-                        <img
+                        <Image
                           src={thumbnailUrl}
                           alt=""
-                          className="w-full h-full object-cover pointer-events-none"
+                          fill
+                          sizes="90px"
+                          unoptimized
+                          className="object-cover pointer-events-none"
                         />
                       </button>
                       <div className="absolute inset-0 z-[1] bg-black/10 opacity-0 group-hover:opacity-100 transition-opacity pointer-events-none" />

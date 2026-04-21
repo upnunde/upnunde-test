@@ -6,7 +6,7 @@ import { useEffect, useMemo, useState } from "react";
 import { useEditorStore } from "@/store/useEditorStore";
 import { Button } from "@/components/ui/button";
 import { Snackbar } from "@/components/episode/Snackbar";
-import { Dialog, DialogContent } from "@/components/ui/dialog";
+import { Dialog, DialogContent, DialogTitle } from "@/components/ui/dialog";
 import {
   Popover,
   PopoverContent,
@@ -114,11 +114,14 @@ export function EditorSubHeader({ title = "에피소드 제목", onRecreate }: E
     if (blocks.length === 0) return;
     if (scriptHistory.length > 0) return;
     addScriptHistoryEntry("created");
+    // 외부 store(history) 동기화 직후 로컬 saved 스냅샷도 한 번 맞춰준다
+    // eslint-disable-next-line react-hooks/set-state-in-effect
     setSavedSnapshot(blocksSnapshot);
   }, [addScriptHistoryEntry, blocks.length, blocksSnapshot, scriptHistory.length]);
 
   /** 히스토리가 없을 때 목록 레이아웃용 예시 5건 (신규생성/임시저장 혼합). 최신이 위. */
-  const emptyStateDemoEntries = useMemo(() => {
+  const [emptyStateDemoEntries] = useState(() => {
+    /** Date.now()는 비순수이므로 render 중이 아닌 state lazy initializer에서 1회 계산 */
     const now = Date.now();
     return [
       { savedAt: now - 15 * 60 * 1000, source: "temporary" as const },
@@ -127,7 +130,7 @@ export function EditorSubHeader({ title = "에피소드 제목", onRecreate }: E
       { savedAt: now - 24 * 60 * 60 * 1000, source: "temporary" as const },
       { savedAt: now - 48 * 60 * 60 * 1000, source: "created" as const },
     ].sort((a, b) => b.savedAt - a.savedAt);
-  }, []);
+  });
 
   return (
     <>
@@ -251,9 +254,9 @@ export function EditorSubHeader({ title = "에피소드 제목", onRecreate }: E
       <Dialog open={isBackConfirmOpen} onOpenChange={setIsBackConfirmOpen}>
         <DialogContent className="w-[min(92vw,420px)] max-w-[420px] border border-slate-200 bg-white p-5 shadow-none">
           <div className="space-y-2">
-            <p className="text-base font-semibold text-on-surface-10">
+            <DialogTitle className="text-base font-semibold text-on-surface-10">
               아직 작업을 저장하지 않았어요.
-            </p>
+            </DialogTitle>
             <p className="text-sm text-on-surface-20">
               정말 나가시겠어요? 임시저장 후 나갈 수 있어요.
             </p>

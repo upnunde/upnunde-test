@@ -2,6 +2,7 @@
 
 import React, { useLayoutEffect, useState, useRef } from "react";
 import { createPortal } from "react-dom";
+import Image from "next/image";
 import { useRouter } from "next/navigation";
 
 const MODAL_WIDTH = 384;
@@ -59,7 +60,7 @@ export function ProfileEditModal({ isOpen, onClose, anchorRef, onSave }: Profile
     const anchor = anchorRef.current;
     const rect = anchor.getBoundingClientRect();
     let top = rect.bottom + GAP_BELOW_ANCHOR;
-    let left = leftClamp(rect.left);
+    const left = leftClamp(rect.left);
     top = Math.max(VIEWPORT_MARGIN, top);
     const maxHeight = vh - top - VIEWPORT_MARGIN;
     setPosition({ top, left, maxHeight });
@@ -67,6 +68,8 @@ export function ProfileEditModal({ isOpen, onClose, anchorRef, onSave }: Profile
 
   useLayoutEffect(() => {
     if (!isOpen) return;
+    // DOM 측정 후 위치를 반영하는 layout effect — 의도된 set-state-in-effect 사용
+    // eslint-disable-next-line react-hooks/set-state-in-effect
     updatePosition();
   }, [isOpen, updatePosition]);
 
@@ -80,7 +83,8 @@ export function ProfileEditModal({ isOpen, onClose, anchorRef, onSave }: Profile
   if (!isOpen) return null;
 
   // anchorRef가 있으면 위치 계산이 끝난 뒤에만 카드 표시 → 프로필 바로 아래 고정 좌표로만 노출, 중앙으로 갔다 이동하는 느낌 제거
-  const hasAnchor = !!anchorRef?.current;
+  // 부모가 anchorRef prop 자체를 넘겼다면 앵커 기반 배치로 간주 (.current는 layout effect 안에서만 접근)
+  const hasAnchor = anchorRef !== undefined;
   const showCard = !hasAnchor || position !== null;
 
   const style: React.CSSProperties =
@@ -159,7 +163,14 @@ export function ProfileEditModal({ isOpen, onClose, anchorRef, onSave }: Profile
           <div className="w-24 h-24 relative">
             <div className="w-24 h-24 left-0 top-0 absolute bg-slate-100 rounded-full overflow-hidden flex items-center justify-center border border-slate-200">
               {avatarPreview ? (
-                <img src={avatarPreview} alt="프로필 미리보기" className="w-full h-full object-cover" />
+                <Image
+                  src={avatarPreview}
+                  alt="프로필 미리보기"
+                  width={96}
+                  height={96}
+                  unoptimized
+                  className="w-full h-full object-cover"
+                />
               ) : (
                 <svg width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" className="text-on-surface-30"><path d="M19 21v-2a4 4 0 0 0-4-4H9a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
               )}
@@ -230,7 +241,7 @@ export function ProfileEditModal({ isOpen, onClose, anchorRef, onSave }: Profile
                   value={description}
                   onChange={(e) => setDescription(e.target.value.slice(0, MAX_DESCRIPTION))}
                   maxLength={MAX_DESCRIPTION}
-                  className="w-full h-full bg-transparent text-on-surface-10 placeholder:text-on-surface-30 text-base font-normal leading-6 focus:outline-none min-h-[160px] max-h-[400px]"
+                  className="w-full h-full min-h-0 resize-none bg-transparent text-on-surface-10 placeholder:text-on-surface-30 text-base font-normal leading-6 focus:outline-none"
                 />
               </div>
               <div className="self-stretch inline-flex justify-end items-center gap-2">

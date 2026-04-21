@@ -25,7 +25,7 @@ export interface InquiryFormProps {
 
 const defaultSubmit = (e: React.FormEvent<HTMLFormElement>) => {
   e.preventDefault();
-  // eslint-disable-next-line no-alert
+   
   alert("문의가 임시로 저장되었습니다. 실제 전송 기능은 추후 연동 예정입니다.");
 };
 

@@ -1,6 +1,7 @@
 "use client";
 
 import React, { useMemo } from "react";
+import Image from "next/image";
 import type { ChoiceItem, ScriptBlock } from "@/types/editor";
 import { useEditorStore } from "@/store/useEditorStore";
 import { CHARACTERS, BACKGROUNDS, BGMS } from "@/lib/mockData";
@@ -234,10 +235,12 @@ export function PreviewScreen(props: PreviewScreenProps = {}) {
       {/* Layer 1: BG (absolute fill) — from accumulated state up to focused block */}
       <div className="absolute inset-0 z-0">
         {currentBg != null && currentBg !== "" ? (
-          <img
+          <Image
             src={getBackgroundUrl(currentBg)}
             alt=""
-            className="h-full w-full object-cover object-center"
+            fill
+            sizes="(max-width: 768px) 100vw, 480px"
+            className="object-cover object-center"
           />
         ) : (
           <div className="h-full w-full bg-gradient-to-b from-slate-800 to-slate-900" />
@@ -247,10 +250,12 @@ export function PreviewScreen(props: PreviewScreenProps = {}) {
       {/* Layer 2: Character (centered) — from accumulated state */}
       {currentChar != null && currentChar !== "" && (
         <div className="absolute inset-0 z-10 flex items-end justify-center pb-24 pointer-events-none">
-          <img
+          <Image
             src={getCharacterUrl(currentChar)}
             alt=""
-            className="max-h-[55%] max-w-[80%] object-contain"
+            width={400}
+            height={600}
+            className="max-h-[55%] max-w-[80%] object-contain w-auto h-auto"
           />
         </div>
       )}
@@ -299,7 +304,7 @@ export function PreviewScreen(props: PreviewScreenProps = {}) {
               >
                 <div className="flex items-center gap-2">
                   {choice.isPaid && (
-                    <img
+                    <Image
                       src="/choice-paid-icon.png"
                       alt=""
                       width={16}

@@ -24,8 +24,6 @@ export interface BgmSectionProps {
   description: string;
   emptyMessage: string;
   addButtonLabel: string;
-  /** 리스트 상단 카테고리 라벨 (예: 로맨스) */
-  categoryTitle?: string;
   items: BgmResource[];
   onDelete: (item: BgmResource) => void;
   onAddFromModal: (item: BgmResource) => void;
@@ -44,7 +42,6 @@ export function BgmSection({
   description,
   emptyMessage,
   addButtonLabel,
-  categoryTitle = "판타지",
   items,
   onDelete,
   onAddFromModal,
@@ -67,13 +64,12 @@ export function BgmSection({
     return items.filter((_, idx) => idx % GENRE_TABS.length === index);
   }, [items, activeGenre]);
 
-  useEffect(() => {
-    if (playingId && !items.some((i) => i.id === playingId)) {
-      setPlayingId(null);
-      setIsPaused(false);
-      setCurrentTime(0);
-    }
-  }, [items, playingId]);
+  /** 재생 중인 항목이 items에서 사라지면 재생 상태를 초기화 — render 중 setState 패턴 */
+  if (playingId && !items.some((i) => i.id === playingId)) {
+    setPlayingId(null);
+    setIsPaused(false);
+    setCurrentTime(0);
+  }
 
   useEffect(() => {
     if (!playingId || isPaused || totalSeconds <= 0) {

@@ -1,6 +1,7 @@
 "use client";
 
 import { useCallback, useEffect, useMemo, useRef } from "react";
+import Image from "next/image";
 import { X } from "lucide-react";
 import {
   Popover,
@@ -114,8 +115,15 @@ export function ResourcePicker({
     const base = itemsOverride ?? getItemsForType(type);
     // 외부에서 순서를 정의해 주입한 경우(장면 전환 목록 등)에는 그대로 유지한다.
     if (itemsOverride) return [...base];
-    // 데모용 더미 리소스는 목록 내에서 랜덤 배치
-    return [...base].sort(() => Math.random() - 0.5);
+    // 데모용 더미 리소스 — type 문자열에서 파생한 고정 시드로 한 번만 섞어 재렌더 시 순서를 고정한다
+    let seed = 1;
+    for (let i = 0; i < type.length; i += 1) {
+      seed = (seed * 31 + type.charCodeAt(i)) % 9973;
+    }
+    return [...base]
+      .map((item, idx) => ({ item, key: ((idx + 1) * seed) % 9973 }))
+      .sort((a, b) => a.key - b.key)
+      .map((entry) => entry.item);
   }, [type, itemsOverride]);
 
   const handleSelect = (name: string) => {
@@ -124,8 +132,7 @@ export function ResourcePicker({
     onClose();
   };
 
-  if (!PICKER_TYPES.includes(type)) return <>{children}</>;
-
+  const isPickerType = PICKER_TYPES.includes(type);
   const imageMode = isImageType(type);
   const isCharacter = type === "character";
   const isSceneTransition = type === "event";
@@ -141,10 +148,13 @@ export function ResourcePicker({
   }, []);
 
   useEffect(() => {
+    if (!isPickerType) return;
     if (!isOpen) return;
     optionButtonRefs.current = optionButtonRefs.current.slice(0, optionCount);
     focusFirstOption();
-  }, [isOpen, optionCount, focusFirstOption]);
+  }, [isPickerType, isOpen, optionCount, focusFirstOption]);
+
+  if (!isPickerType) return <>{children}</>;
 
   const focusOption = (index: number) => {
     const clamped = Math.max(0, Math.min(index, optionCount - 1));
@@ -293,13 +303,12 @@ export function ResourcePicker({
                     )}
                   >
                     {"url" in item && item.url ? (
-                      <img
+                      <Image
                         src={item.url}
                         alt={item.name}
-                        className={cn(
-                          isCharacter ? "w-[100px] h-[100px]" : "w-24 h-44 border border-[rgba(0,0,0,0.07)]",
-                          "left-0 top-0 absolute z-0 object-cover"
-                        )}
+                        fill
+                        sizes={isCharacter ? "100px" : "96px"}
+                        className="object-cover"
                       />
                     ) : (
                       <div className="relative z-0 flex h-full w-full items-center justify-center text-xs text-on-surface-30">

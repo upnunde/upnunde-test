@@ -1,6 +1,7 @@
- "use client";
+"use client";
 
 import { useState, useRef } from "react";
+import Image from "next/image";
 import { User } from "lucide-react";
 import { ProfileEditModal } from "@/components/ProfileEditModal";
 import { useRouter } from "next/navigation";
@@ -29,10 +30,13 @@ export default function Header({ profileImageUrl, onProfileImageChange }: Header
           className="flex cursor-pointer items-center"
           aria-label="로그인 화면으로 이동"
         >
-          <img
+          <Image
             src="/renovel-studio-logo.png"
             alt="RE:NOVEL Studio"
-            className="h-5 object-contain object-left"
+            width={94}
+            height={20}
+            priority
+            className="h-5 w-auto object-contain object-left"
           />
         </button>
       </div>
@@ -45,7 +49,14 @@ export default function Header({ profileImageUrl, onProfileImageChange }: Header
           aria-label="프로필 편집"
         >
           {profileImageUrl ? (
-            <img src={profileImageUrl} alt="프로필" className="w-full h-full object-cover" />
+            <Image
+              src={profileImageUrl}
+              alt="프로필"
+              width={36}
+              height={36}
+              unoptimized
+              className="w-full h-full object-cover"
+            />
           ) : (
             <User className="h-4 w-4 text-slate-600" />
           )}
