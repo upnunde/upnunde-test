@@ -19,8 +19,8 @@ const SCENE_LEGACY_REGEX = /^==\s*(.+?)\s*==$/;
 /** Match `#tag: value` (optional space after # still accepted) */
 const TAG_REGEX = /^#\s*(\w+):\s*(.*)$/;
 
-/** Match legacy choice line: * [ text ] — extract text inside brackets */
-const CHOICE_LINE_REGEX = /^\*\s*\[(.*)\]\s*$/;
+/** Match choice line: * [ text ] [유료|paid](optional) */
+const CHOICE_LINE_REGEX = /^\*\s*\[(.*?)\]\s*(?:\[(paid|유료)\])?\s*$/i;
 
 /** Match next-scene line: -> SCENE_NAME */
 const NEXT_SCENE_REGEX = /^->\s*(.+?)\s*$/;
@@ -69,6 +69,7 @@ export function parseScriptToBlocks(text: string): ScriptBlock[] {
 
         const choiceMatch = cur.match(CHOICE_LINE_REGEX);
         const text = choiceMatch ? choiceMatch[1].trim() : cur.replace(/^\*\s*\[/, "").replace(/\]\s*$/, "").trim();
+        const isPaid = choiceMatch ? Boolean(choiceMatch[2]) : false;
         let nextScene = "";
 
         if (i + 1 < lines.length) {
@@ -84,7 +85,7 @@ export function parseScriptToBlocks(text: string): ScriptBlock[] {
           id: generateId(),
           text,
           nextScene,
-          isPaid: false,
+          isPaid,
         });
         i++;
       }

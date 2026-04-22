@@ -128,7 +128,7 @@ export const INITIAL_SCRIPT = `-> SCENE_1
 
 * [제발 살려주세요. 이대로 비참하게 죽긴 싫어요.]
     -> SCENE_4_CHOICE
-* [살려만 준다면 반드시 행복할게. 약속할 수 있어.]
+* [살려만 준다면 반드시 행복할게. 약속할 수 있어.] [유료]
     -> SCENE_4_CHOICE
 
 == SCENE_4_CHOICE ==

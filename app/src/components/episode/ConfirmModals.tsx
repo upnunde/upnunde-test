@@ -8,9 +8,6 @@ import {
   DialogClose,
 } from "@/components/ui/dialog";
 import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
-import { DELETE_CONFIRM_INPUT_PHRASE } from "@/lib/deleteConfirmPhrase";
-import { useDeleteConfirmInput } from "@/hooks/useDeleteConfirmInput";
 import type { Episode } from "@/types/episode";
 
 /** 안내팝업: 공개 전 유의사항 (정책 6) */
@@ -105,19 +102,15 @@ export function DeleteConfirmModal({
   onClose,
   onConfirm,
 }: DeleteConfirmModalProps) {
-  const { confirmInput, setConfirmInput, deleteEnabled, handleOpenChange, resetConfirmInput } =
-    useDeleteConfirmInput({ onClose });
-
   const handleConfirm = () => {
-    if (episode && deleteEnabled) {
+    if (episode) {
       onConfirm(episode);
-      resetConfirmInput();
       onClose();
     }
   };
 
   return (
-    <Dialog open={open} onOpenChange={handleOpenChange}>
+    <Dialog open={open} onOpenChange={(o) => !o && onClose()}>
       <DialogContent className="flex w-[480px] max-w-[calc(100vw-2rem)] flex-col items-stretch gap-0 overflow-hidden border-0 bg-surface-10 p-0 shadow-[0px_8px_16px_8px_rgba(0,0,0,0.16)] sm:rounded-2xl">
         {/* 상단: 제목 + 부제 (가이드 셸) */}
         <div className="flex flex-col items-center gap-5 self-stretch overflow-hidden rounded-tl-2xl rounded-tr-2xl bg-surface-10 px-6 pb-4 pt-10">
@@ -133,27 +126,6 @@ export function DeleteConfirmModal({
             {episode && (
               <span className="block font-medium text-on-surface-10">「{episode.title}」</span>
             )}
-          </div>
-        </div>
-
-        {/* 중단: 확인 문구 + 입력 (surface-20 띠) */}
-        <div className="mx-5 mb-3 flex flex-col items-center gap-2.5 self-stretch overflow-hidden rounded bg-surface-20 p-6">
-          <label
-            htmlFor="episode-delete-confirm-input"
-            className="text-center font-['Pretendard_JP'] text-sm font-normal leading-5 text-on-surface-20"
-          >
-            삭제를 진행하려면 아래에「{DELETE_CONFIRM_INPUT_PHRASE}」를 입력해 주세요.
-          </label>
-          <div className="flex w-full flex-col items-stretch justify-center gap-2 rounded">
-            <Input
-              id="episode-delete-confirm-input"
-              type="text"
-              autoComplete="off"
-              placeholder={DELETE_CONFIRM_INPUT_PHRASE}
-              value={confirmInput}
-              onChange={(e) => setConfirmInput(e.target.value)}
-              className="h-10 rounded border-0 bg-surface-10 px-4 font-['Pretendard_JP'] text-sm font-normal leading-5 text-on-surface-10 shadow-none outline outline-1 -outline-offset-1 outline-border-20 focus-visible:ring-0 focus-visible:ring-offset-0"
-            />
           </div>
         </div>
 
@@ -174,7 +146,6 @@ export function DeleteConfirmModal({
               variant="destructive"
               className="h-10 min-w-20 rounded-md bg-error-error px-3 font-['Pretendard_JP'] text-base font-medium leading-5 text-white hover:bg-error-error/90 disabled:opacity-50"
               onClick={handleConfirm}
-              disabled={!deleteEnabled}
             >
               에피소드 삭제
             </Button>
