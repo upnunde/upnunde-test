@@ -10,9 +10,12 @@ import { BLOCK_LABEL_KO } from "@/lib/blockTypeLabels";
 
 /** EditorBody 줄번호 열과 동일 톤 (포커스 없을 때) */
 const INDEX_COL_CLASS =
-  "shrink-0 text-[13px] font-medium tabular-nums w-10 h-8 flex items-center justify-start pt-0 mt-0 text-[rgba(197,207,221,1)]";
+  "shrink-0 text-[13px] font-medium tabular-nums w-10 flex items-center justify-start mt-0 text-[rgba(197,207,221,1)] min-h-8 py-1";
+const READONLY_ROW_MIN_HEIGHT_CLASS = "min-h-8 py-1";
+const READONLY_ROW_LABEL_CELL_CLASS = "w-24 shrink-0 min-h-8 py-1 flex items-center justify-start";
+const READONLY_ROW_CONTENT_CELL_CLASS = "min-w-0 flex-1 min-h-8 py-0 flex items-center justify-start";
 const READONLY_BODY_TEXT_CLASS =
-  "text-sm leading-5 font-normal text-[16px] text-on-surface-10 whitespace-pre-wrap break-words align-middle";
+  "text-sm leading-6 font-normal text-[16px] text-on-surface-10 whitespace-pre-wrap break-words align-middle";
 const INLINE_TAG_TOKEN_REGEX = /(<[^>]+>)/g;
 
 function renderInlineTagHighlightedText(content: string): React.ReactNode {
@@ -48,28 +51,26 @@ function ReadOnlyBlockRow({
   if (block.type === "text") {
     const speaker = resolveSpeakerDisplay(block.data?.speaker, seriesPersona);
     return (
-      <div className="group/row relative flex h-fit w-full min-h-10 items-start justify-start gap-0 rounded bg-white py-1 transition-colors group-hover/preview:bg-slate-50/50">
-        <span
+      <>
+        <div
           className={cn(
             INDEX_COL_CLASS,
             isFocused ? "text-primary" : "transition-colors group-hover/preview:text-on-surface-20"
           )}
         >
           {indexLabel}
-        </span>
-        <div className="min-w-0 flex-1 flex items-start">
-          <div className="flex h-8 items-center justify-start gap-0 shrink-0 pt-0 w-[100px] mt-0 pr-2">
-            <span className="inline-block w-fit max-w-[76px] text-left truncate text-[13px] font-medium text-on-surface-30">
-              {speaker}
-            </span>
-          </div>
-          <div className="min-w-0 flex flex-1 items-center justify-start h-8 py-0">
-            <span className={READONLY_BODY_TEXT_CLASS}>
-              {renderInlineTagHighlightedText(block.content || "—")}
-            </span>
-          </div>
         </div>
-      </div>
+        <div className={cn(READONLY_ROW_LABEL_CELL_CLASS, "pr-2")}>
+          <span className="inline-block w-fit max-w-[76px] text-left truncate text-[13px] font-medium text-on-surface-30">
+            {speaker}
+          </span>
+        </div>
+        <div className={READONLY_ROW_CONTENT_CELL_CLASS}>
+          <span className={READONLY_BODY_TEXT_CLASS}>
+            {renderInlineTagHighlightedText(block.content || "—")}
+          </span>
+        </div>
+      </>
     );
   }
 
@@ -89,28 +90,31 @@ function ReadOnlyBlockRow({
           },
         ];
     return (
-      <div className="group/row flex h-fit w-full min-h-10 items-start justify-start gap-0 rounded bg-white py-1 transition-colors group-hover/preview:bg-slate-50/50">
-        <span
+      <>
+        <div
           className={cn(
-            "flex h-fit min-h-8 w-10 shrink-0 items-center justify-start font-medium tabular-nums text-xs leading-4",
+            INDEX_COL_CLASS,
             isFocused ? "text-primary" : "text-on-surface-disabled transition-colors group-hover/preview:text-on-surface-20"
           )}
         >
           {indexLabel}
-        </span>
-        <div className="flex min-w-0 flex-1 items-start gap-0">
-          <div className="flex w-24 min-w-14 shrink-0 items-center justify-start overflow-hidden pt-0.5 min-h-8">
-            <span className={cn("text-xs font-medium leading-4", labelColorClass)}>#선택지</span>
-          </div>
-          <div className="flex min-w-0 flex-1 flex-col gap-0.5 py-1">
+        </div>
+        <div className={cn(READONLY_ROW_LABEL_CELL_CLASS, "overflow-hidden")}>
+          <span className={cn("text-xs font-medium leading-4", labelColorClass)}>#선택지</span>
+        </div>
+        <div className={cn(READONLY_ROW_CONTENT_CELL_CLASS, "items-start", "py-0")}>
+          <div className="flex min-w-0 flex-1 flex-col gap-0.5">
             {displayChoices.map((c, i) => (
-              <span key={c.id} className="flex h-8 items-center gap-1">
+              <span
+                key={c.id}
+                className={cn("flex justify-start items-center gap-3", READONLY_ROW_MIN_HEIGHT_CLASS)}
+              >
                 <span className={READONLY_BODY_TEXT_CLASS}>
                   {i + 1}.{" "}
                   {c.isAiMode ? "✨ AI 대화창" : renderInlineTagHighlightedText(c.text || "—")}
                 </span>
                 {c.isPaid && (
-                  <span className="inline-flex items-center rounded bg-primary/12 px-1.5 py-0.5 text-[11px] font-medium leading-none text-primary">
+                  <span className="inline-flex h-5 w-fit shrink-0 items-center justify-center rounded bg-primary/12 px-1.5 text-[11px] font-medium leading-none whitespace-nowrap text-primary">
                     유료
                   </span>
                 )}
@@ -118,79 +122,84 @@ function ReadOnlyBlockRow({
             ))}
           </div>
         </div>
-      </div>
+      </>
     );
   }
 
   if (block.type === "scene") {
     const sceneOrdinal = blocks.slice(0, blockIndex + 1).filter((b) => b.type === "scene").length;
     return (
-      <div className="group/row flex h-8 items-center justify-start gap-0 rounded-lg transition-colors group-hover/preview:bg-slate-50/50">
-        <span
+      <>
+        <div
           className={cn(
             INDEX_COL_CLASS,
-            "mt-0 h-full",
+            "mt-0",
             isFocused ? "text-primary" : "transition-colors group-hover/preview:text-on-surface-20"
           )}
         >
           {indexLabel}
-        </span>
-        <div className="flex min-w-0 flex-1 items-center gap-0">
-          <div className="flex h-8 w-[100px] shrink-0 items-center justify-start">
-            <span className={cn("text-[13px] font-medium", labelColorClass)}>
-              {`#장면 ${String(sceneOrdinal).padStart(2, "0")}`}
-            </span>
-          </div>
-          <span className="min-w-0 flex-1 text-[24px] font-bold leading-8 text-on-surface-10 truncate">{block.content || "—"}</span>
         </div>
-      </div>
+        <div className={cn(READONLY_ROW_LABEL_CELL_CLASS, "text-[13px] font-medium", labelColorClass)}>
+          {`#장면 ${String(sceneOrdinal).padStart(2, "0")}`}
+        </div>
+        <div className={READONLY_ROW_CONTENT_CELL_CLASS}>
+          <span
+            className={cn(
+              "min-w-0 flex-1 whitespace-pre-wrap break-words",
+              "text-[24px] font-bold leading-8 text-on-surface-10"
+            )}
+          >
+            {block.content || "—"}
+          </span>
+        </div>
+      </>
     );
   }
 
   if (block.type === "top_desc") {
     return (
-      <div className="group/row flex h-[36px] items-center justify-start gap-0 rounded-lg transition-colors group-hover/preview:bg-slate-50/50">
-        <span
+      <>
+        <div
           className={cn(
             INDEX_COL_CLASS,
-            "mt-0 h-full",
+            "mt-0",
             isFocused ? "text-primary" : "transition-colors group-hover/preview:text-on-surface-20"
           )}
         >
           {indexLabel}
-        </span>
-        <div className="flex min-w-0 flex-1 items-center gap-0">
-          <div className="w-[100px] shrink-0">
-            <span className={cn("text-[13px] font-medium", labelColorClass)}>#장면정보</span>
-          </div>
-          <span className="min-w-0 flex-1 text-base font-medium leading-relaxed text-on-surface-10 truncate">
+        </div>
+        <div className={cn(READONLY_ROW_LABEL_CELL_CLASS, "text-[13px] font-medium", labelColorClass)}>
+          #장면정보
+        </div>
+        <div className={READONLY_ROW_CONTENT_CELL_CLASS}>
+          <span className="min-w-0 flex-1 h-6 text-base font-medium leading-6 text-on-surface-10 whitespace-pre-wrap break-words">
             {renderInlineTagHighlightedText(block.content || "—")}
           </span>
         </div>
-      </div>
+      </>
     );
   }
 
   return (
-    <div className="group/row flex h-[36px] items-center justify-start gap-0 rounded-lg transition-colors group-hover/preview:bg-slate-50/50">
-      <span
+    <>
+      <div
         className={cn(
           INDEX_COL_CLASS,
-          "mt-0 h-full",
+          "mt-0",
           isFocused ? "text-primary" : "transition-colors group-hover/preview:text-on-surface-20"
         )}
       >
         {indexLabel}
-      </span>
-      <div className="flex min-w-0 flex-1 items-center gap-0">
-        <div className="w-[100px] shrink-0 flex items-center">
-          <span className={cn("w-fit font-medium text-[13px]", labelColorClass)}>{`#${labelKo}`}</span>
-        </div>
+      </div>
+      <div className={cn(READONLY_ROW_LABEL_CELL_CLASS, "text-[13px] font-medium", labelColorClass)}>
+        {`#${labelKo}`}
+      </div>
+      <div className={READONLY_ROW_CONTENT_CELL_CLASS}>
         <span className={cn("min-w-0 flex-1", READONLY_BODY_TEXT_CLASS)}>
           {renderInlineTagHighlightedText(block.content || "—")}
         </span>
       </div>
-    </div>
+    </>
   );
 }
 
@@ -270,7 +279,7 @@ export function EditorBodyReadOnly() {
                 tabIndex={0}
                 onClick={() => focusBlock(block.id)}
                 className={cn(
-                  "group/preview rounded-lg px-3 text-left outline-none transition-colors hover:bg-slate-50/50"
+                  "group/preview w-full rounded bg-white inline-flex items-start justify-start gap-0 px-3 py-1 text-left outline-none transition-colors hover:bg-slate-50/50"
                 )}
               >
                 <ReadOnlyBlockRow
