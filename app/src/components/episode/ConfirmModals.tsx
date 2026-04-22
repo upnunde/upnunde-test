@@ -137,7 +137,7 @@ export function DeleteConfirmModal({
         </div>
 
         {/* 중단: 확인 문구 + 입력 (surface-20 띠) */}
-        <div className="flex flex-col items-center gap-2.5 self-stretch bg-surface-20 p-6">
+        <div className="mx-5 mb-3 flex flex-col items-center gap-2.5 self-stretch overflow-hidden rounded bg-surface-20 p-6">
           <label
             htmlFor="episode-delete-confirm-input"
             className="text-center font-['Pretendard_JP'] text-sm font-normal leading-5 text-on-surface-20"
@@ -176,7 +176,7 @@ export function DeleteConfirmModal({
               onClick={handleConfirm}
               disabled={!deleteEnabled}
             >
-              삭제
+              에피소드 삭제
             </Button>
           </div>
         </div>

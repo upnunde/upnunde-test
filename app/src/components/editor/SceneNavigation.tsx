@@ -10,12 +10,14 @@ interface SceneNavigationProps {
   onSceneClick?: (blockId: string) => void;
   collapsed?: boolean;
   onToggleCollapsed?: () => void;
+  showIssues?: boolean;
 }
 
 export function SceneNavigation({
   onSceneClick,
   collapsed = false,
   onToggleCollapsed,
+  showIssues = true,
 }: SceneNavigationProps) {
   const blocks = useEditorStore((s) => s.blocks);
   const focusBlockId = useEditorStore((s) => s.focusBlockId);
@@ -323,8 +325,11 @@ export function SceneNavigation({
           ))}
       </nav>
 
+      {/* 읽기 전용 화면 등에서 오류 패널을 숨길 때도 레이아웃 높이는 유지 */}
+      {!showIssues && !collapsed && <div className="mt-auto h-[46px]" aria-hidden />}
+
       {/* 최하단: 오류/누락 알림 박스 (hover 시 상세 리스트 노출, 클릭 시 해당 위치로 이동) */}
-      {!collapsed && (
+      {showIssues && !collapsed && (
         <div className="mt-auto px-2 pb-2">
           <div className="relative group">
             <button
@@ -392,7 +397,9 @@ export function SceneNavigation({
       )}
 
       {/* 접힘 상태: 오류 아이콘 고정 노출 + 클릭 시 상세 */}
-      {collapsed && (
+      {!showIssues && collapsed && <div className="mt-auto h-12" aria-hidden />}
+
+      {showIssues && collapsed && (
         <div className="mt-auto pb-2">
           <div ref={collapsedIssueWrapRef} className="relative">
             <button

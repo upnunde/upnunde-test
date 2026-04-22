@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useEffect } from "react";
+import React, { Fragment, useCallback, useEffect } from "react";
 import { useEditorStore, hydrateSeriesPersonaFromSession } from "@/store/useEditorStore";
 import { resolveSpeakerDisplay } from "@/lib/speakerPersona";
 import type { ScriptBlock } from "@/types/editor";
@@ -10,18 +10,20 @@ import { BLOCK_LABEL_KO } from "@/lib/blockTypeLabels";
 
 /** EditorBody 줄번호 열과 동일 톤 (포커스 없을 때) */
 const INDEX_COL_CLASS =
-  "shrink-0 text-[13px] font-medium tabular-nums w-10 flex items-center justify-start pt-0 text-[rgba(197,207,221,1)]";
+  "shrink-0 text-[13px] font-medium tabular-nums w-10 h-8 flex items-center justify-start pt-0 mt-0 text-[rgba(197,207,221,1)]";
 
 function ReadOnlyBlockRow({
   block,
   lineIndex,
   blockIndex,
   blocks,
+  isFocused,
 }: {
   block: ScriptBlock;
   lineIndex: number;
   blockIndex: number;
   blocks: ScriptBlock[];
+  isFocused: boolean;
 }) {
   const indexLabel = String(lineIndex).padStart(2, "0");
   const labelColorClass = LABEL_COLOR_BY_TYPE[block.type];
@@ -31,16 +33,23 @@ function ReadOnlyBlockRow({
   if (block.type === "text") {
     const speaker = resolveSpeakerDisplay(block.data?.speaker, seriesPersona);
     return (
-      <div className="group flex min-h-[36px] h-fit items-start justify-start gap-0">
-        <span className={cn(INDEX_COL_CLASS, "mt-2")}>{indexLabel}</span>
+      <div className="group/row relative flex h-fit w-full min-h-10 items-start justify-start gap-0 rounded bg-white py-1 transition-colors group-hover/preview:bg-slate-50/50">
+        <span
+          className={cn(
+            INDEX_COL_CLASS,
+            isFocused ? "text-primary" : "transition-colors group-hover/preview:text-on-surface-20"
+          )}
+        >
+          {indexLabel}
+        </span>
         <div className="min-w-0 flex-1 flex items-start">
-          <div className="flex items-center justify-start gap-0 shrink-0 pt-0 w-[100px] mt-1 pr-2">
+          <div className="flex h-8 items-center justify-start gap-0 shrink-0 pt-0 w-[100px] mt-0 pr-2">
             <span className="inline-block w-fit max-w-[76px] text-left truncate text-[13px] font-medium text-on-surface-30">
               {speaker}
             </span>
           </div>
-          <div className="min-w-0 flex-1 py-1">
-            <span className="text-sm leading-5 font-medium text-[16px] text-on-surface-10 whitespace-pre-wrap break-words">
+          <div className="min-w-0 flex flex-1 items-center justify-start h-8 py-0">
+            <span className="text-sm leading-5 font-medium text-[16px] text-on-surface-10 whitespace-pre-wrap break-words align-middle">
               {block.content || "—"}
             </span>
           </div>
@@ -52,8 +61,13 @@ function ReadOnlyBlockRow({
   if (block.type === "choice") {
     const choices = block.data?.choices ?? [];
     return (
-      <div className="group flex h-fit w-full min-h-10 items-start justify-start gap-0 rounded bg-white py-1">
-        <span className="flex h-fit min-h-8 w-10 shrink-0 items-center justify-start font-medium tabular-nums text-xs leading-4 text-on-surface-disabled">
+      <div className="group/row flex h-fit w-full min-h-10 items-start justify-start gap-0 rounded bg-white py-1 transition-colors group-hover/preview:bg-slate-50/50">
+        <span
+          className={cn(
+            "flex h-fit min-h-8 w-10 shrink-0 items-center justify-start font-medium tabular-nums text-xs leading-4",
+            isFocused ? "text-primary" : "text-on-surface-disabled transition-colors group-hover/preview:text-on-surface-20"
+          )}
+        >
           {indexLabel}
         </span>
         <div className="flex min-w-0 flex-1 items-start gap-0">
@@ -75,8 +89,16 @@ function ReadOnlyBlockRow({
   if (block.type === "scene") {
     const sceneOrdinal = blocks.slice(0, blockIndex + 1).filter((b) => b.type === "scene").length;
     return (
-      <div className="group flex min-h-[36px] h-[36px] items-center justify-start gap-0">
-        <span className={cn(INDEX_COL_CLASS, "mt-0 h-full")}>{indexLabel}</span>
+      <div className="group/row flex h-[36px] items-center justify-start gap-0 rounded-lg transition-colors group-hover/preview:bg-slate-50/50">
+        <span
+          className={cn(
+            INDEX_COL_CLASS,
+            "mt-0 h-full",
+            isFocused ? "text-primary" : "transition-colors group-hover/preview:text-on-surface-20"
+          )}
+        >
+          {indexLabel}
+        </span>
         <div className="flex min-w-0 flex-1 items-center gap-0">
           <div className="w-[100px] shrink-0">
             <span className={cn("text-[13px] font-medium", labelColorClass)}>
@@ -91,8 +113,16 @@ function ReadOnlyBlockRow({
 
   if (block.type === "top_desc") {
     return (
-      <div className="group flex min-h-[36px] h-[36px] items-center justify-start gap-0">
-        <span className={cn(INDEX_COL_CLASS, "mt-0 h-full")}>{indexLabel}</span>
+      <div className="group/row flex h-[36px] items-center justify-start gap-0 rounded-lg transition-colors group-hover/preview:bg-slate-50/50">
+        <span
+          className={cn(
+            INDEX_COL_CLASS,
+            "mt-0 h-full",
+            isFocused ? "text-primary" : "transition-colors group-hover/preview:text-on-surface-20"
+          )}
+        >
+          {indexLabel}
+        </span>
         <div className="flex min-w-0 flex-1 items-center gap-0">
           <div className="w-[100px] shrink-0">
             <span className={cn("text-[13px] font-medium", labelColorClass)}>#장면정보</span>
@@ -106,8 +136,16 @@ function ReadOnlyBlockRow({
   }
 
   return (
-    <div className="group flex min-h-[36px] h-[36px] items-center justify-start gap-0">
-      <span className={cn(INDEX_COL_CLASS, "mt-0 h-full")}>{indexLabel}</span>
+    <div className="group/row flex h-[36px] items-center justify-start gap-0 rounded-lg transition-colors group-hover/preview:bg-slate-50/50">
+      <span
+        className={cn(
+          INDEX_COL_CLASS,
+          "mt-0 h-full",
+          isFocused ? "text-primary" : "transition-colors group-hover/preview:text-on-surface-20"
+        )}
+      >
+        {indexLabel}
+      </span>
       <div className="flex min-w-0 flex-1 items-center gap-0">
         <div className="w-[100px] shrink-0 flex items-center">
           <span className={cn("w-fit font-medium text-[13px]", labelColorClass)}>{`#${labelKo}`}</span>
@@ -124,9 +162,48 @@ export function EditorBodyReadOnly() {
   const focusBlockId = useEditorStore((s) => s.focusBlockId);
   const setFocusBlockId = useEditorStore((s) => s.setFocusBlockId);
 
+  const focusBlock = useCallback(
+    (id: string) => {
+      setFocusBlockId(id);
+      requestAnimationFrame(() => {
+        const el = document.getElementById(`block-${id}`);
+        if (!el) return;
+        el.focus();
+        el.scrollIntoView({ block: "nearest", behavior: "auto" });
+      });
+    },
+    [setFocusBlockId]
+  );
+
   useEffect(() => {
     hydrateSeriesPersonaFromSession();
   }, []);
+
+  useEffect(() => {
+    const handleKeyDown = (e: KeyboardEvent) => {
+      if (e.key !== "ArrowUp" && e.key !== "ArrowDown") return;
+      const target = e.target as HTMLElement | null;
+      if (
+        target?.tagName === "INPUT" ||
+        target?.tagName === "TEXTAREA" ||
+        target?.isContentEditable
+      ) {
+        return;
+      }
+      if (!blocks.length) return;
+      e.preventDefault();
+      const currentIndex = focusBlockId ? blocks.findIndex((b) => b.id === focusBlockId) : -1;
+      if (e.key === "ArrowDown") {
+        const nextIndex = currentIndex < 0 ? 0 : Math.min(currentIndex + 1, blocks.length - 1);
+        focusBlock(blocks[nextIndex].id);
+        return;
+      }
+      const prevIndex = currentIndex < 0 ? blocks.length - 1 : Math.max(currentIndex - 1, 0);
+      focusBlock(blocks[prevIndex].id);
+    };
+    document.addEventListener("keydown", handleKeyDown, true);
+    return () => document.removeEventListener("keydown", handleKeyDown, true);
+  }, [blocks, focusBlockId, focusBlock]);
 
   if (!blocks || blocks.length === 0) {
     return (
@@ -143,39 +220,30 @@ export function EditorBodyReadOnly() {
           const isScene = block.type === "scene";
           const prevBlock = i > 0 ? blocks[i - 1] : null;
           const showDivider = isScene && prevBlock && prevBlock.type !== "scene";
-          const isSelected = focusBlockId === block.id;
-
           return (
-            <div
-              key={block.id}
-              id={`block-${block.id}`}
-              data-block-id={block.id}
-              role="button"
-              tabIndex={0}
-              aria-current={isSelected ? "true" : undefined}
-              aria-label={`원고 블록 ${i + 1}, 클릭하면 미리보기에 반영`}
-              onClick={() => setFocusBlockId(block.id)}
-              onKeyDown={(e) => {
-                if (e.key === "Enter" || e.key === " ") {
-                  e.preventDefault();
-                  setFocusBlockId(block.id);
-                }
-              }}
-              className={cn(
-                "rounded-lg px-1 -mx-1 py-0.5 text-left outline-none transition-colors",
-                "focus-visible:ring-2 focus-visible:ring-primary/40 focus-visible:ring-offset-2",
-                isSelected
-                  ? "bg-primary/10 ring-2 ring-inset ring-primary/25"
-                  : "hover:bg-slate-50/90"
-              )}
-            >
+            <Fragment key={block.id}>
               {showDivider && (
-                <div className="flex items-center gap-2 px-[48px] py-10">
-                  <div className="flex-1 border-t border-slate-200" />
-                </div>
+                <div className="mx-0 my-10 border-t border-slate-200" />
               )}
-              <ReadOnlyBlockRow block={block} lineIndex={i + 1} blockIndex={i} blocks={blocks} />
-            </div>
+              <div
+                id={`block-${block.id}`}
+                data-block-id={block.id}
+                aria-label={`원고 블록 ${i + 1}, 클릭하면 미리보기에 반영`}
+                tabIndex={0}
+                onClick={() => focusBlock(block.id)}
+                className={cn(
+                  "group/preview rounded-lg px-3 text-left outline-none transition-colors hover:bg-slate-50/50"
+                )}
+              >
+                <ReadOnlyBlockRow
+                  block={block}
+                  lineIndex={i + 1}
+                  blockIndex={i}
+                  blocks={blocks}
+                  isFocused={focusBlockId === block.id}
+                />
+              </div>
+            </Fragment>
           );
         })}
       </div>

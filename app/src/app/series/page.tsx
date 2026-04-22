@@ -46,8 +46,13 @@ const SERIES_THUMBNAIL_IMAGES = [
   "/gallery-G11.png",
 ] as const;
 
-function getRandomSeriesThumbnail(): string {
-  const index = Math.floor(Math.random() * SERIES_THUMBNAIL_IMAGES.length);
+/** SSR/CSR 동일 썸네일 선택 — Math.random 사용 금지 */
+function deterministicSeriesThumbnail(seriesId: string): string {
+  let hash = 0;
+  for (const ch of seriesId) {
+    hash = (hash * 31 + ch.charCodeAt(0)) >>> 0;
+  }
+  const index = hash % SERIES_THUMBNAIL_IMAGES.length;
   return SERIES_THUMBNAIL_IMAGES[index]!;
 }
 
@@ -56,7 +61,7 @@ const MOCK_SERIES: SeriesData[] = [
   {
     id: "1",
     title: "꽃에게는 독이 필요하다",
-    thumbnailUrl: getRandomSeriesThumbnail(),
+    thumbnailUrl: deterministicSeriesThumbnail("1"),
     status: "PUBLIC",
     createdAt: "2025-12-01T09:00:00.000Z",
     episodeCount: 120,
@@ -65,7 +70,7 @@ const MOCK_SERIES: SeriesData[] = [
   {
     id: "2",
     title: "달빛 아래 그대",
-    thumbnailUrl: getRandomSeriesThumbnail(),
+    thumbnailUrl: deterministicSeriesThumbnail("2"),
     status: "PRIVATE",
     createdAt: "2025-11-15T14:30:00.000Z",
     episodeCount: 50,
@@ -74,7 +79,7 @@ const MOCK_SERIES: SeriesData[] = [
   {
     id: "4",
     title: "가이드 위반 작품",
-    thumbnailUrl: getRandomSeriesThumbnail(),
+    thumbnailUrl: deterministicSeriesThumbnail("4"),
     status: "BANNED",
     createdAt: "2025-10-01T00:00:00.000Z",
     episodeCount: 10,

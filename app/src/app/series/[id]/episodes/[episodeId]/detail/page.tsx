@@ -56,6 +56,7 @@ export default function EpisodeDetailPage() {
             onSceneClick={handleSceneClick}
             collapsed={isSceneSidebarCollapsed}
             onToggleCollapsed={() => setIsSceneSidebarCollapsed((prev) => !prev)}
+            showIssues={false}
           />
         </aside>
         <div className="flex min-w-0 flex-1 flex-col overflow-hidden">
