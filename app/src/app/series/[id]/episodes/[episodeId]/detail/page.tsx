@@ -2,13 +2,14 @@
 
 import React, { useState, useEffect, useMemo } from "react";
 import { useRouter, usePathname } from "next/navigation";
-import { ChevronLeft } from "lucide-react";
+import { ChevronLeft, FileText } from "lucide-react";
 import Header from "@/components/Header/Header";
 import { Button } from "@/components/ui/button";
 import { EditorBodyReadOnly } from "@/components/editor/EditorBodyReadOnly";
 import { PreviewScreen } from "@/components/editor/PreviewScreen";
 import { IPhone15ProFrame } from "@/components/preview/IPhone15ProFrame";
 import { SceneNavigation } from "@/components/editor/SceneNavigation";
+import { EpisodePromptReferenceModal } from "@/components/episode/EpisodePromptReferenceModal";
 import { parseScriptToBlocks } from "@/utils/scriptParser";
 import { useEditorStore, hydrateSeriesPersonaFromSession } from "@/store/useEditorStore";
 import { useSceneClickHandler } from "@/hooks/useSceneClickHandler";
@@ -23,8 +24,10 @@ export default function EpisodeDetailPage() {
     return segments[1] ?? "";
   }, [pathname]);
   const setBlocks = useEditorStore((s) => s.setBlocks);
+  const blocks = useEditorStore((s) => s.blocks);
   const [profileImageUrl, setProfileImageUrl] = useState<string | null>(null);
   const [isSceneSidebarCollapsed, setIsSceneSidebarCollapsed] = useState(false);
+  const [isPromptModalOpen, setIsPromptModalOpen] = useState(false);
   const handleSceneClick = useSceneClickHandler();
 
   useEffect(() => {
@@ -32,9 +35,10 @@ export default function EpisodeDetailPage() {
   }, []);
 
   useEffect(() => {
+    if (blocks.length > 0) return;
     const parsed = parseScriptToBlocks(INITIAL_SCRIPT);
     setBlocks(parsed.length > 0 ? parsed : []);
-  }, [setBlocks]);
+  }, [blocks.length, setBlocks]);
 
   const handleBack = () => {
     router.push(`/series/${seriesId}/episodes`);
@@ -62,18 +66,30 @@ export default function EpisodeDetailPage() {
         <div className="flex min-w-0 flex-1 flex-col overflow-hidden">
           <main className="flex min-w-0 flex-1 flex-col overflow-hidden">
             <header className="flex h-16 shrink-0 items-center justify-start border-b border-slate-200 bg-white px-6 py-0">
-              <div className="flex w-full max-w-[1200px] min-w-[800px] items-center justify-start gap-3">
+              <div className="flex w-full min-w-[800px] items-center justify-between gap-3">
+                <div className="flex items-center justify-start gap-3">
+                  <Button
+                    type="button"
+                    variant="outline"
+                    size="icon"
+                    onClick={handleBack}
+                    className="h-9 w-9 shrink-0 rounded-full border-slate-200 shadow-none focus-visible:ring-0 focus-visible:ring-offset-0"
+                    aria-label="에피소드 목록으로"
+                  >
+                    <ChevronLeft className="h-5 w-5 text-slate-600" strokeWidth={2} />
+                  </Button>
+                  <h1 className="text-2xl font-extrabold text-on-surface-10">에피소드 상세</h1>
+                </div>
                 <Button
                   type="button"
                   variant="outline"
                   size="icon"
-                  onClick={handleBack}
-                  className="h-9 w-9 shrink-0 rounded-full border-slate-200 shadow-none focus-visible:ring-0 focus-visible:ring-offset-0"
-                  aria-label="에피소드 목록으로"
+                  onClick={() => setIsPromptModalOpen(true)}
+                  className="h-9 w-9 shrink-0 rounded-full border-slate-200 shadow-none"
+                  aria-label="에피소드 기준 프롬프트 보기"
                 >
-                  <ChevronLeft className="h-5 w-5 text-slate-600" strokeWidth={2} />
+                  <FileText className="h-4 w-4 text-slate-600" aria-hidden />
                 </Button>
-                <h1 className="text-2xl font-extrabold text-on-surface-10">에피소드 상세</h1>
               </div>
             </header>
 
@@ -93,6 +109,10 @@ export default function EpisodeDetailPage() {
         </div>
         <div id="profile-modal-portal" className="absolute left-0 top-0 w-0 h-0 overflow-visible" aria-hidden />
       </div>
+      <EpisodePromptReferenceModal
+        open={isPromptModalOpen}
+        onOpenChange={setIsPromptModalOpen}
+      />
     </div>
   );
 }

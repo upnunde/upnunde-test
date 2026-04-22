@@ -216,12 +216,19 @@ export default function EpisodeManagementPage() {
     router.push(`/series/${seriesId}/resources`);
   }, [router, seriesId]);
 
-  /** 정책 7: 행 클릭 → 원고 에디터 화면 */
+  /** 정책 7: 행 클릭
+   *  - 공개 중(PUBLISHED): 에피소드 상세(읽기 전용)로 바로 진입
+   *  - 그 외 상태: 원고 에디터 화면 진입
+   */
   const handleRowClick = useCallback(
     (episode: Episode) => {
+      if (episode.status === "PUBLISHED") {
+        router.push(`/series/${seriesId}/episodes/${episode.id}/detail`);
+        return;
+      }
       router.push(`/editor?episode=${episode.id}`);
     },
-    [router]
+    [router, seriesId]
   );
 
   /** 정책 6: 공개 전환 클릭 → 확인 팝업 */

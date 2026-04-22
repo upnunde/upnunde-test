@@ -11,6 +11,21 @@ import { BLOCK_LABEL_KO } from "@/lib/blockTypeLabels";
 /** EditorBody 줄번호 열과 동일 톤 (포커스 없을 때) */
 const INDEX_COL_CLASS =
   "shrink-0 text-[13px] font-medium tabular-nums w-10 h-8 flex items-center justify-start pt-0 mt-0 text-[rgba(197,207,221,1)]";
+const READONLY_BODY_TEXT_CLASS =
+  "text-sm leading-5 font-normal text-[16px] text-on-surface-10 whitespace-pre-wrap break-words align-middle";
+const INLINE_TAG_TOKEN_REGEX = /(<[^>]+>)/g;
+
+function renderInlineTagHighlightedText(content: string): React.ReactNode {
+  const segments = content.split(INLINE_TAG_TOKEN_REGEX).filter(Boolean);
+  return segments.map((segment, idx) => {
+    const isTag = /^<[^>]+>$/.test(segment);
+    return (
+      <span key={`${idx}-${segment}`} className={isTag ? "text-primary" : undefined}>
+        {segment}
+      </span>
+    );
+  });
+}
 
 function ReadOnlyBlockRow({
   block,
@@ -49,8 +64,8 @@ function ReadOnlyBlockRow({
             </span>
           </div>
           <div className="min-w-0 flex flex-1 items-center justify-start h-8 py-0">
-            <span className="text-sm leading-5 font-medium text-[16px] text-on-surface-10 whitespace-pre-wrap break-words align-middle">
-              {block.content || "—"}
+            <span className={READONLY_BODY_TEXT_CLASS}>
+              {renderInlineTagHighlightedText(block.content || "—")}
             </span>
           </div>
         </div>
@@ -60,6 +75,19 @@ function ReadOnlyBlockRow({
 
   if (block.type === "choice") {
     const choices = block.data?.choices ?? [];
+    const hasAiChoice = choices.some((c) => c.isAiMode);
+    const displayChoices = hasAiChoice
+      ? choices
+      : [
+          ...choices,
+          {
+            id: `${block.id}-ai-preview`,
+            text: "AI 대화창",
+            nextScene: "",
+            isPaid: false,
+            isAiMode: true,
+          },
+        ];
     return (
       <div className="group/row flex h-fit w-full min-h-10 items-start justify-start gap-0 rounded bg-white py-1 transition-colors group-hover/preview:bg-slate-50/50">
         <span
@@ -75,9 +103,17 @@ function ReadOnlyBlockRow({
             <span className={cn("text-xs font-medium leading-4", labelColorClass)}>#선택지</span>
           </div>
           <div className="flex min-w-0 flex-1 flex-col gap-0.5 py-1">
-            {choices.map((c, i) => (
-              <span key={c.id} className="text-sm text-on-surface-10">
-                {i + 1}. {c.text || "—"}
+            {displayChoices.map((c, i) => (
+              <span key={c.id} className="flex h-8 items-center gap-1">
+                <span className={READONLY_BODY_TEXT_CLASS}>
+                  {i + 1}.{" "}
+                  {c.isAiMode ? "✨ AI 대화창" : renderInlineTagHighlightedText(c.text || "—")}
+                </span>
+                {c.isPaid && (
+                  <span className="inline-flex items-center rounded bg-primary/12 px-1.5 py-0.5 text-[11px] font-medium leading-none text-primary">
+                    유료
+                  </span>
+                )}
               </span>
             ))}
           </div>
@@ -89,7 +125,7 @@ function ReadOnlyBlockRow({
   if (block.type === "scene") {
     const sceneOrdinal = blocks.slice(0, blockIndex + 1).filter((b) => b.type === "scene").length;
     return (
-      <div className="group/row flex h-[36px] items-center justify-start gap-0 rounded-lg transition-colors group-hover/preview:bg-slate-50/50">
+      <div className="group/row flex h-8 items-center justify-start gap-0 rounded-lg transition-colors group-hover/preview:bg-slate-50/50">
         <span
           className={cn(
             INDEX_COL_CLASS,
@@ -100,12 +136,12 @@ function ReadOnlyBlockRow({
           {indexLabel}
         </span>
         <div className="flex min-w-0 flex-1 items-center gap-0">
-          <div className="w-[100px] shrink-0">
+          <div className="flex h-8 w-[100px] shrink-0 items-center justify-start">
             <span className={cn("text-[13px] font-medium", labelColorClass)}>
               {`#장면 ${String(sceneOrdinal).padStart(2, "0")}`}
             </span>
           </div>
-          <span className="min-w-0 flex-1 text-[24px] font-bold text-on-surface-10 truncate">{block.content || "—"}</span>
+          <span className="min-w-0 flex-1 text-[24px] font-bold leading-8 text-on-surface-10 truncate">{block.content || "—"}</span>
         </div>
       </div>
     );
@@ -128,7 +164,7 @@ function ReadOnlyBlockRow({
             <span className={cn("text-[13px] font-medium", labelColorClass)}>#장면정보</span>
           </div>
           <span className="min-w-0 flex-1 text-base font-medium leading-relaxed text-on-surface-10 truncate">
-            {block.content || "—"}
+            {renderInlineTagHighlightedText(block.content || "—")}
           </span>
         </div>
       </div>
@@ -150,7 +186,9 @@ function ReadOnlyBlockRow({
         <div className="w-[100px] shrink-0 flex items-center">
           <span className={cn("w-fit font-medium text-[13px]", labelColorClass)}>{`#${labelKo}`}</span>
         </div>
-        <span className="min-w-0 flex-1 truncate text-sm text-on-surface-10">{block.content || "—"}</span>
+        <span className={cn("min-w-0 flex-1", READONLY_BODY_TEXT_CLASS)}>
+          {renderInlineTagHighlightedText(block.content || "—")}
+        </span>
       </div>
     </div>
   );
