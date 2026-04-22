@@ -111,11 +111,7 @@ export const FrameThemeSelector = forwardRef<FrameThemeSelectorHandle, FrameThem
     const totalPages = themePages.length;
     const needsPager = totalPages > 1;
 
-    /** totalPages가 줄어들 때 activePage가 범위를 넘으면 클램프 — render 중 setState 패턴 */
     const maxPage = Math.max(0, totalPages - 1);
-    if (activePage > maxPage) {
-      setActivePage(maxPage);
-    }
     const clampedPage = Math.min(activePage, maxPage);
     const canGoPrev = clampedPage > 0;
     const canGoNext = clampedPage < totalPages - 1;

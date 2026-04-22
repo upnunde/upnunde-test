@@ -13,7 +13,6 @@ export interface SeriesListProps {
   onSetPrivate?: (series: SeriesData) => void;
   onSetPublic?: (series: SeriesData) => void;
   onDelete?: (series: SeriesData) => void;
-  onViolationDetail?: (series: SeriesData) => void;
   /** 새 시리즈 생성 클릭 */
   onCreateSeries?: () => void;
   className?: string;
@@ -27,7 +26,6 @@ export function SeriesList({
   onSetPrivate,
   onSetPublic,
   onDelete,
-  onViolationDetail,
   onCreateSeries,
   className,
 }: SeriesListProps) {
@@ -57,7 +55,6 @@ export function SeriesList({
           onSetPrivate={onSetPrivate}
           onSetPublic={onSetPublic}
           onDelete={onDelete}
-          onViolationDetail={onViolationDetail}
         />
       ))}
       <div className="min-w-0">

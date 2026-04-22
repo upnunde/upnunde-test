@@ -26,8 +26,6 @@ export interface SeriesItemProps {
   onSetPublic?: (series: SeriesData) => void;
   /** 삭제 */
   onDelete?: (series: SeriesData) => void;
-  /** 가이드 정책 위반 상세 페이지 이동 (정책 6) */
-  onViolationDetail?: (series: SeriesData) => void;
 }
 
 function ViolationIcon({
@@ -55,7 +53,6 @@ export function SeriesItem({
   onSetPrivate,
   onSetPublic,
   onDelete,
-  onViolationDetail,
 }: SeriesItemProps) {
   const { title, thumbnailUrl, status, createdAt, episodeCount, viewCount } = series;
   const [isMenuOpen, setIsMenuOpen] = useState(false);
@@ -202,20 +199,13 @@ export function SeriesItem({
           </span>
         )}
         {isBanned && (
-          <div className="inline-flex mt-1 h-7 items-center gap-4 px-2 py-1 rounded border border-destructive">
+          <div className="inline-flex mt-1 h-7 items-center gap-1 px-2 py-1 rounded border border-destructive">
             <div className="flex items-center gap-1">
               <ViolationIcon className="h-5 w-5 text-destructive" aria-hidden />
               <span className="text-destructive text-sm font-medium">
                 가이드 정책을 위반, 이용 금지
               </span>
             </div>
-            <button
-              type="button"
-              onClick={() => onViolationDetail?.(series)}
-              className="cursor-pointer text-destructive text-sm font-medium underline focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary"
-            >
-              자세히 보기
-            </button>
           </div>
         )}
 

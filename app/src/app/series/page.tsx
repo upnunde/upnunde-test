@@ -121,13 +121,6 @@ export default function SeriesListPage() {
     [router]
   );
 
-  const handleViolationDetail = useCallback(
-    (_series: SeriesData) => {
-      router.push("/guide/violation");
-    },
-    [router]
-  );
-
   const handleCreateSeries = useCallback(() => {
     router.push("/series/new");
   }, [router]);
@@ -177,7 +170,6 @@ export default function SeriesListPage() {
                 onResourceManage={handleResourceManage}
                 onEpisodeManage={handleEpisodeManage}
                 onSeriesManage={handleSeriesManage}
-                onViolationDetail={handleViolationDetail}
                 onSetPrivate={handleSetPrivate}
                 onSetPublic={handleSetPublic}
                 onDelete={(series) => setSeriesToDelete(series)}

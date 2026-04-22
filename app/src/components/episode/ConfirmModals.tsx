@@ -8,6 +8,9 @@ import {
   DialogClose,
 } from "@/components/ui/dialog";
 import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
+import { DELETE_CONFIRM_INPUT_PHRASE } from "@/lib/deleteConfirmPhrase";
+import { useDeleteConfirmInput } from "@/hooks/useDeleteConfirmInput";
 import type { Episode } from "@/types/episode";
 
 /** 안내팝업: 공개 전 유의사항 (정책 6) */
@@ -102,48 +105,76 @@ export function DeleteConfirmModal({
   onClose,
   onConfirm,
 }: DeleteConfirmModalProps) {
+  const { confirmInput, setConfirmInput, deleteEnabled, handleOpenChange, resetConfirmInput } =
+    useDeleteConfirmInput({ onClose });
+
   const handleConfirm = () => {
-    if (episode) {
+    if (episode && deleteEnabled) {
       onConfirm(episode);
+      resetConfirmInput();
       onClose();
     }
   };
 
   return (
-    <Dialog open={open} onOpenChange={(o) => !o && onClose()}>
-      <DialogContent className="w-[480px] max-w-[calc(100vw-2rem)] p-0 gap-0 bg-surface-10 rounded-2xl shadow-[0px_8px_16px_8px_rgba(0,0,0,0.16)] overflow-hidden border-0">
-        {/* 상단: 제목 + 부제 (가이드 레이아웃) */}
-        <div className="self-stretch px-6 pt-10 pb-4 bg-surface-10 rounded-t-2xl flex flex-col justify-start items-center gap-5 overflow-hidden">
-          <div className="self-stretch flex flex-col justify-center items-center gap-2">
+    <Dialog open={open} onOpenChange={handleOpenChange}>
+      <DialogContent className="flex w-[480px] max-w-[calc(100vw-2rem)] flex-col items-stretch gap-0 overflow-hidden border-0 bg-surface-10 p-0 shadow-[0px_8px_16px_8px_rgba(0,0,0,0.16)] sm:rounded-2xl">
+        {/* 상단: 제목 + 부제 (가이드 셸) */}
+        <div className="flex flex-col items-center gap-5 self-stretch overflow-hidden rounded-tl-2xl rounded-tr-2xl bg-surface-10 px-6 pb-4 pt-10">
+          <div className="flex flex-col items-center gap-2 self-stretch">
             <DialogTitle asChild>
-              <h2 className="text-center text-on-surface-10 text-2xl font-bold font-['Pretendard_JP'] leading-8">
+              <h2 className="text-center font-['Pretendard_JP'] text-2xl font-bold leading-8 text-on-surface-10">
                 에피소드를 삭제하시겠어요?
               </h2>
             </DialogTitle>
           </div>
-          <div className="self-stretch text-center text-on-surface-20 text-base font-medium font-['Pretendard_JP'] leading-6">
+          <div className="flex flex-col gap-2 self-stretch text-center font-['Pretendard_JP'] text-base font-medium leading-6 text-on-surface-20">
             <p>삭제된 에피소드는 복구할 수 없습니다.</p>
             {episode && (
-              <span className="mt-2 block font-medium text-on-surface-10">
-                「{episode.title}」
-              </span>
+              <span className="block font-medium text-on-surface-10">「{episode.title}」</span>
             )}
           </div>
         </div>
 
-        {/* 하단: 버튼 영역 (가이드 레이아웃) */}
-        <div className="self-stretch rounded-b-2xl flex flex-col justify-start items-start overflow-hidden bg-surface-10">
-          <div className="self-stretch px-6 pt-2 pb-5 bg-surface-10 inline-flex justify-end items-center gap-2">
+        {/* 중단: 확인 문구 + 입력 (surface-20 띠) */}
+        <div className="flex flex-col items-center gap-2.5 self-stretch bg-surface-20 p-6">
+          <label
+            htmlFor="episode-delete-confirm-input"
+            className="text-center font-['Pretendard_JP'] text-sm font-normal leading-5 text-on-surface-20"
+          >
+            삭제를 진행하려면 아래에「{DELETE_CONFIRM_INPUT_PHRASE}」를 입력해 주세요.
+          </label>
+          <div className="flex w-full flex-col items-stretch justify-center gap-2 rounded">
+            <Input
+              id="episode-delete-confirm-input"
+              type="text"
+              autoComplete="off"
+              placeholder={DELETE_CONFIRM_INPUT_PHRASE}
+              value={confirmInput}
+              onChange={(e) => setConfirmInput(e.target.value)}
+              className="h-10 rounded border-0 bg-surface-10 px-4 font-['Pretendard_JP'] text-sm font-normal leading-5 text-on-surface-10 shadow-none outline outline-1 -outline-offset-1 outline-border-20 focus-visible:ring-0 focus-visible:ring-offset-0"
+            />
+          </div>
+        </div>
+
+        {/* 하단: 버튼 */}
+        <div className="flex items-center justify-end overflow-hidden rounded-bl-2xl rounded-br-2xl bg-surface-10">
+          <div className="inline-flex items-center justify-end gap-2 self-stretch bg-surface-10 px-6 pb-5 pt-2">
             <DialogClose asChild>
-              <Button variant="outline" size="default" className="min-w-20 h-10">
+              <Button
+                type="button"
+                variant="outline"
+                className="h-10 min-w-20 rounded-md border border-border-20 bg-surface-10 px-3 font-['Pretendard_JP'] text-base font-medium leading-5 text-on-surface-10 hover:bg-surface-20"
+              >
                 취소
               </Button>
             </DialogClose>
             <Button
+              type="button"
               variant="destructive"
-              size="default"
-              className="min-w-20 h-10"
+              className="h-10 min-w-20 rounded-md bg-error-error px-3 font-['Pretendard_JP'] text-base font-medium leading-5 text-white hover:bg-error-error/90 disabled:opacity-50"
               onClick={handleConfirm}
+              disabled={!deleteEnabled}
             >
               삭제
             </Button>
