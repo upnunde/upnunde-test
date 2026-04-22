@@ -58,6 +58,18 @@ const RESOURCE_THUMBNAIL_IMAGES = [
   "/gallery-G11.png",
 ] as const;
 
+/** SSR/CSR 동일 — Math.random 금지(하이드레이션 불일치 방지) */
+function deterministicViews(episodeNumber: number): number {
+  return 100 + ((episodeNumber * 7919 + 12345) % 4901);
+}
+
+function deterministicThumbnail(episodeNumber: number): string {
+  const idx =
+    Math.abs((episodeNumber * 1103515245 + 12345) % RESOURCE_THUMBNAIL_IMAGES.length) %
+    RESOURCE_THUMBNAIL_IMAGES.length;
+  return RESOURCE_THUMBNAIL_IMAGES[idx]!;
+}
+
 /** 1~120화 더미 데이터 생성 (정책 13: 페이지네이션 동작 검증용) - 모든 목록 공개 중 */
 function buildMockEpisodes(): Episode[] {
   const episodes: Episode[] = [];
@@ -77,11 +89,8 @@ function buildMockEpisodes(): Episode[] {
     const baseDate = new Date(2024, 0, 1);
     baseDate.setDate(baseDate.getDate() + (n - 1) * 2);
     const date = baseDate.toISOString().slice(0, 10);
-    const views = Math.floor(100 + Math.random() * 5000);
-    const thumbnail =
-      RESOURCE_THUMBNAIL_IMAGES[
-        Math.floor(Math.random() * RESOURCE_THUMBNAIL_IMAGES.length)
-      ];
+    const views = deterministicViews(n);
+    const thumbnail = deterministicThumbnail(n);
 
     episodes.push({
       id,
