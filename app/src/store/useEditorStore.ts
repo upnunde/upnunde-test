@@ -148,7 +148,8 @@ export const useEditorStore = create<EditorStore>((set) => ({
   blocks: [],
   focusBlockId: null,
   issueFocus: null,
-  currentView: "form",
+  /** 기본은 원고 에디터; 에피소드 생성은 `/editor?view=form`으로만 전환 */
+  currentView: "editor",
   rawScript: "",
   undoStack: [],
   redoStack: [],

@@ -1,7 +1,7 @@
 "use client";
 
 import { Suspense, useState, useEffect } from "react";
-import { useRouter } from "next/navigation";
+import { useRouter, useSearchParams } from "next/navigation";
 import { ChevronLeft } from "lucide-react";
 import Header from "@/components/Header/Header";
 import { EditorSubHeader } from "@/components/editor/EditorSubHeader";
@@ -17,6 +17,7 @@ import { Dialog, DialogContent, DialogTitle } from "@/components/ui/dialog";
 
 function EditorInner() {
   const router = useRouter();
+  const searchParams = useSearchParams();
   const currentView = useEditorStore((s) => s.currentView);
   const setCurrentView = useEditorStore((s) => s.setCurrentView);
   const handleSceneClick = useSceneClickHandler();
@@ -25,11 +26,16 @@ function EditorInner() {
   const [isRecreateModalOpen, setIsRecreateModalOpen] = useState(false);
 
   useEffect(() => {
-    if (typeof window !== "undefined" && new URLSearchParams(window.location.search).get("view") === "form") {
+    if (searchParams.get("view") === "form") {
       setCurrentView("form");
       router.replace("/editor");
+      return;
     }
-  }, [setCurrentView, router]);
+    // 에피소드 목록에서 `?episode=` 로 진입 시 이전 탭에서 남은 `form` 뷰를 덮어씀
+    if (searchParams.get("episode") != null) {
+      setCurrentView("editor");
+    }
+  }, [searchParams, setCurrentView, router]);
 
   if (currentView === "form") {
     return (
