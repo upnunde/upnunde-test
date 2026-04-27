@@ -4,6 +4,7 @@ import { Suspense, useState, useEffect } from "react";
 import { useRouter, useSearchParams } from "next/navigation";
 import { ChevronLeft } from "lucide-react";
 import Header from "@/components/Header/Header";
+import { EditorScriptBootstrap } from "@/components/editor/EditorScriptBootstrap";
 import { EditorSubHeader } from "@/components/editor/EditorSubHeader";
 import EditorBody from "@/components/editor/EditorBody";
 import { SceneNavigation } from "@/components/editor/SceneNavigation";
@@ -92,9 +93,11 @@ function EditorInner() {
 
         {/* 2-2. Right Content Area (Sub-header + Editor + Preview) */}
         <main className="flex min-w-0 flex-1 flex-col overflow-hidden">
+          <EditorScriptBootstrap routeKey={searchParams.toString()} />
           {/* 2-2-a. Sub Header (Back, Title, Actions) */}
           <div className="w-full border-b border-slate-200">
             <EditorSubHeader
+              key={searchParams.size === 0 ? "editor" : searchParams.toString()}
               title="에피소드 에디터"
               onRecreate={() => setIsRecreateModalOpen(true)}
             />

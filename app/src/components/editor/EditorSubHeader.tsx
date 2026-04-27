@@ -2,7 +2,7 @@
 
 import { ChevronLeft, History } from "lucide-react";
 import { useRouter } from "next/navigation";
-import { useEffect, useMemo, useState } from "react";
+import { useLayoutEffect, useMemo, useRef, useState } from "react";
 import { useEditorStore } from "@/store/useEditorStore";
 import { Button } from "@/components/ui/button";
 import { Snackbar } from "@/components/episode/Snackbar";
@@ -13,6 +13,7 @@ import {
   PopoverTrigger,
 } from "@/components/ui/popover";
 import { cn } from "@/lib/utils";
+import type { ScriptBlock } from "@/types/editor";
 
 /** 히스토리 목록: MM.DD, HH:mm (예: 04.07, 16:23) */
 function formatScriptHistoryTimestamp(savedAt: number): string {
@@ -36,12 +37,16 @@ export function EditorSubHeader({ title = "에피소드 제목", onRecreate }: E
   const blocks = useEditorStore((s) => s.blocks);
   const scriptHistory = useEditorStore((s) => s.scriptHistory);
   const addScriptHistoryEntry = useEditorStore((s) => s.addScriptHistoryEntry);
+  const undoDepth = useEditorStore((s) => s.undoStack.length);
+  const setBlocks = useEditorStore((s) => s.setBlocks);
   const currentView = useEditorStore((s) => s.currentView);
   const setCurrentView = useEditorStore((s) => s.setCurrentView);
   const [savedSnapshot, setSavedSnapshot] = useState<string | null>(null);
   const [snackbar, setSnackbar] = useState({ open: false, message: "" });
   const [isBackConfirmOpen, setIsBackConfirmOpen] = useState(false);
   const [historyOpen, setHistoryOpen] = useState(false);
+  /** 블록이 비었다가 다시 생길 때까지 한 번만 진입 기준선을 잡기 위함 */
+  const snapshotBaselineInitRef = useRef(false);
 
   const blocksSnapshot = useMemo(() => JSON.stringify(blocks), [blocks]);
 
@@ -89,6 +94,7 @@ export function EditorSubHeader({ title = "에피소드 제목", onRecreate }: E
 
   const handleSubmit = () => {
     // TODO: 실제 등록 로직 연동 후 에피소드 목록 화면으로 이동
+    useEditorStore.setState({ undoStack: [], redoStack: [] });
     router.push("/series/1/episodes");
   };
 
@@ -96,7 +102,28 @@ export function EditorSubHeader({ title = "에피소드 제목", onRecreate }: E
     // TODO: 실제 임시저장 API 연동 시 저장 성공 시점에 snapshot 갱신
     setSavedSnapshot(blocksSnapshot);
     addScriptHistoryEntry();
+    useEditorStore.setState({ undoStack: [], redoStack: [] });
     setSnackbar({ open: true, message: "임시저장을 완료했습니다" });
+  };
+
+  /** 확인 모달: 마지막 저장(또는 최초 스냅샷) 기준으로 편집 내용 버리고 목록으로 */
+  const handleLeaveWithoutSave = () => {
+    if (savedSnapshot != null) {
+      try {
+        setBlocks(JSON.parse(savedSnapshot) as ScriptBlock[]);
+      } catch {
+        /* ignore */
+      }
+    }
+    useEditorStore.setState({ undoStack: [], redoStack: [] });
+    setIsBackConfirmOpen(false);
+    goToEpisodeList();
+  };
+
+  const handleTemporarySaveAndLeave = () => {
+    handleTemporarySave();
+    setIsBackConfirmOpen(false);
+    goToEpisodeList();
   };
   const handleRecreate = () => {
     setHistoryOpen(false);
@@ -107,17 +134,30 @@ export function EditorSubHeader({ title = "에피소드 제목", onRecreate }: E
     setCurrentView("form");
   };
 
-  const hasChangesSinceSave = savedSnapshot == null || savedSnapshot !== blocksSnapshot;
+  /** 실제 편집(undo 스택 생성)이 발생한 경우에만 저장 필요 상태로 간주 */
+  const hasChangesSinceSave = undoDepth > 0;
+  const canSubmit = hasChangesSinceSave && !hasValidationIssues;
 
-  // 에피소드가 처음 생성되어 에디터에 진입했을 때 1회 자동 히스토리 저장
-  useEffect(() => {
-    if (blocks.length === 0) return;
-    if (scriptHistory.length > 0) return;
-    addScriptHistoryEntry("created");
-    // 외부 store(history) 동기화 직후 로컬 saved 스냅샷도 한 번 맞춰준다
-    // eslint-disable-next-line react-hooks/set-state-in-effect
-    setSavedSnapshot(blocksSnapshot);
-  }, [addScriptHistoryEntry, blocks.length, blocksSnapshot, scriptHistory.length]);
+  /**
+   * 편집 전 기준선(savedSnapshot) 확보.
+   * - 히스토리가 비어 있으면 신규 생성 1건을 쌓은 뒤 현재 블록을 기준선으로 삼는다.
+   * - 이미 히스토리가 있으면(목록 재진입 등) 추가 시드 없이 현재 블록만 기준선으로 삼는다.
+   * blocksSnapshot을 deps에 넣지 않아, 타이핑마다 effect가 돌며 스냅샷을 덮어쓰지 않게 한다.
+   */
+  useLayoutEffect(() => {
+    if (blocks.length === 0) {
+      snapshotBaselineInitRef.current = false;
+      return;
+    }
+    if (snapshotBaselineInitRef.current) return;
+    snapshotBaselineInitRef.current = true;
+    if (scriptHistory.length === 0) {
+      addScriptHistoryEntry("created");
+    }
+    const snap = JSON.stringify(useEditorStore.getState().blocks);
+    // eslint-disable-next-line react-hooks/set-state-in-effect -- 진입 시점 baseline 확보(첫 페인트 전)
+    setSavedSnapshot(snap);
+  }, [addScriptHistoryEntry, blocks.length, scriptHistory.length]);
 
   /** 히스토리가 없을 때 목록 레이아웃용 예시 5건 (신규생성/임시저장 혼합). 최신이 위. */
   const [emptyStateDemoEntries] = useState(() => {
@@ -237,7 +277,7 @@ export function EditorSubHeader({ title = "에피소드 제목", onRecreate }: E
           <Button
             type="button"
             size="sm"
-            disabled={hasValidationIssues}
+            disabled={!canSubmit}
             className="h-10 shadow-none bg-primary text-primary-foreground hover:bg-primary/90 disabled:bg-primary/40 disabled:hover:bg-primary/40"
             onClick={handleSubmit}
           >
@@ -261,20 +301,18 @@ export function EditorSubHeader({ title = "에피소드 제목", onRecreate }: E
               정말 나가시겠어요? 임시저장 후 나갈 수 있어요.
             </p>
           </div>
-          <div className="mt-5 flex justify-end gap-2">
+          <div className="mt-5 flex flex-wrap items-center justify-between gap-2">
             <Button type="button" variant="outline" onClick={() => setIsBackConfirmOpen(false)}>
               취소
             </Button>
-            <Button
-              type="button"
-              onClick={() => {
-                handleTemporarySave();
-                setIsBackConfirmOpen(false);
-                goToEpisodeList();
-              }}
-            >
-              임시저장
-            </Button>
+            <div className="flex shrink-0 flex-wrap justify-end gap-2">
+              <Button type="button" variant="outline" onClick={handleLeaveWithoutSave}>
+                저장 안 함
+              </Button>
+              <Button type="button" onClick={handleTemporarySaveAndLeave}>
+                임시저장
+              </Button>
+            </div>
           </div>
         </DialogContent>
       </Dialog>

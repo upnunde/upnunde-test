@@ -16,9 +16,6 @@ import {
 } from "@dnd-kit/sortable";
 import { CSS } from "@dnd-kit/utilities";
 import { useEditorStore, hydrateSeriesPersonaFromSession } from "@/store/useEditorStore";
-import { parseScriptToBlocks } from "@/utils/scriptParser";
-import { createBlock } from "@/store/useEditorStore";
-import { INITIAL_SCRIPT } from "@/lib/initialScript";
 import { cn } from "@/lib/utils";
 import { Button } from "@/components/ui/button";
 import { Plus } from "lucide-react";
@@ -160,7 +157,6 @@ function SortableBlockWrapper({
 
 export default function EditorBody() {
   const blocks = useEditorStore((s) => s.blocks);
-  const setBlocks = useEditorStore((s) => s.setBlocks);
   const setFocusBlockId = useEditorStore((s) => s.setFocusBlockId);
   const undo = useEditorStore((s) => s.undo);
   const redo = useEditorStore((s) => s.redo);
@@ -172,11 +168,6 @@ export default function EditorBody() {
   useEffect(() => {
     hydrateSeriesPersonaFromSession();
   }, []);
-
-  useEffect(() => {
-    const parsed = parseScriptToBlocks(INITIAL_SCRIPT);
-    setBlocks(parsed.length > 0 ? parsed : [createBlock("text", "")]);
-  }, [setBlocks]);
 
   // Cmd+Z / Ctrl+Z: undo, Shift+Cmd+Z / Ctrl+Y: redo
   useEffect(() => {

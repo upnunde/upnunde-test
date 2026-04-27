@@ -1,0 +1,57 @@
+---
+description: 에디터 블록 모델, 상태 관리, 버튼 활성화 기준 등 에디터 관련 패턴
+globs: app/src/**/*.tsx,app/src/**/*.ts
+alwaysApply: false
+---
+
+# 에디터 패턴 규칙
+
+## 블록 모델
+
+- 블록은 **평면 리스트** (`ScriptBlock[]`). 중첩 속성 없이 Zustand `blocks` 배열로 관리.
+- 타입별 의미: `types/editor.ts`, 한글 라벨: `blockTypeLabels.ts` / `blockLabelColors.ts`와 일치.
+- `choice` 블록은 `data.choices` 배열 보유. `text` 블록 기본 화자는 `"나레이션"`.
+
+## Undo / Dirty 판별
+
+- 모든 편집(추가·수정·삭제·재정렬·타입 변경)은 `undoStack`에 스냅샷을 쌓는다.
+- **미저장 변경 여부 = `undoStack.length > 0`** 으로만 판단한다.
+  - 스냅샷 비교(blocksSnapshot diffing)나 타이밍 의존 로직은 사용하지 않는다.
+- 임시저장·등록·저장 안 함 처리 후에는 반드시 `undoStack`, `redoStack`을 비운다.
+
+## 버튼 활성 기준 (EditorSubHeader)
+
+| 버튼 | 활성 조건 |
+|------|----------|
+| `임시저장` (텍스트 전환) | `undoDepth > 0` |
+| `등록하기` | `undoDepth > 0 && !hasValidationIssues` |
+| 뒤로가기 확인 모달 | `undoDepth > 0` |
+
+## 진입 경로별 처리
+
+- **`?episode=` (에피소드 관리 목록 → 기존 초안 열기):** `EditorScriptBootstrap`에서 `INITIAL_SCRIPT`로 시드 + undo 스택 초기화 → 진입 직후는 미저장 아님.
+- **`?from=new` 또는 `editorEntryFromFormConversion=true` (폼 → 에디터 변환):** 블록 유지, undo 스택만 비움 → 변환 직후는 미저장 상태.
+
+## 스토어 상태 접근
+
+```ts
+// ✅ 변경 감지
+const undoDepth = useEditorStore((s) => s.undoStack.length);
+
+// ✅ 저장 후 스택 초기화
+useEditorStore.setState({ undoStack: [], redoStack: [] });
+
+// ✅ 직접 getState() 사용은 이벤트 핸들러 안에서만
+useEditorStore.getState().setEditorEntryFromFormConversion(false);
+```
+
+## 임시저장 히스토리
+
+- `addScriptHistoryEntry()` 호출 시 현재 `blocks` 전체 스냅샷 저장.
+- 목록은 **최신이 위** (`savedAt` 내림차순).
+- 시간 라벨은 `ux-and-content-standards.md` Global Policy 기준 (예: `1분 전`, `2025.01.01`).
+
+## 검증 규칙
+
+- 빈 콘텐츠 블록(`scene`, `top_desc`, `text`, `direction`), 선택지 필수 필드, `event`/`event_end` 쌍 불일치 → `hasValidationIssues = true`.
+- 검증 실패 시 `등록하기` 버튼 비활성.

@@ -1,6 +1,6 @@
 "use client";
 
-import React from "react";
+import React, { useState } from "react";
 import {
   Dialog,
   DialogContent,
@@ -24,15 +24,27 @@ export function PublishConfirmModal({
   onClose,
   onConfirm,
 }: PublishConfirmModalProps) {
+  const [confirmationText, setConfirmationText] = useState("");
+  const isConfirmKeywordMatched = confirmationText.trim() === "확인했습니다";
+
   const handleConfirm = () => {
-    if (episode) {
+    if (episode && isConfirmKeywordMatched) {
+      setConfirmationText("");
       onConfirm(episode);
       onClose();
     }
   };
 
   return (
-    <Dialog open={open} onOpenChange={(o) => !o && onClose()}>
+    <Dialog
+      open={open}
+      onOpenChange={(o) => {
+        if (!o) {
+          setConfirmationText("");
+          onClose();
+        }
+      }}
+    >
       <DialogContent className="w-[480px] max-w-[calc(100vw-2rem)] p-0 gap-0 bg-surface-10 rounded-2xl shadow-[0px_8px_16px_8px_rgba(0,0,0,0.16)] overflow-hidden border-0">
         {/* 상단: 제목 + 부제 (가이드 레이아웃) */}
         <div className="self-stretch px-6 pt-10 pb-4 bg-surface-10 rounded-t-2xl flex flex-col justify-start items-center gap-5 overflow-hidden">
@@ -67,6 +79,18 @@ export function PublishConfirmModal({
                 </div>
               </div>
             </div>
+            <div className="self-stretch space-y-2">
+              <p className="text-sm font-medium text-on-surface-20">
+                아래 입력창에 <span className="text-on-surface-10">확인했습니다</span>를 입력해 주세요.
+              </p>
+              <input
+                type="text"
+                value={confirmationText}
+                onChange={(e) => setConfirmationText(e.target.value)}
+                placeholder="확인했습니다"
+                className="h-10 w-full rounded-md border border-slate-200 bg-white px-3 text-sm text-on-surface-10 outline-none focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-2"
+              />
+            </div>
           </div>
         </div>
 
@@ -78,7 +102,12 @@ export function PublishConfirmModal({
                 취소
               </Button>
             </DialogClose>
-            <Button size="default" className="min-w-20 h-10" onClick={handleConfirm}>
+            <Button
+              size="default"
+              className="min-w-20 h-10"
+              onClick={handleConfirm}
+              disabled={!isConfirmKeywordMatched || !episode}
+            >
               공개
             </Button>
           </div>
