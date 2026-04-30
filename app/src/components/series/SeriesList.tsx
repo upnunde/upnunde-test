@@ -66,7 +66,7 @@ export function SeriesList({
           <span className="text-sm text-on-surface-30">새로운 작품을 등록하세요</span>
           <span className="inline-flex items-center gap-2 rounded-md bg-slate-800 px-4 py-2 text-sm font-medium text-white hover:bg-slate-700">
             <Plus className="h-4 w-4" aria-hidden />
-            새 시리즈 생성
+            새 작품 생성
           </span>
         </button>
       </div>

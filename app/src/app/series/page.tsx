@@ -7,6 +7,7 @@ import AppSidebar from "@/components/AppSidebar/AppSidebar";
 import { SeriesList } from "@/components/series/SeriesList";
 import { SeriesDeleteModal } from "@/components/series/SeriesDeleteModal";
 import { PolicyAgreementModal } from "@/components/series/PolicyAgreementModal";
+import { SegmentedTextTabs } from "@/components/ui/segmented-text-tabs";
 import type { SeriesData } from "@/types/series";
 
 /** 시리즈 썸네일용 더미 이미지
@@ -94,6 +95,7 @@ export default function SeriesListPage() {
   const router = useRouter();
   const [profileImageUrl, setProfileImageUrl] = useState<string | null>(null);
   const [seriesList, setSeriesList] = useState<SeriesData[]>(MOCK_SERIES);
+  const [seriesScope, setSeriesScope] = useState("all");
   const [seriesToDelete, setSeriesToDelete] = useState<SeriesData | null>(null);
   const [policyModalOpen, setPolicyModalOpen] = useState(false);
 
@@ -164,22 +166,38 @@ export default function SeriesListPage() {
             {/* Sub Header (레이아웃 가이드: margin 40, max-width 1200, min-width 640) */}
             <div className="w-full h-[64px] shrink-0 border-b border-border-10 bg-white flex flex-col items-center justify-center px-5">
               <div className="w-full max-w-[1200px] flex items-center justify-start gap-4">
-                <h1 className="text-2xl font-bold text-on-surface-10">시리즈</h1>
+                <h1 className="text-2xl font-bold text-on-surface-10">내 작품</h1>
               </div>
             </div>
 
-            <div className="flex-1 overflow-y-auto flex flex-col items-center py-8 gap-3 px-5">
+            <div className="flex-1 overflow-y-auto flex flex-col items-center py-0 gap-0 px-5">
               <div className="w-full max-w-[1200px] mx-0">
-              <SeriesList
-                seriesList={seriesList.filter((s) => s.status !== "BANNED")}
-                onResourceManage={handleResourceManage}
-                onEpisodeManage={handleEpisodeManage}
-                onSeriesManage={handleSeriesManage}
-                onSetPrivate={handleSetPrivate}
-                onSetPublic={handleSetPublic}
-                onDelete={(series) => setSeriesToDelete(series)}
-                onCreateSeries={handleOpenCreateSeries}
-              />
+                <div className="inline-flex flex-col items-start justify-start gap-2.5 self-stretch px-0 pb-2.5 pt-5">
+                  <SegmentedTextTabs
+                    aria-label="시리즈 범위"
+                    items={[
+                      { id: "all", label: "전체" },
+                      { id: "series", label: "시리즈" },
+                      { id: "character", label: "캐릭터" },
+                      { id: "scenario", label: "상황공략" },
+                    ]}
+                    activeId={seriesScope}
+                    onSelect={setSeriesScope}
+                    size="xl"
+                  />
+                </div>
+              </div>
+              <div className="w-full max-w-[1200px] mx-0">
+                <SeriesList
+                  seriesList={seriesList.filter((s) => s.status !== "BANNED")}
+                  onResourceManage={handleResourceManage}
+                  onEpisodeManage={handleEpisodeManage}
+                  onSeriesManage={handleSeriesManage}
+                  onSetPrivate={handleSetPrivate}
+                  onSetPublic={handleSetPublic}
+                  onDelete={(series) => setSeriesToDelete(series)}
+                  onCreateSeries={handleOpenCreateSeries}
+                />
               </div>
             </div>
 
