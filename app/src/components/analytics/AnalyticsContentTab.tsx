@@ -200,7 +200,7 @@ function PopularContentsCard({ rows }: { rows: readonly AnalyticsTopFiveRow[] })
   return (
     <AnalyticsPanel className="min-w-0 flex-1">
       <Title2 text="인기 콘텐츠 TOP5" variant="title" asSectionHeader />
-      <div className="mb-2 mt-2 inline-flex flex-col items-start justify-start gap-2.5 self-stretch px-5 pb-0 pt-0">
+      <div className="px-5 pt-3">
         <SegmentedTextTabs
           aria-label="인기 콘텐츠 기준"
           items={[
@@ -228,7 +228,7 @@ function AttentionContentsCard({ rows }: { rows: readonly AnalyticsTopFiveRow[] 
   return (
     <AnalyticsPanel className="min-w-0 flex-1">
       <Title2 text="주의 필요한 콘텐츠 TOP5" variant="title" asSectionHeader />
-      <div className="mb-2 mt-2 inline-flex flex-col items-start justify-start gap-2.5 self-stretch px-5 pb-0 pt-0">
+      <div className="px-5 pt-3">
         <SegmentedTextTabs
           aria-label="주의 콘텐츠 기준"
           items={[
