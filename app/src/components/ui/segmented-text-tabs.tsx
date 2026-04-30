@@ -101,7 +101,7 @@ export function SegmentedTextTabs({
             )}
             onClick={() => onSelect?.(id)}
           >
-            <span className="justify-start">{label}</span>
+            <span className="justify-start whitespace-nowrap">{label}</span>
           </button>
         );
       })}

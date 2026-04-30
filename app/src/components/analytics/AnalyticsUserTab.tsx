@@ -256,7 +256,7 @@ export function AnalyticsUserTab({
           <AnalyticsPanel>
             <Title2 text="연령 및 성별" variant="title" asSectionHeader />
             <div className="flex flex-col gap-3 px-5 pt-3">
-              <div className="flex flex-wrap items-center gap-4">
+              <div className="flex min-w-0 flex-nowrap items-center gap-4 overflow-x-auto overflow-y-hidden [scrollbar-width:none] [-ms-overflow-style:none] [&::-webkit-scrollbar]:hidden">
                 <SegmentedTextTabs
                   aria-label="연령 필터"
                   items={[
