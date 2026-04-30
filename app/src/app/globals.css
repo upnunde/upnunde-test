@@ -58,6 +58,7 @@
   --color-on-surface-disabled: var(--on-surface-disabled);
   --color-border-10: var(--border-10);
   --color-border-20: var(--border-20);
+  --color-border-strong: var(--border-strong);
   --color-divider-10: var(--divider-10);
   --color-divider-20: var(--divider-20);
   --color-secondary-secondary: var(--secondary-secondary);

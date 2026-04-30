@@ -211,8 +211,7 @@ function PopularContentsCard({ rows }: { rows: readonly AnalyticsTopFiveRow[] })
           ]}
           activeId={popularCriterion}
           onSelect={(id) => setPopularCriterion(id as PopularCriterionId)}
-          mode="plain"
-          dimension="section"
+          size="m"
           tabListClassName="self-stretch"
         />
       </div>
@@ -238,8 +237,7 @@ function AttentionContentsCard({ rows }: { rows: readonly AnalyticsTopFiveRow[] 
           ]}
           activeId={attentionCriterion}
           onSelect={(id) => setAttentionCriterion(id as AttentionCriterionId)}
-          mode="plain"
-          dimension="section"
+          size="m"
           tabListClassName="self-stretch"
         />
       </div>

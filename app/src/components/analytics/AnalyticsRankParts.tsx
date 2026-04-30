@@ -1,8 +1,22 @@
 import type { ReactNode } from "react";
 import Image from "next/image";
+import { cn } from "@/lib/utils";
 import { getAnalyticsTopFiveThumbnailUrl } from "@/lib/analyticsTopFiveThumbnails";
 
 export type ContentTone = "series" | "character" | "seriesBlue" | "scenario";
+
+/** 배지·순위 장식 등 같은 콘텐츠 유형은 동일 톤 (시리즈·seriesBlue 통일) */
+export function contentTypeAccentClass(tone: ContentTone): string {
+  switch (tone) {
+    case "series":
+    case "seriesBlue":
+      return "text-primary-on-primary-container";
+    case "character":
+      return "text-blue-500";
+    case "scenario":
+      return "text-lime-600";
+  }
+}
 
 export type AnalyticsTopFiveRow = {
   rank: number;
@@ -21,15 +35,9 @@ export function ContentTypeBadge({
   children: ReactNode;
   tone: ContentTone;
 }) {
-  const cls =
-    tone === "character"
-      ? "text-blue-500"
-      : tone === "scenario"
-        ? "text-lime-600"
-        : tone === "seriesBlue"
-          ? "text-blue-500"
-          : "text-primary-on-primary-container";
-  return <span className={`text-xs font-normal leading-4 ${cls}`}>{children}</span>;
+  return (
+    <span className={cn("text-xs font-normal leading-4", contentTypeAccentClass(tone))}>{children}</span>
+  );
 }
 
 export function RankDecoration({ rank, tone }: { rank: number; tone: ContentTone }) {
@@ -56,12 +64,13 @@ export function RankDecoration({ rank, tone }: { rank: number; tone: ContentTone
   }
   if (rank === 4 || tone === "seriesBlue" || tone === "character") {
     const num = "3";
+    const accent = contentTypeAccentClass(tone);
     return (
       <div className="flex w-10 items-center gap-0.5">
-        <span className="text-sm text-blue-500" aria-hidden>
+        <span className={cn("text-sm", accent)} aria-hidden>
           ▼
         </span>
-        <span className="text-sm text-blue-500">{num}</span>
+        <span className={cn("text-sm", accent)}>{num}</span>
       </div>
     );
   }

@@ -217,8 +217,7 @@ export function AnalyticsUserTab({
             ]}
             activeId={revisitSegment}
             onSelect={(id) => setRevisitSegment(id as RevisitSegmentId)}
-            mode="plain"
-            dimension="section"
+            size="m"
             tabListClassName="self-stretch"
           />
         </div>
@@ -270,10 +269,9 @@ export function AnalyticsUserTab({
                   ]}
                   activeId={ageBand}
                   onSelect={setAgeBand}
-                  mode="plain"
-                  dimension="section"
+                  size="m"
                 />
-                <div className="hidden h-4 w-px bg-border-20/10 sm:block" aria-hidden />
+                <div className="hidden h-4 w-px bg-border-20 sm:block" aria-hidden />
                 <SegmentedTextTabs
                   aria-label="성별 필터"
                   items={[
@@ -283,8 +281,7 @@ export function AnalyticsUserTab({
                   ]}
                   activeId={genderBand}
                   onSelect={setGenderBand}
-                  mode="plain"
-                  dimension="section"
+                  size="m"
                 />
               </div>
             </div>
@@ -400,8 +397,7 @@ function AudienceBreakdownPanel({
           ]}
           activeId={audienceTab}
           onSelect={(id) => onAudienceChange(id as AudienceTabId)}
-          mode="plain"
-          dimension="section"
+          size="m"
         />
       </div>
       <div className="flex flex-col gap-5 p-5">
@@ -450,8 +446,7 @@ function SimpleDistributionPanel({
             ]}
             activeId={audienceTab}
             onSelect={(id) => onAudienceChange(id as AudienceTabId)}
-            mode="plain"
-            dimension="section"
+            size="m"
           />
         </div>
       ) : null}

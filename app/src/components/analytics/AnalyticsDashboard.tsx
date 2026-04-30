@@ -30,8 +30,7 @@ export function AnalyticsDashboard() {
           ]}
           activeId={analyticsArea}
           onSelect={(id) => setAnalyticsArea(id as AnalyticsAreaTabId)}
-          mode="plain"
-          dimension="page"
+          size="xl"
           tabListClassName="self-stretch"
         />
       </div>

@@ -22,8 +22,8 @@ export default function AnalyticsPage() {
               </div>
             </div>
 
-            <div className="flex min-h-0 flex-1 flex-col justify-start items-center gap-0 overflow-y-auto px-5">
-              <div className="mx-10 w-full max-w-[1200px]">
+            <div className="flex min-h-0 flex-1 flex-col justify-start items-stretch gap-0 overflow-y-auto px-5 py-0">
+              <div className="mx-auto w-full min-w-0 max-w-[1200px]">
                 <AnalyticsDashboard />
               </div>
             </div>
