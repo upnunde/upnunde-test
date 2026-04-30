@@ -110,13 +110,26 @@ function hashNick(s: string): number {
   return h;
 }
 
-const ACTIVE_FOLLOWER_NICKS = Array.from({ length: 10 }, (_, i) => {
-  const seed = `follower-${i + 1}`;
-  const h = hashNick(seed);
-  const prefix = NICKNAME_PREFIXES[h % NICKNAME_PREFIXES.length] ?? "달빛";
-  const suffix = NICKNAME_SUFFIXES[(h >>> 4) % NICKNAME_SUFFIXES.length] ?? "냥";
-  return `${prefix}${suffix}`;
-});
+const ACTIVE_FOLLOWERS = (() => {
+  const names: string[] = [];
+  const used = new Set<string>();
+  let cursor = 1;
+
+  while (names.length < 10) {
+    const seed = `follower-${cursor}`;
+    const h = hashNick(seed);
+    const prefix = NICKNAME_PREFIXES[h % NICKNAME_PREFIXES.length] ?? "달빛";
+    const suffix = NICKNAME_SUFFIXES[(h >>> 4) % NICKNAME_SUFFIXES.length] ?? "냥";
+    const nick = `${prefix}${suffix}`;
+    if (!used.has(nick)) {
+      used.add(nick);
+      names.push(nick);
+    }
+    cursor += 1;
+  }
+
+  return names.map((nick, i) => ({ id: `active-follower-${i + 1}`, nick }));
+})();
 
 function getFollowerDummyProfileUrl(nick: string): string {
   const seed = encodeURIComponent(nick);
@@ -401,8 +414,8 @@ export function AnalyticsUserTab({
           <AnalyticsPanel>
             <Title2 text="가장 적극 활동중인 팔로워" variant="title" asSectionHeader />
             <div className="grid grid-cols-5 justify-items-center gap-x-5 gap-y-6 p-5">
-              {ACTIVE_FOLLOWER_NICKS.map((nick) => (
-                <div key={nick} className="flex w-full max-w-28 flex-col items-center justify-center gap-2">
+              {ACTIVE_FOLLOWERS.slice(0, 10).map(({ id, nick }) => (
+                <div key={id} className="flex w-full max-w-28 flex-col items-center justify-center gap-2">
                   <div className="relative h-16 w-16 overflow-hidden rounded-full bg-zinc-100">
                     <img
                       src={getFollowerDummyProfileUrl(nick)}
