@@ -45,7 +45,7 @@ export function AddResourceSlot({
           sizeClass,
           error
             ? "bg-error-error-container text-error-on-error-container hover:bg-error-error-container/90"
-            : "border border-dashed border-border-20 bg-white text-muted-foreground hover:border-border-10 hover:bg-slate-50"
+            : "border border-dashed border-border-20 bg-white text-muted-foreground hover:border-border-10 hover:bg-surface-20"
         )}
         aria-label={ariaLabel}
       >

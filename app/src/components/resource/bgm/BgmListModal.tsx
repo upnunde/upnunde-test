@@ -272,7 +272,7 @@ export function BgmListModal({ open, onClose, onAdd }: BgmListModalProps) {
 
   return (
     <Dialog open={open} onOpenChange={(o) => !o && onClose()}>
-      <DialogContent className="w-[800px] max-w-[calc(100vw-2rem)] gap-0 bg-surface-10 rounded-2xl border border-border-10 p-0 overflow-hidden">
+      <DialogContent className="w-[800px] max-w-[calc(100vw-2rem)] gap-0 bg-surface-10 rounded-[4px] border border-border-10 p-0 overflow-hidden">
         <DialogHeader className="justify-center items-start h-10 px-5 pt-1 pb-0 border-b border-border-10">
           <div className="flex items-center justify-center gap-1">
             <DialogTitle className="text-on-surface-10 text-base font-bold font-['Pretendard_JP']">

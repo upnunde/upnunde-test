@@ -23,17 +23,17 @@ import { ScriptBlock } from "./ScriptBlock";
 
 /** 텍스트(대사) 블록: 디자인 시안과 동일 — min-h-10·py-1·bg-white·rounded·flex 행 */
 const WRAPPER_CLASS_TEXT =
-  "group group/row relative flex h-fit w-full min-h-10 items-start justify-start gap-0 rounded bg-white py-1 outline-none hover:bg-slate-50/50 focus-within:bg-white";
+  "group group/row relative flex h-fit w-full min-h-10 items-start justify-start gap-0 rounded bg-white py-1 outline-none hover:bg-surface-20/50 focus-within:bg-white";
 const ROOT_CLASS_TEXT = "min-h-8 min-w-0 flex-1 h-fit";
 
 /** 선택지 블록: 텍스트 행과 동일 래퍼( min-h-10·py-1·bg-white·rounded·group/row ) */
 const WRAPPER_CLASS_CHOICE =
-  "group group/row relative flex h-fit w-full min-h-10 items-start justify-start gap-0 rounded bg-white py-1 outline-none hover:bg-slate-50/50 focus-within:bg-white";
+  "group group/row relative flex h-fit w-full min-h-10 items-start justify-start gap-0 rounded bg-white py-1 outline-none hover:bg-surface-20/50 focus-within:bg-white";
 const ROOT_CLASS_CHOICE = "min-h-8 min-w-0 flex-1 h-fit";
 
 /** 한 줄 블록 (장면/캐릭터/연출/배경 등): 고정 높이 36px, px-0 py-1 */
 const WRAPPER_CLASS_COMPACT =
-  "group flex h-full items-center justify-start gap-0 rounded-lg hover:bg-slate-50/50";
+  "group flex h-full items-center justify-start gap-0 rounded-lg hover:bg-surface-20/50";
 const ROOT_CLASS_COMPACT = "min-w-0 flex-1 min-h-[36px] h-[36px]";
 
 function SortableBlockWrapper({
@@ -90,7 +90,7 @@ function SortableBlockWrapper({
           type="button"
           variant="ghost"
           size="icon"
-          className="h-8 w-6 shrink-0 rounded-full p-0 text-on-surface-30 hover:bg-slate-100 hover:text-slate-600"
+          className="h-8 w-6 shrink-0 rounded-full p-0 text-on-surface-30 hover:bg-surface-20 hover:text-on-surface-30"
           aria-label="Add block below"
           onClick={(e) => {
             e.preventDefault();
@@ -103,7 +103,7 @@ function SortableBlockWrapper({
         </Button>
         <button
           type="button"
-          className="flex h-8 w-6 shrink-0 cursor-grab touch-none items-center justify-center rounded-full p-0 text-on-surface-30 hover:bg-slate-100 hover:text-slate-600 active:cursor-grabbing"
+          className="flex h-8 w-6 shrink-0 cursor-grab touch-none items-center justify-center rounded-full p-0 text-on-surface-30 hover:bg-surface-20 hover:text-on-surface-30 active:cursor-grabbing"
           aria-label="Drag to reorder"
           {...attributes}
           {...listeners}
@@ -130,7 +130,7 @@ function SortableBlockWrapper({
               ? "text-rose-600"
               : block.type === "text" || block.type === "choice"
                 ? "text-on-surface-disabled"
-                : "text-[rgba(197,207,221,1)]"
+                : "text-on-surface-disabled"
         )}
       >
         {String(index).padStart(2, "0")}
@@ -352,7 +352,7 @@ export default function EditorBody() {
           strategy={verticalListSortingStrategy}
         >
           <div
-            className="mx-auto flex min-h-full w-full max-w-[1400px] flex-col gap-1 px-2"
+            className="mx-auto flex min-h-full w-full flex-col gap-1 px-2"
             onClick={handleBackgroundClick}
           >
             {blocks.map((block, i) => {
@@ -363,7 +363,7 @@ export default function EditorBody() {
               return (
                 <Fragment key={block.id}>
                   {showDivider && (
-                    <div className="mx-0 my-10 border-t border-slate-200" />
+                    <div className="mx-0 my-10 border-t border-border-10" />
                   )}
                   <SortableBlockWrapper
                     block={block}

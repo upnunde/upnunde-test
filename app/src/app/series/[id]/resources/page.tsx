@@ -18,7 +18,7 @@ export default function SeriesResourcesPage() {
   return (
     <div className="flex flex-col h-screen w-full bg-white overflow-hidden">
       <Header profileImageUrl={profileImageUrl} onProfileImageChange={setProfileImageUrl} />
-      <div className="flex min-h-0 flex-1 overflow-hidden bg-slate-50">
+      <div className="flex min-h-0 flex-1 overflow-hidden bg-surface-20">
         <div className="flex min-h-0 min-w-0 flex-1 flex-col overflow-hidden">
           <ResourceManagementPage />
         </div>

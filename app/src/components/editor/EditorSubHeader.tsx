@@ -186,7 +186,7 @@ export function EditorSubHeader({ title = "에피소드 제목", onRecreate }: E
           >
             <ChevronLeft className="h-5 w-5" strokeWidth={2} />
           </Button>
-          <h1 className="text-2xl font-extrabold text-on-surface-10">{title}</h1>
+          <h1 className="text-2xl font-bold text-on-surface-10">{title}</h1>
         </div>
         <div className="flex items-center gap-2">
           <Popover open={historyOpen} onOpenChange={setHistoryOpen}>
@@ -204,10 +204,10 @@ export function EditorSubHeader({ title = "에피소드 제목", onRecreate }: E
             <PopoverContent
               align="end"
               sideOffset={8}
-              className="w-[min(100vw-2rem,280px)] max-w-[280px] rounded-lg border border-slate-200 p-0 shadow-lg"
+              className="w-[min(100vw-2rem,280px)] max-w-[280px] rounded-lg border border-border-10 p-0 shadow-lg"
             >
               <div className="px-3 pt-4 pb-1">
-                <p className="text-sm font-medium text-slate-400">히스토리</p>
+                <p className="text-sm font-medium text-on-surface-30">히스토리</p>
               </div>
               <div className="max-h-[min(40vh,280px)] overflow-y-auto px-2 pb-1">
                 <ul className="flex flex-col gap-0.5">
@@ -216,7 +216,7 @@ export function EditorSubHeader({ title = "에피소드 제목", onRecreate }: E
                       <div
                         className={cn(
                           "group flex min-h-10 items-center justify-between gap-2 rounded-md px-2 py-2",
-                          "hover:bg-slate-100"
+                          "hover:bg-surface-20"
                         )}
                       >
                         <div className="min-w-0 flex items-center gap-2 text-sm font-medium">
@@ -238,7 +238,7 @@ export function EditorSubHeader({ title = "에피소드 제목", onRecreate }: E
                             e.preventDefault();
                           }}
                           className={cn(
-                            "h-7 shrink-0 border-slate-200 bg-white px-2 text-xs font-medium text-on-surface-10 shadow-none",
+                            "h-7 shrink-0 border-border-10 bg-white px-2 text-xs font-medium text-on-surface-10 shadow-none",
                             "opacity-0 pointer-events-none transition-opacity",
                             "group-hover:opacity-100 group-hover:pointer-events-auto",
                             "[@media(hover:none)]:opacity-100 [@media(hover:none)]:pointer-events-auto",
@@ -252,7 +252,7 @@ export function EditorSubHeader({ title = "에피소드 제목", onRecreate }: E
                   ))}
                 </ul>
               </div>
-              <div className="border-t border-slate-200 px-2 py-2.5">
+              <div className="border-t border-border-10 px-2 py-2.5">
                 <Button
                   type="button"
                   variant="ghost"
@@ -292,9 +292,9 @@ export function EditorSubHeader({ title = "에피소드 제목", onRecreate }: E
         onClose={() => setSnackbar((s) => ({ ...s, open: false }))}
       />
       <Dialog open={isBackConfirmOpen} onOpenChange={setIsBackConfirmOpen}>
-        <DialogContent className="w-[min(92vw,420px)] max-w-[420px] border border-slate-200 bg-white p-5 shadow-none">
+        <DialogContent className="w-[min(92vw,420px)] max-w-[420px] border border-border-10 bg-white p-5 shadow-none">
           <div className="space-y-2">
-            <DialogTitle className="text-base font-semibold text-on-surface-10">
+            <DialogTitle className="text-base font-medium text-on-surface-10">
               아직 작업을 저장하지 않았어요.
             </DialogTitle>
             <p className="text-sm text-on-surface-20">

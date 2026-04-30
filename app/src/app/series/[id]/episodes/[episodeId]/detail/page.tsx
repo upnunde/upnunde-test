@@ -52,8 +52,8 @@ export default function EpisodeDetailPage() {
         <aside
           className={
             isSceneSidebarCollapsed
-              ? "w-fit shrink-0 border-r border-slate-200 bg-white overflow-y-auto px-2"
-              : "w-[240px] shrink-0 border-r border-slate-200 bg-white overflow-y-auto"
+              ? "w-fit shrink-0 border-r border-border-10 bg-white overflow-y-auto px-2"
+              : "w-[240px] shrink-0 border-r border-border-10 bg-white overflow-y-auto"
           }
         >
           <SceneNavigation
@@ -65,7 +65,7 @@ export default function EpisodeDetailPage() {
         </aside>
         <div className="flex min-w-0 flex-1 flex-col overflow-hidden">
           <main className="flex min-w-0 flex-1 flex-col overflow-hidden">
-            <header className="flex h-16 shrink-0 items-center justify-start border-b border-slate-200 bg-white px-6 py-0">
+            <header className="flex h-16 shrink-0 items-center justify-start border-b border-border-10 bg-white px-6 py-0">
               <div className="flex w-full min-w-[800px] items-center justify-between gap-3">
                 <div className="flex items-center justify-start gap-3">
                   <Button
@@ -73,28 +73,28 @@ export default function EpisodeDetailPage() {
                     variant="outline"
                     size="icon"
                     onClick={handleBack}
-                    className="h-9 w-9 shrink-0 rounded-full border-slate-200 shadow-none focus-visible:ring-0 focus-visible:ring-offset-0"
+                    className="h-9 w-9 shrink-0 rounded-full border-border-10 shadow-none focus-visible:ring-0 focus-visible:ring-offset-0"
                     aria-label="에피소드 목록으로"
                   >
-                    <ChevronLeft className="h-5 w-5 text-slate-600" strokeWidth={2} />
+                    <ChevronLeft className="h-5 w-5 text-on-surface-30" strokeWidth={2} />
                   </Button>
-                  <h1 className="text-2xl font-extrabold text-on-surface-10">에피소드 상세</h1>
+                  <h1 className="text-2xl font-bold text-on-surface-10">에피소드 상세</h1>
                 </div>
                 <Button
                   type="button"
                   variant="outline"
                   size="icon"
                   onClick={() => setIsPromptModalOpen(true)}
-                  className="h-9 w-9 shrink-0 rounded-full border-slate-200 shadow-none"
+                  className="h-9 w-9 shrink-0 rounded-full border-border-10 shadow-none"
                   aria-label="에피소드 기준 프롬프트 보기"
                 >
-                  <FileText className="h-4 w-4 text-slate-600" aria-hidden />
+                  <FileText className="h-4 w-4 text-on-surface-30" aria-hidden />
                 </Button>
               </div>
             </header>
 
             <div className="flex flex-1 w-full min-h-0 overflow-hidden bg-white justify-center items-start">
-              <div className="flex flex-1 min-h-0 h-full w-full flex-col border-r border-slate-200 overflow-hidden">
+              <div className="flex flex-1 min-h-0 h-full w-full flex-col border-r border-border-10 overflow-hidden">
                 <div className="py-10 px-0 flex-1 min-h-0 overflow-y-auto overscroll-none">
                   <EditorBodyReadOnly />
                 </div>

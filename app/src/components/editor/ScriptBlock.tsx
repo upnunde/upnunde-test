@@ -633,7 +633,7 @@ export function ScriptBlock({
         {/* Left column: 화자 — 시안 w-[100px] min-w-14 min-h-8 */}
         <div className="flex min-h-8 w-[100px] min-w-14 shrink-0 items-center justify-start gap-0 overflow-hidden pr-3">
           {!hideIndex && (
-            <span className="text-sm font-medium text-slate-300 w-5 text-right tabular-nums">
+            <span className="text-sm font-medium text-on-surface-30 w-5 text-right tabular-nums">
               {indexLabel}
             </span>
           )}
@@ -674,7 +674,7 @@ export function ScriptBlock({
                     alt=""
                     width={24}
                     height={24}
-                    className="size-6 shrink-0 rounded-full object-cover bg-slate-100"
+                    className="size-6 shrink-0 rounded-full object-cover bg-surface-20"
                   />
                   {c.name}
                 </DropdownMenuItem>
@@ -786,7 +786,7 @@ export function ScriptBlock({
               <button
                 type="button"
                 onClick={() => applyTag("<b>", "</b>")}
-                className="p-2 text-slate-300 hover:text-white transition-colors"
+                className="p-2 text-on-surface-30 hover:text-white transition-colors"
                 title="Bold"
               >
                 <Bold className="w-4 h-4" />
@@ -794,7 +794,7 @@ export function ScriptBlock({
               <button
                 type="button"
                 onClick={() => applyTag("<i>", "</i>")}
-                className="p-2 text-slate-300 hover:text-white transition-colors"
+                className="p-2 text-on-surface-30 hover:text-white transition-colors"
                 title="Italic"
               >
                 <Italic className="w-4 h-4" />
@@ -802,7 +802,7 @@ export function ScriptBlock({
               <button
                 type="button"
                 onClick={() => applyTag("<u>", "</u>")}
-                className="p-2 text-slate-300 hover:text-white transition-colors"
+                className="p-2 text-on-surface-30 hover:text-white transition-colors"
                 title="Underline"
               >
                 <Underline className="w-4 h-4" />
@@ -822,14 +822,14 @@ export function ScriptBlock({
               }}
             >
               <DropdownMenuTrigger
-                className="flex items-center gap-1 px-3 py-2 text-sm text-slate-300 hover:text-white transition-colors outline-none"
+                className="flex items-center gap-1 px-3 py-2 text-sm text-on-surface-30 hover:text-white transition-colors outline-none"
               >
                 이펙트 <ChevronDown className="w-3.5 h-3.5" />
               </DropdownMenuTrigger>
               <DropdownMenuContent
                 align="start"
                 portalled={false}
-                className="z-[110] w-40 p-1 bg-white rounded-lg border border-slate-100"
+                className="z-[110] w-40 p-1 bg-white rounded-lg border border-border-10"
                 ref={dropdownRef}
               >
                 {EFFECT_OPTIONS.map((effect) => {
@@ -838,7 +838,7 @@ export function ScriptBlock({
                     <DropdownMenuItem
                       key={effect.key}
                       onClick={() => applyEffect(effect.key)}
-                      className="flex items-center px-3 py-2.5 cursor-pointer text-sm text-slate-700 hover:bg-slate-50 focus:bg-slate-50 rounded-md relative"
+                      className="flex items-center px-3 py-2.5 cursor-pointer text-sm text-on-surface-20 hover:bg-surface-20 focus:bg-surface-20 rounded-md relative"
                     >
                       {isSelected ? (
                         <Check className="w-4 h-4 mr-1 absolute left-2" />
@@ -860,14 +860,14 @@ export function ScriptBlock({
               }}
             >
               <DropdownMenuTrigger
-                className="flex items-center gap-1 px-3 py-2 text-sm text-slate-300 hover:text-white transition-colors outline-none"
+                className="flex items-center gap-1 px-3 py-2 text-sm text-on-surface-30 hover:text-white transition-colors outline-none"
               >
                 컬러 <ChevronDown className="w-3.5 h-3.5" />
               </DropdownMenuTrigger>
               <DropdownMenuContent
                 align="start"
                 portalled={false}
-                className="z-[110] w-44 p-1 bg-white rounded-lg border border-slate-100"
+                className="z-[110] w-44 p-1 bg-white rounded-lg border border-border-10"
                 ref={dropdownRef}
               >
                 {COLOR_OPTIONS.map((color) => {
@@ -875,11 +875,11 @@ export function ScriptBlock({
                     <DropdownMenuItem
                       key={color.hex}
                       onClick={() => applyColor(color.hex)}
-                      className="flex items-center px-3 py-2.5 cursor-pointer text-sm text-slate-700 hover:bg-slate-50 focus:bg-slate-50 rounded-md"
+                      className="flex items-center px-3 py-2.5 cursor-pointer text-sm text-on-surface-20 hover:bg-surface-20 focus:bg-surface-20 rounded-md"
                     >
                       <span className="inline-flex items-center gap-2">
                         <span
-                          className="h-5 w-5 rounded-full border border-slate-200"
+                          className="h-5 w-5 rounded-full border border-border-10"
                           style={{ backgroundColor: color.hex }}
                           aria-hidden
                         />
@@ -955,7 +955,7 @@ export function ScriptBlock({
             onKeyDown={handleSceneKeyDown}
             placeholder={placeholder}
             className={cn(
-              "min-w-0 flex-1 rounded-md border-0 bg-transparent px-0 py-1.5 text-[rgba(29,41,61,1)] placeholder:text-on-surface-30 outline-none transition-colors focus:outline-none focus:ring-0",
+              "min-w-0 flex-1 rounded-md border-0 bg-transparent px-0 py-1.5 text-on-surface-10 placeholder:text-on-surface-30 outline-none transition-colors focus:outline-none focus:ring-0",
               block.type === "scene"
                 ? "text-[24px] font-bold"
                 : "text-base font-medium leading-relaxed"
@@ -1118,7 +1118,7 @@ export function ScriptBlock({
   if (resourceEditing) {
     return (
       <div
-        className={cn(COMPACT_BLOCK_ROOT_CLASSES, "bg-slate-50/50", rootClassName)}
+        className={cn(COMPACT_BLOCK_ROOT_CLASSES, "bg-surface-20/50", rootClassName)}
         onFocus={onFocusBlock}
         tabIndex={0}
       >
@@ -1355,7 +1355,7 @@ export function ScriptBlock({
                   }
                 }
               }}
-              className="flex h-8 min-w-0 w-fit cursor-pointer items-center gap-1 rounded-md border border-slate-200 bg-white px-2 py-1.5 transition-colors duration-150 hover:bg-slate-50 focus:outline-none focus:ring-0 active:scale-[0.98]"
+              className="flex h-8 min-w-0 w-fit cursor-pointer items-center gap-1 rounded-md border border-border-10 bg-white px-2 py-1.5 transition-colors duration-150 hover:bg-surface-20 focus:outline-none focus:ring-0 active:scale-[0.98]"
             >
               {hasImageThumbnail ? (
                 <NextImage
@@ -1366,18 +1366,18 @@ export function ScriptBlock({
                   className="h-5 w-5 shrink-0 rounded-full object-cover"
                 />
               ) : block.type === "bgm" || block.type === "sfx" ? (
-                <span className="flex h-5 w-5 shrink-0 items-center justify-center rounded-full bg-slate-100 text-on-surface-30">
+                <span className="flex h-5 w-5 shrink-0 items-center justify-center rounded-full bg-surface-20 text-on-surface-30">
                   <Music className="h-3 w-3" />
                 </span>
               ) : isVideo ? (
-                <span className="flex h-5 w-5 shrink-0 items-center justify-center rounded-full bg-slate-100 text-on-surface-30">
+                <span className="flex h-5 w-5 shrink-0 items-center justify-center rounded-full bg-surface-20 text-on-surface-30">
                   <Film className="h-3 w-3" />
                 </span>
               ) : null}
               <span
                 className={cn(
                   "min-w-0 flex-1 truncate text-[13px] font-medium",
-                  isEmpty ? "text-on-surface-30" : "text-[rgba(126,140,160,1)]"
+                  isEmpty ? "text-on-surface-30" : "text-on-surface-30"
                 )}
               >
                 {isEmpty ? "선택 안됨" : displayName}
@@ -1392,11 +1392,11 @@ export function ScriptBlock({
                   type="button"
                   onClick={(e) => e.stopPropagation()}
                   onFocus={onFocusBlock}
-                  className="ml-2 flex h-8 min-w-0 w-fit cursor-pointer items-center gap-1 rounded-md border border-slate-200 bg-white px-2 py-1.5 transition-colors duration-150 hover:bg-slate-50 focus:outline-none focus:ring-0 active:scale-[0.98]"
+                  className="ml-2 flex h-8 min-w-0 w-fit cursor-pointer items-center gap-1 rounded-md border border-border-10 bg-white px-2 py-1.5 transition-colors duration-150 hover:bg-surface-20 focus:outline-none focus:ring-0 active:scale-[0.98]"
                 >
                   <span
                     className={cn(
-                      "min-w-0 flex-1 truncate text-[13px] font-medium text-[rgba(126,140,160,1)]"
+                      "min-w-0 flex-1 truncate text-[13px] font-medium text-on-surface-30"
                     )}
                   >
                     {currentExpression}
@@ -1406,7 +1406,7 @@ export function ScriptBlock({
               </DropdownMenuTrigger>
               <DropdownMenuContent
                 align="start"
-                className="w-40 p-1 bg-white rounded-lg border border-slate-100"
+                className="w-40 p-1 bg-white rounded-lg border border-border-10"
               >
                 {characterExpressionOptions.map((expr) => (
                   <DropdownMenuItem
@@ -1417,7 +1417,7 @@ export function ScriptBlock({
                         expression: expr,
                       })
                     }
-                    className="flex items-center px-3 py-2.5 cursor-pointer text-sm text-slate-700 hover:bg-slate-50 focus:bg-slate-50 rounded-md"
+                    className="flex items-center px-3 py-2.5 cursor-pointer text-sm text-on-surface-20 hover:bg-surface-20 focus:bg-surface-20 rounded-md"
                   >
                     {expr}
                   </DropdownMenuItem>
@@ -1432,9 +1432,9 @@ export function ScriptBlock({
                   type="button"
                   onClick={(e) => e.stopPropagation()}
                   onFocus={onFocusBlock}
-                  className="ml-2 flex h-8 min-w-0 w-fit cursor-pointer items-center gap-1 rounded-md border border-slate-200 bg-white px-2 py-1.5 transition-colors duration-150 hover:bg-slate-50 focus:outline-none focus:ring-0 active:scale-[0.98]"
+                  className="ml-2 flex h-8 min-w-0 w-fit cursor-pointer items-center gap-1 rounded-md border border-border-10 bg-white px-2 py-1.5 transition-colors duration-150 hover:bg-surface-20 focus:outline-none focus:ring-0 active:scale-[0.98]"
                 >
-                  <span className="min-w-0 flex-1 truncate text-[13px] font-medium text-[rgba(126,140,160,1)]">
+                  <span className="min-w-0 flex-1 truncate text-[13px] font-medium text-on-surface-30">
                     {currentVideoPlaybackLabel}
                   </span>
                   <ChevronDown className="ml-1 h-4 w-4 shrink-0 text-on-surface-30" />
@@ -1442,7 +1442,7 @@ export function ScriptBlock({
               </DropdownMenuTrigger>
               <DropdownMenuContent
                 align="start"
-                className="w-40 p-1 bg-white rounded-lg border border-slate-100"
+                className="w-40 p-1 bg-white rounded-lg border border-border-10"
               >
                 <DropdownMenuItem
                   onClick={() =>
@@ -1451,7 +1451,7 @@ export function ScriptBlock({
                       playback: "loop",
                     })
                   }
-                  className="flex items-center px-3 py-2.5 cursor-pointer text-sm text-slate-700 hover:bg-slate-50 focus:bg-slate-50 rounded-md"
+                  className="flex items-center px-3 py-2.5 cursor-pointer text-sm text-on-surface-20 hover:bg-surface-20 focus:bg-surface-20 rounded-md"
                 >
                   무한루프
                 </DropdownMenuItem>
@@ -1462,7 +1462,7 @@ export function ScriptBlock({
                       playback: "once",
                     })
                   }
-                  className="flex items-center px-3 py-2.5 cursor-pointer text-sm text-slate-700 hover:bg-slate-50 focus:bg-slate-50 rounded-md"
+                  className="flex items-center px-3 py-2.5 cursor-pointer text-sm text-on-surface-20 hover:bg-surface-20 focus:bg-surface-20 rounded-md"
                 >
                   한 번만
                 </DropdownMenuItem>

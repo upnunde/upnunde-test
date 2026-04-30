@@ -10,7 +10,7 @@ import { BLOCK_LABEL_KO } from "@/lib/blockTypeLabels";
 
 /** EditorBody 줄번호 열과 동일 톤 (포커스 없을 때) */
 const INDEX_COL_CLASS =
-  "shrink-0 text-[13px] font-medium tabular-nums w-10 flex items-center justify-start mt-0 text-[rgba(197,207,221,1)] min-h-8 py-1";
+  "shrink-0 text-[13px] font-medium tabular-nums w-10 flex items-center justify-start mt-0 text-on-surface-disabled min-h-8 py-1";
 const READONLY_ROW_MIN_HEIGHT_CLASS = "min-h-8 py-1";
 const READONLY_ROW_LABEL_CELL_CLASS = "w-24 shrink-0 min-h-8 py-1 flex items-center justify-start";
 const READONLY_ROW_CONTENT_CELL_CLASS = "min-w-0 flex-1 min-h-8 py-0 flex items-center justify-start";
@@ -262,7 +262,7 @@ export function EditorBodyReadOnly() {
 
   return (
     <div className="min-h-full w-full cursor-default select-text">
-      <div className="mx-auto flex min-h-full w-full max-w-[1400px] flex-col gap-1 px-2">
+      <div className="mx-auto flex min-h-full w-full flex-col gap-1 px-2">
         {blocks.map((block, i) => {
           const isScene = block.type === "scene";
           const prevBlock = i > 0 ? blocks[i - 1] : null;
@@ -270,7 +270,7 @@ export function EditorBodyReadOnly() {
           return (
             <Fragment key={block.id}>
               {showDivider && (
-                <div className="mx-0 my-10 border-t border-slate-200" />
+                <div className="mx-0 my-10 border-t border-border-10" />
               )}
               <div
                 id={`block-${block.id}`}
@@ -279,7 +279,7 @@ export function EditorBodyReadOnly() {
                 tabIndex={0}
                 onClick={() => focusBlock(block.id)}
                 className={cn(
-                  "group/preview w-full rounded bg-white inline-flex items-start justify-start gap-0 px-3 py-1 text-left outline-none transition-colors hover:bg-slate-50/50"
+                  "group/preview w-full rounded bg-white inline-flex items-start justify-start gap-0 px-3 py-1 text-left outline-none transition-colors hover:bg-surface-20/50"
                 )}
               >
                 <ReadOnlyBlockRow

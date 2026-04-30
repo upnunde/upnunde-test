@@ -4,7 +4,7 @@
   gap: var(--spacing-24, 24px);
   background: var(--surface-10, rgba(255, 255, 255, 1));
   color: var(--on-surface-10, rgba(43, 43, 43, 1));
-  border-radius: var(--radius-12, 12px);
+  border-radius: var(--radius-surface, var(--radius-4, 4px));
   border: 1px solid var(--border-10, rgba(0, 0, 0, 0.07));
 }
 

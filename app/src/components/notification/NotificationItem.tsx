@@ -33,7 +33,7 @@ export function NotificationItem({
   };
 
   return (
-    <div className="transition-colors hover:bg-slate-50">
+    <div className="transition-colors hover:bg-surface-20">
       <button
         type="button"
         onClick={() => onToggle?.()}
@@ -56,7 +56,7 @@ export function NotificationItem({
         <div className="flex-1 inline-flex flex-col justify-center items-start gap-1">
           <div className="inline-flex justify-start items-center gap-5">
             <div className="flex justify-start items-start gap-1">
-              <div className="justify-start text-on-surface-10 text-[15px] font-semibold font-['Pretendard_JP'] leading-5">
+              <div className="justify-start text-on-surface-10 text-[15px] font-medium font-['Pretendard_JP'] leading-5">
                 {title}
               </div>
             </div>
@@ -81,7 +81,7 @@ export function NotificationItem({
           className="flex items-stretch gap-5 pl-[90px] pr-5 pb-5 pt-0"
         >
           <div
-            className="w-px shrink-0 self-stretch min-h-0 bg-slate-100 rounded-full"
+            className="w-px shrink-0 self-stretch min-h-0 bg-surface-20 rounded-full"
             aria-hidden
           />
           <div className="min-w-0 flex-1 flex flex-col gap-3 py-1">
@@ -94,14 +94,14 @@ export function NotificationItem({
               <button
                 type="button"
                 onClick={handleContactClick}
-                className="h-8 cursor-pointer flex items-center rounded-md border border-slate-200 bg-white px-3 text-sm font-medium text-slate-700 transition-colors hover:bg-slate-50 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-2"
+                className="h-8 cursor-pointer flex items-center rounded-md border border-border-10 bg-white px-3 text-sm font-medium text-on-surface-20 transition-colors hover:bg-surface-20 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-2"
               >
                 문의하기
               </button>
               <button
                 type="button"
                 onClick={handleCollapse}
-                className="h-8 cursor-pointer rounded-md border border-slate-200 bg-white px-3 flex items-center text-sm font-medium text-slate-700 transition-colors hover:bg-slate-50 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-2"
+                className="h-8 cursor-pointer rounded-md border border-border-10 bg-white px-3 flex items-center text-sm font-medium text-on-surface-20 transition-colors hover:bg-surface-20 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-2"
               >
                 접기
               </button>

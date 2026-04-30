@@ -76,7 +76,7 @@ export function SeriesImageUploadField({
                 e.stopPropagation();
                 onClearPreview();
               }}
-              className="absolute right-1 top-1 hidden h-8 w-8 cursor-pointer items-center justify-center rounded-full bg-surface-10 text-on-surface-10 shadow-sm group-hover:inline-flex hover:bg-slate-100"
+              className="absolute right-1 top-1 hidden h-8 w-8 cursor-pointer items-center justify-center rounded-full bg-surface-10 text-on-surface-10 shadow-sm group-hover:inline-flex hover:bg-surface-20"
             >
               <svg
                 xmlns="http://www.w3.org/2000/svg"

@@ -11,7 +11,7 @@ interface SeriesPreviewPanelProps {
 export function SeriesPreviewPanel({ coverPreviewUrl, logoPreviewUrl }: SeriesPreviewPanelProps) {
   return (
     <div className="w-[300px] shrink-0 flex flex-col gap-3">
-      <p className="text-base font-semibold text-slate-700">미리보기</p>
+      <p className="text-base font-medium text-on-surface-20">미리보기</p>
       <div className="w-full flex justify-center">
         <IPhone15ProFrame>
           <div className="relative w-full h-full">

@@ -10,12 +10,12 @@ export default function GuidePage() {
   return (
     <div className="flex flex-col h-screen w-full bg-white overflow-hidden">
       <Header profileImageUrl={profileImageUrl} onProfileImageChange={setProfileImageUrl} />
-      <div className="flex flex-1 overflow-hidden bg-slate-50">
+      <div className="flex flex-1 overflow-hidden bg-surface-20">
         <AppSidebar defaultActiveId="guide" />
         <div className="flex min-w-0 flex-1 flex-col overflow-hidden">
-          <main className="flex flex-1 flex-col overflow-hidden bg-slate-50">
+          <main className="flex flex-1 flex-col overflow-hidden bg-surface-20">
             {/* Sub Header (레이아웃 가이드: margin 40, max-width 1200, min-width 640) */}
-            <div className="w-full h-[64px] shrink-0 border-b border-slate-200 bg-white flex flex-col items-center justify-center px-5">
+            <div className="w-full h-[64px] shrink-0 border-b border-border-10 bg-white flex flex-col items-center justify-center px-5">
               <div className="w-full max-w-[1200px] flex items-center justify-start gap-4">
                 <h1 className="text-2xl font-bold text-on-surface-10">가이드</h1>
               </div>

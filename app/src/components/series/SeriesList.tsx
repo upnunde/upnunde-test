@@ -61,7 +61,7 @@ export function SeriesList({
         <button
           type="button"
           onClick={onCreateSeries}
-          className="flex flex-col cursor-pointer items-center justify-center gap-3 w-full min-h-[241px] rounded-xl border-2 border-dashed border-slate-200 bg-slate-50/50 hover:bg-slate-100 transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-2"
+          className="flex flex-col cursor-pointer items-center justify-center gap-3 w-full min-h-[241px] rounded-[4px] border-2 border-dashed border-border-10 bg-surface-20/50 hover:bg-surface-20 transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-2"
         >
           <span className="text-sm text-on-surface-30">새로운 작품을 등록하세요</span>
           <span className="inline-flex items-center gap-2 rounded-md bg-slate-800 px-4 py-2 text-sm font-medium text-white hover:bg-slate-700">

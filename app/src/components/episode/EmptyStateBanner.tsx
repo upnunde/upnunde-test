@@ -14,13 +14,13 @@ export function EmptyStateBanner({ className }: EmptyStateBannerProps) {
   return (
     <div
       className={
-        "flex flex-col items-center justify-center rounded-2xl border border-slate-200 bg-slate-50 py-16 px-8 text-center " +
+        "flex flex-col items-center justify-center rounded-[4px] border border-border-10 bg-surface-20 py-16 px-8 text-center " +
         (className ?? "")
       }
       role="status"
       aria-label="등록된 에피소드가 없습니다"
     >
-      <p className="text-base font-medium text-slate-600">
+      <p className="text-base font-medium text-on-surface-30">
         등록된 에피소드가 없습니다.
       </p>
       <p className="mt-2 text-sm text-on-surface-30">

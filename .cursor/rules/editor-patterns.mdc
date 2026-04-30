@@ -49,7 +49,7 @@ useEditorStore.getState().setEditorEntryFromFormConversion(false);
 
 - `addScriptHistoryEntry()` 호출 시 현재 `blocks` 전체 스냅샷 저장.
 - 목록은 **최신이 위** (`savedAt` 내림차순).
-- 시간 라벨은 `ux-and-content-standards.md` Global Policy 기준 (예: `1분 전`, `2025.01.01`).
+- 시간 라벨은 `design-system.md` Global Policy 기준 (예: `1분 전`, `2025.01.01`).
 
 ## 검증 규칙
 

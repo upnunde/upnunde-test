@@ -135,18 +135,18 @@ function ChoiceRow({
 
   return (
     <div
-      className="group/choice-row flex border-b border-slate-100 items-stretch min-h-[40px]"
+      className="group/choice-row flex border-b border-border-10 items-stretch min-h-[40px]"
       data-choice-id={choice.id}
     >
       {/* Col 1: Label */}
       <div className="relative w-[80px] shrink-0 min-h-[40px] px-3 py-0 text-sm text-on-surface-30 self-stretch flex items-center">
         선택 {index + 1}
-        <div className="pointer-events-none absolute inset-y-0 right-0 w-px bg-slate-100" />
+        <div className="pointer-events-none absolute inset-y-0 right-0 w-px bg-surface-20" />
       </div>
       {/* Col 2: Content - 텍스트 필드 분리, 줄 길이에 따라 가변 확장 */}
       <div className="relative flex-1 min-w-[200px] min-h-[40px] px-3 py-1 self-stretch flex items-center">
         {isAiMode ? (
-          <span className="text-sm font-semibold text-primary">
+          <span className="text-sm font-medium text-primary">
             ✨ AI 모드로 직접 대화
           </span>
         ) : (
@@ -162,7 +162,7 @@ function ChoiceRow({
             className={isTextIssueFocused ? "text-destructive placeholder:text-destructive/60" : ""}
           />
         )}
-        <div className="pointer-events-none absolute inset-y-0 right-0 w-px bg-slate-100" />
+        <div className="pointer-events-none absolute inset-y-0 right-0 w-px bg-surface-20" />
       </div>
       {/* Col 3: 장면 전환 드롭다운 */}
       <div className="relative w-[200px] min-w-[160px] max-w-[200px] shrink-0 min-h-[40px] px-3 py-0 self-stretch flex items-center">
@@ -189,7 +189,7 @@ function ChoiceRow({
             </option>
           ))}
         </select>
-        <div className="pointer-events-none absolute inset-y-0 right-0 w-px bg-slate-100" />
+        <div className="pointer-events-none absolute inset-y-0 right-0 w-px bg-surface-20" />
       </div>
       {/* Col 4: Actions */}
       <div className="w-[120px] min-w-[100px] max-w-[120px] shrink-0 min-h-[40px] px-3 py-0 self-stretch flex items-center justify-between gap-2">
@@ -225,7 +225,7 @@ function SwitchToggle({
       onClick={() => onCheckedChange(!checked)}
       className={cn(
         "relative inline-flex h-5 w-[34px] shrink-0 rounded-full transition-colors focus:outline-none focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-2",
-        checked ? "bg-primary" : "bg-slate-200"
+        checked ? "bg-primary" : "bg-surface-20"
       )}
     >
       <span
@@ -298,16 +298,16 @@ export function ChoiceBlockTable({
   return (
     <div
       className={cn(
-        "border border-slate-200 rounded-md bg-white overflow-hidden",
+        "border border-border-10 rounded-md bg-white overflow-hidden",
         className
       )}
       data-block-id={blockId}
     >
       {/* Header */}
-      <div className="flex border-b border-slate-200 bg-slate-50/80 text-slate-600 text-xs font-medium min-h-9">
-        <div className="w-20 shrink-0 px-3 flex items-center border-r border-slate-200">선택</div>
-        <div className="flex-1 min-w-[200px] px-3 flex items-center border-r border-slate-200">내용</div>
-        <div className="w-[200px] min-w-[160px] max-w-[200px] shrink-0 px-3 flex items-center border-r border-slate-200">장면 전환</div>
+      <div className="flex border-b border-border-10 bg-surface-20/80 text-on-surface-30 text-xs font-medium min-h-9">
+        <div className="w-20 shrink-0 px-3 flex items-center border-r border-border-10">선택</div>
+        <div className="flex-1 min-w-[200px] px-3 flex items-center border-r border-border-10">내용</div>
+        <div className="w-[200px] min-w-[160px] max-w-[200px] shrink-0 px-3 flex items-center border-r border-border-10">장면 전환</div>
         <div className="w-[120px] min-w-[100px] max-w-[120px] shrink-0 px-3 flex items-center">유료 전환</div>
       </div>
       {/* Rows */}
@@ -331,7 +331,7 @@ export function ChoiceBlockTable({
                 type="button"
                 variant="ghost"
                 size="sm"
-                className="text-slate-600 hover:text-on-surface-10"
+                className="text-on-surface-30 hover:text-on-surface-10"
               >
                 + 선택지 추가
               </Button>

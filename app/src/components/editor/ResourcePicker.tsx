@@ -200,7 +200,7 @@ export function ResourcePicker({
       <PopoverAnchor asChild>{children}</PopoverAnchor>
       <PopoverContent
         align="start"
-        className="w-fit max-h-[420px] flex flex-col justify-start items-stretch overflow-hidden p-0 bg-surface-10 rounded-2xl border border-[rgba(0,0,0,0.07)] outline outline-1 outline-offset-[-1px] outline-border-20/10"
+        className="w-fit max-h-[420px] flex flex-col justify-start items-stretch overflow-hidden p-0 bg-surface-10 rounded-[4px] border border-[rgba(0,0,0,0.07)] outline outline-1 outline-offset-[-1px] outline-border-20/10"
         onCloseAutoFocus={(e) => e.preventDefault()}
         onOpenAutoFocus={(e) => {
           e.preventDefault();
@@ -348,9 +348,9 @@ export function ResourcePicker({
                     optionButtonRefs.current[0] = el;
                   }}
                   onKeyDown={(e) => handleOptionKeyDown(0, e)}
-                  className="flex cursor-pointer items-center gap-2 rounded px-2 py-2 text-left text-sm hover:bg-slate-100 focus:outline-none focus-visible:ring-2 focus-visible:ring-inset focus-visible:ring-primary/40 focus:ring-0"
+                  className="flex cursor-pointer items-center gap-2 rounded px-2 py-2 text-left text-sm hover:bg-surface-20 focus:outline-none focus-visible:ring-2 focus-visible:ring-inset focus-visible:ring-primary/40 focus:ring-0"
                 >
-                  <span className="flex h-8 w-8 shrink-0 items-center justify-center rounded bg-slate-100 text-on-surface-disabled/60">
+                  <span className="flex h-8 w-8 shrink-0 items-center justify-center rounded bg-surface-20 text-on-surface-disabled/60">
                     —
                   </span>
                   <span className="truncate font-medium text-on-surface-10">선택 안 함</span>
@@ -367,10 +367,10 @@ export function ResourcePicker({
                   onKeyDown={(e) =>
                     handleOptionKeyDown(idx + (isSceneTransition ? 0 : 1), e)
                   }
-                  className="flex cursor-pointer items-center gap-2 rounded px-2 py-2 text-left text-sm hover:bg-slate-100 focus:outline-none focus-visible:ring-2 focus-visible:ring-inset focus-visible:ring-primary/40 focus:ring-0"
+                  className="flex cursor-pointer items-center gap-2 rounded px-2 py-2 text-left text-sm hover:bg-surface-20 focus:outline-none focus-visible:ring-2 focus-visible:ring-inset focus-visible:ring-primary/40 focus:ring-0"
                 >
                   {!isSceneTransition && (
-                    <span className="flex h-8 w-8 shrink-0 items-center justify-center rounded bg-slate-100 text-on-surface-30">
+                    <span className="flex h-8 w-8 shrink-0 items-center justify-center rounded bg-surface-20 text-on-surface-30">
                       ♪
                     </span>
                   )}
@@ -388,7 +388,7 @@ export function ResourcePicker({
                       optionButtonRefs.current[items.length] = el;
                     }}
                     onKeyDown={(e) => handleOptionKeyDown(items.length, e)}
-                    className="flex w-full cursor-pointer items-center gap-2 rounded px-2 py-2 text-left text-sm hover:bg-slate-100 focus:outline-none focus-visible:ring-2 focus-visible:ring-inset focus-visible:ring-primary/40 focus:ring-0"
+                    className="flex w-full cursor-pointer items-center gap-2 rounded px-2 py-2 text-left text-sm hover:bg-surface-20 focus:outline-none focus-visible:ring-2 focus-visible:ring-inset focus-visible:ring-primary/40 focus:ring-0"
                   >
                     <span className="truncate font-medium text-on-surface-10">
                       {EPISODE_END_LABEL}

@@ -29,7 +29,7 @@ export function ResourceSection({
   descriptionColorClassName: _descriptionColorClassName,
 }: ResourceSectionProps) {
   return (
-    <div className="w-full max-w-[1200px] min-w-[640px] bg-surface-10 rounded-2xl border border-border-10 flex flex-col justify-start items-start">
+    <div className="w-full max-w-[1200px] min-w-[640px] bg-surface-10 rounded-[4px] border border-border-10 flex flex-col justify-start items-start">
       <Title2
         text={title}
         asSectionHeader
@@ -37,14 +37,14 @@ export function ResourceSection({
         subtitleText={description}
       />
       {isEmpty ? (
-        <div className="self-stretch h-36 p-5 rounded-2xl flex flex-col justify-center items-center gap-4">
+        <div className="self-stretch h-36 p-5 rounded-[4px] flex flex-col justify-center items-center gap-4">
           <p className="text-on-surface-30 text-sm font-normal font-['Pretendard_JP'] leading-5">
             {emptyMessage}
           </p>
           <Button
             type="button"
             variant="outline"
-            className="h-10 min-w-20 px-3 rounded-md border border-border-20 text-secondary-on-secondary text-base font-medium font-['Pretendard_JP'] leading-5 hover:bg-slate-50"
+            className="h-10 min-w-20 px-3 rounded-md border border-border-20 text-secondary-on-secondary text-base font-medium font-['Pretendard_JP'] leading-5 hover:bg-surface-20"
             onClick={onAddClick}
           >
             {addButtonLabel}

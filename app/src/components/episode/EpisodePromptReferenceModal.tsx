@@ -42,7 +42,7 @@ export function EpisodePromptReferenceModal({
         <DialogHeader className="sr-only">
           <DialogTitle>에피소드 기준 프롬프트</DialogTitle>
         </DialogHeader>
-        <div className="mx-auto w-full rounded-xl border border-slate-200 bg-white shadow-none flex min-h-0 h-full flex-col overflow-hidden max-w-[760px] min-w-[560px]">
+        <div className="mx-auto w-full rounded-[4px] border border-border-10 bg-white shadow-none flex min-h-0 h-full flex-col overflow-hidden max-w-[760px] min-w-[560px]">
           <Title2 text="에피소드" asSectionHeader />
           <div className="mx-0 max-w-none min-w-0 border-0 rounded-none px-5 pt-5 pb-5 shadow-none min-h-0 flex-1 overflow-y-auto">
             <div className="mt-0 flex flex-col gap-6">
@@ -58,7 +58,7 @@ export function EpisodePromptReferenceModal({
                   value={REFERENCE_TITLE}
                   readOnly
                   tabIndex={-1}
-                  className="h-12 rounded-md border border-slate-200 bg-slate-50 px-3 py-2 text-sm text-on-surface-10 pointer-events-none"
+                  className="h-12 rounded-md border border-border-10 bg-surface-20 px-3 py-2 text-sm text-on-surface-10 pointer-events-none"
                 />
                 <div className="flex justify-end text-xs text-on-surface-30">
                   {REFERENCE_TITLE.length}/{MAX_TITLE}
@@ -77,7 +77,7 @@ export function EpisodePromptReferenceModal({
                   value={REFERENCE_SUMMARY}
                   readOnly
                   tabIndex={-1}
-                  className="h-12 rounded-md border border-slate-200 bg-slate-50 px-3 py-2 text-sm text-on-surface-10 pointer-events-none"
+                  className="h-12 rounded-md border border-border-10 bg-surface-20 px-3 py-2 text-sm text-on-surface-10 pointer-events-none"
                 />
                 <div className="flex justify-end text-xs text-on-surface-30">
                   {REFERENCE_SUMMARY.length}/{MAX_SUMMARY}
@@ -90,7 +90,7 @@ export function EpisodePromptReferenceModal({
                   variant="title-subtitle-dot"
                   subtitleText="에피소드 대표 이미지를 등록해주세요."
                 />
-                <div className="relative h-[107px] w-[60px] overflow-hidden rounded border border-slate-200 bg-slate-200">
+                <div className="relative h-[107px] w-[60px] overflow-hidden rounded border border-border-10 bg-slate-200">
                   <Image
                     src={REFERENCE_THUMBNAIL}
                     alt="대표 이미지"
@@ -113,7 +113,7 @@ export function EpisodePromptReferenceModal({
                   value={REFERENCE_HISTORY}
                   readOnly
                   tabIndex={-1}
-                  className="min-h-[160px] max-h-[400px] rounded-md border border-slate-200 bg-slate-50 px-3 py-2 text-sm text-on-surface-10 pointer-events-none"
+                  className="min-h-[160px] max-h-[400px] rounded-md border border-border-10 bg-surface-20 px-3 py-2 text-sm text-on-surface-10 pointer-events-none"
                 />
                 <div className="flex justify-end text-xs text-on-surface-30">
                   {REFERENCE_HISTORY.length}/{MAX_HISTORY}
@@ -132,7 +132,7 @@ export function EpisodePromptReferenceModal({
                   value={REFERENCE_SCRIPT}
                   readOnly
                   tabIndex={-1}
-                  className="min-h-[160px] max-h-[400px] rounded-md border border-slate-200 bg-slate-50 px-3 py-2 text-sm text-on-surface-10 pointer-events-none"
+                  className="min-h-[160px] max-h-[400px] rounded-md border border-border-10 bg-surface-20 px-3 py-2 text-sm text-on-surface-10 pointer-events-none"
                 />
                 <div className="flex justify-end text-xs text-on-surface-30">
                   {REFERENCE_SCRIPT.length}/{MAX_SCRIPT}
@@ -140,7 +140,7 @@ export function EpisodePromptReferenceModal({
               </div>
             </div>
           </div>
-          <div className="sticky bottom-0 border-t border-slate-200 bg-white px-5 py-4">
+          <div className="sticky bottom-0 border-t border-border-10 bg-white px-5 py-4">
             <div className="flex justify-end">
               <Button type="button" variant="outline" onClick={() => onOpenChange(false)}>
                 닫기

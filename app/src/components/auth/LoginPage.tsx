@@ -225,7 +225,7 @@ export function LoginPage() {
 
       <Dialog open={inquiryOpen} onOpenChange={setInquiryOpen}>
         <DialogContent
-          className="flex max-h-[min(90vh,calc(100vh-160px))] min-h-0 w-full min-w-[480px] max-w-[640px] flex-col gap-0 overflow-hidden rounded-xl border border-slate-200 bg-white px-0 pt-2 pb-0 shadow-none"
+          className="flex max-h-[min(90vh,calc(100vh-160px))] min-h-0 w-full min-w-[480px] max-w-[640px] flex-col gap-0 overflow-hidden rounded-[4px] border border-slate-200 bg-white px-0 pt-2 pb-0 shadow-none"
           aria-describedby={undefined}
         >
           <DialogHeader className="shrink-0 flex flex-col justify-center items-start gap-0 border-none p-0 px-5 pt-2 pb-2">

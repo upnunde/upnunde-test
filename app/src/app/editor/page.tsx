@@ -43,22 +43,22 @@ function EditorInner() {
       <div className="flex h-screen flex-col overflow-hidden bg-white">
         <Header profileImageUrl={profileImageUrl} onProfileImageChange={setProfileImageUrl} />
         {/* 에피소드 생성 서브 헤더: 뒤로가기 + 제목 */}
-        <header className="flex h-16 shrink-0 items-center justify-center border-b border-slate-200 bg-white px-6 py-0">
+        <header className="flex h-16 shrink-0 items-center justify-center border-b border-border-10 bg-white px-6 py-0">
           <div className="flex w-full max-w-[1200px] min-w-[800px] items-center justify-start gap-3">
             <Button
               type="button"
               variant="outline"
               size="icon"
               onClick={() => router.push("/series/1/episodes")}
-              className="h-9 w-9 shrink-0 rounded-full border-slate-200 shadow-none focus-visible:ring-0 focus-visible:ring-offset-0"
+              className="h-9 w-9 shrink-0 rounded-full border-border-10 shadow-none focus-visible:ring-0 focus-visible:ring-offset-0"
               aria-label="뒤로 가기"
             >
-              <ChevronLeft className="h-5 w-5 text-slate-600" strokeWidth={2} />
+              <ChevronLeft className="h-5 w-5 text-on-surface-30" strokeWidth={2} />
             </Button>
-            <h1 className="text-2xl font-extrabold text-on-surface-10">에피소드 생성</h1>
+            <h1 className="text-2xl font-bold text-on-surface-10">에피소드 생성</h1>
           </div>
         </header>
-        <div className="flex min-h-0 flex-1 flex-col overflow-hidden bg-slate-50">
+        <div className="flex min-h-0 flex-1 flex-col overflow-hidden bg-surface-20">
           <div className="flex min-h-0 flex-1 flex-col items-center gap-3 overflow-y-auto overscroll-none py-8 px-5">
             <EpisodeForm />
           </div>
@@ -78,8 +78,8 @@ function EditorInner() {
         <aside
           className={
             isSceneSidebarCollapsed
-              ? "relative z-20 w-fit shrink-0 border-r border-slate-200 bg-white overflow-visible px-2"
-              : "w-[240px] shrink-0 border-r border-slate-200 bg-white overflow-y-auto overscroll-none"
+              ? "relative z-20 w-fit shrink-0 border-r border-border-10 bg-white overflow-visible px-2"
+              : "w-[240px] shrink-0 border-r border-border-10 bg-white overflow-y-auto overscroll-none"
           }
         >
           <SceneNavigation
@@ -95,7 +95,7 @@ function EditorInner() {
         <main className="flex min-w-0 flex-1 flex-col overflow-hidden">
           <EditorScriptBootstrap routeKey={searchParams.toString()} />
           {/* 2-2-a. Sub Header (Back, Title, Actions) */}
-          <div className="w-full border-b border-slate-200">
+          <div className="w-full border-b border-border-10">
             <EditorSubHeader
               key={searchParams.size === 0 ? "editor" : searchParams.toString()}
               title="에피소드 에디터"
@@ -106,7 +106,7 @@ function EditorInner() {
           {/* Container: fixed height, no scroll — only inner content scrolls */}
           <div className="flex flex-1 w-full min-h-0 overflow-hidden bg-white justify-center items-start">
             {/* Left Area: bordered panel fixed in view, only inner content scrolls */}
-            <div className="flex flex-1 min-h-0 h-full w-full flex-col border-r border-slate-200 overflow-hidden">
+            <div className="flex flex-1 min-h-0 h-full w-full flex-col border-r border-border-10 overflow-hidden">
               <div className="py-10 px-0 flex-1 min-h-0 overflow-y-auto overscroll-none">
                 <EditorBody />
               </div>

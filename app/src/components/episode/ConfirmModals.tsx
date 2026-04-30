@@ -45,9 +45,9 @@ export function PublishConfirmModal({
         }
       }}
     >
-      <DialogContent className="w-[480px] max-w-[calc(100vw-2rem)] p-0 gap-0 bg-surface-10 rounded-2xl shadow-[0px_8px_16px_8px_rgba(0,0,0,0.16)] overflow-hidden border-0">
+      <DialogContent className="w-[480px] max-w-[calc(100vw-2rem)] p-0 gap-0 bg-surface-10 rounded-[4px] shadow-[0px_8px_16px_8px_rgba(0,0,0,0.16)] overflow-hidden border-0">
         {/* 상단: 제목 + 부제 (가이드 레이아웃) */}
-        <div className="self-stretch px-6 pt-10 pb-4 bg-surface-10 rounded-t-2xl flex flex-col justify-start items-center gap-5 overflow-hidden">
+        <div className="self-stretch px-6 pt-10 pb-4 bg-surface-10 rounded-t-[4px] flex flex-col justify-start items-center gap-5 overflow-hidden">
           <div className="self-stretch flex flex-col justify-center items-center gap-2">
             <DialogTitle asChild>
               <h2 className="text-center text-on-surface-10 text-2xl font-bold font-['Pretendard_JP'] leading-8">
@@ -88,7 +88,7 @@ export function PublishConfirmModal({
                 value={confirmationText}
                 onChange={(e) => setConfirmationText(e.target.value)}
                 placeholder="확인했습니다"
-                className="h-10 w-full rounded-md border border-slate-200 bg-white px-3 text-sm text-on-surface-10 outline-none focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-2"
+                className="h-10 w-full rounded-md border border-border-10 bg-white px-3 text-sm text-on-surface-10 outline-none focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-2"
               />
             </div>
           </div>
@@ -140,7 +140,7 @@ export function DeleteConfirmModal({
 
   return (
     <Dialog open={open} onOpenChange={(o) => !o && onClose()}>
-      <DialogContent className="flex w-[480px] max-w-[calc(100vw-2rem)] flex-col items-stretch gap-0 overflow-hidden border-0 bg-surface-10 p-0 shadow-[0px_8px_16px_8px_rgba(0,0,0,0.16)] sm:rounded-2xl">
+      <DialogContent className="flex w-[480px] max-w-[calc(100vw-2rem)] flex-col items-stretch gap-0 overflow-hidden border-0 bg-surface-10 p-0 shadow-[0px_8px_16px_8px_rgba(0,0,0,0.16)] sm:rounded-[4px]">
         {/* 상단: 제목 + 부제 (가이드 셸) */}
         <div className="flex flex-col items-center gap-5 self-stretch overflow-hidden rounded-tl-2xl rounded-tr-2xl bg-surface-10 px-6 pb-4 pt-10">
           <div className="flex flex-col items-center gap-2 self-stretch">

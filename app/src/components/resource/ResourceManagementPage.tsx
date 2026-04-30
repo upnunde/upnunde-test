@@ -185,9 +185,9 @@ export function ResourceManagementPage() {
 
   return (
     <>
-      <main className="flex min-h-0 flex-1 flex-col bg-slate-50">
+      <main className="flex min-h-0 flex-1 flex-col bg-surface-20">
         {/* [정책 1] 헤더 (레이아웃 가이드: margin 40, max-width 1200, min-width 640) */}
-        <header className="flex h-16 shrink-0 items-center justify-center border-b border-slate-200 bg-white px-10 py-0">
+        <header className="flex h-16 shrink-0 items-center justify-center border-b border-border-10 bg-white px-10 py-0">
           <div className="flex w-full max-w-[1200px] min-w-[640px] items-center justify-between gap-4">
             <div className="flex items-center justify-start gap-3">
               <Button
@@ -195,10 +195,10 @@ export function ResourceManagementPage() {
                 variant="outline"
                 size="icon"
                 onClick={handleBack}
-                className="h-9 w-9 shrink-0 rounded-full border-slate-200 shadow-none focus-visible:ring-0 focus-visible:ring-offset-0"
+                className="h-9 w-9 shrink-0 rounded-full border-border-10 shadow-none focus-visible:ring-0 focus-visible:ring-offset-0"
                 aria-label="시리즈 목록으로"
               >
-                <ChevronLeft className="h-5 w-5 text-slate-600" strokeWidth={2} />
+                <ChevronLeft className="h-5 w-5 text-on-surface-30" strokeWidth={2} />
               </Button>
               <h1 className="text-2xl font-bold text-on-surface-10">리소스 관리</h1>
             </div>
@@ -212,7 +212,7 @@ export function ResourceManagementPage() {
             <div className="flex w-full flex-col items-start gap-6 lg:flex-row">
               {showPreview && (
                 <aside className="w-full lg:w-[380px] lg:shrink-0 lg:sticky lg:top-6">
-                  <div className="w-full bg-surface-10 rounded-2xl border border-border-10 p-5">
+                  <div className="w-full bg-surface-10 rounded-[4px] border border-border-10 p-5">
                     <Title2
                       text="미리보기"
                       asSectionHeader
@@ -237,10 +237,10 @@ export function ResourceManagementPage() {
               emptyMessage="등록된 등장인물이 없습니다"
               addButtonLabel="등장인물 등록"
               isEmpty={characters.length === 0}
-              descriptionColorClassName="text-[rgba(145,145,148,1)]"
+              descriptionColorClassName="text-on-surface-30"
               onAddClick={() => navigateTo(ROUTES.character.new(seriesId))}
             >
-              <div className="self-stretch p-0 rounded-2xl inline-flex justify-start items-start gap-4 flex-wrap content-start">
+              <div className="self-stretch p-0 rounded-[4px] inline-flex justify-start items-start gap-4 flex-wrap content-start">
                 {characters.map((c) => (
                   <CharacterCard
                     key={c.id}
@@ -276,10 +276,10 @@ export function ResourceManagementPage() {
               emptyMessage="등록된 배경이 없습니다"
               addButtonLabel="배경 등록"
               isEmpty={backgrounds.length === 0}
-              descriptionColorClassName="text-[rgba(145,145,148,1)]"
+              descriptionColorClassName="text-on-surface-30"
               onAddClick={() => navigateTo(ROUTES.background.new(seriesId))}
             >
-              <div className="self-stretch p-0 rounded-2xl inline-flex justify-start items-start gap-4 flex-wrap content-start">
+              <div className="self-stretch p-0 rounded-[4px] inline-flex justify-start items-start gap-4 flex-wrap content-start">
                 {backgrounds.map((bg) => (
                   <ImageCard
                     key={bg.id}
@@ -315,10 +315,10 @@ export function ResourceManagementPage() {
               emptyMessage="등록된 연출장면이 없습니다"
               addButtonLabel="연출장면 등록"
               isEmpty={scenes.length === 0}
-              descriptionColorClassName="text-[rgba(145,145,148,1)]"
+              descriptionColorClassName="text-on-surface-30"
               onAddClick={() => navigateTo(ROUTES.scene.new(seriesId))}
             >
-              <div className="self-stretch p-0 rounded-2xl inline-flex justify-start items-start gap-4 flex-wrap content-start">
+              <div className="self-stretch p-0 rounded-[4px] inline-flex justify-start items-start gap-4 flex-wrap content-start">
                 {visibleScenes.map((s) => (
                   <ImageCard
                     key={s.id}
@@ -352,10 +352,10 @@ export function ResourceManagementPage() {
               emptyMessage="등록된 미디어가 없습니다"
               addButtonLabel="미디어 등록"
               isEmpty={media.length === 0}
-              descriptionColorClassName="text-[rgba(145,145,148,1)]"
+              descriptionColorClassName="text-on-surface-30"
               onAddClick={() => navigateTo(ROUTES.media.new(seriesId))}
             >
-              <div className="self-stretch p-0 rounded-2xl inline-flex justify-start items-start gap-4 flex-wrap content-start">
+              <div className="self-stretch p-0 rounded-[4px] inline-flex justify-start items-start gap-4 flex-wrap content-start">
                 {media.map((m) => (
                   <MediaCard
                     key={m.id}
@@ -388,10 +388,10 @@ export function ResourceManagementPage() {
               emptyMessage="등록된 갤러리가 없습니다"
               addButtonLabel="갤러리 등록"
               isEmpty={gallery.length === 0}
-              descriptionColorClassName="text-[rgba(145,145,148,1)]"
+              descriptionColorClassName="text-on-surface-30"
               onAddClick={() => navigateTo(ROUTES.gallery.new(seriesId))}
             >
-              <div className="self-stretch p-0 rounded-2xl inline-flex justify-start items-start gap-4 flex-wrap content-start">
+              <div className="self-stretch p-0 rounded-[4px] inline-flex justify-start items-start gap-4 flex-wrap content-start">
                 {visibleGallery.map((g) => (
                   <ImageCard
                     key={g.id}

@@ -22,7 +22,7 @@ export default function Header({ profileImageUrl, onProfileImageChange }: Header
   const profileButtonRef = useRef<HTMLButtonElement>(null);
 
   return (
-    <header className="flex h-14 shrink-0 items-center justify-between border-b border-slate-200 bg-white pl-0 pr-4">
+    <header className="flex h-14 shrink-0 items-center justify-between border-b border-border-10 bg-white pl-0 pr-4">
       <div className="flex w-[240px] self-stretch items-center pl-4">
         <button
           type="button"
@@ -45,7 +45,7 @@ export default function Header({ profileImageUrl, onProfileImageChange }: Header
           ref={profileButtonRef}
           type="button"
           onClick={() => setIsProfileModalOpen(true)}
-          className="w-9 h-9 rounded-full bg-slate-100 border border-slate-200 flex cursor-pointer items-center justify-center hover:bg-slate-200 transition-colors overflow-hidden"
+          className="w-9 h-9 rounded-full bg-surface-20 border border-border-10 flex cursor-pointer items-center justify-center hover:bg-slate-200 transition-colors overflow-hidden"
           aria-label="프로필 편집"
         >
           {profileImageUrl ? (
@@ -58,7 +58,7 @@ export default function Header({ profileImageUrl, onProfileImageChange }: Header
               className="w-full h-full object-cover"
             />
           ) : (
-            <User className="h-4 w-4 text-slate-600" />
+            <User className="h-4 w-4 text-on-surface-30" />
           )}
         </button>
       </div>

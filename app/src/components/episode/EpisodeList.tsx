@@ -36,12 +36,12 @@ export function EpisodeList({
   return (
     <div
       className={
-        "w-full bg-white rounded-2xl border border-slate-200 flex flex-col shrink-0 overflow-hidden " +
+        "w-full bg-white rounded-[4px] border border-border-10 flex flex-col shrink-0 overflow-hidden " +
         (className ?? "")
       }
     >
       {/* Table Header */}
-      <div className="h-12 border-b border-slate-100 flex items-center px-5 bg-white rounded-t-2xl shrink-0">
+      <div className="h-12 border-b border-slate-100 flex items-center px-5 bg-white rounded-t-[4px] shrink-0">
         <div className="w-20 text-xs text-on-surface-30">회차</div>
         <div className="flex-1 px-0 text-xs text-on-surface-30">제목</div>
         <div className="w-32 px-0 text-xs text-on-surface-30">개시일</div>

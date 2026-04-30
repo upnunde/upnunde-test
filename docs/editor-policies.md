@@ -25,7 +25,7 @@
 - **가장 최근 임시저장이 목록 최상단**에 온다.
 - UI에서는 `savedAt` 기준 **내림차순** 정렬을 사용해, 저장소 배열 순서와 무관하게 동일한 경험을 보장한다.
 - 빈 상태 **데모 타임스탬프**도 동일하게 **최신이 위**로 정렬한다.
-- 히스토리 시간 라벨은 [ux-and-content-standards.md](./ux-and-content-standards.md)의 **Global Policy(날짜·시간 표기)** 를 따른다.
+- 히스토리 시간 라벨은 [design-system.md](./design-system.md)의 **Global Policy(날짜·시간 표기)** 를 따른다.
 
 ### 히스토리 UI (팝오버)
 

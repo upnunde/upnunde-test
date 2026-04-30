@@ -489,7 +489,7 @@ export function CharacterExpressionModal({
   return (
     <Dialog open={open} onOpenChange={(o) => !o && handleClose()}>
       <DialogContent
-        className={`${layoutShowSlotList ? "w-auto max-w-[calc(100vw-2rem)]" : "w-[424px] max-w-[calc(100vw-2rem)]"} gap-0 p-0 bg-surface-10 rounded-2xl shadow-[0px_8px_16px_8px_rgba(0,0,0,0.16)] outline outline-1 outline-offset-[-1px] outline-slate-200 overflow-hidden flex flex-col`}
+        className={`${layoutShowSlotList ? "w-auto max-w-[calc(100vw-2rem)]" : "w-[424px] max-w-[calc(100vw-2rem)]"} gap-0 p-0 bg-surface-10 rounded-[4px] shadow-[0px_8px_16px_8px_rgba(0,0,0,0.16)] outline outline-1 outline-offset-[-1px] outline-border-10 overflow-hidden flex flex-col`}
         aria-describedby={undefined}
       >
         <DialogTitle className="sr-only">이미지 편집</DialogTitle>
@@ -507,7 +507,7 @@ export function CharacterExpressionModal({
           {/* 왼쪽: 이미지 크롭 에디터 + 슬라이더 + 표정 입력 */}
           <div
             className={`p-4 sm:p-5 flex-1 min-h-0 overflow-y-auto flex flex-col justify-start items-center gap-5 shrink-0 ${
-              layoutShowSlotList ? "border-r border-slate-200" : "w-full"
+              layoutShowSlotList ? "border-r border-border-10" : "w-full"
             }`}
             style={layoutShowSlotList ? { width: "fit-content" } : undefined}
           >
@@ -572,7 +572,7 @@ export function CharacterExpressionModal({
                 type="button"
                 variant="outline"
                 size="icon"
-                className="shrink-0 w-8 h-8 bg-transparent hover:bg-transparent active:bg-transparent shadow-none rounded-full border border-slate-200"
+                className="shrink-0 w-8 h-8 bg-transparent hover:bg-transparent active:bg-transparent shadow-none rounded-full border border-border-10"
                 onClick={() => {
                   if (selectedSlot?.id) {
                     setZoom(1);
@@ -623,7 +623,7 @@ export function CharacterExpressionModal({
                       onBlur={() => setTimeout(() => setSuggestionOpen(false), 150)}
                       placeholder="인물의 표정을 입력하세요"
                       maxLength={EXPRESSION_MAX_LENGTH}
-                      className="h-12 w-full rounded-md border border-slate-200 bg-white px-3 py-2 text-sm text-on-surface-10 placeholder:text-on-surface-30 focus:outline-none focus:ring-2 focus:ring-primary shadow-none font-['Pretendard_JP']"
+                      className="h-12 w-full rounded-md border border-border-10 bg-white px-3 py-2 text-sm text-on-surface-10 placeholder:text-on-surface-30 focus:outline-none focus:ring-2 focus:ring-primary shadow-none font-['Pretendard_JP']"
                     />
                   </div>
                   <div className="self-stretch inline-flex justify-end items-center gap-2">
@@ -639,7 +639,7 @@ export function CharacterExpressionModal({
                 <Button
                   type="button"
                   variant="outline"
-                  className="h-8 rounded-md outline outline-1 outline-offset-[-1px] outline-slate-200 font-['Pretendard_JP'] text-sm font-medium text-secondary-foreground px-4 w-auto"
+                  className="h-8 rounded-md outline outline-1 outline-offset-[-1px] outline-border-10 font-['Pretendard_JP'] text-sm font-medium text-secondary-foreground px-4 w-auto"
                   onClick={() => handleNavigateFilledSlots("prev")}
                   disabled={filledSlotIndices.length <= 1}
                 >
@@ -648,7 +648,7 @@ export function CharacterExpressionModal({
                 <Button
                   type="button"
                   variant="outline"
-                  className="h-8 rounded-md outline outline-1 outline-offset-[-1px] outline-slate-200 font-['Pretendard_JP'] text-sm font-medium text-secondary-foreground px-4 w-auto"
+                  className="h-8 rounded-md outline outline-1 outline-offset-[-1px] outline-border-10 font-['Pretendard_JP'] text-sm font-medium text-secondary-foreground px-4 w-auto"
                   onClick={() => handleNavigateFilledSlots("next")}
                   disabled={filledSlotIndices.length <= 1}
                 >
@@ -693,7 +693,7 @@ export function CharacterExpressionModal({
                           type="button"
                           aria-label="표정 삭제"
                           onClick={() => setSlots((prev) => prev.filter((s) => s.id !== slot.id))}
-                          className="hidden group-hover:inline-flex absolute top-1 right-1 w-8 h-8 rounded-full bg-surface-10 text-on-surface-10 hover:bg-slate-100 items-center justify-center cursor-pointer shadow-sm"
+                          className="hidden group-hover:inline-flex absolute top-1 right-1 w-8 h-8 rounded-full bg-surface-10 text-on-surface-10 hover:bg-surface-20 items-center justify-center cursor-pointer shadow-sm"
                         >
                           <Trash2 className="w-4 h-4 pointer-events-none" />
                         </button>
@@ -719,12 +719,12 @@ export function CharacterExpressionModal({
         </div>
 
         {/* 푸터: border-t, 취소(아웃라인) / 저장 */}
-        <div className="self-stretch w-full p-5 border-t border-slate-200 inline-flex justify-end items-center gap-2 shrink-0">
+        <div className="self-stretch w-full p-5 border-t border-border-10 inline-flex justify-end items-center gap-2 shrink-0">
           <DialogClose asChild>
             <Button
               type="button"
               variant="outline"
-              className="min-w-20 h-10 rounded-md outline outline-1 outline-offset-[-1px] outline-slate-200 font-['Pretendard_JP'] text-base font-medium text-secondary-foreground"
+              className="min-w-20 h-10 rounded-md outline outline-1 outline-offset-[-1px] outline-border-10 font-['Pretendard_JP'] text-base font-medium text-secondary-foreground"
               onClick={handleClose}
             >
               취소

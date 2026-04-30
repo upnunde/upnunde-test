@@ -48,10 +48,10 @@ export function SeriesFormPageScaffold({
   return (
     <div className="flex flex-col h-screen w-full bg-white overflow-hidden">
       <Header profileImageUrl={profileImageUrl} onProfileImageChange={onProfileImageChange} />
-      <div className="flex flex-1 overflow-hidden bg-slate-50">
+      <div className="flex flex-1 overflow-hidden bg-surface-20">
         <div className="flex min-w-0 flex-1 flex-col overflow-hidden">
-          <main className="flex flex-1 flex-col overflow-hidden bg-slate-50">
-            <header className="flex h-16 shrink-0 items-center justify-center border-b border-slate-200 bg-white px-5 py-0">
+          <main className="flex flex-1 flex-col overflow-hidden bg-surface-20">
+            <header className="flex h-16 shrink-0 items-center justify-center border-b border-border-10 bg-white px-5 py-0">
               <div className="flex w-full max-w-[1200px] items-center justify-between gap-4">
                 <div className="flex items-center justify-start gap-3">
                   <Button
@@ -59,12 +59,12 @@ export function SeriesFormPageScaffold({
                     variant="outline"
                     size="icon"
                     onClick={onBack}
-                    className="h-9 w-9 shrink-0 rounded-full border-slate-200 shadow-none focus-visible:ring-0 focus-visible:ring-offset-0"
+                    className="h-9 w-9 shrink-0 rounded-full border-border-10 shadow-none focus-visible:ring-0 focus-visible:ring-offset-0"
                     aria-label="시리즈 목록으로"
                   >
-                    <ChevronLeft className="h-5 w-5 text-slate-600" strokeWidth={2} />
+                    <ChevronLeft className="h-5 w-5 text-on-surface-30" strokeWidth={2} />
                   </Button>
-                  <h1 className="text-2xl font-extrabold text-on-surface-10">{title}</h1>
+                  <h1 className="text-2xl font-bold text-on-surface-10">{title}</h1>
                 </div>
                 <div className="flex items-center gap-3">
                   {showDraftButton ? (
@@ -72,7 +72,7 @@ export function SeriesFormPageScaffold({
                       type="button"
                       variant="outline"
                       onClick={onDraftClick}
-                      className="border-slate-200 bg-white text-slate-700 hover:bg-slate-50"
+                      className="border-border-10 bg-white text-on-surface-20 hover:bg-surface-20"
                     >
                       임시저장
                     </Button>
@@ -101,7 +101,7 @@ export function SeriesFormPageScaffold({
                 <div className="flex-1 min-w-0">
                   <PageCard
                     fullWidth
-                    className="h-fit rounded-2xl flex flex-col shrink-0 overflow-hidden px-0 pt-0 pb-0"
+                    className="h-fit rounded-[4px] flex flex-col shrink-0 overflow-hidden px-0 pt-0 pb-0"
                   >
                     <SeriesFormTabs activeTab={activeTab} onChange={onTabChange} />
                     <div className="self-stretch px-5 pt-2 pb-5">{children}</div>

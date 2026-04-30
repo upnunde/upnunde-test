@@ -127,7 +127,7 @@ export function BgmSection({
 
   return (
     <>
-      <div className="w-full max-w-[1200px] min-w-[640px] bg-surface-10 rounded-2xl border border-border-10 flex flex-col justify-start items-start">
+      <div className="w-full max-w-[1200px] min-w-[640px] bg-surface-10 rounded-[4px] border border-border-10 flex flex-col justify-start items-start">
         <div className="w-full self-stretch px-5 pt-5 pb-3 border-b border-border-10 inline-flex justify-between items-center gap-0">
           <Title2
             text={title}
@@ -147,7 +147,7 @@ export function BgmSection({
           </Button>
         </div>
         {items.length === 0 ? (
-          <div className="self-stretch h-36 p-5 rounded-2xl flex flex-col justify-center items-center gap-4">
+          <div className="self-stretch h-36 p-5 rounded-[4px] flex flex-col justify-center items-center gap-4">
             <p className="text-on-surface-30 text-sm font-normal font-['Pretendard_JP'] leading-5">
               {emptyMessage}
             </p>
@@ -161,7 +161,7 @@ export function BgmSection({
             </Button>
           </div>
         ) : (
-          <div className="self-stretch px-5 pb-2 pt-2 rounded-2xl flex flex-col justify-start items-start gap-3">
+          <div className="self-stretch px-5 pb-2 pt-2 rounded-[4px] flex flex-col justify-start items-start gap-3">
             {/* 상단 카테고리 탭 영역 - 레벨2(보조) 탭 스타일 */}
             <div className="w-full pt-0 pb-0 mt-0 mb-1 inline-flex flex-col justify-start items-start gap-2.5">
               <div
@@ -183,7 +183,7 @@ export function BgmSection({
                         "h-7 px-0 flex cursor-pointer justify-center items-center min-w-0 border-b text-sm font-medium font-['Pretendard_JP'] leading-4 transition-colors " +
                         (isActive
                           ? "border-slate-800 text-on-surface-10"
-                          : "border-transparent text-[rgba(145,145,148,1)] hover:text-on-surface-20")
+                          : "border-transparent text-on-surface-30 hover:text-on-surface-20")
                       }
                       aria-current={isActive ? "page" : undefined}
                       onClick={() => setActiveGenre(genre)}

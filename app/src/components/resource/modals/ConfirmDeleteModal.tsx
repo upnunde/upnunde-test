@@ -40,7 +40,7 @@ export function ConfirmDeleteModal({
   const label = CATEGORY_LABELS[category];
   return (
     <Dialog open={open} onOpenChange={(o) => !o && onClose()}>
-      <DialogContent className="w-[400px] max-w-[calc(100vw-2rem)] gap-4 bg-surface-10 rounded-2xl border border-border-10">
+      <DialogContent className="w-[400px] max-w-[calc(100vw-2rem)] gap-4 bg-surface-10 rounded-[4px] border border-border-10">
         <DialogHeader>
           <DialogTitle className="text-on-surface-10 text-xl font-bold font-['Pretendard_JP']">
             {label}을(를) 삭제하시겠어요?

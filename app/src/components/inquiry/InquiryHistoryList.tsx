@@ -29,7 +29,7 @@ export function InquiryHistoryList({ items }: InquiryHistoryListProps) {
           {index > 0 ? (
             <li aria-hidden className="list-none">
               <div
-                className="mx-5 my-0 h-px bg-slate-100"
+                className="mx-5 my-0 h-px bg-surface-20"
                 role="separator"
               />
             </li>

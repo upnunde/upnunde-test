@@ -79,7 +79,7 @@ export function SeriesItem({
   };
 
   return (
-    <div className="flex min-w-0 w-full flex-col gap-5 py-5 pl-5 pr-5 min-[480px]:flex-row rounded-xl border border-slate-200 bg-white">
+    <div className="flex min-w-0 w-full flex-col gap-5 py-5 pl-5 pr-5 min-[480px]:flex-row rounded-[4px] border border-border-10 bg-white">
       {/* 썸네일 영역 (정책 6, 8, 9, 10) */}
       <div className="aspect-[9/16] w-28 max-[479px]:self-center shrink-0 overflow-hidden rounded bg-slate-200 relative">
         {status === "DRAFT" ? (
@@ -119,17 +119,17 @@ export function SeriesItem({
             <DropdownMenuTrigger asChild>
               <button
                 type="button"
-                className="shrink-0 w-8 h-8 -mt-1 -mr-2 rounded-full flex items-center justify-center text-on-surface-30 hover:bg-slate-100 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-slate-200"
+                className="shrink-0 w-8 h-8 -mt-1 -mr-2 rounded-full flex items-center justify-center text-on-surface-30 hover:bg-surface-20 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-border-10"
                 aria-label="더보기"
               >
                 <MoreVertical className="w-5 h-5" aria-hidden />
               </button>
             </DropdownMenuTrigger>
-          <DropdownMenuContent align="end" className="w-48 rounded-lg border border-slate-100 bg-white p-1">
+          <DropdownMenuContent align="end" className="w-48 rounded-lg border border-border-10 bg-white p-1">
               {status === "PUBLIC" && (
                 <>
                   <DropdownMenuItem
-                    className="flex cursor-pointer items-center gap-2 rounded-md px-3 py-2.5 text-sm text-slate-700 outline-none hover:bg-slate-50"
+                    className="flex cursor-pointer items-center gap-2 rounded-md px-3 py-2.5 text-sm text-on-surface-20 outline-none hover:bg-surface-20"
                     onSelect={() => onSetPrivate?.(series)}
                   >
                     <EyeOff className="h-4 w-4 shrink-0 text-on-surface-30" aria-hidden />
@@ -148,7 +148,7 @@ export function SeriesItem({
               {status === "PRIVATE" && (
                 <>
                   <DropdownMenuItem
-                    className="flex cursor-pointer items-center gap-2 rounded-md px-3 py-2.5 text-sm text-slate-700 outline-none hover:bg-slate-50"
+                    className="flex cursor-pointer items-center gap-2 rounded-md px-3 py-2.5 text-sm text-on-surface-20 outline-none hover:bg-surface-20"
                     onSelect={() => onSetPublic?.(series)}
                   >
                     <Eye className="h-4 w-4 shrink-0 text-on-surface-30" aria-hidden />
@@ -239,7 +239,7 @@ export function SeriesItem({
           <button
             type="button"
             onClick={handleSeriesManage}
-            className="h-10 flex-1 min-w-0 cursor-pointer rounded-md border px-3 text-sm font-medium transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-2 border-slate-200 bg-white text-slate-700 hover:bg-slate-50 flex items-center"
+            className="h-10 flex-1 min-w-0 cursor-pointer rounded-md border px-3 text-sm font-medium transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-2 border-border-10 bg-white text-on-surface-20 hover:bg-surface-20 flex items-center"
           >
             <span className="block w-full overflow-hidden text-ellipsis whitespace-nowrap text-center">
               시리즈 관리
@@ -252,8 +252,8 @@ export function SeriesItem({
             onClick={handleResource}
             className={`h-10 flex-1 min-w-0 rounded-md border px-3 text-sm font-medium transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-2 flex items-center ${
               isDraft
-                ? "border-slate-200 text-on-surface-30 cursor-not-allowed"
-                : "border-slate-200 bg-white text-slate-700 hover:bg-slate-50 cursor-pointer"
+                ? "border-border-10 text-on-surface-30 cursor-not-allowed"
+                : "border-border-10 bg-white text-on-surface-20 hover:bg-surface-20 cursor-pointer"
             }`}
           >
             <span className="block w-full overflow-hidden text-ellipsis whitespace-nowrap text-center">
@@ -267,8 +267,8 @@ export function SeriesItem({
             onClick={handleEpisode}
             className={`h-10 flex-1 min-w-0 rounded-md border px-3 text-sm font-medium transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-2 flex items-center ${
               isDraft
-                ? "border-slate-200 text-on-surface-30 cursor-not-allowed"
-                : "border-slate-200 bg-white text-slate-700 hover:bg-slate-50 cursor-pointer"
+                ? "border-border-10 text-on-surface-30 cursor-not-allowed"
+                : "border-border-10 bg-white text-on-surface-20 hover:bg-surface-20 cursor-pointer"
             }`}
           >
             <span className="block w-full overflow-hidden text-ellipsis whitespace-nowrap text-center">

@@ -207,9 +207,9 @@ export function CharacterDetailPage({ isNew = true, initialData }: CharacterDeta
   }, []);
 
   return (
-    <main className="flex flex-1 flex-col overflow-hidden bg-slate-50">
+    <main className="flex flex-1 flex-col overflow-hidden bg-surface-20">
       {/* 상단 서브 헤더 - 리소스 관리/에피소드 관리와 동일 톤 */}
-      <header className="flex h-16 shrink-0 items-center justify-center border-b border-slate-200 bg-white px-10 py-0">
+      <header className="flex h-16 shrink-0 items-center justify-center border-b border-border-10 bg-white px-10 py-0">
         <div className="flex w-full max-w-[1200px] min-w-[640px] items-center justify-between gap-4">
           <div className="flex items-center justify-start gap-3">
             <Button
@@ -217,10 +217,10 @@ export function CharacterDetailPage({ isNew = true, initialData }: CharacterDeta
               variant="outline"
               size="icon"
               onClick={handleBack}
-              className="h-9 w-9 shrink-0 rounded-full border-slate-200 shadow-none focus-visible:ring-0 focus-visible:ring-offset-0"
+              className="h-9 w-9 shrink-0 rounded-full border-border-10 shadow-none focus-visible:ring-0 focus-visible:ring-offset-0"
               aria-label="리소스 목록으로"
             >
-              <ChevronLeft className="h-5 w-5 text-slate-600" strokeWidth={2} />
+              <ChevronLeft className="h-5 w-5 text-on-surface-30" strokeWidth={2} />
             </Button>
             <h1 className="text-2xl font-bold text-on-surface-10">등장인물 {isNew ? "등록" : "상세"}</h1>
           </div>
@@ -229,7 +229,7 @@ export function CharacterDetailPage({ isNew = true, initialData }: CharacterDeta
 
       <div className="flex-1 overflow-y-auto flex flex-col items-center py-8 px-10 gap-4">
         <div className="w-full max-w-[1200px] min-w-[640px] mx-auto">
-          <div className="w-full rounded-2xl border border-slate-200 bg-white">
+          <div className="w-full rounded-[4px] border border-border-10 bg-white">
             <Title2
               text="인물정보"
               asSectionHeader
@@ -250,7 +250,7 @@ export function CharacterDetailPage({ isNew = true, initialData }: CharacterDeta
                     onChange={(e) => setName(e.target.value.slice(0, MAX_NAME))}
                     maxLength={MAX_NAME}
                     placeholder="예) 한하루"
-                    className="h-12 rounded-md border border-slate-200 bg-white px-3 py-2 text-sm text-on-surface-10 placeholder:text-on-surface-30 focus:outline-none focus:ring-2 focus:ring-primary shadow-none"
+                    className="h-12 rounded-md border border-border-10 bg-white px-3 py-2 text-sm text-on-surface-10 placeholder:text-on-surface-30 focus:outline-none focus:ring-2 focus:ring-primary shadow-none"
                   />
                   <div className="w-full inline-flex justify-end items-center gap-2">
                     <div className="text-right text-on-surface-30 text-xs font-normal leading-4 tabular-nums">{name.length}/{MAX_NAME}</div>
@@ -271,7 +271,7 @@ export function CharacterDetailPage({ isNew = true, initialData }: CharacterDeta
                     onChange={(e) => setSummary(e.target.value.slice(0, MAX_SUMMARY))}
                     maxLength={MAX_SUMMARY}
                     placeholder="예) 사람의 소리를 볼 수 있는 소리 수집가 소년"
-                    className="h-12 rounded-md border border-slate-200 bg-white px-3 py-2 text-sm text-on-surface-10 placeholder:text-on-surface-30 focus:outline-none focus:ring-2 focus:ring-primary"
+                    className="h-12 rounded-md border border-border-10 bg-white px-3 py-2 text-sm text-on-surface-10 placeholder:text-on-surface-30 focus:outline-none focus:ring-2 focus:ring-primary"
                   />
                   <div className="w-full inline-flex justify-end items-center gap-2">
                     <div className="text-right text-on-surface-30 text-xs font-normal leading-4 tabular-nums">{summary.length}/{MAX_SUMMARY}</div>
@@ -290,7 +290,7 @@ export function CharacterDetailPage({ isNew = true, initialData }: CharacterDeta
                     />
                     {thumbnailUrl ? (
                       <div className="inline-flex flex-col justify-start items-start gap-1 w-[90px] group">
-                        <div className="w-[90px] h-[160px] rounded-lg overflow-hidden border border-slate-200 bg-slate-100 relative">
+                        <div className="w-[90px] h-[160px] rounded-lg overflow-hidden border border-border-10 bg-surface-20 relative">
                           <button
                             type="button"
                             onClick={handleThumbnailAddClick}
@@ -310,7 +310,7 @@ export function CharacterDetailPage({ isNew = true, initialData }: CharacterDeta
                           <div className="absolute right-1 top-1 z-[2] flex flex-col justify-center items-start gap-1 opacity-0 group-hover:opacity-100 transition-opacity pointer-events-none group-hover:pointer-events-auto">
                             <button
                               type="button"
-                              className="w-8 h-8 rounded-full cursor-pointer bg-surface-10 inline-flex justify-center items-center text-on-surface-10 hover:bg-slate-100"
+                              className="w-8 h-8 rounded-full cursor-pointer bg-surface-10 inline-flex justify-center items-center text-on-surface-10 hover:bg-surface-20"
                               aria-label="대표 썸네일 편집"
                               onClick={(e) => {
                                 e.stopPropagation();
@@ -321,7 +321,7 @@ export function CharacterDetailPage({ isNew = true, initialData }: CharacterDeta
                             </button>
                             <button
                               type="button"
-                              className="w-8 h-8 rounded-full cursor-pointer bg-surface-10 inline-flex justify-center items-center text-on-surface-10 hover:bg-slate-100"
+                              className="w-8 h-8 rounded-full cursor-pointer bg-surface-10 inline-flex justify-center items-center text-on-surface-10 hover:bg-surface-20"
                               aria-label="대표 썸네일 삭제"
                               onClick={(e) => {
                                 e.stopPropagation();
@@ -354,7 +354,7 @@ export function CharacterDetailPage({ isNew = true, initialData }: CharacterDeta
                           key={slot.id}
                           className="inline-flex flex-col justify-start items-start gap-1 w-[90px] group"
                         >
-                          <div className="w-[90px] h-[160px] rounded-lg overflow-hidden border border-slate-200 bg-slate-100 relative">
+                          <div className="w-[90px] h-[160px] rounded-lg overflow-hidden border border-border-10 bg-surface-20 relative">
                             <Image
                               src={slot.imageUrl ?? ""}
                               alt=""
@@ -369,7 +369,7 @@ export function CharacterDetailPage({ isNew = true, initialData }: CharacterDeta
                             <div className="absolute right-1 top-1 flex flex-col justify-center items-start gap-1 opacity-0 group-hover:opacity-100 transition-opacity pointer-events-none group-hover:pointer-events-auto">
                               <button
                                 type="button"
-                                className="w-8 h-8 rounded-full cursor-pointer bg-surface-10 inline-flex justify-center items-center text-on-surface-10 hover:bg-slate-100"
+                                className="w-8 h-8 rounded-full cursor-pointer bg-surface-10 inline-flex justify-center items-center text-on-surface-10 hover:bg-surface-20"
                                 aria-label="표정 편집"
                                 onClick={() => handleExpressionEditClick(slot)}
                               >
@@ -377,7 +377,7 @@ export function CharacterDetailPage({ isNew = true, initialData }: CharacterDeta
                               </button>
                               <button
                                 type="button"
-                                className="w-8 h-8 rounded-full cursor-pointer bg-surface-10 inline-flex justify-center items-center text-on-surface-10 hover:bg-slate-100"
+                                className="w-8 h-8 rounded-full cursor-pointer bg-surface-10 inline-flex justify-center items-center text-on-surface-10 hover:bg-surface-20"
                                 aria-label="표정 삭제"
                                 onClick={() =>
                                   setExpressionSlots((prev) =>
@@ -429,7 +429,7 @@ export function CharacterDetailPage({ isNew = true, initialData }: CharacterDeta
                       }
                     }}
                     placeholder="예) 고등학생, 사진, 츤데레"
-                    className="h-12 rounded-md border border-slate-200 bg-white px-3 py-2 text-sm text-on-surface-10 placeholder:text-on-surface-30 focus:outline-none focus:ring-2 focus:ring-primary"
+                    className="h-12 rounded-md border border-border-10 bg-white px-3 py-2 text-sm text-on-surface-10 placeholder:text-on-surface-30 focus:outline-none focus:ring-2 focus:ring-primary"
                   />
                   <div className="w-full inline-flex justify-end items-start gap-2">
                     {tagList.length > 0 && (
@@ -439,10 +439,10 @@ export function CharacterDetailPage({ isNew = true, initialData }: CharacterDeta
                             key={tag}
                             type="button"
                             onClick={() => handleRemoveTag(tag)}
-                            className="inline-flex items-center gap-2 rounded-full border border-slate-200 bg-slate-50 px-3 py-1 text-xs text-on-surface-10 hover:bg-slate-100 hover:border-slate-300 cursor-pointer"
+                            className="inline-flex items-center gap-2 rounded-full border border-border-10 bg-surface-20 px-3 py-1 text-xs text-on-surface-10 hover:bg-surface-20 hover:border-border-20 cursor-pointer"
                           >
                             <span className="whitespace-nowrap">#{tag}</span>
-                            <span className="text-on-surface-30 text-[10px] leading-none">✕</span>
+                            <span className="text-on-surface-30 text-[11px] leading-none">✕</span>
                           </button>
                         ))}
                       </div>
@@ -468,7 +468,7 @@ export function CharacterDetailPage({ isNew = true, initialData }: CharacterDeta
                     onChange={(e) => setGreeting(e.target.value.slice(0, MAX_GREETING))}
                     maxLength={MAX_GREETING}
                     placeholder="예) 안녕, 오늘도 사진 찍으러 나갈 준비됐지?"
-                    className="resize-y rounded-md border border-slate-200 bg-white px-3 py-2 text-sm text-on-surface-10 placeholder:text-on-surface-30 focus:outline-none focus:ring-2 focus:ring-primary w-full min-h-[80px]"
+                    className="resize-y rounded-md border border-border-10 bg-white px-3 py-2 text-sm text-on-surface-10 placeholder:text-on-surface-30 focus:outline-none focus:ring-2 focus:ring-primary w-full min-h-[80px]"
                   />
                   <div className="w-full inline-flex justify-end items-center gap-2">
                     <div className="text-right text-on-surface-30 text-xs font-normal leading-4 tabular-nums">{greeting.length}/{MAX_GREETING}</div>

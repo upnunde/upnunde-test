@@ -83,7 +83,7 @@ export function MediaCard({
         >
           <button
             type="button"
-            className="w-8 h-8 rounded-full cursor-pointer bg-surface-10 inline-flex justify-center items-center text-on-surface-10 hover:bg-slate-100"
+            className="w-8 h-8 rounded-full cursor-pointer bg-surface-10 inline-flex justify-center items-center text-on-surface-10 hover:bg-surface-20"
             aria-label="상세 페이지에서 편집"
             onClick={(e) => {
               e.stopPropagation();
@@ -94,7 +94,7 @@ export function MediaCard({
           </button>
           <button
             type="button"
-            className="w-8 h-8 rounded-full cursor-pointer bg-surface-10 inline-flex justify-center items-center text-on-surface-10 hover:bg-slate-100"
+            className="w-8 h-8 rounded-full cursor-pointer bg-surface-10 inline-flex justify-center items-center text-on-surface-10 hover:bg-surface-20"
             aria-label="삭제"
             onClick={(e) => {
               e.stopPropagation();

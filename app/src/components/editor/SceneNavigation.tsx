@@ -228,7 +228,7 @@ export function SceneNavigation({
           )}
         >
           {!collapsed && (
-            <h2 className="text-sm font-semibold text-on-surface-10 flex items-center gap-2">
+            <h2 className="text-sm font-medium text-on-surface-10 flex items-center gap-2">
               장면 목록
             </h2>
           )}
@@ -237,7 +237,7 @@ export function SceneNavigation({
             variant="outline"
             size="icon"
             onClick={onToggleCollapsed}
-            className="h-9 w-9 shrink-0 rounded-full border-slate-200 shadow-none text-on-surface-30"
+            className="h-9 w-9 shrink-0 rounded-full border-border-10 shadow-none text-on-surface-30"
             aria-label={collapsed ? "장면 목록 펼치기" : "장면 목록 최소화"}
           >
             <Menu className="h-5 w-5" aria-hidden="true" />
@@ -278,7 +278,7 @@ export function SceneNavigation({
                           }
                         }}
                         onClick={(e) => e.stopPropagation()}
-                        className="flex-1 min-w-0 rounded px-1 py-0.5 text-[14px] font-medium bg-white border border-slate-300 focus:outline-none focus:ring-1 focus:ring-slate-400 focus:border-slate-400"
+                        className="flex-1 min-w-0 rounded px-1 py-0.5 text-[14px] font-medium bg-white border border-border-20 focus:outline-none focus:ring-1 focus:ring-border-20 focus:border-border-20"
                         aria-label="장면 제목 편집"
                       />
                     ) : (
@@ -299,7 +299,7 @@ export function SceneNavigation({
                       <div
                         className={cn(
                           "w-full px-3 py-2 rounded-md text-sm",
-                          "bg-white ring-1 ring-slate-300 ring-inset"
+                          "bg-white ring-1 ring-border-20 ring-inset"
                         )}
                       >
                         {rowContent}
@@ -310,9 +310,9 @@ export function SceneNavigation({
                         onClick={() => handleSceneClick(block.id)}
                         className={cn(
                           "w-full text-left px-3 py-2 rounded-md text-sm transition-colors",
-                          "hover:bg-slate-100",
+                          "hover:bg-surface-20",
                           isActive && "font-medium text-black",
-                          !isActive && "text-slate-600"
+                          !isActive && "text-on-surface-30"
                         )}
                       >
                         {rowContent}
@@ -338,12 +338,12 @@ export function SceneNavigation({
                 "w-full rounded-lg border px-3 py-2 text-left transition-colors",
                 issues.length > 0
                   ? "border-rose-300 bg-rose-50 text-rose-900 hover:bg-rose-100"
-                  : "border-slate-200 bg-slate-50 text-slate-500 hover:bg-slate-100"
+                  : "border-border-10 bg-surface-20 text-on-surface-30 hover:bg-surface-20"
               )}
               aria-label="오류 및 누락 알림"
             >
               <div className="flex items-center justify-between gap-3">
-                <div className="text-sm font-semibold">
+                <div className="text-sm font-medium">
                   {issues.length > 0 ? "오류/누락 있음" : "오류/누락 없음"}
                 </div>
                 <div className="text-xs tabular-nums">
@@ -359,10 +359,10 @@ export function SceneNavigation({
                 role="dialog"
                 aria-label="오류 및 누락 상세"
               >
-                <div className="rounded-lg border border-slate-200 bg-white shadow-lg overflow-hidden">
-                  <div className="px-3 py-2 border-b border-slate-200 bg-slate-50">
-                    <div className="text-xs font-semibold text-slate-700">오류/누락 목록</div>
-                    <div className="text-[11px] text-slate-500">클릭하면 해당 위치로 이동합니다</div>
+                <div className="rounded-lg border border-border-10 bg-white shadow-lg overflow-hidden">
+                  <div className="px-3 py-2 border-b border-border-10 bg-surface-20">
+                    <div className="text-xs font-medium text-on-surface-20">오류/누락 목록</div>
+                    <div className="text-[11px] text-on-surface-30">클릭하면 해당 위치로 이동합니다</div>
                   </div>
                   <ul className="max-h-60 overflow-y-auto py-1">
                     {issues.map((it, idx) => (
@@ -370,7 +370,7 @@ export function SceneNavigation({
                         <button
                           type="button"
                           className={cn(
-                            "w-full px-3 py-2 text-left text-xs hover:bg-slate-100 transition-colors",
+                            "w-full px-3 py-2 text-left text-xs hover:bg-surface-20 transition-colors",
                             it.kind === "error" ? "text-rose-700" : "text-rose-700"
                           )}
                           onClick={() => {
@@ -380,11 +380,11 @@ export function SceneNavigation({
                         >
                           <div className="flex items-start justify-between gap-2">
                             <div className="font-medium">{it.title}</div>
-                            <div className="shrink-0 text-[10px] uppercase opacity-70">
+                            <div className="shrink-0 text-[11px] uppercase opacity-70">
                               {it.kind}
                             </div>
                           </div>
-                          {it.detail && <div className="mt-0.5 text-[11px] text-slate-500">{it.detail}</div>}
+                          {it.detail && <div className="mt-0.5 text-[11px] text-on-surface-30">{it.detail}</div>}
                         </button>
                       </li>
                     ))}
@@ -409,7 +409,7 @@ export function SceneNavigation({
                 "relative mx-auto flex h-10 w-10 items-center justify-center rounded-lg border transition-colors",
                 issues.length > 0
                   ? "border-rose-300 bg-rose-50 text-rose-900 hover:bg-rose-100"
-                  : "border-slate-200 bg-slate-50 text-slate-500 hover:bg-slate-100"
+                  : "border-border-10 bg-surface-20 text-on-surface-30 hover:bg-surface-20"
               )}
               aria-label={issues.length > 0 ? `오류 및 누락 알림 ${issues.length}건` : "오류 및 누락 없음"}
               aria-expanded={collapsedIssueOpen}
@@ -417,7 +417,7 @@ export function SceneNavigation({
             >
               <AlertTriangle className="h-4 w-4" aria-hidden="true" />
               {issues.length > 0 && (
-                <span className="absolute -right-1 -top-1 min-w-4 rounded-full bg-rose-600 px-1 text-[10px] leading-4 text-white">
+                <span className="absolute -right-1 -top-1 min-w-4 rounded-full bg-rose-600 px-1 text-[11px] leading-4 text-white">
                   {issues.length > 99 ? "99+" : issues.length}
                 </span>
               )}
@@ -429,10 +429,10 @@ export function SceneNavigation({
                 role="dialog"
                 aria-label="오류 및 누락 상세"
               >
-                <div className="rounded-lg border border-slate-200 bg-white shadow-lg overflow-hidden">
-                  <div className="px-3 py-2 border-b border-slate-200 bg-slate-50">
-                    <div className="text-xs font-semibold text-slate-700">오류/누락 목록</div>
-                    <div className="text-[11px] text-slate-500">클릭하면 해당 위치로 이동합니다</div>
+                <div className="rounded-lg border border-border-10 bg-white shadow-lg overflow-hidden">
+                  <div className="px-3 py-2 border-b border-border-10 bg-surface-20">
+                    <div className="text-xs font-medium text-on-surface-20">오류/누락 목록</div>
+                    <div className="text-[11px] text-on-surface-30">클릭하면 해당 위치로 이동합니다</div>
                   </div>
                   <ul className="max-h-60 overflow-y-auto py-1">
                     {issues.map((it, idx) => (
@@ -440,7 +440,7 @@ export function SceneNavigation({
                         <button
                           type="button"
                           className={cn(
-                            "w-full px-3 py-2 text-left text-xs hover:bg-slate-100 transition-colors",
+                            "w-full px-3 py-2 text-left text-xs hover:bg-surface-20 transition-colors",
                             it.kind === "error" ? "text-rose-700" : "text-rose-700"
                           )}
                           onClick={() => {
@@ -451,11 +451,11 @@ export function SceneNavigation({
                         >
                           <div className="flex items-start justify-between gap-2">
                             <div className="font-medium">{it.title}</div>
-                            <div className="shrink-0 text-[10px] uppercase opacity-70">
+                            <div className="shrink-0 text-[11px] uppercase opacity-70">
                               {it.kind}
                             </div>
                           </div>
-                          {it.detail && <div className="mt-0.5 text-[11px] text-slate-500">{it.detail}</div>}
+                          {it.detail && <div className="mt-0.5 text-[11px] text-on-surface-30">{it.detail}</div>}
                         </button>
                       </li>
                     ))}

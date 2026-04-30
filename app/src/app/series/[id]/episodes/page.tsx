@@ -289,23 +289,23 @@ export default function EpisodeManagementPage() {
   return (
     <div className="flex flex-col h-screen w-full bg-white overflow-hidden">
       <Header profileImageUrl={profileImageUrl} onProfileImageChange={setProfileImageUrl} />
-      <div className="flex flex-1 overflow-hidden bg-slate-50">
+      <div className="flex flex-1 overflow-hidden bg-surface-20">
         <div className="flex min-w-0 flex-1 flex-col overflow-hidden">
-          <main className="flex flex-1 flex-col overflow-hidden bg-slate-50">
+          <main className="flex flex-1 flex-col overflow-hidden bg-surface-20">
             {/* Sub Header (레이아웃 가이드: margin 40, max-width 1200, min-width 640) */}
-            <header className="flex h-16 shrink-0 items-center justify-center border-b border-slate-200 bg-white px-5 py-0">
+            <header className="flex h-16 shrink-0 items-center justify-center border-b border-border-10 bg-white px-5 py-0">
               <div className="flex w-full max-w-[1200px] items-center justify-start gap-3">
                 <Button
                   type="button"
                   variant="outline"
                   size="icon"
                   onClick={handleBack}
-                  className="h-9 w-9 shrink-0 rounded-full border-slate-200 shadow-none focus-visible:ring-0 focus-visible:ring-offset-0"
+                  className="h-9 w-9 shrink-0 rounded-full border-border-10 shadow-none focus-visible:ring-0 focus-visible:ring-offset-0"
                   aria-label="시리즈 목록으로"
                 >
-                  <ChevronLeft className="h-5 w-5 text-slate-600" strokeWidth={2} />
+                  <ChevronLeft className="h-5 w-5 text-on-surface-30" strokeWidth={2} />
                 </Button>
-                <h1 className="text-2xl font-extrabold text-on-surface-10">에피소드 관리</h1>
+                <h1 className="text-2xl font-bold text-on-surface-10">에피소드 관리</h1>
               </div>
             </header>
 
@@ -318,7 +318,7 @@ export default function EpisodeManagementPage() {
                   <button
                     type="button"
                     onClick={handleResourceManagement}
-                    className="h-10 px-4 cursor-pointer bg-white border border-slate-200 rounded-md text-slate-700 font-medium hover:bg-slate-100 transition-colors"
+                    className="h-10 px-4 cursor-pointer bg-white border border-border-10 rounded-md text-on-surface-20 font-medium hover:bg-surface-20 transition-colors"
                   >
                     리소스 관리
                   </button>

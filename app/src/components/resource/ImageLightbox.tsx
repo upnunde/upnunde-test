@@ -82,7 +82,7 @@ export function ImageLightbox({
       >
         {/* 이미지 프레임 */}
         <div
-          className="w-96 h-[640px] relative rounded-2xl outline outline-4 outline-offset-[-4px] outline-white overflow-hidden shadow-xl"
+          className="w-96 h-[640px] relative rounded-[4px] outline outline-4 outline-offset-[-4px] outline-white overflow-hidden shadow-xl"
           style={{
             backgroundColor: "#f8fafc",
             backgroundImage:
@@ -112,7 +112,7 @@ export function ImageLightbox({
               "absolute left-0 top-1/2 -translate-y-1/2 w-14 h-14 rounded-full",
               "inline-flex justify-center items-center overflow-hidden cursor-pointer",
               "bg-surface-10 shadow-[0px_2px_4px_2px_rgba(0,0,0,0.16)]",
-              "hover:bg-slate-100 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-2",
+              "hover:bg-surface-20 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-2",
               "disabled:opacity-40 disabled:pointer-events-none"
             )}
             aria-label="이전 이미지"
@@ -131,7 +131,7 @@ export function ImageLightbox({
               "absolute right-0 top-1/2 -translate-y-1/2 w-14 h-14 rounded-full",
               "inline-flex justify-center items-center overflow-hidden cursor-pointer",
               "bg-surface-10 shadow-[0px_2px_4px_2px_rgba(0,0,0,0.16)]",
-              "hover:bg-slate-100 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-2",
+              "hover:bg-surface-20 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-2",
               "disabled:opacity-40 disabled:pointer-events-none"
             )}
             aria-label="다음 이미지"

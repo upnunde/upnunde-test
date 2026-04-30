@@ -145,7 +145,7 @@ export function EpisodeForm({
       className={cn(
         "flex justify-end gap-2",
         stickyFooter
-          ? "sticky bottom-0 border-t border-slate-200 bg-white px-5 py-4"
+          ? "sticky bottom-0 border-t border-border-10 bg-white px-5 py-4"
           : "mt-8",
       )}
     >
@@ -165,7 +165,7 @@ export function EpisodeForm({
   return (
     <div
       className={cn(
-        "mx-auto w-full max-w-[1200px] min-w-[640px] rounded-xl border border-slate-200 bg-white shadow-none",
+        "mx-auto w-full max-w-[1200px] min-w-[640px] rounded-[4px] border border-border-10 bg-white shadow-none",
         stickyFooter && "flex min-h-0 h-full flex-col overflow-hidden",
         containerClassName,
       )}
@@ -192,7 +192,7 @@ export function EpisodeForm({
               value={title}
               onChange={(e) => setTitle(e.target.value)}
               placeholder="에피소드 제목을 입력해주세요."
-              className="h-12 rounded-md border border-slate-200 bg-white px-3 py-2 text-sm text-on-surface-10 placeholder:text-on-surface-30 focus:outline-none focus:ring-2 focus:ring-primary"
+              className="h-12 rounded-md border border-border-10 bg-white px-3 py-2 text-sm text-on-surface-10 placeholder:text-on-surface-30 focus:outline-none focus:ring-2 focus:ring-primary"
             />
             <div className="flex justify-end text-xs text-on-surface-30">
               {title.length}/{MAX_TITLE}
@@ -212,7 +212,7 @@ export function EpisodeForm({
               value={summary}
               onChange={(e) => setSummary(e.target.value)}
               placeholder="에피소드 요약을 입력해주세요."
-              className="h-12 rounded-md border border-slate-200 bg-white px-3 py-2 text-sm text-on-surface-10 placeholder:text-on-surface-30 focus:outline-none focus:ring-2 focus:ring-primary"
+              className="h-12 rounded-md border border-border-10 bg-white px-3 py-2 text-sm text-on-surface-10 placeholder:text-on-surface-30 focus:outline-none focus:ring-2 focus:ring-primary"
             />
             <div className="flex justify-end text-xs text-on-surface-30">
               {summary.length}/{MAX_SUMMARY}
@@ -256,7 +256,7 @@ export function EpisodeForm({
               value={history}
               onChange={(e) => setHistory(e.target.value)}
               placeholder="지난 사건의 히스토리를 작성해 주세요."
-              className="min-h-[160px] max-h-[400px] rounded-md border border-slate-200 bg-white px-3 py-2 text-sm text-on-surface-10 placeholder:text-on-surface-30 focus:outline-none focus:ring-2 focus:ring-primary"
+              className="min-h-[160px] max-h-[400px] rounded-md border border-border-10 bg-white px-3 py-2 text-sm text-on-surface-10 placeholder:text-on-surface-30 focus:outline-none focus:ring-2 focus:ring-primary"
             />
             <div className="flex justify-end text-xs text-on-surface-30">
               {history.length}/{MAX_HISTORY}
@@ -276,7 +276,7 @@ export function EpisodeForm({
               value={rawScript}
               onChange={(e) => setRawScript(e.target.value)}
               placeholder="에피소드 대본을 상세하게 작성해 주세요."
-              className="min-h-[160px] max-h-[400px] rounded-md border border-slate-200 bg-white px-3 py-2 text-sm text-on-surface-10 placeholder:text-on-surface-30 focus:outline-none focus:ring-2 focus:ring-primary"
+              className="min-h-[160px] max-h-[400px] rounded-md border border-border-10 bg-white px-3 py-2 text-sm text-on-surface-10 placeholder:text-on-surface-30 focus:outline-none focus:ring-2 focus:ring-primary"
             />
             <div className="flex justify-end text-xs text-on-surface-30">
               {rawScript.length}/{MAX_SCRIPT}

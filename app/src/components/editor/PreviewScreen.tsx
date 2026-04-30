@@ -224,7 +224,7 @@ export function PreviewScreen(props: PreviewScreenProps = {}) {
       {/* Optional: BGM label (state persisted for future audio playback) */}
       {displayBgm && (
         <div
-          className="absolute right-3 top-10 z-20 rounded-lg border border-white/20 bg-black/60 px-2 py-1 text-[10px] text-white/80"
+          className="absolute right-3 top-10 z-20 rounded-lg border border-white/20 bg-black/60 px-2 py-1 text-[11px] text-white/80"
           role="status"
           aria-label={`BGM: ${displayBgm}`}
         >
@@ -271,7 +271,7 @@ export function PreviewScreen(props: PreviewScreenProps = {}) {
         >
           {currentSpeaker && currentSpeaker !== "나레이션" && (
             <div className="border-b border-white/10 px-4 py-2">
-              <span className="text-sm font-semibold text-amber-300/95">
+              <span className="text-sm font-medium text-amber-300/95">
                 {currentSpeaker}
               </span>
             </div>
@@ -293,7 +293,7 @@ export function PreviewScreen(props: PreviewScreenProps = {}) {
             "border-2 border-white/20 p-2"
           )}
         >
-          <div className="mb-2 px-2 text-[11px] font-semibold tracking-wide text-white/70">
+          <div className="mb-2 px-2 text-[11px] font-medium tracking-wide text-white/70">
             선택지
           </div>
           <div className="flex flex-col gap-2">

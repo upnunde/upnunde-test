@@ -151,7 +151,7 @@ export default function SeriesEditPage() {
                                     aria-label="이전 테마 목록"
                                     onClick={() => frameThemeSelectorRef.current?.goPrev()}
                                     disabled={!frameThemePager.canGoPrev}
-                                    className="inline-flex h-7 w-7 items-center justify-center rounded-full border border-slate-200 bg-white text-slate-600 transition-colors hover:bg-slate-50 focus:outline-none focus-visible:ring-2 focus-visible:ring-primary/40 disabled:cursor-not-allowed disabled:opacity-40"
+                                    className="inline-flex h-7 w-7 items-center justify-center rounded-full border border-border-10 bg-white text-on-surface-30 transition-colors hover:bg-surface-20 focus:outline-none focus-visible:ring-2 focus-visible:ring-primary/40 disabled:cursor-not-allowed disabled:opacity-40"
                                   >
                                     <ChevronLeft className="h-4 w-4" />
                                   </button>
@@ -160,7 +160,7 @@ export default function SeriesEditPage() {
                                     aria-label="다음 테마 목록"
                                     onClick={() => frameThemeSelectorRef.current?.goNext()}
                                     disabled={!frameThemePager.canGoNext}
-                                    className="inline-flex h-7 w-7 items-center justify-center rounded-full border border-slate-200 bg-white text-slate-600 transition-colors hover:bg-slate-50 focus:outline-none focus-visible:ring-2 focus-visible:ring-primary/40 disabled:cursor-not-allowed disabled:opacity-40"
+                                    className="inline-flex h-7 w-7 items-center justify-center rounded-full border border-border-10 bg-white text-on-surface-30 transition-colors hover:bg-surface-20 focus:outline-none focus-visible:ring-2 focus-visible:ring-primary/40 disabled:cursor-not-allowed disabled:opacity-40"
                                   >
                                     <ChevronRight className="h-4 w-4" />
                                   </button>
@@ -179,7 +179,7 @@ export default function SeriesEditPage() {
                             <Button
                               type="button"
                               variant="outline"
-                              className="border-slate-200 text-slate-700"
+                              className="border-border-10 text-on-surface-20"
                               onClick={() => setActiveTab("info")}
                             >
                               다음
@@ -248,7 +248,7 @@ export default function SeriesEditPage() {
                             <Button
                               type="button"
                               variant="outline"
-                              className="border-slate-200 text-slate-700"
+                              className="border-border-10 text-on-surface-20"
                               onClick={() => setActiveTab("image")}
                             >
                               이전
@@ -256,7 +256,7 @@ export default function SeriesEditPage() {
                             <Button
                               type="button"
                               variant="outline"
-                              className="border-slate-200 text-slate-700"
+                              className="border-border-10 text-on-surface-20"
                               onClick={() => setActiveTab("worldview")}
                             >
                               다음
@@ -298,7 +298,7 @@ export default function SeriesEditPage() {
                             <Button
                               type="button"
                               variant="outline"
-                              className="border-slate-200 text-slate-700"
+                              className="border-border-10 text-on-surface-20"
                               onClick={() => setActiveTab("info")}
                             >
                               이전

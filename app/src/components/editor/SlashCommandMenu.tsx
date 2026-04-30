@@ -170,7 +170,7 @@ export function SlashCommandMenu({
         onClick={onClose}
       />
       <div
-        className="fixed z-50 min-w-[200px] rounded-lg border border-slate-200 bg-white py-1 shadow-lg"
+        className="fixed z-50 min-w-[200px] rounded-lg border border-border-10 bg-white py-1 shadow-lg"
         style={{ top: adjustedPosition.top, left: adjustedPosition.left }}
         role="listbox"
       >
@@ -185,7 +185,7 @@ export function SlashCommandMenu({
             aria-selected={false}
             className={cn(
               "flex w-full cursor-pointer items-center gap-2 px-3 py-2 text-left text-sm",
-              "hover:bg-slate-100 focus:bg-slate-100 focus:outline-none"
+              "hover:bg-surface-20 focus:bg-surface-20 focus:outline-none"
             )}
             onClick={() => {
               const defaultPayload = getDefaultPayloadForType(type);

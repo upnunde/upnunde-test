@@ -89,7 +89,7 @@ export function Pagination({
               "h-8 w-8 rounded-full cursor-pointer text-sm font-medium transition-colors " +
               (page === currentPage
                 ? "bg-slate-800 text-white"
-                : "text-on-surface-30 hover:bg-slate-100")
+                : "text-on-surface-30 hover:bg-surface-20")
             }
             aria-label={`${page}페이지`}
             aria-current={page === currentPage ? "page" : undefined}
@@ -117,14 +117,14 @@ export function Pagination({
             max={totalPages}
             value={pageInputValue}
             onChange={(e) => setPageInputValue(e.target.value)}
-            className="h-8 w-12 rounded border border-slate-200 text-center text-sm outline-none focus:border-slate-400"
+            className="h-8 w-12 rounded border border-border-10 text-center text-sm outline-none focus:border-border-20"
             aria-label="페이지 번호"
           />
           <span className="text-sm text-on-surface-30">/ {totalPages}</span>
         </div>
         <button
           type="submit"
-          className="h-8 cursor-pointer rounded border border-slate-200 px-3 text-sm font-medium text-slate-700 transition-colors hover:bg-slate-50"
+          className="h-8 cursor-pointer rounded border border-border-10 px-3 text-sm font-medium text-on-surface-20 transition-colors hover:bg-surface-20"
         >
           Go
         </button>

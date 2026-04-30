@@ -177,9 +177,9 @@ export function ImageResourceDetailPage({ kind, initialData }: ImageResourceDeta
   );
 
   return (
-    <main className="flex flex-1 flex-col overflow-hidden bg-slate-50">
+    <main className="flex flex-1 flex-col overflow-hidden bg-surface-20">
       {/* 상단 서브 헤더 */}
-      <header className="flex h-16 shrink-0 items-center justify-center border-b border-slate-200 bg-white px-10 py-0">
+      <header className="flex h-16 shrink-0 items-center justify-center border-b border-border-10 bg-white px-10 py-0">
         <div className="flex w-full max-w-[1200px] min-w-[640px] items-center justify-between gap-4">
           <div className="flex items-center justify-start gap-3">
             <Button
@@ -187,10 +187,10 @@ export function ImageResourceDetailPage({ kind, initialData }: ImageResourceDeta
               variant="outline"
               size="icon"
               onClick={handleBack}
-              className="h-9 w-9 shrink-0 rounded-full border-slate-200 shadow-none focus-visible:ring-0 focus-visible:ring-offset-0"
+              className="h-9 w-9 shrink-0 rounded-full border-border-10 shadow-none focus-visible:ring-0 focus-visible:ring-offset-0"
               aria-label="리소스 목록으로"
             >
-              <ChevronLeft className="h-5 w-5 text-slate-600" strokeWidth={2} />
+              <ChevronLeft className="h-5 w-5 text-on-surface-30" strokeWidth={2} />
             </Button>
             <h1 className="text-2xl font-bold text-on-surface-10">{labels.headerTitle}</h1>
           </div>
@@ -199,7 +199,7 @@ export function ImageResourceDetailPage({ kind, initialData }: ImageResourceDeta
 
       <div className="flex-1 overflow-y-auto flex flex-col items-center py-8 px-10 gap-4">
         <div className="w-full max-w-[1200px] min-w-[640px] mx-auto">
-          <div className="w-full rounded-2xl border border-slate-200 bg-white">
+          <div className="w-full rounded-[4px] border border-border-10 bg-white">
             <Title2
               text={labels.sectionTitle}
               asSectionHeader
@@ -219,7 +219,7 @@ export function ImageResourceDetailPage({ kind, initialData }: ImageResourceDeta
                     value={name}
                     onChange={(e) => setName(e.target.value)}
                     placeholder="이름을 입력해 주세요."
-                    className="h-12 rounded-md border border-slate-200 bg-white px-3 py-2 text-sm text-on-surface-10 placeholder:text-on-surface-30 focus:outline-none focus:ring-2 focus:ring-primary shadow-none"
+                    className="h-12 rounded-md border border-border-10 bg-white px-3 py-2 text-sm text-on-surface-10 placeholder:text-on-surface-30 focus:outline-none focus:ring-2 focus:ring-primary shadow-none"
                   />
                 </div>
               </section>
@@ -237,7 +237,7 @@ export function ImageResourceDetailPage({ kind, initialData }: ImageResourceDeta
                     value={description}
                     onChange={(e) => setDescription(e.target.value)}
                     placeholder="설명을 입력해 주세요."
-                    className="min-h-[96px] max-h-[400px] w-full resize-y rounded-md border border-slate-200 bg-white px-3 py-2 text-sm text-on-surface-10 placeholder:text-on-surface-30 shadow-none focus:outline-none focus:ring-2 focus:ring-primary"
+                    className="min-h-[96px] max-h-[400px] w-full resize-y rounded-md border border-border-10 bg-white px-3 py-2 text-sm text-on-surface-10 placeholder:text-on-surface-30 shadow-none focus:outline-none focus:ring-2 focus:ring-primary"
                   />
                 </div>
               </section>
@@ -251,7 +251,7 @@ export function ImageResourceDetailPage({ kind, initialData }: ImageResourceDeta
                 />
                 {thumbnailUrl ? (
                   <div className="inline-flex flex-col justify-start items-start gap-1 w-[90px] group">
-                    <div className="w-[90px] h-[160px] rounded-lg overflow-hidden border border-slate-200 bg-slate-100 relative">
+                    <div className="w-[90px] h-[160px] rounded-lg overflow-hidden border border-border-10 bg-surface-20 relative">
                       <button
                         type="button"
                         onClick={handleThumbnailClick}
@@ -271,7 +271,7 @@ export function ImageResourceDetailPage({ kind, initialData }: ImageResourceDeta
                       <div className="absolute right-1 top-1 z-[2] flex flex-col justify-center items-start gap-1 opacity-0 group-hover:opacity-100 transition-opacity pointer-events-none group-hover:pointer-events-auto">
                         <button
                           type="button"
-                          className="w-8 h-8 rounded-full cursor-pointer bg-surface-10 inline-flex justify-center items-center text-on-surface-10 hover:bg-slate-100"
+                          className="w-8 h-8 rounded-full cursor-pointer bg-surface-10 inline-flex justify-center items-center text-on-surface-10 hover:bg-surface-20"
                           aria-label="대표 썸네일 편집"
                           onClick={(e) => {
                             e.stopPropagation();
@@ -282,7 +282,7 @@ export function ImageResourceDetailPage({ kind, initialData }: ImageResourceDeta
                         </button>
                         <button
                           type="button"
-                          className="w-8 h-8 rounded-full cursor-pointer bg-surface-10 inline-flex justify-center items-center text-on-surface-10 hover:bg-slate-100"
+                          className="w-8 h-8 rounded-full cursor-pointer bg-surface-10 inline-flex justify-center items-center text-on-surface-10 hover:bg-surface-20"
                           aria-label="대표 썸네일 삭제"
                           onClick={(e) => {
                             e.stopPropagation();
@@ -325,7 +325,7 @@ export function ImageResourceDetailPage({ kind, initialData }: ImageResourceDeta
                         }`}
                       >
                         {sceneAiMode === "apply" && (
-                          <span className="h-2.5 w-2.5 rounded-full bg-[rgba(255,0,128,1)]" />
+                          <span className="h-2.5 w-2.5 rounded-full bg-primary" />
                         )}
                       </span>
                       <span>적용</span>
@@ -343,7 +343,7 @@ export function ImageResourceDetailPage({ kind, initialData }: ImageResourceDeta
                         }`}
                       >
                         {sceneAiMode === "none" && (
-                          <span className="h-2.5 w-2.5 rounded-full bg-[rgba(255,0,128,1)]" />
+                          <span className="h-2.5 w-2.5 rounded-full bg-primary" />
                         )}
                       </span>
                       <span>적용 안 함</span>

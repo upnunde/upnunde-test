@@ -125,7 +125,7 @@ export function ProfileEditModal({ isOpen, onClose, anchorRef, onSave }: Profile
         {/* Modal Card: 프로필 버튼 바로 아래 고정 배치 */}
         <div
           ref={cardRef}
-          className="w-full max-w-96 relative bg-white rounded-2xl shadow-[0px_8px_16px_8px_rgba(0,0,0,0.16)] border border-slate-200 flex flex-col justify-start items-start overflow-y-auto"
+          className="w-full max-w-96 relative bg-white rounded-[4px] shadow-[0px_8px_16px_8px_rgba(0,0,0,0.16)] border border-slate-200 flex flex-col justify-start items-start overflow-y-auto"
           style={position ? { maxHeight: position.maxHeight } : undefined}
           onClick={(e) => e.stopPropagation()}
         >

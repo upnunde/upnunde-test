@@ -55,12 +55,14 @@
   --chart-4: rgba(82, 82, 84, 1.00);
   /* The color for another chart element, such as a bar or line in a chart. */
   --chart-5: rgba(236, 50, 50, 1.00);
-  /* The default border radius for elements such as buttons, cards, and other containers. */
-  --radius: 8px;
+  /* The default border radius for surface elements. */
+  --radius: 4px;
   /* The border radius for button elements. */
   --radius-button: 6px;
   /* The border radius for card elements. */
-  --radius-card: 16px;
+  --radius-card: 4px;
+  /* The default border radius for non-interactive surface elements. */
+  --radius-surface: 4px;
   /* The border radius for input elements. */
   --radius-input: 4px;
   /* The background color for sidebars, navigation menus, and other persistent elements. */

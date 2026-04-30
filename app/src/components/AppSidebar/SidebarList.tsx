@@ -28,7 +28,7 @@ export interface SidebarListProps {
 const DEFAULT_ITEM_CLASS =
   "flex w-full cursor-pointer items-center gap-3 rounded-md px-3 py-2.5 text-sm font-medium transition-colors outline-none focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-2";
 const DEFAULT_ACTIVE_CLASS = "text-primary";
-const DEFAULT_INACTIVE_CLASS = "text-slate-700 hover:bg-slate-50";
+const DEFAULT_INACTIVE_CLASS = "text-on-surface-20 hover:bg-surface-20";
 
 /**
  * 사이드바/패널에서 사용하는 선택 가능한 목록. AppSidebar, BGM 모달 장르 목록 등에서 재사용.

@@ -36,7 +36,7 @@ export function NotificationList({
   return (
     <div
       className={
-        "w-full h-fit rounded-2xl border border-slate-200 bg-white flex flex-col shrink-0 overflow-hidden " +
+        "w-full h-fit rounded-[4px] border border-border-10 bg-white flex flex-col shrink-0 overflow-hidden " +
         (className ?? "")
       }
     >
@@ -109,7 +109,7 @@ export function NotificationList({
               {index > 0 ? (
                 <li aria-hidden className="list-none">
                   <div
-                    className="mx-5 my-0 h-px bg-slate-100"
+                    className="mx-5 my-0 h-px bg-surface-20"
                     role="separator"
                   />
                 </li>
