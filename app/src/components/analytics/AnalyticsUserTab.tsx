@@ -76,7 +76,52 @@ type RevisitSegmentId = "once" | "twice" | "threePlus";
 
 type AudienceTabId = "all" | "general" | "follower";
 
-const ACTIVE_FOLLOWER_NICKS = Array.from({ length: 10 }, (_, i) => `닉네임${String(i + 1).padStart(2, "0")}`);
+const NICKNAME_PREFIXES = [
+  "달빛",
+  "모노",
+  "하늘",
+  "코코",
+  "별빛",
+  "루나",
+  "토리",
+  "밀키",
+  "도토리",
+  "바닐라",
+] as const;
+
+const NICKNAME_SUFFIXES = [
+  "고양이",
+  "토끼",
+  "펭귄",
+  "여우",
+  "곰돌이",
+  "나무",
+  "파도",
+  "구름",
+  "냥",
+  "별",
+] as const;
+
+function hashNick(s: string): number {
+  let h = 0;
+  for (let i = 0; i < s.length; i++) {
+    h = (h * 31 + s.charCodeAt(i)) >>> 0;
+  }
+  return h;
+}
+
+const ACTIVE_FOLLOWER_NICKS = Array.from({ length: 10 }, (_, i) => {
+  const seed = `follower-${i + 1}`;
+  const h = hashNick(seed);
+  const prefix = NICKNAME_PREFIXES[h % NICKNAME_PREFIXES.length] ?? "달빛";
+  const suffix = NICKNAME_SUFFIXES[(h >>> 4) % NICKNAME_SUFFIXES.length] ?? "냥";
+  return `${prefix}${suffix}`;
+});
+
+function getFollowerDummyProfileUrl(nick: string): string {
+  const seed = encodeURIComponent(nick);
+  return `https://api.dicebear.com/9.x/adventurer-neutral/png?seed=${seed}&radius=50&size=128`;
+}
 
 function LegendRow({ dotClass, label, value }: { dotClass: string; label: string; value: string }) {
   return (
@@ -359,9 +404,12 @@ export function AnalyticsUserTab({
               {ACTIVE_FOLLOWER_NICKS.map((nick) => (
                 <div key={nick} className="flex w-full max-w-28 flex-col items-center justify-center gap-2">
                   <div className="relative h-16 w-16 overflow-hidden rounded-full bg-zinc-100">
-                    <div className="absolute inset-0 flex items-center justify-center">
-                      <div className="h-8 w-6 rounded-sm bg-black/20" aria-hidden />
-                    </div>
+                    <img
+                      src={getFollowerDummyProfileUrl(nick)}
+                      alt={`${nick} 프로필`}
+                      className="h-full w-full object-cover"
+                      loading="lazy"
+                    />
                   </div>
                   <span className="w-full text-center text-[13px] font-normal leading-5 text-on-surface-20">{nick}</span>
                 </div>
