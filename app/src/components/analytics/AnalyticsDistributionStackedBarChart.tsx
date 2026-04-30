@@ -4,16 +4,10 @@ import { useEffect, useMemo, useRef } from "react";
 import { cn } from "@/lib/utils";
 import VChart from "@visactor/vchart";
 import type { IBarChartSpec } from "@visactor/vchart";
-
-/** 차트 세그먼트 색 — 재방문 막대·디자인 시스템 primary 계열과 동일 톤 (`ANALYTICS_DISTRIBUTION_LEGEND_DOT_CLASSES` 순서와 대응) */
-const SEGMENT_COLORS = [
-  "#FEF0FC",
-  "rgba(246, 66, 212, 0.25)",
-  "rgba(246, 66, 212, 0.45)",
-  "rgba(246, 66, 212, 0.5)",
-  "rgba(246, 66, 212, 0.75)",
-  "#F642D4",
-] as const;
+import {
+  ANALYTICS_PRIMARY_DESCENDING_SEGMENT_COLORS,
+  mapPaletteByDescendingRank,
+} from "@/lib/analytics-distribution-constants";
 
 const BAND_ID = "분포";
 
@@ -27,7 +21,7 @@ function buildSpec(rawWeights: readonly number[]): IBarChartSpec {
     segment: seg,
     pct: pcts[i]!,
   }));
-  const colors = segmentIds.map((_, i) => SEGMENT_COLORS[i % SEGMENT_COLORS.length]!);
+  const colors = mapPaletteByDescendingRank(rawWeights, ANALYTICS_PRIMARY_DESCENDING_SEGMENT_COLORS);
 
   return {
     type: "bar",

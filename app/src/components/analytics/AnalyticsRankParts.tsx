@@ -64,13 +64,12 @@ export function RankDecoration({ rank, tone }: { rank: number; tone: ContentTone
   }
   if (rank === 4 || tone === "seriesBlue" || tone === "character") {
     const num = "3";
-    const accent = contentTypeAccentClass(tone);
     return (
       <div className="flex w-10 items-center gap-0.5">
-        <span className={cn("text-sm", accent)} aria-hidden>
+        <span className="text-sm text-blue-500" aria-hidden>
           ▼
         </span>
-        <span className={cn("text-sm", accent)}>{num}</span>
+        <span className="text-sm text-blue-500">{num}</span>
       </div>
     );
   }

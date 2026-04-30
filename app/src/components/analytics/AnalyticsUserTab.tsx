@@ -30,7 +30,10 @@ import {
   type AnalyticsScopeCategoryId,
 } from "@/components/analytics/analytics-scope-category";
 import { deltaClassName, getContentDummy, getUserDummy } from "@/components/analytics/analytics-dummy-by-scope";
-import { ANALYTICS_DISTRIBUTION_LEGEND_DOT_CLASSES } from "@/lib/analytics-distribution-constants";
+import {
+  ANALYTICS_PRIMARY_DESCENDING_DOT_CLASSES,
+  mapPaletteByDescendingRank,
+} from "@/lib/analytics-distribution-constants";
 
 const AnalyticsTrendLineChart = dynamic(
   () =>
@@ -384,6 +387,8 @@ function AudienceBreakdownPanel({
   stackValues: readonly number[];
   legend: { label: string; value: string }[];
 }) {
+  const dotClasses = mapPaletteByDescendingRank(stackValues, ANALYTICS_PRIMARY_DESCENDING_DOT_CLASSES);
+
   return (
     <AnalyticsPanel>
       <Title2 text={title} variant="title" asSectionHeader />
@@ -406,9 +411,7 @@ function AudienceBreakdownPanel({
           {legend.map((row, i) => (
             <LegendRow
               key={`${row.label}-${row.value}`}
-              dotClass={
-                ANALYTICS_DISTRIBUTION_LEGEND_DOT_CLASSES[i % ANALYTICS_DISTRIBUTION_LEGEND_DOT_CLASSES.length]!
-              }
+              dotClass={dotClasses[i] ?? "bg-primary/25"}
               label={row.label}
               value={row.value}
             />
@@ -432,6 +435,8 @@ function SimpleDistributionPanel({
   stackValues: readonly number[];
   legend: { label: string; value: string }[];
 }) {
+  const dotClasses = mapPaletteByDescendingRank(stackValues, ANALYTICS_PRIMARY_DESCENDING_DOT_CLASSES);
+
   return (
     <AnalyticsPanel>
       <Title2 text={title} variant="title" asSectionHeader />
@@ -456,9 +461,7 @@ function SimpleDistributionPanel({
           {legend.map((row, i) => (
             <LegendRow
               key={`${row.label}-${row.value}`}
-              dotClass={
-                ANALYTICS_DISTRIBUTION_LEGEND_DOT_CLASSES[i % ANALYTICS_DISTRIBUTION_LEGEND_DOT_CLASSES.length]!
-              }
+              dotClass={dotClasses[i] ?? "bg-primary/25"}
               label={row.label}
               value={row.value}
             />
