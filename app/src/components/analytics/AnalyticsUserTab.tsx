@@ -145,7 +145,7 @@ export function AnalyticsUserTab({
               );
             })}
           </div>
-          <div className="flex shrink-0 items-end justify-end gap-2">
+          <div className="flex shrink-0 items-end justify-end gap-3">
             <span className="text-sm font-medium leading-5 text-on-surface-30">{dateRangeLabel}</span>
             <DropdownMenu>
               <DropdownMenuTrigger asChild>

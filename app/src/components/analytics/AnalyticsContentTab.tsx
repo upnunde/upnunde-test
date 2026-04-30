@@ -90,7 +90,7 @@ export function AnalyticsContentTab({
               );
             })}
           </div>
-          <div className="flex items-end justify-end gap-4">
+          <div className="flex items-end justify-end gap-3">
             <span className="text-sm font-medium leading-5 text-on-surface-30">{dateRangeLabel}</span>
             <DropdownMenu>
               <DropdownMenuTrigger asChild>
