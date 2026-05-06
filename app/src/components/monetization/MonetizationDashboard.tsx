@@ -49,16 +49,13 @@ const AnalyticsTrendLineChart = dynamic(
   },
 );
 
-/** 디자인 목업과 유사한 7포인트 시계열 — 조회 기간 버킷 수에 맞게 보간 */
-const MONETIZATION_OVERVIEW_CHART_TEMPLATE = [18, 14, 21, 16, 31, 13, 48] as const;
-
 function resampleMonetizationChartValues(full: readonly number[], targetLen: number): number[] {
   if (targetLen <= 0) return [];
   if (full.length === 0) return Array.from({ length: targetLen }, () => 0);
   if (targetLen === 1) return [full[full.length - 1] ?? 0];
-  if (targetLen >= full.length) {
-    return Array.from({ length: targetLen }, (_, i) => full[Math.min(i, full.length - 1)] ?? 0);
-  }
+  if (full.length === 1) return Array.from({ length: targetLen }, () => full[0] ?? 0);
+
+  // targetLen이 원본 길이보다 커도 마지막 값을 반복하지 않고, 전 구간을 선형 보간한다.
   return Array.from({ length: targetLen }, (_, i) => {
     const t = i / (targetLen - 1);
     const idx = t * (full.length - 1);
@@ -69,17 +66,100 @@ function resampleMonetizationChartValues(full: readonly number[], targetLen: num
   });
 }
 
+const MONETIZATION_TOTAL_REVENUE_ALL = 32_324_522;
+const MONETIZATION_OPERATION_DAYS = 365 * 2;
+
 const MONETIZATION_REVENUE_STATS = [
   { label: "즉시정산 가능 금액", value: "₩1,442" },
   { label: "5월 정산 예상 수익금", value: "₩321,213" },
-  { label: "누적 수익금", value: "₩32,324,522" },
+  { label: "누적 수익금", value: `₩${MONETIZATION_TOTAL_REVENUE_ALL.toLocaleString("ko-KR")}` },
 ] as const;
 
 const MONETIZATION_KEY_STATS_ROWS = [
-  { id: "expectedRevenue", label: "예상수익", value: "₩4,522", delta: "+3,112 (+76%)" },
-  { id: "purchaseCount", label: "구매 수", value: "442", delta: "+3,112 (+76%)" },
-  { id: "purchaseRate", label: "구매 전환율", value: "21%", delta: "+3,112 (+76%)" },
+  { id: "expectedRevenue", label: "수익금" },
+  { id: "purchaseCount", label: "구매 수" },
+  { id: "purchaseRate", label: "구매 전환율" },
 ] as const;
+
+type MonetizationStatId = (typeof MONETIZATION_KEY_STATS_ROWS)[number]["id"];
+
+const MONETIZATION_STAT_DUMMY = {
+  expectedRevenue: {
+    baseValue: 4522,
+    seriesTemplate: [22, 9, 37, 14, 45, 18, 62] as const,
+  },
+  purchaseCount: {
+    baseValue: 1842,
+    seriesTemplate: [18, 24, 16, 29, 21, 35, 26] as const,
+  },
+  purchaseRate: {
+    baseValue: 27.4,
+    seriesTemplate: [14, 17, 15, 20, 18, 23, 27] as const,
+  },
+} as const;
+
+const MONETIZATION_PERIOD_MULTIPLIER: Record<AnalyticsPeriodRange, number> = {
+  "7d": 1,
+  "30d": 1.24,
+  "90d": 1.62,
+  "365d": 2.18,
+  all: 2.86,
+};
+
+/**
+ * 가설: 서비스 운영 2년(730일), 누적 수익금은 `MONETIZATION_TOTAL_REVENUE_ALL`.
+ * 최근 기간이 더 높은 추세를 보이도록 기간별 수익금을 분배한 더미.
+ */
+const MONETIZATION_REVENUE_BY_PERIOD: Record<AnalyticsPeriodRange, number> = {
+  "7d": 486_000,
+  "30d": 2_040_000,
+  "90d": 6_120_000,
+  "365d": 18_790_000,
+  all: MONETIZATION_TOTAL_REVENUE_ALL,
+};
+
+const MONETIZATION_REVENUE_PREV_BY_PERIOD: Record<AnalyticsPeriodRange, number | null> = {
+  "7d": 462_000,
+  "30d": 1_910_000,
+  "90d": 5_700_000,
+  "365d": 17_220_000,
+  all: null,
+};
+
+const MONETIZATION_PREV_PERIOD: Record<AnalyticsPeriodRange, AnalyticsPeriodRange | null> = {
+  "7d": null,
+  "30d": "7d",
+  "90d": "30d",
+  "365d": "90d",
+  all: "365d",
+};
+
+function formatMonetizationStatValue(statId: MonetizationStatId, value: number): string {
+  if (statId === "expectedRevenue") return `₩${Math.round(value).toLocaleString("ko-KR")}`;
+  if (statId === "purchaseCount") return Math.round(value).toLocaleString("ko-KR");
+  return `${value.toFixed(1)}%`;
+}
+
+function getMonetizationDelta(
+  statId: MonetizationStatId,
+  currentValue: number,
+  prevValue: number | null,
+): { text: string; tone: "gain" | "loss" | "neutral" } {
+  if (prevValue == null || prevValue <= 0) return { text: "—", tone: "neutral" };
+  const diff = currentValue - prevValue;
+  if (Math.abs(diff) < 0.0001) return { text: "0", tone: "neutral" };
+
+  const sign = diff > 0 ? "+" : "";
+  if (statId === "purchaseRate") {
+    const pctPoint = `${sign}${diff.toFixed(1)}%p`;
+    const relative = `${sign}${Math.round((diff / prevValue) * 100)}%`;
+    return { text: `${pctPoint} (${relative})`, tone: diff > 0 ? "gain" : "loss" };
+  }
+
+  const formattedDiff = `${sign}${Math.round(diff).toLocaleString("ko-KR")}`;
+  const relative = `${sign}${Math.round((diff / prevValue) * 100)}%`;
+  return { text: `${formattedDiff} (${relative})`, tone: diff > 0 ? "gain" : "loss" };
+}
 
 function MonetizationRevenueSummaryCard() {
   return (
@@ -126,13 +206,51 @@ export function MonetizationDashboard() {
     () => getAnalyticsDateRangeLabel(periodRange, new Date()),
     [periodRange],
   );
+  const monetizationStatValues = useMemo(() => {
+    const currentMultiplier = MONETIZATION_PERIOD_MULTIPLIER[periodRange];
+    const prevPeriod = MONETIZATION_PREV_PERIOD[periodRange];
+    const prevMultiplier = prevPeriod ? MONETIZATION_PERIOD_MULTIPLIER[prevPeriod] : null;
+
+    return {
+      expectedRevenue: (() => {
+        const current = MONETIZATION_REVENUE_BY_PERIOD[periodRange];
+        const prev = MONETIZATION_REVENUE_PREV_BY_PERIOD[periodRange];
+        return {
+          value: formatMonetizationStatValue("expectedRevenue", current),
+          ...getMonetizationDelta("expectedRevenue", current, prev),
+        };
+      })(),
+      purchaseCount: (() => {
+        const current = MONETIZATION_STAT_DUMMY.purchaseCount.baseValue * currentMultiplier;
+        const prev =
+          prevMultiplier == null ? null : MONETIZATION_STAT_DUMMY.purchaseCount.baseValue * prevMultiplier;
+        return {
+          value: formatMonetizationStatValue("purchaseCount", current),
+          ...getMonetizationDelta("purchaseCount", current, prev),
+        };
+      })(),
+      purchaseRate: (() => {
+        const current = MONETIZATION_STAT_DUMMY.purchaseRate.baseValue + (currentMultiplier - 1) * 6.8;
+        const prev =
+          prevMultiplier == null ? null : MONETIZATION_STAT_DUMMY.purchaseRate.baseValue + (prevMultiplier - 1) * 6.8;
+        return {
+          value: formatMonetizationStatValue("purchaseRate", current),
+          ...getMonetizationDelta("purchaseRate", current, prev),
+        };
+      })(),
+    };
+  }, [periodRange]);
   const monetizationChartValues = useMemo(
-    () =>
-      resampleMonetizationChartValues(
-        MONETIZATION_OVERVIEW_CHART_TEMPLATE,
-        getAnalyticsTrendPointCount(periodRange),
-      ),
-    [periodRange],
+    () => {
+      const baseSeries = MONETIZATION_STAT_DUMMY[selectedMonetizationStat].seriesTemplate;
+      const scaledSeries = baseSeries.map((v) =>
+        selectedMonetizationStat === "purchaseRate"
+          ? Math.round((v + (MONETIZATION_PERIOD_MULTIPLIER[periodRange] - 1) * 8) * 10) / 10
+          : Math.round(v * MONETIZATION_PERIOD_MULTIPLIER[periodRange]),
+      );
+      return resampleMonetizationChartValues(scaledSeries, getAnalyticsTrendPointCount(periodRange));
+    },
+    [periodRange, selectedMonetizationStat],
   );
 
   return (
@@ -210,22 +328,22 @@ export function MonetizationDashboard() {
                   {stat.label}
                 </div>
                 <div className="justify-center text-center text-2xl font-bold leading-8 text-on-surface-10">
-                  {stat.value}
+                  {monetizationStatValues[stat.id].value}
                 </div>
                 <div
                   className={cn(
                     "justify-center text-center text-sm font-normal leading-5",
-                    deltaClassName("gain"),
+                    deltaClassName(monetizationStatValues[stat.id].tone),
                   )}
                 >
-                  {stat.delta}
+                  {monetizationStatValues[stat.id].text}
                 </div>
               </button>
             ))}
           </div>
 
           <div className="flex flex-col items-stretch gap-3 self-stretch px-0 py-10">
-            <p className="px-5 text-sm font-medium leading-5 text-on-surface-20">예상수익 추이</p>
+            <p className="px-5 text-sm font-medium leading-5 text-on-surface-20">수익금 추이</p>
             <AnalyticsTrendLineChart
               metric="views"
               periodRange={periodRange}

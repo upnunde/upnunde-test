@@ -9,6 +9,7 @@ import {
   CircleDollarSign,
   LibraryBig,
   Mail,
+  UserRoundCog,
 } from "lucide-react";
 import { SidebarList } from "./SidebarList";
 
@@ -16,9 +17,12 @@ const SIDEBAR_ITEMS = [
   { id: "series", label: "내 작품", path: "/series" },
   { id: "analytics", label: "분석", path: "/analytics" },
   { id: "monetization", label: "수익창출", path: "/monetization" },
-  { id: "guide", label: "가이드", path: "/guide" },
   { id: "notification", label: "알림", path: "/notifications" },
+] as const;
+const SIDEBAR_BOTTOM_ITEMS = [
+  { id: "profile", label: "내 정보 관리", path: "/profile" },
   { id: "inquiry", label: "문의", path: "/inquiry" },
+  { id: "guide", label: "이용가이드", path: "/guide" },
 ] as const;
 
 const SIDEBAR_ICON_PROPS = {
@@ -37,6 +41,8 @@ function sidebarIconFor(id: SidebarItemId): React.ReactNode {
       return <CircleDollarSign {...SIDEBAR_ICON_PROPS} />;
     case "guide":
       return <BookOpen {...SIDEBAR_ICON_PROPS} />;
+    case "profile":
+      return <UserRoundCog {...SIDEBAR_ICON_PROPS} />;
     case "notification":
       return <Bell {...SIDEBAR_ICON_PROPS} />;
     case "inquiry":
@@ -60,6 +66,7 @@ function deriveActiveId(pathname: string | null, fallback: SidebarItemId): Sideb
   if (pathname.startsWith("/notifications")) return "notification";
   if (pathname.startsWith("/inquiry")) return "inquiry";
   if (pathname.startsWith("/guide")) return "guide";
+  if (pathname.startsWith("/profile")) return "profile";
   if (pathname.startsWith("/analytics")) return "analytics";
   if (pathname.startsWith("/monetization")) return "monetization";
   if (pathname.startsWith("/series")) return "series";
@@ -82,9 +89,14 @@ export default function AppSidebar({ defaultActiveId = "series", onSelect }: App
     label,
     icon: sidebarIconFor(id),
   }));
+  const sidebarBottomItems = SIDEBAR_BOTTOM_ITEMS.map(({ id, label }) => ({
+    id,
+    label,
+    icon: sidebarIconFor(id),
+  }));
 
   return (
-    <nav className="shrink-0 w-[240px] border-r border-border-10 bg-white py-4" aria-label="메인 메뉴">
+    <nav className="shrink-0 flex h-full w-[240px] flex-col border-r border-border-10 bg-white py-4" aria-label="메인 메뉴">
       <SidebarList
         items={sidebarListItems}
         activeId={activeId}
@@ -95,6 +107,18 @@ export default function AppSidebar({ defaultActiveId = "series", onSelect }: App
         }}
         listClassName="flex flex-col gap-0 px-2"
       />
+      <div className="mt-auto px-2">
+        <SidebarList
+          items={sidebarBottomItems}
+          activeId={activeId}
+          onSelect={(id) => {
+            const item = SIDEBAR_BOTTOM_ITEMS.find((i) => i.id === id);
+            if (!item) return;
+            handleClick(item.id, item.path);
+          }}
+          listClassName="flex flex-col gap-0"
+        />
+      </div>
     </nav>
   );
 }

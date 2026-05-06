@@ -2,7 +2,7 @@
 
 import React, { useCallback, useMemo, useState } from "react";
 import { useRouter } from "next/navigation";
-import { ChevronLeft } from "lucide-react";
+import { ChevronLeft, PencilLine } from "lucide-react";
 import Header from "@/components/Header/Header";
 import AppSidebar from "@/components/AppSidebar/AppSidebar";
 import { Button } from "@/components/ui/button";
@@ -136,10 +136,19 @@ export default function MonetizationSettlementsPage() {
                             <p className="text-sm font-normal leading-5 text-on-surface-20">
                               {SETTLEMENT_SUMMARY.bankAccountMasked}
                             </p>
-                            <div className="h-4 w-px bg-border-20/10" />
+                            <div className="h-4 w-px bg-border-20" />
                             <p className="text-sm font-normal leading-5 text-on-surface-20">
                               {SETTLEMENT_SUMMARY.depositor}
                             </p>
+                            <Button
+                              type="button"
+                              variant="ghost"
+                              className="h-8 px-2 text-sm font-medium text-on-surface-20 hover:bg-surface-20"
+                              onClick={() => router.push("/profile?tab=settlement")}
+                            >
+                              <PencilLine className="h-4 w-4" aria-hidden />
+                              계좌 변경
+                            </Button>
                           </div>
                         </div>
                       </div>
@@ -167,7 +176,7 @@ export default function MonetizationSettlementsPage() {
                   </div>
                   <div className="flex flex-col">
                     <div className="inline-flex h-10 items-center border-b border-divider-10 bg-surface-10 px-5">
-                      <div className="w-40 text-xs font-normal leading-4 text-on-surface-30">회차</div>
+                      <div className="w-40 text-xs font-normal leading-4 text-on-surface-30">상태</div>
                       <div className="min-w-[220px] flex-1 text-xs font-normal leading-4 text-on-surface-30">수익금</div>
                       <div className="w-40 text-xs font-normal leading-4 text-on-surface-30">신청일</div>
                       <div className="w-40 text-xs font-normal leading-4 text-on-surface-30">지급 예정일</div>
@@ -181,7 +190,7 @@ export default function MonetizationSettlementsPage() {
                           <div className="flex h-20 w-40 items-center">
                             <span
                               className={cn(
-                                "inline-flex items-center justify-center rounded-[4px] px-2 py-1 text-sm font-normal leading-5",
+                                "inline-flex h-8 items-center justify-center rounded-[4px] px-2 py-1 text-[13px] font-normal leading-5",
                                 statusBadgeClassName(item.status),
                               )}
                             >
@@ -192,19 +201,19 @@ export default function MonetizationSettlementsPage() {
                             <p className="text-base font-bold leading-6 text-on-surface-10">{item.revenueAmount}</p>
                             <p className="text-base font-normal leading-6 text-on-surface-20">원</p>
                           </div>
-                          <div className="flex h-20 w-40 items-center text-base font-normal leading-6 text-on-surface-20">
+                          <div className="flex h-20 w-40 items-center text-sm font-normal leading-5 text-on-surface-20">
                             {item.requestedAt}
                           </div>
-                          <div className="flex h-20 w-40 items-center text-base font-normal leading-6 text-on-surface-20">
+                          <div className="flex h-20 w-40 items-center text-sm font-normal leading-5 text-on-surface-20">
                             {item.payoutDueAt}
                           </div>
                           <div className="flex h-20 w-40 items-center gap-0.5">
-                            <p className="text-base font-normal leading-6 text-on-surface-20">{item.vatAmount}</p>
-                            <p className="text-base font-normal leading-6 text-on-surface-20">원</p>
+                            <p className="text-sm font-normal leading-5 text-on-surface-20">{item.vatAmount}</p>
+                            <p className="text-sm font-normal leading-5 text-on-surface-20">원</p>
                           </div>
                           <div className="flex h-20 w-40 items-center gap-0.5">
-                            <p className="text-base font-bold leading-6 text-on-surface-10">{item.settlementAmount}</p>
-                            <p className="text-base font-normal leading-6 text-on-surface-20">원</p>
+                            <p className="text-sm font-normal leading-5 text-on-surface-20">{item.settlementAmount}</p>
+                            <p className="text-sm font-normal leading-5 text-on-surface-20">원</p>
                           </div>
                         </div>
                         {idx < pagedSettlementItems.length - 1 ? (

@@ -212,12 +212,25 @@ function trendPoints(n: number, end: number, rng: () => number, startRatio = 0.8
   if (n <= 0) return [];
   if (n === 1) return [Math.round(end)];
   const start = Math.max(0, Math.round(end * (startRatio + (rng() - 0.5) * 0.12)));
+  const waveCycles = 1.1 + rng() * 1.6;
+  const wavePhase = rng() * Math.PI * 2;
+  const waveAmplitude = end * (0.06 + rng() * 0.14);
+  const jitterAmplitude = end * (0.03 + rng() * 0.07);
+  const pulseCenterA = 0.2 + rng() * 0.25;
+  const pulseCenterB = 0.55 + rng() * 0.3;
+  const pulseWidthA = 0.08 + rng() * 0.07;
+  const pulseWidthB = 0.08 + rng() * 0.07;
+  const pulseAmpA = end * (0.06 + rng() * 0.12);
+  const pulseAmpB = -end * (0.05 + rng() * 0.11);
   const out: number[] = [];
   for (let i = 0; i < n; i++) {
     const t = i / (n - 1);
     const base = start + (end - start) * t;
-    const noise = end * 0.02 * (rng() - 0.5);
-    out.push(Math.max(0, Math.round(base + noise)));
+    const wave = Math.sin((t * waveCycles + wavePhase) * Math.PI * 2) * waveAmplitude;
+    const pulseA = Math.exp(-Math.pow((t - pulseCenterA) / pulseWidthA, 2)) * pulseAmpA;
+    const pulseB = Math.exp(-Math.pow((t - pulseCenterB) / pulseWidthB, 2)) * pulseAmpB;
+    const jitter = (rng() - 0.5) * jitterAmplitude;
+    out.push(Math.max(0, Math.round(base + wave + pulseA + pulseB + jitter)));
   }
   out[0] = start;
   out[n - 1] = Math.round(end);
