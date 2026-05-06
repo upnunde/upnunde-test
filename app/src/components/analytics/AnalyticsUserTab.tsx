@@ -37,6 +37,10 @@ import {
   getUserTimeOfDayHourlyDummy,
 } from "@/components/analytics/analytics-dummy-by-scope";
 import {
+  ANALYTICS_TREND_LINE_FIXED_HEIGHT_CLASS,
+  ANALYTICS_TREND_LINE_SHELL_CLASS,
+} from "@/components/analytics/analytics-trend-chart-shell";
+import {
   ANALYTICS_PRIMARY_DESCENDING_DOT_CLASSES,
   mapPaletteByDescendingRank,
 } from "@/lib/analytics-distribution-constants";
@@ -47,7 +51,13 @@ const AnalyticsTrendLineChart = dynamic(
   {
     ssr: false,
     loading: () => (
-      <div className="h-[320px] w-full animate-pulse rounded-[4px] bg-slate-100" aria-hidden />
+      <div
+        className={cn(
+          ANALYTICS_TREND_LINE_SHELL_CLASS,
+          ANALYTICS_TREND_LINE_FIXED_HEIGHT_CLASS,
+        )}
+        aria-hidden
+      />
     ),
   },
 );
@@ -222,7 +232,11 @@ export function AnalyticsUserTab({
           <p className="px-5 text-sm font-medium leading-5 text-on-surface-20">
             {USER_PRIMARY_LABELS[userMetric] ?? "이용자 수"} 추이
           </p>
-          <AnalyticsTrendLineChart metric={userMetric} valuesOverride={userDummy.chartSeries[userMetric]} />
+          <AnalyticsTrendLineChart
+            metric={userMetric}
+            periodRange={periodRange}
+            valuesOverride={userDummy.chartSeries[userMetric]}
+          />
         </div>
       </AnalyticsPanel>
 
@@ -242,7 +256,7 @@ export function AnalyticsUserTab({
             tabListClassName="self-stretch"
           />
         </div>
-        <div className="flex flex-col items-start justify-start gap-3 self-stretch rounded-lg px-5 pb-5 pt-3">
+        <div className="flex flex-col items-start justify-start gap-3 self-stretch rounded-lg pb-5 pt-3">
           <div
             className="flex h-4 w-full items-center"
             role="img"
@@ -252,10 +266,9 @@ export function AnalyticsUserTab({
               key={revisitSegment}
               revisitPercent={revisitRates.revisitPct}
               noRevisitPercent={revisitRates.noRevisitPct}
-              className="w-full"
             />
           </div>
-          <div className="inline-flex items-start justify-between self-stretch">
+          <div className="inline-flex items-start justify-between self-stretch px-5">
             <div className="inline-flex flex-1 flex-col items-start justify-center gap-0.5">
               <div className="text-justify text-xl font-bold leading-7 text-on-surface-10">
                 {revisitRates.revisitPct.toFixed(1)}%
@@ -377,6 +390,7 @@ export function AnalyticsUserTab({
               <AnalyticsViewerHourlyActivityChart
                 hourlyWeights={timeOfDayHourlyForPeriod}
                 periodRange={periodRange}
+                scopeCategory={scopeCategory}
               />
             </div>
           </AnalyticsPanel>
@@ -436,9 +450,9 @@ function AudienceBreakdownPanel({
           size="m"
         />
       </div>
-      <div className="flex flex-col gap-5 p-5">
+      <div className="flex flex-col gap-5 pb-5 pt-3">
         <AnalyticsDistributionStackedBarChart values={stackValues} />
-        <div className="flex flex-col gap-2.5">
+        <div className="flex flex-col gap-2.5 px-5">
           {legend.map((row, i) => (
             <LegendRow
               key={`${row.label}-${row.value}`}
@@ -486,9 +500,9 @@ function SimpleDistributionPanel({
           />
         </div>
       ) : null}
-      <div className="flex flex-col gap-5 p-5">
+      <div className="flex flex-col gap-5 pb-5 pt-3">
         <AnalyticsDistributionStackedBarChart values={stackValues} />
-        <div className="flex flex-col gap-2.5">
+        <div className="flex flex-col gap-2.5 px-5">
           {legend.map((row, i) => (
             <LegendRow
               key={`${row.label}-${row.value}`}

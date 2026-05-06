@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
 import "./globals.css";
 import { Toaster } from "@/components/ui/toaster";
+import DevConsoleFilter from "@/components/DevConsoleFilter";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -29,6 +30,7 @@ export default function RootLayout({
         className={`${geistSans.variable} ${geistMono.variable} antialiased m-0 flex h-screen min-h-screen w-full flex-col overflow-hidden overscroll-none p-0`}
         style={{ minHeight: "100vh", height: "100%", width: "100%" }}
       >
+        <DevConsoleFilter />
         {children}
         <Toaster />
       </body>

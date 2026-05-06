@@ -1,6 +1,6 @@
 "use client";
 
-import { useMemo, useState } from "react";
+import { useCallback, useMemo, useState } from "react";
 import { SegmentedTextTabs } from "@/components/ui/segmented-text-tabs";
 import { AnalyticsContentTab } from "@/components/analytics/AnalyticsContentTab";
 import { AnalyticsUserTab } from "@/components/analytics/AnalyticsUserTab";
@@ -13,6 +13,10 @@ type AnalyticsAreaTabId = "content" | "user";
 export function AnalyticsDashboard() {
   const [periodRange, setPeriodRange] = useState<AnalyticsPeriodRange>("7d");
   const [analyticsArea, setAnalyticsArea] = useState<AnalyticsAreaTabId>("content");
+  /** 조회 기간 라디오가 마운트 직후 동기 콜백할 때 부모 setState 경고 방지 */
+  const setPeriodRangeDeferred = useCallback((v: AnalyticsPeriodRange) => {
+    queueMicrotask(() => setPeriodRange(v));
+  }, []);
   const dateRangeLabel = useMemo(
     () => getAnalyticsDateRangeLabel(periodRange, new Date()),
     [periodRange],
@@ -37,13 +41,13 @@ export function AnalyticsDashboard() {
       {analyticsArea === "content" ? (
         <AnalyticsContentTab
           periodRange={periodRange}
-          onPeriodRangeChange={setPeriodRange}
+          onPeriodRangeChange={setPeriodRangeDeferred}
           dateRangeLabel={dateRangeLabel}
         />
       ) : (
         <AnalyticsUserTab
           periodRange={periodRange}
-          onPeriodRangeChange={setPeriodRange}
+          onPeriodRangeChange={setPeriodRangeDeferred}
           dateRangeLabel={dateRangeLabel}
         />
       )}

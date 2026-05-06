@@ -1,9 +1,23 @@
 "use client";
 
+import dynamic from "next/dynamic";
 import React, { useState } from "react";
 import Header from "@/components/Header/Header";
 import AppSidebar from "@/components/AppSidebar/AppSidebar";
-import { AnalyticsDashboard } from "@/components/analytics/AnalyticsDashboard";
+
+/** VisActor·차트 등으로 `page` 청크가 비대해지는 것을 완화 — 별도 청크로 분리 */
+const AnalyticsDashboard = dynamic(
+  () => import("@/components/analytics/AnalyticsDashboard").then((m) => m.AnalyticsDashboard),
+  {
+    ssr: true,
+    loading: () => (
+      <div
+        className="mx-auto w-full min-h-[min(60vh,520px)] max-w-[1200px] animate-pulse rounded-[4px] bg-slate-100"
+        aria-hidden
+      />
+    ),
+  },
+);
 
 export default function AnalyticsPage() {
   const [profileImageUrl, setProfileImageUrl] = useState<string | null>(null);

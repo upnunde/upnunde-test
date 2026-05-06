@@ -203,10 +203,10 @@ export function ImageResourceDetailPage({ kind, initialData }: ImageResourceDeta
             <Title2
               text={labels.sectionTitle}
               asSectionHeader
-              className="px-8 pt-5 pb-3"
+              className="px-8"
             />
 
-            <div className="px-8 py-6 flex flex-col gap-8">
+            <div className="px-8 py-8 flex flex-col gap-8">
               {/* 이름 */}
               <section className="flex flex-col gap-2">
                 <Title1

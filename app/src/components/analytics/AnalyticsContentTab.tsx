@@ -20,6 +20,10 @@ import {
   type AnalyticsPeriodRange,
 } from "@/components/analytics/analytics-date";
 import {
+  ANALYTICS_TREND_LINE_FIXED_HEIGHT_CLASS,
+  ANALYTICS_TREND_LINE_SHELL_CLASS,
+} from "@/components/analytics/analytics-trend-chart-shell";
+import {
   analyticsFilledSecondaryChipClassName,
   analyticsOutlineChipClassName,
   analyticsScopeChipInactiveClassName,
@@ -40,7 +44,13 @@ const AnalyticsTrendLineChart = dynamic(
   {
     ssr: false,
     loading: () => (
-      <div className="h-[320px] w-full animate-pulse rounded-[4px] bg-slate-100" aria-hidden />
+      <div
+        className={cn(
+          ANALYTICS_TREND_LINE_SHELL_CLASS,
+          ANALYTICS_TREND_LINE_FIXED_HEIGHT_CLASS,
+        )}
+        aria-hidden
+      />
     ),
   },
 );
@@ -182,12 +192,13 @@ export function AnalyticsContentTab({
           </p>
           <AnalyticsTrendLineChart
             metric={primaryMetric}
+            periodRange={periodRange}
             valuesOverride={contentDummy.chartSeries[primaryMetric]}
           />
         </div>
       </AnalyticsPanel>
 
-      <div className="inline-flex items-start justify-start gap-5 self-stretch">
+      <div className="flex w-full flex-col items-stretch gap-5 lg:flex-row">
         <PopularContentsCard rows={contentDummy.top5} />
         <AttentionContentsCard rows={contentDummy.top5} />
       </div>
@@ -201,7 +212,7 @@ function PopularContentsCard({ rows }: { rows: readonly AnalyticsTopFiveRow[] })
   const [popularCriterion, setPopularCriterion] = useState<PopularCriterionId>("views");
 
   return (
-    <AnalyticsPanel className="min-w-0 flex-1">
+    <AnalyticsPanel className="w-full min-w-0 flex-1 lg:min-w-[260px]">
       <Title2 text="인기 콘텐츠 TOP5" variant="title" asSectionHeader />
       <div className="px-5 pt-3">
         <SegmentedTextTabs
@@ -229,7 +240,7 @@ function AttentionContentsCard({ rows }: { rows: readonly AnalyticsTopFiveRow[] 
   const [attentionCriterion, setAttentionCriterion] = useState<AttentionCriterionId>("lowViews");
 
   return (
-    <AnalyticsPanel className="min-w-0 flex-1">
+    <AnalyticsPanel className="w-full min-w-0 flex-1 lg:min-w-[260px]">
       <Title2 text="주의 필요한 콘텐츠 TOP5" variant="title" asSectionHeader />
       <div className="px-5 pt-3">
         <SegmentedTextTabs

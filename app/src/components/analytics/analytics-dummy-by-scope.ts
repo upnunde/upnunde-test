@@ -86,7 +86,8 @@ function applyAnalyticsPeriodToHourlyShape(
     v = v.map((x) => mean + (x - mean) * 0.62);
   }
 
-  return v.map((x) => Math.max(0, Math.round(x * 10) / 10));
+  /* 시간대별 이용자 수 더미 — 정수(명) 스케일만 유지 */
+  return v.map((x) => Math.max(0, Math.round(x)));
 }
 
 function hashString(s: string): number {
@@ -113,7 +114,7 @@ function addSeededHourlyDemoNoise(values: readonly number[], seedKey: string): n
     const gain = 0.42 + rnd() * 1.28;
     const jitter = (rnd() - 0.5) * 14;
     const next = v * gain + jitter;
-    return Math.max(10, Math.round(next * 10) / 10);
+    return Math.max(10, Math.round(next));
   });
 }
 

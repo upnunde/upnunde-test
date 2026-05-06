@@ -138,8 +138,8 @@
   --border-strong: #626264;
   --border-inverse: #FFFFFF;
   /* Divider */
-  --divider-10: rgb(0 0 0 / 2%);
-  --divider-20: rgb(0 0 0 / 8%);
+  --divider-10: rgb(0 0 0 / 7%);
+  --divider-20: rgb(0 0 0 / 22%);
   /* Dim (overlay) */
   --dim-10: rgb(0 0 0 / 38%);
   --dim-20: rgb(0 0 0 / 53%);

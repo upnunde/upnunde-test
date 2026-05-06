@@ -5,6 +5,10 @@ import { cn } from "@/lib/utils";
 import VChart from "@visactor/vchart";
 import type { IBarChartSpec } from "@visactor/vchart";
 import {
+  ANALYTICS_HORIZONTAL_STACK_BAR_AXES,
+  analyticsHorizontalStackBarTrackClassName,
+} from "@/components/analytics/analytics-horizontal-stacked-bar";
+import {
   ANALYTICS_PRIMARY_DESCENDING_SEGMENT_COLORS,
   mapPaletteByDescendingRank,
 } from "@/lib/analytics-distribution-constants";
@@ -25,6 +29,7 @@ function buildSpec(rawWeights: readonly number[]): IBarChartSpec {
 
   return {
     type: "bar",
+    background: "transparent",
     direction: "horizontal",
     stack: true,
     padding: { top: 0, bottom: 0, left: 0, right: 0 },
@@ -37,18 +42,7 @@ function buildSpec(rawWeights: readonly number[]): IBarChartSpec {
       domain: segmentIds,
       range: colors,
     },
-    axes: [
-      { orient: "left", visible: false },
-      {
-        orient: "bottom",
-        type: "linear",
-        visible: false,
-        /** 정규화 합 100%가 축 전폭을 쓰도록 도메인 고정 (nice 확장으로 빈 영역 방지) */
-        min: 0,
-        max: 100,
-        nice: false,
-      },
-    ],
+    axes: ANALYTICS_HORIZONTAL_STACK_BAR_AXES,
     legends: [{ visible: false }],
     tooltip: { visible: false },
     series: [
@@ -102,7 +96,7 @@ export function AnalyticsDistributionStackedBarChart({
   if (!values.length) {
     return (
       <div
-        className={cn("w-full rounded-full bg-surface-20", className)}
+        className={cn(analyticsHorizontalStackBarTrackClassName, className)}
         style={{ height: heightPx }}
         aria-hidden
       />
@@ -111,10 +105,11 @@ export function AnalyticsDistributionStackedBarChart({
 
   return (
     <div
-      ref={containerRef}
-      className={className}
-      style={{ width: "100%", height: heightPx, position: "relative" }}
+      className={cn(analyticsHorizontalStackBarTrackClassName, className)}
+      style={{ height: heightPx }}
       aria-hidden
-    />
+    >
+      <div ref={containerRef} className="h-full w-full" style={{ position: "relative" }} />
+    </div>
   );
 }

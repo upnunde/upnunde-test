@@ -84,7 +84,7 @@ export function Title2({
 
   const titleRow = (
     <div className="inline-flex justify-start items-start gap-0.5">
-      <div className="justify-start text-on-surface-10 text-lg font-bold font-['Pretendard_JP'] leading-6">
+      <div className="justify-start text-on-surface-10 text-base font-bold font-['Pretendard_JP'] leading-6">
         {text}
       </div>
       {flags.showDot && (
@@ -123,7 +123,7 @@ export function Title2({
     return (
       <div
         className={cn(
-          "w-full px-5 pt-5 pb-3 border-b border-border-10/5 flex flex-col justify-center items-start",
+          "w-full h-fit px-5 py-3 border-b border-border-10/5 flex flex-col justify-center items-start",
           className
         )}
         style={{ borderBottomColor: "rgba(0, 0, 0, 0.07)" }}

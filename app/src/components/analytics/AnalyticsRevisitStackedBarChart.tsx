@@ -1,6 +1,11 @@
 "use client";
 
 import { useEffect, useMemo, useRef } from "react";
+import {
+  ANALYTICS_HORIZONTAL_STACK_BAR_AXES,
+  analyticsHorizontalStackBarTrackClassName,
+} from "@/components/analytics/analytics-horizontal-stacked-bar";
+import { cn } from "@/lib/utils";
 import VChart from "@visactor/vchart";
 import type { IBarChartSpec } from "@visactor/vchart";
 
@@ -11,6 +16,7 @@ const COLOR_NO_REVISIT = "#FEF0FC";
 function buildRevisitStackedBarSpec(revisitPct: number, noRevisitPct: number): IBarChartSpec {
   return {
     type: "bar",
+    background: "transparent",
     direction: "horizontal",
     stack: true,
     padding: { top: 0, bottom: 0, left: 0, right: 0 },
@@ -31,17 +37,7 @@ function buildRevisitStackedBarSpec(revisitPct: number, noRevisitPct: number): I
       domain: ["again", "notAgain"],
       range: [COLOR_REVISIT, COLOR_NO_REVISIT],
     },
-    axes: [
-      { orient: "left", visible: false },
-      {
-        orient: "bottom",
-        type: "linear",
-        visible: false,
-        min: 0,
-        max: 100,
-        nice: false,
-      },
-    ],
+    axes: ANALYTICS_HORIZONTAL_STACK_BAR_AXES,
     legends: [{ visible: false }],
     tooltip: { visible: false },
     series: [
@@ -95,10 +91,11 @@ export function AnalyticsRevisitStackedBarChart({
 
   return (
     <div
-      ref={containerRef}
-      className={className}
-      style={{ width: "100%", height: 16, position: "relative" }}
+      className={cn(analyticsHorizontalStackBarTrackClassName, className)}
+      style={{ height: 16 }}
       aria-hidden
-    />
+    >
+      <div ref={containerRef} className="h-full w-full" style={{ position: "relative" }} />
+    </div>
   );
 }

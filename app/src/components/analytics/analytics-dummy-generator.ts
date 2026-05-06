@@ -6,7 +6,7 @@ import type { AnalyticsPrimaryMetric } from "@/components/analytics/AnalyticsTre
 import type { AnalyticsUserMetric } from "@/components/analytics/AnalyticsTrendLineChart";
 import type { AnalyticsTopFiveRow } from "@/components/analytics/AnalyticsRankParts";
 import type { AnalyticsScopeCategoryId } from "@/components/analytics/analytics-scope-category";
-import type { AnalyticsPeriodRange } from "@/components/analytics/analytics-date";
+import { getAnalyticsTrendPointCount, type AnalyticsPeriodRange } from "@/components/analytics/analytics-date";
 import type {
   ActiveFollowerDummy,
   ContentDummyByScope,
@@ -163,6 +163,18 @@ function deltaFromPrev(cur: number, prev: number): { text: string; tone: DeltaTo
   return { text: `${sign}${formatInt(diff)} (${sign}${pct}%)`, tone };
 }
 
+/** 인원 증감 — 증감분에 `명` 표기 */
+function deltaPersonFromPrev(cur: number, prev: number): { text: string; tone: DeltaTone } {
+  if (prev <= 0) {
+    return { text: "—", tone: "neutral" };
+  }
+  const diff = cur - prev;
+  const pct = Math.round((diff / prev) * 100);
+  const sign = diff > 0 ? "+" : "";
+  const tone: DeltaTone = diff > 0 ? "gain" : diff < 0 ? "loss" : "neutral";
+  return { text: `${sign}${formatInt(diff)}명 (${sign}${pct}%)`, tone };
+}
+
 /** n개 정수, 각 최소 minEach, 합 = 100 */
 function randomComposition100(rng: () => number, n: number, minEach = 2): number[] {
   const w = Array.from({ length: n }, () => 0.15 + rng() * 0.95);
@@ -195,18 +207,20 @@ function formatDurationKo(totalSec: number): string {
   return `${m}분 ${s.toString().padStart(2, "0")}초`;
 }
 
-/** 11시점 추이: 직전값→현재값, 약간의 흔들림 */
-function trend11(end: number, rng: () => number, startRatio = 0.82): number[] {
+/** 추이 시계열 — 포인트 수는 조회 기간에 맞춤 (`getAnalyticsTrendPointCount`) */
+function trendPoints(n: number, end: number, rng: () => number, startRatio = 0.82): number[] {
+  if (n <= 0) return [];
+  if (n === 1) return [Math.round(end)];
   const start = Math.max(0, Math.round(end * (startRatio + (rng() - 0.5) * 0.12)));
   const out: number[] = [];
-  for (let i = 0; i < 11; i++) {
-    const t = i / 10;
+  for (let i = 0; i < n; i++) {
+    const t = i / (n - 1);
     const base = start + (end - start) * t;
     const noise = end * 0.02 * (rng() - 0.5);
     out.push(Math.max(0, Math.round(base + noise)));
   }
   out[0] = start;
-  out[10] = Math.round(end);
+  out[n - 1] = Math.round(end);
   return out;
 }
 
@@ -279,6 +293,66 @@ function descendingCountsFromTop(rng: () => number, scope: AnalyticsScopeCategor
   return out;
 }
 
+/** 캐릭터 범위 가설: 등록 캐릭터 콘텐츠가 없어 지표·목록이 비는 상태 */
+function emptyContentDummyForCharacterScope(period: AnalyticsPeriodRange): ContentDummyByScope {
+  const neutral = { delta: "—", deltaTone: "neutral" as DeltaTone };
+  const primary: PrimaryStatDummy[] = [
+    { id: "views", value: "0", ...neutral },
+    { id: "watchTime", value: "0시간", ...neutral },
+    { id: "likes", value: "0", ...neutral },
+    { id: "comments", value: "0", ...neutral },
+    { id: "shares", value: "0", ...neutral },
+  ];
+  const zeros = Array.from({ length: getAnalyticsTrendPointCount(period) }, () => 0);
+  const chartSeries: Record<AnalyticsPrimaryMetric, number[]> = {
+    views: [...zeros],
+    watchTime: [...zeros],
+    likes: [...zeros],
+    comments: [...zeros],
+    shares: [...zeros],
+  };
+  const z = { revisitPct: 0, noRevisitPct: 0 };
+  return {
+    primary,
+    revisit: { once: z, twice: z, threePlus: z },
+    top5: [],
+    chartSeries,
+  };
+}
+
+/** 캐릭터 범위 — 이용자 탭도 동일 가설(범위 내 콘텐츠 없음)으로 비어 있는 분포 */
+function emptyUserDummyForCharacterScope(period: AnalyticsPeriodRange): UserDummyByScope {
+  const neutral = { delta: "—", deltaTone: "neutral" as DeltaTone };
+  const zn = getAnalyticsTrendPointCount(period);
+  const zerosSeries = Array.from({ length: zn }, () => 0);
+  const z3 = [0, 0, 0] as [number, number, number];
+  const z5 = [0, 0, 0, 0, 0] as [number, number, number, number, number];
+  const pct0 = ["0%", "0%", "0%"] as [string, string, string];
+  const pct5 = ["0%", "0%", "0%", "0%", "0%"] as [string, string, string, string, string];
+  const zeroDur = "0분 00초";
+  return {
+    primary: [
+      { id: "userCount", value: "0명", ...neutral },
+      { id: "totalFollowers", value: "0명", ...neutral },
+    ],
+    listA: [],
+    listBCounts: [],
+    chartSeries: {
+      userCount: [...zerosSeries],
+      totalFollowers: [...zerosSeries],
+    },
+    gender: { flex: z3, legend: pct0 },
+    age: { flex: z5, legend: pct5 },
+    avgTime: {
+      flex: z3,
+      legend: [zeroDur, zeroDur, zeroDur] as [string, string, string],
+    },
+    userMix: { flex: z3, legend: pct0 },
+    timeOfDayHourly: Array.from({ length: 24 }, () => 0),
+    activeFollowers: [],
+  };
+}
+
 function buildRevisit(rng: () => number): RevisitBundle {
   const once = 72 + rng() * 14;
   const twice = Math.max(54, once - 3 - rng() * 12);
@@ -299,6 +373,10 @@ export function generateContentDummy(
   scope: AnalyticsScopeCategoryId,
   period: AnalyticsPeriodRange,
 ): ContentDummyByScope {
+  if (scope === "character") {
+    return emptyContentDummyForCharacterScope(period);
+  }
+
   const rng = mulberry32(seedFor(scope, period));
   const vol = scopeVolumeFactor(scope, rng) * periodTrendBias(period, rng);
 
@@ -328,11 +406,12 @@ export function generateContentDummy(
     };
   });
 
+  const pt = getAnalyticsTrendPointCount(period);
   const chartSeries = {} as Record<AnalyticsPrimaryMetric, number[]>;
   for (const { id, cur } of metrics) {
     const drift = 0.78 + rng() * 0.2;
     const prev = Math.max(1, Math.round(cur * drift));
-    chartSeries[id] = trend11(cur, rng, prev / cur);
+    chartSeries[id] = trendPoints(pt, cur, rng, prev / cur);
   }
 
   const top5Rows = shuffleRowsWithRanks(top5PoolForScope(scope), rng).sort((a, b) => a.rank - b.rank);
@@ -351,6 +430,10 @@ export function generateContentDummy(
 }
 
 export function generateUserDummy(scope: AnalyticsScopeCategoryId, period: AnalyticsPeriodRange): UserDummyByScope {
+  if (scope === "character") {
+    return emptyUserDummyForCharacterScope(period);
+  }
+
   const rng = mulberry32(seedFor(scope, period) ^ 0x9e3779b9);
   const vol = scopeVolumeFactor(scope, rng) * periodTrendBias(period, rng);
 
@@ -358,22 +441,27 @@ export function generateUserDummy(scope: AnalyticsScopeCategoryId, period: Analy
   const followers = Math.max(120, Math.round(users * (0.08 + rng() * 0.35)));
 
   const userMetrics: { id: AnalyticsUserMetric; cur: number; fmt: (n: number) => string }[] = [
-    { id: "userCount", cur: users, fmt: formatCompactKo },
-    { id: "totalFollowers", cur: followers, fmt: (n) => (n >= 10_000 ? formatCompactKo(n) : formatInt(n)) },
+    { id: "userCount", cur: users, fmt: (n) => `${formatCompactKo(n)}명` },
+    {
+      id: "totalFollowers",
+      cur: followers,
+      fmt: (n) => `${n >= 10_000 ? formatCompactKo(n) : formatInt(n)}명`,
+    },
   ];
 
   const primary: UserPrimaryStatDummy[] = userMetrics.map(({ id, cur, fmt }) => {
     const drift = 0.8 + rng() * 0.18;
     const prev = Math.max(1, Math.round(cur * drift));
-    const { text, tone } = deltaFromPrev(cur, prev);
+    const { text, tone } = deltaPersonFromPrev(cur, prev);
     return { id, value: fmt(cur), delta: text, deltaTone: tone };
   });
 
+  const pt = getAnalyticsTrendPointCount(period);
   const chartSeries = {} as Record<AnalyticsUserMetric, number[]>;
   for (const { id, cur } of userMetrics) {
     const drift = 0.8 + rng() * 0.18;
     const prev = Math.max(1, Math.round(cur * drift));
-    chartSeries[id] = trend11(cur, rng, prev / cur);
+    chartSeries[id] = trendPoints(pt, cur, rng, prev / cur);
   }
 
   const listPool = scope === "all" ? LIST_A_MIXED : top5PoolForScope(scope);
