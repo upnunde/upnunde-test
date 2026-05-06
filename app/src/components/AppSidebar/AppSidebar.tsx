@@ -25,6 +25,10 @@ const SIDEBAR_BOTTOM_ITEMS = [
   { id: "guide", label: "이용가이드", path: "/guide" },
 ] as const;
 
+type SidebarTopItemId = (typeof SIDEBAR_ITEMS)[number]["id"];
+type SidebarBottomItemId = (typeof SIDEBAR_BOTTOM_ITEMS)[number]["id"];
+export type SidebarItemId = SidebarTopItemId | SidebarBottomItemId;
+
 const SIDEBAR_ICON_PROPS = {
   className: "shrink-0 opacity-90",
   strokeWidth: 1.75,
@@ -51,8 +55,6 @@ function sidebarIconFor(id: SidebarItemId): React.ReactNode {
       return null;
   }
 }
-
-export type SidebarItemId = (typeof SIDEBAR_ITEMS)[number]["id"];
 
 export interface AppSidebarProps {
   /** 초기 선택 메뉴 id (기본: 'series') */
