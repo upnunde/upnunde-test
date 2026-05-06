@@ -8,7 +8,7 @@ import { getAnalyticsDateRangeLabel, type AnalyticsPeriodRange } from "@/compone
 
 export type { AnalyticsPeriodRange } from "@/components/analytics/analytics-date";
 
-type AnalyticsAreaTabId = "content" | "user" | "revenue";
+type AnalyticsAreaTabId = "content" | "user";
 
 export function AnalyticsDashboard() {
   const [periodRange, setPeriodRange] = useState<AnalyticsPeriodRange>("7d");
@@ -26,7 +26,6 @@ export function AnalyticsDashboard() {
           items={[
             { id: "content", label: "콘텐츠" },
             { id: "user", label: "이용자" },
-            { id: "revenue", label: "수익" },
           ]}
           activeId={analyticsArea}
           onSelect={(id) => setAnalyticsArea(id as AnalyticsAreaTabId)}
@@ -41,17 +40,12 @@ export function AnalyticsDashboard() {
           onPeriodRangeChange={setPeriodRange}
           dateRangeLabel={dateRangeLabel}
         />
-      ) : analyticsArea === "user" ? (
+      ) : (
         <AnalyticsUserTab
           periodRange={periodRange}
           onPeriodRangeChange={setPeriodRange}
           dateRangeLabel={dateRangeLabel}
         />
-      ) : (
-        <div className="flex min-h-[280px] flex-col items-center justify-center gap-2 self-stretch px-0 py-16">
-          <p className="text-center text-base font-medium text-on-surface-20">수익 분석은 준비 중이에요.</p>
-          <p className="text-center text-sm text-on-surface-30">곧 인사이트를 확인할 수 있어요.</p>
-        </div>
       )}
     </div>
   );

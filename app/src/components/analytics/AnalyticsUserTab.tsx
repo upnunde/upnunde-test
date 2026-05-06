@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useMemo, useState } from "react";
 import dynamic from "next/dynamic";
 import { ChevronDown } from "lucide-react";
 import {
@@ -13,6 +13,7 @@ import {
 import { Title2 } from "@/components/ui/title2";
 import { SegmentedTextTabs } from "@/components/ui/segmented-text-tabs";
 import { AnalyticsPanel } from "@/components/analytics/AnalyticsPanel";
+import { AnalyticsViewerHourlyActivityChart } from "@/components/analytics/AnalyticsViewerHourlyActivityChart";
 import { cn } from "@/lib/utils";
 import type { AnalyticsUserMetric } from "@/components/analytics/AnalyticsTrendLineChart";
 import {
@@ -29,7 +30,12 @@ import {
   ANALYTICS_SCOPE_CHIPS,
   type AnalyticsScopeCategoryId,
 } from "@/components/analytics/analytics-scope-category";
-import { deltaClassName, getContentDummy, getUserDummy } from "@/components/analytics/analytics-dummy-by-scope";
+import {
+  deltaClassName,
+  getContentDummy,
+  getUserDummy,
+  getUserTimeOfDayHourlyDummy,
+} from "@/components/analytics/analytics-dummy-by-scope";
 import {
   ANALYTICS_PRIMARY_DESCENDING_DOT_CLASSES,
   mapPaletteByDescendingRank,
@@ -76,61 +82,6 @@ type RevisitSegmentId = "once" | "twice" | "threePlus";
 
 type AudienceTabId = "all" | "general" | "follower";
 
-const NICKNAME_PREFIXES = [
-  "달빛",
-  "모노",
-  "하늘",
-  "코코",
-  "별빛",
-  "루나",
-  "토리",
-  "밀키",
-  "도토리",
-  "바닐라",
-] as const;
-
-const NICKNAME_SUFFIXES = [
-  "고양이",
-  "토끼",
-  "펭귄",
-  "여우",
-  "곰돌이",
-  "나무",
-  "파도",
-  "구름",
-  "냥",
-  "별",
-] as const;
-
-function hashNick(s: string): number {
-  let h = 0;
-  for (let i = 0; i < s.length; i++) {
-    h = (h * 31 + s.charCodeAt(i)) >>> 0;
-  }
-  return h;
-}
-
-const ACTIVE_FOLLOWERS = (() => {
-  const names: string[] = [];
-  const used = new Set<string>();
-  let cursor = 1;
-
-  while (names.length < 10) {
-    const seed = `follower-${cursor}`;
-    const h = hashNick(seed);
-    const prefix = NICKNAME_PREFIXES[h % NICKNAME_PREFIXES.length] ?? "달빛";
-    const suffix = NICKNAME_SUFFIXES[(h >>> 4) % NICKNAME_SUFFIXES.length] ?? "냥";
-    const nick = `${prefix}${suffix}`;
-    if (!used.has(nick)) {
-      used.add(nick);
-      names.push(nick);
-    }
-    cursor += 1;
-  }
-
-  return names.map((nick, i) => ({ id: `active-follower-${i + 1}`, nick }));
-})();
-
 function getFollowerDummyProfileUrl(nick: string): string {
   const seed = encodeURIComponent(nick);
   return `https://api.dicebear.com/9.x/adventurer-neutral/png?seed=${seed}&radius=50&size=128`;
@@ -150,8 +101,7 @@ function LegendRow({ dotClass, label, value }: { dotClass: string; label: string
 
 const USER_PRIMARY_LABELS: Record<AnalyticsUserMetric, string> = {
   userCount: "이용자 수",
-  newFollowers: "새 팔로워",
-  totalFollowers: "총 팔로워",
+  totalFollowers: "팔로워",
 };
 
 export function AnalyticsUserTab({
@@ -173,8 +123,18 @@ export function AnalyticsUserTab({
   const [genderBand, setGenderBand] = useState("all");
   const periodLabel =
     ANALYTICS_PERIOD_OPTIONS.find((o) => o.value === periodRange)?.label ?? "7일 전";
-  const userDummy = getUserDummy(scopeCategory);
-  const contentDummyForRevisit = getContentDummy(scopeCategory);
+  const userDummy = useMemo(
+    () => getUserDummy(scopeCategory, periodRange),
+    [scopeCategory, periodRange],
+  );
+  const timeOfDayHourlyForPeriod = useMemo(
+    () => getUserTimeOfDayHourlyDummy(scopeCategory, periodRange),
+    [scopeCategory, periodRange],
+  );
+  const contentDummyForRevisit = useMemo(
+    () => getContentDummy(scopeCategory, periodRange),
+    [scopeCategory, periodRange],
+  );
   const revisitRates = contentDummyForRevisit.revisit[revisitSegment];
   const followerFavoriteRows = userDummy.listA.map((r, i) => ({
     ...r,
@@ -398,23 +358,33 @@ export function AnalyticsUserTab({
               { label: "팔로워", value: userDummy.userMix.legend[2] },
             ]}
           />
-          <SimpleDistributionPanel
-            title="이용 시간대"
-            audienceTab={audienceTimeSegment}
-            onAudienceChange={setAudienceTimeSegment}
-            stackValues={userDummy.timeOfDay.flex}
-            legend={[
-              { label: "00시~06시", value: userDummy.timeOfDay.legend[0] },
-              { label: "06시~12시", value: userDummy.timeOfDay.legend[1] },
-              { label: "12시~18시", value: userDummy.timeOfDay.legend[2] },
-              { label: "18시~00시", value: userDummy.timeOfDay.legend[3] },
-            ]}
-          />
+          <AnalyticsPanel>
+            <Title2 text="이용 시간대" variant="title" asSectionHeader />
+            <div className="px-5 pt-3">
+              <SegmentedTextTabs
+                aria-label="이용 시간대 기준"
+                items={[
+                  { id: "all", label: "전체" },
+                  { id: "general", label: "일반 이용자" },
+                  { id: "follower", label: "팔로워" },
+                ]}
+                activeId={audienceTimeSegment}
+                onSelect={(id) => setAudienceTimeSegment(id as AudienceTabId)}
+                size="m"
+              />
+            </div>
+            <div className="p-5">
+              <AnalyticsViewerHourlyActivityChart
+                hourlyWeights={timeOfDayHourlyForPeriod}
+                periodRange={periodRange}
+              />
+            </div>
+          </AnalyticsPanel>
 
           <AnalyticsPanel>
             <Title2 text="가장 적극 활동중인 팔로워" variant="title" asSectionHeader />
             <div className="grid grid-cols-5 justify-items-center gap-x-5 gap-y-6 p-5">
-              {ACTIVE_FOLLOWERS.slice(0, 10).map(({ id, nick }) => (
+              {userDummy.activeFollowers.map(({ id, nick }) => (
                 <div key={id} className="flex w-full max-w-28 flex-col items-center justify-center gap-2">
                   <div className="relative h-16 w-16 overflow-hidden rounded-full bg-zinc-100">
                     <img

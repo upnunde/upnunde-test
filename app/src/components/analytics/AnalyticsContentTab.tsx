@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useMemo, useState } from "react";
 import dynamic from "next/dynamic";
 import { ChevronDown } from "lucide-react";
 import {
@@ -66,7 +66,10 @@ export function AnalyticsContentTab({
   const [primaryMetric, setPrimaryMetric] = useState<AnalyticsPrimaryMetric>("views");
   const periodLabel =
     ANALYTICS_PERIOD_OPTIONS.find((o) => o.value === periodRange)?.label ?? "7일 전";
-  const contentDummy = getContentDummy(scopeCategory);
+  const contentDummy = useMemo(
+    () => getContentDummy(scopeCategory, periodRange),
+    [scopeCategory, periodRange],
+  );
 
   return (
     <div className="flex flex-col items-start justify-start gap-5 self-stretch px-0 pt-5 pb-10">
