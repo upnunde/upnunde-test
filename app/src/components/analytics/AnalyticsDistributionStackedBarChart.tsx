@@ -39,7 +39,15 @@ function buildSpec(rawWeights: readonly number[]): IBarChartSpec {
     },
     axes: [
       { orient: "left", visible: false },
-      { orient: "bottom", visible: false },
+      {
+        orient: "bottom",
+        type: "linear",
+        visible: false,
+        /** 정규화 합 100%가 축 전폭을 쓰도록 도메인 고정 (nice 확장으로 빈 영역 방지) */
+        min: 0,
+        max: 100,
+        nice: false,
+      },
     ],
     legends: [{ visible: false }],
     tooltip: { visible: false },

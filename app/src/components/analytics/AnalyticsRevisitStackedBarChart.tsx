@@ -33,7 +33,14 @@ function buildRevisitStackedBarSpec(revisitPct: number, noRevisitPct: number): I
     },
     axes: [
       { orient: "left", visible: false },
-      { orient: "bottom", visible: false },
+      {
+        orient: "bottom",
+        type: "linear",
+        visible: false,
+        min: 0,
+        max: 100,
+        nice: false,
+      },
     ],
     legends: [{ visible: false }],
     tooltip: { visible: false },

@@ -9,21 +9,32 @@ import { getAnalyticsPeriodInclusiveDays, type AnalyticsPeriodRange } from "@/co
 /** 제품 primary (`globals.css` --primary) */
 const ANALYTICS_BAR_PRIMARY = "#F642D4";
 
-/** 참고 UI와 동일하게 0a~11p 표기 */
-function hourToAmPmAxisLabel(hour: number): string {
-  if (hour === 0) return "0a";
-  if (hour <= 11) return `${hour}a`;
-  if (hour === 12) return "12p";
-  return `${hour - 12}p`;
+/** 24시 정각 → 12시간제 시각 숫자(1~12) + 오전/오후 */
+function hour24To12Parts(h: number): { h12: number; pm: boolean } {
+  const x = ((h % 24) + 24) % 24;
+  if (x === 0) return { h12: 12, pm: false };
+  if (x < 12) return { h12: x, pm: false };
+  if (x === 12) return { h12: 12, pm: true };
+  return { h12: x - 12, pm: true };
 }
 
-function formatPeakHourRangeKo(hour: number): string {
-  const end = hour + 1;
-  return `${hour}시~${end}시`;
+/** 2시간 구간 축 라벨 — `12~2am`, `10~12pm` 등 (끝 시각 기준 am/pm 한 번만) */
+function twoHourBinAmPmLabel(startHour: number): string {
+  const endHour = startHour + 2;
+  const a = hour24To12Parts(startHour);
+  const b = hour24To12Parts(endHour);
+  const suf = b.pm ? "pm" : "am";
+  return `${a.h12}~${b.h12}${suf}`;
 }
 
-function buildSummaryLine(period: AnalyticsPeriodRange, peakHour: number): string {
-  const peak = formatPeakHourRangeKo(peakHour);
+const TWO_HOUR_BIN_COUNT = 12;
+
+function formatPeakTwoHourRangeKo(startHour: number): string {
+  return `${startHour}시~${startHour + 2}시`;
+}
+
+function buildSummaryLine(period: AnalyticsPeriodRange, peakBinStartHour: number): string {
+  const peak = formatPeakTwoHourRangeKo(peakBinStartHour);
   const days = getAnalyticsPeriodInclusiveDays(period);
   if (days == null) {
     return `전체 기간 동안 내 시청자는 ${peak}에 가장 많이 활동했습니다`;
@@ -31,24 +42,32 @@ function buildSummaryLine(period: AnalyticsPeriodRange, peakHour: number): strin
   return `지난 ${days}일 동안 내 시청자는 ${peak}에 가장 많이 활동했습니다`;
 }
 
-function calcPeakHour(weights: readonly number[]): number {
-  let best = 0;
-  let maxW = -Infinity;
-  for (let h = 0; h < weights.length; h++) {
-    const w = weights[h] ?? 0;
-    if (w > maxW) {
-      maxW = w;
-      best = h;
+/** 합산 활동량이 가장 큰 2시간 구간의 시작 시각(0,2,…,22) */
+function calcPeakTwoHourBinStart(weights: readonly number[]): number {
+  let bestStart = 0;
+  let maxSum = -Infinity;
+  for (let i = 0; i < TWO_HOUR_BIN_COUNT; i++) {
+    const start = i * 2;
+    const sum = (weights[start] ?? 0) + (weights[start + 1] ?? 0);
+    if (sum > maxSum) {
+      maxSum = sum;
+      bestStart = start;
     }
   }
-  return best;
+  return bestStart;
 }
 
-function buildHourlyBarSpec(hourlyWeights: readonly number[]): IBarChartSpec {
-  const values = hourlyWeights.map((y, hour) => ({
-    hour: hourToAmPmAxisLabel(hour),
-    value: y,
-  }));
+function buildTwoHourBarSpec(hourlyWeights: readonly number[]): IBarChartSpec {
+  const values = Array.from({ length: TWO_HOUR_BIN_COUNT }, (_, i) => {
+    const start = i * 2;
+    const value = (hourlyWeights[start] ?? 0) + (hourlyWeights[start + 1] ?? 0);
+    return {
+      hour: twoHourBinAmPmLabel(start),
+      /** 구간 시작 시각(0,2,…,22) — 툴팁·요약용 */
+      hourStart: start,
+      value,
+    };
+  });
 
   return {
     type: "bar",
@@ -87,7 +106,27 @@ function buildHourlyBarSpec(hourlyWeights: readonly number[]): IBarChartSpec {
       },
     ],
     legends: [{ visible: false }],
-    tooltip: { visible: false },
+    tooltip: {
+      visible: true,
+      mark: {
+        content: [
+          {
+            key: (datum) => {
+              const d = datum as { hourStart?: number };
+              const h = d.hourStart;
+              if (typeof h !== "number") return "시간대";
+              return `${h}시~${h + 2}시`;
+            },
+            value: (datum) => {
+              const d = datum as { value?: number };
+              const v = d.value;
+              if (typeof v !== "number") return "";
+              return `활동량 ${Math.round(v)}`;
+            },
+          },
+        ],
+      },
+    },
     series: [
       {
         type: "bar",
@@ -96,36 +135,6 @@ function buildHourlyBarSpec(hourlyWeights: readonly number[]): IBarChartSpec {
         yField: "value",
         barWidth: "60%",
         barMinHeight: 2,
-        animationNormal: {
-          bar: [
-            {
-              loop: true,
-              startTime: 100,
-              oneByOne: 100,
-              timeSlices: [
-                {
-                  delay: 1000,
-                  duration: 500,
-                  effects: {
-                    channel: {
-                      fillOpacity: { to: 0.5 },
-                    },
-                    easing: "linear",
-                  },
-                },
-                {
-                  duration: 500,
-                  effects: {
-                    channel: {
-                      fillOpacity: { to: 1 },
-                    },
-                    easing: "linear",
-                  },
-                },
-              ],
-            },
-          ],
-        },
       },
     ],
   };
@@ -133,7 +142,7 @@ function buildHourlyBarSpec(hourlyWeights: readonly number[]): IBarChartSpec {
 
 export interface AnalyticsViewerHourlyActivityChartProps {
   className?: string;
-  /** 길이 24, 0~23시 가중치 */
+  /** 길이 24, 0~23시 시간대별 가중치(2시간 단위로 합산해 표시) */
   hourlyWeights: readonly number[];
   periodRange: AnalyticsPeriodRange;
 }
@@ -141,18 +150,18 @@ export interface AnalyticsViewerHourlyActivityChartProps {
 const CHART_HEIGHT_PX = 200;
 
 /**
- * 시청자 24시간 활동 막대 그래프 (@visactor/vchart).
+ * 시청자 24시간 활동 막대 그래프 — 2시간 단위 12개 막대 (@visactor/vchart).
  */
 export function AnalyticsViewerHourlyActivityChart({
   className,
   hourlyWeights,
   periodRange,
 }: AnalyticsViewerHourlyActivityChartProps) {
-  const peakHour = useMemo(() => calcPeakHour(hourlyWeights), [hourlyWeights]);
-  const summaryText = buildSummaryLine(periodRange, peakHour);
+  const peakBinStartHour = useMemo(() => calcPeakTwoHourBinStart(hourlyWeights), [hourlyWeights]);
+  const summaryText = buildSummaryLine(periodRange, peakBinStartHour);
 
   const spec = useMemo(
-    () => (hourlyWeights.length > 0 ? buildHourlyBarSpec(hourlyWeights) : null),
+    () => (hourlyWeights.length > 0 ? buildTwoHourBarSpec(hourlyWeights) : null),
     [hourlyWeights],
   );
 
@@ -193,7 +202,7 @@ export function AnalyticsViewerHourlyActivityChart({
       <div
         className="w-full min-w-0"
         role="img"
-        aria-label={`24시간 시청 활동, 피크 ${formatPeakHourRangeKo(peakHour)}`}
+        aria-label={`24시간 시청 활동(2시간 단위), 피크 ${formatPeakTwoHourRangeKo(peakBinStartHour)}`}
       >
         <div
           ref={containerRef}
