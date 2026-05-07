@@ -213,21 +213,25 @@ export function SeriesItem({
         <div className="w-full h-full" />
 
         {/* 메타: 날짜, 회차 수, 조회수 (정책 2, 3, 4, 11 - 툴팁) */}
-        <div className="mb-5 flex flex-wrap gap-6 text-[13px] text-on-surface-20">
-          <div className="flex flex-col justify-center items-start gap-2">
-            <div className="flex items-center gap-2">
-              <Calendar className="w-[18px] h-[18px] text-on-surface-20" aria-hidden />
-              <span title="생성한 날짜">{dateStr}</span>
+        <div className="mb-5 flex flex-wrap gap-6 text-[13px] leading-5 text-on-surface-20 [&_svg]:shrink-0 [&_svg]:text-on-surface-20">
+          <div className="flex flex-col items-start justify-center gap-2 text-on-surface-20">
+            <div className="flex items-center gap-2 text-on-surface-20">
+              <Calendar className="h-[18px] w-[18px]" aria-hidden />
+              <span className="text-on-surface-20" title="생성한 날짜">
+                {dateStr}
+              </span>
             </div>
-            <div className="flex items-center gap-2">
-              <Eye className="w-[18px] h-[18px] text-on-surface-20" aria-hidden />
-              <span title="작품 누적 조회수">{viewStr}</span>
+            <div className="flex items-center gap-2 text-on-surface-20">
+              <Eye className="h-[18px] w-[18px]" aria-hidden />
+              <span className="text-on-surface-20" title="작품 누적 조회수">
+                {viewStr}
+              </span>
             </div>
           </div>
-          <div className="flex flex-col justify-start items-start gap-2">
-            <div className="flex items-center gap-2">
-              <Layers className="w-[18px] h-[18px] text-on-surface-20" aria-hidden />
-              <span title="에피소드 등록 수">
+          <div className="flex flex-col items-start justify-start gap-2 text-on-surface-20">
+            <div className="flex items-center gap-2 text-on-surface-20">
+              <Layers className="h-[18px] w-[18px]" aria-hidden />
+              <span className="text-on-surface-20" title="에피소드 등록 수">
                 {episodeCount}회
               </span>
             </div>

@@ -2,18 +2,12 @@
 
 import React, { useCallback } from "react";
 import { useRouter } from "next/navigation";
-import { ChevronLeft, ChevronRight } from "lucide-react";
 import { Button } from "@/components/ui/button";
-import { Title1 } from "@/components/ui/title1";
 import { ImageCropOnlyModal } from "@/components/resource/character/CharacterExpressionModal";
 import { SeriesImageUploadField } from "@/components/series/SeriesImageUploadField";
 import { SeriesFormTextInputField } from "@/components/series/SeriesFormTextInputField";
 import { SeriesFormTextareaField } from "@/components/series/SeriesFormTextareaField";
 import { SeriesFormPageScaffold } from "@/components/series/SeriesFormPageScaffold";
-import {
-  DEFAULT_FRAME_THEME_ITEM_COUNT,
-  FrameThemeSelector,
-} from "@/components/series/FrameThemeSelector";
 import { useSeriesFormController } from "@/hooks/useSeriesFormController";
 
 export default function SeriesNewPage() {
@@ -39,11 +33,6 @@ export default function SeriesNewPage() {
     setWorldviewPrompt,
     persona,
     setPersona,
-    selectedFrameThemeId,
-    setSelectedFrameThemeId,
-    frameThemeSelectorRef,
-    frameThemePager,
-    handleFrameThemePagerChange,
     fieldErrors,
     isFormValid,
     coverPreviewUrl,
@@ -135,48 +124,6 @@ export default function SeriesNewPage() {
                             onClearPreview={handleClearLogoPreview}
                             onFileSelected={handleLogoFileSelected}
                           />
-
-                          <div className="flex flex-col gap-1">
-                            <div className="flex items-end justify-end gap-3">
-                              <Title1
-                                className="min-w-0 flex-1"
-                                text="디자인 테마*"
-                                variant="title-subtitle-dot"
-                                subtitleText="말풍선을 포함한 화면 전체 테마 세트를 선택하세요."
-                              />
-                              {frameThemePager.needsPager ? (
-                                <div className="inline-flex shrink-0 items-center gap-2 pt-0.5">
-                                  <span className="whitespace-nowrap text-xs text-on-surface-30">
-                                    총 {DEFAULT_FRAME_THEME_ITEM_COUNT}개
-                                  </span>
-                                  <button
-                                    type="button"
-                                    aria-label="이전 테마 목록"
-                                    onClick={() => frameThemeSelectorRef.current?.goPrev()}
-                                    disabled={!frameThemePager.canGoPrev}
-                                    className="inline-flex h-7 w-7 items-center justify-center rounded-full border border-border-10 bg-white text-on-surface-30 transition-colors hover:bg-surface-20 focus:outline-none focus-visible:ring-2 focus-visible:ring-primary/40 disabled:cursor-not-allowed disabled:opacity-40"
-                                  >
-                                    <ChevronLeft className="h-4 w-4" />
-                                  </button>
-                                  <button
-                                    type="button"
-                                    aria-label="다음 테마 목록"
-                                    onClick={() => frameThemeSelectorRef.current?.goNext()}
-                                    disabled={!frameThemePager.canGoNext}
-                                    className="inline-flex h-7 w-7 items-center justify-center rounded-full border border-border-10 bg-white text-on-surface-30 transition-colors hover:bg-surface-20 focus:outline-none focus-visible:ring-2 focus-visible:ring-primary/40 disabled:cursor-not-allowed disabled:opacity-40"
-                                  >
-                                    <ChevronRight className="h-4 w-4" />
-                                  </button>
-                                </div>
-                              ) : null}
-                            </div>
-                            <FrameThemeSelector
-                              ref={frameThemeSelectorRef}
-                              selectedThemeId={selectedFrameThemeId}
-                              onSelectTheme={setSelectedFrameThemeId}
-                              onPagerChange={handleFrameThemePagerChange}
-                            />
-                          </div>
 
                           <div className="flex justify-end mt-4">
                             <Button

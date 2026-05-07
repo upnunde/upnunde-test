@@ -13,7 +13,8 @@ alwaysApply: true
 
 ## 개발 서버
 
-- 항상 **`npm run dev`** (webpack 모드). `--turbopack` 사용 금지.
+- **`npm run dev`**: Next.js 16 기본 개발 서버(로컬에서 가장 안정적).
+- Webpack 전용이 필요하면 **`npm run dev:webpack`**. 다만 Node 24 등 환경에서 webpack 개발 모드가 `.next/dev` 매니페스트 오류로 실패할 수 있다(빈 화면·500). 그때는 기본 `dev`를 쓰거나 `npm run clean` 후 재시도.
 - 화면 깜빡임·클릭 무반응 같은 이상 증상이 생기면 CSS가 아닌 **dev 서버 로그부터 확인**.
 - 캐시 문제 시 `npm run clean` 후 재시작.
 

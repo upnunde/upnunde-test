@@ -11,10 +11,6 @@ import {
   type SeriesFormTab,
 } from "@/lib/seriesForm";
 import { useEditorStore } from "@/store/useEditorStore";
-import type {
-  FrameThemePagerState,
-  FrameThemeSelectorHandle,
-} from "@/components/series/FrameThemeSelector";
 
 interface UseSeriesFormControllerOptions {
   coverSlotId: string;
@@ -34,14 +30,6 @@ export function useSeriesFormController({
   const [worldviewDescription, setWorldviewDescription] = useState("");
   const [worldviewPrompt, setWorldviewPrompt] = useState("");
   const [persona, setPersona] = useState("");
-  const [selectedFrameThemeId, setSelectedFrameThemeId] = useState("");
-
-  const frameThemeSelectorRef = useRef<FrameThemeSelectorHandle>(null);
-  const [frameThemePager, setFrameThemePager] = useState<FrameThemePagerState>({
-    canGoPrev: false,
-    canGoNext: false,
-    needsPager: false,
-  });
 
   const [hasCoverImage, setHasCoverImage] = useState(false);
   const [hasLogoImage, setHasLogoImage] = useState(false);
@@ -95,10 +83,6 @@ export function useSeriesFormController({
   useEffect(() => {
     setSeriesPersona(persona);
   }, [persona, setSeriesPersona]);
-
-  const handleFrameThemePagerChange = useCallback((state: FrameThemePagerState) => {
-    setFrameThemePager(state);
-  }, []);
 
   const isFormValid = isSeriesFormValid(
     getSeriesFormErrors({
@@ -336,11 +320,6 @@ export function useSeriesFormController({
     setWorldviewPrompt,
     persona,
     setPersona,
-    selectedFrameThemeId,
-    setSelectedFrameThemeId,
-    frameThemeSelectorRef,
-    frameThemePager,
-    handleFrameThemePagerChange,
     fieldErrors,
     isFormValid,
     coverPreviewUrl,
