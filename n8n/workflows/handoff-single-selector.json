@@ -1,0 +1,145 @@
+{
+  "name": "Handoff: Single Selector",
+  "nodes": [
+    {
+      "parameters": {},
+      "id": "manual-trigger",
+      "name": "Manual Trigger",
+      "type": "n8n-nodes-base.manualTrigger",
+      "typeVersion": 1,
+      "position": [
+        260,
+        280
+      ]
+    },
+    {
+      "parameters": {
+        "keepOnlySet": true,
+        "values": {
+          "string": [
+            {
+              "name": "feature_name",
+              "value": "기능명을 입력하세요"
+            },
+            {
+              "name": "transition_key",
+              "value": "planner_to_uiux"
+            },
+            {
+              "name": "planner_owner",
+              "value": "planner-ai"
+            },
+            {
+              "name": "uiux_owner",
+              "value": "uiux-ai"
+            },
+            {
+              "name": "fe_owner",
+              "value": "fe-ai"
+            }
+          ]
+        }
+      },
+      "id": "set-input",
+      "name": "Set Input",
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 2,
+      "position": [
+        520,
+        280
+      ],
+      "notes": "transition_key 값: planner_to_uiux | uiux_to_fe | fe_to_done"
+    },
+    {
+      "parameters": {
+        "keepOnlySet": false,
+        "values": {
+          "string": [
+            {
+              "name": "from_stage",
+              "value": "={{ $json.transition_key === 'planner_to_uiux' ? 'ready_for_planner' : $json.transition_key === 'uiux_to_fe' ? 'ready_for_uiux' : 'ready_for_fe' }}"
+            },
+            {
+              "name": "to_stage",
+              "value": "={{ $json.transition_key === 'planner_to_uiux' ? 'ready_for_uiux' : $json.transition_key === 'uiux_to_fe' ? 'ready_for_fe' : 'done' }}"
+            },
+            {
+              "name": "next_owner",
+              "value": "={{ $json.transition_key === 'planner_to_uiux' ? $json.uiux_owner : $json.transition_key === 'uiux_to_fe' ? $json.fe_owner : 'none' }}"
+            },
+            {
+              "name": "handoff_message",
+              "value": "={{ '[역할 핸드오프]\\n기능: ' + $json.feature_name + '\\n이전 단계: ' + ($json.transition_key === 'planner_to_uiux' ? 'ready_for_planner' : $json.transition_key === 'uiux_to_fe' ? 'ready_for_uiux' : 'ready_for_fe') + '\\n다음 단계: ' + ($json.transition_key === 'planner_to_uiux' ? 'ready_for_uiux' : $json.transition_key === 'uiux_to_fe' ? 'ready_for_fe' : 'done') + '\\n다음 담당: ' + ($json.transition_key === 'planner_to_uiux' ? $json.uiux_owner : $json.transition_key === 'uiux_to_fe' ? $json.fe_owner : 'none') }}"
+            }
+          ]
+        }
+      },
+      "id": "set-handoff",
+      "name": "Set Handoff Result",
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 2,
+      "position": [
+        820,
+        280
+      ]
+    },
+    {
+      "parameters": {
+        "resource": "message",
+        "operation": "post",
+        "channel": "YOUR_SLACK_CHANNEL_ID",
+        "text": "={{ $json.handoff_message }}"
+      },
+      "id": "slack-notify",
+      "name": "Slack Notify (Optional)",
+      "type": "n8n-nodes-base.slack",
+      "typeVersion": 2.2,
+      "position": [
+        1100,
+        280
+      ],
+      "disabled": true,
+      "notes": "Slack credential/channel 설정 후 활성화"
+    }
+  ],
+  "connections": {
+    "Manual Trigger": {
+      "main": [
+        [
+          {
+            "node": "Set Input",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Set Input": {
+      "main": [
+        [
+          {
+            "node": "Set Handoff Result",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Set Handoff Result": {
+      "main": [
+        [
+          {
+            "node": "Slack Notify (Optional)",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "active": false,
+  "settings": {},
+  "meta": {
+    "templateCredsSetupCompleted": false
+  }
+}

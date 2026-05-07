@@ -6,6 +6,32 @@
 
 ---
 
+### 역할군 자동화 (n8n)
+
+이 저장소는 AI 역할군 핸드오프 자동화를 위해 `n8n/` 폴더를 포함합니다.
+
+1. 환경 파일 준비
+
+```bash
+cp n8n/.env.example n8n/.env
+```
+
+2. 실행
+
+```bash
+npm run n8n:up
+```
+
+3. 접속
+
+```text
+http://localhost:5678
+```
+
+자세한 운영 기준은 `docs/ai-role-automation-playbook.md`, 실행 방법은 `n8n/README.md`를 참고하세요.
+
+---
+
 ### 프로젝트 구조
 
 - **`cursor-talk-to-figma-mcp/`**  

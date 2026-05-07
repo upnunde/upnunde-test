@@ -8,5 +8,8 @@
 | [repository-architecture.md](./repository-architecture.md) | 모노레포 구성, 패키지 역할, 실행 단위 |
 | [editor-policies.md](./editor-policies.md) | 스크립트 에디터·히스토리·임시저장·검증 정책 |
 | [design-system.md](./design-system.md) | UI 원칙, 디자인 토큰(타이포·컬러·스페이싱·레디어스), 표기 규칙 |
+| [ai-role-automation-playbook.md](./ai-role-automation-playbook.md) | AI 역할군 우선순위, 핸드오프 규칙, n8n 자동화 운영 가이드 |
+| [n8n-workflow-descriptions.md](./n8n-workflow-descriptions.md) | n8n 워크플로 Description 표준 문구 모음 |
+| [pm-autopilot-bridge.md](./pm-autopilot-bridge.md) | 자연어 요청을 n8n PM 오케스트레이터로 전달하는 브리지 사용법 |
 
 **갱신 원칙:** 제품/정책이 바뀌면 해당 문서를 먼저 고친 뒤 코드를 맞추거나, 반대로 중요한 코드 변경이 있으면 문서에 반영합니다.

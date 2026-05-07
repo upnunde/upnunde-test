@@ -1,0 +1,148 @@
+{
+  "name": "Handoff: Webhook Selector",
+  "nodes": [
+    {
+      "parameters": {
+        "httpMethod": "POST",
+        "path": "handoff-selector",
+        "responseMode": "responseNode",
+        "options": {}
+      },
+      "id": "webhook-trigger",
+      "name": "Webhook Trigger",
+      "type": "n8n-nodes-base.webhook",
+      "typeVersion": 2,
+      "position": [
+        260,
+        300
+      ],
+      "webhookId": "handoff-selector"
+    },
+    {
+      "parameters": {
+        "keepOnlySet": true,
+        "values": {
+          "string": [
+            {
+              "name": "feature_name",
+              "value": "={{ $json.body?.feature_name || $json.query?.feature_name || '기능명을 입력하세요' }}"
+            },
+            {
+              "name": "transition_key",
+              "value": "={{ $json.body?.transition_key || $json.query?.transition_key || 'planner_to_uiux' }}"
+            },
+            {
+              "name": "planner_owner",
+              "value": "={{ $json.body?.planner_owner || 'planner-ai' }}"
+            },
+            {
+              "name": "uiux_owner",
+              "value": "={{ $json.body?.uiux_owner || 'uiux-ai' }}"
+            },
+            {
+              "name": "fe_owner",
+              "value": "={{ $json.body?.fe_owner || 'fe-ai' }}"
+            }
+          ]
+        }
+      },
+      "id": "set-input",
+      "name": "Set Input From Webhook",
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 2,
+      "position": [
+        540,
+        300
+      ],
+      "notes": "transition_key: planner_to_uiux | uiux_to_fe | fe_to_done"
+    },
+    {
+      "parameters": {
+        "keepOnlySet": false,
+        "values": {
+          "string": [
+            {
+              "name": "from_stage",
+              "value": "={{ $json.transition_key === 'planner_to_uiux' ? 'ready_for_planner' : $json.transition_key === 'uiux_to_fe' ? 'ready_for_uiux' : 'ready_for_fe' }}"
+            },
+            {
+              "name": "to_stage",
+              "value": "={{ $json.transition_key === 'planner_to_uiux' ? 'ready_for_uiux' : $json.transition_key === 'uiux_to_fe' ? 'ready_for_fe' : 'done' }}"
+            },
+            {
+              "name": "next_owner",
+              "value": "={{ $json.transition_key === 'planner_to_uiux' ? $json.uiux_owner : $json.transition_key === 'uiux_to_fe' ? $json.fe_owner : 'none' }}"
+            },
+            {
+              "name": "handoff_message",
+              "value": "={{ '[역할 핸드오프]\\n기능: ' + $json.feature_name + '\\n이전 단계: ' + ($json.transition_key === 'planner_to_uiux' ? 'ready_for_planner' : $json.transition_key === 'uiux_to_fe' ? 'ready_for_uiux' : 'ready_for_fe') + '\\n다음 단계: ' + ($json.transition_key === 'planner_to_uiux' ? 'ready_for_uiux' : $json.transition_key === 'uiux_to_fe' ? 'ready_for_fe' : 'done') + '\\n다음 담당: ' + ($json.transition_key === 'planner_to_uiux' ? $json.uiux_owner : $json.transition_key === 'uiux_to_fe' ? $json.fe_owner : 'none') }}"
+            }
+          ]
+        }
+      },
+      "id": "set-handoff",
+      "name": "Set Handoff Result",
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 2,
+      "position": [
+        820,
+        300
+      ]
+    },
+    {
+      "parameters": {
+        "respondWith": "json",
+        "responseBody": "={\"ok\": true, \"feature_name\": \"{{$json.feature_name}}\", \"from_stage\": \"{{$json.from_stage}}\", \"to_stage\": \"{{$json.to_stage}}\", \"next_owner\": \"{{$json.next_owner}}\", \"message\": \"{{$json.handoff_message}}\"}",
+        "options": {}
+      },
+      "id": "respond-webhook",
+      "name": "Respond JSON",
+      "type": "n8n-nodes-base.respondToWebhook",
+      "typeVersion": 1,
+      "position": [
+        1100,
+        300
+      ]
+    }
+  ],
+  "connections": {
+    "Webhook Trigger": {
+      "main": [
+        [
+          {
+            "node": "Set Input From Webhook",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Set Input From Webhook": {
+      "main": [
+        [
+          {
+            "node": "Set Handoff Result",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Set Handoff Result": {
+      "main": [
+        [
+          {
+            "node": "Respond JSON",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "active": false,
+  "settings": {},
+  "meta": {
+    "templateCredsSetupCompleted": false
+  }
+}

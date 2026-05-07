@@ -66,7 +66,7 @@ export function Pagination({
   return (
     <div
       className={
-        "flex h-16 items-center justify-center gap-8 border-t border-slate-100 bg-white rounded-b-2xl " +
+        "flex h-16 items-center justify-center gap-8 border-t border-divider-10 bg-white rounded-b-[4px] " +
         (className ?? "")
       }
     >

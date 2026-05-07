@@ -1,0 +1,190 @@
+{
+  "name": "Handoff: Webhook Form UI",
+  "nodes": [
+    {
+      "parameters": {
+        "httpMethod": "GET",
+        "path": "handoff-form",
+        "responseMode": "responseNode",
+        "options": {}
+      },
+      "id": "webhook-form-get",
+      "name": "Webhook Form (GET)",
+      "type": "n8n-nodes-base.webhook",
+      "typeVersion": 2,
+      "position": [
+        220,
+        180
+      ],
+      "webhookId": "handoff-form-get"
+    },
+    {
+      "parameters": {
+        "respondWith": "text",
+        "responseBody": "<!doctype html><html lang=\"ko\"><head><meta charset=\"utf-8\"/><meta name=\"viewport\" content=\"width=device-width,initial-scale=1\"/><title>역할 핸드오프</title><style>body{font-family:Arial,sans-serif;background:#f5f6f8;margin:0;padding:24px} .card{max-width:720px;margin:0 auto;background:#fff;border:1px solid #e5e7eb;border-radius:10px;padding:20px} h1{font-size:20px;margin:0 0 16px} label{display:block;font-size:13px;color:#374151;margin:12px 0 6px} input,select{width:100%;height:40px;border:1px solid #d1d5db;border-radius:8px;padding:0 12px;box-sizing:border-box} button{margin-top:16px;height:40px;padding:0 16px;border:none;border-radius:8px;background:#111827;color:#fff;cursor:pointer} .hint{margin-top:12px;color:#6b7280;font-size:12px}</style></head><body><div class=\"card\"><h1>역할 핸드오프 전환</h1><form method=\"POST\" action=\"./handoff-form-submit\"><label>기능명</label><input name=\"feature_name\" value=\"내 작품 캐릭터 삭제 확인 모달\"/><label>전환 키</label><select name=\"transition_key\"><option value=\"planner_to_uiux\">planner_to_uiux</option><option value=\"uiux_to_fe\">uiux_to_fe</option><option value=\"fe_to_done\">fe_to_done</option></select><label>기획 담당</label><input name=\"planner_owner\" value=\"planner-ai\"/><label>UIUX 담당</label><input name=\"uiux_owner\" value=\"uiux-ai\"/><label>FE 담당</label><input name=\"fe_owner\" value=\"fe-ai\"/><button type=\"submit\">전환 실행</button></form><div class=\"hint\">제출 후 JSON 결과가 표시됩니다.</div></div></body></html>",
+        "options": {}
+      },
+      "id": "respond-form-html",
+      "name": "Respond Form HTML",
+      "type": "n8n-nodes-base.respondToWebhook",
+      "typeVersion": 1,
+      "position": [
+        520,
+        180
+      ]
+    },
+    {
+      "parameters": {
+        "httpMethod": "POST",
+        "path": "handoff-form-submit",
+        "responseMode": "responseNode",
+        "options": {}
+      },
+      "id": "webhook-form-post",
+      "name": "Webhook Form Submit (POST)",
+      "type": "n8n-nodes-base.webhook",
+      "typeVersion": 2,
+      "position": [
+        220,
+        440
+      ],
+      "webhookId": "handoff-form-post"
+    },
+    {
+      "parameters": {
+        "keepOnlySet": true,
+        "values": {
+          "string": [
+            {
+              "name": "feature_name",
+              "value": "={{ $json.body?.feature_name || '기능명을 입력하세요' }}"
+            },
+            {
+              "name": "transition_key",
+              "value": "={{ $json.body?.transition_key || 'planner_to_uiux' }}"
+            },
+            {
+              "name": "planner_owner",
+              "value": "={{ $json.body?.planner_owner || 'planner-ai' }}"
+            },
+            {
+              "name": "uiux_owner",
+              "value": "={{ $json.body?.uiux_owner || 'uiux-ai' }}"
+            },
+            {
+              "name": "fe_owner",
+              "value": "={{ $json.body?.fe_owner || 'fe-ai' }}"
+            }
+          ]
+        }
+      },
+      "id": "set-input",
+      "name": "Set Input From Form",
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 2,
+      "position": [
+        520,
+        440
+      ]
+    },
+    {
+      "parameters": {
+        "keepOnlySet": false,
+        "values": {
+          "string": [
+            {
+              "name": "from_stage",
+              "value": "={{ $json.transition_key === 'planner_to_uiux' ? 'ready_for_planner' : $json.transition_key === 'uiux_to_fe' ? 'ready_for_uiux' : 'ready_for_fe' }}"
+            },
+            {
+              "name": "to_stage",
+              "value": "={{ $json.transition_key === 'planner_to_uiux' ? 'ready_for_uiux' : $json.transition_key === 'uiux_to_fe' ? 'ready_for_fe' : 'done' }}"
+            },
+            {
+              "name": "next_owner",
+              "value": "={{ $json.transition_key === 'planner_to_uiux' ? $json.uiux_owner : $json.transition_key === 'uiux_to_fe' ? $json.fe_owner : 'none' }}"
+            },
+            {
+              "name": "handoff_message",
+              "value": "={{ '[역할 핸드오프]\\n기능: ' + $json.feature_name + '\\n이전 단계: ' + ($json.transition_key === 'planner_to_uiux' ? 'ready_for_planner' : $json.transition_key === 'uiux_to_fe' ? 'ready_for_uiux' : 'ready_for_fe') + '\\n다음 단계: ' + ($json.transition_key === 'planner_to_uiux' ? 'ready_for_uiux' : $json.transition_key === 'uiux_to_fe' ? 'ready_for_fe' : 'done') + '\\n다음 담당: ' + ($json.transition_key === 'planner_to_uiux' ? $json.uiux_owner : $json.transition_key === 'uiux_to_fe' ? $json.fe_owner : 'none') }}"
+            }
+          ]
+        }
+      },
+      "id": "set-result",
+      "name": "Set Handoff Result",
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 2,
+      "position": [
+        820,
+        440
+      ]
+    },
+    {
+      "parameters": {
+        "respondWith": "text",
+        "responseBody": "={{ '<!doctype html><html lang=\"ko\"><head><meta charset=\"utf-8\"/><meta name=\"viewport\" content=\"width=device-width,initial-scale=1\"/><title>핸드오프 완료</title><style>body{font-family:Arial,sans-serif;background:#f5f6f8;margin:0;padding:24px}.card{max-width:760px;margin:0 auto;background:#fff;border:1px solid #e5e7eb;border-radius:10px;padding:20px}h1{font-size:20px;margin:0 0 14px}.row{margin:8px 0;font-size:14px;color:#111827}.label{display:inline-block;width:90px;color:#6b7280}.msg{margin-top:14px;white-space:pre-line;background:#f9fafb;border:1px solid #e5e7eb;border-radius:8px;padding:12px}.btns{margin-top:16px;display:flex;gap:8px;align-items:center}.btn{display:inline-block;padding:8px 12px;border-radius:8px;text-decoration:none;border:1px solid #d1d5db;color:#111827;background:#fff;cursor:pointer}.btn-primary{background:#111827;color:#fff;border-color:#111827}.hint-inline{font-size:12px;color:#6b7280}</style></head><body><div class=\"card\"><h1>역할 핸드오프 완료</h1><div class=\"row\"><span class=\"label\">기능명</span><strong>' + $json.feature_name + '</strong></div><div class=\"row\"><span class=\"label\">이전 단계</span>' + $json.from_stage + '</div><div class=\"row\"><span class=\"label\">다음 단계</span>' + $json.to_stage + '</div><div class=\"row\"><span class=\"label\">다음 담당</span>' + $json.next_owner + '</div><div class=\"msg\" id=\"handoff-message\">' + $json.handoff_message + '</div><div class=\"btns\"><button class=\"btn\" type=\"button\" onclick=\"copyHandoffMessage()\">메시지 복사</button><a class=\"btn btn-primary\" href=\"javascript:history.back()\">다시 입력</a><span id=\"copy-status\" class=\"hint-inline\"></span></div></div><script>function copyHandoffMessage(){var text=document.getElementById(\"handoff-message\").innerText;var status=document.getElementById(\"copy-status\");navigator.clipboard.writeText(text).then(function(){status.textContent=\"복사 완료\";setTimeout(function(){status.textContent=\"\";},1200);}).catch(function(){status.textContent=\"복사 실패\";});}</script></body></html>' }}",
+        "options": {}
+      },
+      "id": "respond-submit-html",
+      "name": "Respond Result HTML",
+      "type": "n8n-nodes-base.respondToWebhook",
+      "typeVersion": 1,
+      "position": [
+        1120,
+        440
+      ]
+    }
+  ],
+  "connections": {
+    "Webhook Form (GET)": {
+      "main": [
+        [
+          {
+            "node": "Respond Form HTML",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Webhook Form Submit (POST)": {
+      "main": [
+        [
+          {
+            "node": "Set Input From Form",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Set Input From Form": {
+      "main": [
+        [
+          {
+            "node": "Set Handoff Result",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Set Handoff Result": {
+      "main": [
+        [
+          {
+            "node": "Respond Result HTML",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "active": false,
+  "settings": {},
+  "meta": {
+    "templateCredsSetupCompleted": false
+  }
+}

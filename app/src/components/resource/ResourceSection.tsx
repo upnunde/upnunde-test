@@ -16,6 +16,8 @@ export interface ResourceSectionProps {
   onAddClick: () => void;
   /** 설명 텍스트 색상 커스터마이징 (현재는 미반영, 호환용) */
   descriptionColorClassName?: string;
+  /** 섹션 헤더 우측 액션 영역 (예: 캐릭터 가져오기 버튼) */
+  headerAction?: React.ReactNode;
 }
 
 export function ResourceSection({
@@ -27,15 +29,23 @@ export function ResourceSection({
   children,
   onAddClick,
   descriptionColorClassName: _descriptionColorClassName,
+  headerAction,
 }: ResourceSectionProps) {
   return (
     <div className="w-full max-w-[1200px] min-w-[640px] bg-surface-10 rounded-[4px] border border-border-10 flex flex-col justify-start items-start">
-      <Title2
-        text={title}
-        asSectionHeader
-        subtitle
-        subtitleText={description}
-      />
+      {headerAction ? (
+        <div
+          className="w-full h-fit px-5 py-3 border-b border-border-10/5 flex items-center justify-between gap-3"
+          style={{ borderBottomColor: "rgba(0, 0, 0, 0.07)" }}
+        >
+          <div className="min-w-0 flex-1">
+            <Title2 text={title} subtitle subtitleText={description} />
+          </div>
+          {headerAction}
+        </div>
+      ) : (
+        <Title2 text={title} asSectionHeader subtitle subtitleText={description} />
+      )}
       {isEmpty ? (
         <div className="self-stretch h-36 p-5 rounded-[4px] flex flex-col justify-center items-center gap-4">
           <p className="text-on-surface-30 text-sm font-normal font-['Pretendard_JP'] leading-5">

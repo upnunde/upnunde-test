@@ -30,6 +30,10 @@ import {
   analyticsScopeChipInactiveClassName,
 } from "@/components/analytics/analytics-filter-chips";
 import {
+  AnalyticsTopFiveRowList,
+  type AnalyticsTopFiveRow,
+} from "@/components/analytics/AnalyticsRankParts";
+import {
   ANALYTICS_SCOPE_CHIPS,
   type AnalyticsScopeCategoryId,
 } from "@/components/analytics/analytics-scope-category";
@@ -117,6 +121,22 @@ const MONETIZATION_REVENUE_BY_PERIOD: Record<AnalyticsPeriodRange, number> = {
   "365d": 18_790_000,
   all: MONETIZATION_TOTAL_REVENUE_ALL,
 };
+
+const MONETIZATION_REVENUE_TOP5: AnalyticsTopFiveRow[] = [
+  { rank: 1, badge: "캐릭터", title: "캐릭터 A 심층 설정", tone: "character", countLabel: "12,840,000", countSuffix: "원" },
+  { rank: 2, badge: "상황공략", title: "상황공략 #12 첫 대화", tone: "scenario", countLabel: "8,210,000", countSuffix: "원" },
+  { rank: 3, badge: "시리즈", title: "캐릭터 B 스페셜 에피소드", tone: "series", countLabel: "5,930,000", countSuffix: "원" },
+  { rank: 4, badge: "시리즈", title: "주말 한정 에피소드", tone: "seriesBlue", countLabel: "3,420,000", countSuffix: "원" },
+  { rank: 5, badge: "상황공략", title: "상황공략 #08 후속편", tone: "scenario", countLabel: "1,924,000", countSuffix: "원" },
+];
+
+const MONETIZATION_REVENUE_LOW5: AnalyticsTopFiveRow[] = [
+  { rank: 1, badge: "시리즈", title: "튜토리얼 프롤로그", tone: "series", countLabel: "84,000", countSuffix: "원" },
+  { rank: 2, badge: "캐릭터", title: "캐릭터 C 서브 설정", tone: "character", countLabel: "96,000", countSuffix: "원" },
+  { rank: 3, badge: "상황공략", title: "상황공략 #03", tone: "scenario", countLabel: "122,000", countSuffix: "원" },
+  { rank: 4, badge: "시리즈", title: "재편집 하이라이트", tone: "seriesBlue", countLabel: "149,000", countSuffix: "원" },
+  { rank: 5, badge: "캐릭터", title: "캐릭터 D 첫 공개", tone: "character", countLabel: "181,000", countSuffix: "원" },
+];
 
 const MONETIZATION_REVENUE_PREV_BY_PERIOD: Record<AnalyticsPeriodRange, number | null> = {
   "7d": 462_000,
@@ -351,6 +371,17 @@ export function MonetizationDashboard() {
             />
           </div>
         </AnalyticsPanel>
+
+        <div className="flex w-full flex-col items-stretch gap-5 lg:flex-row">
+          <AnalyticsPanel className="w-full min-w-0 flex-1 lg:min-w-[260px]">
+            <Title2 text="매출 기여 콘텐츠 TOP5" variant="title" asSectionHeader />
+            <AnalyticsTopFiveRowList rows={MONETIZATION_REVENUE_TOP5} />
+          </AnalyticsPanel>
+          <AnalyticsPanel className="w-full min-w-0 flex-1 lg:min-w-[260px]">
+            <Title2 text="개선 필요 콘텐츠 TOP5" variant="title" asSectionHeader />
+            <AnalyticsTopFiveRowList rows={MONETIZATION_REVENUE_LOW5} />
+          </AnalyticsPanel>
+        </div>
       </div>
     </div>
   );

@@ -230,11 +230,7 @@ export function CharacterDetailPage({ isNew = true, initialData }: CharacterDeta
       <div className="flex-1 overflow-y-auto flex flex-col items-center py-8 px-10 gap-4">
         <div className="w-full max-w-[1200px] min-w-[640px] mx-auto">
           <div className="w-full rounded-[4px] border border-border-10 bg-white">
-            <Title2
-              text="인물정보"
-              asSectionHeader
-              className="px-8"
-            />
+            <Title2 text="인물정보" asSectionHeader className="px-8" />
 
             <div className="px-8 py-8 flex flex-col gap-8">
               {/* 이름 */}

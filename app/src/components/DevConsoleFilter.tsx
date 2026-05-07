@@ -2,8 +2,10 @@
 
 import { useEffect } from "react";
 
-const PARAMS_PROMISE_ENUMERATION_ERROR =
-  "params are being enumerated. `params` is a Promise and must be unwrapped with `React.use()` before accessing its properties.";
+const BLOCKED_DYNAMIC_API_ERRORS = [
+  "params are being enumerated. `params` is a Promise and must be unwrapped with `React.use()` before accessing its properties.",
+  "The keys of `searchParams` were accessed directly. `searchParams` is a Promise and must be unwrapped with `React.use()` before accessing its properties.",
+];
 
 export default function DevConsoleFilter() {
   useEffect(() => {
@@ -12,10 +14,12 @@ export default function DevConsoleFilter() {
     const originalConsoleError = window.console.error;
 
     window.console.error = (...args: unknown[]) => {
-      const firstArg = args[0];
-      const message = typeof firstArg === "string" ? firstArg : "";
+      const hasBlockedMessage = args.some((arg) => {
+        if (typeof arg !== "string") return false;
+        return BLOCKED_DYNAMIC_API_ERRORS.some((blocked) => arg.includes(blocked));
+      });
 
-      if (message.includes(PARAMS_PROMISE_ENUMERATION_ERROR)) {
+      if (hasBlockedMessage) {
         return;
       }
 

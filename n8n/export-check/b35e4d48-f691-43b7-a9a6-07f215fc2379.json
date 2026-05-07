@@ -1,0 +1,176 @@
+{
+  "updatedAt": "2026-05-07T06:14:07.158Z",
+  "createdAt": "2026-05-07T06:14:07.158Z",
+  "id": "b35e4d48-f691-43b7-a9a6-07f215fc2379",
+  "name": "Role Handoff Checklist (Template)",
+  "description": null,
+  "active": false,
+  "isArchived": false,
+  "nodes": [
+    {
+      "parameters": {},
+      "id": "manual-trigger",
+      "name": "Manual Trigger",
+      "type": "n8n-nodes-base.manualTrigger",
+      "typeVersion": 1,
+      "position": [
+        260,
+        280
+      ]
+    },
+    {
+      "parameters": {
+        "keepOnlySet": true,
+        "values": {
+          "string": [
+            {
+              "name": "feature_name",
+              "value": "내 작품 캐릭터 삭제 확인 모달"
+            },
+            {
+              "name": "planner_owner",
+              "value": "planner-ai"
+            },
+            {
+              "name": "uiux_owner",
+              "value": "uiux-ai"
+            },
+            {
+              "name": "fe_owner",
+              "value": "fe-ai"
+            },
+            {
+              "name": "handoff_status",
+              "value": "ready_for_planner"
+            }
+          ]
+        }
+      },
+      "id": "set-context",
+      "name": "Set Context",
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 2,
+      "position": [
+        520,
+        280
+      ],
+      "notes": "handoff_status 값만 바꿔 실행하면 다음 단계가 계산됩니다. 허용값: ready_for_planner | ready_for_uiux | ready_for_fe"
+    },
+    {
+      "parameters": {
+        "keepOnlySet": false,
+        "values": {
+          "string": [
+            {
+              "name": "next_handoff_status",
+              "value": "={{ $json.handoff_status === 'ready_for_planner' ? 'ready_for_uiux' : $json.handoff_status === 'ready_for_uiux' ? 'ready_for_fe' : $json.handoff_status === 'ready_for_fe' ? 'done' : 'ready_for_planner' }}"
+            },
+            {
+              "name": "next_owner",
+              "value": "={{ $json.handoff_status === 'ready_for_planner' ? $json.uiux_owner : $json.handoff_status === 'ready_for_uiux' ? $json.fe_owner : $json.handoff_status === 'ready_for_fe' ? 'none' : $json.planner_owner }}"
+            },
+            {
+              "name": "handoff_message",
+              "value": "={{ '[역할 핸드오프]\\n기능: ' + $json.feature_name + '\\n현재 단계: ' + $json.handoff_status + '\\n다음 단계: ' + ($json.handoff_status === 'ready_for_planner' ? 'ready_for_uiux' : $json.handoff_status === 'ready_for_uiux' ? 'ready_for_fe' : $json.handoff_status === 'ready_for_fe' ? 'done' : 'ready_for_planner') + '\\n다음 담당: ' + ($json.handoff_status === 'ready_for_planner' ? $json.uiux_owner : $json.handoff_status === 'ready_for_uiux' ? $json.fe_owner : $json.handoff_status === 'ready_for_fe' ? 'none' : $json.planner_owner) }}"
+            }
+          ]
+        }
+      },
+      "id": "set-next-handoff",
+      "name": "Set Next Handoff",
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 2,
+      "position": [
+        780,
+        280
+      ]
+    },
+    {
+      "parameters": {
+        "resource": "message",
+        "operation": "post",
+        "channel": "YOUR_SLACK_CHANNEL_ID",
+        "text": "={{ $json.handoff_message }}"
+      },
+      "id": "slack-notify",
+      "name": "Slack Notify (Optional)",
+      "type": "n8n-nodes-base.slack",
+      "typeVersion": 2.2,
+      "position": [
+        1040,
+        280
+      ],
+      "disabled": true,
+      "notes": "Slack credential/channel 설정 후 활성화"
+    }
+  ],
+  "connections": {
+    "Manual Trigger": {
+      "main": [
+        [
+          {
+            "node": "Set Context",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Set Context": {
+      "main": [
+        [
+          {
+            "node": "Set Next Handoff",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Set Next Handoff": {
+      "main": [
+        [
+          {
+            "node": "Slack Notify (Optional)",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "settings": {},
+  "staticData": null,
+  "meta": {
+    "templateCredsSetupCompleted": false
+  },
+  "pinData": null,
+  "versionId": "79d4a82f-6d8a-4de6-bb57-4535646231bd",
+  "activeVersionId": null,
+  "versionCounter": 1,
+  "triggerCount": 0,
+  "tags": [],
+  "shared": [
+    {
+      "updatedAt": "2026-05-07T06:14:07.161Z",
+      "createdAt": "2026-05-07T06:14:07.161Z",
+      "role": "workflow:owner",
+      "workflowId": "b35e4d48-f691-43b7-a9a6-07f215fc2379",
+      "projectId": "KOnrhqfGUP1nA891",
+      "project": {
+        "updatedAt": "2026-05-07T05:20:53.651Z",
+        "createdAt": "2026-05-07T05:20:53.651Z",
+        "id": "KOnrhqfGUP1nA891",
+        "name": "Unnamed Project",
+        "type": "personal",
+        "icon": null,
+        "description": null,
+        "creatorId": "33d17006-5fec-478d-a7d7-28bdc4b4b96d"
+      }
+    }
+  ],
+  "versionMetadata": {
+    "name": null,
+    "description": null
+  }
+}

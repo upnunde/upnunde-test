@@ -1,0 +1,101 @@
+{
+  "name": "Handoff: UIUX -> FE",
+  "nodes": [
+    {
+      "parameters": {},
+      "id": "manual-trigger",
+      "name": "Manual Trigger",
+      "type": "n8n-nodes-base.manualTrigger",
+      "typeVersion": 1,
+      "position": [
+        260,
+        280
+      ]
+    },
+    {
+      "parameters": {
+        "keepOnlySet": true,
+        "values": {
+          "string": [
+            {
+              "name": "feature_name",
+              "value": "기능명을 입력하세요"
+            },
+            {
+              "name": "from_stage",
+              "value": "ready_for_uiux"
+            },
+            {
+              "name": "to_stage",
+              "value": "ready_for_fe"
+            },
+            {
+              "name": "next_owner",
+              "value": "fe-ai"
+            },
+            {
+              "name": "handoff_message",
+              "value": "=[역할 핸드오프]\\n기능: {{$json.feature_name}}\\n이전 단계: {{$json.from_stage}}\\n다음 단계: {{$json.to_stage}}\\n다음 담당: {{$json.next_owner}}"
+            }
+          ]
+        }
+      },
+      "id": "set-context",
+      "name": "Set UIUX -> FE",
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 2,
+      "position": [
+        560,
+        280
+      ],
+      "notes": "feature_name, next_owner 값을 실행 전에 프로젝트에 맞게 수정"
+    },
+    {
+      "parameters": {
+        "resource": "message",
+        "operation": "post",
+        "channel": "YOUR_SLACK_CHANNEL_ID",
+        "text": "={{ $json.handoff_message }}"
+      },
+      "id": "slack-notify",
+      "name": "Slack Notify (Optional)",
+      "type": "n8n-nodes-base.slack",
+      "typeVersion": 2.2,
+      "position": [
+        860,
+        280
+      ],
+      "disabled": true,
+      "notes": "Slack credential/channel 설정 후 활성화"
+    }
+  ],
+  "connections": {
+    "Manual Trigger": {
+      "main": [
+        [
+          {
+            "node": "Set UIUX -> FE",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Set UIUX -> FE": {
+      "main": [
+        [
+          {
+            "node": "Slack Notify (Optional)",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "active": false,
+  "settings": {},
+  "meta": {
+    "templateCredsSetupCompleted": false
+  }
+}

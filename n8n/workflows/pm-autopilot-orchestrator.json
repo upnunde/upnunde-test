@@ -1,0 +1,235 @@
+{
+  "name": "PM Autopilot Orchestrator",
+  "nodes": [
+    {
+      "parameters": {
+        "httpMethod": "POST",
+        "path": "pm-autopilot",
+        "responseMode": "responseNode",
+        "options": {}
+      },
+      "id": "webhook-trigger",
+      "name": "PM Request (Webhook)",
+      "type": "n8n-nodes-base.webhook",
+      "typeVersion": 2,
+      "position": [
+        240,
+        280
+      ],
+      "webhookId": "pm-autopilot"
+    },
+    {
+      "parameters": {
+        "keepOnlySet": true,
+        "values": {
+          "string": [
+            {
+              "name": "request_id",
+              "value": "={{ 'req-' + Date.now() }}"
+            },
+            {
+              "name": "feature_name",
+              "value": "={{ $json.body?.feature_name || $json.query?.feature_name || '기능명을 입력해 주세요' }}"
+            },
+            {
+              "name": "pm_note",
+              "value": "={{ $json.body?.pm_note || $json.query?.pm_note || '' }}"
+            },
+            {
+              "name": "planner_owner",
+              "value": "={{ $json.body?.planner_owner || 'planner-ai' }}"
+            },
+            {
+              "name": "uiux_owner",
+              "value": "={{ $json.body?.uiux_owner || 'uiux-ai' }}"
+            },
+            {
+              "name": "fe_owner",
+              "value": "={{ $json.body?.fe_owner || 'fe-ai' }}"
+            },
+            {
+              "name": "created_at",
+              "value": "={{ new Date().toISOString() }}"
+            }
+          ]
+        }
+      },
+      "id": "set-input",
+      "name": "Normalize PM Input",
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 2,
+      "position": [
+        520,
+        280
+      ]
+    },
+    {
+      "parameters": {
+        "keepOnlySet": false,
+        "values": {
+          "string": [
+            {
+              "name": "planner_task_title",
+              "value": "={{ '[Planner] ' + $json.feature_name }}"
+            },
+            {
+              "name": "planner_task_desc",
+              "value": "={{ '요청ID: ' + $json.request_id + '\\n역할: 기획\\n목표: 요구사항/예외/완료조건 정리\\nPM 메모: ' + ($json.pm_note || '-') }}"
+            },
+            {
+              "name": "planner_status",
+              "value": "created"
+            }
+          ]
+        }
+      },
+      "id": "planner-stage",
+      "name": "Create Planner Stage",
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 2,
+      "position": [
+        780,
+        280
+      ]
+    },
+    {
+      "parameters": {
+        "keepOnlySet": false,
+        "values": {
+          "string": [
+            {
+              "name": "uiux_task_title",
+              "value": "={{ '[UIUX] ' + $json.feature_name }}"
+            },
+            {
+              "name": "uiux_task_desc",
+              "value": "={{ '요청ID: ' + $json.request_id + '\\n역할: UIUX\\n입력: planner 산출물\\n목표: IA/상태/카피/상호작용 정의' }}"
+            },
+            {
+              "name": "uiux_status",
+              "value": "queued"
+            }
+          ]
+        }
+      },
+      "id": "uiux-stage",
+      "name": "Queue UIUX Stage",
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 2,
+      "position": [
+        1040,
+        280
+      ]
+    },
+    {
+      "parameters": {
+        "keepOnlySet": false,
+        "values": {
+          "string": [
+            {
+              "name": "fe_task_title",
+              "value": "={{ '[FE] ' + $json.feature_name }}"
+            },
+            {
+              "name": "fe_task_desc",
+              "value": "={{ '요청ID: ' + $json.request_id + '\\n역할: FE\\n입력: uiux 산출물\\n목표: 구현/검증/배포준비' }}"
+            },
+            {
+              "name": "fe_status",
+              "value": "queued"
+            },
+            {
+              "name": "pipeline_status",
+              "value": "planner_created_uiux_queued_fe_queued"
+            }
+          ]
+        }
+      },
+      "id": "fe-stage",
+      "name": "Queue FE Stage",
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 2,
+      "position": [
+        1300,
+        280
+      ]
+    },
+    {
+      "parameters": {
+        "respondWith": "json",
+        "responseBody": "={{ { ok: true, request_id: $json.request_id, feature_name: $json.feature_name, created_at: $json.created_at, routing: { planner: { owner: $json.planner_owner, task_title: $json.planner_task_title, status: $json.planner_status }, uiux: { owner: $json.uiux_owner, task_title: $json.uiux_task_title, status: $json.uiux_status }, fe: { owner: $json.fe_owner, task_title: $json.fe_task_title, status: $json.fe_status } }, pipeline_status: $json.pipeline_status, next_action: 'planner 단계 작업 시작' } }}",
+        "options": {}
+      },
+      "id": "respond-json",
+      "name": "Respond Orchestration Result",
+      "type": "n8n-nodes-base.respondToWebhook",
+      "typeVersion": 1,
+      "position": [
+        1580,
+        280
+      ]
+    }
+  ],
+  "connections": {
+    "PM Request (Webhook)": {
+      "main": [
+        [
+          {
+            "node": "Normalize PM Input",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Normalize PM Input": {
+      "main": [
+        [
+          {
+            "node": "Create Planner Stage",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Create Planner Stage": {
+      "main": [
+        [
+          {
+            "node": "Queue UIUX Stage",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Queue UIUX Stage": {
+      "main": [
+        [
+          {
+            "node": "Queue FE Stage",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Queue FE Stage": {
+      "main": [
+        [
+          {
+            "node": "Respond Orchestration Result",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "active": false,
+  "settings": {},
+  "meta": {
+    "templateCredsSetupCompleted": false
+  }
+}

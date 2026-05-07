@@ -2,6 +2,7 @@
 
 import React, { useCallback, useState } from "react";
 import { CharacterList } from "@/components/character/CharacterList";
+import { CharacterDeleteModal } from "@/components/character/CharacterDeleteModal";
 import type { CharacterData } from "@/types/character";
 
 const MOCK_CHARACTERS: CharacterData[] = [
@@ -45,6 +46,7 @@ const MOCK_CHARACTERS: CharacterData[] = [
  */
 export default function WorksCharacterListPage() {
   const [characters, setCharacters] = useState<CharacterData[]>(MOCK_CHARACTERS);
+  const [characterToDelete, setCharacterToDelete] = useState<CharacterData | null>(null);
 
   const handleDelete = useCallback((target: CharacterData) => {
     setCharacters((prev) => prev.filter((c) => c.id !== target.id));
@@ -63,17 +65,29 @@ export default function WorksCharacterListPage() {
   }, []);
 
   return (
-    <CharacterList
-      characters={characters}
-      onCharacterSettings={() => {
-        // TODO: 캐릭터 설정 화면 연결
-      }}
-      onSetPrivate={handleSetPrivate}
-      onSetPublic={handleSetPublic}
-      onDelete={handleDelete}
-      onCreateCharacter={() => {
-        // TODO: 새 캐릭터 생성 플로우
-      }}
-    />
+    <>
+      <CharacterList
+        characters={characters}
+        onCharacterSettings={() => {
+          // TODO: 캐릭터 설정 화면 연결
+        }}
+        onSetPrivate={handleSetPrivate}
+        onSetPublic={handleSetPublic}
+        onDelete={(character) => setCharacterToDelete(character)}
+        onCreateCharacter={() => {
+          // TODO: 새 캐릭터 생성 플로우
+        }}
+      />
+
+      <CharacterDeleteModal
+        open={!!characterToDelete}
+        character={characterToDelete}
+        onClose={() => setCharacterToDelete(null)}
+        onConfirm={(character) => {
+          handleDelete(character);
+          setCharacterToDelete(null);
+        }}
+      />
+    </>
   );
 }

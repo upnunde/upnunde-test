@@ -9,7 +9,12 @@
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "dev": "cd app && npm run dev",
-    "clean": "cd app && npm run clean"
+    "clean": "cd app && npm run clean",
+    "n8n:up": "docker compose --env-file n8n/.env -f n8n/docker-compose.yml up -d",
+    "n8n:down": "docker compose --env-file n8n/.env -f n8n/docker-compose.yml down",
+    "n8n:logs": "docker compose --env-file n8n/.env -f n8n/docker-compose.yml logs -f",
+    "n8n:restart": "npm run n8n:down && npm run n8n:up",
+    "pm:req": "node scripts/pm-request.mjs"
   },
   "dependencies": {
     "@dnd-kit/core": "^6.3.1",
