@@ -2,11 +2,9 @@
 
 import React, { useMemo, useState, useCallback, useEffect } from "react";
 import dynamic from "next/dynamic";
-import Image from "next/image";
 import { useRouter, usePathname } from "next/navigation";
 import { ChevronLeft } from "lucide-react";
 import { Button } from "@/components/ui/button";
-import { Dialog, DialogContent, DialogTitle } from "@/components/ui/dialog";
 import { ResourceBanner } from "./ResourceBanner";
 import { ResourceSection } from "./ResourceSection";
 import { CharacterCard } from "./cards/CharacterCard";
@@ -59,26 +57,6 @@ const ROUTES = {
 } as const;
 
 const MOCK_HAS_RESOURCES = true;
-const IMPORTABLE_CHARACTERS: Array<Pick<CharacterResource, "id" | "name" | "summary" | "imageUrl">> = [
-  {
-    id: "c1",
-    name: "눈싸움 달인 그레이브즈",
-    summary: "뭐, 좋은 생각이라도 있어?",
-    imageUrl: "/characters/graves-winter-splash.png",
-  },
-  {
-    id: "c2",
-    name: "(구) 리신",
-    summary: "앞을 못 보게 된 건 용의 분노를 일깨우려다 혹독한 대가를 치른 것이라오",
-    imageUrl: "/characters/leesin-splash.png",
-  },
-  {
-    id: "c3",
-    name: "이터늄 녹턴",
-    summary: "어둠을... 맞이하라...!",
-    imageUrl: "/characters/eternum-nocturne-splash.png",
-  },
-];
 
 /** 3~5분 랜덤 duration "MM:SS" */
 function randomBgmDuration(): string {
@@ -140,9 +118,6 @@ export function ResourceManagementPage() {
   const [bgm, setBgm] = useState<BgmResource[]>(initialBgm);
   const [showAllScenes, _setShowAllScenes] = useState(false);
   const [showAllGallery, _setShowAllGallery] = useState(false);
-  const [importCharacterModalOpen, setImportCharacterModalOpen] = useState(false);
-  const [selectedImportCharacterId, setSelectedImportCharacterId] = useState<string | null>(null);
-
   const [deleteModal, setDeleteModal] = useState<{
     open: boolean;
     category: ResourceCategory;
@@ -204,32 +179,6 @@ export function ResourceManagementPage() {
     [router]
   );
 
-  const handleOpenImportCharacterModal = useCallback(() => {
-    setSelectedImportCharacterId((prev) => prev ?? IMPORTABLE_CHARACTERS[0]?.id ?? null);
-    setImportCharacterModalOpen(true);
-  }, []);
-
-  const handleApplyImportedCharacter = useCallback(() => {
-    const selected = IMPORTABLE_CHARACTERS.find((c) => c.id === selectedImportCharacterId);
-    if (!selected) return;
-
-    setCharacters((prev) => {
-      const duplicated = prev.some((c) => c.name === selected.name && c.imageUrl === selected.imageUrl);
-      if (duplicated) return prev;
-      return [
-        ...prev,
-        {
-          id: `import-${selected.id}-${Date.now()}`,
-          name: selected.name,
-          imageUrl: selected.imageUrl,
-          summary: selected.summary,
-        },
-      ];
-    });
-
-    setImportCharacterModalOpen(false);
-  }, [selectedImportCharacterId]);
-
   const visibleScenes = showAllScenes ? scenes : scenes.slice(0, 6);
   const visibleGallery = showAllGallery ? gallery : gallery.slice(0, 6);
 
@@ -289,16 +238,6 @@ export function ResourceManagementPage() {
               isEmpty={characters.length === 0}
               descriptionColorClassName="text-on-surface-30"
               onAddClick={() => navigateTo(ROUTES.character.new(seriesId))}
-              headerAction={
-                <Button
-                  type="button"
-                  variant="outline"
-                  onClick={handleOpenImportCharacterModal}
-                  className="h-9 rounded-md border-border-10 bg-white px-3 text-sm font-medium text-on-surface-10 hover:bg-surface-20"
-                >
-                  캐릭터 가져오기
-                </Button>
-              }
             >
               <div className="self-stretch p-0 rounded-[4px] inline-flex justify-start items-start gap-4 flex-wrap content-start">
                 {characters.map((c) => (
@@ -520,71 +459,6 @@ export function ResourceManagementPage() {
         }}
       />
 
-      <Dialog open={importCharacterModalOpen} onOpenChange={setImportCharacterModalOpen}>
-        <DialogContent className="w-[680px] max-w-[calc(100vw-2rem)] rounded-[4px] border border-border-10 bg-white p-0">
-          <div className="border-b border-border-10/5 px-5 py-3">
-            <DialogTitle className="text-base font-bold leading-6 text-on-surface-10">
-              캐릭터 가져오기
-            </DialogTitle>
-            <p className="mt-1 text-sm text-on-surface-30">
-              내 작품 캐릭터 중 하나를 선택해 등장인물 목록에 추가해 주세요.
-            </p>
-          </div>
-
-          <div className="max-h-[420px] overflow-y-auto px-5 py-4">
-            <div className="flex flex-col gap-3">
-              {IMPORTABLE_CHARACTERS.map((character) => {
-                const selected = selectedImportCharacterId === character.id;
-                return (
-                  <button
-                    key={character.id}
-                    type="button"
-                    onClick={() => setSelectedImportCharacterId(character.id)}
-                    className={`flex w-full items-center gap-3 rounded-[4px] border px-3 py-3 text-left transition-colors ${
-                      selected
-                        ? "border-primary bg-primary/5"
-                        : "border-border-10 bg-white hover:bg-surface-20"
-                    }`}
-                  >
-                    <div className="relative h-20 w-14 shrink-0 overflow-hidden rounded border border-border-10 bg-surface-20">
-                      <Image
-                        src={character.imageUrl}
-                        alt={character.name}
-                        fill
-                        sizes="56px"
-                        className="object-cover"
-                      />
-                    </div>
-                    <div className="min-w-0 flex-1">
-                      <p className="truncate text-sm font-bold text-on-surface-10">{character.name}</p>
-                      <p className="mt-1 line-clamp-2 text-sm text-on-surface-30">{character.summary}</p>
-                    </div>
-                  </button>
-                );
-              })}
-            </div>
-          </div>
-
-          <div className="flex items-center justify-end gap-2 border-t border-border-10/5 px-5 py-3">
-            <Button
-              type="button"
-              variant="outline"
-              className="h-9 rounded-md border-border-10 bg-white px-3 text-sm text-on-surface-10 hover:bg-surface-20"
-              onClick={() => setImportCharacterModalOpen(false)}
-            >
-              취소
-            </Button>
-            <Button
-              type="button"
-              className="h-9 rounded-md bg-slate-800 px-3 text-sm text-white hover:bg-slate-700"
-              onClick={handleApplyImportedCharacter}
-              disabled={!selectedImportCharacterId}
-            >
-              적용하기
-            </Button>
-          </div>
-        </DialogContent>
-      </Dialog>
     </>
   );
 }

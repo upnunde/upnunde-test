@@ -1,6 +1,7 @@
 "use client";
 
 import React from "react";
+import type { ReactNode } from "react";
 import { Info } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { Button } from "@/components/ui/button";
@@ -62,6 +63,8 @@ export interface Title2Props {
   onGuideClick?: () => void;
   /** 루트 컨테이너에 적용할 추가 클래스 */
   className?: string;
+  /** `asSectionHeader`일 때 헤더 우측 액션(버튼 등) */
+  sectionEnd?: ReactNode;
 }
 
 /**
@@ -77,6 +80,7 @@ export function Title2({
   subtitleText = "필요 없는 보조문구는 삭제",
   onGuideClick,
   className,
+  sectionEnd,
 }: Title2Props) {
   const flags = variant
     ? VARIANT_FLAGS[variant]
@@ -120,6 +124,20 @@ export function Title2({
   );
 
   if (asSectionHeader) {
+    if (sectionEnd) {
+      return (
+        <div
+          className={cn(
+            "w-full h-fit px-5 py-3 border-b border-border-10/5 flex items-center justify-between gap-3",
+            className
+          )}
+          style={{ borderBottomColor: "rgba(0, 0, 0, 0.07)" }}
+        >
+          <div className="min-w-0 flex-1">{body}</div>
+          <div className="shrink-0">{sectionEnd}</div>
+        </div>
+      );
+    }
     return (
       <div
         className={cn(

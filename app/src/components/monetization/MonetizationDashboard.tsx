@@ -278,7 +278,7 @@ export function MonetizationDashboard() {
       <div className="flex flex-col items-start justify-start gap-5 self-stretch px-0 pt-5 pb-10">
         <MonetizationRevenueSummaryCard />
         <div className="flex flex-col items-start justify-start gap-2 self-stretch">
-          <div className="mt-5 inline-flex items-center justify-between self-stretch">
+          <div className="mt-5 flex flex-wrap items-end justify-between gap-3 self-stretch">
             <div className="flex flex-wrap items-center justify-start gap-2" role="group" aria-label="콘텐츠 범위">
               {ANALYTICS_SCOPE_CHIPS.map(({ id, label }) => {
                 const selected = scopeCategory === id;
@@ -299,7 +299,7 @@ export function MonetizationDashboard() {
                 );
               })}
             </div>
-            <div className="flex items-end justify-end gap-3">
+            <div className="flex flex-wrap items-end justify-end gap-3">
               <span className="text-sm font-medium leading-5 text-on-surface-30">{dateRangeLabel}</span>
               <DropdownMenu>
                 <DropdownMenuTrigger asChild>

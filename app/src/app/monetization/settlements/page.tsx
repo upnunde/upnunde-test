@@ -156,11 +156,173 @@ function SettlementSummaryCard({
   amount: number;
 }) {
   return (
-    <div className="flex h-[100px] flex-1 items-center justify-between gap-0 rounded-[4px] border border-border-10 bg-surface-10 px-10 py-5">
-      <p className="text-sm font-bold leading-5 text-on-surface-20">{title}</p>
-      <div className="inline-flex items-center gap-1">
-        <p className="text-2xl font-bold leading-8 text-on-surface-10">{formatAmount(amount)}</p>
-        <p className="text-2xl font-bold leading-8 text-on-surface-10">원</p>
+    <div className="flex min-h-[100px] w-full min-w-0 flex-col justify-between gap-3 rounded-[4px] border border-border-10 bg-surface-10 px-4 py-4 lg:min-h-0 lg:flex-1 lg:flex-row lg:items-center lg:justify-between lg:gap-4 lg:px-8 lg:py-5 xl:px-10">
+      <p className="min-w-0 text-sm font-bold leading-5 text-on-surface-20 lg:shrink">{title}</p>
+      <div className="inline-flex min-w-0 flex-wrap items-baseline gap-x-1 gap-y-0 tabular-nums">
+        <p className="text-xl font-bold leading-8 text-on-surface-10 lg:text-2xl">{formatAmount(amount)}</p>
+        <p className="text-xl font-bold leading-8 text-on-surface-10 lg:text-2xl">원</p>
+      </div>
+    </div>
+  );
+}
+
+/**
+ * 데스크톱 표: 상태 열은 행 너비의 15%, 나머지(80px 액션 제외)는 2.5fr·1fr×4로 분배.
+ */
+const SETTLEMENT_TABLE_GRID_CLASS =
+  "grid w-full min-w-0 grid-cols-[minmax(0,15%)_minmax(0,2.5fr)_minmax(0,1fr)_minmax(0,1fr)_minmax(0,1fr)_minmax(0,1fr)_minmax(0,min(100%,80px))] gap-x-0";
+
+/** 기간 프리셋 선택 상태 — primary 대신 inverse 서피스(어두운 톤) */
+const RANGE_PRESET_ACTIVE_CLASS =
+  "border-transparent bg-[var(--surface-inverse-10)] text-[var(--on-surface-inverse)] shadow-none hover:bg-[var(--surface-inverse-20)] hover:text-[var(--on-surface-inverse)] focus-visible:ring-2 focus-visible:ring-on-surface-30/35";
+
+function rangePresetButtonClass(active: boolean) {
+  return cn("border-border-10 shadow-none", active ? RANGE_PRESET_ACTIVE_CLASS : "bg-white text-on-surface-20");
+}
+
+function SettlementRowDesktop({
+  item,
+  onTaxDetail,
+  onRejectionReason,
+}: {
+  item: SettlementItem;
+  onTaxDetail: () => void;
+  onRejectionReason: () => void;
+}) {
+  return (
+    <div className={cn(SETTLEMENT_TABLE_GRID_CLASS, "min-h-16 items-center px-3 py-2 sm:min-h-20 sm:px-4")}>
+      <div className="flex min-w-0 items-center">
+        {item.status === "rejected" && item.rejectionReason ? (
+          <button
+            type="button"
+            className={cn(
+              "inline-flex max-w-full items-center gap-1 truncate rounded-[4px] px-2 py-1 text-[12px] font-normal leading-5 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-error-error/40 sm:text-[13px]",
+              statusBadgeClassName(item.status)
+            )}
+            title={`반려 사유: ${item.rejectionReason}`}
+            aria-label={`반려 사유 확인: ${item.rejectionReason}`}
+            onClick={onRejectionReason}
+          >
+            <span className="truncate">{getSettlementStatusLabel(item.status)}</span>
+            <AlertCircle className="h-3.5 w-3.5 shrink-0" aria-hidden />
+          </button>
+        ) : (
+          <span
+            className={cn(
+              "inline-flex max-w-full items-center justify-center truncate rounded-[4px] px-2 py-1 text-[12px] font-normal leading-5 sm:text-[13px]",
+              statusBadgeClassName(item.status),
+            )}
+          >
+            <span className="truncate">{getSettlementStatusLabel(item.status)}</span>
+          </span>
+        )}
+      </div>
+      <div className="flex min-w-0 items-center gap-0.5 tabular-nums">
+        <p className="truncate text-sm font-bold leading-5 text-on-surface-10">{item.revenueAmount}</p>
+        <p className="shrink-0 text-sm font-normal leading-5 text-on-surface-20">원</p>
+      </div>
+      <div className="min-w-0 truncate text-sm font-normal leading-5 text-on-surface-20">{item.requestedAt}</div>
+      <div className="min-w-0 truncate text-sm font-normal leading-5 text-on-surface-20">{item.payoutDueAt}</div>
+      <div className="flex min-w-0 items-center gap-0.5 tabular-nums">
+        <p className="truncate text-sm font-normal leading-5 text-on-surface-20">{item.vatAmount}</p>
+        <p className="shrink-0 text-sm font-normal leading-5 text-on-surface-20">원</p>
+      </div>
+      <div className="flex min-w-0 items-center gap-0.5 tabular-nums">
+        <p className="truncate text-sm font-normal leading-5 text-on-surface-20">{item.settlementAmount}</p>
+        <p className="shrink-0 text-sm font-normal leading-5 text-on-surface-20">원</p>
+      </div>
+      <div className="flex min-w-0 items-center justify-end">
+        {item.status === "completed" ? (
+          <Button
+            type="button"
+            variant="ghost"
+            size="sm"
+            className="h-8 w-8 shrink-0 rounded-full p-0 text-on-surface-30 hover:bg-surface-20"
+            onClick={onTaxDetail}
+            aria-label="세금 계산 상세 보기"
+          >
+            <FileText className="h-4 w-4" aria-hidden />
+          </Button>
+        ) : (
+          <span aria-hidden className="h-8 w-8" />
+        )}
+      </div>
+    </div>
+  );
+}
+
+function SettlementRowMobile({
+  item,
+  onTaxDetail,
+  onRejectionReason,
+}: {
+  item: SettlementItem;
+  onTaxDetail: () => void;
+  onRejectionReason: () => void;
+}) {
+  return (
+    <div className="rounded-[4px] border border-border-10 bg-white p-4">
+      <div className="flex items-start justify-between gap-3">
+        <div className="min-w-0 flex-1">
+          {item.status === "rejected" && item.rejectionReason ? (
+            <button
+              type="button"
+              className={cn(
+                "inline-flex max-w-full items-center gap-1 rounded-[4px] px-2 py-1 text-[13px] font-normal leading-5 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-error-error/40",
+                statusBadgeClassName(item.status),
+              )}
+              title={`반려 사유: ${item.rejectionReason}`}
+              aria-label={`반려 사유 확인: ${item.rejectionReason}`}
+              onClick={onRejectionReason}
+            >
+              <span className="truncate">{getSettlementStatusLabel(item.status)}</span>
+              <AlertCircle className="h-3.5 w-3.5 shrink-0" aria-hidden />
+            </button>
+          ) : (
+            <span
+              className={cn(
+                "inline-flex items-center rounded-[4px] px-2 py-1 text-[13px] font-normal leading-5",
+                statusBadgeClassName(item.status),
+              )}
+            >
+              {getSettlementStatusLabel(item.status)}
+            </span>
+          )}
+        </div>
+        {item.status === "completed" ? (
+          <Button
+            type="button"
+            variant="ghost"
+            size="sm"
+            className="h-8 w-8 shrink-0 rounded-full p-0 text-on-surface-30 hover:bg-surface-20"
+            onClick={onTaxDetail}
+            aria-label="세금 계산 상세 보기"
+          >
+            <FileText className="h-4 w-4" aria-hidden />
+          </Button>
+        ) : null}
+      </div>
+      <div className="mt-3 grid grid-cols-2 gap-x-4 gap-y-2 text-sm">
+        <div>
+          <p className="text-xs text-on-surface-30">수익금</p>
+          <p className="font-bold text-on-surface-10">{item.revenueAmount}원</p>
+        </div>
+        <div>
+          <p className="text-xs text-on-surface-30">실지급액</p>
+          <p className="text-on-surface-20">{item.settlementAmount}원</p>
+        </div>
+        <div>
+          <p className="text-xs text-on-surface-30">신청일</p>
+          <p className="text-on-surface-20">{item.requestedAt}</p>
+        </div>
+        <div>
+          <p className="text-xs text-on-surface-30">지급 예정일</p>
+          <p className="text-on-surface-20">{item.payoutDueAt}</p>
+        </div>
+        <div className="col-span-2">
+          <p className="text-xs text-on-surface-30">부가세</p>
+          <p className="text-on-surface-20">{item.vatAmount}원</p>
+        </div>
       </div>
     </div>
   );
@@ -362,7 +524,9 @@ export default function MonetizationSettlementsPage() {
                 >
                   <ChevronLeft className="h-5 w-5 text-on-surface-30" strokeWidth={2} />
                 </Button>
-                <h1 className="text-2xl font-bold text-on-surface-10">정산 신청 및 내역</h1>
+                <h1 className="min-w-0 truncate text-xl font-bold text-on-surface-10 sm:text-2xl">
+                  정산 신청 및 내역
+                </h1>
               </div>
             </header>
 
@@ -373,8 +537,8 @@ export default function MonetizationSettlementsPage() {
                     <h3 className="text-lg font-bold leading-6 text-on-surface-10">정산 요약</h3>
                   </div>
                   <div className="flex flex-col gap-5 p-5">
-                    <div className="inline-flex items-center justify-between rounded-[4px] bg-surface-20 p-10">
-                      <div className="inline-flex flex-col items-start justify-start gap-5">
+                    <div className="flex flex-col gap-6 rounded-[4px] bg-surface-20 p-5 sm:p-8 lg:flex-row lg:items-center lg:justify-between lg:p-10">
+                      <div className="flex flex-col items-start justify-start gap-5">
                         <p className="text-sm font-bold leading-5 text-on-surface-20">지금 출금 가능한 금액</p>
                         <div className="flex flex-col items-start gap-2">
                           <div className="inline-flex items-center gap-1">
@@ -383,7 +547,7 @@ export default function MonetizationSettlementsPage() {
                             </p>
                             <p className="text-3xl font-bold leading-9 text-on-surface-10">원</p>
                           </div>
-                          <div className="inline-flex items-center gap-3">
+                          <div className="flex flex-wrap items-center gap-3">
                             <p className="text-sm font-normal leading-5 text-on-surface-20">
                               {SETTLEMENT_SUMMARY.bankAccountMasked}
                             </p>
@@ -406,7 +570,7 @@ export default function MonetizationSettlementsPage() {
                       </Button>
                     </div>
 
-                    <div className="inline-flex items-start justify-start gap-5">
+                    <div className="flex w-full min-w-0 flex-col items-stretch gap-4 md:gap-5 lg:flex-row lg:items-stretch">
                       <SettlementSummaryCard
                         title={SETTLEMENT_SUMMARY.expectedMonthLabel}
                         amount={SETTLEMENT_SUMMARY.expectedAmount}
@@ -426,23 +590,33 @@ export default function MonetizationSettlementsPage() {
                     </div>
                     <div className="mt-3 flex flex-wrap items-end justify-between gap-4">
                       <div className="flex flex-wrap items-end gap-4">
-                        <div className="flex items-center gap-2">
-                          <Button type="button" variant={rangePreset === "all" ? "default" : "outline"} size="sm" onClick={() => applyPresetRange("all")}>전체 기간</Button>
-                          <Button type="button" variant={rangePreset === "1m" ? "default" : "outline"} size="sm" onClick={() => applyPresetRange("1m")}>1개월</Button>
-                          <Button type="button" variant={rangePreset === "3m" ? "default" : "outline"} size="sm" onClick={() => applyPresetRange("3m")}>3개월</Button>
-                          <Button type="button" variant={rangePreset === "6m" ? "default" : "outline"} size="sm" onClick={() => applyPresetRange("6m")}>6개월</Button>
-                          <Button type="button" variant={rangePreset === "ytd" ? "default" : "outline"} size="sm" onClick={() => applyPresetRange("ytd")}>올해</Button>
+                        <div className="flex flex-wrap items-center gap-2">
+                          <Button type="button" variant="outline" size="sm" className={rangePresetButtonClass(rangePreset === "all")} onClick={() => applyPresetRange("all")}>
+                            전체 기간
+                          </Button>
+                          <Button type="button" variant="outline" size="sm" className={rangePresetButtonClass(rangePreset === "1m")} onClick={() => applyPresetRange("1m")}>
+                            1개월
+                          </Button>
+                          <Button type="button" variant="outline" size="sm" className={rangePresetButtonClass(rangePreset === "3m")} onClick={() => applyPresetRange("3m")}>
+                            3개월
+                          </Button>
+                          <Button type="button" variant="outline" size="sm" className={rangePresetButtonClass(rangePreset === "6m")} onClick={() => applyPresetRange("6m")}>
+                            6개월
+                          </Button>
+                          <Button type="button" variant="outline" size="sm" className={rangePresetButtonClass(rangePreset === "ytd")} onClick={() => applyPresetRange("ytd")}>
+                            올해
+                          </Button>
                         </div>
-                        <div className="flex items-center gap-2">
+                        <div className="flex min-w-0 flex-wrap items-center gap-2">
                           <Button
                             type="button"
                             variant="outline"
                             size="sm"
-                            className="h-9 min-w-[230px] justify-between border-border-10 px-3 text-sm font-normal text-on-surface-20"
+                            className="h-9 min-w-0 max-w-full flex-1 justify-between border-border-10 px-3 text-sm font-normal text-on-surface-20 sm:min-w-[200px] sm:max-w-[min(100%,320px)]"
                             onClick={() => setDatePickerOpen(true)}
                           >
                             <span className="truncate">{rangeLabel}</span>
-                            <CalendarDays className="h-4 w-4 text-on-surface-30" aria-hidden />
+                            <CalendarDays className="h-4 w-4 shrink-0 text-on-surface-30" aria-hidden />
                           </Button>
                           <DropdownMenu>
                             <DropdownMenuTrigger asChild>
@@ -450,7 +624,7 @@ export default function MonetizationSettlementsPage() {
                                 type="button"
                                 variant="outline"
                                 size="sm"
-                                className="h-9 min-w-[108px] justify-between border-border-10 px-3 text-sm font-normal text-on-surface-20"
+                                className="h-9 min-w-0 max-w-full flex-1 justify-between border-border-10 px-3 text-sm font-normal text-on-surface-20 sm:min-w-[108px] sm:flex-initial sm:max-w-none"
                               >
                                 <span>{statusFilterLabel}</span>
                                 <ChevronDown className="h-4 w-4 text-on-surface-30" aria-hidden />
@@ -477,101 +651,66 @@ export default function MonetizationSettlementsPage() {
                         type="button"
                         variant="outline"
                         size="sm"
+                        className="min-w-0 shrink"
                         onClick={handleDownloadCsv}
                       >
-                        <Download className="h-4 w-4" aria-hidden />
-                        내역 다운로드 (CSV)
+                        <Download className="h-4 w-4 shrink-0" aria-hidden />
+                        <span className="truncate">내역 다운로드 (CSV)</span>
                       </Button>
                     </div>
                   </div>
-                  <div className="flex flex-col">
-                    <div className="grid grid-cols-[160px_minmax(220px,1fr)_160px_160px_160px_160px_88px] items-center border-b border-divider-10 bg-surface-10 px-5 py-3">
-                      <div className="text-xs font-normal leading-4 text-on-surface-30">상태</div>
-                      <div className="text-xs font-normal leading-4 text-on-surface-30">수익금</div>
-                      <div className="text-xs font-normal leading-4 text-on-surface-30">신청일</div>
-                      <div className="text-xs font-normal leading-4 text-on-surface-30">지급 예정일</div>
-                      <div className="text-xs font-normal leading-4 text-on-surface-30">부가세</div>
-                      <div className="text-xs font-normal leading-4 text-on-surface-30">실지급액</div>
-                      <div className="text-right text-xs font-normal leading-4 text-on-surface-30">세금 상세</div>
-                    </div>
-
+                  <div className="w-full min-w-0">
                     {pagedSettlementItems.length === 0 ? (
                       <div className="px-5 py-10 text-center text-sm text-on-surface-30">
                         조건에 맞는 정산 내역이 없어요. 기간 또는 상태를 다시 선택해 주세요.
                       </div>
-                    ) : null}
-
-                    {pagedSettlementItems.map((item, idx) => (
-                      <React.Fragment key={item.id}>
-                        <div className="grid h-20 grid-cols-[160px_minmax(220px,1fr)_160px_160px_160px_160px_88px] items-center px-5 py-0">
-                          <div className="flex items-center">
-                            {item.status === "rejected" && item.rejectionReason ? (
-                              <button
-                                type="button"
-                                className={cn(
-                                  "inline-flex h-8 items-center gap-1 rounded-[4px] px-2 py-1 text-[13px] font-normal leading-5 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-error-error/40",
-                                  statusBadgeClassName(item.status)
-                                )}
-                                title={`반려 사유: ${item.rejectionReason}`}
-                                aria-label={`반려 사유 확인: ${item.rejectionReason}`}
-                                onClick={() => setRejectionReasonTarget(item)}
-                              >
-                                <span>{getSettlementStatusLabel(item.status)}</span>
-                                <AlertCircle className="h-3.5 w-3.5" aria-hidden />
-                              </button>
-                            ) : (
-                              <span
-                                className={cn(
-                                  "inline-flex h-8 items-center justify-center rounded-[4px] px-2 py-1 text-[13px] font-normal leading-5",
-                                  statusBadgeClassName(item.status),
-                                )}
-                              >
-                                {getSettlementStatusLabel(item.status)}
-                              </span>
-                            )}
-                          </div>
-                          <div className="flex items-center gap-0.5">
-                            <p className="text-sm font-bold leading-5 text-on-surface-10">{item.revenueAmount}</p>
-                            <p className="text-sm font-normal leading-5 text-on-surface-20">원</p>
-                          </div>
-                          <div className="text-sm font-normal leading-5 text-on-surface-20">
-                            {item.requestedAt}
-                          </div>
-                          <div className="text-sm font-normal leading-5 text-on-surface-20">
-                            {item.payoutDueAt}
-                          </div>
-                          <div className="flex items-center gap-0.5">
-                            <p className="text-sm font-normal leading-5 text-on-surface-20">{item.vatAmount}</p>
-                            <p className="text-sm font-normal leading-5 text-on-surface-20">원</p>
-                          </div>
-                          <div className="flex items-center gap-0.5">
-                            <p className="text-sm font-normal leading-5 text-on-surface-20">{item.settlementAmount}</p>
-                            <p className="text-sm font-normal leading-5 text-on-surface-20">원</p>
-                          </div>
-                          <div className="flex items-center justify-end">
-                            {item.status === "completed" ? (
-                              <Button
-                                type="button"
-                                variant="ghost"
-                                size="sm"
-                                className="h-8 w-8 rounded-full p-0 text-on-surface-30 hover:bg-surface-20"
-                                onClick={() => setTaxDetailTarget(item)}
-                                aria-label="세금 계산 상세 보기"
-                              >
-                                <FileText className="h-4 w-4" aria-hidden />
-                              </Button>
-                            ) : (
-                              <span aria-hidden className="h-8 w-8" />
-                            )}
-                          </div>
+                    ) : (
+                      <>
+                        {/* xl 미만·사이드바 포함 폭에서는 표 대신 카드로 가로 스크롤 없이 표시 */}
+                        <div className="space-y-3 p-3 sm:p-4 xl:hidden">
+                          {pagedSettlementItems.map((item) => (
+                            <SettlementRowMobile
+                              key={item.id}
+                              item={item}
+                              onTaxDetail={() => setTaxDetailTarget(item)}
+                              onRejectionReason={() => setRejectionReasonTarget(item)}
+                            />
+                          ))}
                         </div>
-                        {idx < pagedSettlementItems.length - 1 ? (
-                          <div className="px-5">
-                            <div className="h-px bg-divider-10" />
+
+                        <div className="hidden min-w-0 flex-col xl:flex">
+                          <div
+                            className={cn(
+                              SETTLEMENT_TABLE_GRID_CLASS,
+                              "items-center border-b border-divider-10 bg-surface-10 px-3 py-3 sm:px-4",
+                            )}
+                          >
+                            <div className="min-w-0 truncate text-xs font-normal leading-4 text-on-surface-30">상태</div>
+                            <div className="min-w-0 truncate text-xs font-normal leading-4 text-on-surface-30">수익금</div>
+                            <div className="min-w-0 truncate text-xs font-normal leading-4 text-on-surface-30">신청일</div>
+                            <div className="min-w-0 truncate text-xs font-normal leading-4 text-on-surface-30">지급 예정일</div>
+                            <div className="min-w-0 truncate text-xs font-normal leading-4 text-on-surface-30">부가세</div>
+                            <div className="min-w-0 truncate text-xs font-normal leading-4 text-on-surface-30">실지급액</div>
+                            <div className="min-w-0 truncate text-right text-xs font-normal leading-4 text-on-surface-30">세금 상세</div>
                           </div>
-                        ) : null}
-                      </React.Fragment>
-                    ))}
+
+                          {pagedSettlementItems.map((item, idx) => (
+                            <React.Fragment key={item.id}>
+                              <SettlementRowDesktop
+                                item={item}
+                                onTaxDetail={() => setTaxDetailTarget(item)}
+                                onRejectionReason={() => setRejectionReasonTarget(item)}
+                              />
+                              {idx < pagedSettlementItems.length - 1 ? (
+                                <div className="px-3 sm:px-4">
+                                  <div className="h-px w-full bg-divider-10" />
+                                </div>
+                              ) : null}
+                            </React.Fragment>
+                          ))}
+                        </div>
+                      </>
+                    )}
                   </div>
                   <Pagination
                     currentPage={currentPage}

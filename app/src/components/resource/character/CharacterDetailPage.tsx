@@ -13,6 +13,10 @@ import {
   CharacterExpressionSingleModal,
   ImageCropOnlyModal,
 } from "@/components/resource/character/CharacterExpressionModal";
+import {
+  ImportCharacterDialog,
+  type ImportableCharacterPick,
+} from "@/components/resource/character/ImportCharacterDialog";
 import { Title1 } from "@/components/ui/title1";
 import { Title2 } from "@/components/ui/title2";
 import type { CharacterResource, CharacterExpressionSlot } from "@/types/resource";
@@ -57,6 +61,7 @@ export function CharacterDetailPage({ isNew = true, initialData }: CharacterDeta
   /** 추가하기 → 파일 선택 후 이 슬롯으로 모달을 연다 */
   const [modalInitialSlots, setModalInitialSlots] = useState<CharacterExpressionSlot[] | null>(null);
   const [editingExpressionSlotId, setEditingExpressionSlotId] = useState<string | null>(null);
+  const [importCharacterModalOpen, setImportCharacterModalOpen] = useState(false);
   const expressionFileInputRef = useRef<HTMLInputElement>(null);
   const thumbnailFileInputRef = useRef<HTMLInputElement>(null);
 
@@ -98,6 +103,16 @@ export function CharacterDetailPage({ isNew = true, initialData }: CharacterDeta
     // 실제 저장 로직은 추후 API 연동 시 구현
     router.push(`/series/${seriesId}/resources`);
   }, [router, seriesId]);
+
+  const handleApplyImportedCharacterToForm = useCallback((selected: ImportableCharacterPick) => {
+    setName(selected.name);
+    setSummary(selected.summary ?? "");
+    setThumbnailUrl((prev) => {
+      if (prev && prev.startsWith("blob:")) URL.revokeObjectURL(prev);
+      return selected.imageUrl;
+    });
+    setThumbnailOriginalUrl(selected.imageUrl);
+  }, []);
 
   /** 추가하기 클릭 → OS 파일 선택 (최대 10장) → 선택한 수만큼 슬롯 채워서 모달 오픈 */
   const handleExpressionAddClick = useCallback(() => {
@@ -230,7 +245,21 @@ export function CharacterDetailPage({ isNew = true, initialData }: CharacterDeta
       <div className="flex-1 overflow-y-auto flex flex-col items-center py-8 px-10 gap-4">
         <div className="w-full max-w-[1200px] min-w-[640px] mx-auto">
           <div className="w-full rounded-[4px] border border-border-10 bg-white">
-            <Title2 text="인물정보" asSectionHeader className="px-8" />
+            <Title2
+              text="인물정보"
+              asSectionHeader
+              className="px-8"
+              sectionEnd={
+                <Button
+                  type="button"
+                  variant="outline"
+                  onClick={() => setImportCharacterModalOpen(true)}
+                  className="h-9 rounded-md border-border-10 bg-white px-3 text-sm font-medium text-on-surface-10 hover:bg-surface-20"
+                >
+                  캐릭터 가져오기
+                </Button>
+              }
+            />
 
             <div className="px-8 py-8 flex flex-col gap-8">
               {/* 이름 */}
@@ -586,6 +615,12 @@ export function CharacterDetailPage({ isNew = true, initialData }: CharacterDeta
           }}
         />
       )}
+
+      <ImportCharacterDialog
+        open={importCharacterModalOpen}
+        onOpenChange={setImportCharacterModalOpen}
+        onApply={handleApplyImportedCharacterToForm}
+      />
     </main>
   );
 }
