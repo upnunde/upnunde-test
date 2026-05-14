@@ -1,11 +1,12 @@
 "use client";
 
 import dynamic from "next/dynamic";
-import React, { useState } from "react";
+import React, { Suspense, useState } from "react";
+import { useSearchParams } from "next/navigation";
 import Header from "@/components/Header/Header";
 import AppSidebar from "@/components/AppSidebar/AppSidebar";
+import type { AnalyticsAreaTabId } from "@/components/analytics/AnalyticsDashboard";
 
-/** VisActor·차트 등으로 `page` 청크가 비대해지는 것을 완화 — 별도 청크로 분리 */
 const AnalyticsDashboard = dynamic(
   () => import("@/components/analytics/AnalyticsDashboard").then((m) => m.AnalyticsDashboard),
   {
@@ -19,7 +20,15 @@ const AnalyticsDashboard = dynamic(
   },
 );
 
-export default function AnalyticsPage() {
+function parseDefaultArea(searchParams: URLSearchParams): AnalyticsAreaTabId {
+  const area = searchParams.get("area");
+  if (area === "revenue" || area === "user" || area === "content") return area;
+  return "content";
+}
+
+function AnalyticsPageContent() {
+  const searchParams = useSearchParams();
+  const defaultArea = parseDefaultArea(searchParams);
   const [profileImageUrl, setProfileImageUrl] = useState<string | null>(null);
 
   return (
@@ -29,7 +38,6 @@ export default function AnalyticsPage() {
         <AppSidebar defaultActiveId="analytics" />
         <div className="flex min-w-0 flex-1 flex-col overflow-hidden">
           <main className="flex flex-1 flex-col overflow-hidden bg-surface-20">
-            {/* Sub Header — 문의·가이드와 동일: px-5, max-width 1200 */}
             <div className="flex h-[64px] w-full shrink-0 flex-col items-center justify-center border-b border-border-10 bg-white px-5">
               <div className="flex w-full max-w-[1200px] items-center justify-start gap-4">
                 <h1 className="text-2xl font-bold text-on-surface-10">분석</h1>
@@ -38,12 +46,27 @@ export default function AnalyticsPage() {
 
             <div className="flex min-h-0 flex-1 flex-col justify-start items-stretch gap-0 overflow-y-auto px-5 py-0">
               <div className="mx-auto w-full min-w-0 max-w-[1200px]">
-                <AnalyticsDashboard />
+                <AnalyticsDashboard defaultArea={defaultArea} />
               </div>
             </div>
           </main>
         </div>
       </div>
     </div>
+  );
+}
+
+export default function AnalyticsPage() {
+  return (
+    <Suspense
+      fallback={
+        <div
+          className="mx-auto w-full min-h-screen max-w-[1200px] animate-pulse bg-slate-50"
+          aria-hidden
+        />
+      }
+    >
+      <AnalyticsPageContent />
+    </Suspense>
   );
 }

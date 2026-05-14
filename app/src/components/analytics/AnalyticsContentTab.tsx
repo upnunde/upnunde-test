@@ -1,42 +1,32 @@
 "use client";
 
-import { useMemo, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import dynamic from "next/dynamic";
-import { ChevronDown } from "lucide-react";
-import {
-  DropdownMenu,
-  DropdownMenuContent,
-  DropdownMenuRadioGroup,
-  DropdownMenuRadioItem,
-  DropdownMenuTrigger,
-} from "@/components/ui/dropdown-menu";
 import { Title2 } from "@/components/ui/title2";
 import { SegmentedTextTabs } from "@/components/ui/segmented-text-tabs";
 import { AnalyticsPanel } from "@/components/analytics/AnalyticsPanel";
+import { AnalyticsScopeFilterBar } from "@/components/analytics/AnalyticsScopeFilterBar";
+import { AnalyticsEpisodeScopePicker } from "@/components/analytics/AnalyticsEpisodeScopePicker";
 import { cn } from "@/lib/utils";
 import type { AnalyticsPrimaryMetric } from "@/components/analytics/AnalyticsTrendLineChart";
-import {
-  ANALYTICS_PERIOD_OPTIONS,
-  type AnalyticsPeriodRange,
-} from "@/components/analytics/analytics-date";
+import { type AnalyticsPeriodRange } from "@/components/analytics/analytics-date";
 import {
   ANALYTICS_TREND_LINE_FIXED_HEIGHT_CLASS,
   ANALYTICS_TREND_LINE_SHELL_CLASS,
 } from "@/components/analytics/analytics-trend-chart-shell";
 import {
-  analyticsFilledSecondaryChipClassName,
-  analyticsOutlineChipClassName,
-  analyticsScopeChipInactiveClassName,
-} from "@/components/analytics/analytics-filter-chips";
-import {
   AnalyticsTopFiveRowList,
   type AnalyticsTopFiveRow,
 } from "@/components/analytics/AnalyticsRankParts";
+import type { AnalyticsScopeCategoryId } from "@/components/analytics/analytics-scope-category";
+import type { AnalyticsCharacterId } from "@/components/analytics/analytics-character-options";
+import type { AnalyticsSeriesId } from "@/components/analytics/analytics-series-options";
 import {
-  ANALYTICS_SCOPE_CHIPS,
-  type AnalyticsScopeCategoryId,
-} from "@/components/analytics/analytics-scope-category";
-import { deltaClassName, getContentDummy } from "@/components/analytics/analytics-dummy-by-scope";
+  deltaClassName,
+  getContentDummy,
+  getEpisodePrimaryStatsDummy,
+  getScopedTop5Dummy,
+} from "@/components/analytics/analytics-dummy-by-scope";
 
 const AnalyticsTrendLineChart = dynamic(
   () =>
@@ -66,73 +56,85 @@ const PRIMARY_LABELS: Record<AnalyticsPrimaryMetric, string> = {
 export function AnalyticsContentTab({
   periodRange,
   onPeriodRangeChange,
-  dateRangeLabel,
+  scopeCategory,
+  onScopeCategoryChange,
+  seriesId,
+  onSeriesIdChange,
+  characterId,
+  onCharacterIdChange,
 }: {
   periodRange: AnalyticsPeriodRange;
   onPeriodRangeChange: (v: AnalyticsPeriodRange) => void;
-  dateRangeLabel: string;
+  scopeCategory: AnalyticsScopeCategoryId;
+  onScopeCategoryChange: (id: AnalyticsScopeCategoryId) => void;
+  seriesId: AnalyticsSeriesId;
+  onSeriesIdChange: (id: AnalyticsSeriesId) => void;
+  characterId: AnalyticsCharacterId;
+  onCharacterIdChange: (id: AnalyticsCharacterId) => void;
 }) {
-  const [scopeCategory, setScopeCategory] = useState<AnalyticsScopeCategoryId>("all");
   const [primaryMetric, setPrimaryMetric] = useState<AnalyticsPrimaryMetric>("views");
-  const periodLabel =
-    ANALYTICS_PERIOD_OPTIONS.find((o) => o.value === periodRange)?.label ?? "7일 전";
-  const contentDummy = useMemo(
-    () => getContentDummy(scopeCategory, periodRange),
-    [scopeCategory, periodRange],
+  const [statsEpisodeNo, setStatsEpisodeNo] = useState<"all" | number>("all");
+
+  const isSeriesScope = scopeCategory === "series";
+
+  useEffect(() => {
+    setStatsEpisodeNo("all");
+  }, [seriesId, scopeCategory]);
+
+  const seriesDummy = useMemo(
+    () => getContentDummy(scopeCategory, periodRange, seriesId, characterId),
+    [scopeCategory, periodRange, seriesId, characterId],
+  );
+
+  const episodeStats = useMemo(() => {
+    if (!isSeriesScope || statsEpisodeNo === "all") return null;
+    return getEpisodePrimaryStatsDummy(seriesId, statsEpisodeNo, periodRange);
+  }, [isSeriesScope, statsEpisodeNo, seriesId, periodRange]);
+
+  const primaryStats = episodeStats?.primary ?? seriesDummy.primary;
+  const primaryChartSeries = episodeStats?.chartSeries ?? seriesDummy.chartSeries;
+
+  /** 인기/주의 TOP5 — 범위·선택 작품/캐릭터에 맞는 하위 단위 */
+  const popularTop5Rows = useMemo<AnalyticsTopFiveRow[]>(
+    () => getScopedTop5Dummy(scopeCategory, periodRange, seriesId, characterId, "popular"),
+    [scopeCategory, periodRange, seriesId, characterId],
+  );
+  const attentionTop5Rows = useMemo<AnalyticsTopFiveRow[]>(
+    () => getScopedTop5Dummy(scopeCategory, periodRange, seriesId, characterId, "attention"),
+    [scopeCategory, periodRange, seriesId, characterId],
   );
 
   return (
     <div className="flex flex-col items-start justify-start gap-5 self-stretch px-0 pt-5 pb-10">
-      <div className="flex flex-col items-start justify-start gap-2 self-stretch">
-        <div className="inline-flex items-center justify-between self-stretch">
-          <div className="flex flex-wrap items-center justify-start gap-2" role="group" aria-label="콘텐츠 범위">
-            {ANALYTICS_SCOPE_CHIPS.map(({ id, label }) => {
-              const selected = scopeCategory === id;
-              return (
-                <button
-                  key={id}
-                  type="button"
-                  aria-pressed={selected}
-                  onClick={() => setScopeCategory(id)}
-                  className={selected ? analyticsFilledSecondaryChipClassName : analyticsScopeChipInactiveClassName}
-                >
-                  <span className="block w-full overflow-hidden text-ellipsis whitespace-nowrap text-center text-base font-medium leading-5">
-                    {label}
-                  </span>
-                </button>
-              );
-            })}
-          </div>
-          <div className="flex items-end justify-end gap-3">
-            <span className="text-sm font-medium leading-5 text-on-surface-30">{dateRangeLabel}</span>
-            <DropdownMenu>
-              <DropdownMenuTrigger asChild>
-                <button type="button" className={analyticsOutlineChipClassName} aria-label="조회 기간 선택">
-                  <span className="min-w-0 max-w-[140px] truncate">{periodLabel}</span>
-                  <ChevronDown className="h-4 w-4 shrink-0 text-slate-700" aria-hidden />
-                </button>
-              </DropdownMenuTrigger>
-              <DropdownMenuContent align="end" className="min-w-[160px]">
-                <DropdownMenuRadioGroup
-                  value={periodRange}
-                  onValueChange={(v) => onPeriodRangeChange(v as AnalyticsPeriodRange)}
-                >
-                  {ANALYTICS_PERIOD_OPTIONS.map(({ value, label }) => (
-                    <DropdownMenuRadioItem key={value} value={value}>
-                      {label}
-                    </DropdownMenuRadioItem>
-                  ))}
-                </DropdownMenuRadioGroup>
-              </DropdownMenuContent>
-            </DropdownMenu>
-          </div>
-        </div>
-      </div>
+      <AnalyticsScopeFilterBar
+        periodRange={periodRange}
+        onPeriodRangeChange={onPeriodRangeChange}
+        scopeCategory={scopeCategory}
+        onScopeCategoryChange={onScopeCategoryChange}
+        seriesId={seriesId}
+        onSeriesIdChange={onSeriesIdChange}
+        characterId={characterId}
+        onCharacterIdChange={onCharacterIdChange}
+      />
 
       <AnalyticsPanel>
-        <Title2 text="주요통계" variant="title" asSectionHeader />
+        <Title2
+          text="주요통계"
+          variant="title"
+          asSectionHeader
+          sectionEnd={
+            isSeriesScope ? (
+              <AnalyticsEpisodeScopePicker
+                seriesId={seriesId}
+                value={statsEpisodeNo}
+                onChange={setStatsEpisodeNo}
+              />
+            ) : undefined
+          }
+        />
+
         <div className="inline-flex min-h-0 min-w-0 flex-1 flex-wrap items-stretch justify-start self-stretch sm:flex-nowrap">
-          {contentDummy.primary.map((stat, i, arr) => {
+          {primaryStats.map((stat, i, arr) => {
             const isFirst = i === 0;
             const selected = primaryMetric === stat.id;
             const shell = cn(
@@ -193,14 +195,14 @@ export function AnalyticsContentTab({
           <AnalyticsTrendLineChart
             metric={primaryMetric}
             periodRange={periodRange}
-            valuesOverride={contentDummy.chartSeries[primaryMetric]}
+            valuesOverride={primaryChartSeries[primaryMetric]}
           />
         </div>
       </AnalyticsPanel>
 
       <div className="flex w-full flex-col items-stretch gap-5 lg:flex-row">
-        <PopularContentsCard rows={contentDummy.top5} />
-        <AttentionContentsCard rows={contentDummy.top5} />
+        <PopularContentsCard rows={popularTop5Rows} isSeriesScope={isSeriesScope} />
+        <AttentionContentsCard rows={attentionTop5Rows} isSeriesScope={isSeriesScope} />
       </div>
     </div>
   );
@@ -208,12 +210,22 @@ export function AnalyticsContentTab({
 
 type PopularCriterionId = "views" | "time" | "likes" | "followers";
 
-function PopularContentsCard({ rows }: { rows: readonly AnalyticsTopFiveRow[] }) {
+function PopularContentsCard({
+  rows,
+  isSeriesScope,
+}: {
+  rows: readonly AnalyticsTopFiveRow[];
+  isSeriesScope: boolean;
+}) {
   const [popularCriterion, setPopularCriterion] = useState<PopularCriterionId>("views");
 
   return (
     <AnalyticsPanel className="w-full min-w-0 flex-1 lg:min-w-[260px]">
-      <Title2 text="인기 콘텐츠 TOP5" variant="title" asSectionHeader />
+      <Title2
+        text={isSeriesScope ? "인기 에피소드 TOP5" : "인기 콘텐츠 TOP5"}
+        variant="title"
+        asSectionHeader
+      />
       <div className="px-5 pt-3">
         <SegmentedTextTabs
           aria-label="인기 콘텐츠 기준"
@@ -236,12 +248,23 @@ function PopularContentsCard({ rows }: { rows: readonly AnalyticsTopFiveRow[] })
 
 type AttentionCriterionId = "lowViews" | "lowTime";
 
-function AttentionContentsCard({ rows }: { rows: readonly AnalyticsTopFiveRow[] }) {
+function AttentionContentsCard({
+  rows,
+  isSeriesScope,
+}: {
+  rows: readonly AnalyticsTopFiveRow[];
+  isSeriesScope: boolean;
+}) {
   const [attentionCriterion, setAttentionCriterion] = useState<AttentionCriterionId>("lowViews");
+  const isEmpty = rows.length === 0;
 
   return (
     <AnalyticsPanel className="w-full min-w-0 flex-1 lg:min-w-[260px]">
-      <Title2 text="주의 필요한 콘텐츠 TOP5" variant="title" asSectionHeader />
+      <Title2
+        text={isSeriesScope ? "주의 필요한 에피소드 TOP5" : "주의 필요한 콘텐츠 TOP5"}
+        variant="title"
+        asSectionHeader
+      />
       <div className="px-5 pt-3">
         <SegmentedTextTabs
           aria-label="주의 콘텐츠 기준"
@@ -255,7 +278,15 @@ function AttentionContentsCard({ rows }: { rows: readonly AnalyticsTopFiveRow[] 
           tabListClassName="self-stretch"
         />
       </div>
-      <AnalyticsTopFiveRowList rows={rows} />
+      {isEmpty ? (
+        <div className="flex h-[584px] flex-col items-center justify-center gap-4 p-5">
+          <p className="text-sm font-normal leading-5 text-on-surface-disabled">
+            데이터가 충분하지 않아 이 보고서를 표시할 수 없습니다.
+          </p>
+        </div>
+      ) : (
+        <AnalyticsTopFiveRowList rows={rows} />
+      )}
     </AnalyticsPanel>
   );
 }

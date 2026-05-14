@@ -6,9 +6,9 @@ import {
   BarChart3,
   Bell,
   BookOpen,
-  CircleDollarSign,
   LibraryBig,
   Mail,
+  Receipt,
   UserRoundCog,
 } from "lucide-react";
 import { SidebarList } from "./SidebarList";
@@ -16,7 +16,7 @@ import { SidebarList } from "./SidebarList";
 const SIDEBAR_ITEMS = [
   { id: "series", label: "내 작품", path: "/series" },
   { id: "analytics", label: "분석", path: "/analytics" },
-  { id: "monetization", label: "수익창출", path: "/monetization" },
+  { id: "settlements", label: "정산", path: "/settlements" },
   { id: "notification", label: "알림", path: "/notifications" },
 ] as const;
 const SIDEBAR_BOTTOM_ITEMS = [
@@ -41,8 +41,8 @@ function sidebarIconFor(id: SidebarItemId): React.ReactNode {
       return <LibraryBig {...SIDEBAR_ICON_PROPS} />;
     case "analytics":
       return <BarChart3 {...SIDEBAR_ICON_PROPS} />;
-    case "monetization":
-      return <CircleDollarSign {...SIDEBAR_ICON_PROPS} />;
+    case "settlements":
+      return <Receipt {...SIDEBAR_ICON_PROPS} />;
     case "guide":
       return <BookOpen {...SIDEBAR_ICON_PROPS} />;
     case "profile":
@@ -70,7 +70,8 @@ function deriveActiveId(pathname: string | null, fallback: SidebarItemId): Sideb
   if (pathname.startsWith("/guide")) return "guide";
   if (pathname.startsWith("/profile")) return "profile";
   if (pathname.startsWith("/analytics")) return "analytics";
-  if (pathname.startsWith("/monetization")) return "monetization";
+  if (pathname.startsWith("/settlements")) return "settlements";
+  if (pathname.startsWith("/monetization/settlements")) return "settlements";
   if (pathname.startsWith("/series")) return "series";
   return fallback;
 }

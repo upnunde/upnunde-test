@@ -1,36 +1,67 @@
 import type { AnalyticsScopeCategoryId } from "@/components/analytics/analytics-scope-category";
-import type { AnalyticsPeriodRange } from "@/components/analytics/analytics-date";
+import {
+  getAnalyticsPeriodInclusiveDays,
+  periodKey,
+  type AnalyticsPeriodRange,
+} from "@/components/analytics/analytics-date";
 import type { DeltaTone } from "@/components/analytics/analytics-dummy-types";
+import type { AnalyticsTopFiveRow } from "@/components/analytics/AnalyticsRankParts";
+import type { AnalyticsSeriesId } from "@/components/analytics/analytics-series-options";
+import type { AnalyticsCharacterId } from "@/components/analytics/analytics-character-options";
 import {
   generateContentDummy,
+  generateEpisodePrimaryStats,
+  generateEpisodeTop5,
+  generateCharacterContentTop5,
+  generateScopedTop5Dummy,
+  generateMonetizationDummy,
+  generateSeriesEpisodeOptions,
   generateUserDummy,
 } from "@/components/analytics/analytics-dummy-generator";
 
 export type {
   ActiveFollowerDummy,
   DeltaTone,
+  EpisodeOption,
+  EpisodePrimaryStatsDummy,
   PrimaryStatDummy,
   UserPrimaryStatDummy,
   ContentDummyByScope,
   UserDummyByScope,
+  MonetizationDummyByScope,
 } from "@/components/analytics/analytics-dummy-types";
 
 const cacheContent = new Map<string, ReturnType<typeof generateContentDummy>>();
 const cacheUser = new Map<string, ReturnType<typeof generateUserDummy>>();
+const cacheEpisodeStats = new Map<string, ReturnType<typeof generateEpisodePrimaryStats>>();
+const cacheEpisodeOptions = new Map<string, ReturnType<typeof generateSeriesEpisodeOptions>>();
+const cacheEpisodeTop5 = new Map<string, AnalyticsTopFiveRow[]>();
+const cacheCharacterTop5 = new Map<string, AnalyticsTopFiveRow[]>();
+const cacheScopedTop5 = new Map<string, AnalyticsTopFiveRow[]>();
+const cacheMonetization = new Map<string, ReturnType<typeof generateMonetizationDummy>>();
 
-function cacheKey(scope: AnalyticsScopeCategoryId, period: AnalyticsPeriodRange): string {
-  return `${scope}:${period}`;
+function cacheKey(
+  scope: AnalyticsScopeCategoryId,
+  period: AnalyticsPeriodRange,
+  seriesId: string,
+  characterId: string,
+): string {
+  const entityKey =
+    scope === "series" ? seriesId : scope === "character" ? characterId : "noseries";
+  return `${scope}:${periodKey(period)}:${entityKey}`;
 }
 
-/** 콘텐츠 분석 더미 (범위·기간 조합별 시드, 합·순위 일관) */
+/** 콘텐츠 분석 더미 (시리즈·캐릭터일 땐 선택 단위별 캐싱) */
 export function getContentDummy(
   scope: AnalyticsScopeCategoryId,
   period: AnalyticsPeriodRange,
+  seriesId: string = "noseries",
+  characterId: string = "nochar",
 ): ReturnType<typeof generateContentDummy> {
-  const k = cacheKey(scope, period);
+  const k = cacheKey(scope, period, seriesId, characterId);
   let v = cacheContent.get(k);
   if (!v) {
-    v = generateContentDummy(scope, period);
+    v = generateContentDummy(scope, period, seriesId, characterId);
     cacheContent.set(k, v);
   }
   return v;
@@ -40,12 +71,127 @@ export function getContentDummy(
 export function getUserDummy(
   scope: AnalyticsScopeCategoryId,
   period: AnalyticsPeriodRange,
+  seriesId: string = "noseries",
+  characterId: string = "nochar",
 ): ReturnType<typeof generateUserDummy> {
-  const k = cacheKey(scope, period);
+  const k = cacheKey(scope, period, seriesId, characterId);
   let v = cacheUser.get(k);
   if (!v) {
-    v = generateUserDummy(scope, period);
+    v = generateUserDummy(scope, period, seriesId, characterId);
     cacheUser.set(k, v);
+  }
+  return v;
+}
+
+/** 시리즈 작품의 회차 옵션 (가로 탭 + 회차 드롭다운에서 사용) */
+export function getSeriesEpisodeOptions(seriesId: AnalyticsSeriesId) {
+  const k = seriesId;
+  let v = cacheEpisodeOptions.get(k);
+  if (!v) {
+    v = generateSeriesEpisodeOptions(seriesId);
+    cacheEpisodeOptions.set(k, v);
+  }
+  return v;
+}
+
+/** 시리즈 회차 단위 주요통계 + 추세 */
+export function getEpisodePrimaryStatsDummy(
+  seriesId: AnalyticsSeriesId,
+  episodeNo: number,
+  period: AnalyticsPeriodRange,
+) {
+  const k = `${seriesId}:${episodeNo}:${periodKey(period)}`;
+  let v = cacheEpisodeStats.get(k);
+  if (!v) {
+    v = generateEpisodePrimaryStats(seriesId, episodeNo, period);
+    cacheEpisodeStats.set(k, v);
+  }
+  return v;
+}
+
+/** 시리즈 작품의 인기/주의 에피소드 TOP5 */
+export function getEpisodeTop5Dummy(
+  seriesId: AnalyticsSeriesId,
+  period: AnalyticsPeriodRange,
+  mode: "popular" | "attention",
+): AnalyticsTopFiveRow[] {
+  const k = `${seriesId}:${periodKey(period)}:${mode}`;
+  let v = cacheEpisodeTop5.get(k);
+  if (!v) {
+    v = generateEpisodeTop5(seriesId, period, mode);
+    cacheEpisodeTop5.set(k, v);
+  }
+  return v;
+}
+
+/** 캐릭터 범위 — 선택 캐릭터의 하위 콘텐츠 TOP5 */
+export function getCharacterContentTop5Dummy(
+  characterId: AnalyticsCharacterId,
+  period: AnalyticsPeriodRange,
+  mode: "popular" | "attention",
+): AnalyticsTopFiveRow[] {
+  const k = `${characterId}:${periodKey(period)}:${mode}`;
+  let v = cacheCharacterTop5.get(k);
+  if (!v) {
+    v = generateCharacterContentTop5(characterId, period, mode);
+    cacheCharacterTop5.set(k, v);
+  }
+  return v;
+}
+
+/**
+ * 범위 칩·하위 탭에 맞는 TOP5 — 시리즈는 회차, 캐릭터는 해당 캐릭터 콘텐츠, 상황공략은 시나리오 목록.
+ */
+export function getScopedTop5Dummy(
+  scope: AnalyticsScopeCategoryId,
+  period: AnalyticsPeriodRange,
+  seriesId: AnalyticsSeriesId,
+  characterId: AnalyticsCharacterId,
+  mode: "popular" | "attention",
+): AnalyticsTopFiveRow[] {
+  if (scope === "series") return getEpisodeTop5Dummy(seriesId, period, mode);
+  if (scope === "character") return getCharacterContentTop5Dummy(characterId, period, mode);
+  if (mode === "popular") return getContentDummy(scope, period, seriesId, characterId).top5;
+  const k = `${scope}:${periodKey(period)}:${mode}`;
+  let v = cacheScopedTop5.get(k);
+  if (!v) {
+    v = generateScopedTop5Dummy(scope, period, seriesId, characterId, mode);
+    cacheScopedTop5.set(k, v);
+  }
+  return v;
+}
+
+function monetizationCacheKey(
+  scope: AnalyticsScopeCategoryId,
+  period: AnalyticsPeriodRange,
+  seriesId: string,
+  characterId: string,
+  selectedEpisodeNo: "all" | number,
+): string {
+  const entityKey =
+    scope === "series" ? seriesId : scope === "character" ? characterId : "noseries";
+  return `monetization:${scope}:${periodKey(period)}:${entityKey}:${selectedEpisodeNo}`;
+}
+
+/** 수익 탭 더미 */
+export function getMonetizationDummy(
+  scope: AnalyticsScopeCategoryId,
+  period: AnalyticsPeriodRange,
+  seriesId: string = "noseries",
+  characterId: string = "nochar",
+  selectedEpisodeNo: "all" | number = "all",
+): ReturnType<typeof generateMonetizationDummy> {
+  const k = monetizationCacheKey(scope, period, seriesId, characterId, selectedEpisodeNo);
+  let v = cacheMonetization.get(k);
+  if (!v) {
+    v = generateMonetizationDummy(
+      scope,
+      period,
+      seriesId as AnalyticsSeriesId,
+      characterId as AnalyticsCharacterId,
+      selectedEpisodeNo,
+    );
+    cacheMonetization.set(k, v);
   }
   return v;
 }
@@ -61,27 +207,36 @@ function movingAverage3(values: readonly number[]): number[] {
   });
 }
 
+/**
+ * 기간 길이가 길수록 시간대 분포가 평탄해지는 자연스러움 모사 — 일수 기반으로 정규화.
+ * `all`은 일수 null이라 별도로 추가 평탄화.
+ */
 function applyAnalyticsPeriodToHourlyShape(
   base: readonly number[],
   period: AnalyticsPeriodRange,
 ): number[] {
   let v = [...base];
-  const passes =
-    period === "7d"
-      ? 0
-      : period === "30d"
-        ? 2
-        : period === "90d"
-          ? 4
-          : period === "365d"
-            ? 6
-            : 9;
+  const days = getAnalyticsPeriodInclusiveDays(period);
+  let passes: number;
+  if (days === null) {
+    passes = 9;
+  } else if (days <= 7) {
+    passes = 0;
+  } else if (days <= 30) {
+    passes = 2;
+  } else if (days <= 90) {
+    passes = 4;
+  } else if (days <= 365) {
+    passes = 6;
+  } else {
+    passes = 9;
+  }
 
   for (let i = 0; i < passes; i++) {
     v = movingAverage3(v);
   }
 
-  if (period === "all") {
+  if (days === null) {
     const mean = v.reduce((a, b) => a + b, 0) / v.length;
     v = v.map((x) => mean + (x - mean) * 0.62);
   }
@@ -122,10 +277,14 @@ function addSeededHourlyDemoNoise(values: readonly number[], seedKey: string): n
 export function getUserTimeOfDayHourlyDummy(
   scope: AnalyticsScopeCategoryId,
   period: AnalyticsPeriodRange,
+  seriesId: string = "noseries",
+  characterId: string = "nochar",
 ): readonly number[] {
-  const base = getUserDummy(scope, period).timeOfDayHourly;
+  const base = getUserDummy(scope, period, seriesId, characterId).timeOfDayHourly;
   const shaped = applyAnalyticsPeriodToHourlyShape(base, period);
-  return addSeededHourlyDemoNoise(shaped, `tod:${scope}:${period}`);
+  const entityKey =
+    scope === "series" ? seriesId : scope === "character" ? characterId : "noseries";
+  return addSeededHourlyDemoNoise(shaped, `tod:${scope}:${periodKey(period)}:${entityKey}`);
 }
 
 export function deltaClassName(tone: DeltaTone): string {

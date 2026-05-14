@@ -2,7 +2,6 @@
 
 import { useMemo, useState } from "react";
 import dynamic from "next/dynamic";
-import { ChevronDown } from "lucide-react";
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -13,23 +12,15 @@ import {
 import { Title2 } from "@/components/ui/title2";
 import { SegmentedTextTabs } from "@/components/ui/segmented-text-tabs";
 import { AnalyticsPanel } from "@/components/analytics/AnalyticsPanel";
+import { AnalyticsScopeFilterBar } from "@/components/analytics/AnalyticsScopeFilterBar";
 import { AnalyticsViewerHourlyActivityChart } from "@/components/analytics/AnalyticsViewerHourlyActivityChart";
 import { cn } from "@/lib/utils";
 import type { AnalyticsUserMetric } from "@/components/analytics/AnalyticsTrendLineChart";
-import {
-  ANALYTICS_PERIOD_OPTIONS,
-  type AnalyticsPeriodRange,
-} from "@/components/analytics/analytics-date";
-import {
-  analyticsFilledSecondaryChipClassName,
-  analyticsOutlineChipClassName,
-  analyticsScopeChipInactiveClassName,
-} from "@/components/analytics/analytics-filter-chips";
+import { type AnalyticsPeriodRange } from "@/components/analytics/analytics-date";
 import { AnalyticsTopFiveRowList } from "@/components/analytics/AnalyticsRankParts";
-import {
-  ANALYTICS_SCOPE_CHIPS,
-  type AnalyticsScopeCategoryId,
-} from "@/components/analytics/analytics-scope-category";
+import type { AnalyticsScopeCategoryId } from "@/components/analytics/analytics-scope-category";
+import type { AnalyticsCharacterId } from "@/components/analytics/analytics-character-options";
+import type { AnalyticsSeriesId } from "@/components/analytics/analytics-series-options";
 import {
   deltaClassName,
   getContentDummy,
@@ -117,13 +108,22 @@ const USER_PRIMARY_LABELS: Record<AnalyticsUserMetric, string> = {
 export function AnalyticsUserTab({
   periodRange,
   onPeriodRangeChange,
-  dateRangeLabel,
+  scopeCategory,
+  onScopeCategoryChange,
+  seriesId,
+  onSeriesIdChange,
+  characterId,
+  onCharacterIdChange,
 }: {
   periodRange: AnalyticsPeriodRange;
   onPeriodRangeChange: (v: AnalyticsPeriodRange) => void;
-  dateRangeLabel: string;
+  scopeCategory: AnalyticsScopeCategoryId;
+  onScopeCategoryChange: (id: AnalyticsScopeCategoryId) => void;
+  seriesId: AnalyticsSeriesId;
+  onSeriesIdChange: (id: AnalyticsSeriesId) => void;
+  characterId: AnalyticsCharacterId;
+  onCharacterIdChange: (id: AnalyticsCharacterId) => void;
 }) {
-  const [scopeCategory, setScopeCategory] = useState<AnalyticsScopeCategoryId>("all");
   const [userMetric, setUserMetric] = useState<AnalyticsUserMetric>("userCount");
   const [revisitSegment, setRevisitSegment] = useState<RevisitSegmentId>("once");
   const [audienceGender, setAudienceGender] = useState<AudienceTabId>("all");
@@ -131,19 +131,17 @@ export function AnalyticsUserTab({
   const [audienceTimeSegment, setAudienceTimeSegment] = useState<AudienceTabId>("all");
   const [ageBand, setAgeBand] = useState("all");
   const [genderBand, setGenderBand] = useState("all");
-  const periodLabel =
-    ANALYTICS_PERIOD_OPTIONS.find((o) => o.value === periodRange)?.label ?? "7일 전";
   const userDummy = useMemo(
-    () => getUserDummy(scopeCategory, periodRange),
-    [scopeCategory, periodRange],
+    () => getUserDummy(scopeCategory, periodRange, seriesId, characterId),
+    [scopeCategory, periodRange, seriesId, characterId],
   );
   const timeOfDayHourlyForPeriod = useMemo(
-    () => getUserTimeOfDayHourlyDummy(scopeCategory, periodRange),
-    [scopeCategory, periodRange],
+    () => getUserTimeOfDayHourlyDummy(scopeCategory, periodRange, seriesId, characterId),
+    [scopeCategory, periodRange, seriesId, characterId],
   );
   const contentDummyForRevisit = useMemo(
-    () => getContentDummy(scopeCategory, periodRange),
-    [scopeCategory, periodRange],
+    () => getContentDummy(scopeCategory, periodRange, seriesId, characterId),
+    [scopeCategory, periodRange, seriesId, characterId],
   );
   const revisitRates = contentDummyForRevisit.revisit[revisitSegment];
   const followerFavoriteRows = userDummy.listA.map((r, i) => ({
@@ -153,53 +151,18 @@ export function AnalyticsUserTab({
 
   return (
     <div className="flex flex-col items-start justify-start gap-5 self-stretch px-0 pt-5 pb-10">
-      <div className="flex flex-col items-start justify-start gap-2 self-stretch">
-        <div className="inline-flex items-center justify-between self-stretch">
-          <div className="flex flex-wrap items-center justify-start gap-2" role="group" aria-label="콘텐츠 범위">
-            {ANALYTICS_SCOPE_CHIPS.map(({ id, label }) => {
-              const selected = scopeCategory === id;
-              return (
-                <button
-                  key={id}
-                  type="button"
-                  aria-pressed={selected}
-                  onClick={() => setScopeCategory(id)}
-                  className={selected ? analyticsFilledSecondaryChipClassName : analyticsScopeChipInactiveClassName}
-                >
-                  <span className="block w-full overflow-hidden text-ellipsis whitespace-nowrap text-center text-base font-medium leading-5">
-                    {label}
-                  </span>
-                </button>
-              );
-            })}
-          </div>
-          <div className="flex shrink-0 items-end justify-end gap-3">
-            <span className="text-sm font-medium leading-5 text-on-surface-30">{dateRangeLabel}</span>
-            <DropdownMenu>
-              <DropdownMenuTrigger asChild>
-                <button type="button" className={analyticsOutlineChipClassName} aria-label="조회 기간 선택">
-                  <span className="min-w-0 max-w-[140px] truncate">{periodLabel}</span>
-                  <ChevronDown className="h-4 w-4 shrink-0 text-slate-700" aria-hidden />
-                </button>
-              </DropdownMenuTrigger>
-              <DropdownMenuContent align="end" className="min-w-[160px]">
-                <DropdownMenuRadioGroup
-                  value={periodRange}
-                  onValueChange={(v) => onPeriodRangeChange(v as AnalyticsPeriodRange)}
-                >
-                  {ANALYTICS_PERIOD_OPTIONS.map(({ value, label }) => (
-                    <DropdownMenuRadioItem key={value} value={value}>
-                      {label}
-                    </DropdownMenuRadioItem>
-                  ))}
-                </DropdownMenuRadioGroup>
-              </DropdownMenuContent>
-            </DropdownMenu>
-          </div>
-        </div>
-      </div>
+      <AnalyticsScopeFilterBar
+        periodRange={periodRange}
+        onPeriodRangeChange={onPeriodRangeChange}
+        scopeCategory={scopeCategory}
+        onScopeCategoryChange={onScopeCategoryChange}
+        seriesId={seriesId}
+        onSeriesIdChange={onSeriesIdChange}
+        characterId={characterId}
+        onCharacterIdChange={onCharacterIdChange}
+      />
 
-      <AnalyticsPanel>
+            <AnalyticsPanel>
         <Title2 text="주요통계" variant="title" asSectionHeader />
         <div className="inline-flex w-full flex-wrap items-stretch sm:flex-nowrap">
           {userDummy.primary.map((stat, i, arr) => {

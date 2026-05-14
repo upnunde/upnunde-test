@@ -77,13 +77,23 @@ export function SegmentedTextTabs({
     >
       {items.map(({ id, label }) => {
         const isActive = activeId === id;
+        const isClickable = !!onSelect;
+        /**
+         * 호버 정책 — 활성 탭은 이미 강조되어 있어 변화 없음.
+         * 비활성 탭은 클릭 가능할 때만 라벨 톤을 한 단계 올려(`disabled → 20`) 진입 가능성을 시그널.
+         * underline 모드에서 비활성 탭 밑줄은 활성 탭만 표시(호버 시 가이드 라인 없음).
+         */
         const state = underline
           ? isActive
             ? "border-border-strong text-on-surface-10"
-            : cn("border-transparent", INACTIVE_TAB_TEXT)
+            : cn(
+                "border-transparent",
+                INACTIVE_TAB_TEXT,
+                isClickable && "hover:text-on-surface-20",
+              )
           : isActive
             ? "text-on-surface-10"
-            : INACTIVE_TAB_TEXT;
+            : cn(INACTIVE_TAB_TEXT, isClickable && "hover:text-on-surface-20");
         const line = underline ? "border-b-2" : "";
 
         return (
@@ -94,7 +104,7 @@ export function SegmentedTextTabs({
             aria-selected={isActive}
             className={cn(
               "flex items-center justify-center px-0 font-bold font-['Pretendard_JP',sans-serif] transition-colors",
-              onSelect ? "cursor-pointer" : "cursor-default",
+              isClickable ? "cursor-pointer" : "cursor-default",
               sizeButton,
               line,
               state,

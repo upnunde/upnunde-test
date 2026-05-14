@@ -41,3 +41,39 @@ export type UserDummyByScope = {
   timeOfDayHourly: readonly number[];
   activeFollowers: ActiveFollowerDummy[];
 };
+
+/** 시리즈 회차 옵션 (드롭다운 등) */
+export type EpisodeOption = {
+  episodeNo: number;
+  title: string;
+};
+
+/** 회차 단위 주요통계 + 추세 — 시리즈 칩에서 특정 회차를 골랐을 때 */
+export type EpisodePrimaryStatsDummy = {
+  episodeNo: number;
+  title: string;
+  primary: PrimaryStatDummy[];
+  chartSeries: Record<AnalyticsPrimaryMetric, number[]>;
+};
+
+export type MonetizationStatDummy = {
+  value: string;
+  delta: string;
+  deltaTone: DeltaTone;
+};
+
+/** 수익 탭 더미 — 범위·기간·하위 탭(작품/캐릭터/회차)에 따라 변함 */
+export type MonetizationDummyByScope = {
+  stats: {
+    expectedRevenue: MonetizationStatDummy;
+    purchaseCount: MonetizationStatDummy;
+    purchaseRate: MonetizationStatDummy;
+  };
+  chartSeries: {
+    expectedRevenue: number[];
+    purchaseCount: number[];
+    purchaseRate: number[];
+  };
+  top5: AnalyticsTopFiveRow[];
+  low5: AnalyticsTopFiveRow[];
+};
