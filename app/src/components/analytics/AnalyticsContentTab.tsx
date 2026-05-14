@@ -18,6 +18,7 @@ import {
 } from "@/components/analytics/AnalyticsRankParts";
 import type { AnalyticsScopeCategoryId } from "@/components/analytics/analytics-scope-category";
 import type { AnalyticsCharacterId } from "@/components/analytics/analytics-character-options";
+import type { AnalyticsScenarioId } from "@/components/analytics/analytics-scenario-options";
 import type { AnalyticsSeriesId } from "@/components/analytics/analytics-series-options";
 import {
   deltaClassName,
@@ -56,12 +57,14 @@ export function AnalyticsContentTab({
   scopeCategory,
   seriesId,
   characterId,
+  scenarioId,
   statsEpisodeNo,
 }: {
   periodRange: AnalyticsPeriodRange;
   scopeCategory: AnalyticsScopeCategoryId;
   seriesId: AnalyticsSeriesId;
   characterId: AnalyticsCharacterId;
+  scenarioId: AnalyticsScenarioId;
   statsEpisodeNo: "all" | number;
 }) {
   const [primaryMetric, setPrimaryMetric] = useState<AnalyticsPrimaryMetric>("views");
@@ -69,8 +72,8 @@ export function AnalyticsContentTab({
   const isSeriesScope = scopeCategory === "series";
 
   const seriesDummy = useMemo(
-    () => getContentDummy(scopeCategory, periodRange, seriesId, characterId),
-    [scopeCategory, periodRange, seriesId, characterId],
+    () => getContentDummy(scopeCategory, periodRange, seriesId, characterId, scenarioId),
+    [scopeCategory, periodRange, seriesId, characterId, scenarioId],
   );
 
   const episodeStats = useMemo(() => {
@@ -83,12 +86,12 @@ export function AnalyticsContentTab({
 
   /** 인기/주의 TOP5 — 범위·선택 작품/캐릭터에 맞는 하위 단위 */
   const popularTop5Rows = useMemo<AnalyticsTopFiveRow[]>(
-    () => getScopedTop5Dummy(scopeCategory, periodRange, seriesId, characterId, "popular"),
-    [scopeCategory, periodRange, seriesId, characterId],
+    () => getScopedTop5Dummy(scopeCategory, periodRange, seriesId, characterId, scenarioId, "popular"),
+    [scopeCategory, periodRange, seriesId, characterId, scenarioId],
   );
   const attentionTop5Rows = useMemo<AnalyticsTopFiveRow[]>(
-    () => getScopedTop5Dummy(scopeCategory, periodRange, seriesId, characterId, "attention"),
-    [scopeCategory, periodRange, seriesId, characterId],
+    () => getScopedTop5Dummy(scopeCategory, periodRange, seriesId, characterId, scenarioId, "attention"),
+    [scopeCategory, periodRange, seriesId, characterId, scenarioId],
   );
 
   return (

@@ -1,4 +1,5 @@
 import type { AnalyticsScopeCategoryId } from "@/components/analytics/analytics-scope-category";
+import { analyticsScopeEntityKey } from "@/components/analytics/analytics-scope-entity";
 import {
   getAnalyticsPeriodInclusiveDays,
   periodKey,
@@ -8,6 +9,7 @@ import type { DeltaTone } from "@/components/analytics/analytics-dummy-types";
 import type { AnalyticsTopFiveRow } from "@/components/analytics/AnalyticsRankParts";
 import type { AnalyticsSeriesId } from "@/components/analytics/analytics-series-options";
 import type { AnalyticsCharacterId } from "@/components/analytics/analytics-character-options";
+import type { AnalyticsScenarioId } from "@/components/analytics/analytics-scenario-options";
 import {
   generateContentDummy,
   generateEpisodePrimaryStats,
@@ -50,23 +52,23 @@ function cacheKey(
   period: AnalyticsPeriodRange,
   seriesId: string,
   characterId: string,
+  scenarioId: string,
 ): string {
-  const entityKey =
-    scope === "series" ? seriesId : scope === "character" ? characterId : "noseries";
-  return `${scope}:${periodKey(period)}:${entityKey}`;
+  return `${scope}:${periodKey(period)}:${analyticsScopeEntityKey(scope, seriesId, characterId, scenarioId)}`;
 }
 
-/** 콘텐츠 분석 더미 (시리즈·캐릭터일 땐 선택 단위별 캐싱) */
+/** 콘텐츠 분석 더미 (시리즈·캐릭터·상황공략일 땐 선택 단위별 캐싱) */
 export function getContentDummy(
   scope: AnalyticsScopeCategoryId,
   period: AnalyticsPeriodRange,
   seriesId: string = "noseries",
   characterId: string = "nochar",
+  scenarioId: string = "noscenario",
 ): ReturnType<typeof generateContentDummy> {
-  const k = cacheKey(scope, period, seriesId, characterId);
+  const k = cacheKey(scope, period, seriesId, characterId, scenarioId);
   let v = cacheContent.get(k);
   if (!v) {
-    v = generateContentDummy(scope, period, seriesId, characterId);
+    v = generateContentDummy(scope, period, seriesId, characterId, scenarioId);
     cacheContent.set(k, v);
   }
   return v;
@@ -78,11 +80,12 @@ export function getUserDummy(
   period: AnalyticsPeriodRange,
   seriesId: string = "noseries",
   characterId: string = "nochar",
+  scenarioId: string = "noscenario",
 ): ReturnType<typeof generateUserDummy> {
-  const k = cacheKey(scope, period, seriesId, characterId);
+  const k = cacheKey(scope, period, seriesId, characterId, scenarioId);
   let v = cacheUser.get(k);
   if (!v) {
-    v = generateUserDummy(scope, period, seriesId, characterId);
+    v = generateUserDummy(scope, period, seriesId, characterId, scenarioId);
     cacheUser.set(k, v);
   }
   return v;
@@ -152,15 +155,18 @@ export function getScopedTop5Dummy(
   period: AnalyticsPeriodRange,
   seriesId: AnalyticsSeriesId,
   characterId: AnalyticsCharacterId,
+  scenarioId: AnalyticsScenarioId,
   mode: "popular" | "attention",
 ): AnalyticsTopFiveRow[] {
   if (scope === "series") return getEpisodeTop5Dummy(seriesId, period, mode);
   if (scope === "character") return getCharacterContentTop5Dummy(characterId, period, mode);
-  if (mode === "popular") return getContentDummy(scope, period, seriesId, characterId).top5;
-  const k = `${scope}:${periodKey(period)}:${mode}`;
+  if (mode === "popular") {
+    return getContentDummy(scope, period, seriesId, characterId, scenarioId).top5;
+  }
+  const k = `${scope}:${periodKey(period)}:${scenarioId}:${mode}`;
   let v = cacheScopedTop5.get(k);
   if (!v) {
-    v = generateScopedTop5Dummy(scope, period, seriesId, characterId, mode);
+    v = generateScopedTop5Dummy(scope, period, seriesId, characterId, scenarioId, mode);
     cacheScopedTop5.set(k, v);
   }
   return v;
@@ -171,10 +177,10 @@ function monetizationCacheKey(
   period: AnalyticsPeriodRange,
   seriesId: string,
   characterId: string,
+  scenarioId: string,
   selectedEpisodeNo: "all" | number,
 ): string {
-  const entityKey =
-    scope === "series" ? seriesId : scope === "character" ? characterId : "noseries";
+  const entityKey = analyticsScopeEntityKey(scope, seriesId, characterId, scenarioId);
   return `monetization:${scope}:${periodKey(period)}:${entityKey}:${selectedEpisodeNo}`;
 }
 
@@ -184,9 +190,10 @@ export function getMonetizationDummy(
   period: AnalyticsPeriodRange,
   seriesId: string = "noseries",
   characterId: string = "nochar",
+  scenarioId: string = "noscenario",
   selectedEpisodeNo: "all" | number = "all",
 ): ReturnType<typeof generateMonetizationDummy> {
-  const k = monetizationCacheKey(scope, period, seriesId, characterId, selectedEpisodeNo);
+  const k = monetizationCacheKey(scope, period, seriesId, characterId, scenarioId, selectedEpisodeNo);
   let v = cacheMonetization.get(k);
   if (!v) {
     v = generateMonetizationDummy(
@@ -194,6 +201,7 @@ export function getMonetizationDummy(
       period,
       seriesId as AnalyticsSeriesId,
       characterId as AnalyticsCharacterId,
+      scenarioId,
       selectedEpisodeNo,
     );
     cacheMonetization.set(k, v);
@@ -205,10 +213,10 @@ function monetizationMonthlyCacheKey(
   scope: AnalyticsScopeCategoryId,
   seriesId: string,
   characterId: string,
+  scenarioId: string,
   monthCount: number,
 ): string {
-  const entityKey =
-    scope === "series" ? seriesId : scope === "character" ? characterId : "noseries";
+  const entityKey = analyticsScopeEntityKey(scope, seriesId, characterId, scenarioId);
   return `monetization-monthly:${scope}:${entityKey}:${monthCount}`;
 }
 
@@ -217,15 +225,17 @@ export function getMonetizationMonthlyRevenue(
   scope: AnalyticsScopeCategoryId,
   seriesId: string = "noseries",
   characterId: string = "nochar",
+  scenarioId: string = "noscenario",
   monthCount = 6,
 ): ReturnType<typeof generateMonetizationMonthlyRevenue> {
-  const k = monetizationMonthlyCacheKey(scope, seriesId, characterId, monthCount);
+  const k = monetizationMonthlyCacheKey(scope, seriesId, characterId, scenarioId, monthCount);
   let v = cacheMonetizationMonthly.get(k);
   if (!v) {
     v = generateMonetizationMonthlyRevenue(
       scope,
       seriesId as AnalyticsSeriesId,
       characterId as AnalyticsCharacterId,
+      scenarioId,
       monthCount,
     );
     cacheMonetizationMonthly.set(k, v);
@@ -316,11 +326,11 @@ export function getUserTimeOfDayHourlyDummy(
   period: AnalyticsPeriodRange,
   seriesId: string = "noseries",
   characterId: string = "nochar",
+  scenarioId: string = "noscenario",
 ): readonly number[] {
-  const base = getUserDummy(scope, period, seriesId, characterId).timeOfDayHourly;
+  const base = getUserDummy(scope, period, seriesId, characterId, scenarioId).timeOfDayHourly;
   const shaped = applyAnalyticsPeriodToHourlyShape(base, period);
-  const entityKey =
-    scope === "series" ? seriesId : scope === "character" ? characterId : "noseries";
+  const entityKey = analyticsScopeEntityKey(scope, seriesId, characterId, scenarioId);
   return addSeededHourlyDemoNoise(shaped, `tod:${scope}:${periodKey(period)}:${entityKey}`);
 }
 

@@ -134,10 +134,20 @@ function seedFor(
   period: AnalyticsPeriodRange,
   seriesId: string,
   characterId: string,
+  scenarioId: string = "noscenario",
 ): number {
   const entityKey =
-    scope === "series" ? seriesId : scope === "character" ? characterId : "noscenario";
+    scope === "series" ? seriesId : scope === "character" ? characterId : scenarioId;
   return hashString(`analytics:${scope}:${periodKey(period)}:${entityKey}`);
+}
+
+function singleEntityScaleForScope(
+  scope: AnalyticsScopeCategoryId,
+  rng: () => number,
+): number {
+  if (scope === "series") return 0.3 + rng() * 0.25;
+  if (scope === "character" || scope === "scenario") return singleCharacterScale(rng);
+  return 1;
 }
 
 function formatInt(n: number): string {
@@ -339,15 +349,11 @@ export function generateContentDummy(
   period: AnalyticsPeriodRange,
   seriesId: string = "noseries",
   characterId: string = "nochar",
+  scenarioId: string = "noscenario",
 ): ContentDummyByScope {
-  const rng = mulberry32(seedFor(scope, period, seriesId, characterId));
-  /** 시리즈·캐릭터 단일 선택은 합산 대비 30~55% 정도 */
-  const isSingleEntity = scope === "series" || scope === "character";
-  const singleEntityScale = isSingleEntity
-    ? scope === "series"
-      ? 0.3 + rng() * 0.25
-      : singleCharacterScale(rng)
-    : 1;
+  const rng = mulberry32(seedFor(scope, period, seriesId, characterId, scenarioId));
+  const isSingleEntity = scope === "series" || scope === "character" || scope === "scenario";
+  const singleEntityScale = isSingleEntity ? singleEntityScaleForScope(scope, rng) : 1;
   const vol = scopeVolumeFactor(scope, rng) * periodTrendBias(period, rng) * singleEntityScale;
 
   const views = Math.max(120, Math.round((800 + rng() * 9200) * vol));
@@ -399,14 +405,11 @@ export function generateUserDummy(
   period: AnalyticsPeriodRange,
   seriesId: string = "noseries",
   characterId: string = "nochar",
+  scenarioId: string = "noscenario",
 ): UserDummyByScope {
-  const rng = mulberry32(seedFor(scope, period, seriesId, characterId) ^ 0x9e3779b9);
-  const isSingleEntity = scope === "series" || scope === "character";
-  const singleEntityScale = isSingleEntity
-    ? scope === "series"
-      ? 0.3 + rng() * 0.25
-      : singleCharacterScale(rng)
-    : 1;
+  const rng = mulberry32(seedFor(scope, period, seriesId, characterId, scenarioId) ^ 0x9e3779b9);
+  const isSingleEntity = scope === "series" || scope === "character" || scope === "scenario";
+  const singleEntityScale = isSingleEntity ? singleEntityScaleForScope(scope, rng) : 1;
   const vol = scopeVolumeFactor(scope, rng) * periodTrendBias(period, rng) * singleEntityScale;
 
   const users = Math.max(800, Math.round((2800 + rng() * 8500) * vol));
@@ -715,10 +718,11 @@ export function generateScopedTop5Dummy(
   period: AnalyticsPeriodRange,
   seriesId: AnalyticsSeriesId,
   characterId: AnalyticsCharacterId,
+  scenarioId: string,
   mode: "popular" | "attention",
 ): AnalyticsTopFiveRow[] {
   const rng = mulberry32(
-    hashString(`scoped-top5:${scope}:${periodKey(period)}:${seriesId}:${characterId}:${mode}`),
+    hashString(`scoped-top5:${scope}:${periodKey(period)}:${seriesId}:${characterId}:${scenarioId}:${mode}`),
   );
   return scopedTop5Rows(scope, period, seriesId, characterId, mode, rng);
 }
@@ -790,6 +794,7 @@ export function generateMonetizationMonthlyRevenue(
   scope: AnalyticsScopeCategoryId,
   seriesId: AnalyticsSeriesId,
   characterId: AnalyticsCharacterId,
+  scenarioId: string = "noscenario",
   monthCount = 6,
 ): MonetizationDummyByScope["monthlyRevenue"] {
   const todayYmd = getSeoulCalendarYmd(new Date());
@@ -798,13 +803,11 @@ export function generateMonetizationMonthlyRevenue(
   const totalMonths = Math.max(1, monthCount);
 
   // 기간·회차 필터와 무관 — 범위(전체/시리즈/캐릭터)만 반영
-  const baseRng = mulberry32(hashString(`monetization-monthly:${scope}:${seriesId}:${characterId}`));
-  const isSingleEntity = scope === "series" || scope === "character";
-  const entityScale = isSingleEntity
-    ? scope === "series"
-      ? 0.3 + baseRng() * 0.25
-      : 0.28 + baseRng() * 0.22
-    : 1;
+  const baseRng = mulberry32(
+    hashString(`monetization-monthly:${scope}:${seriesId}:${characterId}:${scenarioId}`),
+  );
+  const isSingleEntity = scope === "series" || scope === "character" || scope === "scenario";
+  const entityScale = isSingleEntity ? singleEntityScaleForScope(scope, baseRng) : 1;
   const vol = scopeVolumeFactor(scope, baseRng) * entityScale;
 
   for (let monthsAgo = totalMonths - 1; monthsAgo >= 0; monthsAgo--) {
@@ -813,7 +816,7 @@ export function generateMonetizationMonthlyRevenue(
     const month = dt.getUTCMonth() + 1;
     const inProgress = year === ty && month === tm;
     const slotRng = mulberry32(
-      hashString(`rev-month:${year}-${month}:${scope}:${seriesId}:${characterId}`),
+      hashString(`rev-month:${year}-${month}:${scope}:${seriesId}:${characterId}:${scenarioId}`),
     );
     const monthVol = vol * (0.75 + monthsAgo * 0.06) * (0.9 + slotRng() * 0.2);
     const amount = Math.max(40_000, Math.round((120_000 + slotRng() * 380_000) * monthVol));
@@ -835,19 +838,16 @@ export function generateMonetizationDummy(
   period: AnalyticsPeriodRange,
   seriesId: AnalyticsSeriesId,
   characterId: AnalyticsCharacterId,
+  scenarioId: string = "noscenario",
   selectedEpisodeNo: "all" | number = "all",
 ): MonetizationDummyByScope {
   const rng = mulberry32(
     hashString(
-      `monetization:${scope}:${periodKey(period)}:${seriesId}:${characterId}:${selectedEpisodeNo}`,
+      `monetization:${scope}:${periodKey(period)}:${seriesId}:${characterId}:${scenarioId}:${selectedEpisodeNo}`,
     ),
   );
-  const isSingleEntity = scope === "series" || scope === "character";
-  const entityScale = isSingleEntity
-    ? scope === "series"
-      ? 0.3 + rng() * 0.25
-      : 0.28 + rng() * 0.22
-    : 1;
+  const isSingleEntity = scope === "series" || scope === "character" || scope === "scenario";
+  const entityScale = isSingleEntity ? singleEntityScaleForScope(scope, rng) : 1;
   const vol = scopeVolumeFactor(scope, rng) * periodTrendBias(period, rng) * entityScale;
 
   let episodeScale = 1;
@@ -906,7 +906,7 @@ export function generateMonetizationDummy(
     top5 = revenueTop5FromPool(pool, rng, scope);
   }
 
-  const monthlyRevenue = generateMonetizationMonthlyRevenue(scope, seriesId, characterId);
+  const monthlyRevenue = generateMonetizationMonthlyRevenue(scope, seriesId, characterId, scenarioId);
 
   return {
     stats,

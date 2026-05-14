@@ -11,9 +11,15 @@ import {
 } from "@/components/analytics/analytics-trend-chart-shell";
 import { deltaClassName, getMonetizationDummy } from "@/components/analytics/analytics-dummy-by-scope";
 import { AnalyticsMonthlyRevenueSection } from "@/components/analytics/AnalyticsMonthlyRevenueSection";
+import {
+  AnalyticsMonthlyRevenueRangeFilter,
+  DEFAULT_MONTHLY_REVENUE_RANGE_MONTHS,
+  type MonthlyRevenueRangeMonths,
+} from "@/components/analytics/AnalyticsMonthlyRevenueRangeFilter";
 import { AnalyticsTopFiveRowList } from "@/components/analytics/AnalyticsRankParts";
 import type { AnalyticsScopeCategoryId } from "@/components/analytics/analytics-scope-category";
 import type { AnalyticsCharacterId } from "@/components/analytics/analytics-character-options";
+import type { AnalyticsScenarioId } from "@/components/analytics/analytics-scenario-options";
 import type { AnalyticsSeriesId } from "@/components/analytics/analytics-series-options";
 import { cn } from "@/lib/utils";
 
@@ -44,19 +50,32 @@ export function MonetizationDashboard({
   scopeCategory,
   seriesId,
   characterId,
+  scenarioId,
   statsEpisodeNo,
 }: {
   periodRange: AnalyticsPeriodRange;
   scopeCategory: AnalyticsScopeCategoryId;
   seriesId: AnalyticsSeriesId;
   characterId: AnalyticsCharacterId;
+  scenarioId: AnalyticsScenarioId;
   statsEpisodeNo: "all" | number;
 }) {
   const [selectedMonetizationStat, setSelectedMonetizationStat] = useState<MonetizationStatId>("expectedRevenue");
+  const [monthlyRevenueRange, setMonthlyRevenueRange] = useState<MonthlyRevenueRangeMonths>(
+    DEFAULT_MONTHLY_REVENUE_RANGE_MONTHS,
+  );
 
   const dummy = useMemo(
-    () => getMonetizationDummy(scopeCategory, periodRange, seriesId, characterId, statsEpisodeNo),
-    [scopeCategory, periodRange, seriesId, characterId, statsEpisodeNo],
+    () =>
+      getMonetizationDummy(
+        scopeCategory,
+        periodRange,
+        seriesId,
+        characterId,
+        scenarioId,
+        statsEpisodeNo,
+      ),
+    [scopeCategory, periodRange, seriesId, characterId, scenarioId, statsEpisodeNo],
   );
 
   const monetizationChartValues = dummy.chartSeries[selectedMonetizationStat];
@@ -116,12 +135,24 @@ export function MonetizationDashboard({
           <AnalyticsTopFiveRowList rows={dummy.top5} />
         </AnalyticsPanel>
         <AnalyticsPanel className="h-fit w-full min-w-0 flex-1 self-start lg:min-w-[260px]">
-          <Title2 text="월별 수익" variant="title" asSectionHeader />
+          <Title2
+            text="월별 수익"
+            variant="title"
+            asSectionHeader
+            sectionEnd={
+              <AnalyticsMonthlyRevenueRangeFilter
+                value={monthlyRevenueRange}
+                onChange={setMonthlyRevenueRange}
+              />
+            }
+          />
           <div className="p-5">
             <AnalyticsMonthlyRevenueSection
               scopeCategory={scopeCategory}
               seriesId={seriesId}
               characterId={characterId}
+              scenarioId={scenarioId}
+              monthCount={monthlyRevenueRange}
             />
           </div>
         </AnalyticsPanel>

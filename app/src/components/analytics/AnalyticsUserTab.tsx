@@ -19,6 +19,7 @@ import { type AnalyticsPeriodRange } from "@/components/analytics/analytics-date
 import { AnalyticsTopFiveRowList } from "@/components/analytics/AnalyticsRankParts";
 import type { AnalyticsScopeCategoryId } from "@/components/analytics/analytics-scope-category";
 import type { AnalyticsCharacterId } from "@/components/analytics/analytics-character-options";
+import type { AnalyticsScenarioId } from "@/components/analytics/analytics-scenario-options";
 import type { AnalyticsSeriesId } from "@/components/analytics/analytics-series-options";
 import {
   deltaClassName,
@@ -109,11 +110,13 @@ export function AnalyticsUserTab({
   scopeCategory,
   seriesId,
   characterId,
+  scenarioId,
 }: {
   periodRange: AnalyticsPeriodRange;
   scopeCategory: AnalyticsScopeCategoryId;
   seriesId: AnalyticsSeriesId;
   characterId: AnalyticsCharacterId;
+  scenarioId: AnalyticsScenarioId;
 }) {
   const [userMetric, setUserMetric] = useState<AnalyticsUserMetric>("userCount");
   const [revisitSegment, setRevisitSegment] = useState<RevisitSegmentId>("once");
@@ -123,16 +126,16 @@ export function AnalyticsUserTab({
   const [ageBand, setAgeBand] = useState("all");
   const [genderBand, setGenderBand] = useState("all");
   const userDummy = useMemo(
-    () => getUserDummy(scopeCategory, periodRange, seriesId, characterId),
-    [scopeCategory, periodRange, seriesId, characterId],
+    () => getUserDummy(scopeCategory, periodRange, seriesId, characterId, scenarioId),
+    [scopeCategory, periodRange, seriesId, characterId, scenarioId],
   );
   const timeOfDayHourlyForPeriod = useMemo(
-    () => getUserTimeOfDayHourlyDummy(scopeCategory, periodRange, seriesId, characterId),
-    [scopeCategory, periodRange, seriesId, characterId],
+    () => getUserTimeOfDayHourlyDummy(scopeCategory, periodRange, seriesId, characterId, scenarioId),
+    [scopeCategory, periodRange, seriesId, characterId, scenarioId],
   );
   const contentDummyForRevisit = useMemo(
-    () => getContentDummy(scopeCategory, periodRange, seriesId, characterId),
-    [scopeCategory, periodRange, seriesId, characterId],
+    () => getContentDummy(scopeCategory, periodRange, seriesId, characterId, scenarioId),
+    [scopeCategory, periodRange, seriesId, characterId, scenarioId],
   );
   const revisitRates = contentDummyForRevisit.revisit[revisitSegment];
   const followerFavoriteRows = userDummy.listA.map((r, i) => ({

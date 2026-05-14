@@ -16,6 +16,10 @@ import {
   type AnalyticsCharacterId,
 } from "@/components/analytics/analytics-character-options";
 import {
+  DEFAULT_ANALYTICS_SCENARIO_ID,
+  type AnalyticsScenarioId,
+} from "@/components/analytics/analytics-scenario-options";
+import {
   DEFAULT_ANALYTICS_SERIES_ID,
   isAllAnalyticsSeriesId,
   type AnalyticsSeriesId,
@@ -60,6 +64,7 @@ export function AnalyticsDashboard({ defaultArea = "content", onAreaChange }: An
   );
   const [seriesId, setSeriesId] = useState<AnalyticsSeriesId>(DEFAULT_ANALYTICS_SERIES_ID);
   const [characterId, setCharacterId] = useState<AnalyticsCharacterId>(DEFAULT_ANALYTICS_CHARACTER_ID);
+  const [scenarioId, setScenarioId] = useState<AnalyticsScenarioId>(DEFAULT_ANALYTICS_SCENARIO_ID);
   const [statsEpisodeNo, setStatsEpisodeNo] = useState<"all" | number>("all");
 
   useEffect(() => {
@@ -89,6 +94,8 @@ export function AnalyticsDashboard({ defaultArea = "content", onAreaChange }: An
             onSeriesIdChange={setSeriesId}
             characterId={characterId}
             onCharacterIdChange={setCharacterId}
+            scenarioId={scenarioId}
+            onScenarioIdChange={setScenarioId}
             statsEpisodeNo={statsEpisodeNo}
             onStatsEpisodeNoChange={setStatsEpisodeNo}
           />
@@ -103,6 +110,7 @@ export function AnalyticsDashboard({ defaultArea = "content", onAreaChange }: An
               scopeCategory={scopeCategory}
               seriesId={seriesId}
               characterId={characterId}
+              scenarioId={scenarioId}
               statsEpisodeNo={effectiveStatsEpisodeNo}
             />
           ) : analyticsArea === "user" ? (
@@ -111,6 +119,7 @@ export function AnalyticsDashboard({ defaultArea = "content", onAreaChange }: An
               scopeCategory={scopeCategory}
               seriesId={seriesId}
               characterId={characterId}
+              scenarioId={scenarioId}
             />
           ) : (
             <MonetizationDashboard
@@ -118,6 +127,7 @@ export function AnalyticsDashboard({ defaultArea = "content", onAreaChange }: An
               scopeCategory={scopeCategory}
               seriesId={seriesId}
               characterId={characterId}
+              scenarioId={scenarioId}
               statsEpisodeNo={effectiveStatsEpisodeNo}
             />
           )}

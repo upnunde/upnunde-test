@@ -22,6 +22,10 @@ import {
   type AnalyticsCharacterId,
 } from "@/components/analytics/analytics-character-options";
 import {
+  ANALYTICS_SCENARIO_OPTIONS,
+  type AnalyticsScenarioId,
+} from "@/components/analytics/analytics-scenario-options";
+import {
   ANALYTICS_SERIES_OPTIONS,
   isAllAnalyticsSeriesId,
   type AnalyticsSeriesId,
@@ -45,6 +49,8 @@ export interface AnalyticsScopeFilterBarProps {
   onSeriesIdChange: (id: AnalyticsSeriesId) => void;
   characterId: AnalyticsCharacterId;
   onCharacterIdChange: (id: AnalyticsCharacterId) => void;
+  scenarioId: AnalyticsScenarioId;
+  onScenarioIdChange: (id: AnalyticsScenarioId) => void;
   statsEpisodeNo: "all" | number;
   onStatsEpisodeNoChange: (v: "all" | number) => void;
   className?: string;
@@ -62,12 +68,15 @@ export function AnalyticsScopeFilterBar({
   onSeriesIdChange,
   characterId,
   onCharacterIdChange,
+  scenarioId,
+  onScenarioIdChange,
   statsEpisodeNo,
   onStatsEpisodeNoChange,
   className,
 }: AnalyticsScopeFilterBarProps) {
   const isSeriesScope = scopeCategory === "series";
   const isCharacterScope = scopeCategory === "character";
+  const isScenarioScope = scopeCategory === "scenario";
 
   return (
     <div className={cn(analyticsScopeFilterShellClassName, className)}>
@@ -119,7 +128,7 @@ export function AnalyticsScopeFilterBar({
           })}
         </div>
 
-        {isSeriesScope || isCharacterScope ? (
+        {isSeriesScope || isCharacterScope || isScenarioScope ? (
           <>
             <div className={analyticsScopeFilterDividerClassName} aria-hidden />
             <div className="flex shrink-0 items-center gap-2">
@@ -148,6 +157,15 @@ export function AnalyticsScopeFilterBar({
                   options={ANALYTICS_CHARACTER_OPTIONS}
                   ariaLabelPrefix="캐릭터"
                   placeholder="캐릭터 선택"
+                />
+              ) : null}
+              {isScenarioScope ? (
+                <AnalyticsScopeDropdown
+                  value={scenarioId}
+                  onChange={(id) => onScenarioIdChange(id as AnalyticsScenarioId)}
+                  options={ANALYTICS_SCENARIO_OPTIONS}
+                  ariaLabelPrefix="상황공략"
+                  placeholder="상황공략 선택"
                 />
               ) : null}
             </div>
