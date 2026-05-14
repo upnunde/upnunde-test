@@ -3,49 +3,14 @@
 import React, { useCallback, useState } from "react";
 import { CharacterList } from "@/components/character/CharacterList";
 import { CharacterDeleteModal } from "@/components/character/CharacterDeleteModal";
+import { MY_WORKS_CHARACTERS_MOCK } from "@/lib/myWorksCharactersMock";
 import type { CharacterData } from "@/types/character";
-
-const MOCK_CHARACTERS: CharacterData[] = [
-  {
-    id: "c1",
-    title: "눈싸움 달인 그레이브즈",
-    tagline: "뭐, 좋은 생각이라도 있어?",
-    thumbnailUrl: "/characters/graves-winter-splash.png",
-    status: "PRIVATE",
-    createdAt: "2024-05-12T00:00:00.000Z",
-    viewCount: 25_000,
-    stat1: 4231,
-    stat2: 4211,
-  },
-  {
-    id: "c2",
-    title: "(구) 리신",
-    tagline: "앞을 못 보게 된 건 용의 분노를 일깨우려다 혹독한 대가를 치른 것이라오",
-    thumbnailUrl: "/characters/leesin-splash.png",
-    status: "PUBLIC",
-    createdAt: "2024-05-12T00:00:00.000Z",
-    viewCount: 25_000,
-    stat1: 325_000,
-    stat2: 4211,
-  },
-  {
-    id: "c3",
-    title: "이터늄 녹턴",
-    tagline: "어둠을... 맞이하라...!",
-    thumbnailUrl: "/characters/eternum-nocturne-splash.png",
-    status: "PUBLIC",
-    createdAt: "2024-05-12T00:00:00.000Z",
-    viewCount: 25_000,
-    stat1: 45_000,
-    stat2: 4211,
-  },
-];
 
 /**
  * 내 작품 — 캐릭터 목록 (`/series/character`)
  */
 export default function WorksCharacterListPage() {
-  const [characters, setCharacters] = useState<CharacterData[]>(MOCK_CHARACTERS);
+  const [characters, setCharacters] = useState<CharacterData[]>(MY_WORKS_CHARACTERS_MOCK);
   const [characterToDelete, setCharacterToDelete] = useState<CharacterData | null>(null);
 
   const handleDelete = useCallback((target: CharacterData) => {
