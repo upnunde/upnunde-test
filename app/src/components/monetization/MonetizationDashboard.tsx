@@ -1,17 +1,16 @@
 "use client";
 
-import { useEffect, useMemo, useState } from "react";
+import { useMemo, useState } from "react";
 import dynamic from "next/dynamic";
 import { Title2 } from "@/components/ui/title2";
 import { AnalyticsPanel } from "@/components/analytics/AnalyticsPanel";
-import { AnalyticsScopeFilterBar } from "@/components/analytics/AnalyticsScopeFilterBar";
-import { AnalyticsEpisodeScopePicker } from "@/components/analytics/AnalyticsEpisodeScopePicker";
 import type { AnalyticsPeriodRange } from "@/components/analytics/analytics-date";
 import {
   ANALYTICS_TREND_LINE_FIXED_HEIGHT_CLASS,
   ANALYTICS_TREND_LINE_SHELL_CLASS,
 } from "@/components/analytics/analytics-trend-chart-shell";
 import { deltaClassName, getMonetizationDummy } from "@/components/analytics/analytics-dummy-by-scope";
+import { AnalyticsMonthlyRevenueSection } from "@/components/analytics/AnalyticsMonthlyRevenueSection";
 import { AnalyticsTopFiveRowList } from "@/components/analytics/AnalyticsRankParts";
 import type { AnalyticsScopeCategoryId } from "@/components/analytics/analytics-scope-category";
 import type { AnalyticsCharacterId } from "@/components/analytics/analytics-character-options";
@@ -33,7 +32,7 @@ const AnalyticsTrendLineChart = dynamic(
 );
 
 const MONETIZATION_KEY_STATS_ROWS = [
-  { id: "expectedRevenue", label: "수익금" },
+  { id: "expectedRevenue", label: "추정 수익금" },
   { id: "purchaseCount", label: "구매 수" },
   { id: "purchaseRate", label: "구매 전환율" },
 ] as const;
@@ -42,31 +41,18 @@ type MonetizationStatId = (typeof MONETIZATION_KEY_STATS_ROWS)[number]["id"];
 
 export function MonetizationDashboard({
   periodRange,
-  onPeriodRangeChange,
   scopeCategory,
-  onScopeCategoryChange,
   seriesId,
-  onSeriesIdChange,
   characterId,
-  onCharacterIdChange,
+  statsEpisodeNo,
 }: {
   periodRange: AnalyticsPeriodRange;
-  onPeriodRangeChange: (v: AnalyticsPeriodRange) => void;
   scopeCategory: AnalyticsScopeCategoryId;
-  onScopeCategoryChange: (id: AnalyticsScopeCategoryId) => void;
   seriesId: AnalyticsSeriesId;
-  onSeriesIdChange: (id: AnalyticsSeriesId) => void;
   characterId: AnalyticsCharacterId;
-  onCharacterIdChange: (id: AnalyticsCharacterId) => void;
+  statsEpisodeNo: "all" | number;
 }) {
   const [selectedMonetizationStat, setSelectedMonetizationStat] = useState<MonetizationStatId>("expectedRevenue");
-  const [statsEpisodeNo, setStatsEpisodeNo] = useState<"all" | number>("all");
-
-  const isSeriesScope = scopeCategory === "series";
-
-  useEffect(() => {
-    setStatsEpisodeNo("all");
-  }, [seriesId, scopeCategory]);
 
   const dummy = useMemo(
     () => getMonetizationDummy(scopeCategory, periodRange, seriesId, characterId, statsEpisodeNo),
@@ -77,32 +63,8 @@ export function MonetizationDashboard({
 
   return (
     <div className="flex flex-col items-start justify-start gap-5 self-stretch px-0 pt-5 pb-10">
-      <AnalyticsScopeFilterBar
-        periodRange={periodRange}
-        onPeriodRangeChange={onPeriodRangeChange}
-        scopeCategory={scopeCategory}
-        onScopeCategoryChange={onScopeCategoryChange}
-        seriesId={seriesId}
-        onSeriesIdChange={onSeriesIdChange}
-        characterId={characterId}
-        onCharacterIdChange={onCharacterIdChange}
-      />
-
       <AnalyticsPanel>
-        <Title2
-          text="주요통계"
-          variant="title"
-          asSectionHeader
-          sectionEnd={
-            isSeriesScope ? (
-              <AnalyticsEpisodeScopePicker
-                seriesId={seriesId}
-                value={statsEpisodeNo}
-                onChange={setStatsEpisodeNo}
-              />
-            ) : undefined
-          }
-        />
+        <Title2 text="주요통계" variant="title" asSectionHeader />
         <div className="inline-flex min-h-0 min-w-0 flex-1 flex-wrap items-stretch justify-start self-stretch sm:flex-nowrap">
           {MONETIZATION_KEY_STATS_ROWS.map((stat, i, arr) => (
             <button
@@ -148,14 +110,20 @@ export function MonetizationDashboard({
         </div>
       </AnalyticsPanel>
 
-      <div className="flex w-full flex-col items-stretch gap-5 lg:flex-row">
+      <div className="flex w-full flex-col items-stretch gap-5 lg:flex-row lg:items-start">
         <AnalyticsPanel className="w-full min-w-0 flex-1 lg:min-w-[260px]">
           <Title2 text="매출 기여 콘텐츠 TOP5" variant="title" asSectionHeader />
           <AnalyticsTopFiveRowList rows={dummy.top5} />
         </AnalyticsPanel>
-        <AnalyticsPanel className="w-full min-w-0 flex-1 lg:min-w-[260px]">
-          <Title2 text="개선 필요 콘텐츠 TOP5" variant="title" asSectionHeader />
-          <AnalyticsTopFiveRowList rows={dummy.low5} />
+        <AnalyticsPanel className="h-fit w-full min-w-0 flex-1 self-start lg:min-w-[260px]">
+          <Title2 text="월별 수익" variant="title" asSectionHeader />
+          <div className="p-5">
+            <AnalyticsMonthlyRevenueSection
+              scopeCategory={scopeCategory}
+              seriesId={seriesId}
+              characterId={characterId}
+            />
+          </div>
         </AnalyticsPanel>
       </div>
     </div>

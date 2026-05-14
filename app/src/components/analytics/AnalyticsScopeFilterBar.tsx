@@ -2,11 +2,17 @@
 
 import { SegmentedTextTabs } from "@/components/ui/segmented-text-tabs";
 import { AnalyticsPeriodPicker } from "@/components/analytics/AnalyticsPeriodPicker";
+import { AnalyticsScopeDropdown } from "@/components/analytics/AnalyticsScopeDropdown";
+import { AnalyticsEpisodeScopePicker } from "@/components/analytics/AnalyticsEpisodeScopePicker";
+import type { AnalyticsAreaTabId } from "@/components/analytics/AnalyticsDashboard";
 import { type AnalyticsPeriodRange } from "@/components/analytics/analytics-date";
 import {
   analyticsFilledSecondaryChipClassName,
-  analyticsScopeChipInactiveClassName,
+  analyticsOutlineChipClassName,
+  analyticsScopeFilterDividerClassName,
+  analyticsScopeFilterShellClassName,
 } from "@/components/analytics/analytics-filter-chips";
+import { Button } from "@/components/ui/button";
 import {
   ANALYTICS_SCOPE_CHIPS,
   type AnalyticsScopeCategoryId,
@@ -17,10 +23,20 @@ import {
 } from "@/components/analytics/analytics-character-options";
 import {
   ANALYTICS_SERIES_OPTIONS,
+  isAllAnalyticsSeriesId,
   type AnalyticsSeriesId,
 } from "@/components/analytics/analytics-series-options";
+import { cn } from "@/lib/utils";
+
+const AREA_TABS = [
+  { id: "content", label: "콘텐츠" },
+  { id: "user", label: "이용자" },
+  { id: "revenue", label: "수익" },
+] as const;
 
 export interface AnalyticsScopeFilterBarProps {
+  analyticsArea: AnalyticsAreaTabId;
+  onAnalyticsAreaChange: (area: AnalyticsAreaTabId) => void;
   periodRange: AnalyticsPeriodRange;
   onPeriodRangeChange: (v: AnalyticsPeriodRange) => void;
   scopeCategory: AnalyticsScopeCategoryId;
@@ -29,9 +45,15 @@ export interface AnalyticsScopeFilterBarProps {
   onSeriesIdChange: (id: AnalyticsSeriesId) => void;
   characterId: AnalyticsCharacterId;
   onCharacterIdChange: (id: AnalyticsCharacterId) => void;
+  statsEpisodeNo: "all" | number;
+  onStatsEpisodeNoChange: (v: "all" | number) => void;
+  className?: string;
 }
 
+/** 분석 상단 — 영역 탭·기간·범위 칩·엔티티 드롭다운 */
 export function AnalyticsScopeFilterBar({
+  analyticsArea,
+  onAnalyticsAreaChange,
   periodRange,
   onPeriodRangeChange,
   scopeCategory,
@@ -40,63 +62,98 @@ export function AnalyticsScopeFilterBar({
   onSeriesIdChange,
   characterId,
   onCharacterIdChange,
+  statsEpisodeNo,
+  onStatsEpisodeNoChange,
+  className,
 }: AnalyticsScopeFilterBarProps) {
   const isSeriesScope = scopeCategory === "series";
   const isCharacterScope = scopeCategory === "character";
-  const showSubScopeTabs = isSeriesScope || isCharacterScope;
 
   return (
-    <div className="flex flex-col items-start justify-start gap-3 self-stretch">
-      <div className="inline-flex items-center justify-between self-stretch">
-        <div className="flex flex-wrap items-center justify-start gap-2" role="group" aria-label="콘텐츠 범위">
+    <div className={cn(analyticsScopeFilterShellClassName, className)}>
+      <div className="flex w-full min-w-0 flex-wrap items-center justify-between gap-x-4 gap-y-2">
+        <div className="min-w-0 flex-1">
+          <SegmentedTextTabs
+          aria-label="분석 영역"
+          items={[...AREA_TABS]}
+          activeId={analyticsArea}
+          onSelect={(id) => onAnalyticsAreaChange(id as AnalyticsAreaTabId)}
+          size="xl"
+            underline={false}
+          />
+        </div>
+        <div className="shrink-0">
+          <AnalyticsPeriodPicker value={periodRange} onChange={onPeriodRangeChange} variant="inline" />
+        </div>
+      </div>
+
+      <div className="flex w-full items-center gap-5 overflow-x-auto">
+        <div className="flex shrink-0 items-center gap-2" role="group" aria-label="콘텐츠 범위">
           {ANALYTICS_SCOPE_CHIPS.map(({ id, label }) => {
             const selected = scopeCategory === id;
-            return (
+            return selected ? (
               <button
                 key={id}
                 type="button"
-                aria-pressed={selected}
+                aria-pressed
                 onClick={() => onScopeCategoryChange(id)}
-                className={selected ? analyticsFilledSecondaryChipClassName : analyticsScopeChipInactiveClassName}
+                className={analyticsFilledSecondaryChipClassName}
               >
-                <span className="block w-full overflow-hidden text-ellipsis whitespace-nowrap text-center text-base font-medium leading-5">
+                <span className="block whitespace-nowrap text-center text-sm font-medium leading-5">
                   {label}
                 </span>
               </button>
+            ) : (
+              <Button
+                key={id}
+                type="button"
+                variant="outline"
+                size="lg"
+                aria-pressed={false}
+                onClick={() => onScopeCategoryChange(id)}
+                className={analyticsOutlineChipClassName}
+              >
+                {label}
+              </Button>
             );
           })}
         </div>
-        <AnalyticsPeriodPicker value={periodRange} onChange={onPeriodRangeChange} />
-      </div>
 
-      {showSubScopeTabs ? (
-        <div className="flex w-full items-end gap-3 border-b border-border-10/5 pb-0.5">
-          {isSeriesScope ? (
-            <SegmentedTextTabs
-              aria-label="시리즈 작품"
-              items={ANALYTICS_SERIES_OPTIONS.map((s) => ({ id: s.id, label: s.label }))}
-              activeId={seriesId}
-              onSelect={(id) => onSeriesIdChange(id as AnalyticsSeriesId)}
-              size="l"
-              underline
-              className="min-w-0 flex-1"
-              tabListClassName="self-stretch"
-            />
-          ) : null}
-          {isCharacterScope ? (
-            <SegmentedTextTabs
-              aria-label="캐릭터"
-              items={ANALYTICS_CHARACTER_OPTIONS.map((c) => ({ id: c.id, label: c.label }))}
-              activeId={characterId}
-              onSelect={(id) => onCharacterIdChange(id as AnalyticsCharacterId)}
-              size="l"
-              underline
-              className="min-w-0 flex-1"
-              tabListClassName="self-stretch"
-            />
-          ) : null}
-        </div>
-      ) : null}
+        {isSeriesScope || isCharacterScope ? (
+          <>
+            <div className={analyticsScopeFilterDividerClassName} aria-hidden />
+            <div className="flex shrink-0 items-center gap-2">
+              {isSeriesScope ? (
+                <>
+                  <AnalyticsScopeDropdown
+                    value={seriesId}
+                    onChange={(id) => onSeriesIdChange(id as AnalyticsSeriesId)}
+                    options={ANALYTICS_SERIES_OPTIONS}
+                    ariaLabelPrefix="시리즈 작품"
+                    placeholder="시리즈 전체"
+                  />
+                  {!isAllAnalyticsSeriesId(seriesId) ? (
+                    <AnalyticsEpisodeScopePicker
+                      seriesId={seriesId}
+                      value={statsEpisodeNo}
+                      onChange={onStatsEpisodeNoChange}
+                    />
+                  ) : null}
+                </>
+              ) : null}
+              {isCharacterScope ? (
+                <AnalyticsScopeDropdown
+                  value={characterId}
+                  onChange={(id) => onCharacterIdChange(id as AnalyticsCharacterId)}
+                  options={ANALYTICS_CHARACTER_OPTIONS}
+                  ariaLabelPrefix="캐릭터"
+                  placeholder="캐릭터 선택"
+                />
+              ) : null}
+            </div>
+          </>
+        ) : null}
+      </div>
     </div>
   );
 }

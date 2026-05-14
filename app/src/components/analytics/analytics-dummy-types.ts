@@ -75,5 +75,5 @@ export type MonetizationDummyByScope = {
     purchaseRate: number[];
   };
   top5: AnalyticsTopFiveRow[];
-  low5: AnalyticsTopFiveRow[];
+  monthlyRevenue: { year: number; month: number; label: string; amount: number; inProgress?: boolean }[];
 };

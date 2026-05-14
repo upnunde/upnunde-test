@@ -13,6 +13,7 @@ import {
 } from "@/components/analytics/analytics-date";
 import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover";
 import { Button } from "@/components/ui/button";
+import { analyticsPeriodInlineTriggerClassName } from "@/components/analytics/analytics-filter-chips";
 import { cn } from "@/lib/utils";
 
 /**
@@ -30,6 +31,8 @@ export interface AnalyticsPeriodPickerProps {
   onChange: (next: AnalyticsPeriodRange) => void;
   /** 트리거 className 보강 (정렬 등) */
   triggerClassName?: string;
+  /** `inline` — 상단 컨텍스트 바용 보더 없는 트리거 */
+  variant?: "default" | "inline";
   /** 트리거에 적용할 추가 aria-label 컨텍스트 */
   ariaLabelPrefix?: string;
 }
@@ -38,10 +41,13 @@ const TRIGGER_BASE_CLASS = cn(
   "inline-flex h-10 min-w-0 shrink-0 cursor-pointer items-center justify-between gap-2 rounded-md border border-slate-200 bg-white px-3 text-sm font-medium text-on-surface-10 transition-colors hover:bg-slate-50 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-2 data-[state=open]:border-slate-300 data-[state=open]:bg-slate-50",
 );
 
+const TRIGGER_INLINE_CLASS = analyticsPeriodInlineTriggerClassName;
+
 export function AnalyticsPeriodPicker({
   value,
   onChange,
   triggerClassName,
+  variant = "default",
   ariaLabelPrefix = "조회 기간",
 }: AnalyticsPeriodPickerProps) {
   const [open, setOpen] = useState(false);
@@ -89,12 +95,14 @@ export function AnalyticsPeriodPicker({
       <PopoverTrigger asChild>
         <button
           type="button"
-          className={cn(TRIGGER_BASE_CLASS, triggerClassName)}
+          className={cn(variant === "inline" ? TRIGGER_INLINE_CLASS : TRIGGER_BASE_CLASS, triggerClassName)}
           aria-label={`${ariaLabelPrefix} — 현재 ${triggerLabel}`}
         >
-          <CalendarDays className="h-4 w-4 shrink-0 text-on-surface-30" aria-hidden />
-          <span className="min-w-0 max-w-[260px] truncate">{triggerLabel}</span>
-          <ChevronDown className="h-4 w-4 shrink-0 text-on-surface-30" aria-hidden />
+          <CalendarDays className="h-5 w-5 shrink-0 text-on-surface-20" aria-hidden />
+          <span className="min-w-0 max-w-[280px] truncate text-center text-sm font-medium leading-5">
+            {triggerLabel}
+          </span>
+          <ChevronDown className="h-5 w-5 shrink-0 text-on-surface-20" aria-hidden />
         </button>
       </PopoverTrigger>
       <PopoverContent

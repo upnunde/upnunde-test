@@ -32,7 +32,7 @@ function AnalyticsPageContent() {
   const [profileImageUrl, setProfileImageUrl] = useState<string | null>(null);
 
   return (
-    <div className="flex flex-col h-screen w-full bg-white overflow-hidden">
+    <div className="flex h-screen w-full flex-col overflow-hidden bg-white">
       <Header profileImageUrl={profileImageUrl} onProfileImageChange={setProfileImageUrl} />
       <div className="flex flex-1 overflow-hidden bg-surface-20">
         <AppSidebar defaultActiveId="analytics" />
@@ -43,12 +43,7 @@ function AnalyticsPageContent() {
                 <h1 className="text-2xl font-bold text-on-surface-10">분석</h1>
               </div>
             </div>
-
-            <div className="flex min-h-0 flex-1 flex-col justify-start items-stretch gap-0 overflow-y-auto px-5 py-0">
-              <div className="mx-auto w-full min-w-0 max-w-[1200px]">
-                <AnalyticsDashboard defaultArea={defaultArea} />
-              </div>
-            </div>
+            <AnalyticsDashboard defaultArea={defaultArea} />
           </main>
         </div>
       </div>

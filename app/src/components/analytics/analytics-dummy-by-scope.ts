@@ -15,6 +15,7 @@ import {
   generateCharacterContentTop5,
   generateScopedTop5Dummy,
   generateMonetizationDummy,
+  generateMonetizationMonthlyRevenue,
   generateSeriesEpisodeOptions,
   generateUserDummy,
 } from "@/components/analytics/analytics-dummy-generator";
@@ -39,6 +40,10 @@ const cacheEpisodeTop5 = new Map<string, AnalyticsTopFiveRow[]>();
 const cacheCharacterTop5 = new Map<string, AnalyticsTopFiveRow[]>();
 const cacheScopedTop5 = new Map<string, AnalyticsTopFiveRow[]>();
 const cacheMonetization = new Map<string, ReturnType<typeof generateMonetizationDummy>>();
+const cacheMonetizationMonthly = new Map<
+  string,
+  ReturnType<typeof generateMonetizationMonthlyRevenue>
+>();
 
 function cacheKey(
   scope: AnalyticsScopeCategoryId,
@@ -192,6 +197,38 @@ export function getMonetizationDummy(
       selectedEpisodeNo,
     );
     cacheMonetization.set(k, v);
+  }
+  return v;
+}
+
+function monetizationMonthlyCacheKey(
+  scope: AnalyticsScopeCategoryId,
+  seriesId: string,
+  characterId: string,
+  monthCount: number,
+): string {
+  const entityKey =
+    scope === "series" ? seriesId : scope === "character" ? characterId : "noseries";
+  return `monetization-monthly:${scope}:${entityKey}:${monthCount}`;
+}
+
+/** 수익 탭 월별 수익 — 기간·회차 필터와 무관 */
+export function getMonetizationMonthlyRevenue(
+  scope: AnalyticsScopeCategoryId,
+  seriesId: string = "noseries",
+  characterId: string = "nochar",
+  monthCount = 6,
+): ReturnType<typeof generateMonetizationMonthlyRevenue> {
+  const k = monetizationMonthlyCacheKey(scope, seriesId, characterId, monthCount);
+  let v = cacheMonetizationMonthly.get(k);
+  if (!v) {
+    v = generateMonetizationMonthlyRevenue(
+      scope,
+      seriesId as AnalyticsSeriesId,
+      characterId as AnalyticsCharacterId,
+      monthCount,
+    );
+    cacheMonetizationMonthly.set(k, v);
   }
   return v;
 }

@@ -159,7 +159,7 @@ function SettlementSummaryCard({
   amount: number;
 }) {
   return (
-    <div className="flex min-h-[100px] w-full min-w-0 flex-col justify-between gap-3 rounded-[4px] border border-border-10 bg-surface-10 px-4 py-4 lg:min-h-0 lg:flex-1 lg:flex-row lg:items-center lg:justify-between lg:gap-4 lg:px-8 lg:py-5 xl:px-10">
+    <div className="flex min-h-[100px] w-full min-w-0 flex-col justify-between gap-3 rounded-[4px] border border-border-10 bg-surface-10 px-5 py-4 lg:min-h-0 lg:flex-1 lg:flex-row lg:items-center lg:justify-between lg:gap-4 lg:py-5">
       <p className="min-w-0 text-sm font-bold leading-5 text-on-surface-20 lg:shrink">{title}</p>
       <div className="inline-flex min-w-0 flex-wrap items-baseline gap-x-1 gap-y-0 tabular-nums">
         <p className="text-xl font-bold leading-8 text-on-surface-10 lg:text-2xl">{formatAmount(amount)}</p>

@@ -23,7 +23,8 @@ import type {
   UserDummyByScope,
   UserPrimaryStatDummy,
 } from "@/components/analytics/analytics-dummy-types";
-import type { AnalyticsSeriesId } from "@/components/analytics/analytics-series-options";
+import type { AnalyticsSeriesId, AnalyticsSeriesWorkId } from "@/components/analytics/analytics-series-options";
+import { ALL_ANALYTICS_SERIES_ID, ANALYTICS_SERIES_WORK_OPTIONS } from "@/components/analytics/analytics-series-options";
 import type { AnalyticsCharacterId } from "@/components/analytics/analytics-character-options";
 
 type RevisitBundle = ContentDummyByScope["revisit"];
@@ -503,7 +504,7 @@ const EPISODE_TITLE_PARTS: readonly string[] = [
   "운명의 갈림길",
 ] as const;
 
-const SERIES_EPISODE_COUNT: Record<AnalyticsSeriesId, number> = {
+const SERIES_EPISODE_COUNT: Record<AnalyticsSeriesWorkId, number> = {
   "guy-date": 8,
   "her-heart": 10,
   "rich-youngest": 6,
@@ -512,6 +513,7 @@ const SERIES_EPISODE_COUNT: Record<AnalyticsSeriesId, number> = {
 
 /** 작품별 회차 옵션 생성 — 시드 결정론으로 회차 제목 일관 유지 */
 export function generateSeriesEpisodeOptions(seriesId: AnalyticsSeriesId): EpisodeOption[] {
+  if (seriesId === ALL_ANALYTICS_SERIES_ID) return [];
   const total = SERIES_EPISODE_COUNT[seriesId] ?? 6;
   const rng = mulberry32(hashString(`episode-options:${seriesId}`));
   const titles: string[] = [];
@@ -596,6 +598,26 @@ export function generateEpisodeTop5(
   period: AnalyticsPeriodRange,
   mode: "popular" | "attention",
 ): AnalyticsTopFiveRow[] {
+  if (seriesId === ALL_ANALYTICS_SERIES_ID) {
+    const rng = mulberry32(hashString(`series-works-top5:${period}:${mode}`));
+    const weights = ANALYTICS_SERIES_WORK_OPTIONS.map(() => 0.85 + rng() * 0.3);
+    const sorted = ANALYTICS_SERIES_WORK_OPTIONS.map((work, i) => ({ work, w: weights[i]! }))
+      .sort((a, b) => b.w - a.w)
+      .slice(0, 5);
+    const baseTop = mode === "popular" ? 5200 + Math.floor(rng() * 3200) : 90 + Math.floor(rng() * 220);
+    return sorted.map((entry, rank) => {
+      const decay = Math.pow(0.78, rank);
+      const count = Math.max(1, Math.round(baseTop * decay + (rng() - 0.5) * baseTop * 0.08));
+      return {
+        rank: rank + 1,
+        badge: "시리즈",
+        title: entry.work.label,
+        tone: "series",
+        countLabel: formatInt(count),
+      };
+    });
+  }
+
   const options = generateSeriesEpisodeOptions(seriesId);
   const rng = mulberry32(hashString(`episode-top5:${seriesId}:${period}:${mode}`));
   const weights = options.map((_, i) =>
@@ -755,6 +777,58 @@ function revenueTop5FromPool(
   }));
 }
 
+function getSeoulCalendarYmd(now: Date): string {
+  return now.toLocaleString("sv-SE", { timeZone: "Asia/Seoul" }).slice(0, 10);
+}
+
+function formatRevenueMonthLabel(year: number, month: number, referenceYear: number): string {
+  if (year === referenceYear) return `${month}월`;
+  return `${String(year).slice(-2)}년 ${month}월`;
+}
+
+export function generateMonetizationMonthlyRevenue(
+  scope: AnalyticsScopeCategoryId,
+  seriesId: AnalyticsSeriesId,
+  characterId: AnalyticsCharacterId,
+  monthCount = 6,
+): MonetizationDummyByScope["monthlyRevenue"] {
+  const todayYmd = getSeoulCalendarYmd(new Date());
+  const [ty, tm] = todayYmd.split("-").map(Number);
+  const rows: MonetizationDummyByScope["monthlyRevenue"] = [];
+  const totalMonths = Math.max(1, monthCount);
+
+  // 기간·회차 필터와 무관 — 범위(전체/시리즈/캐릭터)만 반영
+  const baseRng = mulberry32(hashString(`monetization-monthly:${scope}:${seriesId}:${characterId}`));
+  const isSingleEntity = scope === "series" || scope === "character";
+  const entityScale = isSingleEntity
+    ? scope === "series"
+      ? 0.3 + baseRng() * 0.25
+      : 0.28 + baseRng() * 0.22
+    : 1;
+  const vol = scopeVolumeFactor(scope, baseRng) * entityScale;
+
+  for (let monthsAgo = totalMonths - 1; monthsAgo >= 0; monthsAgo--) {
+    const dt = new Date(Date.UTC(ty, tm - 1 - monthsAgo, 1));
+    const year = dt.getUTCFullYear();
+    const month = dt.getUTCMonth() + 1;
+    const inProgress = year === ty && month === tm;
+    const slotRng = mulberry32(
+      hashString(`rev-month:${year}-${month}:${scope}:${seriesId}:${characterId}`),
+    );
+    const monthVol = vol * (0.75 + monthsAgo * 0.06) * (0.9 + slotRng() * 0.2);
+    const amount = Math.max(40_000, Math.round((120_000 + slotRng() * 380_000) * monthVol));
+    rows.push({
+      year,
+      month,
+      label: formatRevenueMonthLabel(year, month, ty),
+      amount,
+      inProgress,
+    });
+  }
+
+  return rows;
+}
+
 /** 수익 탭 — 범위 칩·하위 탭·기간·회차에 따라 더미가 달라진다 */
 export function generateMonetizationDummy(
   scope: AnalyticsScopeCategoryId,
@@ -777,10 +851,12 @@ export function generateMonetizationDummy(
   const vol = scopeVolumeFactor(scope, rng) * periodTrendBias(period, rng) * entityScale;
 
   let episodeScale = 1;
-  if (scope === "series" && selectedEpisodeNo !== "all") {
+  if (scope === "series" && selectedEpisodeNo !== "all" && seriesId !== ALL_ANALYTICS_SERIES_ID) {
     const options = generateSeriesEpisodeOptions(seriesId);
-    const ep = options.find((o) => o.episodeNo === selectedEpisodeNo) ?? options[0]!;
-    episodeScale = episodeRevenueShareRatio(seriesId, ep.episodeNo, period, options.length);
+    const ep = options.find((o) => o.episodeNo === selectedEpisodeNo) ?? options[0];
+    if (ep && options.length > 0) {
+      episodeScale = episodeRevenueShareRatio(seriesId, ep.episodeNo, period, options.length);
+    }
   }
 
   const baseRevenue = Math.max(120_000, Math.round((486_000 + rng() * 920_000) * vol * episodeScale));
@@ -813,14 +889,8 @@ export function generateMonetizationDummy(
   };
 
   let top5: AnalyticsTopFiveRow[];
-  let low5: AnalyticsTopFiveRow[];
   if (scope === "series") {
     top5 = generateEpisodeTop5(seriesId, period, "popular").map((row) => ({
-      ...row,
-      countSuffix: "원",
-      countLabel: String(Math.round(Number((row.countLabel ?? "0").replace(/,/g, "")) * (180 + rng() * 120))),
-    }));
-    low5 = generateEpisodeTop5(seriesId, period, "attention").map((row) => ({
       ...row,
       countSuffix: "원",
       countLabel: String(Math.round(Number((row.countLabel ?? "0").replace(/,/g, "")) * (180 + rng() * 120))),
@@ -831,26 +901,17 @@ export function generateMonetizationDummy(
       countSuffix: "원",
       countLabel: Math.round(Number((row.countLabel ?? "0").replace(/,/g, "")) * (4200 + rng() * 1800)).toLocaleString("ko-KR"),
     }));
-    const lowRng = mulberry32(hashString(`monetization-low-char:${characterId}:${periodKey(period)}`));
-    low5 = generateCharacterContentTop5(characterId, period, "attention").map((row) => ({
-      ...row,
-      countSuffix: "원",
-      countLabel: String(Math.round(Number((row.countLabel ?? "0").replace(/,/g, "")) * (0.04 + lowRng() * 0.06))),
-    }));
   } else {
     const pool = top5PoolForScope(scope);
     top5 = revenueTop5FromPool(pool, rng, scope);
-    const lowRng = mulberry32(hashString(`monetization-low:${scope}:${periodKey(period)}:${seriesId}:${characterId}`));
-    low5 = revenueTop5FromPool([...pool].reverse(), lowRng, scope).map((row) => ({
-      ...row,
-      countLabel: String(Math.round(Number((row.countLabel ?? "0").replace(/,/g, "")) * (0.04 + lowRng() * 0.06))),
-    }));
   }
+
+  const monthlyRevenue = generateMonetizationMonthlyRevenue(scope, seriesId, characterId);
 
   return {
     stats,
     chartSeries,
     top5,
-    low5,
+    monthlyRevenue,
   };
 }

@@ -1,19 +1,30 @@
 import { cn } from "@/lib/utils";
 
-/** 기간 드롭다운 트리거·보조 필터 칩 (테두리형) */
+/** 분석 상단 필터 바 셸 — 페이지 `max-w-[1200px] px-5` 안에서 사용 */
+export const analyticsScopeFilterShellClassName = cn(
+  "flex w-full flex-col gap-1",
+);
+
+/**
+ * 아웃라인 필터 칩·드롭다운 트리거 공통 스타일.
+ * `Button variant="outline" size="lg"`와 함께 쓰거나, 단독 className으로도 사용한다.
+ */
 export const analyticsOutlineChipClassName = cn(
-  "inline-flex h-10 min-w-20 shrink-0 cursor-pointer items-center justify-center gap-1.5 rounded-md border border-slate-200 bg-white px-3 text-sm font-medium text-slate-700 transition-colors hover:bg-slate-50 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-2",
+  "min-w-20 shrink-0 border-divider-10 bg-white px-3 text-sm font-medium text-on-surface-10 shadow-none hover:bg-surface-20 hover:text-on-surface-10",
 );
 
-/** 콘텐츠 범위 `전체` 등 채움형 보조 버튼 */
+/** 범위 칩 — 선택됨 (다크 필) */
 export const analyticsFilledSecondaryChipClassName = cn(
-  "inline-flex h-10 min-w-20 cursor-pointer items-center justify-center gap-1 overflow-hidden rounded-md border-0 bg-secondary-secondary px-3 text-secondary-on-secondary transition-opacity hover:opacity-90 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-2",
+  "inline-flex h-10 min-w-20 cursor-pointer items-center justify-center gap-1 overflow-hidden rounded-md border-0 bg-secondary-secondary px-3 text-sm font-medium leading-5 text-secondary-on-secondary transition-opacity hover:opacity-90 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-2",
 );
 
-/** 범위 칩 중 선택되지 않은 항목 (시리즈·캐릭터 등) */
-export const analyticsScopeChipInactiveClassName = cn(
-  "flex h-10 min-w-20 cursor-pointer items-center rounded-md border border-slate-200 bg-white px-3 text-sm font-medium text-slate-700 transition-colors hover:bg-slate-50 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-2",
+/** 분석 상단 기간 피커 인라인 트리거 */
+export const analyticsPeriodInlineTriggerClassName = cn(
+  "inline-flex h-10 min-w-20 shrink-0 cursor-pointer items-center justify-center gap-2 overflow-hidden rounded-md border-0 bg-transparent px-0 text-sm font-medium leading-5 text-on-surface-20 shadow-none transition-colors hover:bg-transparent focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-2 data-[state=open]:bg-transparent",
 );
+
+/** 필터 행 구분선 */
+export const analyticsScopeFilterDividerClassName = "h-8 w-px shrink-0 bg-divider-10";
 
 /**
  * 상위 컨트롤(시리즈 가로 탭 등) 옆에 붙는 보조 드롭다운 트리거.

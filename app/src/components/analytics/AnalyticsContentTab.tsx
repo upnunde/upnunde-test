@@ -1,12 +1,10 @@
 "use client";
 
-import { useEffect, useMemo, useState } from "react";
+import { useMemo, useState } from "react";
 import dynamic from "next/dynamic";
 import { Title2 } from "@/components/ui/title2";
 import { SegmentedTextTabs } from "@/components/ui/segmented-text-tabs";
 import { AnalyticsPanel } from "@/components/analytics/AnalyticsPanel";
-import { AnalyticsScopeFilterBar } from "@/components/analytics/AnalyticsScopeFilterBar";
-import { AnalyticsEpisodeScopePicker } from "@/components/analytics/AnalyticsEpisodeScopePicker";
 import { cn } from "@/lib/utils";
 import type { AnalyticsPrimaryMetric } from "@/components/analytics/AnalyticsTrendLineChart";
 import { type AnalyticsPeriodRange } from "@/components/analytics/analytics-date";
@@ -55,31 +53,20 @@ const PRIMARY_LABELS: Record<AnalyticsPrimaryMetric, string> = {
 
 export function AnalyticsContentTab({
   periodRange,
-  onPeriodRangeChange,
   scopeCategory,
-  onScopeCategoryChange,
   seriesId,
-  onSeriesIdChange,
   characterId,
-  onCharacterIdChange,
+  statsEpisodeNo,
 }: {
   periodRange: AnalyticsPeriodRange;
-  onPeriodRangeChange: (v: AnalyticsPeriodRange) => void;
   scopeCategory: AnalyticsScopeCategoryId;
-  onScopeCategoryChange: (id: AnalyticsScopeCategoryId) => void;
   seriesId: AnalyticsSeriesId;
-  onSeriesIdChange: (id: AnalyticsSeriesId) => void;
   characterId: AnalyticsCharacterId;
-  onCharacterIdChange: (id: AnalyticsCharacterId) => void;
+  statsEpisodeNo: "all" | number;
 }) {
   const [primaryMetric, setPrimaryMetric] = useState<AnalyticsPrimaryMetric>("views");
-  const [statsEpisodeNo, setStatsEpisodeNo] = useState<"all" | number>("all");
 
   const isSeriesScope = scopeCategory === "series";
-
-  useEffect(() => {
-    setStatsEpisodeNo("all");
-  }, [seriesId, scopeCategory]);
 
   const seriesDummy = useMemo(
     () => getContentDummy(scopeCategory, periodRange, seriesId, characterId),
@@ -106,32 +93,8 @@ export function AnalyticsContentTab({
 
   return (
     <div className="flex flex-col items-start justify-start gap-5 self-stretch px-0 pt-5 pb-10">
-      <AnalyticsScopeFilterBar
-        periodRange={periodRange}
-        onPeriodRangeChange={onPeriodRangeChange}
-        scopeCategory={scopeCategory}
-        onScopeCategoryChange={onScopeCategoryChange}
-        seriesId={seriesId}
-        onSeriesIdChange={onSeriesIdChange}
-        characterId={characterId}
-        onCharacterIdChange={onCharacterIdChange}
-      />
-
       <AnalyticsPanel>
-        <Title2
-          text="주요통계"
-          variant="title"
-          asSectionHeader
-          sectionEnd={
-            isSeriesScope ? (
-              <AnalyticsEpisodeScopePicker
-                seriesId={seriesId}
-                value={statsEpisodeNo}
-                onChange={setStatsEpisodeNo}
-              />
-            ) : undefined
-          }
-        />
+        <Title2 text="주요통계" variant="title" asSectionHeader />
 
         <div className="inline-flex min-h-0 min-w-0 flex-1 flex-wrap items-stretch justify-start self-stretch sm:flex-nowrap">
           {primaryStats.map((stat, i, arr) => {

@@ -2,7 +2,7 @@
 
 import { useCallback, useEffect, useState } from "react";
 import { usePathname, useRouter } from "next/navigation";
-import { SegmentedTextTabs } from "@/components/ui/segmented-text-tabs";
+import { AnalyticsScopeFilterBar } from "@/components/analytics/AnalyticsScopeFilterBar";
 import { AnalyticsContentTab } from "@/components/analytics/AnalyticsContentTab";
 import { AnalyticsUserTab } from "@/components/analytics/AnalyticsUserTab";
 import { MonetizationDashboard } from "@/components/monetization/MonetizationDashboard";
@@ -17,6 +17,7 @@ import {
 } from "@/components/analytics/analytics-character-options";
 import {
   DEFAULT_ANALYTICS_SERIES_ID,
+  isAllAnalyticsSeriesId,
   type AnalyticsSeriesId,
 } from "@/components/analytics/analytics-series-options";
 
@@ -27,9 +28,7 @@ type AnalyticsAreaTabId = "content" | "user" | "revenue";
 export type { AnalyticsAreaTabId };
 
 export interface AnalyticsDashboardProps {
-  /** 진입 시 기본 탭 (`/analytics?area=revenue` 등) */
   defaultArea?: AnalyticsAreaTabId;
-  /** 영역 탭 전환 시 상위(페이지 헤더·URL) 동기화 */
   onAreaChange?: (area: AnalyticsAreaTabId) => void;
 }
 
@@ -55,72 +54,75 @@ export function AnalyticsDashboard({ defaultArea = "content", onAreaChange }: An
     setAnalyticsAreaState(defaultArea);
     onAreaChange?.(defaultArea);
   }, [defaultArea, onAreaChange]);
-  /**
-   * 범위 칩과 시리즈 가로 탭은 콘텐츠/이용자 탭이 공유한다 (탭 전환 시 선택 유지).
-   * 시리즈 칩일 때만 seriesId가 유효하지만, 다른 칩에서 돌아왔을 때도 마지막 선택을 복원하기 위해
-   * 항상 default 시리즈로 초기화하지 않고 lift up 한 상태로 보관한다.
-   */
+
   const [scopeCategory, setScopeCategory] = useState<AnalyticsScopeCategoryId>(
     ANALYTICS_DEFAULT_SCOPE_CATEGORY,
   );
   const [seriesId, setSeriesId] = useState<AnalyticsSeriesId>(DEFAULT_ANALYTICS_SERIES_ID);
   const [characterId, setCharacterId] = useState<AnalyticsCharacterId>(DEFAULT_ANALYTICS_CHARACTER_ID);
+  const [statsEpisodeNo, setStatsEpisodeNo] = useState<"all" | number>("all");
+
+  useEffect(() => {
+    setStatsEpisodeNo("all");
+  }, [seriesId, scopeCategory]);
 
   const setPeriodRangeDeferred = useCallback((v: AnalyticsPeriodRange) => {
     queueMicrotask(() => setPeriodRange(v));
   }, []);
 
+  const effectiveStatsEpisodeNo: "all" | number = isAllAnalyticsSeriesId(seriesId)
+    ? "all"
+    : statsEpisodeNo;
+
   return (
-    <div className="flex w-full flex-col items-stretch">
-      <div className="inline-flex flex-col items-start justify-start gap-2.5 self-stretch border-b border-border-10 px-0 pb-2.5 pt-5">
-        <SegmentedTextTabs
-          aria-label="분석 영역"
-          items={[
-            { id: "content", label: "콘텐츠" },
-            { id: "user", label: "이용자" },
-            { id: "revenue", label: "수익" },
-          ]}
-          activeId={analyticsArea}
-          onSelect={(id) => setAnalyticsArea(id as AnalyticsAreaTabId)}
-          size="xl"
-          tabListClassName="self-stretch"
-        />
+    <div className="flex min-h-0 w-full flex-1 flex-col overflow-hidden">
+      <div className="flex w-full shrink-0 flex-col items-center border-b border-border-10 bg-surface-10 px-5 pb-5 pt-2">
+        <div className="w-full min-w-0 max-w-[1200px]">
+          <AnalyticsScopeFilterBar
+            analyticsArea={analyticsArea}
+            onAnalyticsAreaChange={setAnalyticsArea}
+            periodRange={periodRange}
+            onPeriodRangeChange={setPeriodRangeDeferred}
+            scopeCategory={scopeCategory}
+            onScopeCategoryChange={setScopeCategory}
+            seriesId={seriesId}
+            onSeriesIdChange={setSeriesId}
+            characterId={characterId}
+            onCharacterIdChange={setCharacterId}
+            statsEpisodeNo={statsEpisodeNo}
+            onStatsEpisodeNoChange={setStatsEpisodeNo}
+          />
+        </div>
       </div>
 
-      {analyticsArea === "content" ? (
-        <AnalyticsContentTab
-          periodRange={periodRange}
-          onPeriodRangeChange={setPeriodRangeDeferred}
-          scopeCategory={scopeCategory}
-          onScopeCategoryChange={setScopeCategory}
-          seriesId={seriesId}
-          onSeriesIdChange={setSeriesId}
-          characterId={characterId}
-          onCharacterIdChange={setCharacterId}
-        />
-      ) : analyticsArea === "user" ? (
-        <AnalyticsUserTab
-          periodRange={periodRange}
-          onPeriodRangeChange={setPeriodRangeDeferred}
-          scopeCategory={scopeCategory}
-          onScopeCategoryChange={setScopeCategory}
-          seriesId={seriesId}
-          onSeriesIdChange={setSeriesId}
-          characterId={characterId}
-          onCharacterIdChange={setCharacterId}
-        />
-      ) : (
-        <MonetizationDashboard
-          periodRange={periodRange}
-          onPeriodRangeChange={setPeriodRangeDeferred}
-          scopeCategory={scopeCategory}
-          onScopeCategoryChange={setScopeCategory}
-          seriesId={seriesId}
-          onSeriesIdChange={setSeriesId}
-          characterId={characterId}
-          onCharacterIdChange={setCharacterId}
-        />
-      )}
+      <div className="flex min-h-0 flex-1 flex-col overflow-y-auto px-5 py-0">
+        <div className="mx-auto flex w-full min-w-0 max-w-[1200px] flex-col">
+          {analyticsArea === "content" ? (
+            <AnalyticsContentTab
+              periodRange={periodRange}
+              scopeCategory={scopeCategory}
+              seriesId={seriesId}
+              characterId={characterId}
+              statsEpisodeNo={effectiveStatsEpisodeNo}
+            />
+          ) : analyticsArea === "user" ? (
+            <AnalyticsUserTab
+              periodRange={periodRange}
+              scopeCategory={scopeCategory}
+              seriesId={seriesId}
+              characterId={characterId}
+            />
+          ) : (
+            <MonetizationDashboard
+              periodRange={periodRange}
+              scopeCategory={scopeCategory}
+              seriesId={seriesId}
+              characterId={characterId}
+              statsEpisodeNo={effectiveStatsEpisodeNo}
+            />
+          )}
+        </div>
+      </div>
     </div>
   );
 }

@@ -12,7 +12,6 @@ import {
 import { Title2 } from "@/components/ui/title2";
 import { SegmentedTextTabs } from "@/components/ui/segmented-text-tabs";
 import { AnalyticsPanel } from "@/components/analytics/AnalyticsPanel";
-import { AnalyticsScopeFilterBar } from "@/components/analytics/AnalyticsScopeFilterBar";
 import { AnalyticsViewerHourlyActivityChart } from "@/components/analytics/AnalyticsViewerHourlyActivityChart";
 import { cn } from "@/lib/utils";
 import type { AnalyticsUserMetric } from "@/components/analytics/AnalyticsTrendLineChart";
@@ -107,22 +106,14 @@ const USER_PRIMARY_LABELS: Record<AnalyticsUserMetric, string> = {
 
 export function AnalyticsUserTab({
   periodRange,
-  onPeriodRangeChange,
   scopeCategory,
-  onScopeCategoryChange,
   seriesId,
-  onSeriesIdChange,
   characterId,
-  onCharacterIdChange,
 }: {
   periodRange: AnalyticsPeriodRange;
-  onPeriodRangeChange: (v: AnalyticsPeriodRange) => void;
   scopeCategory: AnalyticsScopeCategoryId;
-  onScopeCategoryChange: (id: AnalyticsScopeCategoryId) => void;
   seriesId: AnalyticsSeriesId;
-  onSeriesIdChange: (id: AnalyticsSeriesId) => void;
   characterId: AnalyticsCharacterId;
-  onCharacterIdChange: (id: AnalyticsCharacterId) => void;
 }) {
   const [userMetric, setUserMetric] = useState<AnalyticsUserMetric>("userCount");
   const [revisitSegment, setRevisitSegment] = useState<RevisitSegmentId>("once");
@@ -151,18 +142,7 @@ export function AnalyticsUserTab({
 
   return (
     <div className="flex flex-col items-start justify-start gap-5 self-stretch px-0 pt-5 pb-10">
-      <AnalyticsScopeFilterBar
-        periodRange={periodRange}
-        onPeriodRangeChange={onPeriodRangeChange}
-        scopeCategory={scopeCategory}
-        onScopeCategoryChange={onScopeCategoryChange}
-        seriesId={seriesId}
-        onSeriesIdChange={onSeriesIdChange}
-        characterId={characterId}
-        onCharacterIdChange={onCharacterIdChange}
-      />
-
-            <AnalyticsPanel>
+      <AnalyticsPanel>
         <Title2 text="주요통계" variant="title" asSectionHeader />
         <div className="inline-flex w-full flex-wrap items-stretch sm:flex-nowrap">
           {userDummy.primary.map((stat, i, arr) => {
