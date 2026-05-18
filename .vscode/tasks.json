@@ -39,7 +39,7 @@
     {
       "label": "Open in Browser",
       "type": "shell",
-      "command": "open http://localhost:3000",
+      "command": "open http://renovel.localhost:3000",
       "problemMatcher": [],
       "presentation": { "reveal": "never" }
     }
@@ -49,7 +49,7 @@
       "id": "openPreview",
       "type": "command",
       "command": "simpleBrowser.show",
-      "args": ["http://localhost:3000"]
+      "args": ["http://renovel.localhost:3000"]
     }
   ]
 }

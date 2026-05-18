@@ -14,7 +14,7 @@ pnpm dev
 bun dev
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+개발 서버는 `npm run dev` (포트 3000). Cursor/VS Code 미리보기는 [http://renovel.localhost:3000](http://renovel.localhost:3000) 으로 열립니다.
 
 You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
 

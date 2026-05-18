@@ -45,7 +45,7 @@ panic이 누적되면 HMR이 무한 재시도되며 dev 오버레이가 mount/un
 
 | 명령 | 용도 |
 |------|------|
-| `npm run dev` (루트 또는 `app/`) | **표준 개발 서버.** webpack 모드. 항상 이걸 사용한다. |
+| `npm run dev` (루트 또는 `app/`) | **표준 개발 서버.** 포트 3000. IDE 미리보기는 `http://renovel.localhost:3000` (`.vscode/settings.json`). |
 | `npm run dev:turbo` (`app/` 한정) | **임시 실험용.** 위 모노레포 이슈가 해결됐는지 확인하거나, Turbopack 전용 기능을 시험할 때만. 일반 개발에 쓰지 않는다. |
 | `npm run clean` (루트 또는 `app/`) | `app/.next` 캐시 삭제. dev 서버가 이상 동작하면 가장 먼저 시도한다. |
 | `npm run build` (`app/`) | 프로덕션 빌드. dev와 무관하게 정상 동작한다. |
