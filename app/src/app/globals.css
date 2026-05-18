@@ -214,7 +214,125 @@
   }
 }
 
+/* 에디터 변환 로딩: 딤드 오버레이 + 4도트 모노톤 */
+@keyframes ai-overlay-fade-in {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+@keyframes ai-orb-loader-spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+@keyframes ai-orb-loader-radius {
+  0%,
+  100% {
+    transform: translateY(0) scale(1.03);
+  }
+  35%,
+  65% {
+    transform: translateY(-24px) scale(1);
+  }
+}
+
+@keyframes ai-orb-loader-glow {
+  0%,
+  100% {
+    filter: brightness(1);
+  }
+  50% {
+    filter: brightness(1.07);
+  }
+}
+
+@keyframes ai-loading-message-fade {
+  0%,
+  12% {
+    opacity: 0;
+  }
+  24%,
+  76% {
+    opacity: 1;
+  }
+  88%,
+  100% {
+    opacity: 0;
+  }
+}
+
 @layer utilities {
+  .ai-convert-overlay {
+    animation: ai-overlay-fade-in 220ms ease-out;
+  }
+
+  .ai-orb-loader {
+    position: relative;
+    width: 84px;
+    height: 84px;
+    animation: ai-orb-loader-glow 1.6s ease-in-out infinite;
+  }
+
+  .ai-orb-loader-spin {
+    position: absolute;
+    inset: 0;
+    animation: ai-orb-loader-spin 1.6s linear infinite;
+  }
+
+  .ai-orb-node {
+    position: absolute;
+    inset: 0;
+    transform-origin: 50% 50%;
+  }
+
+  .ai-orb-node-0 {
+    transform: rotate(0deg);
+  }
+
+  .ai-orb-node-90 {
+    transform: rotate(90deg);
+  }
+
+  .ai-orb-node-180 {
+    transform: rotate(180deg);
+  }
+
+  .ai-orb-node-270 {
+    transform: rotate(270deg);
+  }
+
+  .ai-orb {
+    position: absolute;
+    left: 50%;
+    top: 50%;
+    width: 36px;
+    height: 36px;
+    margin-left: -18px;
+    margin-top: -18px;
+    border-radius: 999px;
+    animation: ai-orb-loader-radius 1.6s cubic-bezier(0.4, 0, 0.2, 1) infinite;
+  }
+
+  .ai-orb-mono {
+    background: var(--on-surface-inverse);
+    box-shadow: 0 0 8px color-mix(in srgb, var(--on-surface-inverse) 22%, transparent);
+  }
+
+  .ai-loading-message {
+    min-height: 20px;
+    display: inline-flex;
+    align-items: center;
+  }
+
+  .ai-loading-message-fade {
+    animation: ai-loading-message-fade 1.5s ease-in-out;
+  }
+
   /* "블랙 버튼"으로 사용된 bg-black 유틸을 공통 컬러로 치환 */
   button.bg-black,
   [data-slot="button"].bg-black {

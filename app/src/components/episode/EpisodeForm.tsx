@@ -10,6 +10,7 @@ import { ImageCard } from "@/components/resource/cards/ImageCard";
 import { Title1 } from "@/components/ui/title1";
 import { Title2 } from "@/components/ui/title2";
 import { ImageCropPosterModal } from "@/components/resource/character/CharacterExpressionModal";
+import { AiConvertLoadingOverlay } from "@/components/episode/AiConvertLoadingOverlay";
 import { cn } from "@/lib/utils";
 import { initialBackgrounds } from "@/lib/resourceMockData";
 import type { ImageResource } from "@/types/resource";
@@ -33,6 +34,13 @@ const DUMMY_SCRIPT = `[scene] 폐성당 지하 입구
 [text speaker="나레이션"] 문틈 너머로 오래전 사라진 이름이 속삭인다.
 [event_end]`;
 const DUMMY_THUMBNAIL = initialBackgrounds[0]?.imageUrl ?? "/background-1.png";
+const EDITOR_CONVERT_LOADING_MS = 5000;
+const EDITOR_CONVERT_LOADING_STEPS = [
+  "작성하신 내용을 에디터로 변환하고 있어요…",
+  "장면과 대사를 블록 구조로 정리하고 있어요…",
+  "배경·캐릭터 리소스를 연결할 준비를 하고 있어요…",
+  "거의 다 되었어요. 에디터 화면으로 이동합니다…",
+];
 
 export interface EpisodeFormProps {
   onCancel?: () => void;
@@ -61,19 +69,44 @@ export function EpisodeForm({
     useState<{ id: string; expressionLabel: string; imageUrl?: string }[] | null>(null);
   const [pendingThumbnailUrl, setPendingThumbnailUrl] = useState<string | null>(null);
   const thumbnailFileInputRef = useRef<HTMLInputElement | null>(null);
+  const convertTimeoutRef = useRef<ReturnType<typeof setTimeout> | null>(null);
+  const isMountedRef = useRef(true);
+  const [isConverting, setIsConverting] = useState(false);
 
-  const handleConvertToEditor = useCallback(() => {
+  const completeConvertToEditor = useCallback(() => {
     const parsed = parseScriptToBlocks(rawScript);
     setBlocks(parsed.length > 0 ? parsed : [createBlock("text", "")]);
     setCurrentView("editor");
     onConverted?.();
   }, [onConverted, rawScript, setBlocks, setCurrentView]);
 
+  const handleConvertToEditor = useCallback(() => {
+    if (isConverting) return;
+    setIsConverting(true);
+    convertTimeoutRef.current = setTimeout(() => {
+      convertTimeoutRef.current = null;
+      if (!isMountedRef.current) return;
+      completeConvertToEditor();
+      setIsConverting(false);
+    }, EDITOR_CONVERT_LOADING_MS);
+  }, [completeConvertToEditor, isConverting]);
+
   useEffect(() => {
     if (!rawScript.trim()) {
       setRawScript(DUMMY_SCRIPT);
     }
   }, [rawScript, setRawScript]);
+
+  useEffect(() => {
+    isMountedRef.current = true;
+    return () => {
+      isMountedRef.current = false;
+      if (convertTimeoutRef.current) {
+        clearTimeout(convertTimeoutRef.current);
+        convertTimeoutRef.current = null;
+      }
+    };
+  }, []);
 
   useEffect(() => {
     return () => {
@@ -155,7 +188,7 @@ export function EpisodeForm({
       <Button
         type="button"
         onClick={handleConvertToEditor}
-        disabled={!isFormComplete}
+        disabled={!isFormComplete || isConverting}
       >
         에디터 변환하기
       </Button>
@@ -163,14 +196,16 @@ export function EpisodeForm({
   );
 
   return (
-    <div
-      className={cn(
-        "mx-auto w-full max-w-[1200px] min-w-[640px] rounded-[4px] border border-border-10 bg-white shadow-none",
-        stickyFooter && "flex min-h-0 h-full flex-col overflow-hidden",
-        containerClassName,
-      )}
-    >
-      <Title2 text="에피소드" asSectionHeader />
+    <>
+      {isConverting ? <AiConvertLoadingOverlay messageSteps={EDITOR_CONVERT_LOADING_STEPS} /> : null}
+      <div
+        className={cn(
+          "mx-auto w-full max-w-[1200px] min-w-[640px] rounded-[4px] border border-border-10 bg-white shadow-none",
+          stickyFooter && "flex min-h-0 h-full flex-col overflow-hidden",
+          containerClassName,
+        )}
+      >
+        <Title2 text="에피소드" asSectionHeader />
 
       <PageCard
         className={cn(
@@ -328,6 +363,7 @@ export function EpisodeForm({
           });
         }}
       />
-    </div>
+      </div>
+    </>
   );
 }

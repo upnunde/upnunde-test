@@ -96,6 +96,7 @@ function ChoiceRow({
   onUpdate,
   onRemove,
   sceneOptions = [],
+  showBottomBorder = true,
 }: {
   blockId: string;
   index: number;
@@ -103,6 +104,7 @@ function ChoiceRow({
   onUpdate: (patch: Partial<ChoiceItem>) => void;
   onRemove: () => void;
   sceneOptions: SceneOption[];
+  showBottomBorder?: boolean;
 }) {
   const isAiMode = choice.isAiMode === true;
   const issueFocus = useEditorStore((s) => s.issueFocus);
@@ -135,16 +137,18 @@ function ChoiceRow({
 
   return (
     <div
-      className="group/choice-row flex border-b border-border-10 items-stretch min-h-[40px]"
+      className={cn(
+        "group/choice-row flex min-h-[40px] items-stretch",
+        showBottomBorder && "border-b border-border-10",
+      )}
       data-choice-id={choice.id}
     >
       {/* Col 1: Label */}
-      <div className="relative w-[80px] shrink-0 min-h-[40px] px-3 py-0 text-sm text-on-surface-30 self-stretch flex items-center">
+      <div className="flex min-h-[40px] w-[80px] shrink-0 self-stretch items-center border-r border-border-10 px-3 py-0 text-sm text-on-surface-30">
         선택 {index + 1}
-        <div className="pointer-events-none absolute inset-y-0 right-0 w-px bg-surface-20" />
       </div>
       {/* Col 2: Content - 텍스트 필드 분리, 줄 길이에 따라 가변 확장 */}
-      <div className="relative flex-1 min-w-[200px] min-h-[40px] px-3 py-1 self-stretch flex items-center">
+      <div className="flex min-h-[40px] min-w-[200px] flex-1 self-stretch items-center border-r border-border-10 px-3 py-1">
         {isAiMode ? (
           <span className="text-sm font-medium text-primary">
             ✨ AI 모드로 직접 대화
@@ -162,10 +166,9 @@ function ChoiceRow({
             className={isTextIssueFocused ? "text-destructive placeholder:text-destructive/60" : ""}
           />
         )}
-        <div className="pointer-events-none absolute inset-y-0 right-0 w-px bg-surface-20" />
       </div>
       {/* Col 3: 장면 전환 드롭다운 */}
-      <div className="relative w-[200px] min-w-[160px] max-w-[200px] shrink-0 min-h-[40px] px-3 py-0 self-stretch flex items-center">
+      <div className="flex min-h-[40px] w-[200px] min-w-[160px] max-w-[200px] shrink-0 self-stretch items-center border-r border-border-10 px-3 py-0">
         <select
           value={choice.nextScene}
           onChange={(e) => {
@@ -189,10 +192,9 @@ function ChoiceRow({
             </option>
           ))}
         </select>
-        <div className="pointer-events-none absolute inset-y-0 right-0 w-px bg-surface-20" />
       </div>
       {/* Col 4: Actions */}
-      <div className="w-[120px] min-w-[100px] max-w-[120px] shrink-0 min-h-[40px] px-3 py-0 self-stretch flex items-center justify-between gap-2">
+      <div className="flex min-h-[40px] w-[120px] min-w-[100px] max-w-[120px] shrink-0 self-stretch items-center justify-between gap-2 px-3 py-0">
         <SwitchToggle
           checked={choice.isPaid}
           onCheckedChange={(checked) => onUpdate({ isPaid: checked })}
@@ -320,6 +322,7 @@ export function ChoiceBlockTable({
           onUpdate={(patch) => handleUpdate(index, patch)}
           onRemove={() => handleRemove(index)}
           sceneOptions={sceneOptions}
+          showBottomBorder={index < choices.length - 1 || !isAtMaxChoices}
         />
       ))}
       {/* Footer: Task 4 - Dropdown with "선택지 추가" and "✨ AI 모드로 직접 대화" */}

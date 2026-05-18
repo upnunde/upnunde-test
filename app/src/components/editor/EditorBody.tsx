@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useEffect, useCallback, Fragment } from "react";
+import React, { useEffect, useCallback, Fragment, useState } from "react";
 import {
   DndContext,
   closestCenter,
@@ -20,6 +20,8 @@ import { cn } from "@/lib/utils";
 import { Button } from "@/components/ui/button";
 import { Plus } from "lucide-react";
 import { ScriptBlock } from "./ScriptBlock";
+import { SlashCommandMenu, type SlashSelectPayload } from "./SlashCommandMenu";
+import type { ScriptBlockData } from "@/types/editor";
 
 /** 텍스트(대사) 블록: 디자인 시안과 동일 — min-h-10·py-1·bg-white·rounded·flex 행 */
 const WRAPPER_CLASS_TEXT =
@@ -48,8 +50,13 @@ function SortableBlockWrapper({
   block: import("@/types/editor").ScriptBlock;
   index: number;
   hasIssue: boolean;
-  updateBlock: (id: string, content: string, data?: import("@/types/editor").ScriptBlockData) => void;
-  addBlock: (index: number, type: import("@/types/editor").BlockType, content?: string) => string;
+  updateBlock: (id: string, content: string, data?: ScriptBlockData) => void;
+  addBlock: (
+    index: number,
+    type: import("@/types/editor").BlockType,
+    content?: string,
+    data?: ScriptBlockData,
+  ) => string;
   removeBlock: (id: string) => void;
   focusBlock: (id: string) => void;
 }) {
@@ -69,6 +76,33 @@ function SortableBlockWrapper({
     transform: CSS.Transform.toString(transform),
     transition,
   };
+
+  const [insertMenuPosition, setInsertMenuPosition] = useState<{
+    top: number;
+    left: number;
+  } | null>(null);
+
+  const handleAddButtonClick = useCallback((e: React.MouseEvent<HTMLButtonElement>) => {
+    e.preventDefault();
+    e.stopPropagation();
+    const rect = e.currentTarget.getBoundingClientRect();
+    setInsertMenuPosition({
+      top: rect.bottom + 4,
+      left: rect.left,
+    });
+  }, []);
+
+  const handleInsertMenuSelect = useCallback(
+    (payload: SlashSelectPayload) => {
+      setInsertMenuPosition(null);
+      const hasDefaultPayload = typeof payload === "object" && "content" in payload;
+      const newBlockId = hasDefaultPayload
+        ? addBlock(index, payload.type, payload.content, payload.data)
+        : addBlock(index, payload);
+      if (newBlockId) focusBlock(newBlockId);
+    },
+    [addBlock, focusBlock, index],
+  );
 
   return (
     <div
@@ -92,12 +126,9 @@ function SortableBlockWrapper({
           size="icon"
           className="h-8 w-6 shrink-0 rounded-full p-0 text-on-surface-30 hover:bg-surface-20 hover:text-on-surface-30"
           aria-label="Add block below"
-          onClick={(e) => {
-            e.preventDefault();
-            e.stopPropagation();
-            const newBlockId = addBlock(index, "text");
-            if (newBlockId) focusBlock(newBlockId);
-          }}
+          aria-expanded={insertMenuPosition !== null}
+          aria-haspopup="listbox"
+          onClick={handleAddButtonClick}
         >
           <Plus className="size-5" />
         </Button>
@@ -151,6 +182,13 @@ function SortableBlockWrapper({
               : ROOT_CLASS_COMPACT
         }
       />
+      {insertMenuPosition ? (
+        <SlashCommandMenu
+          position={insertMenuPosition}
+          onSelect={handleInsertMenuSelect}
+          onClose={() => setInsertMenuPosition(null)}
+        />
+      ) : null}
     </div>
   );
 }
