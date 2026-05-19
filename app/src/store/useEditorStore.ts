@@ -127,6 +127,8 @@ interface EditorActions {
   updateBlockType: (id: string, type: BlockType) => void;
   /** 현재 블록 상태를 히스토리에 추가 */
   addScriptHistoryEntry: (source?: ScriptHistoryEntry["source"]) => void;
+  /** 에디터 최초 진입 시 목록 UI용 히스토리 시드 (5건) */
+  seedInitialScriptHistory: () => void;
   /** 히스토리 항목을 에디터에 불러오기 */
   loadScriptHistoryEntry: (id: string) => void;
 }
@@ -259,6 +261,29 @@ export const useEditorStore = create<EditorStore>((set) => ({
         source,
       };
       const scriptHistory = [entry, ...state.scriptHistory].slice(0, MAX_SCRIPT_HISTORY);
+      return { scriptHistory };
+    }),
+
+  seedInitialScriptHistory: () =>
+    set((state) => {
+      if (state.scriptHistory.length > 0 || state.blocks.length === 0) return state;
+      const now = Date.now();
+      const blocks = cloneBlocks(state.blocks);
+      const seeds: { source: ScriptHistoryEntry["source"]; ageMs: number }[] = [
+        { source: "temporary", ageMs: 15 * 60 * 1000 },
+        { source: "created", ageMs: 60 * 60 * 1000 },
+        { source: "temporary", ageMs: 5 * 60 * 60 * 1000 },
+        { source: "temporary", ageMs: 24 * 60 * 60 * 1000 },
+        { source: "created", ageMs: 48 * 60 * 60 * 1000 },
+      ];
+      const scriptHistory = seeds
+        .map((seed) => ({
+          id: generateId(),
+          blocks: cloneBlocks(blocks),
+          savedAt: now - seed.ageMs,
+          source: seed.source,
+        }))
+        .sort((a, b) => b.savedAt - a.savedAt);
       return { scriptHistory };
     }),
 

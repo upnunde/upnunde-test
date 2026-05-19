@@ -37,7 +37,7 @@ export function ImportCharacterDialog({ open, onOpenChange, onApply }: ImportCha
 
   return (
     <Dialog open={open} onOpenChange={handleDialogOpenChange}>
-      <DialogContent className="w-[680px] max-w-[calc(100vw-2rem)] rounded-[4px] border border-border-10 bg-white p-0">
+      <DialogContent className="w-[680px] max-w-[calc(100vw-2rem)] rounded-2xl border border-border-10 bg-white p-0">
         <div className="border-b border-border-10/5 px-5 py-3">
           <DialogTitle className="text-base font-bold leading-6 text-on-surface-10">캐릭터 가져오기</DialogTitle>
           <p className="mt-1 text-sm text-on-surface-30">

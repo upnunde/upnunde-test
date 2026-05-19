@@ -723,7 +723,7 @@ export default function MonetizationSettlementsPage() {
         </div>
       </div>
       <Dialog open={!!taxDetailTarget} onOpenChange={(open) => !open && setTaxDetailTarget(null)}>
-        <DialogContent className="w-[560px] max-w-[calc(100vw-2rem)] rounded-[4px] border border-border-10 bg-white p-0">
+        <DialogContent className="w-[560px] max-w-[calc(100vw-2rem)] rounded-2xl border border-border-10 bg-white p-0">
           <div className="border-b border-divider-10 px-6 py-4">
             <DialogTitle className="text-lg font-bold leading-6 text-on-surface-10">
               세금 계산 내역
@@ -803,7 +803,7 @@ export default function MonetizationSettlementsPage() {
         </DialogContent>
       </Dialog>
       <Dialog open={!!rejectionReasonTarget} onOpenChange={(open) => !open && setRejectionReasonTarget(null)}>
-        <DialogContent className="w-[420px] max-w-[calc(100vw-2rem)] rounded-[4px] border border-border-10 bg-white p-0">
+        <DialogContent className="w-[420px] max-w-[calc(100vw-2rem)] rounded-2xl border border-border-10 bg-white p-0">
           <div className="border-b border-divider-10 px-5 py-3">
             <DialogTitle className="text-base font-bold leading-6 text-on-surface-10">반려 사유</DialogTitle>
           </div>
@@ -825,7 +825,7 @@ export default function MonetizationSettlementsPage() {
         </DialogContent>
       </Dialog>
       <Dialog open={datePickerOpen} onOpenChange={setDatePickerOpen}>
-        <DialogContent className="w-[420px] max-w-[calc(100vw-2rem)] rounded-[4px] border border-border-10 bg-white p-0">
+        <DialogContent className="w-[420px] max-w-[calc(100vw-2rem)] rounded-2xl border border-border-10 bg-white p-0">
           <div className="border-b border-divider-10 px-5 py-3">
             <DialogTitle className="text-base font-bold leading-6 text-on-surface-10">기간 선택</DialogTitle>
             <p className="mt-1 text-sm text-on-surface-30">조회할 신청일 기간을 설정해 주세요.</p>

@@ -11,6 +11,7 @@ import {
 import { Button } from "@/components/ui/button";
 import { Info } from "lucide-react";
 import { SidebarList } from "@/components/AppSidebar/SidebarList";
+import { deterministicBgmDuration } from "@/lib/bgm-duration";
 import { BgmListItem } from "./BgmListItem";
 
 function parseDurationToSeconds(duration: string): number {
@@ -32,22 +33,17 @@ export interface BgmListModalProps {
 
 const GENRES = ["로맨스", "판타지", "모험", "신화", "마법", "전설"];
 
-/** 3~5분(초) 랜덤 값을 "MM:SS" 형식으로 반환 */
-function randomDuration3to5Min(): string {
-  const totalSeconds = 180 + Math.floor(Math.random() * 121); // 180~300초 (3:00~5:00)
-  const m = Math.floor(totalSeconds / 60);
-  const s = totalSeconds % 60;
-  return `${String(m).padStart(2, "0")}:${String(s).padStart(2, "0")}`;
-}
-
 type MockTrack = { id: string; title: string; duration: string };
 
 function makeTracks(genreKey: string, titles: string[]): MockTrack[] {
-  return titles.map((title, i) => ({
-    id: `${genreKey}-t${i + 1}`,
-    title,
-    duration: randomDuration3to5Min(),
-  }));
+  return titles.map((title, i) => {
+    const id = `${genreKey}-t${i + 1}`;
+    return {
+      id,
+      title,
+      duration: deterministicBgmDuration(id),
+    };
+  });
 }
 
 /** 장르별 테마에 맞는 더미 트랙 목록 (15~30개) */
@@ -272,7 +268,7 @@ export function BgmListModal({ open, onClose, onAdd }: BgmListModalProps) {
 
   return (
     <Dialog open={open} onOpenChange={(o) => !o && onClose()}>
-      <DialogContent className="w-[800px] max-w-[calc(100vw-2rem)] gap-0 bg-surface-10 rounded-[4px] border border-border-10 p-0 overflow-hidden">
+      <DialogContent className="w-[800px] max-w-[calc(100vw-2rem)] gap-0 bg-surface-10 rounded-2xl border border-border-10 p-0 overflow-hidden">
         <DialogHeader className="justify-center items-start h-10 px-5 pt-1 pb-0 border-b border-border-10">
           <div className="flex items-center justify-center gap-1">
             <DialogTitle className="text-on-surface-10 text-base font-bold font-['Pretendard_JP']">

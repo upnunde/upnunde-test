@@ -6,7 +6,7 @@ import { useLayoutEffect, useMemo, useRef, useState } from "react";
 import { useEditorStore } from "@/store/useEditorStore";
 import { Button } from "@/components/ui/button";
 import { Snackbar } from "@/components/episode/Snackbar";
-import { Dialog, DialogContent, DialogTitle } from "@/components/ui/dialog";
+import { EditorUnsavedConfirmModal } from "@/components/editor/EditorUnsavedConfirmModal";
 import {
   Popover,
   PopoverContent,
@@ -37,6 +37,8 @@ export function EditorSubHeader({ title = "에피소드 제목", onRecreate }: E
   const blocks = useEditorStore((s) => s.blocks);
   const scriptHistory = useEditorStore((s) => s.scriptHistory);
   const addScriptHistoryEntry = useEditorStore((s) => s.addScriptHistoryEntry);
+  const seedInitialScriptHistory = useEditorStore((s) => s.seedInitialScriptHistory);
+  const loadScriptHistoryEntry = useEditorStore((s) => s.loadScriptHistoryEntry);
   const undoDepth = useEditorStore((s) => s.undoStack.length);
   const setBlocks = useEditorStore((s) => s.setBlocks);
   const currentView = useEditorStore((s) => s.currentView);
@@ -44,6 +46,8 @@ export function EditorSubHeader({ title = "에피소드 제목", onRecreate }: E
   const [savedSnapshot, setSavedSnapshot] = useState<string | null>(null);
   const [snackbar, setSnackbar] = useState({ open: false, message: "" });
   const [isBackConfirmOpen, setIsBackConfirmOpen] = useState(false);
+  const [isLoadConfirmOpen, setIsLoadConfirmOpen] = useState(false);
+  const [pendingLoadHistoryId, setPendingLoadHistoryId] = useState<string | null>(null);
   const [historyOpen, setHistoryOpen] = useState(false);
   /** 블록이 비었다가 다시 생길 때까지 한 번만 진입 기준선을 잡기 위함 */
   const snapshotBaselineInitRef = useRef(false);
@@ -134,6 +138,36 @@ export function EditorSubHeader({ title = "에피소드 제목", onRecreate }: E
     setCurrentView("form");
   };
 
+  const finishHistoryLoad = (historyId: string) => {
+    loadScriptHistoryEntry(historyId);
+    const snap = JSON.stringify(useEditorStore.getState().blocks);
+    setSavedSnapshot(snap);
+    useEditorStore.setState({ undoStack: [], redoStack: [] });
+    setHistoryOpen(false);
+    setIsLoadConfirmOpen(false);
+    setPendingLoadHistoryId(null);
+    setSnackbar({ open: true, message: "히스토리를 불러왔어요" });
+  };
+
+  const handleHistoryLoadClick = (historyId: string) => {
+    if (hasChangesSinceSave) {
+      setPendingLoadHistoryId(historyId);
+      setIsLoadConfirmOpen(true);
+      return;
+    }
+    finishHistoryLoad(historyId);
+  };
+
+  const handleLoadWithoutSave = () => {
+    if (pendingLoadHistoryId) finishHistoryLoad(pendingLoadHistoryId);
+  };
+
+  const handleTemporarySaveAndLoad = () => {
+    if (!pendingLoadHistoryId) return;
+    handleTemporarySave();
+    finishHistoryLoad(pendingLoadHistoryId);
+  };
+
   /** 실제 편집(undo 스택 생성)이 발생한 경우에만 저장 필요 상태로 간주 */
   const hasChangesSinceSave = undoDepth > 0;
   const canSubmit = hasChangesSinceSave && !hasValidationIssues;
@@ -152,25 +186,22 @@ export function EditorSubHeader({ title = "에피소드 제목", onRecreate }: E
     if (snapshotBaselineInitRef.current) return;
     snapshotBaselineInitRef.current = true;
     if (scriptHistory.length === 0) {
-      addScriptHistoryEntry("created");
+      seedInitialScriptHistory();
     }
     const snap = JSON.stringify(useEditorStore.getState().blocks);
     // eslint-disable-next-line react-hooks/set-state-in-effect -- 진입 시점 baseline 확보(첫 페인트 전)
     setSavedSnapshot(snap);
-  }, [addScriptHistoryEntry, blocks.length, scriptHistory.length]);
+  }, [blocks.length, scriptHistory.length, seedInitialScriptHistory]);
 
-  /** 히스토리가 없을 때 목록 레이아웃용 예시 5건 (신규생성/임시저장 혼합). 최신이 위. */
-  const [emptyStateDemoEntries] = useState(() => {
-    /** Date.now()는 비순수이므로 render 중이 아닌 state lazy initializer에서 1회 계산 */
-    const now = Date.now();
-    return [
-      { savedAt: now - 15 * 60 * 1000, source: "temporary" as const },
-      { savedAt: now - 60 * 60 * 1000, source: "created" as const },
-      { savedAt: now - 5 * 60 * 60 * 1000, source: "temporary" as const },
-      { savedAt: now - 24 * 60 * 60 * 1000, source: "temporary" as const },
-      { savedAt: now - 48 * 60 * 60 * 1000, source: "created" as const },
-    ].sort((a, b) => b.savedAt - a.savedAt);
-  });
+  const historyListItems = useMemo(
+    () =>
+      scriptHistory.map((entry) => ({
+        id: entry.id,
+        savedAt: entry.savedAt,
+        source: entry.source,
+      })),
+    [scriptHistory],
+  );
 
   return (
     <>
@@ -211,8 +242,8 @@ export function EditorSubHeader({ title = "에피소드 제목", onRecreate }: E
               </div>
               <div className="max-h-[min(40vh,280px)] overflow-y-auto px-2 pb-1">
                 <ul className="flex flex-col gap-0.5">
-                  {emptyStateDemoEntries.map((entry, i) => (
-                    <li key={`demo-${i}`}>
+                  {historyListItems.map((entry) => (
+                    <li key={entry.id}>
                       <div
                         className={cn(
                           "group flex min-h-10 items-center justify-between gap-2 rounded-md px-2 py-2",
@@ -231,18 +262,13 @@ export function EditorSubHeader({ title = "에피소드 제목", onRecreate }: E
                           type="button"
                           variant="outline"
                           size="sm"
-                          aria-disabled
-                          tabIndex={-1}
-                          title="임시저장 후 불러올 수 있어요"
-                          onClick={(e) => {
-                            e.preventDefault();
-                          }}
+                          title="이 시점의 원고 불러오기"
+                          onClick={() => handleHistoryLoadClick(entry.id)}
                           className={cn(
                             "h-7 shrink-0 border-border-10 bg-white px-2 text-xs font-medium text-on-surface-10 shadow-none",
                             "opacity-0 pointer-events-none transition-opacity",
                             "group-hover:opacity-100 group-hover:pointer-events-auto",
                             "[@media(hover:none)]:opacity-100 [@media(hover:none)]:pointer-events-auto",
-                            "cursor-default"
                           )}
                         >
                           불러오기
@@ -291,31 +317,29 @@ export function EditorSubHeader({ title = "에피소드 제목", onRecreate }: E
         autoHideDuration={2000}
         onClose={() => setSnackbar((s) => ({ ...s, open: false }))}
       />
-      <Dialog open={isBackConfirmOpen} onOpenChange={setIsBackConfirmOpen}>
-        <DialogContent className="w-[min(92vw,420px)] max-w-[420px] border border-border-10 bg-white p-5 shadow-none">
-          <div className="space-y-2">
-            <DialogTitle className="text-base font-medium text-on-surface-10">
-              아직 작업을 저장하지 않았어요.
-            </DialogTitle>
-            <p className="text-sm text-on-surface-20">
-              정말 나가시겠어요? 임시저장 후 나갈 수 있어요.
-            </p>
-          </div>
-          <div className="mt-5 flex flex-wrap items-center justify-between gap-2">
-            <Button type="button" variant="outline" onClick={() => setIsBackConfirmOpen(false)}>
-              취소
-            </Button>
-            <div className="flex shrink-0 flex-wrap justify-end gap-2">
-              <Button type="button" variant="outline" onClick={handleLeaveWithoutSave}>
-                저장 안 함
-              </Button>
-              <Button type="button" onClick={handleTemporarySaveAndLeave}>
-                임시저장
-              </Button>
-            </div>
-          </div>
-        </DialogContent>
-      </Dialog>
+      <EditorUnsavedConfirmModal
+        open={isBackConfirmOpen}
+        onOpenChange={setIsBackConfirmOpen}
+        title="저장되지 않았어요!"
+        description={"정말 나가시겠어요? 임시저장 후 나갈 수 있어요."}
+        secondaryLabel="저장 안 함"
+        onSecondary={handleLeaveWithoutSave}
+        primaryLabel="저장 후 나가기"
+        onPrimary={handleTemporarySaveAndLeave}
+      />
+      <EditorUnsavedConfirmModal
+        open={isLoadConfirmOpen}
+        onOpenChange={(open) => {
+          setIsLoadConfirmOpen(open);
+          if (!open) setPendingLoadHistoryId(null);
+        }}
+        title="히스토리를 불러올까요?"
+        description={"지금 편집 중인 내용이 있어요.\n임시저장한 뒤 불러오거나, 저장하지 않고 불러올 수 있어요."}
+        secondaryLabel="저장 없이 불러오기"
+        onSecondary={handleLoadWithoutSave}
+        primaryLabel="저장 후 불러오기"
+        onPrimary={handleTemporarySaveAndLoad}
+      />
     </>
   );
 }

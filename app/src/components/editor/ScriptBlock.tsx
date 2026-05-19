@@ -786,7 +786,7 @@ export function ScriptBlock({
               <button
                 type="button"
                 onClick={() => applyTag("<b>", "</b>")}
-                className="p-2 text-on-surface-30 hover:text-white transition-colors"
+                className="rounded-sm p-2 text-[var(--on-surface-inverse)] transition-colors hover:bg-[var(--surface-inverse-20)] hover:text-[var(--on-surface-inverse)]"
                 title="Bold"
               >
                 <Bold className="w-4 h-4" />
@@ -794,7 +794,7 @@ export function ScriptBlock({
               <button
                 type="button"
                 onClick={() => applyTag("<i>", "</i>")}
-                className="p-2 text-on-surface-30 hover:text-white transition-colors"
+                className="rounded-sm p-2 text-[var(--on-surface-inverse)] transition-colors hover:bg-[var(--surface-inverse-20)] hover:text-[var(--on-surface-inverse)]"
                 title="Italic"
               >
                 <Italic className="w-4 h-4" />
@@ -802,7 +802,7 @@ export function ScriptBlock({
               <button
                 type="button"
                 onClick={() => applyTag("<u>", "</u>")}
-                className="p-2 text-on-surface-30 hover:text-white transition-colors"
+                className="rounded-sm p-2 text-[var(--on-surface-inverse)] transition-colors hover:bg-[var(--surface-inverse-20)] hover:text-[var(--on-surface-inverse)]"
                 title="Underline"
               >
                 <Underline className="w-4 h-4" />
@@ -822,7 +822,7 @@ export function ScriptBlock({
               }}
             >
               <DropdownMenuTrigger
-                className="flex items-center gap-1 px-3 py-2 text-sm text-on-surface-30 hover:text-white transition-colors outline-none"
+                className="flex items-center gap-1 rounded-sm px-3 py-2 text-sm text-[var(--on-surface-inverse)] outline-none transition-colors hover:bg-[var(--surface-inverse-20)] hover:text-[var(--on-surface-inverse)]"
               >
                 이펙트 <ChevronDown className="w-3.5 h-3.5" />
               </DropdownMenuTrigger>
@@ -860,7 +860,7 @@ export function ScriptBlock({
               }}
             >
               <DropdownMenuTrigger
-                className="flex items-center gap-1 px-3 py-2 text-sm text-on-surface-30 hover:text-white transition-colors outline-none"
+                className="flex items-center gap-1 rounded-sm px-3 py-2 text-sm text-[var(--on-surface-inverse)] outline-none transition-colors hover:bg-[var(--surface-inverse-20)] hover:text-[var(--on-surface-inverse)]"
               >
                 컬러 <ChevronDown className="w-3.5 h-3.5" />
               </DropdownMenuTrigger>

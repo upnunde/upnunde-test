@@ -1,14 +1,15 @@
 "use client";
 
 import React, { useState } from "react";
-import {
-  Dialog,
-  DialogContent,
-  DialogTitle,
-  DialogClose,
-} from "@/components/ui/dialog";
+import { Dialog, DialogContent, DialogTitle, DialogClose } from "@/components/ui/dialog";
 import { Button } from "@/components/ui/button";
+import {
+  ModalFooterButtons,
+  ModalHeader,
+  modalDialogContentClassName,
+} from "@/components/ui/modal";
 import { formTextFieldSmClassName } from "@/lib/form-field-styles";
+import { CONFIRM_INPUT_GUIDE_TEXT, CONFIRM_INPUT_PHRASE } from "@/lib/deleteConfirmPhrase";
 import { cn } from "@/lib/utils";
 import type { Episode } from "@/types/episode";
 
@@ -27,7 +28,7 @@ export function PublishConfirmModal({
   onConfirm,
 }: PublishConfirmModalProps) {
   const [confirmationText, setConfirmationText] = useState("");
-  const isConfirmKeywordMatched = confirmationText.trim() === "확인했습니다";
+  const isConfirmKeywordMatched = confirmationText.trim() === CONFIRM_INPUT_PHRASE;
 
   const handleConfirm = () => {
     if (episode && isConfirmKeywordMatched) {
@@ -47,9 +48,9 @@ export function PublishConfirmModal({
         }
       }}
     >
-      <DialogContent className="w-[480px] max-w-[calc(100vw-2rem)] p-0 gap-0 bg-surface-10 rounded-[4px] shadow-[0px_8px_16px_8px_rgba(0,0,0,0.16)] border-0 outline-none focus:outline-none">
+      <DialogContent className="w-[480px] max-w-[calc(100vw-2rem)] p-0 gap-0 bg-surface-10 rounded-2xl shadow-[0px_8px_16px_8px_rgba(0,0,0,0.16)] border-0 outline-none focus:outline-none">
         {/* 상단: 제목 + 부제 (가이드 레이아웃) */}
-        <div className="self-stretch px-6 pt-10 pb-4 bg-surface-10 rounded-t-[4px] flex flex-col justify-start items-center gap-5">
+        <div className="self-stretch px-6 pt-10 pb-4 bg-surface-10 rounded-t-2xl flex flex-col justify-start items-center gap-5">
           <div className="self-stretch flex flex-col justify-center items-center gap-2">
             <DialogTitle asChild>
               <h2 className="text-center text-on-surface-10 text-2xl font-bold font-['Pretendard_JP'] leading-8">
@@ -82,14 +83,12 @@ export function PublishConfirmModal({
               </div>
             </div>
             <div className="self-stretch space-y-2">
-              <p className="text-sm font-medium text-on-surface-20">
-                아래 입력창에 <span className="text-on-surface-10">확인했습니다</span>를 입력해 주세요.
-              </p>
+              <p className="text-sm font-medium text-on-surface-20">{CONFIRM_INPUT_GUIDE_TEXT}</p>
               <input
                 type="text"
                 value={confirmationText}
                 onChange={(e) => setConfirmationText(e.target.value)}
-                placeholder="확인했습니다"
+                placeholder={CONFIRM_INPUT_PHRASE}
                 className={cn(formTextFieldSmClassName, "w-full")}
               />
             </div>
@@ -141,47 +140,29 @@ export function DeleteConfirmModal({
   };
 
   return (
-    <Dialog open={open} onOpenChange={(o) => !o && onClose()}>
-      <DialogContent className="flex w-[480px] max-w-[calc(100vw-2rem)] flex-col items-stretch gap-0 overflow-hidden border-0 bg-surface-10 p-0 shadow-[0px_8px_16px_8px_rgba(0,0,0,0.16)] sm:rounded-[4px]">
-        {/* 상단: 제목 + 부제 (가이드 셸) */}
-        <div className="flex flex-col items-center gap-5 self-stretch overflow-hidden rounded-tl-2xl rounded-tr-2xl bg-surface-10 px-6 pb-4 pt-10">
-          <div className="flex flex-col items-center gap-2 self-stretch">
-            <DialogTitle asChild>
-              <h2 className="text-center font-['Pretendard_JP'] text-2xl font-bold leading-8 text-on-surface-10">
-                에피소드를 삭제하시겠어요?
-              </h2>
-            </DialogTitle>
-          </div>
-          <div className="flex flex-col gap-2 self-stretch text-center font-['Pretendard_JP'] text-base font-medium leading-6 text-on-surface-20">
-            <p>삭제된 에피소드는 복구할 수 없습니다.</p>
-            {episode && (
-              <span className="block font-medium text-on-surface-10">「{episode.title}」</span>
-            )}
-          </div>
-        </div>
-
-        {/* 하단: 버튼 */}
-        <div className="flex items-center justify-end overflow-hidden rounded-bl-2xl rounded-br-2xl bg-surface-10">
-          <div className="inline-flex items-center justify-end gap-2 self-stretch bg-surface-10 px-6 pb-5 pt-2">
-            <DialogClose asChild>
-              <Button
-                type="button"
-                variant="outline"
-                className="h-10 min-w-20 rounded-md border border-border-20 bg-surface-10 px-3 font-['Pretendard_JP'] text-base font-medium leading-5 text-on-surface-10 hover:bg-surface-20"
-              >
-                취소
-              </Button>
-            </DialogClose>
-            <Button
-              type="button"
-              variant="destructive"
-              className="h-10 min-w-20 rounded-md bg-error-error px-3 font-['Pretendard_JP'] text-base font-medium leading-5 text-white hover:bg-error-error/90 disabled:opacity-50"
-              onClick={handleConfirm}
-            >
-              에피소드 삭제
-            </Button>
-          </div>
-        </div>
+    <Dialog
+      open={open}
+      onOpenChange={(o) => {
+        if (!o) onClose();
+      }}
+    >
+      <DialogContent className={modalDialogContentClassName}>
+        <ModalHeader
+          title="에피소드를 삭제하시겠어요?"
+          subtitle="정말 삭제하시겠어요? 삭제 후에는 복구할 수 없어요."
+        />
+        {episode ? (
+          <p className="-mt-3 px-6 pb-2 text-center font-['Pretendard_JP'] text-base font-medium leading-6 text-on-surface-10">
+            「{episode.title}」
+          </p>
+        ) : null}
+        <ModalFooterButtons
+          layout="end"
+          trailingButtons={[
+            { label: "취소", closeOnSelect: true },
+            { label: "삭제", tone: "destructive", onClick: handleConfirm },
+          ]}
+        />
       </DialogContent>
     </Dialog>
   );

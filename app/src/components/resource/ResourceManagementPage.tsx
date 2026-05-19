@@ -28,6 +28,7 @@ import {
   initialGallery,
   initialCharacters,
 } from "@/lib/resourceMockData";
+import { deterministicBgmDuration } from "@/lib/bgm-duration";
 import { PreviewScreen } from "@/components/editor/PreviewScreen";
 import { Title2 } from "@/components/ui/title2";
 import type { ScriptBlock } from "@/types/editor";
@@ -58,31 +59,23 @@ const ROUTES = {
 
 const MOCK_HAS_RESOURCES = true;
 
-/** 3~5분 랜덤 duration "MM:SS" */
-function randomBgmDuration(): string {
-  const totalSeconds = 180 + Math.floor(Math.random() * 121); // 180~300초 (3:00~5:00)
-  const m = Math.floor(totalSeconds / 60);
-  const s = totalSeconds % 60;
-  return `${String(m).padStart(2, "0")}:${String(s).padStart(2, "0")}`;
-}
-
 const initialBgm: BgmResource[] = MOCK_HAS_RESOURCES
   ? [
       // 판타지
-      { id: "1", title: "빛의 성가", duration: randomBgmDuration() },
-      { id: "2", title: "마법의 숲", duration: randomBgmDuration() },
-      { id: "3", title: "용자의 여정", duration: randomBgmDuration() },
-      { id: "4", title: "신성한 유적", duration: randomBgmDuration() },
+      { id: "1", title: "빛의 성가", duration: deterministicBgmDuration("bgm-1") },
+      { id: "2", title: "마법의 숲", duration: deterministicBgmDuration("bgm-2") },
+      { id: "3", title: "용자의 여정", duration: deterministicBgmDuration("bgm-3") },
+      { id: "4", title: "신성한 유적", duration: deterministicBgmDuration("bgm-4") },
       // 호러
-      { id: "5", title: "침묵의 복도", duration: randomBgmDuration() },
-      { id: "6", title: "낡은 저택", duration: randomBgmDuration() },
-      { id: "7", title: "속삭이는 그림자", duration: randomBgmDuration() },
-      { id: "8", title: "붉은 달밤", duration: randomBgmDuration() },
+      { id: "5", title: "침묵의 복도", duration: deterministicBgmDuration("bgm-5") },
+      { id: "6", title: "낡은 저택", duration: deterministicBgmDuration("bgm-6") },
+      { id: "7", title: "속삭이는 그림자", duration: deterministicBgmDuration("bgm-7") },
+      { id: "8", title: "붉은 달밤", duration: deterministicBgmDuration("bgm-8") },
       // 로맨스
-      { id: "9", title: "봄날의 고백", duration: randomBgmDuration() },
-      { id: "10", title: "달빛 산책", duration: randomBgmDuration() },
-      { id: "11", title: "두근두근 러브송", duration: randomBgmDuration() },
-      { id: "12", title: "별빛 약속", duration: randomBgmDuration() },
+      { id: "9", title: "봄날의 고백", duration: deterministicBgmDuration("bgm-9") },
+      { id: "10", title: "달빛 산책", duration: deterministicBgmDuration("bgm-10") },
+      { id: "11", title: "두근두근 러브송", duration: deterministicBgmDuration("bgm-11") },
+      { id: "12", title: "별빛 약속", duration: deterministicBgmDuration("bgm-12") },
     ]
   : [];
 

@@ -1,29 +1,22 @@
 "use client";
 
-import React from "react";
+import { AlertCircle } from "lucide-react";
+import { Dialog, DialogContent } from "@/components/ui/dialog";
 import {
-  Dialog,
-  DialogContent,
-  DialogHeader,
-  DialogTitle,
-  DialogDescription,
-  DialogClose,
-} from "@/components/ui/dialog";
-import { Button } from "@/components/ui/button";
+  ModalFooterButtons,
+  ModalHeader,
+  modalDialogContentClassName,
+} from "@/components/ui/modal";
 import type { ResourceCategory } from "@/types/resource";
 
-/** [정책 4] 삭제 전 확인 팝업 - 등장인물, 배경, 연출장면, 갤러리, 미디어, BGM 공통 */
-const CATEGORY_LABELS: Record<ResourceCategory, string> = {
-  character: "등장인물",
-  background: "배경",
-  scene: "연출장면",
-  media: "미디어",
-  gallery: "갤러리",
-  bgm: "BGM",
-};
+/** [정책 4] 삭제 전 확인 팝업 — 등장인물·배경·연출장면·갤러리·미디어·BGM 공통 */
+const RESOURCE_DELETE_TITLE = "리소스를 삭제하시겠어요?";
+const RESOURCE_DELETE_SUBTITLE =
+  "현재 선택한 리소스를 삭제하면, 이 리소스가 포함된 모든 에피소드에서 이미지 노출 누락 또는 음원 재생 오류가 발생될 수 있습니다.";
 
 export interface ConfirmDeleteModalProps {
   open: boolean;
+  /** 하위 호환·호출부 유지용 (표시 카피는 리소스 공통 문구 사용) */
   category: ResourceCategory;
   itemName: string;
   onClose: () => void;
@@ -32,33 +25,41 @@ export interface ConfirmDeleteModalProps {
 
 export function ConfirmDeleteModal({
   open,
-  category,
-  itemName,
   onClose,
   onConfirm,
 }: ConfirmDeleteModalProps) {
-  const label = CATEGORY_LABELS[category];
+  const handleConfirm = () => {
+    onConfirm();
+    onClose();
+  };
+
   return (
-    <Dialog open={open} onOpenChange={(o) => !o && onClose()}>
-      <DialogContent className="w-[400px] max-w-[calc(100vw-2rem)] gap-4 bg-surface-10 rounded-[4px] border border-border-10">
-        <DialogHeader>
-          <DialogTitle className="text-on-surface-10 text-xl font-bold font-['Pretendard_JP']">
-            {label}을(를) 삭제하시겠어요?
-          </DialogTitle>
-          <DialogDescription className="text-on-surface-30 text-sm">
-            &quot;{itemName}&quot; 항목이 영구 삭제되며 복구할 수 없습니다.
-          </DialogDescription>
-        </DialogHeader>
-        <div className="flex justify-end gap-2 pt-2">
-          <DialogClose asChild>
-            <Button type="button" variant="outline" className="w-fit">
-              취소
-            </Button>
-          </DialogClose>
-          <Button type="button" variant="destructive" onClick={onConfirm}>
-            삭제
-          </Button>
-        </div>
+    <Dialog
+      open={open}
+      onOpenChange={(o) => {
+        if (!o) onClose();
+      }}
+    >
+      <DialogContent className={modalDialogContentClassName}>
+        <ModalHeader
+          title={RESOURCE_DELETE_TITLE}
+          subtitle={RESOURCE_DELETE_SUBTITLE}
+          icon={
+            <span
+              className="flex h-7 w-7 items-center justify-center rounded-full bg-[var(--surface-inverse-10)]"
+              aria-hidden
+            >
+              <AlertCircle className="h-4 w-4 text-[var(--on-surface-inverse)]" strokeWidth={2.25} />
+            </span>
+          }
+        />
+        <ModalFooterButtons
+          layout="end"
+          trailingButtons={[
+            { label: "취소", closeOnSelect: true },
+            { label: "삭제", tone: "destructive", onClick: handleConfirm },
+          ]}
+        />
       </DialogContent>
     </Dialog>
   );

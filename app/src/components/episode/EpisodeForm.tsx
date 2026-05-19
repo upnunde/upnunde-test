@@ -11,28 +11,22 @@ import { Title1 } from "@/components/ui/title1";
 import { Title2 } from "@/components/ui/title2";
 import { ImageCropPosterModal } from "@/components/resource/character/CharacterExpressionModal";
 import { AiConvertLoadingOverlay } from "@/components/episode/AiConvertLoadingOverlay";
+import { EpisodeScriptTextarea } from "@/components/episode/EpisodeScriptTextarea";
 import { cn } from "@/lib/utils";
+import { EPISODE_FORM_FIELD_COPY } from "@/lib/episode-form-copy";
+import { EPISODE_SCRIPT_SAMPLE } from "@/lib/episode-script-sample";
 import { initialBackgrounds } from "@/lib/resourceMockData";
 import type { ImageResource } from "@/types/resource";
 
 const MAX_TITLE = 50;
 const MAX_SUMMARY = 100;
 const MAX_HISTORY = 5000;
-const MAX_SCRIPT = 5000;
 const DUMMY_TITLE = "새벽의 문턱에서";
 const DUMMY_SUMMARY = "봉인된 문이 열리며 주인공이 첫 선택의 대가를 마주합니다.";
 const DUMMY_HISTORY =
   "지난 화에서 주인공은 금서 보관실에서 오래된 열쇠를 발견했습니다. " +
   "열쇠에는 정체불명의 문양이 새겨져 있었고, 그 문양은 마을 외곽 폐성당의 지하 문과 일치했습니다. " +
   "동료들은 위험을 경고했지만 주인공은 진실을 확인하기 위해 새벽에 홀로 성당으로 향합니다.";
-const DUMMY_SCRIPT = `[scene] 폐성당 지하 입구
-[top_desc] 차가운 안개가 계단을 타고 올라온다.
-[text speaker="나레이션"] 새벽 다섯 시, 성당의 종은 울리지 않았다.
-[text speaker="나 (페르소나 닉네임)"] 이 문이 정말 모든 시작점이라면, 지금 열어야 해.
-[direction] 주인공이 열쇠를 문에 꽂고 천천히 돌린다.
-[event] 낡은 문이 열리며 푸른 빛이 새어 나온다.
-[text speaker="나레이션"] 문틈 너머로 오래전 사라진 이름이 속삭인다.
-[event_end]`;
 const DUMMY_THUMBNAIL = initialBackgrounds[0]?.imageUrl ?? "/background-1.png";
 const EDITOR_CONVERT_LOADING_MS = 5000;
 const EDITOR_CONVERT_LOADING_STEPS = [
@@ -91,11 +85,13 @@ export function EpisodeForm({
     }, EDITOR_CONVERT_LOADING_MS);
   }, [completeConvertToEditor, isConverting]);
 
+  /** 최초 진입 시에만 샘플 대본 주입. 비운 뒤에는 빈 상태 UI가 유지됨 */
   useEffect(() => {
     if (!rawScript.trim()) {
-      setRawScript(DUMMY_SCRIPT);
+      setRawScript(EPISODE_SCRIPT_SAMPLE);
     }
-  }, [rawScript, setRawScript]);
+    // eslint-disable-next-line react-hooks/exhaustive-deps -- mount seed only
+  }, []);
 
   useEffect(() => {
     isMountedRef.current = true;
@@ -219,14 +215,14 @@ export function EpisodeForm({
             <Title1
               text="에피소드 제목*"
               variant="title-subtitle-dot"
-              subtitleText="에피소드 제목을 입력해주세요."
+              subtitleText={EPISODE_FORM_FIELD_COPY.title.subtitle}
             />
             <input
               type="text"
               maxLength={MAX_TITLE}
               value={title}
               onChange={(e) => setTitle(e.target.value)}
-              placeholder="에피소드 제목을 입력해주세요."
+              placeholder={EPISODE_FORM_FIELD_COPY.title.placeholder}
               className="h-12 rounded-md border border-border-10 bg-white px-3 py-2 text-sm text-on-surface-10 placeholder:text-on-surface-30 focus:outline-none focus:ring-2 focus:ring-primary"
             />
             <div className="flex justify-end text-xs text-on-surface-30">
@@ -239,14 +235,14 @@ export function EpisodeForm({
             <Title1
               text="에피소드 요약*"
               variant="title-subtitle-dot"
-              subtitleText="에피소드를 한 줄로 소개해주세요."
+              subtitleText={EPISODE_FORM_FIELD_COPY.summary.subtitle}
             />
             <input
               type="text"
               maxLength={MAX_SUMMARY}
               value={summary}
               onChange={(e) => setSummary(e.target.value)}
-              placeholder="에피소드 요약을 입력해주세요."
+              placeholder={EPISODE_FORM_FIELD_COPY.summary.placeholder}
               className="h-12 rounded-md border border-border-10 bg-white px-3 py-2 text-sm text-on-surface-10 placeholder:text-on-surface-30 focus:outline-none focus:ring-2 focus:ring-primary"
             />
             <div className="flex justify-end text-xs text-on-surface-30">
@@ -259,7 +255,7 @@ export function EpisodeForm({
             <Title1
               text="대표 이미지*"
               variant="title-subtitle-dot"
-              subtitleText="에피소드 대표 이미지를 등록해주세요."
+              subtitleText={EPISODE_FORM_FIELD_COPY.thumbnail.subtitle}
             />
             {thumbnailUrl ? (
               <ImageCard
@@ -283,14 +279,14 @@ export function EpisodeForm({
             <Title1
               text="지난 사건 히스토리*"
               variant="title-subtitle-dot"
-              subtitleText="지난 사건의 히스토리를 작성해 주세요."
+              subtitleText={EPISODE_FORM_FIELD_COPY.history.subtitle}
             />
             <textarea
               rows={4}
               maxLength={MAX_HISTORY}
               value={history}
               onChange={(e) => setHistory(e.target.value)}
-              placeholder="지난 사건의 히스토리를 작성해 주세요."
+              placeholder={EPISODE_FORM_FIELD_COPY.history.placeholder}
               className="min-h-[160px] max-h-[400px] rounded-md border border-border-10 bg-white px-3 py-2 text-sm text-on-surface-10 placeholder:text-on-surface-30 focus:outline-none focus:ring-2 focus:ring-primary"
             />
             <div className="flex justify-end text-xs text-on-surface-30">
@@ -303,19 +299,9 @@ export function EpisodeForm({
             <Title1
               text="에피소드 대본*"
               variant="title-subtitle-dot"
-              subtitleText="에피소드 대본을 상세하게 작성해 주세요."
+              subtitleText={EPISODE_FORM_FIELD_COPY.script.subtitle}
             />
-            <textarea
-              rows={8}
-              maxLength={MAX_SCRIPT}
-              value={rawScript}
-              onChange={(e) => setRawScript(e.target.value)}
-              placeholder="에피소드 대본을 상세하게 작성해 주세요."
-              className="min-h-[160px] max-h-[400px] rounded-md border border-border-10 bg-white px-3 py-2 text-sm text-on-surface-10 placeholder:text-on-surface-30 focus:outline-none focus:ring-2 focus:ring-primary"
-            />
-            <div className="flex justify-end text-xs text-on-surface-30">
-              {rawScript.length}/{MAX_SCRIPT}
-            </div>
+            <EpisodeScriptTextarea value={rawScript} onChange={setRawScript} />
           </div>
         </div>
 

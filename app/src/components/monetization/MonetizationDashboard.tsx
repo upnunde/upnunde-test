@@ -81,59 +81,59 @@ export function MonetizationDashboard({
   const monetizationChartValues = dummy.chartSeries[selectedMonetizationStat];
 
   return (
-    <div className="flex flex-col items-start justify-start gap-5 self-stretch px-0 pt-5 pb-10">
-      <AnalyticsPanel>
-        <Title2 text="주요통계" variant="title" asSectionHeader />
-        <div className="inline-flex min-h-0 min-w-0 flex-1 flex-wrap items-stretch justify-start self-stretch sm:flex-nowrap">
-          {MONETIZATION_KEY_STATS_ROWS.map((stat, i, arr) => (
-            <button
-              key={stat.label}
-              type="button"
-              onClick={() => setSelectedMonetizationStat(stat.id)}
-              aria-pressed={selectedMonetizationStat === stat.id}
-              aria-label={`${stat.label} 통계 선택`}
-              className={cn(
-                "min-w-[120px] flex-1 sm:min-w-0 self-stretch border-b border-border-10 px-5 py-10 inline-flex flex-col items-center justify-start gap-1",
-                "cursor-pointer text-left transition-colors outline-none",
-                i < arr.length - 1 && "border-r",
-                selectedMonetizationStat === stat.id
-                  ? "z-[1] bg-white"
-                  : "bg-surface-disabled-10 hover:bg-surface-10/80",
-              )}
-            >
-              <div className="justify-center text-center text-sm font-medium leading-5 text-on-surface-20">
-                {stat.label}
-              </div>
-              <div className="justify-center text-center text-2xl font-bold leading-8 text-on-surface-10">
-                {dummy.stats[stat.id].value}
-              </div>
-              <div
+      <div className="flex flex-col items-start justify-start gap-5 self-stretch px-0 pt-5 pb-10">
+        <AnalyticsPanel>
+          <Title2 text="주요통계" variant="title" asSectionHeader />
+          <div className="inline-flex min-h-0 min-w-0 flex-1 flex-wrap items-stretch justify-start self-stretch sm:flex-nowrap">
+            {MONETIZATION_KEY_STATS_ROWS.map((stat, i, arr) => (
+              <button
+                key={stat.label}
+                type="button"
+                onClick={() => setSelectedMonetizationStat(stat.id)}
+                aria-pressed={selectedMonetizationStat === stat.id}
+                aria-label={`${stat.label} 통계 선택`}
                 className={cn(
-                  "justify-center text-center text-sm font-normal leading-5",
-                  deltaClassName(dummy.stats[stat.id].deltaTone),
+                  "min-w-[120px] flex-1 sm:min-w-0 self-stretch border-b border-border-10 px-5 py-10 inline-flex flex-col items-center justify-start gap-1",
+                  "cursor-pointer text-left transition-colors outline-none",
+                  i < arr.length - 1 && "border-r",
+                  selectedMonetizationStat === stat.id
+                    ? "z-[1] bg-white"
+                    : "bg-surface-disabled-10 hover:bg-surface-10/80",
                 )}
               >
+                <div className="justify-center text-center text-sm font-medium leading-5 text-on-surface-20">
+                  {stat.label}
+                </div>
+                <div className="justify-center text-center text-2xl font-bold leading-8 text-on-surface-10">
+                {dummy.stats[stat.id].value}
+                </div>
+                <div
+                  className={cn(
+                    "justify-center text-center text-sm font-normal leading-5",
+                  deltaClassName(dummy.stats[stat.id].deltaTone),
+                  )}
+                >
                 {dummy.stats[stat.id].delta}
-              </div>
-            </button>
-          ))}
-        </div>
+                </div>
+              </button>
+            ))}
+          </div>
 
-        <div className="flex flex-col items-stretch gap-3 self-stretch px-0 py-10">
-          <p className="px-5 text-sm font-medium leading-5 text-on-surface-20">수익금 추이</p>
-          <AnalyticsTrendLineChart
-            metric="views"
-            periodRange={periodRange}
-            valuesOverride={monetizationChartValues}
-          />
-        </div>
-      </AnalyticsPanel>
+          <div className="flex flex-col items-stretch gap-3 self-stretch px-0 py-10">
+            <p className="px-5 text-sm font-medium leading-5 text-on-surface-20">수익금 추이</p>
+            <AnalyticsTrendLineChart
+              metric="views"
+              periodRange={periodRange}
+              valuesOverride={monetizationChartValues}
+            />
+          </div>
+        </AnalyticsPanel>
 
       <div className="flex w-full flex-col items-stretch gap-5 lg:flex-row lg:items-start">
-        <AnalyticsPanel className="w-full min-w-0 flex-1 lg:min-w-[260px]">
-          <Title2 text="매출 기여 콘텐츠 TOP5" variant="title" asSectionHeader />
+          <AnalyticsPanel className="w-full min-w-0 flex-1 lg:min-w-[260px]">
+            <Title2 text="매출 기여 콘텐츠 TOP5" variant="title" asSectionHeader />
           <AnalyticsTopFiveRowList rows={dummy.top5} />
-        </AnalyticsPanel>
+          </AnalyticsPanel>
         <AnalyticsPanel className="h-fit w-full min-w-0 flex-1 self-start lg:min-w-[260px]">
           <Title2
             text="월별 수익"
@@ -155,7 +155,7 @@ export function MonetizationDashboard({
               monthCount={monthlyRevenueRange}
             />
           </div>
-        </AnalyticsPanel>
+          </AnalyticsPanel>
       </div>
     </div>
   );
