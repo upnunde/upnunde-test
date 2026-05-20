@@ -52,7 +52,7 @@ export function ReadonlyChoiceTable({
         className
       )}
     >
-      <div className="flex min-h-9 border-b border-border-10 bg-surface-20/80 text-xs font-medium text-on-surface-30">
+      <div className="flex min-h-8 border-b border-border-10 bg-surface-20/80 text-xs font-medium text-on-surface-30">
         <div className="flex w-20 shrink-0 items-center border-r border-border-10 px-3">선택</div>
         <div className="flex min-w-[200px] flex-1 items-center border-r border-border-10 px-3">
           내용

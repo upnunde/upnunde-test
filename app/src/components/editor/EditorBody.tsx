@@ -33,10 +33,10 @@ const WRAPPER_CLASS_CHOICE =
   "group group/row relative flex h-fit w-full min-h-10 items-start justify-start gap-0 rounded bg-white py-1 outline-none hover:bg-surface-20/50 focus-within:bg-white";
 const ROOT_CLASS_CHOICE = "min-h-8 min-w-0 flex-1 h-fit";
 
-/** 한 줄 블록 (장면/캐릭터/연출/배경 등): 고정 높이 36px, px-0 py-1 */
+/** 한 줄 블록 (장면/캐릭터/연출/배경 등): 고정 높이 32px(h-8), px-0 py-1 */
 const WRAPPER_CLASS_COMPACT =
   "group flex h-full items-center justify-start gap-0 rounded-lg hover:bg-surface-20/50";
-const ROOT_CLASS_COMPACT = "min-w-0 flex-1 min-h-[36px] h-[36px]";
+const ROOT_CLASS_COMPACT = "min-w-0 flex-1 min-h-8 h-8";
 
 function SortableBlockWrapper({
   block,

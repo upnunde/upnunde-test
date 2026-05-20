@@ -212,7 +212,7 @@ export function EditorSubHeader({ title = "에피소드 제목", onRecreate }: E
             variant="outline"
             size="icon"
             onClick={handleBack}
-            className="h-9 w-9 shrink-0 rounded-full"
+            className="h-8 w-8 shrink-0 rounded-full"
             aria-label="뒤로 가기"
           >
             <ChevronLeft className="h-5 w-5" strokeWidth={2} />

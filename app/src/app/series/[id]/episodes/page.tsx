@@ -270,7 +270,7 @@ export default function EpisodeManagementPage() {
                   variant="outline"
                   size="icon"
                   onClick={handleBack}
-                  className="h-9 w-9 shrink-0 rounded-full border-border-10 shadow-none focus-visible:ring-0 focus-visible:ring-offset-0"
+                  className="h-8 w-8 shrink-0 rounded-full border-border-10 shadow-none focus-visible:ring-0 focus-visible:ring-offset-0"
                   aria-label="시리즈 목록으로"
                 >
                   <ChevronLeft className="h-5 w-5 text-on-surface-30" strokeWidth={2} />
@@ -304,7 +304,7 @@ export default function EpisodeManagementPage() {
 
               {/* 정책 14, 15: 빈 화면 배너 또는 리스트/페이지네이션 */}
               {showEmptyBanner ? (
-                <div className="w-full px-10">
+                <div className="w-full px-5">
                   <EmptyStateBanner />
                 </div>
               ) : (

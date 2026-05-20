@@ -67,7 +67,7 @@ export interface FilterChipProps
   extends Omit<ChipProps, "chipType" | "variant" | "icon" | "dismissIcon"> {
   selected?: boolean;
   chipSize?: NonNullable<ChipVariantProps["size"]>;
-  /** 미지정 시 M=`circle`(rounded), L=`square` */
+  /** 미지정 시 `square` — L=12px·M=8px 라운드 (`chip-styles`) */
   corner?: ChipVariantProps["corner"];
 }
 

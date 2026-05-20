@@ -11,6 +11,7 @@ import {
   analyticsScopeFilterShellClassName,
 } from "@/components/analytics/analytics-filter-chips";
 import { FilterChip } from "@/components/ui/chip";
+import { CHIP_GROUP_GAP_CLASS } from "@/lib/chip-styles";
 import {
   ANALYTICS_SCOPE_CHIPS,
   type AnalyticsScopeCategoryId,
@@ -95,7 +96,11 @@ export function AnalyticsScopeFilterBar({
       </div>
 
       <div className="flex w-full items-center gap-5 overflow-x-auto">
-        <div className="flex shrink-0 items-center gap-2" role="group" aria-label="콘텐츠 범위">
+        <div
+          className={cn("flex shrink-0 items-center", CHIP_GROUP_GAP_CLASS)}
+          role="group"
+          aria-label="콘텐츠 범위"
+        >
           {ANALYTICS_SCOPE_CHIPS.map(({ id, label }) => {
             const selected = scopeCategory === id;
             return (
@@ -116,7 +121,7 @@ export function AnalyticsScopeFilterBar({
         {isSeriesScope || isCharacterScope || isScenarioScope ? (
           <>
             <div className={analyticsScopeFilterDividerClassName} aria-hidden />
-            <div className="flex shrink-0 items-center gap-2">
+            <div className={cn("flex shrink-0 items-center", CHIP_GROUP_GAP_CLASS)}>
               {isSeriesScope ? (
                 <>
                   <AnalyticsScopeDropdown

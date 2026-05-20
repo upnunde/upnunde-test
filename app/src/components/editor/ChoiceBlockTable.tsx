@@ -180,7 +180,7 @@ function ChoiceRow({
           }}
           title={selectedSceneLabel}
           className={cn(
-            "h-9 w-full min-w-0 rounded-md border-0 bg-transparent px-0 py-1 pr-2 text-sm overflow-hidden text-ellipsis whitespace-nowrap outline-none focus:outline-none focus:ring-0 focus:ring-offset-0",
+            "h-8 w-full min-w-0 rounded-md border-0 bg-transparent px-0 py-1 pr-2 text-sm overflow-hidden text-ellipsis whitespace-nowrap outline-none focus:outline-none focus:ring-0 focus:ring-offset-0",
             isSceneUnselected ? "text-on-surface-30" : "text-on-surface-10",
             isNextSceneIssueFocused && "text-destructive"
           )}
@@ -306,7 +306,7 @@ export function ChoiceBlockTable({
       data-block-id={blockId}
     >
       {/* Header */}
-      <div className="flex border-b border-border-10 bg-surface-20/80 text-on-surface-30 text-xs font-medium min-h-9">
+      <div className="flex border-b border-border-10 bg-surface-20/80 text-on-surface-30 text-xs font-medium min-h-8">
         <div className="w-20 shrink-0 px-3 flex items-center border-r border-border-10">선택</div>
         <div className="flex-1 min-w-[200px] px-3 flex items-center border-r border-border-10">내용</div>
         <div className="w-[200px] min-w-[160px] max-w-[200px] shrink-0 px-3 flex items-center border-r border-border-10">장면 전환</div>

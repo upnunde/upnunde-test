@@ -1,6 +1,7 @@
 "use client";
 
 import { FilterChip } from "@/components/ui/chip";
+import { CHIP_GROUP_GAP_CLASS } from "@/lib/chip-styles";
 import { cn } from "@/lib/utils";
 
 export type MonthlyRevenueRangeMonths = 6 | 12;
@@ -26,7 +27,7 @@ export function AnalyticsMonthlyRevenueRangeFilter({
     <div
       role="group"
       aria-label="월별 수익 표시 기간"
-      className={cn("inline-flex shrink-0 items-center gap-1", className)}
+      className={cn("inline-flex shrink-0 items-center", CHIP_GROUP_GAP_CLASS, className)}
     >
       {RANGE_OPTIONS.map((option) => {
         const selected = value === option.value;

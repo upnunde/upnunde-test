@@ -7,6 +7,8 @@ import { AlertCircle, CalendarDays, ChevronDown, Download, FileText } from "luci
 import Header from "@/components/Header/Header";
 import AppSidebar from "@/components/AppSidebar/AppSidebar";
 import { Button } from "@/components/ui/button";
+import { FilterChip } from "@/components/ui/chip";
+import { CHIP_COMPANION_CONTROL_CLASS, CHIP_GROUP_GAP_CLASS } from "@/lib/chip-styles";
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from "@/components/ui/dropdown-menu";
 import { Dialog, DialogContent, DialogTitle } from "@/components/ui/dialog";
 import { AnalyticsPanel } from "@/components/analytics/AnalyticsPanel";
@@ -62,6 +64,14 @@ const SETTLEMENT_PAGE_SIZE = 10;
 
 type RangePreset = "all" | "1m" | "3m" | "6m" | "ytd" | "custom";
 type StatusFilter = "all" | SettlementStatus;
+
+const RANGE_PRESET_OPTIONS: ReadonlyArray<{ value: Exclude<RangePreset, "custom">; label: string }> = [
+  { value: "all", label: "전체 기간" },
+  { value: "1m", label: "1개월" },
+  { value: "3m", label: "3개월" },
+  { value: "6m", label: "6개월" },
+  { value: "ytd", label: "올해" },
+];
 
 const STATUS_FILTER_OPTIONS: Array<{ value: StatusFilter; label: string }> = [
   { value: "all", label: "전체 상태" },
@@ -174,14 +184,6 @@ function SettlementSummaryCard({
  */
 const SETTLEMENT_TABLE_GRID_CLASS =
   "grid w-full min-w-0 grid-cols-[minmax(0,15%)_minmax(0,2.5fr)_minmax(0,1fr)_minmax(0,1fr)_minmax(0,1fr)_minmax(0,1fr)_minmax(0,min(100%,80px))] gap-x-0";
-
-/** 기간 프리셋 선택 상태 — primary 대신 inverse 서피스(어두운 톤) */
-const RANGE_PRESET_ACTIVE_CLASS =
-  "border-transparent bg-[var(--surface-inverse-10)] text-[var(--on-surface-inverse)] shadow-none hover:bg-[var(--surface-inverse-20)] hover:text-[var(--on-surface-inverse)] focus-visible:ring-2 focus-visible:ring-on-surface-30/35";
-
-function rangePresetButtonClass(active: boolean) {
-  return cn("border-border-10 shadow-none", active ? RANGE_PRESET_ACTIVE_CLASS : "bg-white text-on-surface-20");
-}
 
 function SettlementRowDesktop({
   item,
@@ -585,31 +587,43 @@ export default function MonetizationSettlementsPage() {
                     <div className="flex flex-wrap items-center justify-between gap-3">
                       <h3 className="text-lg font-bold leading-6 text-on-surface-10">정산 내역</h3>
                     </div>
-                    <div className="mt-3 flex flex-wrap items-end justify-between gap-4">
-                      <div className="flex flex-wrap items-end gap-4">
-                        <div className="flex flex-wrap items-center gap-2">
-                          <Button type="button" variant="outline" size="sm" className={rangePresetButtonClass(rangePreset === "all")} onClick={() => applyPresetRange("all")}>
-                            전체 기간
-                          </Button>
-                          <Button type="button" variant="outline" size="sm" className={rangePresetButtonClass(rangePreset === "1m")} onClick={() => applyPresetRange("1m")}>
-                            1개월
-                          </Button>
-                          <Button type="button" variant="outline" size="sm" className={rangePresetButtonClass(rangePreset === "3m")} onClick={() => applyPresetRange("3m")}>
-                            3개월
-                          </Button>
-                          <Button type="button" variant="outline" size="sm" className={rangePresetButtonClass(rangePreset === "6m")} onClick={() => applyPresetRange("6m")}>
-                            6개월
-                          </Button>
-                          <Button type="button" variant="outline" size="sm" className={rangePresetButtonClass(rangePreset === "ytd")} onClick={() => applyPresetRange("ytd")}>
-                            올해
-                          </Button>
+                    <div className="mt-3 flex flex-wrap items-center justify-between gap-4">
+                      <div className="flex flex-wrap items-center gap-4">
+                        <div
+                          className={cn("flex flex-wrap items-center", CHIP_GROUP_GAP_CLASS)}
+                          role="group"
+                          aria-label="정산 내역 조회 기간"
+                        >
+                          {RANGE_PRESET_OPTIONS.map(({ value, label }) => {
+                            const selected = rangePreset === value;
+                            return (
+                              <FilterChip
+                                key={value}
+                                selected={selected}
+                                chipSize="m"
+                                aria-pressed={selected}
+                                className="min-w-0"
+                                onClick={() => applyPresetRange(value)}
+                              >
+                                {label}
+                              </FilterChip>
+                            );
+                          })}
                         </div>
-                        <div className="flex min-w-0 flex-wrap items-center gap-2">
+                        <div
+                          className={cn(
+                            "flex min-w-0 flex-wrap items-center",
+                            CHIP_GROUP_GAP_CLASS,
+                          )}
+                        >
                           <Button
                             type="button"
                             variant="outline"
                             size="sm"
-                            className="h-9 min-w-0 max-w-full flex-1 justify-between border-border-10 px-3 text-sm font-normal text-on-surface-20 sm:min-w-[200px] sm:max-w-[min(100%,320px)]"
+                            className={cn(
+                              CHIP_COMPANION_CONTROL_CLASS,
+                              "min-w-0 max-w-full flex-1 justify-between sm:min-w-[200px] sm:max-w-[min(100%,320px)]",
+                            )}
                             onClick={() => setDatePickerOpen(true)}
                           >
                             <span className="truncate">{rangeLabel}</span>
@@ -621,7 +635,10 @@ export default function MonetizationSettlementsPage() {
                                 type="button"
                                 variant="outline"
                                 size="sm"
-                                className="h-9 min-w-0 max-w-full flex-1 justify-between border-border-10 px-3 text-sm font-normal text-on-surface-20 sm:min-w-[108px] sm:flex-initial sm:max-w-none"
+                                className={cn(
+                                  CHIP_COMPANION_CONTROL_CLASS,
+                                  "min-w-0 max-w-full flex-1 justify-between sm:min-w-[108px] sm:flex-initial sm:max-w-none",
+                                )}
                               >
                                 <span>{statusFilterLabel}</span>
                                 <ChevronDown className="h-4 w-4 text-on-surface-30" aria-hidden />
@@ -783,7 +800,7 @@ export default function MonetizationSettlementsPage() {
                   type="button"
                   variant="outline"
                   size="sm"
-                  className="h-9 border-border-10 bg-white hover:bg-surface-20"
+                  className="h-8 border-border-10 bg-white hover:bg-surface-20"
                   onClick={() => handleDownloadSingleSettlementCsv(taxDetailTarget)}
                 >
                   <Download className="h-4 w-4" aria-hidden />
@@ -792,7 +809,7 @@ export default function MonetizationSettlementsPage() {
                 <Button
                   type="button"
                   size="sm"
-                  className="h-9"
+                  className="h-8"
                   onClick={() => setTaxDetailTarget(null)}
                 >
                   확인
@@ -836,14 +853,14 @@ export default function MonetizationSettlementsPage() {
                 type="date"
                 value={pendingStartDate}
                 onChange={(e) => setPendingStartDate(e.target.value)}
-                className="h-9 flex-1 rounded-md border border-border-10 px-3 text-sm"
+                className="h-8 flex-1 rounded-md border border-border-10 px-3 text-sm"
               />
               <span className="text-sm text-on-surface-30">~</span>
               <input
                 type="date"
                 value={pendingEndDate}
                 onChange={(e) => setPendingEndDate(e.target.value)}
-                className="h-9 flex-1 rounded-md border border-border-10 px-3 text-sm"
+                className="h-8 flex-1 rounded-md border border-border-10 px-3 text-sm"
               />
             </div>
           </div>

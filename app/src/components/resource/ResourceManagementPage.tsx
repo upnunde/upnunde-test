@@ -13,6 +13,7 @@ import { MediaCard } from "./cards/MediaCard";
 import { AddResourceSlot } from "./cards/AddResourceSlot";
 import { BgmSection } from "./bgm/BgmSection";
 import { ConfirmDeleteModal } from "./modals/ConfirmDeleteModal";
+import { PAGE_SCROLL_COLUMN_CLASS, PAGE_SUBHEADER_CLASS } from "@/lib/page-layout";
 import type { ImageLightboxItem } from "./ImageLightbox";
 import type {
   ResourceCategory,
@@ -179,7 +180,7 @@ export function ResourceManagementPage() {
     <>
       <main className="flex min-h-0 flex-1 flex-col bg-surface-20">
         {/* [정책 1] 헤더 (레이아웃 가이드: margin 40, max-width 1200, min-width 640) */}
-        <header className="flex h-16 shrink-0 items-center justify-center border-b border-border-10 bg-white px-10 py-0">
+        <header className={PAGE_SUBHEADER_CLASS}>
           <div className="flex w-full max-w-[1200px] min-w-[640px] items-center justify-between gap-4">
             <div className="flex items-center justify-start gap-3">
               <Button
@@ -187,7 +188,7 @@ export function ResourceManagementPage() {
                 variant="outline"
                 size="icon"
                 onClick={handleBack}
-                className="h-9 w-9 shrink-0 rounded-full border-border-10 shadow-none focus-visible:ring-0 focus-visible:ring-offset-0"
+                className="h-8 w-8 shrink-0 rounded-full border-border-10 shadow-none focus-visible:ring-0 focus-visible:ring-offset-0"
                 aria-label="시리즈 목록으로"
               >
                 <ChevronLeft className="h-5 w-5 text-on-surface-30" strokeWidth={2} />
@@ -197,7 +198,7 @@ export function ResourceManagementPage() {
           </div>
         </header>
 
-        <div className="min-h-0 flex-1 overflow-y-auto flex flex-col items-center py-8 px-10 gap-4">
+        <div className={PAGE_SCROLL_COLUMN_CLASS}>
           <div className="w-full max-w-[1200px] min-w-[640px] mx-auto flex flex-col gap-4">
             <ResourceBanner seriesId={seriesId} />
 

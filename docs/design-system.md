@@ -361,9 +361,31 @@ UI에서 **실제로 사용하는 역할 기반 토큰**. 값은 프리미티브
 | `spacing-72` | 72px |
 | `spacing-80` | 80px |
 
+#### 페이지·카드 본문 인셋 (공통)
+
+- **기본 가로·세로 인셋 = `spacing-20`(20px)** → Tailwind **`px-5` / `py-5` / `p-5`**
+- 코드 단일 소스: `app/src/lib/page-layout.ts` (`PAGE_CONTENT_PAD_X_CLASS`, `PAGE_CONTENT_BODY_CLASS`, `PAGE_SCROLL_GUTTER_CLASS` 등)
+- `Title2` `asSectionHeader` 기본값도 **`px-5 py-3`** — `px-8`(32px) 등으로 덮어쓰지 않는다
+- `PageCard`·`SeriesFormPageScaffold` 본문·정산/분석 `px-5` 열과 동일
+
 ---
 
-### 5. Radius (모서리)
+### 5. 인터랙티브 컨트롤 높이
+
+구 **`h-9`(36px)** 는 서비스 전역에서 **`h-8`(32px)** 로 통일한다.
+
+| 용도 | 클래스 | 높이 |
+|------|--------|------|
+| 기본 `Button`·필터 칩 M·보조 드롭다운·컴팩트 에디터 행 | `h-8` / `CONTROL_HEIGHT_CLASS` | 32px |
+| 아이콘-only 버튼 (`size="icon"`) | `size-8` | 32×32px |
+| 칩 L·상단 대형 필터 | `h-10` | 40px |
+| 폼 `Input` md·주요 텍스트 필드 | `h-12` | 48px |
+
+예외: AI 로더 오브(`.ai-orb` 36px) 등 **비컨트롤 그래픽**은 유지한다.
+
+---
+
+### 6. Radius (모서리)
 
 단위: **px**. 비인터랙티브 surface 기본값은 **4px**.
 
@@ -386,7 +408,7 @@ UI에서 **실제로 사용하는 역할 기반 토큰**. 값은 프리미티브
 
 ---
 
-### 6. Chip · Tag (Figma `chips`)
+### 7. Chip · Tag (Figma `chips`)
 
 필터·탭·입력 토큰을 **역할**로 나눈다. 스타일은 `app/src/lib/chip-styles.ts`의 `chipVariants`(cva)가 단일 소스다.
 
@@ -402,8 +424,8 @@ UI에서 **실제로 사용하는 역할 기반 토큰**. 값은 프리미티브
 |----|-----|------|
 | `chipType` | `fill` \| `outline` | HTML `type` 속성과 구분하기 위해 `chipType` 명명 |
 | `variant` | `activated` \| `default` | 선택·강조 상태 |
-| `corner` | `square` \| `circle` | square: L=`rounded-lg`, M=`rounded`(4px) · **M 필터 칩은 Figma `rounded` → `circle`** (`rounded-full`) |
-| `size` | `l` \| `m` | L=`h-10`, M=`h-8` |
+| `corner` | `square` \| `circle` | **square(필터·탭 기본)**: L=`h-10`+**radius 12px**, M=`h-8`+**radius 8px** · **circle**: Tag 등 pill (`rounded-full`) |
+| `size` | `l` \| `m` | L=`h-10`(40px), M=`h-8`(32px) |
 | `icon` | boolean | Tag 닫기(X) 등 — 우측 아이콘 슬롯 |
 
 #### Chip 패딩 (px)
@@ -415,18 +437,27 @@ UI에서 **실제로 사용하는 역할 기반 토큰**. 값은 프리미티브
 
 `FilterChip`·`SegmentedTextTabs` chip에 `px-2.5` 등 **패딩 오버라이드 className을 붙이지 않는다** — 위 표가 `chipVariants` 단일 소스다.
 
+#### 칩 그룹 간격
+
+- 가로 나열 필터·탭 칩 그룹 → **`CHIP_GROUP_GAP_CLASS`** (`gap-2`, 8px) — `chip-styles.ts` 단일 소스
+
+#### 칩 M과 같은 행의 보조 컨트롤
+
+- 날짜·상태 드롭다운 등 → **`CHIP_COMPANION_CONTROL_CLASS`** (`h-8`, `rounded-[8px]`, `border-border-10`, `text-sm`) — FilterChip M과 높이·보더 정렬
+
 #### 시각 매핑 (요약)
 
 - **FilterChip 선택**: fill + activated → `bg-secondary-secondary`, `text-secondary-on-secondary`
-- **FilterChip 비선택**: outline + default → `outline-border-20`
+- **FilterChip 비선택**: outline + default → `outline-border-10`
+- **Chip outline 타입**(activated·default 공통) → 테두리 **`outline-border-10`**
 - **Tag**: fill + default + circle + icon
 
 #### 사용 가이드
 
-- 분석·BGM 장르·`SegmentedTextTabs` `variant="chip"` → **`FilterChip`** (하위 필터 **M / h-8 / corner `circle`**)
-- 분석 상단 범위 칩(작품·캐릭터·시나리오) 등 1단 필터 → **`FilterChip`** **L / h-10**
+- 분석·BGM 장르·`SegmentedTextTabs` `variant="chip"` → **`FilterChip`** **M / h-8 / square / radius 8px** · 그룹 **`gap-2`**
+- 분석 상단 범위 칩(작품·캐릭터·시나리오) 등 1단 필터 → **`FilterChip`** **L / h-10 / square / radius 12px** · 그룹 **`gap-2`**
 - 드롭다운 트리거(작품·캐릭터 등) → **`Chip`** `chipType="outline"` `size="l"`
-- `<Link>` 등 비버튼 surface → `chipVariants({ ... })` className (예: `analyticsOutlineChipClassName`)
+- `<Link>` 등 섹션 헤더 보조 surface → `chipVariants({ ... })` **M / h-8(32px)** (예: `analyticsOutlineChipClassName`)
 - 보조 드롭다운(ghost) → Chip 스펙 밖, `analyticsGhostDropdownChipClassName` 유지
 - className만 복제한 레거시 칩 상수는 추가하지 말고 위 컴포넌트·`chipVariants`를 사용한다.
 

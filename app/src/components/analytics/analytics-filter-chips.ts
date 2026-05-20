@@ -4,12 +4,12 @@ import { cn } from "@/lib/utils";
 /** 분석 상단 필터 바 셸 — 페이지 `max-w-[1200px] px-5` 안에서 사용 */
 export const analyticsScopeFilterShellClassName = cn("flex w-full flex-col gap-1");
 
-/** 드롭다운 트리거 등 — outline default L */
+/** 섹션 헤더 보조 링크(수익 분석 등) — outline default M / h-8(32px) */
 export const analyticsOutlineChipClassName = chipVariants({
   chipType: "outline",
   variant: "default",
   corner: "square",
-  size: "l",
+  size: "m",
   icon: false,
 });
 

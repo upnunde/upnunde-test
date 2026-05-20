@@ -50,7 +50,7 @@ function EditorInner() {
               variant="outline"
               size="icon"
               onClick={() => router.push("/series/1/episodes")}
-              className="h-9 w-9 shrink-0 rounded-full border-border-10 shadow-none focus-visible:ring-0 focus-visible:ring-offset-0"
+              className="h-8 w-8 shrink-0 rounded-full border-border-10 shadow-none focus-visible:ring-0 focus-visible:ring-offset-0"
               aria-label="뒤로 가기"
             >
               <ChevronLeft className="h-5 w-5 text-on-surface-30" strokeWidth={2} />

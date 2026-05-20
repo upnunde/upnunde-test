@@ -10,6 +10,12 @@ import { Textarea } from "@/components/ui/textarea";
 import { AddResourceSlot } from "@/components/resource/cards/AddResourceSlot";
 import { Title1 } from "@/components/ui/title1";
 import { Title2 } from "@/components/ui/title2";
+import {
+  PAGE_CONTENT_BODY_CLASS,
+  PAGE_CONTENT_FOOTER_CLASS,
+  PAGE_SCROLL_COLUMN_CLASS,
+  PAGE_SUBHEADER_CLASS,
+} from "@/lib/page-layout";
 import { ImageCropPosterModal } from "@/components/resource/character/CharacterExpressionModal";
 import type { ImageResource, MediaResource } from "@/types/resource";
 
@@ -179,7 +185,7 @@ export function ImageResourceDetailPage({ kind, initialData }: ImageResourceDeta
   return (
     <main className="flex flex-1 flex-col overflow-hidden bg-surface-20">
       {/* 상단 서브 헤더 */}
-      <header className="flex h-16 shrink-0 items-center justify-center border-b border-border-10 bg-white px-10 py-0">
+      <header className={PAGE_SUBHEADER_CLASS}>
         <div className="flex w-full max-w-[1200px] min-w-[640px] items-center justify-between gap-4">
           <div className="flex items-center justify-start gap-3">
             <Button
@@ -187,7 +193,7 @@ export function ImageResourceDetailPage({ kind, initialData }: ImageResourceDeta
               variant="outline"
               size="icon"
               onClick={handleBack}
-              className="h-9 w-9 shrink-0 rounded-full border-border-10 shadow-none focus-visible:ring-0 focus-visible:ring-offset-0"
+              className="h-8 w-8 shrink-0 rounded-full border-border-10 shadow-none focus-visible:ring-0 focus-visible:ring-offset-0"
               aria-label="리소스 목록으로"
             >
               <ChevronLeft className="h-5 w-5 text-on-surface-30" strokeWidth={2} />
@@ -197,16 +203,15 @@ export function ImageResourceDetailPage({ kind, initialData }: ImageResourceDeta
         </div>
       </header>
 
-      <div className="flex-1 overflow-y-auto flex flex-col items-center py-8 px-10 gap-4">
+      <div className={PAGE_SCROLL_COLUMN_CLASS}>
         <div className="w-full max-w-[1200px] min-w-[640px] mx-auto">
           <div className="w-full rounded-[4px] border border-border-10 bg-white">
             <Title2
               text={labels.sectionTitle}
               asSectionHeader
-              className="px-8"
             />
 
-            <div className="px-8 py-8 flex flex-col gap-8">
+            <div className={`${PAGE_CONTENT_BODY_CLASS} flex flex-col gap-8`}>
               {/* 이름 */}
               <section className="flex flex-col gap-2">
                 <Title1
@@ -353,7 +358,7 @@ export function ImageResourceDetailPage({ kind, initialData }: ImageResourceDeta
               )}
             </div>
 
-            <div className="flex items-center justify-end gap-2 px-8 py-4">
+            <div className={`${PAGE_CONTENT_FOOTER_CLASS} flex items-center justify-end gap-2`}>
               <Button
                 type="button"
                 variant="outline"

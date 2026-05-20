@@ -23,7 +23,7 @@ export const filterChipFilledClassName = chipVariants({
 export const filterChipTabActiveClassName = chipVariants({
   chipType: "fill",
   variant: "activated",
-  corner: "circle",
+  corner: "square",
   size: "m",
   icon: false,
 });
@@ -33,7 +33,7 @@ export const filterChipTabInactiveClassName = cn(
   chipVariants({
     chipType: "outline",
     variant: "default",
-    corner: "circle",
+    corner: "square",
     size: "m",
     icon: false,
   }),

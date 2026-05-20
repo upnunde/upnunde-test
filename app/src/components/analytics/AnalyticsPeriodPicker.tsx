@@ -160,7 +160,7 @@ export function AnalyticsPeriodPicker({
               value={pendingFrom}
               max={pendingTo || undefined}
               onChange={(e) => setPendingFrom(e.target.value)}
-              className="h-9 min-w-0 flex-1 rounded-md border border-border-10 bg-white px-2 text-xs text-on-surface-10 focus:border-primary focus:outline-none"
+              className="h-8 min-w-0 flex-1 rounded-md border border-border-10 bg-white px-2 text-xs text-on-surface-10 focus:border-primary focus:outline-none"
               aria-label="시작 날짜"
             />
             <span className="text-xs text-on-surface-30">~</span>
@@ -169,7 +169,7 @@ export function AnalyticsPeriodPicker({
               value={pendingTo}
               min={pendingFrom || undefined}
               onChange={(e) => setPendingTo(e.target.value)}
-              className="h-9 min-w-0 flex-1 rounded-md border border-border-10 bg-white px-2 text-xs text-on-surface-10 focus:border-primary focus:outline-none"
+              className="h-8 min-w-0 flex-1 rounded-md border border-border-10 bg-white px-2 text-xs text-on-surface-10 focus:border-primary focus:outline-none"
               aria-label="종료 날짜"
             />
           </div>

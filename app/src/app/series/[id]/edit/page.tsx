@@ -91,7 +91,7 @@ export default function SeriesEditPage() {
       submitDisabled={!isFormValid}
       coverPreviewUrl={coverPreviewUrl}
       logoPreviewUrl={logoPreviewUrl}
-      contentPaddingClassName="px-10"
+      contentPaddingClassName="px-5"
       contentGapClassName="gap-5"
     >
       {activeTab === "image" && (

@@ -83,14 +83,14 @@ export function ImportCharacterDialog({ open, onOpenChange, onApply }: ImportCha
           <Button
             type="button"
             variant="outline"
-            className="h-9 rounded-md border-border-10 bg-white px-3 text-sm text-on-surface-10 hover:bg-surface-20"
+            className="h-8 rounded-md border-border-10 bg-white px-3 text-sm text-on-surface-10 hover:bg-surface-20"
             onClick={() => handleDialogOpenChange(false)}
           >
             취소
           </Button>
           <Button
             type="button"
-            className="h-9 rounded-md bg-slate-800 px-3 text-sm text-white hover:bg-slate-700"
+            className="h-8 rounded-md bg-slate-800 px-3 text-sm text-white hover:bg-slate-700"
             onClick={handleApply}
             disabled={!resolvedId}
           >

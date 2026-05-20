@@ -1,6 +1,7 @@
 "use client";
 
 import { FilterChip } from "@/components/ui/chip";
+import { CHIP_GROUP_GAP_CLASS } from "@/lib/chip-styles";
 import { cn } from "@/lib/utils";
 
 export interface SegmentedTextTabItem {
@@ -31,7 +32,7 @@ const SIZE_STYLES: Record<
   },
 };
 
-const CHIP_TAB_LIST_GAP = "gap-1";
+const CHIP_TAB_LIST_GAP = CHIP_GROUP_GAP_CLASS;
 const CHIP_FILTER_SIZE: Record<SegmentedTabSize, "l" | "m"> = {
   xl: "l",
   l: "l",

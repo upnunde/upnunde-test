@@ -46,7 +46,7 @@ export default function Header({ profileImageUrl, onProfileImageChange }: Header
           ref={profileButtonRef}
           type="button"
           onClick={() => setIsProfileModalOpen(true)}
-          className="w-9 h-9 rounded-full bg-surface-20 border border-border-10 flex cursor-pointer items-center justify-center hover:bg-slate-200 transition-colors overflow-hidden"
+          className="w-8 h-8 rounded-full bg-surface-20 border border-border-10 flex cursor-pointer items-center justify-center hover:bg-slate-200 transition-colors overflow-hidden"
           aria-label="프로필 편집"
         >
           {profileImageUrl ? (

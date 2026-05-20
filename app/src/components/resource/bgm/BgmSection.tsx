@@ -4,6 +4,8 @@ import React, { useState, useEffect, useRef, useMemo } from "react";
 import dynamic from "next/dynamic";
 import { Button } from "@/components/ui/button";
 import { FilterChip } from "@/components/ui/chip";
+import { CHIP_GROUP_GAP_CLASS } from "@/lib/chip-styles";
+import { cn } from "@/lib/utils";
 import { Title2 } from "@/components/ui/title2";
 import { BgmListItem } from "./BgmListItem";
 import type { BgmResource } from "@/types/resource";
@@ -141,7 +143,7 @@ export function BgmSection({
             type="button"
             variant="outline"
             size="sm"
-            className="h-9 border-border-20 text-on-surface-10 shrink-0"
+            className="h-8 border-border-20 text-on-surface-10 shrink-0"
             onClick={() => setModalOpen(true)}
           >
             추가하기
@@ -165,7 +167,10 @@ export function BgmSection({
           <div className="self-stretch px-5 pb-2 pt-2 rounded-[4px] flex flex-col justify-start items-start gap-3">
             <div className="w-full pt-0 pb-0 mt-0 mb-1 inline-flex flex-col justify-start items-start gap-2.5">
               <div
-                className="inline-flex w-full min-w-0 flex-wrap items-center gap-1 overflow-x-auto"
+                className={cn(
+                  "inline-flex w-full min-w-0 flex-wrap items-center overflow-x-auto",
+                  CHIP_GROUP_GAP_CLASS,
+                )}
                 role="tablist"
                 aria-label="BGM 장르"
               >

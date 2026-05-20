@@ -120,9 +120,9 @@ function getCharacterExpressionOptions(characterName: string): string[] {
   return deduped.length > 0 ? deduped : [DEFAULT_CHARACTER_EXPRESSION];
 }
 
-/** 한 줄 블록 전용 (장면/캐릭터/연출/배경 등): 높이 36px, px-0 py-1, gap-4 */
+/** 한 줄 블록 전용 (장면/캐릭터/연출/배경 등): 높이 32px(h-8), px-0 py-1, gap-4 */
 const COMPACT_BLOCK_ROOT_CLASSES =
-  "flex items-center justify-start rounded-lg border-0 outline-none focus-within:bg-white min-w-0 flex-1 min-h-[36px] h-[36px] px-0 py-1 gap-4 select-none";
+  "flex items-center justify-start rounded-lg border-0 outline-none focus-within:bg-white min-w-0 flex-1 min-h-8 h-8 px-0 py-1 gap-4 select-none";
 
 /** 삭제 버튼 아이콘 공통 크기 20x20 */
 const DELETE_ICON_CLASS = "h-5 w-5";
