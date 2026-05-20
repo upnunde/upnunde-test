@@ -15,6 +15,7 @@ import { EpisodeScriptTextarea } from "@/components/episode/EpisodeScriptTextare
 import { cn } from "@/lib/utils";
 import { EPISODE_FORM_FIELD_COPY } from "@/lib/episode-form-copy";
 import { EPISODE_SCRIPT_SAMPLE } from "@/lib/episode-script-sample";
+import { DUMMY_DEFAULT_THUMBNAIL } from "@/lib/dummy-thumbnail-images";
 import { initialBackgrounds } from "@/lib/resourceMockData";
 import type { ImageResource } from "@/types/resource";
 
@@ -27,7 +28,7 @@ const DUMMY_HISTORY =
   "지난 화에서 주인공은 금서 보관실에서 오래된 열쇠를 발견했습니다. " +
   "열쇠에는 정체불명의 문양이 새겨져 있었고, 그 문양은 마을 외곽 폐성당의 지하 문과 일치했습니다. " +
   "동료들은 위험을 경고했지만 주인공은 진실을 확인하기 위해 새벽에 홀로 성당으로 향합니다.";
-const DUMMY_THUMBNAIL = initialBackgrounds[0]?.imageUrl ?? "/background-1.png";
+const DUMMY_THUMBNAIL = initialBackgrounds[0]?.imageUrl ?? DUMMY_DEFAULT_THUMBNAIL;
 const EDITOR_CONVERT_LOADING_MS = 5000;
 const EDITOR_CONVERT_LOADING_STEPS = [
   "작성하신 내용을 에디터로 변환하고 있어요…",

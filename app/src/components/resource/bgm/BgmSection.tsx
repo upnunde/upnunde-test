@@ -3,6 +3,7 @@
 import React, { useState, useEffect, useRef, useMemo } from "react";
 import dynamic from "next/dynamic";
 import { Button } from "@/components/ui/button";
+import { FilterChip } from "@/components/ui/chip";
 import { Title2 } from "@/components/ui/title2";
 import { BgmListItem } from "./BgmListItem";
 import type { BgmResource } from "@/types/resource";
@@ -162,34 +163,26 @@ export function BgmSection({
           </div>
         ) : (
           <div className="self-stretch px-5 pb-2 pt-2 rounded-[4px] flex flex-col justify-start items-start gap-3">
-            {/* 상단 카테고리 탭 영역 - 레벨2(보조) 탭 스타일 */}
             <div className="w-full pt-0 pb-0 mt-0 mb-1 inline-flex flex-col justify-start items-start gap-2.5">
               <div
-                data-size="L"
-                data-underline="true"
-                className="w-full inline-flex justify-start items-center gap-4 overflow-hidden"
+                className="inline-flex w-full min-w-0 flex-wrap items-center gap-1 overflow-x-auto"
                 role="tablist"
                 aria-label="BGM 장르"
               >
                 {GENRE_TABS_WITH_ALL.map((genre) => {
                   const isActive = genre === activeGenre;
                   return (
-                    <button
+                    <FilterChip
                       key={genre}
-                      type="button"
                       role="tab"
                       aria-selected={isActive}
-                      className={
-                        "h-7 px-0 flex cursor-pointer justify-center items-center min-w-0 border-b text-sm font-medium font-['Pretendard_JP'] leading-4 transition-colors " +
-                        (isActive
-                          ? "border-slate-800 text-on-surface-10"
-                          : "border-transparent text-on-surface-30 hover:text-on-surface-20")
-                      }
-                      aria-current={isActive ? "page" : undefined}
+                      selected={isActive}
+                      chipSize="m"
+                      className="min-w-0"
                       onClick={() => setActiveGenre(genre)}
                     >
-                      <span className="justify-start">{genre}</span>
-                    </button>
+                      {genre}
+                    </FilterChip>
                   );
                 })}
               </div>

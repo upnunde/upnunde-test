@@ -10,6 +10,28 @@ export interface AiConvertLoadingOverlayProps {
   className?: string;
 }
 
+/** 4도트 합체/분리 로더 (모노톤) */
+function AiLoaderIcon({ className }: { className?: string }) {
+  return (
+    <div className={cn("ai-orb-loader", className)} aria-hidden>
+      <div className="ai-orb-loader-spin">
+        <span className="ai-orb-node ai-orb-node-0">
+          <span className="ai-orb ai-orb-mono" />
+        </span>
+        <span className="ai-orb-node ai-orb-node-90">
+          <span className="ai-orb ai-orb-mono" />
+        </span>
+        <span className="ai-orb-node ai-orb-node-180">
+          <span className="ai-orb ai-orb-mono" />
+        </span>
+        <span className="ai-orb-node ai-orb-node-270">
+          <span className="ai-orb ai-orb-mono" />
+        </span>
+      </div>
+    </div>
+  );
+}
+
 export function AiConvertLoadingOverlay({
   message = "에디터로 변환 중이에요…",
   messageSteps,
@@ -42,7 +64,7 @@ export function AiConvertLoadingOverlay({
   return createPortal(
     <div
       className={cn(
-        "ai-convert-overlay fixed inset-0 z-[200] flex flex-col items-center justify-center gap-2 backdrop-blur-[1.5px]",
+        "ai-convert-overlay fixed inset-0 z-[200] flex flex-col items-center justify-center gap-6 backdrop-blur-[1.5px]",
         className,
       )}
       style={{ backgroundColor: "var(--dim-30)" }}
@@ -51,14 +73,10 @@ export function AiConvertLoadingOverlay({
       aria-busy="true"
       aria-label={message}
     >
+      <AiLoaderIcon />
       <p className="ai-loading-message text-sm font-medium">
         <span key={stepIndex} className="ai-loading-text-shimmer">
           {resolvedSteps[stepIndex] ?? message}
-        </span>
-        <span className="ai-loading-dots" aria-hidden>
-          <span />
-          <span />
-          <span />
         </span>
       </p>
     </div>,

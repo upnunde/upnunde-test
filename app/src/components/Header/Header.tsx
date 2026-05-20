@@ -5,6 +5,7 @@ import Image from "next/image";
 import { User } from "lucide-react";
 import { ProfileEditModal } from "@/components/ProfileEditModal";
 import { useRouter } from "next/navigation";
+import { dummyAsset } from "@/lib/dummy-asset-path";
 
 export interface HeaderProps {
   /** Reserved for future use */
@@ -31,7 +32,7 @@ export default function Header({ profileImageUrl, onProfileImageChange }: Header
           aria-label="로그인 화면으로 이동"
         >
           <Image
-            src="/renovel-studio-logo.png"
+            src={dummyAsset("renovel-studio-logo.png")}
             alt="RE:NOVEL Studio"
             width={94}
             height={20}

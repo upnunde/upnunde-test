@@ -8,8 +8,7 @@ import {
   DropdownMenuRadioItem,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
-import { analyticsOutlineChipClassName } from "@/components/analytics/analytics-filter-chips";
-import { Button } from "@/components/ui/button";
+import { Chip } from "@/components/ui/chip";
 import { cn } from "@/lib/utils";
 
 export type AnalyticsScopeDropdownOption = {
@@ -40,17 +39,18 @@ export function AnalyticsScopeDropdown({
   return (
     <DropdownMenu>
       <DropdownMenuTrigger asChild>
-        <Button
-          type="button"
-          variant="outline"
-          size="lg"
-          className={cn(analyticsOutlineChipClassName, "max-w-[280px] justify-between gap-1", className)}
+        <Chip
+          chipType="outline"
+          variant="default"
+          corner="square"
+          size="l"
+          className={cn("max-w-[280px] justify-between gap-1", className)}
           aria-label={`${ariaLabelPrefix} — ${label}`}
           title={label}
         >
           <span className="min-w-0 max-w-[240px] truncate">{label}</span>
           <ChevronDown className="h-5 w-5 shrink-0 text-on-surface-10" aria-hidden />
-        </Button>
+        </Chip>
       </DropdownMenuTrigger>
       <DropdownMenuContent align={align} className="min-w-[220px]">
         <DropdownMenuRadioGroup value={value} onValueChange={onChange}>

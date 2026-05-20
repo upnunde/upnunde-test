@@ -1,3 +1,5 @@
+import { parseTagList } from "@/lib/parse-tag-list";
+
 export type SeriesFormTab = "image" | "info" | "worldview";
 
 export type SeriesFormField =
@@ -54,7 +56,7 @@ export function getSeriesFormErrors(input: SeriesFormValidationInput): SeriesFor
     logo: !input.hasLogoImage,
     title: input.seriesTitle.trim().length === 0,
     summary: input.seriesSummary.trim().length === 0,
-    keywords: input.seriesKeywords.trim().length === 0,
+    keywords: parseTagList(input.seriesKeywords).length === 0,
     worldview: input.worldviewDescription.trim().length === 0,
     prompt: input.worldviewPrompt.trim().length === 0,
     persona: input.persona.trim().length === 0,

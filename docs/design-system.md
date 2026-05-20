@@ -386,6 +386,52 @@ UI에서 **실제로 사용하는 역할 기반 토큰**. 값은 프리미티브
 
 ---
 
+### 6. Chip · Tag (Figma `chips`)
+
+필터·탭·입력 토큰을 **역할**로 나눈다. 스타일은 `app/src/lib/chip-styles.ts`의 `chipVariants`(cva)가 단일 소스다.
+
+| 컴포넌트 | 경로 | 용도 |
+|----------|------|------|
+| `Chip` | `app/src/components/ui/chip.tsx` | 범용 칩 버튼 (type/variant 직접 지정) |
+| `FilterChip` | 동일 | 단일 선택 필터 — `selected` → fill+activated / outline+default |
+| `Tag` | `app/src/components/ui/tag.tsx` | 입력 필드 토큰 — fill+default, circle, M, 닫기(X) |
+
+#### Variant 축
+
+| 축 | 값 | 비고 |
+|----|-----|------|
+| `chipType` | `fill` \| `outline` | HTML `type` 속성과 구분하기 위해 `chipType` 명명 |
+| `variant` | `activated` \| `default` | 선택·강조 상태 |
+| `corner` | `square` \| `circle` | square: L=`rounded-lg`, M=`rounded`(4px) · **M 필터 칩은 Figma `rounded` → `circle`** (`rounded-full`) |
+| `size` | `l` \| `m` | L=`h-10`, M=`h-8` |
+| `icon` | boolean | Tag 닫기(X) 등 — 우측 아이콘 슬롯 |
+
+#### Chip 패딩 (px)
+
+| size | 기본 (좌·우 동일) | 우측 아이콘 (`icon: true`) |
+|------|-------------------|----------------------------|
+| L (`h-10`) | 16 | 좌 16 · 우 12 (`pl-4 pr-3`) |
+| M (`h-8`) | 12 | 좌 12 · 우 8 (`pl-3 pr-2`) |
+
+`FilterChip`·`SegmentedTextTabs` chip에 `px-2.5` 등 **패딩 오버라이드 className을 붙이지 않는다** — 위 표가 `chipVariants` 단일 소스다.
+
+#### 시각 매핑 (요약)
+
+- **FilterChip 선택**: fill + activated → `bg-secondary-secondary`, `text-secondary-on-secondary`
+- **FilterChip 비선택**: outline + default → `outline-border-20`
+- **Tag**: fill + default + circle + icon
+
+#### 사용 가이드
+
+- 분석·BGM 장르·`SegmentedTextTabs` `variant="chip"` → **`FilterChip`** (하위 필터 **M / h-8 / corner `circle`**)
+- 분석 상단 범위 칩(작품·캐릭터·시나리오) 등 1단 필터 → **`FilterChip`** **L / h-10**
+- 드롭다운 트리거(작품·캐릭터 등) → **`Chip`** `chipType="outline"` `size="l"`
+- `<Link>` 등 비버튼 surface → `chipVariants({ ... })` className (예: `analyticsOutlineChipClassName`)
+- 보조 드롭다운(ghost) → Chip 스펙 밖, `analyticsGhostDropdownChipClassName` 유지
+- className만 복제한 레거시 칩 상수는 추가하지 말고 위 컴포넌트·`chipVariants`를 사용한다.
+
+---
+
 ## Part 3: 코드 적용 가이드
 
 ### CSS 변수 네이밍 규칙
@@ -428,3 +474,4 @@ UI에서 **실제로 사용하는 역할 기반 토큰**. 값은 프리미티브
 | 날짜 | 내용 |
 |------|------|
 | 2026-04-30 | 초안 작성 — UI 원칙(`ux-and-content-standards.md`) + 토큰(`design-tokens.md`) 통합 |
+| 2026-05-19 | Chip · Tag 스펙 및 `FilterChip` 사용 가이드 추가 |

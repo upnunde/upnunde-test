@@ -1,5 +1,6 @@
 "use client";
 
+import { FilterChip } from "@/components/ui/chip";
 import { cn } from "@/lib/utils";
 
 export interface SegmentedTextTabItem {
@@ -9,6 +10,8 @@ export interface SegmentedTextTabItem {
 
 /** Figma `tab` size: XL=h48, L=h40, M=h32 */
 export type SegmentedTabSize = "xl" | "l" | "m";
+
+export type SegmentedTextTabsVariant = "text" | "chip";
 
 const SIZE_STYLES: Record<
   SegmentedTabSize,
@@ -28,6 +31,13 @@ const SIZE_STYLES: Record<
   },
 };
 
+const CHIP_TAB_LIST_GAP = "gap-1";
+const CHIP_FILTER_SIZE: Record<SegmentedTabSize, "l" | "m"> = {
+  xl: "l",
+  l: "l",
+  m: "m",
+};
+
 /** 비활성 라벨 — XL/L/M 공통 토큰 */
 const INACTIVE_TAB_TEXT = "text-on-surface-disabled";
 
@@ -40,6 +50,9 @@ export interface SegmentedTextTabsProps {
    * false면 밑줄 없음(인스턴스·탭 모두 텍스트만).
    */
   underline?: boolean;
+  /** text: 텍스트 탭 | chip: Figma chips 필터 칩 (M/L) */
+  variant?: SegmentedTextTabsVariant;
+  /** chip variant 기본값 `m`(h-8) — 패널·카드 하위 필터용 */
   size?: SegmentedTabSize;
   className?: string;
   tabListClassName?: string;
@@ -48,8 +61,7 @@ export interface SegmentedTextTabsProps {
 
 /**
  * Figma `tab` / `tab instance` 정합.
- * — 활성/비활성 라벨 모두 `font-bold`
- * — 비활성: `text-on-surface-disabled` (크기 공통)
+ * — 활성/비활성 라벨 모두 `font-bold` (chip variant는 FilterChip)
  * — underline: 트랙 `border-b border-border-10/5`, 활성 탭 `border-b-2 border-border-strong`
  */
 export function SegmentedTextTabs({
@@ -57,12 +69,17 @@ export function SegmentedTextTabs({
   activeId,
   onSelect,
   underline = false,
-  size = "l",
+  variant = "text",
+  size,
   className,
   tabListClassName,
   "aria-label": ariaLabel,
 }: SegmentedTextTabsProps) {
-  const { tabListGap, button: sizeButton } = SIZE_STYLES[size];
+  const isChip = variant === "chip";
+  const resolvedSize: SegmentedTabSize = size ?? (isChip ? "m" : "l");
+  const { tabListGap, button: sizeButton } = SIZE_STYLES[resolvedSize];
+  const resolvedTabListGap = isChip ? CHIP_TAB_LIST_GAP : tabListGap;
+  const chipSize = CHIP_FILTER_SIZE[resolvedSize];
 
   const tabList = (
     <div
@@ -70,19 +87,32 @@ export function SegmentedTextTabs({
       aria-label={ariaLabel}
       className={cn(
         "inline-flex max-w-full min-w-0 items-center justify-start overflow-x-auto overflow-y-visible",
-        tabListGap,
-        underline && "-mb-px w-full min-w-0",
+        resolvedTabListGap,
+        !isChip && underline && "-mb-px w-full min-w-0",
         tabListClassName,
       )}
     >
       {items.map(({ id, label }) => {
         const isActive = activeId === id;
         const isClickable = !!onSelect;
-        /**
-         * 호버 정책 — 활성 탭은 이미 강조되어 있어 변화 없음.
-         * 비활성 탭은 클릭 가능할 때만 라벨 톤을 한 단계 올려(`disabled → 20`) 진입 가능성을 시그널.
-         * underline 모드에서 비활성 탭 밑줄은 활성 탭만 표시(호버 시 가이드 라인 없음).
-         */
+
+        if (isChip) {
+          return (
+            <FilterChip
+              key={id}
+              role="tab"
+              aria-selected={isActive}
+              selected={isActive}
+              chipSize={chipSize}
+              disabled={!isClickable}
+              className="min-w-0"
+              onClick={() => onSelect?.(id)}
+            >
+              {label}
+            </FilterChip>
+          );
+        }
+
         const state = underline
           ? isActive
             ? "border-border-strong text-on-surface-10"
@@ -120,7 +150,7 @@ export function SegmentedTextTabs({
 
   return (
     <div className={cn(className)}>
-      {underline ? (
+      {!isChip && underline ? (
         <div className="w-full min-w-0 border-b border-border-10/5">{tabList}</div>
       ) : (
         tabList

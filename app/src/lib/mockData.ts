@@ -3,6 +3,8 @@
  * Used by SlashCommandMenu (default value) and ResourcePicker (selection).
  */
 
+import { dummyAsset } from "@/lib/dummy-asset-path";
+
 export interface BackgroundItem {
   id: string;
   name: string;
@@ -34,36 +36,36 @@ export interface VideoItem {
 }
 
 export const BACKGROUNDS: BackgroundItem[] = [
-  { id: "bg-1", name: "교실", url: "/background-1.png" },
-  { id: "bg-2", name: "강변 산책로", url: "/background-2.png" },
-  { id: "bg-3", name: "주택가 노을", url: "/background-3.png" },
-  { id: "bg-4", name: "베이커리_낮", url: "/background-bakery-day.png" },
-  { id: "bg-5", name: "부엌_밤", url: "/background-kitchen-night.png" },
-  { id: "bg-6", name: "베이커리_밤", url: "/background-bakery-night.png" },
-  { id: "bg-7", name: "부엌_비오는날", url: "/background-kitchen-rain.png" },
-  { id: "bg-8", name: "거리_낮", url: "/background-street-day.png" },
-  { id: "bg-9", name: "내방_밤", url: "/background-room-night.png" },
-  { id: "bg-10", name: "거리_밤", url: "/background-street-night.png" },
-  { id: "bg-11", name: "내방_낮", url: "/background-room-day.png" },
-  { id: "bg-12", name: "거리_노을", url: "/background-street-evening.png" },
-  { id: "bg-13", name: "베이커리_노을", url: "/background-bakery-evening.png" },
-  { id: "bg-14", name: "내방_비오는날", url: "/background-room-rain.png" },
-  { id: "bg-15", name: "부엌_낮", url: "/background-kitchen-day.png" },
-  { id: "bg-16", name: "베이커리_비오는날", url: "/background-bakery-rain.png" },
-  { id: "bg-17", name: "거실_낮", url: "/background-livingroom-day.png" },
-  { id: "bg-18", name: "내방_노을", url: "/background-room-evening.png" },
-  { id: "bg-19", name: "부엌_노을", url: "/background-kitchen-evening.png" },
+  { id: "bg-1", name: "교실", url: dummyAsset("background-1.png") },
+  { id: "bg-2", name: "강변 산책로", url: dummyAsset("background-2.png") },
+  { id: "bg-3", name: "주택가 노을", url: dummyAsset("background-3.png") },
+  { id: "bg-4", name: "베이커리_낮", url: dummyAsset("background-bakery-day.png") },
+  { id: "bg-5", name: "부엌_밤", url: dummyAsset("background-kitchen-night.png") },
+  { id: "bg-6", name: "베이커리_밤", url: dummyAsset("background-bakery-night.png") },
+  { id: "bg-7", name: "부엌_비오는날", url: dummyAsset("background-kitchen-rain.png") },
+  { id: "bg-8", name: "거리_낮", url: dummyAsset("background-street-day.png") },
+  { id: "bg-9", name: "내방_밤", url: dummyAsset("background-room-night.png") },
+  { id: "bg-10", name: "거리_밤", url: dummyAsset("background-street-night.png") },
+  { id: "bg-11", name: "내방_낮", url: dummyAsset("background-room-day.png") },
+  { id: "bg-12", name: "거리_노을", url: dummyAsset("background-street-evening.png") },
+  { id: "bg-13", name: "베이커리_노을", url: dummyAsset("background-bakery-evening.png") },
+  { id: "bg-14", name: "내방_비오는날", url: dummyAsset("background-room-rain.png") },
+  { id: "bg-15", name: "부엌_낮", url: dummyAsset("background-kitchen-day.png") },
+  { id: "bg-16", name: "베이커리_비오는날", url: dummyAsset("background-bakery-rain.png") },
+  { id: "bg-17", name: "거실_낮", url: dummyAsset("background-livingroom-day.png") },
+  { id: "bg-18", name: "내방_노을", url: dummyAsset("background-room-evening.png") },
+  { id: "bg-19", name: "부엌_노을", url: dummyAsset("background-kitchen-evening.png") },
 ];
 
 export const CHARACTERS: CharacterItem[] = [
-  { id: "char-1", name: "등장인물1", url: "/character-1.png" },
-  { id: "char-2", name: "등장인물2", url: "/character-2.png" },
-  { id: "char-3", name: "등장인물3", url: "/character-3.png" },
-  { id: "char-4", name: "등장인물4", url: "/character-4.png" },
-  { id: "char-5", name: "등장인물5", url: "/character-5.png" },
-  { id: "char-6", name: "등장인물6", url: "/character-6.png" },
-  { id: "char-7", name: "등장인물7", url: "/character-7.png" },
-  { id: "char-8", name: "등장인물8", url: "/character-8.png" },
+  { id: "char-1", name: "등장인물1", url: dummyAsset("character-1.png") },
+  { id: "char-2", name: "등장인물2", url: dummyAsset("character-2.png") },
+  { id: "char-3", name: "등장인물3", url: dummyAsset("character-3.png") },
+  { id: "char-4", name: "등장인물4", url: dummyAsset("character-4.png") },
+  { id: "char-5", name: "등장인물5", url: dummyAsset("character-5.png") },
+  { id: "char-6", name: "등장인물6", url: dummyAsset("character-6.png") },
+  { id: "char-7", name: "등장인물7", url: dummyAsset("character-7.png") },
+  { id: "char-8", name: "등장인물8", url: dummyAsset("character-8.png") },
 ];
 
 export const BGMS: AudioItem[] = [
@@ -90,15 +92,15 @@ export const SFX: AudioItem[] = [
 ];
 
 export const GALLERIES: GalleryItem[] = [
-  { id: "gallery-1", name: "갤러리1", url: "/gallery-G3.png" },
-  { id: "gallery-2", name: "갤러리2", url: "/gallery-G4.png" },
-  { id: "gallery-3", name: "갤러리3", url: "/gallery-G5.png" },
-  { id: "gallery-4", name: "갤러리4", url: "/gallery-G6.png" },
-  { id: "gallery-5", name: "갤러리5", url: "/gallery-G7.png" },
-  { id: "gallery-6", name: "갤러리6", url: "/gallery-G8.png" },
-  { id: "gallery-7", name: "갤러리7", url: "/gallery-G9.png" },
-  { id: "gallery-8", name: "갤러리8", url: "/gallery-G10.png" },
-  { id: "gallery-9", name: "갤러리9", url: "/gallery-G11.png" },
+  { id: "gallery-1", name: "갤러리1", url: dummyAsset("gallery-G3.png") },
+  { id: "gallery-2", name: "갤러리2", url: dummyAsset("gallery-G4.png") },
+  { id: "gallery-3", name: "갤러리3", url: dummyAsset("gallery-G5.png") },
+  { id: "gallery-4", name: "갤러리4", url: dummyAsset("gallery-G6.png") },
+  { id: "gallery-5", name: "갤러리5", url: dummyAsset("gallery-G7.png") },
+  { id: "gallery-6", name: "갤러리6", url: dummyAsset("gallery-G8.png") },
+  { id: "gallery-7", name: "갤러리7", url: dummyAsset("gallery-G9.png") },
+  { id: "gallery-8", name: "갤러리8", url: dummyAsset("gallery-G10.png") },
+  { id: "gallery-9", name: "갤러리9", url: dummyAsset("gallery-G11.png") },
 ];
 
 export const VIDEOS: VideoItem[] = [

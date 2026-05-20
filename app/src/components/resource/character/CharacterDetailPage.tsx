@@ -17,6 +17,7 @@ import {
   ImportCharacterDialog,
   type ImportableCharacterPick,
 } from "@/components/resource/character/ImportCharacterDialog";
+import { Tag } from "@/components/ui/tag";
 import { Title1 } from "@/components/ui/title1";
 import { Title2 } from "@/components/ui/title2";
 import type { CharacterResource, CharacterExpressionSlot } from "@/types/resource";
@@ -460,15 +461,9 @@ export function CharacterDetailPage({ isNew = true, initialData }: CharacterDeta
                     {tagList.length > 0 && (
                       <div className="flex flex-wrap gap-2 w-full">
                         {tagList.map((tag) => (
-                          <button
-                            key={tag}
-                            type="button"
-                            onClick={() => handleRemoveTag(tag)}
-                            className="inline-flex items-center gap-2 rounded-full border border-border-10 bg-surface-20 px-3 py-1 text-xs text-on-surface-10 hover:bg-surface-20 hover:border-border-20 cursor-pointer"
-                          >
-                            <span className="whitespace-nowrap">#{tag}</span>
-                            <span className="text-on-surface-30 text-[11px] leading-none">✕</span>
-                          </button>
+                          <Tag key={tag} onDismiss={() => handleRemoveTag(tag)}>
+                            #{tag}
+                          </Tag>
                         ))}
                       </div>
                     )}

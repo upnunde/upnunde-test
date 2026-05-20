@@ -16,6 +16,7 @@ import { AnalyticsViewerHourlyActivityChart } from "@/components/analytics/Analy
 import { cn } from "@/lib/utils";
 import type { AnalyticsUserMetric } from "@/components/analytics/AnalyticsTrendLineChart";
 import { type AnalyticsPeriodRange } from "@/components/analytics/analytics-date";
+import { analyticsScopeFilterDividerClassName } from "@/components/analytics/analytics-filter-chips";
 import { AnalyticsTopFiveRowList } from "@/components/analytics/AnalyticsRankParts";
 import type { AnalyticsScopeCategoryId } from "@/components/analytics/analytics-scope-category";
 import type { AnalyticsCharacterId } from "@/components/analytics/analytics-character-options";
@@ -198,7 +199,7 @@ export function AnalyticsUserTab({
             ]}
             activeId={revisitSegment}
             onSelect={(id) => setRevisitSegment(id as RevisitSegmentId)}
-            size="m"
+            variant="chip"
             tabListClassName="self-stretch"
           />
         </div>
@@ -240,7 +241,7 @@ export function AnalyticsUserTab({
                 <SegmentedTextTabs
                   aria-label="연령 필터"
                   items={[
-                    { id: "all", label: "모든 연령" },
+                    { id: "all", label: "전체" },
                     { id: "10", label: "10대" },
                     { id: "20", label: "20대" },
                     { id: "30", label: "30대" },
@@ -249,9 +250,14 @@ export function AnalyticsUserTab({
                   ]}
                   activeId={ageBand}
                   onSelect={setAgeBand}
-                  size="m"
+                  variant="chip"
                 />
-                <div className="hidden h-4 w-px bg-border-20 sm:block" aria-hidden />
+                <div
+                  className={cn(analyticsScopeFilterDividerClassName, "self-center")}
+                  role="separator"
+                  aria-orientation="vertical"
+                  aria-hidden
+                />
                 <SegmentedTextTabs
                   aria-label="성별 필터"
                   items={[
@@ -261,7 +267,7 @@ export function AnalyticsUserTab({
                   ]}
                   activeId={genderBand}
                   onSelect={setGenderBand}
-                  size="m"
+                  variant="chip"
                 />
               </div>
             </div>
@@ -329,7 +335,7 @@ export function AnalyticsUserTab({
                 ]}
                 activeId={audienceTimeSegment}
                 onSelect={(id) => setAudienceTimeSegment(id as AudienceTabId)}
-                size="m"
+                variant="chip"
               />
             </div>
             <div className="p-5">
@@ -393,7 +399,7 @@ function AudienceBreakdownPanel({
           ]}
           activeId={audienceTab}
           onSelect={(id) => onAudienceChange(id as AudienceTabId)}
-          size="m"
+          variant="chip"
         />
       </div>
       <div className="flex flex-col gap-5 pb-5 pt-3">
@@ -442,7 +448,7 @@ function SimpleDistributionPanel({
             ]}
             activeId={audienceTab}
             onSelect={(id) => onAudienceChange(id as AudienceTabId)}
-            size="m"
+            variant="chip"
           />
         </div>
       ) : null}

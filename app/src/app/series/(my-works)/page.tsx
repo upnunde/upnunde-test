@@ -6,37 +6,9 @@ import { SeriesList } from "@/components/series/SeriesList";
 import { SeriesDeleteModal } from "@/components/series/SeriesDeleteModal";
 import { PolicyAgreementModal } from "@/components/series/PolicyAgreementModal";
 import type { SeriesData } from "@/types/series";
+import { DUMMY_BACKGROUND_GALLERY_THUMBNAILS } from "@/lib/dummy-thumbnail-images";
 
-const SERIES_THUMBNAIL_IMAGES = [
-  "/background-1.png",
-  "/background-2.png",
-  "/background-3.png",
-  "/background-bakery-day.png",
-  "/background-kitchen-night.png",
-  "/background-bakery-night.png",
-  "/background-kitchen-rain.png",
-  "/background-street-day.png",
-  "/background-room-night.png",
-  "/background-street-night.png",
-  "/background-room-day.png",
-  "/background-street-evening.png",
-  "/background-bakery-evening.png",
-  "/background-room-rain.png",
-  "/background-kitchen-day.png",
-  "/background-bakery-rain.png",
-  "/background-livingroom-day.png",
-  "/background-room-evening.png",
-  "/background-kitchen-evening.png",
-  "/gallery-G3.png",
-  "/gallery-G4.png",
-  "/gallery-G5.png",
-  "/gallery-G6.png",
-  "/gallery-G7.png",
-  "/gallery-G8.png",
-  "/gallery-G9.png",
-  "/gallery-G10.png",
-  "/gallery-G11.png",
-] as const;
+const SERIES_THUMBNAIL_IMAGES = DUMMY_BACKGROUND_GALLERY_THUMBNAILS;
 
 function deterministicSeriesThumbnail(seriesId: string): string {
   let hash = 0;

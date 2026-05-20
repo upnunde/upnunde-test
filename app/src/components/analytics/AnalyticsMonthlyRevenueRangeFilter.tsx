@@ -1,10 +1,6 @@
 "use client";
 
-import {
-  analyticsFilledSecondaryChipClassName,
-  analyticsOutlineChipClassName,
-} from "@/components/analytics/analytics-filter-chips";
-import { Button } from "@/components/ui/button";
+import { FilterChip } from "@/components/ui/chip";
 import { cn } from "@/lib/utils";
 
 export type MonthlyRevenueRangeMonths = 6 | 12;
@@ -34,28 +30,17 @@ export function AnalyticsMonthlyRevenueRangeFilter({
     >
       {RANGE_OPTIONS.map((option) => {
         const selected = value === option.value;
-        return selected ? (
-          <button
+        return (
+          <FilterChip
             key={option.value}
-            type="button"
-            aria-pressed
+            selected={selected}
+            chipSize="m"
+            aria-pressed={selected}
+            className="min-w-0"
             onClick={() => onChange(option.value)}
-            className={cn(analyticsFilledSecondaryChipClassName, "h-8 min-w-0 px-2.5 text-xs")}
           >
             {option.label}
-          </button>
-        ) : (
-          <Button
-            key={option.value}
-            type="button"
-            variant="outline"
-            size="sm"
-            aria-pressed={false}
-            onClick={() => onChange(option.value)}
-            className={cn(analyticsOutlineChipClassName, "h-8 min-w-0 px-2.5 text-xs")}
-          >
-            {option.label}
-          </Button>
+          </FilterChip>
         );
       })}
     </div>

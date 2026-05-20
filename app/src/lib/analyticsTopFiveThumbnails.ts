@@ -1,3 +1,4 @@
+import { DUMMY_DEFAULT_THUMBNAIL } from "@/lib/dummy-thumbnail-images";
 import {
   initialBackgrounds,
   initialCharacters,
@@ -13,7 +14,7 @@ export type AnalyticsTopFiveThumbnailTone =
   | "seriesBlue"
   | "scenario";
 
-const FALLBACK_THUMB = "/background-1.png";
+const FALLBACK_THUMB = DUMMY_DEFAULT_THUMBNAIL;
 
 function hashString(s: string): number {
   let h = 0;

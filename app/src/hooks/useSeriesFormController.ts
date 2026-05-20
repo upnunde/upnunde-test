@@ -10,6 +10,7 @@ import {
   type SeriesFormField,
   type SeriesFormTab,
 } from "@/lib/seriesForm";
+import { parseTagList } from "@/lib/parse-tag-list";
 import { useEditorStore } from "@/store/useEditorStore";
 
 interface UseSeriesFormControllerOptions {
@@ -27,6 +28,9 @@ export function useSeriesFormController({
   const [seriesTitle, setSeriesTitle] = useState("");
   const [seriesSummary, setSeriesSummary] = useState("");
   const [seriesKeywords, setSeriesKeywords] = useState("");
+  const [keywordInput, setKeywordInput] = useState("");
+  const [keywordList, setKeywordList] = useState<string[]>([]);
+  const [isComposingKeyword, setIsComposingKeyword] = useState(false);
   const [worldviewDescription, setWorldviewDescription] = useState("");
   const [worldviewPrompt, setWorldviewPrompt] = useState("");
   const [persona, setPersona] = useState("");
@@ -104,6 +108,41 @@ export function useSeriesFormController({
       ref.current?.focus?.();
     }, 0);
   };
+
+  const applyKeywordList = useCallback((list: string[]) => {
+    setKeywordList(list);
+    setSeriesKeywords(list.join(", "));
+    if (list.length > 0) {
+      setFieldErrors((prev) => ({ ...prev, keywords: false }));
+    }
+  }, []);
+
+  const handleAddKeyword = useCallback(() => {
+    const cleaned = keywordInput.trim().replace(/,$/, "");
+    const value = cleaned.replace(/^#+/, "");
+    if (!value || value.length < 2) return;
+    if (keywordList.includes(value)) {
+      setKeywordInput("");
+      return;
+    }
+    const next = [...keywordList, value];
+    if (next.join(", ").length > MAX_KEYWORDS) return;
+    applyKeywordList(next);
+    setKeywordInput("");
+  }, [keywordInput, keywordList, applyKeywordList, MAX_KEYWORDS]);
+
+  const handleRemoveKeyword = useCallback(
+    (keyword: string) => {
+      applyKeywordList(keywordList.filter((t) => t !== keyword));
+    },
+    [keywordList, applyKeywordList],
+  );
+
+  const initKeywordsFromString = useCallback((raw: string) => {
+    const list = parseTagList(raw);
+    setKeywordInput("");
+    applyKeywordList(list);
+  }, [applyKeywordList]);
 
   const handleRequiredFieldChange = useCallback(
     (
@@ -313,7 +352,14 @@ export function useSeriesFormController({
     seriesSummary,
     setSeriesSummary,
     seriesKeywords,
-    setSeriesKeywords,
+    keywordInput,
+    setKeywordInput,
+    keywordList,
+    isComposingKeyword,
+    setIsComposingKeyword,
+    handleAddKeyword,
+    handleRemoveKeyword,
+    initKeywordsFromString,
     worldviewDescription,
     setWorldviewDescription,
     worldviewPrompt,

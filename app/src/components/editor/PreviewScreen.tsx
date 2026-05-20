@@ -4,6 +4,7 @@ import React, { useMemo } from "react";
 import Image from "next/image";
 import type { ChoiceItem, ScriptBlock } from "@/types/editor";
 import { useEditorStore } from "@/store/useEditorStore";
+import { dummyAsset } from "@/lib/dummy-asset-path";
 import { CHARACTERS, BACKGROUNDS, BGMS } from "@/lib/mockData";
 import { cn } from "@/lib/utils";
 import { resolveSpeakerDisplay } from "@/lib/speakerPersona";
@@ -305,7 +306,7 @@ export function PreviewScreen(props: PreviewScreenProps = {}) {
                 <div className="flex items-center gap-2">
                   {choice.isPaid && (
                     <Image
-                      src="/choice-paid-icon.png"
+                      src={dummyAsset("choice-paid-icon.png")}
                       alt=""
                       width={16}
                       height={16}

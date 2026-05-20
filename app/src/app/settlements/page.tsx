@@ -527,7 +527,7 @@ export default function MonetizationSettlementsPage() {
                     sectionEnd={
                       <Link
                         href="/analytics?area=revenue"
-                        className={cn(analyticsOutlineChipClassName, "h-9 shrink-0 px-3 text-sm")}
+                        className={cn(analyticsOutlineChipClassName, "shrink-0")}
                       >
                         수익 분석
                       </Link>

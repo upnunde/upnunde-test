@@ -5,6 +5,7 @@ import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/u
 import { Button } from "@/components/ui/button";
 import { Title1 } from "@/components/ui/title1";
 import { Title2 } from "@/components/ui/title2";
+import { DUMMY_DEFAULT_THUMBNAIL } from "@/lib/dummy-thumbnail-images";
 
 interface EpisodePromptReferenceModalProps {
   open: boolean;
@@ -30,7 +31,8 @@ const REFERENCE_SCRIPT = `[scene] 폐성당 지하 입구
 [event] 낡은 문이 열리며 푸른 빛이 새어 나온다.
 [text speaker="나레이션"] 문틈 너머로 오래전 사라진 이름이 속삭인다.
 [event_end]`;
-const REFERENCE_THUMBNAIL = "/background-1.png";
+
+const REFERENCE_THUMBNAIL = DUMMY_DEFAULT_THUMBNAIL;
 
 export function EpisodePromptReferenceModal({
   open,

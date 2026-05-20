@@ -203,7 +203,7 @@ function PopularContentsCard({
           ]}
           activeId={popularCriterion}
           onSelect={(id) => setPopularCriterion(id as PopularCriterionId)}
-          size="m"
+          variant="chip"
           tabListClassName="self-stretch"
         />
       </div>
@@ -240,7 +240,7 @@ function AttentionContentsCard({
           ]}
           activeId={attentionCriterion}
           onSelect={(id) => setAttentionCriterion(id as AttentionCriterionId)}
-          size="m"
+          variant="chip"
           tabListClassName="self-stretch"
         />
       </div>

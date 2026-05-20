@@ -7,12 +7,10 @@ import { AnalyticsEpisodeScopePicker } from "@/components/analytics/AnalyticsEpi
 import type { AnalyticsAreaTabId } from "@/components/analytics/AnalyticsDashboard";
 import { type AnalyticsPeriodRange } from "@/components/analytics/analytics-date";
 import {
-  analyticsFilledSecondaryChipClassName,
-  analyticsOutlineChipClassName,
   analyticsScopeFilterDividerClassName,
   analyticsScopeFilterShellClassName,
 } from "@/components/analytics/analytics-filter-chips";
-import { Button } from "@/components/ui/button";
+import { FilterChip } from "@/components/ui/chip";
 import {
   ANALYTICS_SCOPE_CHIPS,
   type AnalyticsScopeCategoryId,
@@ -100,30 +98,17 @@ export function AnalyticsScopeFilterBar({
         <div className="flex shrink-0 items-center gap-2" role="group" aria-label="콘텐츠 범위">
           {ANALYTICS_SCOPE_CHIPS.map(({ id, label }) => {
             const selected = scopeCategory === id;
-            return selected ? (
-              <button
+            return (
+              <FilterChip
                 key={id}
-                type="button"
-                aria-pressed
+                selected={selected}
+                chipSize="l"
+                aria-pressed={selected}
+                className="min-w-20"
                 onClick={() => onScopeCategoryChange(id)}
-                className={analyticsFilledSecondaryChipClassName}
-              >
-                <span className="block whitespace-nowrap text-center text-sm font-medium leading-5">
-                  {label}
-                </span>
-              </button>
-            ) : (
-              <Button
-                key={id}
-                type="button"
-                variant="outline"
-                size="lg"
-                aria-pressed={false}
-                onClick={() => onScopeCategoryChange(id)}
-                className={analyticsOutlineChipClassName}
               >
                 {label}
-              </Button>
+              </FilterChip>
             );
           })}
         </div>

@@ -11,6 +11,7 @@ import { PublishConfirmModal, DeleteConfirmModal } from "@/components/episode/Co
 import { Snackbar } from "@/components/episode/Snackbar";
 import { Button } from "@/components/ui/button";
 import type { Episode, SortOptions, SnackbarState, SeriesType } from "@/types/episode";
+import { DUMMY_BACKGROUND_GALLERY_THUMBNAILS } from "@/lib/dummy-thumbnail-images";
 
 const PAGE_SIZE = 10;
 
@@ -25,38 +26,7 @@ const DEFAULT_SORT: SortOptions = {
  *    등장인물·연출장면을 제외한 배경/갤러리 썸네일만 사용
  *  - 실제 서비스 연동 시에는 에피소드별 대표 썸네일 리소스로 교체 예정
  */
-const RESOURCE_THUMBNAIL_IMAGES = [
-  // 배경
-  "/background-1.png",
-  "/background-2.png",
-  "/background-3.png",
-  "/background-bakery-day.png",
-  "/background-kitchen-night.png",
-  "/background-bakery-night.png",
-  "/background-kitchen-rain.png",
-  "/background-street-day.png",
-  "/background-room-night.png",
-  "/background-street-night.png",
-  "/background-room-day.png",
-  "/background-street-evening.png",
-  "/background-bakery-evening.png",
-  "/background-room-rain.png",
-  "/background-kitchen-day.png",
-  "/background-bakery-rain.png",
-  "/background-livingroom-day.png",
-  "/background-room-evening.png",
-  "/background-kitchen-evening.png",
-  // 갤러리
-  "/gallery-G3.png",
-  "/gallery-G4.png",
-  "/gallery-G5.png",
-  "/gallery-G6.png",
-  "/gallery-G7.png",
-  "/gallery-G8.png",
-  "/gallery-G9.png",
-  "/gallery-G10.png",
-  "/gallery-G11.png",
-] as const;
+const RESOURCE_THUMBNAIL_IMAGES = DUMMY_BACKGROUND_GALLERY_THUMBNAILS;
 
 /** SSR/CSR 동일 — Math.random 금지(하이드레이션 불일치 방지) */
 function deterministicViews(episodeNumber: number): number {

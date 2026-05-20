@@ -6,6 +6,7 @@ import { Button } from "@/components/ui/button";
 import { ImageCropOnlyModal } from "@/components/resource/character/CharacterExpressionModal";
 import { SeriesImageUploadField } from "@/components/series/SeriesImageUploadField";
 import { SeriesFormTextInputField } from "@/components/series/SeriesFormTextInputField";
+import { SeriesFormKeywordsField } from "@/components/series/SeriesFormKeywordsField";
 import { SeriesFormTextareaField } from "@/components/series/SeriesFormTextareaField";
 import { SeriesFormPageScaffold } from "@/components/series/SeriesFormPageScaffold";
 import { useSeriesFormController } from "@/hooks/useSeriesFormController";
@@ -25,8 +26,13 @@ export default function SeriesEditPage() {
     setSeriesTitle,
     seriesSummary,
     setSeriesSummary,
-    seriesKeywords,
-    setSeriesKeywords,
+    keywordInput,
+    keywordList,
+    isComposingKeyword,
+    setIsComposingKeyword,
+    setKeywordInput,
+    handleAddKeyword,
+    handleRemoveKeyword,
     worldviewDescription,
     setWorldviewDescription,
     worldviewPrompt,
@@ -164,17 +170,20 @@ export default function SeriesEditPage() {
                             }
                           />
 
-                          <SeriesFormTextInputField
+                          <SeriesFormKeywordsField
                             title="키워드*"
                             subtitle="세계관은 모든 에피소드의 배경과 논리를 구성하는 기준이 됩니다."
-                            value={seriesKeywords}
-                            placeholder="키워드를 작성해주세요."
+                            keywordInput={keywordInput}
+                            keywordList={keywordList}
+                            placeholder="예) 판타지, 학원, 로맨스"
                             maxLength={MAX_KEYWORDS}
                             error={fieldErrors.keywords}
                             inputRef={keywordsRef}
-                            onValueChange={(value) =>
-                              handleRequiredFieldChange(value, setSeriesKeywords, "keywords")
-                            }
+                            isComposing={isComposingKeyword}
+                            onKeywordInputChange={setKeywordInput}
+                            onComposingChange={setIsComposingKeyword}
+                            onAddKeyword={handleAddKeyword}
+                            onRemoveKeyword={handleRemoveKeyword}
                           />
 
                           <SeriesFormTextareaField

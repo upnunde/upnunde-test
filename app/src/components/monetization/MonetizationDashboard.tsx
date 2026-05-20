@@ -135,17 +135,13 @@ export function MonetizationDashboard({
           <AnalyticsTopFiveRowList rows={dummy.top5} />
           </AnalyticsPanel>
         <AnalyticsPanel className="h-fit w-full min-w-0 flex-1 self-start lg:min-w-[260px]">
-          <Title2
-            text="월별 수익"
-            variant="title"
-            asSectionHeader
-            sectionEnd={
-              <AnalyticsMonthlyRevenueRangeFilter
-                value={monthlyRevenueRange}
-                onChange={setMonthlyRevenueRange}
-              />
-            }
-          />
+          <Title2 text="월별 수익" variant="title" asSectionHeader />
+          <div className="px-5 pt-3">
+            <AnalyticsMonthlyRevenueRangeFilter
+              value={monthlyRevenueRange}
+              onChange={setMonthlyRevenueRange}
+            />
+          </div>
           <div className="p-5">
             <AnalyticsMonthlyRevenueSection
               scopeCategory={scopeCategory}

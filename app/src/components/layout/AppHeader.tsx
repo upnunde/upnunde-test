@@ -4,6 +4,7 @@ import { useState } from "react";
 import Image from "next/image";
 import { ProfileEditModal } from "@/components/ProfileEditModal";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
+import { dummyAsset } from "@/lib/dummy-asset-path";
 
 export function AppHeader() {
   const [profileDrawerOpen, setProfileDrawerOpen] = useState(false);
@@ -24,7 +25,7 @@ export function AppHeader() {
             }}
           >
             <Image
-              src="/renovel-logo.png"
+              src={dummyAsset("renovel-logo.png")}
               alt="RE:NOVEL Studio"
               width={187}
               height={20}

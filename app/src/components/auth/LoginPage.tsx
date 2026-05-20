@@ -15,6 +15,7 @@ import { InquiryForm } from "@/components/inquiry/InquiryForm";
 import { Snackbar } from "@/components/episode/Snackbar";
 import { Title2 } from "@/components/ui/title2";
 import { cn } from "@/lib/utils";
+import { dummyAsset } from "@/lib/dummy-asset-path";
 
 /* 소셜 로고 인라인 SVG (플랫폼 공식 비주얼) */
 function GoogleIcon({ className }: { className?: string }) {
@@ -116,7 +117,7 @@ export function LoginPage() {
       <main className="flex w-full max-w-[400px] flex-col items-center gap-6">
         <div className="flex w-full flex-col items-center gap-3 pb-4">
           <Image
-            src="/renovel-studio-logo.png"
+            src={dummyAsset("renovel-studio-logo.png")}
             alt="RE:NOVEL Studio"
             width={187}
             height={40}

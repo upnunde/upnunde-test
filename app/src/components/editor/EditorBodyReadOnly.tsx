@@ -7,11 +7,15 @@ import type { ScriptBlock } from "@/types/editor";
 import { cn } from "@/lib/utils";
 import { LABEL_COLOR_BY_TYPE } from "@/lib/blockLabelColors";
 import { BLOCK_LABEL_KO } from "@/lib/blockTypeLabels";
+import { ReadonlyChoiceTable } from "./ReadonlyChoiceTable";
+import {
+  isReadonlyPickerResourceBlock,
+  ReadonlyResourceValues,
+} from "./ReadonlyResourceValues";
 
 /** EditorBody 줄번호 열과 동일 톤 (포커스 없을 때) */
 const INDEX_COL_CLASS =
   "shrink-0 text-[13px] font-medium tabular-nums w-10 flex items-center justify-start mt-0 text-on-surface-disabled min-h-8 py-1";
-const READONLY_ROW_MIN_HEIGHT_CLASS = "min-h-8 py-1";
 const READONLY_ROW_LABEL_CELL_CLASS = "w-24 shrink-0 min-h-8 py-1 flex items-center justify-start";
 const READONLY_ROW_CONTENT_CELL_CLASS = "min-w-0 flex-1 min-h-8 py-0 flex items-center justify-start";
 const READONLY_BODY_TEXT_CLASS =
@@ -28,6 +32,15 @@ function renderInlineTagHighlightedText(content: string): React.ReactNode {
       </span>
     );
   });
+}
+
+function buildSceneOptions(blocks: ScriptBlock[]) {
+  return blocks
+    .filter((b) => b.type === "scene")
+    .map((b, i) => ({
+      value: b.content?.trim() || `장면_${i + 1}`,
+      label: b.content?.trim() || `장면_${i + 1}`,
+    }));
 }
 
 function ReadOnlyBlockRow({
@@ -47,21 +60,18 @@ function ReadOnlyBlockRow({
   const labelColorClass = LABEL_COLOR_BY_TYPE[block.type];
   const labelKo = BLOCK_LABEL_KO[block.type];
   const seriesPersona = useEditorStore((s) => s.seriesPersona);
+  const indexColClass = cn(
+    INDEX_COL_CLASS,
+    isFocused ? "text-primary" : "transition-colors group-hover/preview:text-on-surface-20"
+  );
 
   if (block.type === "text") {
     const speaker = resolveSpeakerDisplay(block.data?.speaker, seriesPersona);
     return (
       <>
-        <div
-          className={cn(
-            INDEX_COL_CLASS,
-            isFocused ? "text-primary" : "transition-colors group-hover/preview:text-on-surface-20"
-          )}
-        >
-          {indexLabel}
-        </div>
+        <div className={indexColClass}>{indexLabel}</div>
         <div className={cn(READONLY_ROW_LABEL_CELL_CLASS, "pr-2")}>
-          <span className="inline-block w-fit max-w-[76px] text-left truncate text-[13px] font-medium text-on-surface-30">
+          <span className="inline-block w-fit max-w-[76px] truncate text-left text-xs font-medium leading-4 text-on-surface-30">
             {speaker}
           </span>
         </div>
@@ -91,36 +101,15 @@ function ReadOnlyBlockRow({
         ];
     return (
       <>
-        <div
-          className={cn(
-            INDEX_COL_CLASS,
-            isFocused ? "text-primary" : "text-on-surface-disabled transition-colors group-hover/preview:text-on-surface-20"
-          )}
-        >
-          {indexLabel}
-        </div>
-        <div className={cn(READONLY_ROW_LABEL_CELL_CLASS, "overflow-hidden")}>
+        <div className={indexColClass}>{indexLabel}</div>
+        <div className={cn(READONLY_ROW_LABEL_CELL_CLASS, "self-start overflow-hidden pt-0.5")}>
           <span className={cn("text-xs font-medium leading-4", labelColorClass)}>#선택지</span>
         </div>
-        <div className={cn(READONLY_ROW_CONTENT_CELL_CLASS, "items-start", "py-0")}>
-          <div className="flex min-w-0 flex-1 flex-col gap-0.5">
-            {displayChoices.map((c, i) => (
-              <span
-                key={c.id}
-                className={cn("flex justify-start items-center gap-3", READONLY_ROW_MIN_HEIGHT_CLASS)}
-              >
-                <span className={READONLY_BODY_TEXT_CLASS}>
-                  {i + 1}.{" "}
-                  {c.isAiMode ? "✨ AI 대화창" : renderInlineTagHighlightedText(c.text || "—")}
-                </span>
-                {c.isPaid && (
-                  <span className="inline-flex h-5 w-fit shrink-0 items-center justify-center rounded bg-primary/12 px-1.5 text-[11px] font-medium leading-none whitespace-nowrap text-primary">
-                    유료
-                  </span>
-                )}
-              </span>
-            ))}
-          </div>
+        <div className={cn(READONLY_ROW_CONTENT_CELL_CLASS, "items-start py-1")}>
+          <ReadonlyChoiceTable
+            choices={displayChoices}
+            sceneOptions={buildSceneOptions(blocks)}
+          />
         </div>
       </>
     );
@@ -130,15 +119,7 @@ function ReadOnlyBlockRow({
     const sceneOrdinal = blocks.slice(0, blockIndex + 1).filter((b) => b.type === "scene").length;
     return (
       <>
-        <div
-          className={cn(
-            INDEX_COL_CLASS,
-            "mt-0",
-            isFocused ? "text-primary" : "transition-colors group-hover/preview:text-on-surface-20"
-          )}
-        >
-          {indexLabel}
-        </div>
+        <div className={cn(indexColClass, "mt-0")}>{indexLabel}</div>
         <div className={cn(READONLY_ROW_LABEL_CELL_CLASS, "text-[13px] font-medium", labelColorClass)}>
           {`#장면 ${String(sceneOrdinal).padStart(2, "0")}`}
         </div>
@@ -159,15 +140,7 @@ function ReadOnlyBlockRow({
   if (block.type === "top_desc") {
     return (
       <>
-        <div
-          className={cn(
-            INDEX_COL_CLASS,
-            "mt-0",
-            isFocused ? "text-primary" : "transition-colors group-hover/preview:text-on-surface-20"
-          )}
-        >
-          {indexLabel}
-        </div>
+        <div className={cn(indexColClass, "mt-0")}>{indexLabel}</div>
         <div className={cn(READONLY_ROW_LABEL_CELL_CLASS, "text-[13px] font-medium", labelColorClass)}>
           #장면정보
         </div>
@@ -180,17 +153,23 @@ function ReadOnlyBlockRow({
     );
   }
 
+  if (isReadonlyPickerResourceBlock(block.type)) {
+    return (
+      <>
+        <div className={cn(indexColClass, "mt-0")}>{indexLabel}</div>
+        <div className={cn(READONLY_ROW_LABEL_CELL_CLASS, "text-[13px] font-medium", labelColorClass)}>
+          {`#${labelKo}`}
+        </div>
+        <div className={READONLY_ROW_CONTENT_CELL_CLASS}>
+          <ReadonlyResourceValues block={block} />
+        </div>
+      </>
+    );
+  }
+
   return (
     <>
-      <div
-        className={cn(
-          INDEX_COL_CLASS,
-          "mt-0",
-          isFocused ? "text-primary" : "transition-colors group-hover/preview:text-on-surface-20"
-        )}
-      >
-        {indexLabel}
-      </div>
+      <div className={cn(indexColClass, "mt-0")}>{indexLabel}</div>
       <div className={cn(READONLY_ROW_LABEL_CELL_CLASS, "text-[13px] font-medium", labelColorClass)}>
         {`#${labelKo}`}
       </div>
