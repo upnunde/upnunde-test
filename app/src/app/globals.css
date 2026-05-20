@@ -237,7 +237,7 @@
   }
   35%,
   65% {
-    transform: translateY(-24px) scale(1);
+    transform: translateY(-24px) scale(0.5);
   }
 }
 
@@ -323,6 +323,7 @@
     margin-left: -18px;
     margin-top: -18px;
     border-radius: 999px;
+    transform-origin: 50% 50%;
     animation: ai-orb-loader-radius 1.6s cubic-bezier(0.4, 0, 0.2, 1) infinite;
   }
 
