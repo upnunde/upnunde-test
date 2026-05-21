@@ -3,8 +3,9 @@
 import React, { useCallback, useState, useEffect, useRef } from "react";
 import Image from "next/image";
 import { useRouter, usePathname } from "next/navigation";
-import { ChevronLeft, Pencil, Trash2 } from "lucide-react";
+import { Pencil, Trash2 } from "lucide-react";
 import { Button } from "@/components/ui/button";
+import { HeaderBackButton } from "@/components/ui/header-back-button";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import { AddResourceSlot } from "@/components/resource/cards/AddResourceSlot";
@@ -234,16 +235,7 @@ export function CharacterDetailPage({ isNew = true, initialData }: CharacterDeta
       <header className={PAGE_SUBHEADER_CLASS}>
         <div className="flex w-full max-w-[1200px] min-w-[640px] items-center justify-between gap-4">
           <div className="flex items-center justify-start gap-3">
-            <Button
-              type="button"
-              variant="outline"
-              size="icon"
-              onClick={handleBack}
-              className="h-8 w-8 shrink-0 rounded-full border-border-10 shadow-none focus-visible:ring-0 focus-visible:ring-offset-0"
-              aria-label="리소스 목록으로"
-            >
-              <ChevronLeft className="h-5 w-5 text-on-surface-30" strokeWidth={2} />
-            </Button>
+            <HeaderBackButton onClick={handleBack} aria-label="리소스 목록으로" />
             <h1 className="text-2xl font-bold text-on-surface-10">등장인물 {isNew ? "등록" : "상세"}</h1>
           </div>
         </div>
@@ -281,7 +273,7 @@ export function CharacterDetailPage({ isNew = true, initialData }: CharacterDeta
                     onChange={(e) => setName(e.target.value.slice(0, MAX_NAME))}
                     maxLength={MAX_NAME}
                     placeholder="예) 한하루"
-                    className="h-12 rounded-md border border-border-10 bg-white px-3 py-2 text-sm text-on-surface-10 placeholder:text-on-surface-30 focus:outline-none focus:ring-2 focus:ring-primary shadow-none"
+                    className="h-[42px] rounded-md border border-border-10 bg-white px-3 py-2 text-sm text-on-surface-10 placeholder:text-on-surface-30 focus:outline-none focus:ring-2 focus:ring-primary shadow-none"
                   />
                   <div className="w-full inline-flex justify-end items-center gap-2">
                     <div className="text-right text-on-surface-30 text-xs font-normal leading-4 tabular-nums">{name.length}/{MAX_NAME}</div>
@@ -302,7 +294,7 @@ export function CharacterDetailPage({ isNew = true, initialData }: CharacterDeta
                     onChange={(e) => setSummary(e.target.value.slice(0, MAX_SUMMARY))}
                     maxLength={MAX_SUMMARY}
                     placeholder="예) 사람의 소리를 볼 수 있는 소리 수집가 소년"
-                    className="h-12 rounded-md border border-border-10 bg-white px-3 py-2 text-sm text-on-surface-10 placeholder:text-on-surface-30 focus:outline-none focus:ring-2 focus:ring-primary"
+                    className="h-[42px] rounded-md border border-border-10 bg-white px-3 py-2 text-sm text-on-surface-10 placeholder:text-on-surface-30 focus:outline-none focus:ring-2 focus:ring-primary"
                   />
                   <div className="w-full inline-flex justify-end items-center gap-2">
                     <div className="text-right text-on-surface-30 text-xs font-normal leading-4 tabular-nums">{summary.length}/{MAX_SUMMARY}</div>
@@ -460,7 +452,7 @@ export function CharacterDetailPage({ isNew = true, initialData }: CharacterDeta
                       }
                     }}
                     placeholder="예) 고등학생, 사진, 츤데레"
-                    className="h-12 rounded-md border border-border-10 bg-white px-3 py-2 text-sm text-on-surface-10 placeholder:text-on-surface-30 focus:outline-none focus:ring-2 focus:ring-primary"
+                    className="h-[42px] rounded-md border border-border-10 bg-white px-3 py-2 text-sm text-on-surface-10 placeholder:text-on-surface-30 focus:outline-none focus:ring-2 focus:ring-primary"
                   />
                   <div className="w-full inline-flex justify-end items-start gap-2">
                     {tagList.length > 0 && (

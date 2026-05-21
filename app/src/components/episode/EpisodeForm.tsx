@@ -1,8 +1,6 @@
 "use client";
 
 import { useState, useCallback, useRef, useEffect } from "react";
-import { useEditorStore, createBlock } from "@/store/useEditorStore";
-import { parseScriptToBlocks } from "@/utils/scriptParser";
 import { Button } from "@/components/ui/button";
 import { PageCard } from "@/components/layout/PageCard";
 import { AddResourceSlot } from "@/components/resource/cards/AddResourceSlot";
@@ -10,100 +8,60 @@ import { ImageCard } from "@/components/resource/cards/ImageCard";
 import { Title1 } from "@/components/ui/title1";
 import { Title2 } from "@/components/ui/title2";
 import { ImageCropPosterModal } from "@/components/resource/character/CharacterExpressionModal";
-import { AiConvertLoadingOverlay } from "@/components/episode/AiConvertLoadingOverlay";
-import { EpisodeScriptTextarea } from "@/components/episode/EpisodeScriptTextarea";
 import { cn } from "@/lib/utils";
 import { EPISODE_FORM_FIELD_COPY } from "@/lib/episode-form-copy";
-import { EPISODE_SCRIPT_SAMPLE } from "@/lib/episode-script-sample";
-import { DUMMY_DEFAULT_THUMBNAIL } from "@/lib/dummy-thumbnail-images";
-import { initialBackgrounds } from "@/lib/resourceMockData";
 import type { ImageResource } from "@/types/resource";
 
 const MAX_TITLE = 50;
 const MAX_SUMMARY = 100;
-const MAX_HISTORY = 5000;
-const DUMMY_TITLE = "새벽의 문턱에서";
-const DUMMY_SUMMARY = "봉인된 문이 열리며 주인공이 첫 선택의 대가를 마주합니다.";
-const DUMMY_HISTORY =
-  "지난 화에서 주인공은 금서 보관실에서 오래된 열쇠를 발견했습니다. " +
-  "열쇠에는 정체불명의 문양이 새겨져 있었고, 그 문양은 마을 외곽 폐성당의 지하 문과 일치했습니다. " +
-  "동료들은 위험을 경고했지만 주인공은 진실을 확인하기 위해 새벽에 홀로 성당으로 향합니다.";
-const DUMMY_THUMBNAIL = initialBackgrounds[0]?.imageUrl ?? DUMMY_DEFAULT_THUMBNAIL;
-const EDITOR_CONVERT_LOADING_MS = 5000;
-const EDITOR_CONVERT_LOADING_STEPS = [
-  "작성하신 내용을 에디터로 변환하고 있어요…",
-  "장면과 대사를 블록 구조로 정리하고 있어요…",
-  "배경·캐릭터 리소스를 연결할 준비를 하고 있어요…",
-  "거의 다 되었어요. 에디터 화면으로 이동합니다…",
-];
+
+export interface EpisodeFormSubmitPayload {
+  title: string;
+  summary: string;
+  thumbnailUrl: string;
+}
+
+export interface EpisodeFormInitialValues {
+  title?: string;
+  summary?: string;
+  thumbnailUrl?: string;
+}
 
 export interface EpisodeFormProps {
+  onConverted?: (payload: EpisodeFormSubmitPayload) => void;
   onCancel?: () => void;
-  onConverted?: () => void;
   containerClassName?: string;
   stickyFooter?: boolean;
+  sectionTitle?: string;
+  submitLabel?: string;
+  initialValues?: EpisodeFormInitialValues;
 }
 
 export function EpisodeForm({
-  onCancel,
   onConverted,
+  onCancel,
   containerClassName,
   stickyFooter = false,
+  sectionTitle = "에피소드",
+  submitLabel = "생성하기",
+  initialValues,
 }: EpisodeFormProps) {
-  const rawScript = useEditorStore((s) => s.rawScript);
-  const setRawScript = useEditorStore((s) => s.setRawScript);
-  const setBlocks = useEditorStore((s) => s.setBlocks);
-  const setCurrentView = useEditorStore((s) => s.setCurrentView);
+  const [title, setTitle] = useState(initialValues?.title ?? "");
+  const [summary, setSummary] = useState(initialValues?.summary ?? "");
+  const [thumbnailUrl, setThumbnailUrl] = useState(initialValues?.thumbnailUrl ?? "");
 
-  const [title, setTitle] = useState(DUMMY_TITLE);
-  const [summary, setSummary] = useState(DUMMY_SUMMARY);
-  const [history, setHistory] = useState(DUMMY_HISTORY);
-  const [thumbnailUrl, setThumbnailUrl] = useState(DUMMY_THUMBNAIL);
   const [thumbnailModalOpen, setThumbnailModalOpen] = useState(false);
   const [thumbnailModalInitialSlots, setThumbnailModalInitialSlots] =
     useState<{ id: string; expressionLabel: string; imageUrl?: string }[] | null>(null);
   const [pendingThumbnailUrl, setPendingThumbnailUrl] = useState<string | null>(null);
   const thumbnailFileInputRef = useRef<HTMLInputElement | null>(null);
-  const convertTimeoutRef = useRef<ReturnType<typeof setTimeout> | null>(null);
-  const isMountedRef = useRef(true);
-  const [isConverting, setIsConverting] = useState(false);
-
-  const completeConvertToEditor = useCallback(() => {
-    const parsed = parseScriptToBlocks(rawScript);
-    setBlocks(parsed.length > 0 ? parsed : [createBlock("text", "")]);
-    setCurrentView("editor");
-    onConverted?.();
-  }, [onConverted, rawScript, setBlocks, setCurrentView]);
-
-  const handleConvertToEditor = useCallback(() => {
-    if (isConverting) return;
-    setIsConverting(true);
-    convertTimeoutRef.current = setTimeout(() => {
-      convertTimeoutRef.current = null;
-      if (!isMountedRef.current) return;
-      completeConvertToEditor();
-      setIsConverting(false);
-    }, EDITOR_CONVERT_LOADING_MS);
-  }, [completeConvertToEditor, isConverting]);
-
-  /** 최초 진입 시에만 샘플 대본 주입. 비운 뒤에는 빈 상태 UI가 유지됨 */
-  useEffect(() => {
-    if (!rawScript.trim()) {
-      setRawScript(EPISODE_SCRIPT_SAMPLE);
-    }
-    // eslint-disable-next-line react-hooks/exhaustive-deps -- mount seed only
-  }, []);
+  const isAiFilling = false;
 
   useEffect(() => {
-    isMountedRef.current = true;
-    return () => {
-      isMountedRef.current = false;
-      if (convertTimeoutRef.current) {
-        clearTimeout(convertTimeoutRef.current);
-        convertTimeoutRef.current = null;
-      }
-    };
-  }, []);
+    setTitle(initialValues?.title ?? "");
+    setSummary(initialValues?.summary ?? "");
+    setThumbnailUrl(initialValues?.thumbnailUrl ?? "");
+  }, [initialValues?.summary, initialValues?.thumbnailUrl, initialValues?.title]);
 
   useEffect(() => {
     return () => {
@@ -166,9 +124,16 @@ export function EpisodeForm({
   const isFormComplete =
     title.trim().length > 0 &&
     summary.trim().length > 0 &&
-    history.trim().length > 0 &&
-    rawScript.trim().length > 0 &&
     thumbnailUrl.trim().length > 0;
+
+  const handleCreateEpisode = useCallback(() => {
+    if (!isFormComplete || isAiFilling) return;
+    onConverted?.({
+      title: title.trim(),
+      summary: summary.trim(),
+      thumbnailUrl: thumbnailUrl.trim(),
+    });
+  }, [isAiFilling, isFormComplete, onConverted, summary, thumbnailUrl, title]);
 
   const footer = (
     <div
@@ -184,172 +149,145 @@ export function EpisodeForm({
       </Button>
       <Button
         type="button"
-        onClick={handleConvertToEditor}
-        disabled={!isFormComplete || isConverting}
+        onClick={handleCreateEpisode}
+        disabled={!isFormComplete || isAiFilling}
+        title={
+          isFormComplete
+            ? undefined
+            : `제목, 요약, 대표 이미지가 모두 채워져야 ${submitLabel.replace("하기", "")}할 수 있어요`
+        }
       >
-        에디터 변환하기
+        {submitLabel}
       </Button>
     </div>
   );
 
   return (
     <>
-      {isConverting ? <AiConvertLoadingOverlay messageSteps={EDITOR_CONVERT_LOADING_STEPS} /> : null}
       <div
         className={cn(
           "mx-auto w-full max-w-[1200px] min-w-[640px] rounded-[4px] border border-border-10 bg-white shadow-none",
-          stickyFooter && "flex min-h-0 h-full flex-col overflow-hidden",
+          stickyFooter && "flex min-h-0 flex-col",
           containerClassName,
         )}
       >
-        <Title2 text="에피소드" asSectionHeader />
+        <Title2 text={sectionTitle} asSectionHeader />
 
-      <PageCard
-        className={cn(
-          "mx-0 max-w-none min-w-0 border-0 rounded-none px-5 pt-5 pb-5 shadow-none",
-          stickyFooter && "min-h-0 flex-1 overflow-y-auto",
-        )}
-      >
-        <div className="mt-0 flex flex-col gap-6">
-          {/* 에피소드 제목 */}
-          <div className="flex flex-col gap-3">
-            <Title1
-              text="에피소드 제목*"
-              variant="title-subtitle-dot"
-              subtitleText={EPISODE_FORM_FIELD_COPY.title.subtitle}
-            />
-            <input
-              type="text"
-              maxLength={MAX_TITLE}
-              value={title}
-              onChange={(e) => setTitle(e.target.value)}
-              placeholder={EPISODE_FORM_FIELD_COPY.title.placeholder}
-              className="h-12 rounded-md border border-border-10 bg-white px-3 py-2 text-sm text-on-surface-10 placeholder:text-on-surface-30 focus:outline-none focus:ring-2 focus:ring-primary"
-            />
-            <div className="flex justify-end text-xs text-on-surface-30">
-              {title.length}/{MAX_TITLE}
-            </div>
-          </div>
-
-          {/* 에피소드 요약 */}
-          <div className="flex flex-col gap-3">
-            <Title1
-              text="에피소드 요약*"
-              variant="title-subtitle-dot"
-              subtitleText={EPISODE_FORM_FIELD_COPY.summary.subtitle}
-            />
-            <input
-              type="text"
-              maxLength={MAX_SUMMARY}
-              value={summary}
-              onChange={(e) => setSummary(e.target.value)}
-              placeholder={EPISODE_FORM_FIELD_COPY.summary.placeholder}
-              className="h-12 rounded-md border border-border-10 bg-white px-3 py-2 text-sm text-on-surface-10 placeholder:text-on-surface-30 focus:outline-none focus:ring-2 focus:ring-primary"
-            />
-            <div className="flex justify-end text-xs text-on-surface-30">
-              {summary.length}/{MAX_SUMMARY}
-            </div>
-          </div>
-
-          {/* 대표 이미지 (9:16 썸네일 + 단일 크롭 모달) */}
-          <div className="flex flex-col gap-3 pb-5">
-            <Title1
-              text="대표 이미지*"
-              variant="title-subtitle-dot"
-              subtitleText={EPISODE_FORM_FIELD_COPY.thumbnail.subtitle}
-            />
-            {thumbnailUrl ? (
-              <ImageCard
-                item={thumbnailItem}
-                slotType="img9:16"
-                showName={false}
-                onDetailClick={handleThumbnailClick}
-                onDeleteClick={handleThumbnailRemove}
+        <PageCard
+          className={cn(
+            "mx-0 max-w-none min-w-0 border-0 rounded-none px-5 pt-5 pb-5 shadow-none",
+            stickyFooter && "min-h-0",
+          )}
+        >
+          <div className="mt-0 flex flex-col gap-6">
+            <div className="flex flex-col gap-3">
+              <Title1
+                text="에피소드 제목*"
+                variant="title-subtitle-dot"
+                subtitleText={EPISODE_FORM_FIELD_COPY.title.subtitle}
               />
-            ) : (
-              <AddResourceSlot
-                variant="img9:16"
-                ariaLabel="대표 이미지 업로드"
-                onClick={handleThumbnailClick}
+              <input
+                type="text"
+                maxLength={MAX_TITLE}
+                value={title}
+                onChange={(e) => setTitle(e.target.value)}
+                disabled={isAiFilling}
+                placeholder={EPISODE_FORM_FIELD_COPY.title.placeholder}
+                className="h-[42px] w-full rounded-md border border-border-10 bg-white px-3 py-2 text-sm text-on-surface-10 placeholder:text-on-surface-30 focus:outline-none focus:ring-2 focus:ring-primary disabled:cursor-not-allowed disabled:opacity-60"
               />
-            )}
-          </div>
+              <div className="flex justify-end text-xs text-on-surface-30">
+                {title.length}/{MAX_TITLE}
+              </div>
+            </div>
 
-          {/* 지난 사건 히스토리 */}
-          <div className="flex flex-col gap-3">
-            <Title1
-              text="지난 사건 히스토리*"
-              variant="title-subtitle-dot"
-              subtitleText={EPISODE_FORM_FIELD_COPY.history.subtitle}
-            />
-            <textarea
-              rows={4}
-              maxLength={MAX_HISTORY}
-              value={history}
-              onChange={(e) => setHistory(e.target.value)}
-              placeholder={EPISODE_FORM_FIELD_COPY.history.placeholder}
-              className="min-h-[160px] max-h-[400px] rounded-md border border-border-10 bg-white px-3 py-2 text-sm text-on-surface-10 placeholder:text-on-surface-30 focus:outline-none focus:ring-2 focus:ring-primary"
-            />
-            <div className="flex justify-end text-xs text-on-surface-30">
-              {history.length}/{MAX_HISTORY}
+            <div className="flex flex-col gap-3">
+              <Title1
+                text="에피소드 요약*"
+                variant="title-subtitle-dot"
+                subtitleText={EPISODE_FORM_FIELD_COPY.summary.subtitle}
+              />
+              <input
+                type="text"
+                maxLength={MAX_SUMMARY}
+                value={summary}
+                onChange={(e) => setSummary(e.target.value)}
+                disabled={isAiFilling}
+                placeholder={EPISODE_FORM_FIELD_COPY.summary.placeholder}
+                className="h-[42px] w-full rounded-md border border-border-10 bg-white px-3 py-2 text-sm text-on-surface-10 placeholder:text-on-surface-30 focus:outline-none focus:ring-2 focus:ring-primary disabled:cursor-not-allowed disabled:opacity-60"
+              />
+              <div className="flex justify-end text-xs text-on-surface-30">
+                {summary.length}/{MAX_SUMMARY}
+              </div>
+            </div>
+
+            <div className="flex flex-col gap-3 pb-5">
+              <Title1
+                text="대표 이미지*"
+                variant="title-subtitle-dot"
+                subtitleText={EPISODE_FORM_FIELD_COPY.thumbnail.subtitle}
+              />
+              {thumbnailUrl ? (
+                <ImageCard
+                  item={thumbnailItem}
+                  slotType="img9:16"
+                  showName={false}
+                  onDetailClick={handleThumbnailClick}
+                  onDeleteClick={handleThumbnailRemove}
+                />
+              ) : (
+                <AddResourceSlot
+                  variant="img9:16"
+                  ariaLabel="대표 이미지 업로드"
+                  onClick={handleThumbnailClick}
+                />
+              )}
             </div>
           </div>
 
-          {/* 에피소드 대본 */}
-          <div className="flex flex-col gap-3">
-            <Title1
-              text="에피소드 대본*"
-              variant="title-subtitle-dot"
-              subtitleText={EPISODE_FORM_FIELD_COPY.script.subtitle}
-            />
-            <EpisodeScriptTextarea value={rawScript} onChange={setRawScript} />
-          </div>
-        </div>
-
-        {!stickyFooter && footer}
-      </PageCard>
-      {stickyFooter && footer}
-      <input
-        ref={thumbnailFileInputRef}
-        type="file"
-        accept="image/*"
-        className="sr-only"
-        aria-label="대표 이미지 업로드"
-        onChange={handleThumbnailFileChange}
-      />
-      <ImageCropPosterModal
-        open={thumbnailModalOpen}
-        onClose={() => {
-          setThumbnailModalOpen(false);
-          setThumbnailModalInitialSlots(null);
-          setPendingThumbnailUrl((prev) => {
-            if (prev && prev.startsWith("blob:")) {
-              URL.revokeObjectURL(prev);
-            }
-            return null;
-          });
-        }}
-        initialSlots={thumbnailModalInitialSlots ?? []}
-        onSave={(slots) => {
-          const saved = slots[0];
-          if (saved?.imageUrl) {
-            setThumbnailUrl((prev) => {
-              if (prev && prev.startsWith("blob:") && prev !== saved.imageUrl) {
+          {!stickyFooter && footer}
+        </PageCard>
+        {stickyFooter && footer}
+        <input
+          ref={thumbnailFileInputRef}
+          type="file"
+          accept="image/*"
+          className="sr-only"
+          aria-label="대표 이미지 업로드"
+          onChange={handleThumbnailFileChange}
+        />
+        <ImageCropPosterModal
+          open={thumbnailModalOpen}
+          onClose={() => {
+            setThumbnailModalOpen(false);
+            setThumbnailModalInitialSlots(null);
+            setPendingThumbnailUrl((prev) => {
+              if (prev && prev.startsWith("blob:")) {
                 URL.revokeObjectURL(prev);
               }
-              return saved.imageUrl ?? "";
+              return null;
             });
-          }
-          setThumbnailModalOpen(false);
-          setThumbnailModalInitialSlots(null);
-          setPendingThumbnailUrl((prev) => {
-            if (prev && prev.startsWith("blob:") && prev !== saved?.imageUrl) {
-              URL.revokeObjectURL(prev);
+          }}
+          initialSlots={thumbnailModalInitialSlots ?? []}
+          onSave={(slots) => {
+            const saved = slots[0];
+            if (saved?.imageUrl) {
+              setThumbnailUrl((prev) => {
+                if (prev && prev.startsWith("blob:") && prev !== saved.imageUrl) {
+                  URL.revokeObjectURL(prev);
+                }
+                return saved.imageUrl ?? "";
+              });
             }
-            return null;
-          });
-        }}
-      />
+            setThumbnailModalOpen(false);
+            setThumbnailModalInitialSlots(null);
+            setPendingThumbnailUrl((prev) => {
+              if (prev && prev.startsWith("blob:") && prev !== saved?.imageUrl) {
+                URL.revokeObjectURL(prev);
+              }
+              return null;
+            });
+          }}
+        />
       </div>
     </>
   );

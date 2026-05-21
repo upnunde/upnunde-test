@@ -1,10 +1,22 @@
 import { cva, type VariantProps } from "class-variance-authority";
 
-/** 인터랙티브 컨트롤 기본 높이 — 구 h-9(36px) 통일 제거, h-8(32px) */
+/** 인터랙티브 컨트롤 compact 티어 — h-8(32px) */
 export const CONTROL_HEIGHT_CLASS = "h-8 min-h-8";
 
-/** 칩 필터·탭 그룹 가로 간격 공통 */
-export const CHIP_GROUP_GAP_CLASS = "gap-2";
+/** 인터랙티브 컨트롤 standard 티어 — h-9(36px). 구 h-10(40px) 대체 */
+export const CONTROL_HEIGHT_STANDARD_CLASS = "h-9 min-h-9";
+
+/** 인터랙티브 컨트롤 form 티어 — 42px. 구 h-12(48px) 대체 */
+export const CONTROL_HEIGHT_FORM_CLASS = "h-[42px] min-h-[42px]";
+
+/** compact(h-8·32px) 컨트롤 그룹 가로 간격 — spacing-4 = 4px */
+export const CONTROL_GROUP_GAP_COMPACT_CLASS = "gap-[4px]";
+
+/** standard(h-9·36px) 컨트롤 그룹 가로 간격 — spacing-8 = 8px */
+export const CONTROL_GROUP_GAP_STANDARD_CLASS = "gap-[8px]";
+
+/** @deprecated `CONTROL_GROUP_GAP_COMPACT_CLASS` — FilterChip M·h-8 그룹 */
+export const CHIP_GROUP_GAP_CLASS = CONTROL_GROUP_GAP_COMPACT_CLASS;
 
 /** FilterChip M(h-8)과 같은 행 — 날짜·드롭다운·셀렉트 트리거 높이·라운드·보더 */
 export const CHIP_COMPANION_CONTROL_CLASS =
@@ -33,7 +45,7 @@ export const chipVariants = cva(
         square: "",
       },
       size: {
-        l: "h-10 min-w-0 text-base leading-5",
+        l: "h-9 min-w-0 text-[15px] leading-[22px]",
         m: "h-8 min-w-0 text-sm leading-5",
       },
       icon: {
@@ -66,8 +78,7 @@ export const chipVariants = cva(
         class:
           "text-on-surface-30 outline outline-1 outline-offset-[-1px] outline-border-10 hover:text-on-surface-20",
       },
-      { corner: "square", size: "l", class: "rounded-[12px]" },
-      { corner: "square", size: "m", class: "rounded-[8px]" },
+      { corner: "square", class: "rounded-[8px]" },
       { icon: false, size: "l", class: "px-4" },
       { icon: false, size: "m", class: "px-3" },
       { icon: true, size: "l", class: "pl-4 pr-3" },
@@ -85,7 +96,16 @@ export const chipVariants = cva(
 
 export type ChipVariantProps = VariantProps<typeof chipVariants>;
 
-/** 필터 칩 — square 기본: L(h-10)=radius 12px, M(h-8)=radius 8px */
+/** FilterChip size → 그룹 gap (L=h-9→8px, M=h-8→4px) */
+export function chipGroupGapClass(
+  chipSize: NonNullable<ChipVariantProps["size"]>,
+): string {
+  return chipSize === "l"
+    ? CONTROL_GROUP_GAP_STANDARD_CLASS
+    : CONTROL_GROUP_GAP_COMPACT_CLASS;
+}
+
+/** 필터 칩 — square 기본: L/M 공통 radius 8px */
 export function filterChipVariantProps(
   selected: boolean,
   size: NonNullable<ChipVariantProps["size"]> = "m",

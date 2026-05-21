@@ -11,6 +11,16 @@ import {
 } from "@/components/ui/dropdown-menu";
 import type { Episode, EpisodeStatus } from "@/types/episode";
 import { formatViews, formatDateOrRelative } from "@/lib/formatEpisode";
+import { cn } from "@/lib/utils";
+
+const ACTION_ICON_BUTTON_BASE =
+  "flex h-8 w-8 shrink-0 cursor-pointer items-center justify-center rounded-full border border-border-10 text-on-surface-30 transition-all duration-150 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-2";
+const ACTION_ICON_BUTTON_EDIT_HOVER =
+  "hover:border-primary/30 hover:bg-primary/10 hover:text-primary active:scale-95";
+const ACTION_ICON_BUTTON_DELETE_HOVER =
+  "hover:border-rose-200 hover:bg-rose-50 hover:text-rose-600 active:scale-95";
+const ACTION_ICON_BUTTON_MORE_HOVER =
+  "hover:border-border-20 hover:bg-surface-30 hover:text-on-surface-10 active:scale-95";
 
 const STATUS_LABEL: Record<EpisodeStatus, string> = {
   DRAFT: "임시저장",
@@ -18,9 +28,15 @@ const STATUS_LABEL: Record<EpisodeStatus, string> = {
   PUBLISHED: "공개 중",
 };
 
+const STATUS_TEXT_CLASS: Record<EpisodeStatus, string> = {
+  DRAFT: "text-error-error",
+  PRIVATE: "text-error-error",
+  PUBLISHED: "text-on-surface-30",
+};
+
 export interface EpisodeListItemProps {
   episode: Episode;
-  /** 정책 7: 리스트 항목(썸네일/제목 영역) 클릭 시 원고 에디터 진입 */
+  /** 정책 7: 리스트 항목(썸네일/제목 영역) 클릭 시 에피소드 상세(수정 불가) 진입 */
   onRowClick?: (episode: Episode) => void;
   onPublish?: (episode: Episode) => void;
   onEdit?: (episode: Episode) => void;
@@ -100,7 +116,7 @@ export function EpisodeListItem({
       <div className="w-24 shrink-0 px-0 text-sm text-on-surface-30">{viewsDisplay}</div>
 
       {/* 공개여부 */}
-      <div className="w-24 shrink-0 px-0 text-sm text-on-surface-30">
+      <div className={cn("w-24 shrink-0 px-0 text-sm", STATUS_TEXT_CLASS[status])}>
         {STATUS_LABEL[status]}
       </div>
 
@@ -114,7 +130,7 @@ export function EpisodeListItem({
             <button
               type="button"
               onClick={() => onEdit?.(episode)}
-              className="flex h-8 w-8 shrink-0 cursor-pointer items-center justify-center rounded-full border border-border-10 text-on-surface-30 transition-colors hover:bg-surface-20 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-2"
+              className={`${ACTION_ICON_BUTTON_BASE} ${ACTION_ICON_BUTTON_EDIT_HOVER}`}
               aria-label="수정"
             >
               <Pencil className="h-4 w-4" aria-hidden />
@@ -122,7 +138,7 @@ export function EpisodeListItem({
             <button
               type="button"
               onClick={() => onDelete?.(episode)}
-              className="flex h-8 w-8 shrink-0 cursor-pointer items-center justify-center rounded-full border border-border-10 text-on-surface-30 transition-colors hover:bg-surface-20 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-2"
+              className={`${ACTION_ICON_BUTTON_BASE} ${ACTION_ICON_BUTTON_DELETE_HOVER}`}
               aria-label="삭제"
             >
               <Trash2 className="h-4 w-4" aria-hidden />
@@ -142,7 +158,7 @@ export function EpisodeListItem({
             <button
               type="button"
               onClick={() => onEdit?.(episode)}
-              className="flex h-8 w-8 shrink-0 cursor-pointer items-center justify-center rounded-full border border-border-10 text-on-surface-30 transition-colors hover:bg-surface-20 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-2"
+              className={`${ACTION_ICON_BUTTON_BASE} ${ACTION_ICON_BUTTON_EDIT_HOVER}`}
               aria-label="수정"
             >
               <Pencil className="h-4 w-4" aria-hidden />
@@ -150,7 +166,7 @@ export function EpisodeListItem({
             <button
               type="button"
               onClick={() => onDelete?.(episode)}
-              className="flex h-8 w-8 shrink-0 cursor-pointer items-center justify-center rounded-full border border-border-10 text-on-surface-30 transition-colors hover:bg-surface-20 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-2"
+              className={`${ACTION_ICON_BUTTON_BASE} ${ACTION_ICON_BUTTON_DELETE_HOVER}`}
               aria-label="삭제"
             >
               <Trash2 className="h-4 w-4" aria-hidden />
@@ -162,7 +178,7 @@ export function EpisodeListItem({
           <DropdownMenu>
             <DropdownMenuTrigger
               type="button"
-              className="flex h-8 w-8 shrink-0 cursor-pointer items-center justify-center rounded-full border border-border-10 text-on-surface-30 transition-colors hover:bg-surface-20 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-2"
+              className={`${ACTION_ICON_BUTTON_BASE} ${ACTION_ICON_BUTTON_MORE_HOVER}`}
               aria-label="더보기"
             >
               <MoreVertical className="h-4 w-4" aria-hidden />

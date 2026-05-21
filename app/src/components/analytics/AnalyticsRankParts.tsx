@@ -43,7 +43,7 @@ export function ContentTypeBadge({
 export function RankDecoration({ rank, tone }: { rank: number; tone: ContentTone }) {
   if (rank === 2) {
     return (
-      <div className="flex w-10 items-center justify-start gap-1">
+      <div className="flex w-9 items-center justify-start gap-1">
         <div className="relative h-5 w-5">
           <div
             className="absolute left-[4.38px] top-[9.38px] h-[1.25px] w-3 bg-on-surface-30"
@@ -55,7 +55,7 @@ export function RankDecoration({ rank, tone }: { rank: number; tone: ContentTone
   }
   if (rank === 5) {
     return (
-      <div className="flex w-10 items-center justify-start gap-1">
+      <div className="flex w-9 items-center justify-start gap-1">
         <div className="text-center justify-center text-error-error text-sm font-normal font-['Pretendard_JP'] leading-5">
           New
         </div>
@@ -65,7 +65,7 @@ export function RankDecoration({ rank, tone }: { rank: number; tone: ContentTone
   if (rank === 4 || tone === "seriesBlue" || tone === "character") {
     const num = "3";
     return (
-      <div className="flex w-10 items-center gap-0.5">
+      <div className="flex w-9 items-center gap-0.5">
         <span className="text-sm text-blue-500" aria-hidden>
           ▼
         </span>
@@ -75,7 +75,7 @@ export function RankDecoration({ rank, tone }: { rank: number; tone: ContentTone
   }
   const num = rank === 3 ? "1" : "3";
   return (
-    <div className="flex w-10 items-center gap-0.5">
+    <div className="flex w-9 items-center gap-0.5">
       <span className="text-sm text-error-error" aria-hidden>
         ▲
       </span>

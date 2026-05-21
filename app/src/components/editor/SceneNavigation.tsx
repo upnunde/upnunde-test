@@ -397,7 +397,7 @@ export function SceneNavigation({
       )}
 
       {/* 접힘 상태: 오류 아이콘 고정 노출 + 클릭 시 상세 */}
-      {!showIssues && collapsed && <div className="mt-auto h-12" aria-hidden />}
+      {!showIssues && collapsed && <div className="mt-auto h-[42px]" aria-hidden />}
 
       {showIssues && collapsed && (
         <div className="mt-auto pb-2">
@@ -406,7 +406,7 @@ export function SceneNavigation({
               type="button"
               onClick={() => setCollapsedIssueOpen((prev) => !prev)}
               className={cn(
-                "relative mx-auto flex h-10 w-10 items-center justify-center rounded-lg border transition-colors",
+                "relative mx-auto flex h-9 w-9 items-center justify-center rounded-lg border transition-colors",
                 issues.length > 0
                   ? "border-rose-300 bg-rose-50 text-rose-900 hover:bg-rose-100"
                   : "border-border-10 bg-surface-20 text-on-surface-30 hover:bg-surface-20"

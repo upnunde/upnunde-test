@@ -274,6 +274,16 @@
   }
 }
 
+/** 플로팅 AI 프롬프트 바 — 1px inner 라인 그라데이션이 우→좌로 흐름 */
+@keyframes composer-border-gradient-flow {
+  0% {
+    background-position: 0 0, 200% 0;
+  }
+  100% {
+    background-position: 0 0, 0% 0;
+  }
+}
+
 @layer utilities {
   .ai-convert-overlay {
     animation: ai-overlay-fade-in 220ms ease-out;
@@ -382,6 +392,70 @@
     animation-delay: 0.32s;
   }
 
+  .composer-bar-gradient-inner {
+    border: 1px solid transparent;
+    background-image: linear-gradient(#ffffff, #ffffff),
+      linear-gradient(
+        90deg,
+        #f0abfc 0%,
+        #e879f9 12%,
+        #a855f7 28%,
+        #8b5cf6 44%,
+        #6366f1 60%,
+        #a855f7 76%,
+        #e879f9 88%,
+        #f0abfc 100%
+      );
+    background-origin: padding-box, border-box;
+    background-clip: padding-box, border-box;
+    background-size: auto, 200% 100%;
+    animation: composer-border-gradient-flow 4s linear infinite;
+  }
+
+  /** 인풋 필드 내부 AI 생성 중 텍스트 shimmer (밝은 배경) */
+  .ai-field-text-shimmer {
+    background-image: linear-gradient(
+      105deg,
+      var(--on-surface-30) 0%,
+      var(--on-surface-30) 38%,
+      var(--on-surface-20) 50%,
+      var(--on-surface-30) 62%,
+      var(--on-surface-30) 100%
+    );
+    background-size: 220% 100%;
+    background-repeat: no-repeat;
+    -webkit-background-clip: text;
+    background-clip: text;
+    -webkit-text-fill-color: transparent;
+    animation: ai-text-shimmer 2.4s linear infinite;
+  }
+
+  .ai-field-loading-dots {
+    display: inline-flex;
+    align-items: center;
+    gap: 3px;
+    margin-left: 4px;
+    height: 1em;
+    flex-shrink: 0;
+  }
+
+  .ai-field-loading-dots > span {
+    width: 3px;
+    height: 3px;
+    border-radius: 999px;
+    background-color: var(--on-surface-30);
+    opacity: 0.45;
+    animation: ai-loading-dot-pulse 1.1s ease-in-out infinite;
+  }
+
+  .ai-field-loading-dots > span:nth-child(2) {
+    animation-delay: 0.16s;
+  }
+
+  .ai-field-loading-dots > span:nth-child(3) {
+    animation-delay: 0.32s;
+  }
+
   @media (prefers-reduced-motion: reduce) {
     .ai-loading-text-shimmer {
       animation: none;
@@ -393,6 +467,24 @@
     .ai-loading-dots > span {
       animation: none;
       opacity: 0.55;
+    }
+
+    .ai-field-text-shimmer {
+      animation: none;
+      background-image: none;
+      -webkit-text-fill-color: var(--on-surface-30);
+      color: var(--on-surface-30);
+    }
+
+    .ai-field-loading-dots > span {
+      animation: none;
+      opacity: 0.55;
+    }
+
+    .composer-bar-gradient-inner {
+      animation: none;
+      background-size: auto, 100% 100%;
+      background-position: 0 0, 0% 0;
     }
   }
 

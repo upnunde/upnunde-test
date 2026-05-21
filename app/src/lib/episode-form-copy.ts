@@ -15,9 +15,28 @@ export const EPISODE_FORM_FIELD_COPY = {
   history: {
     subtitle: "이번 화 이전 사건·관계를 정리해 주세요.",
     placeholder: "직전 회차 요약, 인물 관계, 남은 떡밥",
+    autoFillFromPrevious: "이전 회차 AI요약",
+    autoFillLoading: "이전 회차 정보를 불러오고 있어요",
+    autoFillUnavailable: "첫 회차이거나 회차 정보가 없어 불러올 수 없어요",
+    autoFillDone: "이전 회차 정보를 채웠어요",
+  },
+  aiComposer: {
+    placeholder: "AI로 에피소드 내용을 작성해 보세요.",
+    fieldLoading: {
+      title: "제목을 생성하고 있어요",
+      summary: "요약을 생성하고 있어요",
+      thumbnail: "대표 이미지를 생성하고 있어요",
+      history: "지난 사건 히스토리를 생성하고 있어요",
+      script: "에피소드 대본을 생성하고 있어요",
+      composer: "초안을 생성하고 있어요",
+    },
+    emptyTitle: "이번 화의 이야기를 간략히 알려 주세요",
+    emptyDescription:
+      "아래 입력창에 핵심 장면·감정·전개를 적으면 AI가 제목, 요약, 히스토리, 대본을 채워 드려요.",
   },
   script: {
     subtitle: "변환 시 장면·대사 블록으로 나뉩니다.",
+    aiProduce: "AI 제작",
     placeholder: "[scene], [text] 태그 또는 자유 작성",
     empty: {
       title: "대본을 작성해 주세요",

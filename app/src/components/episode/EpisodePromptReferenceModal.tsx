@@ -60,7 +60,7 @@ export function EpisodePromptReferenceModal({
                   value={REFERENCE_TITLE}
                   readOnly
                   tabIndex={-1}
-                  className="h-12 rounded-md border border-border-10 bg-surface-20 px-3 py-2 text-sm text-on-surface-10 pointer-events-none"
+                  className="h-[42px] rounded-md border border-border-10 bg-surface-20 px-3 py-2 text-sm text-on-surface-10 pointer-events-none"
                 />
                 <div className="flex justify-end text-xs text-on-surface-30">
                   {REFERENCE_TITLE.length}/{MAX_TITLE}
@@ -79,7 +79,7 @@ export function EpisodePromptReferenceModal({
                   value={REFERENCE_SUMMARY}
                   readOnly
                   tabIndex={-1}
-                  className="h-12 rounded-md border border-border-10 bg-surface-20 px-3 py-2 text-sm text-on-surface-10 pointer-events-none"
+                  className="h-[42px] rounded-md border border-border-10 bg-surface-20 px-3 py-2 text-sm text-on-surface-10 pointer-events-none"
                 />
                 <div className="flex justify-end text-xs text-on-surface-30">
                   {REFERENCE_SUMMARY.length}/{MAX_SUMMARY}

@@ -11,6 +11,7 @@ import {
   Heading,
   Sparkles,
   Clapperboard,
+  MessageSquareText,
 } from "lucide-react";
 import type { BlockType } from "@/types/editor";
 import { cn } from "@/lib/utils";
@@ -25,7 +26,12 @@ import {
 
 export type SlashSelectPayload =
   | BlockType
-  | { type: BlockType; content: string; data?: { isNew?: boolean } };
+  | { type: BlockType; content: string; data?: { isNew?: boolean } }
+  | { action: "add_sentence" };
+
+type SlashMenuOption =
+  | { id: "add_sentence"; label: string; icon: React.ElementType }
+  | { id: BlockType; type: BlockType; label: string; icon: React.ElementType };
 
 export interface SlashCommandMenuProps {
   position: { top: number; left: number };
@@ -36,7 +42,7 @@ export interface SlashCommandMenuProps {
 }
 
 /** 문장 내 안내문구(PICKER_LABEL_KO)와 동일한 한글 라벨 */
-const ALL_OPTIONS: { type: BlockType; label: string; icon: React.ElementType }[] = [
+const BLOCK_OPTIONS: { type: BlockType; label: string; icon: React.ElementType }[] = [
   { type: "scene", label: "장면추가", icon: Heading },
   { type: "top_desc", label: "장면정보", icon: Clapperboard },
   { type: "background", label: "배경", icon: Image },
@@ -47,6 +53,11 @@ const ALL_OPTIONS: { type: BlockType; label: string; icon: React.ElementType }[]
   { type: "video", label: "동영상", icon: Film },
   { type: "choice", label: "선택지", icon: ListChecks },
   { type: "event", label: "장면 전환", icon: Sparkles },
+];
+
+const MENU_OPTIONS: SlashMenuOption[] = [
+  { id: "add_sentence", label: "문장추가", icon: MessageSquareText },
+  ...BLOCK_OPTIONS.map((opt) => ({ id: opt.type, ...opt })),
 ];
 
 function getDefaultPayloadForType(
@@ -90,7 +101,7 @@ export function SlashCommandMenu({
   onClose,
 }: SlashCommandMenuProps) {
   const buttonRefs = useRef<(HTMLButtonElement | null)[]>([]);
-  const OPTIONS = ALL_OPTIONS;
+  const OPTIONS = MENU_OPTIONS;
 
   // 기본 포커스: 메뉴 열리면 첫 항목에 포커스
   useEffect(() => {
@@ -174,33 +185,41 @@ export function SlashCommandMenu({
         style={{ top: adjustedPosition.top, left: adjustedPosition.left }}
         role="listbox"
       >
-        {OPTIONS.map(({ type, label, icon: Icon }, index) => (
-          <button
-            key={type}
-            ref={(el) => {
-              buttonRefs.current[index] = el;
-            }}
-            type="button"
-            role="option"
-            aria-selected={false}
-            className={cn(
-              "flex w-full cursor-pointer items-center gap-2 px-3 py-2 text-left text-sm",
-              "hover:bg-surface-20 focus:bg-surface-20 focus:outline-none"
-            )}
-            onClick={() => {
-              const defaultPayload = getDefaultPayloadForType(type);
-              if (defaultPayload) {
-                onSelect(defaultPayload);
-              } else {
-                onSelect(type);
-              }
-            }}
-            onKeyDown={(e) => handleOptionKeyDown(index, e)}
-          >
-            <Icon className="h-4 w-4 shrink-0 text-on-surface-30" />
-            <span className="text-on-surface-10">{label}</span>
-          </button>
-        ))}
+        {OPTIONS.map((option, index) => {
+          const Icon = option.icon;
+          return (
+            <button
+              key={option.id}
+              ref={(el) => {
+                buttonRefs.current[index] = el;
+              }}
+              type="button"
+              role="option"
+              aria-selected={false}
+              className={cn(
+                "flex w-full cursor-pointer items-center gap-2 px-3 py-2 text-left text-sm",
+                "hover:bg-surface-20 focus:bg-surface-20 focus:outline-none",
+              )}
+              onClick={() => {
+                if (option.id === "add_sentence") {
+                  onSelect({ action: "add_sentence" });
+                  return;
+                }
+                const type = option.type;
+                const defaultPayload = getDefaultPayloadForType(type);
+                if (defaultPayload) {
+                  onSelect(defaultPayload);
+                } else {
+                  onSelect(type);
+                }
+              }}
+              onKeyDown={(e) => handleOptionKeyDown(index, e)}
+            >
+              <Icon className="h-4 w-4 shrink-0 text-on-surface-30" />
+              <span className="text-on-surface-10">{option.label}</span>
+            </button>
+          );
+        })}
       </div>
     </>
   );

@@ -99,13 +99,13 @@ export function PublishConfirmModal({
         <div className="self-stretch rounded-b-2xl flex flex-col justify-start items-start overflow-hidden bg-surface-10">
           <div className="self-stretch px-6 pt-2 pb-5 bg-surface-10 inline-flex justify-end items-center gap-2">
             <DialogClose asChild>
-              <Button variant="outline" size="default" className="min-w-20 h-10">
+              <Button variant="outline" size="lg" className="min-w-20">
                 취소
               </Button>
             </DialogClose>
             <Button
-              size="default"
-              className="min-w-20 h-10"
+              size="lg"
+              className="min-w-20"
               onClick={handleConfirm}
               disabled={!isConfirmKeywordMatched || !episode}
             >

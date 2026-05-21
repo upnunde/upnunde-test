@@ -239,11 +239,11 @@ export function SeriesItem({
         </div>
 
         {/* 하단 관리 버튼: 모든 상태에서 활성화 (가로 영역 내에서 3등분, 버튼 폭 가변) */}
-        <div className="self-stretch flex justify-start items-start gap-2 pt-0">
+        <div className="self-stretch flex justify-start items-start gap-[8px] pt-0">
           <button
             type="button"
             onClick={handleSeriesManage}
-            className="h-10 flex-1 min-w-0 cursor-pointer rounded-md border px-3 text-sm font-medium transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-2 border-border-10 bg-white text-on-surface-20 hover:bg-surface-20 flex items-center"
+            className="h-9 flex-1 min-w-0 cursor-pointer rounded-md border px-3 text-sm font-medium transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-2 border-border-10 bg-white text-on-surface-20 hover:bg-surface-20 flex items-center"
           >
             <span className="block w-full overflow-hidden text-ellipsis whitespace-nowrap text-center">
               시리즈 관리
@@ -254,7 +254,7 @@ export function SeriesItem({
             disabled={isDraft}
             title={isDraft ? "시리즈 작성 완료 후 이용 가능합니다" : undefined}
             onClick={handleResource}
-            className={`h-10 flex-1 min-w-0 rounded-md border px-3 text-sm font-medium transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-2 flex items-center ${
+            className={`h-9 flex-1 min-w-0 rounded-md border px-3 text-sm font-medium transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-2 flex items-center ${
               isDraft
                 ? "border-border-10 text-on-surface-30 cursor-not-allowed"
                 : "border-border-10 bg-white text-on-surface-20 hover:bg-surface-20 cursor-pointer"
@@ -269,7 +269,7 @@ export function SeriesItem({
             disabled={isDraft}
             title={isDraft ? "시리즈 작성 완료 후 이용 가능합니다" : undefined}
             onClick={handleEpisode}
-            className={`h-10 flex-1 min-w-0 rounded-md border px-3 text-sm font-medium transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-2 flex items-center ${
+            className={`h-9 flex-1 min-w-0 rounded-md border px-3 text-sm font-medium transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-2 flex items-center ${
               isDraft
                 ? "border-border-10 text-on-surface-30 cursor-not-allowed"
                 : "border-border-10 bg-white text-on-surface-20 hover:bg-surface-20 cursor-pointer"

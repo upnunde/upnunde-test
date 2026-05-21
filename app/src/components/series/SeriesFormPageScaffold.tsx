@@ -1,10 +1,10 @@
 "use client";
 
 import type { ReactNode } from "react";
-import { ChevronLeft } from "lucide-react";
 import Header from "@/components/Header/Header";
 import { PageCard } from "@/components/layout/PageCard";
 import { Button } from "@/components/ui/button";
+import { HeaderBackButton } from "@/components/ui/header-back-button";
 import { SeriesFormTabs } from "@/components/series/SeriesFormTabs";
 import { SeriesPreviewPanel } from "@/components/series/SeriesPreviewPanel";
 import { cn } from "@/lib/utils";
@@ -54,16 +54,7 @@ export function SeriesFormPageScaffold({
             <header className="flex h-16 shrink-0 items-center justify-center border-b border-border-10 bg-white px-5 py-0">
               <div className="flex w-full max-w-[1200px] items-center justify-between gap-4">
                 <div className="flex items-center justify-start gap-3">
-                  <Button
-                    type="button"
-                    variant="outline"
-                    size="icon"
-                    onClick={onBack}
-                    className="h-8 w-8 shrink-0 rounded-full border-border-10 shadow-none focus-visible:ring-0 focus-visible:ring-offset-0"
-                    aria-label="시리즈 목록으로"
-                  >
-                    <ChevronLeft className="h-5 w-5 text-on-surface-30" strokeWidth={2} />
-                  </Button>
+                  <HeaderBackButton onClick={onBack} aria-label="시리즈 목록으로" />
                   <h1 className="text-2xl font-bold text-on-surface-10">{title}</h1>
                 </div>
                 <div className="flex items-center gap-3">
@@ -71,6 +62,7 @@ export function SeriesFormPageScaffold({
                     <Button
                       type="button"
                       variant="outline"
+                      size="lg"
                       onClick={onDraftClick}
                       className="border-border-10 bg-white text-on-surface-20 hover:bg-surface-20"
                     >
@@ -79,6 +71,7 @@ export function SeriesFormPageScaffold({
                   ) : null}
                   <Button
                     type="button"
+                    size="lg"
                     onClick={onSubmit}
                     className={cn(
                       "bg-primary text-primary-foreground hover:bg-primary/90",

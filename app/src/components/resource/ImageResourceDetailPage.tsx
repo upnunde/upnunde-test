@@ -3,8 +3,9 @@
 import React, { useCallback, useEffect, useRef, useState } from "react";
 import Image from "next/image";
 import { useRouter, usePathname } from "next/navigation";
-import { ChevronLeft, Pencil, Trash2 } from "lucide-react";
+import { Pencil, Trash2 } from "lucide-react";
 import { Button } from "@/components/ui/button";
+import { HeaderBackButton } from "@/components/ui/header-back-button";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import { AddResourceSlot } from "@/components/resource/cards/AddResourceSlot";
@@ -188,16 +189,7 @@ export function ImageResourceDetailPage({ kind, initialData }: ImageResourceDeta
       <header className={PAGE_SUBHEADER_CLASS}>
         <div className="flex w-full max-w-[1200px] min-w-[640px] items-center justify-between gap-4">
           <div className="flex items-center justify-start gap-3">
-            <Button
-              type="button"
-              variant="outline"
-              size="icon"
-              onClick={handleBack}
-              className="h-8 w-8 shrink-0 rounded-full border-border-10 shadow-none focus-visible:ring-0 focus-visible:ring-offset-0"
-              aria-label="리소스 목록으로"
-            >
-              <ChevronLeft className="h-5 w-5 text-on-surface-30" strokeWidth={2} />
-            </Button>
+            <HeaderBackButton onClick={handleBack} aria-label="리소스 목록으로" />
             <h1 className="text-2xl font-bold text-on-surface-10">{labels.headerTitle}</h1>
           </div>
         </div>
@@ -224,7 +216,7 @@ export function ImageResourceDetailPage({ kind, initialData }: ImageResourceDeta
                     value={name}
                     onChange={(e) => setName(e.target.value)}
                     placeholder="이름을 입력해 주세요."
-                    className="h-12 rounded-md border border-border-10 bg-white px-3 py-2 text-sm text-on-surface-10 placeholder:text-on-surface-30 focus:outline-none focus:ring-2 focus:ring-primary shadow-none"
+                    className="h-[42px] rounded-md border border-border-10 bg-white px-3 py-2 text-sm text-on-surface-10 placeholder:text-on-surface-30 focus:outline-none focus:ring-2 focus:ring-primary shadow-none"
                   />
                 </div>
               </section>

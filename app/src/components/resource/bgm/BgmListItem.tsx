@@ -138,7 +138,7 @@ export function BgmListItem({
       onMouseLeave={() => setIsHovered(false)}
     >
       <div className="self-stretch flex flex-col gap-0 min-w-0 h-fit">
-        <div className="self-stretch inline-flex justify-center items-start gap-1 min-h-[40px] flex-shrink-0">
+        <div className="self-stretch inline-flex justify-center items-start gap-1 min-h-9 flex-shrink-0">
           {variant === "default" && index != null && (
             <span className="shrink-0 w-6 text-on-surface-10 text-sm font-medium font-['Pretendard_JP'] leading-5 tabular-nums">
               {index}

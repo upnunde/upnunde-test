@@ -38,7 +38,7 @@ export interface AnalyticsPeriodPickerProps {
 }
 
 const TRIGGER_BASE_CLASS = cn(
-  "inline-flex h-10 min-w-0 shrink-0 cursor-pointer items-center justify-between gap-2 rounded-md border border-slate-200 bg-white px-3 text-sm font-medium text-on-surface-10 transition-colors hover:bg-slate-50 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-2 data-[state=open]:border-slate-300 data-[state=open]:bg-slate-50",
+  "inline-flex h-9 min-w-0 shrink-0 cursor-pointer items-center justify-between gap-2 rounded-md border border-slate-200 bg-white px-3 text-sm font-medium text-on-surface-10 transition-colors hover:bg-slate-50 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-2 data-[state=open]:border-slate-300 data-[state=open]:bg-slate-50",
 );
 
 const TRIGGER_INLINE_CLASS = analyticsPeriodInlineTriggerClassName;

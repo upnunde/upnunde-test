@@ -1,10 +1,11 @@
 "use client";
 
-import { ChevronLeft, History } from "lucide-react";
+import { History, Pencil } from "lucide-react";
 import { useRouter } from "next/navigation";
 import { useLayoutEffect, useMemo, useRef, useState } from "react";
-import { useEditorStore } from "@/store/useEditorStore";
+import { createDefaultSeedBlocks, useEditorStore } from "@/store/useEditorStore";
 import { Button } from "@/components/ui/button";
+import { HeaderBackButton } from "@/components/ui/header-back-button";
 import { Snackbar } from "@/components/episode/Snackbar";
 import { EditorUnsavedConfirmModal } from "@/components/editor/EditorUnsavedConfirmModal";
 import {
@@ -25,14 +26,36 @@ function formatScriptHistoryTimestamp(savedAt: number): string {
   return `${mm}.${dd}, ${hh}:${min}`;
 }
 
+/** 임시저장 직후 히스토리 버튼·목록 new 표시 */
+function HistoryNewDot({ className }: { className?: string }) {
+  return (
+    <span
+      className={cn(
+        "pointer-events-none absolute size-2 rounded-full bg-destructive ring-2 ring-white",
+        className,
+      )}
+      aria-hidden
+    />
+  );
+}
+
 export interface EditorSubHeaderProps {
-  /** 제목 (예: "에피소드 제목") */
+  /** 제목 (예: "에피소드 에디터") */
   title?: string;
+  /** 제목 아래 보조 문구 (예: "121화 에피소드") */
+  subtitle?: string;
+  /** 회차 정보 수정 모달 열기 */
+  onEditEpisodeInfo?: () => void;
   /** 다시 만들기 클릭 시 동작 (없으면 기본: 폼 화면 전환) */
   onRecreate?: () => void;
 }
 
-export function EditorSubHeader({ title = "에피소드 제목", onRecreate }: EditorSubHeaderProps) {
+export function EditorSubHeader({
+  title = "에피소드 에디터",
+  subtitle,
+  onEditEpisodeInfo,
+  onRecreate,
+}: EditorSubHeaderProps) {
   const router = useRouter();
   const blocks = useEditorStore((s) => s.blocks);
   const scriptHistory = useEditorStore((s) => s.scriptHistory);
@@ -47,8 +70,12 @@ export function EditorSubHeader({ title = "에피소드 제목", onRecreate }: E
   const [snackbar, setSnackbar] = useState({ open: false, message: "" });
   const [isBackConfirmOpen, setIsBackConfirmOpen] = useState(false);
   const [isLoadConfirmOpen, setIsLoadConfirmOpen] = useState(false);
+  const [isRecreateConfirmOpen, setIsRecreateConfirmOpen] = useState(false);
   const [pendingLoadHistoryId, setPendingLoadHistoryId] = useState<string | null>(null);
   const [historyOpen, setHistoryOpen] = useState(false);
+  const [isHistoryEnabled, setIsHistoryEnabled] = useState(false);
+  /** 임시저장으로 추가된 최신 히스토리 — 팝오버 닫을 때까지 new 닷 표시 */
+  const [newHistoryEntryId, setNewHistoryEntryId] = useState<string | null>(null);
   /** 블록이 비었다가 다시 생길 때까지 한 번만 진입 기준선을 잡기 위함 */
   const snapshotBaselineInitRef = useRef(false);
 
@@ -91,11 +118,6 @@ export function EditorSubHeader({ title = "에피소드 제목", onRecreate }: E
     goToEpisodeList();
   };
 
-  /** 변경 없음일 때 '나가기' — 에피소드 목록(관리) 화면으로 이동 (에디터 폼 뒤로가기와 동일 경로) */
-  const handleExitToEpisodeList = () => {
-    router.push("/series/1/episodes");
-  };
-
   const handleSubmit = () => {
     // TODO: 실제 등록 로직 연동 후 에피소드 목록 화면으로 이동
     useEditorStore.setState({ undoStack: [], redoStack: [] });
@@ -106,6 +128,9 @@ export function EditorSubHeader({ title = "에피소드 제목", onRecreate }: E
     // TODO: 실제 임시저장 API 연동 시 저장 성공 시점에 snapshot 갱신
     setSavedSnapshot(blocksSnapshot);
     addScriptHistoryEntry();
+    const latestEntryId = useEditorStore.getState().scriptHistory[0]?.id ?? null;
+    setNewHistoryEntryId(latestEntryId);
+    setIsHistoryEnabled(true);
     useEditorStore.setState({ undoStack: [], redoStack: [] });
     setSnackbar({ open: true, message: "임시저장을 완료했습니다" });
   };
@@ -129,13 +154,53 @@ export function EditorSubHeader({ title = "에피소드 제목", onRecreate }: E
     setIsBackConfirmOpen(false);
     goToEpisodeList();
   };
+  const recreateToInitialEmpty = () => {
+    const nextBlocks = createDefaultSeedBlocks();
+    setBlocks(nextBlocks);
+    useEditorStore.setState({
+      rawScript: "",
+      undoStack: [],
+      redoStack: [],
+      focusBlockId: null,
+    });
+    setSavedSnapshot(JSON.stringify(nextBlocks));
+    setIsHistoryEnabled(false);
+    setHistoryOpen(false);
+    setNewHistoryEntryId(null);
+    setSnackbar({ open: true, message: "처음 상태로 다시 만들었어요" });
+  };
+
   const handleRecreate = () => {
     setHistoryOpen(false);
+    setNewHistoryEntryId(null);
+    if (!isHistoryEnabled && hasChangesSinceSave) {
+      setIsRecreateConfirmOpen(true);
+      return;
+    }
     if (onRecreate) {
       onRecreate();
       return;
     }
-    setCurrentView("form");
+    recreateToInitialEmpty();
+  };
+
+  const handleRecreateWithoutSave = () => {
+    setIsRecreateConfirmOpen(false);
+    if (onRecreate) {
+      onRecreate();
+      return;
+    }
+    recreateToInitialEmpty();
+  };
+
+  const handleTemporarySaveAndRecreate = () => {
+    handleTemporarySave();
+    setIsRecreateConfirmOpen(false);
+    if (onRecreate) {
+      onRecreate();
+      return;
+    }
+    recreateToInitialEmpty();
   };
 
   const finishHistoryLoad = (historyId: string) => {
@@ -207,30 +272,53 @@ export function EditorSubHeader({ title = "에피소드 제목", onRecreate }: E
     <>
       <header className="mx-auto flex h-16 w-full min-w-[800px] shrink-0 items-center justify-between px-5">
         <div className="flex items-center gap-3">
-          <Button
-            type="button"
-            variant="outline"
-            size="icon"
-            onClick={handleBack}
-            className="h-8 w-8 shrink-0 rounded-full"
-            aria-label="뒤로 가기"
-          >
-            <ChevronLeft className="h-5 w-5" strokeWidth={2} />
-          </Button>
-          <h1 className="text-2xl font-bold text-on-surface-10">{title}</h1>
+          <HeaderBackButton onClick={handleBack} />
+          <div className="flex flex-col justify-center">
+            <div className="flex items-center gap-2">
+              <h1 className="text-2xl font-bold text-on-surface-10">{title}</h1>
+              {onEditEpisodeInfo ? (
+                <Button
+                  type="button"
+                  variant="outline"
+                  size="icon"
+                  className="shrink-0 border-border-10 bg-white shadow-none text-on-surface-30 hover:text-on-surface-10"
+                  aria-label="회차 정보 수정"
+                  onClick={onEditEpisodeInfo}
+                >
+                  <Pencil className="h-5 w-5" strokeWidth={2} />
+                </Button>
+              ) : null}
+            </div>
+            {subtitle ? (
+              <p className="text-sm text-on-surface-30 leading-5">{subtitle}</p>
+            ) : null}
+          </div>
         </div>
         <div className="flex items-center gap-2">
-          <Popover open={historyOpen} onOpenChange={setHistoryOpen}>
+          <Popover
+            open={historyOpen}
+            onOpenChange={(open) => {
+              if (!isHistoryEnabled) return;
+              setHistoryOpen(open);
+              if (!open) setNewHistoryEntryId(null);
+            }}
+          >
             <PopoverTrigger asChild>
-              <Button
-                type="button"
-                variant="outline"
-                size="icon"
-                className="h-10 w-10 shrink-0 shadow-none bg-white"
-                aria-label="히스토리"
-              >
-                <History className="h-5 w-5 text-on-surface-10" strokeWidth={2} />
-              </Button>
+              <span className="relative inline-flex shrink-0">
+                <Button
+                  type="button"
+                  variant="outline"
+                  size="icon"
+                  className="h-9 w-9 shrink-0 shadow-none bg-white"
+                  aria-label="히스토리"
+                  disabled={!isHistoryEnabled}
+                >
+                  <History className="h-5 w-5 text-on-surface-10" strokeWidth={2} />
+                </Button>
+                {newHistoryEntryId ? (
+                  <HistoryNewDot className="top-0 right-0" />
+                ) : null}
+              </span>
             </PopoverTrigger>
             <PopoverContent
               align="end"
@@ -246,10 +334,13 @@ export function EditorSubHeader({ title = "에피소드 제목", onRecreate }: E
                     <li key={entry.id}>
                       <div
                         className={cn(
-                          "group flex min-h-10 items-center justify-between gap-2 rounded-md px-2 py-2",
+                          "group relative flex min-h-9 items-center justify-between gap-2 rounded-md px-2 py-2",
                           "hover:bg-surface-20"
                         )}
                       >
+                        {historyOpen && newHistoryEntryId === entry.id ? (
+                          <HistoryNewDot className="top-1.5 left-1.5" />
+                        ) : null}
                         <div className="min-w-0 flex items-center gap-2 text-sm font-medium">
                           <div className="text-on-surface-10">
                             {formatScriptHistoryTimestamp(entry.savedAt)}
@@ -283,7 +374,7 @@ export function EditorSubHeader({ title = "에피소드 제목", onRecreate }: E
                   type="button"
                   variant="ghost"
                   size="sm"
-                  className="h-8 px-2 text-sm font-medium text-primary hover:bg-accent hover:text-primary"
+                  className="h-8 px-3 text-sm font-medium text-primary hover:bg-accent hover:text-primary"
                   onClick={handleRecreate}
                 >
                   다시 만들기
@@ -295,16 +386,17 @@ export function EditorSubHeader({ title = "에피소드 제목", onRecreate }: E
             type="button"
             variant="outline"
             size="sm"
-            className="h-10 shadow-none bg-white"
-            onClick={hasChangesSinceSave ? handleTemporarySave : handleExitToEpisodeList}
+            className="h-9 shadow-none bg-white"
+            disabled={!hasChangesSinceSave}
+            onClick={handleTemporarySave}
           >
-            {hasChangesSinceSave ? "임시저장" : "나가기"}
+            임시저장
           </Button>
           <Button
             type="button"
             size="sm"
             disabled={!canSubmit}
-            className="h-10 shadow-none bg-primary text-primary-foreground hover:bg-primary/90 disabled:bg-primary/40 disabled:hover:bg-primary/40"
+            className="h-9 shadow-none bg-primary text-primary-foreground hover:bg-primary/90 disabled:bg-primary/40 disabled:hover:bg-primary/40"
             onClick={handleSubmit}
           >
             등록하기
@@ -339,6 +431,18 @@ export function EditorSubHeader({ title = "에피소드 제목", onRecreate }: E
         onSecondary={handleLoadWithoutSave}
         primaryLabel="저장 후 불러오기"
         onPrimary={handleTemporarySaveAndLoad}
+      />
+      <EditorUnsavedConfirmModal
+        open={isRecreateConfirmOpen}
+        onOpenChange={setIsRecreateConfirmOpen}
+        title="임시저장 후 다시 만들까요?"
+        description={
+          "아직 임시저장하지 않은 내용이 있어요.\n임시저장 후 다시 만들거나, 저장하지 않고 다시 만들 수 있어요."
+        }
+        secondaryLabel="저장 없이 다시 만들기"
+        onSecondary={handleRecreateWithoutSave}
+        primaryLabel="저장 후 다시 만들기"
+        onPrimary={handleTemporarySaveAndRecreate}
       />
     </>
   );

@@ -372,16 +372,19 @@ UI에서 **실제로 사용하는 역할 기반 토큰**. 값은 프리미티브
 
 ### 5. 인터랙티브 컨트롤 높이
 
-구 **`h-9`(36px)** 는 서비스 전역에서 **`h-8`(32px)** 로 통일한다.
+인터랙티브 컨트롤 높이는 **32 / 36 / 42** 세 티어만 사용한다. **40px(`h-10`)·48px(`h-12`) 티어는 사용하지 않는다.**
 
 | 용도 | 클래스 | 높이 |
 |------|--------|------|
-| 기본 `Button`·필터 칩 M·보조 드롭다운·컴팩트 에디터 행 | `h-8` / `CONTROL_HEIGHT_CLASS` | 32px |
+| compact — 기본 `Button`·필터 칩 M·보조 드롭다운·컴팩트 에디터 행 | `h-8` / `CONTROL_HEIGHT_CLASS` | 32px |
 | 아이콘-only 버튼 (`size="icon"`) | `size-8` | 32×32px |
-| 칩 L·상단 대형 필터 | `h-10` | 40px |
-| 폼 `Input` md·주요 텍스트 필드 | `h-12` | 48px |
+| standard — 칩 L·`Button` lg·sm 폼 필드·모달 버튼·드롭다운 트리거 | `h-9` / `CONTROL_HEIGHT_STANDARD_CLASS` | 36px |
+| 아이콘-only large (`size="icon-lg"`) | `size-9` | 36×36px |
+| form — `Input` md·주요 텍스트 필드·로그인 CTA·출금 등 | `CONTROL_HEIGHT_FORM_CLASS` (`h-[42px]`) | 42px · 안쪽 여백 **`formFieldPadClassName`** = 8px (`px-[8px] py-[8px]`) |
 
-예외: AI 로더 오브(`.ai-orb` 36px) 등 **비컨트롤 그래픽**은 유지한다.
+**같은 티어를 가로로 묶을 때:** compact → **4px** (`gap-[4px]`), standard → **8px** (`gap-[8px]`). Tailwind 기본 `gap-2`/`gap-4`(8px/16px)와 혼동하지 않는다.
+
+예외: 토스트 하단 오프셋(`bottom-[40px]`)·AI 로더 오브(`.ai-orb` 36px) 등 **비컨트롤 레이아웃·그래픽**은 유지할 수 있다.
 
 ---
 
@@ -424,22 +427,28 @@ UI에서 **실제로 사용하는 역할 기반 토큰**. 값은 프리미티브
 |----|-----|------|
 | `chipType` | `fill` \| `outline` | HTML `type` 속성과 구분하기 위해 `chipType` 명명 |
 | `variant` | `activated` \| `default` | 선택·강조 상태 |
-| `corner` | `square` \| `circle` | **square(필터·탭 기본)**: L=`h-10`+**radius 12px**, M=`h-8`+**radius 8px** · **circle**: Tag 등 pill (`rounded-full`) |
-| `size` | `l` \| `m` | L=`h-10`(40px), M=`h-8`(32px) |
+| `corner` | `square` \| `circle` | **square(필터·탭 기본)**: L/M 공통 **radius 8px** (L=`h-9`, M=`h-8`) · **circle**: Tag 등 pill (`rounded-full`) |
+| `size` | `l` \| `m` | L=`h-9`(36px), M=`h-8`(32px) |
 | `icon` | boolean | Tag 닫기(X) 등 — 우측 아이콘 슬롯 |
 
 #### Chip 패딩 (px)
 
 | size | 기본 (좌·우 동일) | 우측 아이콘 (`icon: true`) |
 |------|-------------------|----------------------------|
-| L (`h-10`) | 16 | 좌 16 · 우 12 (`pl-4 pr-3`) |
+| L (`h-9`) | 16 | 좌 16 · 우 12 (`pl-4 pr-3`) |
 | M (`h-8`) | 12 | 좌 12 · 우 8 (`pl-3 pr-2`) |
 
 `FilterChip`·`SegmentedTextTabs` chip에 `px-2.5` 등 **패딩 오버라이드 className을 붙이지 않는다** — 위 표가 `chipVariants` 단일 소스다.
 
-#### 칩 그룹 간격
+#### 컨트롤 그룹 간격 (가로 나열)
 
-- 가로 나열 필터·탭 칩 그룹 → **`CHIP_GROUP_GAP_CLASS`** (`gap-2`, 8px) — `chip-styles.ts` 단일 소스
+| 티어 | 상수 | gap (px) |
+|------|------|----------|
+| compact (h-8·32px) | `CONTROL_GROUP_GAP_COMPACT_CLASS` | **4px** (`gap-[4px]`, `spacing-4`) |
+| standard (h-9·36px) | `CONTROL_GROUP_GAP_STANDARD_CLASS` | **8px** (`gap-[8px]`, `spacing-8`) |
+
+- FilterChip 그룹 → **`chipGroupGapClass(size)`** (`l`→8px, `m`→4px)
+- 레거시 M 전용 → **`CHIP_GROUP_GAP_CLASS`** (= compact 4px)
 
 #### 칩 M과 같은 행의 보조 컨트롤
 
@@ -454,12 +463,45 @@ UI에서 **실제로 사용하는 역할 기반 토큰**. 값은 프리미티브
 
 #### 사용 가이드
 
-- 분석·BGM 장르·`SegmentedTextTabs` `variant="chip"` → **`FilterChip`** **M / h-8 / square / radius 8px** · 그룹 **`gap-2`**
-- 분석 상단 범위 칩(작품·캐릭터·시나리오) 등 1단 필터 → **`FilterChip`** **L / h-10 / square / radius 12px** · 그룹 **`gap-2`**
+- 분석·BGM 장르·`SegmentedTextTabs` `variant="chip"` **M** → **`FilterChip`** **M / h-8** · 그룹 **4px**
+- 분석 상단 범위 칩·`SegmentedTextTabs` chip **L** → **`FilterChip`** **L / h-9** · 그룹 **8px** · 같은 행 구분선·드롭다운 트리거도 **h-9**
 - 드롭다운 트리거(작품·캐릭터 등) → **`Chip`** `chipType="outline"` `size="l"`
 - `<Link>` 등 섹션 헤더 보조 surface → `chipVariants({ ... })` **M / h-8(32px)** (예: `analyticsOutlineChipClassName`)
 - 보조 드롭다운(ghost) → Chip 스펙 밖, `analyticsGhostDropdownChipClassName` 유지
 - className만 복제한 레거시 칩 상수는 추가하지 말고 위 컴포넌트·`chipVariants`를 사용한다.
+
+---
+
+### 8. Tab · Tab instance (Figma `tab` / `tab instance`)
+
+**칩(`chips`)과 별도 DS.** 텍스트 탭만 해당한다. 코드 단일 소스: `app/src/lib/tab-styles.ts` · UI: `SegmentedTextTabs` `variant="text"`.
+
+#### Tab 컴포넌트 (`tab`)
+
+| 축 | 값 | 비고 |
+|----|-----|------|
+| `size` | `xl` \| `l` \| `m` | Figma h48/h40/h32 → 서비스 **42 / 36 / 32px** |
+| `underline` | boolean | = instance `selectline`. true면 목록 트랙 `border-b border-border-10` |
+
+**탭 목록 간격** (칩 그룹 4px·8px와 다름):
+
+| size | 탭 사이 gap |
+|------|-------------|
+| XL | 20px (`gap-[20px]`, `spacing-20`) |
+| L | 16px (`gap-[16px]`, `spacing-16`) |
+| M | 12px (`gap-[12px]`, `spacing-12`) |
+
+#### Tab instance (`tab instance`)
+
+| 축 | 값 | 비고 |
+|----|-----|------|
+| `activated` | boolean | true → `text-on-surface-10`, false → `text-on-surface-disabled` |
+| `selectline` | boolean | true + activated → `border-b-2 border-border-strong` |
+| `height` | h48 / h40 / h32 | `data-height` · 실제 높이는 size 티어와 동일 |
+
+- 분석 영역 탭(콘텐츠·이용자·수익) → **`SegmentedTextTabs`** `size="xl"` `underline={false}`
+- 밑줄 탭 행 → `underline={true}`
+- 필터 칩 행 → **`variant="chip"`** (Tab DS 아님)
 
 ---
 

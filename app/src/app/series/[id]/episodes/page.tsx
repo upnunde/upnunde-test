@@ -2,14 +2,18 @@
 
 import React, { useState, useMemo, useCallback } from "react";
 import { useRouter, usePathname } from "next/navigation";
-import { ChevronLeft } from "lucide-react";
 import Header from "@/components/Header/Header";
 import { EpisodeList } from "@/components/episode/EpisodeList";
 import { EmptyStateBanner } from "@/components/episode/EmptyStateBanner";
 import { Pagination } from "@/components/episode/Pagination";
 import { PublishConfirmModal, DeleteConfirmModal } from "@/components/episode/ConfirmModals";
 import { Snackbar } from "@/components/episode/Snackbar";
+import { EpisodeForm } from "@/components/episode/EpisodeForm";
 import { Button } from "@/components/ui/button";
+import { HeaderBackButton } from "@/components/ui/header-back-button";
+import { Dialog, DialogContent, DialogTitle } from "@/components/ui/dialog";
+import { applyInitialScriptToEditor } from "@/lib/apply-initial-script-to-editor";
+import { createDefaultSeedBlocks, useEditorStore } from "@/store/useEditorStore";
 import type { Episode, SortOptions, SnackbarState, SeriesType } from "@/types/episode";
 import { DUMMY_BACKGROUND_GALLERY_THUMBNAILS } from "@/lib/dummy-thumbnail-images";
 
@@ -126,6 +130,9 @@ const MOCK_EPISODES: Episode[] = buildMockEpisodes();
 
 export default function EpisodeManagementPage() {
   const router = useRouter();
+  const setCurrentView = useEditorStore((s) => s.setCurrentView);
+  const setBlocks = useEditorStore((s) => s.setBlocks);
+  const setRawScript = useEditorStore((s) => s.setRawScript);
   const pathname = usePathname();
   const seriesId = useMemo(() => {
     const segments = pathname.split("/").filter(Boolean);
@@ -138,6 +145,7 @@ export default function EpisodeManagementPage() {
   const [currentPage, setCurrentPage] = useState(1);
   const [isPublishModalOpen, setIsPublishModalOpen] = useState(false);
   const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
+  const [isCreateEpisodeModalOpen, setIsCreateEpisodeModalOpen] = useState(false);
   const [episodeToPublish, setEpisodeToPublish] = useState<Episode | null>(null);
   const [episodeToDelete, setEpisodeToDelete] = useState<Episode | null>(null);
   const [snackbarState, setSnackbarState] = useState<SnackbarState>({
@@ -170,35 +178,51 @@ export default function EpisodeManagementPage() {
 
   const showEmptyBanner = episodes.length === 0 && seriesType === "series";
   const showPagination = totalItems > PAGE_SIZE;
+  const nextEpisodeNumber = useMemo(() => {
+    const maxEpisodeNo = episodes.reduce((max, episode) => {
+      return episode.episodeNumber > max ? episode.episodeNumber : max;
+    }, 0);
+    return maxEpisodeNo + 1;
+  }, [episodes]);
 
   /** 정책 1: 뒤로가기 → 시리즈 목록 화면 */
   const handleBack = useCallback(() => {
     router.push("/series");
   }, [router]);
 
-  /** 정책 3: 에피소드 추가 → 에피소드 추가 페이지 */
+  /** 정책 3: 에피소드 추가 → 현재 페이지에서 생성 모달 오픈 */
   const handleAddEpisode = useCallback(() => {
-    router.push("/editor?view=form");
-  }, [router]);
+    setIsCreateEpisodeModalOpen(true);
+  }, []);
 
   /** 정책 16: 리소스 관리 → 리소스 관리 화면 */
   const handleResourceManagement = useCallback(() => {
     router.push(`/series/${seriesId}/resources`);
   }, [router, seriesId]);
 
-  /** 정책 7: 행 클릭
-   *  - 공개 중(PUBLISHED): 에피소드 상세(읽기 전용)로 바로 진입
-   *  - 그 외 상태: 원고 에디터 화면 진입
-   */
+  /** 정책 7: 기존 에피소드 행 클릭은 상세 화면으로 진입 (기존 플로우 복구) */
   const handleRowClick = useCallback(
     (episode: Episode) => {
-      if (episode.status === "PUBLISHED") {
-        router.push(`/series/${seriesId}/episodes/${episode.id}/detail`);
-        return;
-      }
-      router.push(`/editor?episode=${episode.id}`);
+      const titleParam = encodeURIComponent(episode.title || "에피소드 제목");
+      router.push(
+        `/series/${seriesId}/episodes/${episode.id}/detail?episodeNo=${episode.episodeNumber}&episodeTitle=${titleParam}`,
+      );
     },
     [router, seriesId]
+  );
+
+  /** 임시저장·비공개 회차 수정 — 편집 가능한 원고 에디터(샘플 대본 전체) */
+  const handleEdit = useCallback(
+    (episode: Episode) => {
+      setCurrentView("editor");
+      applyInitialScriptToEditor();
+      const titleParam = encodeURIComponent(episode.title || "에피소드 제목");
+      const thumbnailParam = encodeURIComponent(episode.thumbnail || "");
+      router.push(
+        `/editor?episodeNo=${episode.episodeNumber}&episodeTitle=${titleParam}&episodeThumbnail=${thumbnailParam}`,
+      );
+    },
+    [router, setCurrentView],
   );
 
   /** 정책 6: 공개 전환 클릭 → 확인 팝업 */
@@ -238,7 +262,10 @@ export default function EpisodeManagementPage() {
   /** 정책 10: 에피소드 상세(수정 불가 잉크 에디터 미리보기) 진입 */
   const handleLinkEditor = useCallback(
     (episode: Episode) => {
-      router.push(`/series/${seriesId}/episodes/${episode.id}/detail`);
+      const titleParam = encodeURIComponent(episode.title || "에피소드 제목");
+      router.push(
+        `/series/${seriesId}/episodes/${episode.id}/detail?episodeNo=${episode.episodeNumber}&episodeTitle=${titleParam}`,
+      );
     },
     [router, seriesId]
   );
@@ -256,6 +283,22 @@ export default function EpisodeManagementPage() {
     router.push("/inquiry");
   }, [router]);
 
+  const handleCreateComplete = useCallback(
+    (payload: { title: string; summary: string; thumbnailUrl: string }) => {
+      // 모달 종료 애니메이션 잔상 없이 바로 빈 에디터로 진입
+      setCurrentView("editor");
+      setRawScript("");
+      setBlocks(createDefaultSeedBlocks());
+      const titleParam = encodeURIComponent(payload.title || "에피소드 제목");
+      const summaryParam = encodeURIComponent(payload.summary || "");
+      const thumbnailParam = encodeURIComponent(payload.thumbnailUrl || "");
+      router.push(
+        `/editor?episodeNo=${nextEpisodeNumber}&startEmpty=1&episodeTitle=${titleParam}&episodeSummary=${summaryParam}&episodeThumbnail=${thumbnailParam}`,
+      );
+    },
+    [nextEpisodeNumber, router, setBlocks, setCurrentView, setRawScript],
+  );
+
   return (
     <div className="flex flex-col h-screen w-full bg-white overflow-hidden">
       <Header profileImageUrl={profileImageUrl} onProfileImageChange={setProfileImageUrl} />
@@ -265,16 +308,7 @@ export default function EpisodeManagementPage() {
             {/* Sub Header (레이아웃 가이드: margin 40, max-width 1200, min-width 640) */}
             <header className="flex h-16 shrink-0 items-center justify-center border-b border-border-10 bg-white px-5 py-0">
               <div className="flex w-full max-w-[1200px] items-center justify-start gap-3">
-                <Button
-                  type="button"
-                  variant="outline"
-                  size="icon"
-                  onClick={handleBack}
-                  className="h-8 w-8 shrink-0 rounded-full border-border-10 shadow-none focus-visible:ring-0 focus-visible:ring-offset-0"
-                  aria-label="시리즈 목록으로"
-                >
-                  <ChevronLeft className="h-5 w-5 text-on-surface-30" strokeWidth={2} />
-                </Button>
+                <HeaderBackButton onClick={handleBack} aria-label="시리즈 목록으로" />
                 <h1 className="text-2xl font-bold text-on-surface-10">에피소드 관리</h1>
               </div>
             </header>
@@ -288,16 +322,16 @@ export default function EpisodeManagementPage() {
                   <button
                     type="button"
                     onClick={handleResourceManagement}
-                    className="h-10 px-4 cursor-pointer bg-white border border-border-10 rounded-md text-on-surface-20 font-medium hover:bg-surface-20 transition-colors"
+                    className="h-9 px-3 cursor-pointer bg-white border border-border-10 rounded-md text-on-surface-20 font-medium hover:bg-surface-20 transition-colors"
                   >
                     리소스 관리
                   </button>
                   <button
                     type="button"
                     onClick={handleAddEpisode}
-                    className="h-10 px-4 cursor-pointer bg-primary text-primary-foreground hover:bg-primary/90 font-medium rounded-md transition-colors"
+                    className="h-9 px-3 cursor-pointer bg-primary text-primary-foreground hover:bg-primary/90 font-medium rounded-md transition-colors"
                   >
-                    에피소드 만들기
+                    새 에피소드 만들기
                   </button>
                 </div>
               </div>
@@ -312,7 +346,7 @@ export default function EpisodeManagementPage() {
                   episodes={paginatedEpisodes}
                   onRowClick={handleRowClick}
                   onPublish={handlePublishClick}
-                  onEdit={(ep) => handleRowClick(ep)}
+                  onEdit={handleEdit}
                   onDelete={handleDeleteClick}
                   onLinkEditor={handleLinkEditor}
                   onStats={handleStats}
@@ -358,6 +392,21 @@ export default function EpisodeManagementPage() {
         message={snackbarState.message}
         onClose={closeSnackbar}
       />
+      <Dialog open={isCreateEpisodeModalOpen} onOpenChange={setIsCreateEpisodeModalOpen}>
+        <DialogContent
+          className="fixed left-1/2 top-1/2 w-[min(92vw,760px)] max-w-[760px] min-w-[560px] -translate-x-1/2 -translate-y-1/2 overflow-hidden rounded-[16px] border-0 bg-transparent p-0 shadow-none"
+          aria-describedby={undefined}
+        >
+          <DialogTitle className="sr-only">새 에피소드 생성</DialogTitle>
+          <EpisodeForm
+            onConverted={handleCreateComplete}
+            onCancel={() => setIsCreateEpisodeModalOpen(false)}
+            containerClassName="max-w-[760px] min-w-[560px] rounded-[16px]"
+            stickyFooter
+            sectionTitle={`${nextEpisodeNumber}화 에피소드`}
+          />
+        </DialogContent>
+      </Dialog>
     </div>
   );
 }

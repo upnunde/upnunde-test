@@ -143,7 +143,7 @@ export function ProfileEditModal({ isOpen, onClose, anchorRef, onSave }: Profile
               setAvatarPreview(null);
               onClose();
             }}
-            className="w-10 h-10 rounded-full flex justify-center items-center cursor-pointer hover:bg-slate-100 transition-colors text-slate-600"
+            className="w-9 h-9 rounded-full flex justify-center items-center cursor-pointer hover:bg-slate-100 transition-colors text-slate-600"
             aria-label="닫기"
           >
             <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M18 6 6 18"/><path d="m6 6 12 12"/></svg>
@@ -196,7 +196,7 @@ export function ProfileEditModal({ isOpen, onClose, anchorRef, onSave }: Profile
               <div className="text-on-surface-10 text-base font-bold leading-5">아이디</div>
             </div>
             <div className="self-stretch rounded flex flex-col justify-center items-start gap-2">
-              <div className="self-stretch h-12 px-4 bg-slate-100 rounded-md border border-slate-200 inline-flex justify-start items-center overflow-hidden">
+              <div className="self-stretch h-[42px] px-4 bg-slate-100 rounded-md border border-slate-200 inline-flex justify-start items-center overflow-hidden">
                 <input
                   type="text"
                   disabled
@@ -213,7 +213,7 @@ export function ProfileEditModal({ isOpen, onClose, anchorRef, onSave }: Profile
               <div className="text-on-surface-10 text-base font-bold leading-5">작가명</div>
             </div>
             <div className="self-stretch rounded flex flex-col justify-center items-start gap-2">
-              <div className="self-stretch h-12 px-4 bg-white rounded-md border border-slate-200 inline-flex justify-start items-center overflow-hidden focus-within:border-slate-400 focus-within:ring-1 focus-within:ring-slate-400/30">
+              <div className="self-stretch h-[42px] px-4 bg-white rounded-md border border-slate-200 inline-flex justify-start items-center overflow-hidden focus-within:border-slate-400 focus-within:ring-1 focus-within:ring-slate-400/30">
                 <input
                   type="text"
                   value={penName}
@@ -261,7 +261,7 @@ export function ProfileEditModal({ isOpen, onClose, anchorRef, onSave }: Profile
               onClose();
               router.push("/");
             }}
-            className="h-10 min-w-20 -ml-2 bg-transparent rounded-lg flex justify-center items-center hover:bg-red-50 transition-colors"
+            className="h-9 min-w-20 -ml-2 bg-transparent rounded-lg flex justify-center items-center hover:bg-red-50 transition-colors"
           >
             <span className="text-red-600 text-base font-medium leading-5">로그아웃</span>
           </button>
@@ -273,7 +273,7 @@ export function ProfileEditModal({ isOpen, onClose, anchorRef, onSave }: Profile
                 setAvatarPreview(null);
                 onClose();
               }}
-              className="h-10 min-w-20 px-4 rounded-md border border-slate-200 flex justify-center items-center text-slate-700 hover:bg-slate-50 transition-colors"
+              className="h-9 min-w-20 px-3 rounded-md border border-slate-200 flex justify-center items-center text-slate-700 hover:bg-slate-50 transition-colors"
             >
               <span className="text-base font-medium leading-5">취소</span>
             </button>
@@ -283,7 +283,7 @@ export function ProfileEditModal({ isOpen, onClose, anchorRef, onSave }: Profile
                 onSave?.(avatarPreview ?? null);
                 onClose();
               }}
-              className="h-10 min-w-20 px-4 bg-slate-800 rounded-md flex justify-center items-center hover:bg-slate-900 transition-colors"
+              className="h-9 min-w-20 px-3 bg-slate-800 rounded-md flex justify-center items-center hover:bg-slate-900 transition-colors"
             >
               <span className="text-white text-base font-medium leading-5">저장</span>
             </button>

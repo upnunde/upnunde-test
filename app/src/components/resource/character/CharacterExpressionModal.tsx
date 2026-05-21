@@ -623,7 +623,7 @@ export function CharacterExpressionModal({
                       onBlur={() => setTimeout(() => setSuggestionOpen(false), 150)}
                       placeholder="인물의 표정을 입력하세요"
                       maxLength={EXPRESSION_MAX_LENGTH}
-                      className="h-12 w-full rounded-md border border-border-10 bg-white px-3 py-2 text-sm text-on-surface-10 placeholder:text-on-surface-30 focus:outline-none focus:ring-2 focus:ring-primary shadow-none font-['Pretendard_JP']"
+                      className="h-[42px] w-full rounded-md border border-border-10 bg-white px-3 py-2 text-sm text-on-surface-10 placeholder:text-on-surface-30 focus:outline-none focus:ring-2 focus:ring-primary shadow-none font-['Pretendard_JP']"
                     />
                   </div>
                   <div className="self-stretch inline-flex justify-end items-center gap-2">
@@ -639,7 +639,7 @@ export function CharacterExpressionModal({
                 <Button
                   type="button"
                   variant="outline"
-                  className="h-8 rounded-md outline outline-1 outline-offset-[-1px] outline-border-10 font-['Pretendard_JP'] text-sm font-medium text-secondary-foreground px-4 w-auto"
+                  className="h-8 rounded-md outline outline-1 outline-offset-[-1px] outline-border-10 font-['Pretendard_JP'] text-sm font-medium text-secondary-foreground px-3 w-auto"
                   onClick={() => handleNavigateFilledSlots("prev")}
                   disabled={filledSlotIndices.length <= 1}
                 >
@@ -648,7 +648,7 @@ export function CharacterExpressionModal({
                 <Button
                   type="button"
                   variant="outline"
-                  className="h-8 rounded-md outline outline-1 outline-offset-[-1px] outline-border-10 font-['Pretendard_JP'] text-sm font-medium text-secondary-foreground px-4 w-auto"
+                  className="h-8 rounded-md outline outline-1 outline-offset-[-1px] outline-border-10 font-['Pretendard_JP'] text-sm font-medium text-secondary-foreground px-3 w-auto"
                   onClick={() => handleNavigateFilledSlots("next")}
                   disabled={filledSlotIndices.length <= 1}
                 >
@@ -724,7 +724,7 @@ export function CharacterExpressionModal({
             <Button
               type="button"
               variant="outline"
-              className="min-w-20 h-10 rounded-md outline outline-1 outline-offset-[-1px] outline-border-10 font-['Pretendard_JP'] text-base font-medium text-secondary-foreground"
+              className="min-w-20 h-9 rounded-md outline outline-1 outline-offset-[-1px] outline-border-10 font-['Pretendard_JP'] text-base font-medium text-secondary-foreground"
               onClick={handleClose}
             >
               취소
@@ -732,7 +732,7 @@ export function CharacterExpressionModal({
           </DialogClose>
           <Button
             type="button"
-            className="min-w-20 h-10 rounded-md font-['Pretendard_JP'] text-base font-medium"
+            className="min-w-20 h-9 rounded-md font-['Pretendard_JP'] text-base font-medium"
             onClick={handleSave}
             disabled={!canSave || saving}
           >

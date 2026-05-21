@@ -61,7 +61,7 @@ export function SeriesFormKeywordsField({
           placeholder={placeholder}
           aria-invalid={error}
           className={cn(
-            "h-12 rounded-md border bg-white px-3 py-2 text-sm text-on-surface-10 placeholder:text-on-surface-30",
+            "h-[42px] rounded-md border bg-white px-3 py-2 text-sm text-on-surface-10 placeholder:text-on-surface-30",
             error ? "border-destructive focus-visible:ring-destructive/40" : "border-border-10",
           )}
         />

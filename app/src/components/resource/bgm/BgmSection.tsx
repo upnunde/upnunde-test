@@ -157,7 +157,7 @@ export function BgmSection({
             <Button
               type="button"
               variant="outline"
-              className="h-10 min-w-20 px-3 rounded-md border border-border-20 text-on-surface-10"
+              className="h-9 min-w-20 px-3 rounded-md border border-border-20 text-on-surface-10"
               onClick={() => setModalOpen(true)}
             >
               {addButtonLabel}

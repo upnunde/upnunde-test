@@ -79,7 +79,7 @@ export function InquiryForm({
             onChange={(e) =>
               setCategory(e.target.value as InquiryCategory)
             }
-            className="h-10 w-full appearance-none rounded-md border border-border-10 bg-white pl-3 pr-3 text-sm text-on-surface-10 outline-none focus:outline-none focus:ring-2 focus:ring-primary"
+            className="h-9 w-full appearance-none rounded-md border border-border-10 bg-white pl-3 pr-3 text-sm text-on-surface-10 outline-none focus:outline-none focus:ring-2 focus:ring-primary"
           >
             <option value="account">계정 / 로그인</option>
             <option value="payment">결제 / 정산</option>
@@ -106,7 +106,7 @@ export function InquiryForm({
           value={title}
           onChange={(e) => setTitle(e.target.value)}
           placeholder="제목을 입력해주세요."
-          className="mt-1 h-12 rounded-md border border-border-10 bg-white px-3 py-2 text-sm text-on-surface-10 placeholder:text-on-surface-30 focus:outline-none focus:ring-2 focus:ring-primary"
+          className="mt-1 h-[42px] rounded-md border border-border-10 bg-white px-3 py-2 text-sm text-on-surface-10 placeholder:text-on-surface-30 focus:outline-none focus:ring-2 focus:ring-primary"
           required
         />
       </div>
@@ -146,7 +146,7 @@ export function InquiryForm({
           value={email}
           onChange={(e) => setEmail(e.target.value)}
           placeholder="이메일 주소를 입력해주세요."
-          className="mt-1 h-12 rounded-md border border-border-10 bg-white px-3 py-2 text-sm text-on-surface-10 placeholder:text-on-surface-30 focus:outline-none focus:ring-2 focus:ring-primary"
+          className="mt-1 h-[42px] rounded-md border border-border-10 bg-white px-3 py-2 text-sm text-on-surface-10 placeholder:text-on-surface-30 focus:outline-none focus:ring-2 focus:ring-primary"
         />
       </div>
 

@@ -36,7 +36,7 @@ export function ModalConfirmPhraseField({
             placeholder={CONFIRM_INPUT_PHRASE}
             value={value}
             onChange={(e) => onChange(e.target.value)}
-            className="h-12 rounded border-0 bg-surface-10 px-4 font-['Pretendard_JP'] text-base font-normal leading-6 text-on-surface-10 shadow-none outline outline-1 -outline-offset-1 outline-border-20 placeholder:text-on-surface-disabled focus-visible:ring-0 focus-visible:ring-offset-0"
+            className="h-[42px] rounded border-0 bg-surface-10 px-4 font-['Pretendard_JP'] text-base font-normal leading-6 text-on-surface-10 shadow-none outline outline-1 -outline-offset-1 outline-border-20 placeholder:text-on-surface-disabled focus-visible:ring-0 focus-visible:ring-offset-0"
           />
           <div className="inline-flex items-center justify-end gap-2 self-stretch">
             <p className="text-right text-xs font-normal leading-4 text-on-surface-30">

@@ -43,7 +43,7 @@ export function AppHeader() {
             className="rounded-full outline-none ring-offset-background focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2"
             aria-label="프로필 편집"
           >
-            <Avatar className="w-10 h-10 border border-border-10 hover:opacity-90 transition-opacity">
+            <Avatar className="w-9 h-9 border border-border-10 hover:opacity-90 transition-opacity">
               <AvatarImage src="https://github.com/shadcn.png" alt="Profile" />
               <AvatarFallback>CN</AvatarFallback>
             </Avatar>

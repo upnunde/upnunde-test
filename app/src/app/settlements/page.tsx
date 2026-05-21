@@ -564,7 +564,7 @@ export default function MonetizationSettlementsPage() {
                           </div>
                         </div>
                       </div>
-                      <Button type="button" className="h-12 min-w-24 rounded-md px-4 text-base">
+                      <Button type="button" className="h-[42px] min-w-24 rounded-md px-4 text-base">
                         출금 신청
                       </Button>
                     </div>
@@ -588,7 +588,12 @@ export default function MonetizationSettlementsPage() {
                       <h3 className="text-lg font-bold leading-6 text-on-surface-10">정산 내역</h3>
                     </div>
                     <div className="mt-3 flex flex-wrap items-center justify-between gap-4">
-                      <div className="flex flex-wrap items-center gap-4">
+                      <div
+                        className={cn(
+                          "flex flex-wrap items-center",
+                          CHIP_GROUP_GAP_CLASS,
+                        )}
+                      >
                         <div
                           className={cn("flex flex-wrap items-center", CHIP_GROUP_GAP_CLASS)}
                           role="group"

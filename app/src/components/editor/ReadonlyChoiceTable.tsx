@@ -74,14 +74,14 @@ export function ReadonlyChoiceTable({
           <div
             key={choice.id}
             className={cn(
-              "flex min-h-10 items-stretch",
+              "flex min-h-9 items-stretch",
               index < choices.length - 1 && "border-b border-border-10"
             )}
           >
             <div className="flex w-20 shrink-0 items-center self-stretch border-r border-border-10 px-3 text-sm text-on-surface-30">
               선택 {index + 1}
             </div>
-            <div className="flex min-h-10 min-w-[200px] flex-1 items-center self-stretch border-r border-border-10 px-3 py-1 text-sm text-on-surface-10">
+            <div className="flex min-h-9 min-w-[200px] flex-1 items-center self-stretch border-r border-border-10 px-3 py-1 text-sm text-on-surface-10">
               {isAiMode ? (
                 <span className="font-medium text-primary">✨ AI 모드로 직접 대화</span>
               ) : (

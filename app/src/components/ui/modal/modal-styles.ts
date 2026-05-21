@@ -13,9 +13,9 @@ export const modalFooterButtonRowClassName =
 
 export const modalFooterButtonToneClassName = {
   secondary:
-    "h-10 min-w-20 rounded-md border border-border-20 bg-surface-10 px-3 font-['Pretendard_JP'] text-base font-medium leading-5 text-on-surface-10 shadow-none hover:bg-surface-20",
+    "h-9 min-w-20 rounded-md border border-border-20 bg-surface-10 px-3 font-['Pretendard_JP'] text-base font-medium leading-5 text-on-surface-10 shadow-none hover:bg-surface-20",
   primary:
-    "h-10 min-w-20 rounded-md bg-primary px-3 font-['Pretendard_JP'] text-base font-medium leading-5 text-primary-foreground shadow-none hover:bg-primary/90",
+    "h-9 min-w-20 rounded-md bg-primary px-3 font-['Pretendard_JP'] text-base font-medium leading-5 text-primary-foreground shadow-none hover:bg-primary/90",
   destructive:
-    "h-10 min-w-20 rounded-md bg-error-error px-3 font-['Pretendard_JP'] text-base font-medium leading-5 text-white shadow-none hover:bg-error-error/90 disabled:opacity-50",
+    "h-9 min-w-20 rounded-md bg-error-error px-3 font-['Pretendard_JP'] text-base font-medium leading-5 text-white shadow-none hover:bg-error-error/90 disabled:opacity-50",
 } as const;

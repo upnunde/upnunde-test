@@ -35,7 +35,7 @@ export function SeriesFormTextInputField({
         onChange={(e) => onValueChange(e.target.value)}
         placeholder={placeholder}
         className={cn(
-          "mt-1 h-12 w-full rounded-md border bg-white px-3 py-2 text-sm text-on-surface-10 placeholder:text-on-surface-30 focus:outline-none focus:ring-2",
+          "mt-1 h-[42px] w-full rounded-md border bg-white px-3 py-2 text-sm text-on-surface-10 placeholder:text-on-surface-30 focus:outline-none focus:ring-2",
           error ? "border-destructive focus:ring-destructive/40" : "border-border-10 focus:ring-primary"
         )}
       />

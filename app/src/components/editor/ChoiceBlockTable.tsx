@@ -138,17 +138,17 @@ function ChoiceRow({
   return (
     <div
       className={cn(
-        "group/choice-row flex min-h-[40px] items-stretch",
+        "group/choice-row flex min-h-9 items-stretch",
         showBottomBorder && "border-b border-border-10",
       )}
       data-choice-id={choice.id}
     >
       {/* Col 1: Label */}
-      <div className="flex min-h-[40px] w-[80px] shrink-0 self-stretch items-center border-r border-border-10 px-3 py-0 text-sm text-on-surface-30">
+      <div className="flex min-h-9 w-[80px] shrink-0 self-stretch items-center border-r border-border-10 px-3 py-0 text-sm text-on-surface-30">
         선택 {index + 1}
       </div>
       {/* Col 2: Content - 텍스트 필드 분리, 줄 길이에 따라 가변 확장 */}
-      <div className="flex min-h-[40px] min-w-[200px] flex-1 self-stretch items-center border-r border-border-10 px-3 py-1">
+      <div className="flex min-h-9 min-w-[200px] flex-1 self-stretch items-center border-r border-border-10 px-3 py-1">
         {isAiMode ? (
           <span className="text-sm font-medium text-primary">
             ✨ AI 모드로 직접 대화
@@ -168,7 +168,7 @@ function ChoiceRow({
         )}
       </div>
       {/* Col 3: 장면 전환 드롭다운 */}
-      <div className="flex min-h-[40px] w-[200px] min-w-[160px] max-w-[200px] shrink-0 self-stretch items-center border-r border-border-10 px-3 py-0">
+      <div className="flex min-h-9 w-[200px] min-w-[160px] max-w-[200px] shrink-0 self-stretch items-center border-r border-border-10 px-3 py-0">
         <select
           value={choice.nextScene}
           onChange={(e) => {
@@ -194,7 +194,7 @@ function ChoiceRow({
         </select>
       </div>
       {/* Col 4: Actions */}
-      <div className="flex min-h-[40px] w-[120px] min-w-[100px] max-w-[120px] shrink-0 self-stretch items-center justify-between gap-2 px-3 py-0">
+      <div className="flex min-h-9 w-[120px] min-w-[100px] max-w-[120px] shrink-0 self-stretch items-center justify-between gap-2 px-3 py-0">
         <SwitchToggle
           checked={choice.isPaid}
           onCheckedChange={(checked) => onUpdate({ isPaid: checked })}
@@ -327,7 +327,7 @@ export function ChoiceBlockTable({
       ))}
       {/* Footer: Task 4 - Dropdown with "선택지 추가" and "✨ AI 모드로 직접 대화" */}
       {!isAtMaxChoices && (
-        <div className="flex h-[40px] items-center justify-start px-1 py-2">
+        <div className="flex h-9 items-center justify-start px-1 py-2">
           <DropdownMenu>
             <DropdownMenuTrigger asChild>
               <Button

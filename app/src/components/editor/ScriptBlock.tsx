@@ -150,6 +150,7 @@ export function ScriptBlock({
   hideIndex = false,
   rootClassName,
 }: ScriptBlockProps) {
+  const isSeedDefault = block.data?.isSeedDefault === true;
   const blocks = useEditorStore((s) => s.blocks);
   const seriesPersona = useEditorStore((s) => s.seriesPersona);
   const updateBlockType = useEditorStore((s) => s.updateBlockType);
@@ -204,8 +205,37 @@ export function ScriptBlock({
     }
   }, []);
 
+  const insertTextBlockAfterCursor = useCallback(() => {
+    const ta = textareaRef.current;
+    const pos = ta?.selectionStart ?? block.content.length;
+    const value = ta?.value ?? block.content;
+    const afterCursor = value.slice(pos);
+    const beforeCursor = value.slice(0, pos);
+    updateBlock(block.id, beforeCursor);
+    const speakerData =
+      prevBlock?.type === "text"
+        ? { speaker: prevBlock.data?.speaker ?? "나레이션" }
+        : undefined;
+    const newId = addBlock(index, "text", afterCursor, speakerData);
+    focusBlock(newId);
+  }, [
+    addBlock,
+    block.content,
+    block.id,
+    focusBlock,
+    index,
+    prevBlock,
+    updateBlock,
+  ]);
+
   const handleSlashSelect = useCallback(
     (payload: SlashSelectPayload) => {
+      if (typeof payload === "object" && "action" in payload && payload.action === "add_sentence") {
+        setSlashMenuPosition(null);
+        insertTextBlockAfterCursor();
+        return;
+      }
+
       const isPayloadWithDefault =
         typeof payload === "object" && "content" in payload;
 
@@ -215,7 +245,7 @@ export function ScriptBlock({
         setSlashMenuPosition(null);
         if (payload.data?.isNew) setPickerOpen(true);
       } else {
-        const type = payload;
+        const type = payload as BlockType;
         updateBlockType(block.id, type);
         let content = block.content.replace(/\/\s*$/, "").trim();
         // If changing to resource type and content is empty, set default dummy value
@@ -237,7 +267,14 @@ export function ScriptBlock({
         }
       }
     },
-    [block.id, block.content, updateBlockType, updateBlock, getDefaultResourceContent]
+    [
+      block.id,
+      block.content,
+      insertTextBlockAfterCursor,
+      updateBlockType,
+      updateBlock,
+      getDefaultResourceContent,
+    ],
   );
 
   const handleTextMouseUp = useCallback(
@@ -294,16 +331,7 @@ export function ScriptBlock({
         }
         enterSplitLockRef.current = true;
         e.preventDefault();
-        const afterCursor = ta.value.slice(pos);
-        const beforeCursor = ta.value.slice(0, pos);
-        updateBlock(block.id, beforeCursor);
-        // index is 1-based; store expects 0-based insert position = index. Inherit speaker from previous block when it's text.
-        const speakerData =
-          prevBlock?.type === "text"
-            ? { speaker: prevBlock.data?.speaker ?? "나레이션" }
-            : undefined;
-        const newId = addBlock(index, "text", afterCursor, speakerData);
-        focusBlock(newId);
+        insertTextBlockAfterCursor();
         // Unlock on the same timing window as focusBlock's double-rAF focus move.
         // This prevents a quick "/" right after Enter from being handled by the previous block.
         requestAnimationFrame(() => {
@@ -315,6 +343,7 @@ export function ScriptBlock({
       }
 
       if (e.key === "Backspace" && pos === 0 && prevBlock) {
+        if (isSeedDefault) return;
         e.preventDefault();
         const prevContent = prevBlock.content + block.content;
         updateBlock(prevBlock.id, prevContent, prevBlock.data);
@@ -364,7 +393,8 @@ export function ScriptBlock({
       index,
       blocks,
       prevBlock,
-      addBlock,
+      isSeedDefault,
+      insertTextBlockAfterCursor,
       updateBlock,
       removeBlock,
       focusBlock,
@@ -383,6 +413,7 @@ export function ScriptBlock({
   /** Delete key: remove current block and focus next or previous. Used by all block types when focused. */
   const handleDeleteBlock = useCallback(
     (e?: React.KeyboardEvent | React.MouseEvent) => {
+      if (isSeedDefault) return;
       e?.preventDefault();
       e?.stopPropagation();
       const currentIdx = index - 1;
@@ -392,7 +423,7 @@ export function ScriptBlock({
       if (nextBlock) focusBlock(nextBlock.id);
       else if (prevBlockToFocus) focusBlock(prevBlockToFocus.id);
     },
-    [block.id, index, blocks, removeBlock, focusBlock]
+    [block.id, index, blocks, focusBlock, isSeedDefault, removeBlock]
   );
 
   const handleResourceBlockKeyDown = useCallback(
@@ -503,7 +534,7 @@ export function ScriptBlock({
         }
       }
     },
-    [index, blocks, focusBlock, handleDeleteBlock]
+    [addBlock, block.type, index, blocks, focusBlock, handleDeleteBlock]
   );
 
   // Clear isNew after opening picker so it doesn't auto-open again on re-mount
@@ -694,16 +725,18 @@ export function ScriptBlock({
           />
         </div>
 
-        <Button
-          type="button"
-          variant="ghost"
-          size="icon"
-          className="ml-auto h-8 w-8 shrink-0 rounded-full p-0 text-on-surface-30 opacity-0 transition-opacity hover:bg-red-50 hover:text-red-500 group-hover/row:opacity-100"
-          aria-label="Delete block"
-          onClick={handleDeleteBlock}
-        >
-          <Trash2 className={DELETE_ICON_CLASS} />
-        </Button>
+        {!isSeedDefault ? (
+          <Button
+            type="button"
+            variant="ghost"
+            size="icon"
+            className="ml-auto h-8 w-8 shrink-0 rounded-full p-0 text-on-surface-30 opacity-0 transition-opacity hover:bg-red-50 hover:text-red-500 group-hover/row:opacity-100"
+            aria-label="Delete block"
+            onClick={handleDeleteBlock}
+          >
+            <Trash2 className={DELETE_ICON_CLASS} />
+          </Button>
+        ) : null}
 
         {slashMenuPosition && (
           <SlashCommandMenu
@@ -881,7 +914,7 @@ export function ScriptBlock({
         <div className="flex min-w-0 flex-1 w-full items-center gap-0">
           <span
             className={cn(
-              "block shrink-0 w-[100px] text-[13px] font-medium",
+              "flex h-8 w-[100px] shrink-0 items-center justify-start text-[13px] font-medium",
               labelColorClass
             )}
           >
@@ -901,20 +934,22 @@ export function ScriptBlock({
                 : "text-base font-medium leading-relaxed"
             )}
           />
-          <Button
-            type="button"
-            variant="ghost"
-            size="icon"
-            className="ml-auto shrink-0 opacity-0 transition-opacity group-hover:opacity-100 h-8 w-8 text-on-surface-30 hover:bg-red-50 hover:text-red-500"
-            aria-label="Delete block"
-            onClick={(e) => {
-              e.preventDefault();
-              e.stopPropagation();
-              removeBlock(block.id);
-            }}
-          >
-            <Trash2 className={DELETE_ICON_CLASS} />
-          </Button>
+          {!isSeedDefault ? (
+            <Button
+              type="button"
+              variant="ghost"
+              size="icon"
+              className="ml-auto shrink-0 opacity-0 transition-opacity group-hover:opacity-100 h-8 w-8 text-on-surface-30 hover:bg-red-50 hover:text-red-500"
+              aria-label="Delete block"
+              onClick={(e) => {
+                e.preventDefault();
+                e.stopPropagation();
+                removeBlock(block.id);
+              }}
+            >
+              <Trash2 className={DELETE_ICON_CLASS} />
+            </Button>
+          ) : null}
         </div>
       </div>
     );
@@ -955,7 +990,12 @@ export function ScriptBlock({
           </span>
         )}
         <div className="flex min-w-0 flex-1 w-full items-center gap-0">
-          <span className={cn("shrink-0 text-[13px] font-medium", LABEL_COLOR_BY_TYPE.direction)}>
+          <span
+            className={cn(
+              "flex h-8 w-[100px] shrink-0 items-center justify-start text-[13px] font-medium",
+              LABEL_COLOR_BY_TYPE.direction
+            )}
+          >
             {labelText}
           </span>
           <Button
@@ -1009,7 +1049,7 @@ export function ScriptBlock({
         )}
         <span
           className={cn(
-            "flex shrink-0 items-center justify-start overflow-hidden pt-0.5 w-[100px] min-w-14 min-h-8 text-xs font-medium leading-4",
+            "flex h-8 w-[100px] shrink-0 items-center justify-start overflow-hidden text-xs font-medium leading-4",
             LABEL_COLOR_BY_TYPE.choice
           )}
         >
@@ -1069,7 +1109,12 @@ export function ScriptBlock({
         )}
         <div className="flex flex-1 items-center gap-4">
           <Icon className="h-4 w-4 shrink-0 text-on-surface-30" />
-          <span className={cn("w-[100px] shrink-0 text-[13px] font-medium", LABEL_COLOR_BY_TYPE[block.type])}>
+          <span
+            className={cn(
+              "flex h-8 w-[100px] shrink-0 items-center justify-start text-[13px] font-medium",
+              LABEL_COLOR_BY_TYPE[block.type]
+            )}
+          >
             {label}
           </span>
           <input
@@ -1223,7 +1268,7 @@ export function ScriptBlock({
         <div className="flex min-w-0 flex-1 items-center gap-0">
           <span
             className={cn(
-              "block w-[100px] shrink-0 font-medium text-[13px]",
+              "flex h-8 w-[100px] shrink-0 items-center justify-start font-medium text-[13px]",
               labelColorClass
             )}
           >
@@ -1446,7 +1491,12 @@ export function ScriptBlock({
       )}
       <div className="flex min-w-0 flex-1 items-center gap-0">
         <Icon className="h-4 w-4 shrink-0 text-on-surface-30" />
-        <span className={cn("w-[100px] shrink-0 text-[13px] font-medium", LABEL_COLOR_BY_TYPE[block.type])}>
+        <span
+          className={cn(
+            "flex h-8 w-[100px] shrink-0 items-center justify-start text-[13px] font-medium",
+            LABEL_COLOR_BY_TYPE[block.type]
+          )}
+        >
           {label}
         </span>
         <span

@@ -76,6 +76,14 @@ export function createBlock(
   };
 }
 
+/** 에디터 신규 진입 기본 블록: 장면01 + 나레이션(삭제 불가 시드) */
+export function createDefaultSeedBlocks(): ScriptBlock[] {
+  return [
+    createBlock("scene", "장면01", { isSeedDefault: true }),
+    createBlock("text", "", { speaker: "나레이션" }),
+  ];
+}
+
 export type CurrentView = "form" | "editor";
 
 const MAX_UNDO = 50;
@@ -222,6 +230,8 @@ export const useEditorStore = create<EditorStore>((set) => ({
 
   removeBlock: (id) =>
     set((state) => {
+      const target = state.blocks.find((b) => b.id === id);
+      if (target?.data?.isSeedDefault === true) return state;
       const undoPatch = pushUndo(state);
       return { ...undoPatch, blocks: state.blocks.filter((b) => b.id !== id) };
     }),
@@ -229,6 +239,17 @@ export const useEditorStore = create<EditorStore>((set) => ({
   reorderBlocks: (oldIndex, newIndex) =>
     set((state) => {
       if (oldIndex === newIndex) return state;
+      const firstBlock = state.blocks[0];
+      const hasFixedTopSeed = firstBlock?.data?.isSeedDefault === true;
+      const movingBlock = state.blocks[oldIndex];
+
+      // 최상단 시드(예: 01 #장면 01)는 항상 0번 인덱스에 고정한다.
+      if (hasFixedTopSeed) {
+        const movingIsFixedTopSeed = movingBlock?.id === firstBlock.id;
+        if (movingIsFixedTopSeed) return state;
+        if (newIndex <= 0) return state;
+      }
+
       const undoPatch = pushUndo(state);
       const next = [...state.blocks];
       const [removed] = next.splice(oldIndex, 1);

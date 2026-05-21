@@ -54,7 +54,7 @@ export function ResourceSection({
           <Button
             type="button"
             variant="outline"
-            className="h-10 min-w-20 px-3 rounded-md border border-border-20 text-secondary-on-secondary text-base font-medium font-['Pretendard_JP'] leading-5 hover:bg-surface-20"
+            className="h-9 min-w-20 px-3 rounded-md border border-border-20 text-secondary-on-secondary text-base font-medium font-['Pretendard_JP'] leading-5 hover:bg-surface-20"
             onClick={onAddClick}
           >
             {addButtonLabel}

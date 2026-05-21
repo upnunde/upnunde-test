@@ -21,21 +21,21 @@ import { Button } from "@/components/ui/button";
 import { Plus } from "lucide-react";
 import { ScriptBlock } from "./ScriptBlock";
 import { SlashCommandMenu, type SlashSelectPayload } from "./SlashCommandMenu";
-import type { ScriptBlockData } from "@/types/editor";
+import type { BlockType, ScriptBlockData } from "@/types/editor";
 
-/** 텍스트(대사) 블록: 디자인 시안과 동일 — min-h-10·py-1·bg-white·rounded·flex 행 */
+/** 텍스트(대사) 블록: 디자인 시안과 동일 — min-h-9·py-1·bg-white·rounded·flex 행 */
 const WRAPPER_CLASS_TEXT =
-  "group group/row relative flex h-fit w-full min-h-10 items-start justify-start gap-0 rounded bg-white py-1 outline-none hover:bg-surface-20/50 focus-within:bg-white";
+  "group group/row relative flex h-fit w-full min-h-9 items-start justify-start gap-0 rounded bg-white py-1 outline-none hover:bg-surface-20/50 focus-within:bg-white";
 const ROOT_CLASS_TEXT = "min-h-8 min-w-0 flex-1 h-fit";
 
-/** 선택지 블록: 텍스트 행과 동일 래퍼( min-h-10·py-1·bg-white·rounded·group/row ) */
+/** 선택지 블록: 텍스트 행과 동일 래퍼( min-h-9·py-1·bg-white·rounded·group/row ) */
 const WRAPPER_CLASS_CHOICE =
-  "group group/row relative flex h-fit w-full min-h-10 items-start justify-start gap-0 rounded bg-white py-1 outline-none hover:bg-surface-20/50 focus-within:bg-white";
+  "group group/row relative flex h-fit w-full min-h-9 items-start justify-start gap-0 rounded bg-white py-1 outline-none hover:bg-surface-20/50 focus-within:bg-white";
 const ROOT_CLASS_CHOICE = "min-h-8 min-w-0 flex-1 h-fit";
 
 /** 한 줄 블록 (장면/캐릭터/연출/배경 등): 고정 높이 32px(h-8), px-0 py-1 */
 const WRAPPER_CLASS_COMPACT =
-  "group flex h-full items-center justify-start gap-0 rounded-lg hover:bg-surface-20/50";
+  "group flex h-fit min-h-9 items-center justify-start gap-0 rounded-lg py-1 hover:bg-surface-20/50";
 const ROOT_CLASS_COMPACT = "min-w-0 flex-1 min-h-8 h-8";
 
 function SortableBlockWrapper({
@@ -62,6 +62,8 @@ function SortableBlockWrapper({
 }) {
   const focusBlockId = useEditorStore((s) => s.focusBlockId);
   const isFocused = focusBlockId === block.id;
+  const isSeedDefault = block.data?.isSeedDefault === true;
+  const isTextLikeRow = block.type === "text" || block.type === "choice";
   
   const {
     attributes,
@@ -70,7 +72,7 @@ function SortableBlockWrapper({
     transform,
     transition,
     isDragging,
-  } = useSortable({ id: block.id });
+  } = useSortable({ id: block.id, disabled: isSeedDefault });
 
   const style = {
     transform: CSS.Transform.toString(transform),
@@ -95,11 +97,20 @@ function SortableBlockWrapper({
   const handleInsertMenuSelect = useCallback(
     (payload: SlashSelectPayload) => {
       setInsertMenuPosition(null);
+      if (typeof payload === "object" && "action" in payload && payload.action === "add_sentence") {
+        const newBlockId = addBlock(index, "text");
+        if (newBlockId) focusBlock(newBlockId);
+        return;
+      }
       const hasDefaultPayload = typeof payload === "object" && "content" in payload;
+      const shouldKeepAutoOpenedModal =
+        hasDefaultPayload && payload.data?.isNew === true;
       const newBlockId = hasDefaultPayload
         ? addBlock(index, payload.type, payload.content, payload.data)
-        : addBlock(index, payload);
-      if (newBlockId) focusBlock(newBlockId);
+        : addBlock(index, payload as BlockType);
+      if (newBlockId && !shouldKeepAutoOpenedModal) {
+        focusBlock(newBlockId);
+      }
     },
     [addBlock, focusBlock, index],
   );
@@ -132,34 +143,38 @@ function SortableBlockWrapper({
         >
           <Plus className="size-5" />
         </Button>
-        <button
-          type="button"
-          className="flex h-8 w-6 shrink-0 cursor-grab touch-none items-center justify-center rounded-full p-0 text-on-surface-30 hover:bg-surface-20 hover:text-on-surface-30 active:cursor-grabbing"
-          aria-label="Drag to reorder"
-          {...attributes}
-          {...listeners}
-        >
-          <svg className="h-5 w-5" viewBox="0 0 24 24" fill="currentColor" aria-hidden>
-            <circle cx="8" cy="6" r="2" />
-            <circle cx="8" cy="12" r="2" />
-            <circle cx="8" cy="18" r="2" />
-            <circle cx="16" cy="6" r="2" />
-            <circle cx="16" cy="12" r="2" />
-            <circle cx="16" cy="18" r="2" />
-          </svg>
-        </button>
+        {!isSeedDefault ? (
+          <button
+            type="button"
+            className="flex h-8 w-6 shrink-0 cursor-grab touch-none items-center justify-center rounded-full p-0 text-on-surface-30 hover:bg-surface-20 hover:text-on-surface-30 active:cursor-grabbing"
+            aria-label="Drag to reorder"
+            {...attributes}
+            {...listeners}
+          >
+            <svg className="h-5 w-5" viewBox="0 0 24 24" fill="currentColor" aria-hidden>
+              <circle cx="8" cy="6" r="2" />
+              <circle cx="8" cy="12" r="2" />
+              <circle cx="8" cy="18" r="2" />
+              <circle cx="16" cy="6" r="2" />
+              <circle cx="16" cy="12" r="2" />
+              <circle cx="16" cy="18" r="2" />
+            </svg>
+          </button>
+        ) : (
+          <div className="h-8 w-6 shrink-0" aria-hidden />
+        )}
       </div>
       <span
         className={cn(
-          "flex w-10 shrink-0 justify-start font-medium tabular-nums",
-          block.type === "text" || block.type === "choice"
+          "flex w-9 shrink-0 justify-start font-medium tabular-nums",
+          isTextLikeRow
             ? "min-h-8 items-center text-xs leading-4"
-            : "mt-0 h-full items-center pt-0 text-[13px]",
+            : "h-8 items-center text-[13px]",
           isFocused
             ? "text-primary"
             : hasIssue
               ? "text-rose-600"
-              : block.type === "text" || block.type === "choice"
+              : isTextLikeRow
                 ? "text-on-surface-disabled"
                 : "text-on-surface-disabled"
         )}
@@ -395,8 +410,7 @@ export default function EditorBody() {
           >
             {blocks.map((block, i) => {
               const isScene = block.type === "scene";
-              const prevBlock = i > 0 ? blocks[i - 1] : null;
-              const showDivider = isScene && prevBlock && prevBlock.type !== "scene";
+              const showDivider = isScene && i > 0;
 
               return (
                 <Fragment key={block.id}>

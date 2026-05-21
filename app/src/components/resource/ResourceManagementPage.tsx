@@ -3,8 +3,8 @@
 import React, { useMemo, useState, useCallback, useEffect } from "react";
 import dynamic from "next/dynamic";
 import { useRouter, usePathname } from "next/navigation";
-import { ChevronLeft } from "lucide-react";
 import { Button } from "@/components/ui/button";
+import { HeaderBackButton } from "@/components/ui/header-back-button";
 import { ResourceBanner } from "./ResourceBanner";
 import { ResourceSection } from "./ResourceSection";
 import { CharacterCard } from "./cards/CharacterCard";
@@ -183,16 +183,7 @@ export function ResourceManagementPage() {
         <header className={PAGE_SUBHEADER_CLASS}>
           <div className="flex w-full max-w-[1200px] min-w-[640px] items-center justify-between gap-4">
             <div className="flex items-center justify-start gap-3">
-              <Button
-                type="button"
-                variant="outline"
-                size="icon"
-                onClick={handleBack}
-                className="h-8 w-8 shrink-0 rounded-full border-border-10 shadow-none focus-visible:ring-0 focus-visible:ring-offset-0"
-                aria-label="시리즈 목록으로"
-              >
-                <ChevronLeft className="h-5 w-5 text-on-surface-30" strokeWidth={2} />
-              </Button>
+              <HeaderBackButton onClick={handleBack} aria-label="시리즈 목록으로" />
               <h1 className="text-2xl font-bold text-on-surface-10">리소스 관리</h1>
             </div>
           </div>
