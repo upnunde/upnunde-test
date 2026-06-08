@@ -235,12 +235,12 @@ export function SceneNavigation({
           <Button
             type="button"
             variant="outline"
-            size="icon"
+            size="icon-lg"
             onClick={onToggleCollapsed}
-            className="h-8 w-8 shrink-0 rounded-full border-border-10 shadow-none text-on-surface-30"
+            className="shrink-0 rounded-full shadow-none text-on-surface-30 disabled:border-border-20"
             aria-label={collapsed ? "장면 목록 펼치기" : "장면 목록 최소화"}
           >
-            <Menu className="h-5 w-5" aria-hidden="true" />
+            <Menu aria-hidden="true" />
           </Button>
         </div>
 

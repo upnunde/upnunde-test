@@ -83,7 +83,7 @@ export function ImportCharacterDialog({ open, onOpenChange, onApply }: ImportCha
           <Button
             type="button"
             variant="outline"
-            className="h-8 rounded-md border-border-10 bg-white px-3 text-sm text-on-surface-10 hover:bg-surface-20"
+            className="h-8 rounded-md bg-white px-3 text-sm text-on-surface-10 hover:bg-surface-20 disabled:border-border-20"
             onClick={() => handleDialogOpenChange(false)}
           >
             취소

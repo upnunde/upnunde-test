@@ -13,11 +13,21 @@ const buttonVariants = cva(
         destructive:
           "bg-destructive text-white hover:bg-destructive/90 focus-visible:ring-destructive/20 dark:focus-visible:ring-destructive/40 dark:bg-destructive/60",
         outline:
-          "border bg-background hover:bg-accent hover:text-accent-foreground dark:bg-input/30 dark:border-input dark:hover:bg-input/50",
+          "border border-border-20 bg-background hover:bg-accent hover:text-accent-foreground disabled:border-border-20 dark:bg-input/30 dark:border-border-20 dark:hover:bg-input/50",
+        /** Secondary fill (light) — Figma `secondary-secondary` (#F0F0F5) */
         secondary:
-          "bg-secondary text-secondary-foreground hover:bg-secondary/80",
+          "border-0 bg-secondary text-on-secondary shadow-none hover:opacity-90 disabled:bg-surface-disabled-10 disabled:text-on-surface-disabled",
+        /** Secondary 강조 fill (dark) — Figma `secondary-secondary-container` (#343436) */
+        secondaryContainer:
+          "border-0 bg-secondary-container text-on-secondary-container shadow-none hover:opacity-90 disabled:bg-surface-disabled-10 disabled:text-on-surface-disabled",
+        /** Error fill — `error-error` / `error-on-error` */
+        error:
+          "border-0 bg-error-error text-error-on-error shadow-none hover:opacity-90 disabled:bg-surface-disabled-10 disabled:text-on-surface-disabled",
         ghost:
           "hover:bg-accent hover:text-accent-foreground dark:hover:bg-accent/50",
+        /** Tertiary — fill/outline 없음 · 기본 neutral(`on-surface-30`). primary/error 톤은 `text-primary`/`text-error-error` className 조합 */
+        tertiary:
+          "border-0 bg-transparent shadow-none text-on-surface-30 hover:text-on-surface-20 disabled:text-on-surface-disabled disabled:opacity-100",
         link: "text-primary underline-offset-4 hover:underline",
         /** 추가 버튼 (호버 시 표시되는 플로팅 메뉴용) - 공통 스타일 (drop shadow 제거) */
         addMenu:
@@ -32,7 +42,9 @@ const buttonVariants = cva(
         icon: "size-8",
         "icon-xs": "size-6 rounded-md [&_svg:not([class*='size-'])]:size-3",
         "icon-sm": "size-8",
-        "icon-lg": "size-9",
+        /** 36×36 — 내부 SVG 22px · stroke-width 1.5 공통 */
+        "icon-lg":
+          "size-9 [&_svg:not([class*='size-'])]:!size-[22px] [&_svg]:![stroke-width:1.5]",
       },
     },
     defaultVariants: {

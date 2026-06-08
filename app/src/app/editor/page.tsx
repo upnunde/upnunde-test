@@ -128,18 +128,16 @@ function EditorInner() {
           <div className="flex flex-1 w-full min-h-0 overflow-hidden bg-white justify-center items-start">
             {/* Left Area: bordered panel fixed in view, only inner content scrolls */}
             <div className="relative flex flex-1 min-h-0 h-full w-full flex-col border-r border-border-10 overflow-hidden">
-              <div className="pointer-events-none absolute top-6 right-5 z-10">
-                <Button
-                  type="button"
-                  variant="ghost"
-                  size="form"
-                  className="pointer-events-auto rounded-full bg-slate-800 px-4 text-sm font-medium text-white hover:bg-slate-700 hover:text-white"
-                  onClick={() => setIsAutoGeneratorModalOpen(true)}
-                >
-                  에피소드 생성기
-                </Button>
-              </div>
-              <div className="py-10 px-0 flex-1 min-h-0 overflow-y-auto overscroll-none">
+              <Button
+                type="button"
+                variant="ghost"
+                size="form"
+                className="absolute top-3 right-3 z-30 rounded-full bg-slate-800 px-4 text-sm font-medium text-white shadow-sm hover:bg-slate-700 hover:text-white"
+                onClick={() => setIsAutoGeneratorModalOpen(true)}
+              >
+                에피소드 생성기
+              </Button>
+              <div className="relative z-0 flex-1 min-h-0 overflow-y-auto overscroll-none py-10 px-0">
                 <EditorBody />
               </div>
             </div>

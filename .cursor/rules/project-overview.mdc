@@ -9,6 +9,7 @@ alwaysApply: true
 
 - 메인 제품 UI는 **`app/`** (Next.js App Router + TypeScript).
 - 작업은 항상 `app/` 기준. `web/`, `ink-editor/`, `prototype/`은 별도 실험용이다.
+- **화면·라우트 보호**: 기존 페이지/레이아웃을 사용자 요청 없이 삭제·중복 생성·롤백하지 않는다. `/series`는 `(my-works)/` 구조만 사용 — 상세는 `.cursor/rules/page-route-guard.mdc`. 변경 후 `app/`에서 `npm run check:routes` 실행.
 - 상태 관리: **Zustand** (`useEditorStore` 등). 스타일: **Tailwind CSS** + **Radix UI**.
 
 ## 개발 서버

@@ -104,7 +104,7 @@ export function InquiryHistoryItem({
                   e.stopPropagation();
                   onToggle?.();
                 }}
-                className="h-8 cursor-pointer rounded-md border border-border-10 bg-white px-3 text-sm font-medium text-on-surface-20 hover:bg-surface-20 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-2"
+                className="h-8 cursor-pointer rounded-md border border-border-20 bg-white px-3 text-sm font-medium text-on-surface-20 hover:bg-surface-20 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-2 disabled:border-border-20"
               >
                 접기
               </button>

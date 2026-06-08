@@ -134,8 +134,7 @@ export default function SeriesNewPage() {
                           <div className="flex justify-end mt-4">
                             <Button
                               type="button"
-                              variant="outline"
-                              className="border-border-10 text-on-surface-20"
+                              variant="secondary"
                               onClick={() => setActiveTab("info")}
                             >
                               다음
@@ -206,16 +205,14 @@ export default function SeriesNewPage() {
                           <div className="flex justify-end gap-2 mt-4">
                             <Button
                               type="button"
-                              variant="outline"
-                              className="border-border-10 text-on-surface-20"
+                              variant="secondary"
                               onClick={() => setActiveTab("image")}
                             >
                               이전
                             </Button>
                             <Button
                               type="button"
-                              variant="outline"
-                              className="border-border-10 text-on-surface-20"
+                              variant="secondary"
                               onClick={() => setActiveTab("worldview")}
                             >
                               다음
@@ -256,8 +253,7 @@ export default function SeriesNewPage() {
                           <div className="flex justify-end gap-2 mt-4">
                             <Button
                               type="button"
-                              variant="outline"
-                              className="border-border-10 text-on-surface-20"
+                              variant="secondary"
                               onClick={() => setActiveTab("info")}
                             >
                               이전

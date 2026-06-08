@@ -14,7 +14,7 @@ import { formatViews, formatDateOrRelative } from "@/lib/formatEpisode";
 import { cn } from "@/lib/utils";
 
 const ACTION_ICON_BUTTON_BASE =
-  "flex h-8 w-8 shrink-0 cursor-pointer items-center justify-center rounded-full border border-border-10 text-on-surface-30 transition-all duration-150 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-2";
+  "flex h-8 w-8 shrink-0 cursor-pointer items-center justify-center rounded-full border border-border-20 text-on-surface-30 transition-all duration-150 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-2 disabled:border-border-20";
 const ACTION_ICON_BUTTON_EDIT_HOVER =
   "hover:border-primary/30 hover:bg-primary/10 hover:text-primary active:scale-95";
 const ACTION_ICON_BUTTON_DELETE_HOVER =
@@ -82,7 +82,7 @@ export function EpisodeListItem({
           onRowClick?.(episode);
         }
       }}
-      className="flex items-center border-b border-border-10 px-5 py-3 transition-colors hover:bg-surface-20 last:border-b-0 cursor-pointer"
+      className="flex items-center border-b border-divider-10 px-5 py-3 transition-colors hover:bg-surface-20 last:border-b-0 cursor-pointer"
       aria-labelledby={`episode-title-${episode.id}`}
     >
       {/* 회차 */}

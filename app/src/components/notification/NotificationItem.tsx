@@ -94,14 +94,14 @@ export function NotificationItem({
               <button
                 type="button"
                 onClick={handleContactClick}
-                className="h-8 cursor-pointer flex items-center rounded-md border border-border-10 bg-white px-3 text-sm font-medium text-on-surface-20 transition-colors hover:bg-surface-20 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-2"
+                className="h-8 cursor-pointer flex items-center rounded-md border border-border-20 bg-white px-3 text-sm font-medium text-on-surface-20 transition-colors hover:bg-surface-20 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-2 disabled:border-border-20"
               >
                 문의하기
               </button>
               <button
                 type="button"
                 onClick={handleCollapse}
-                className="h-8 cursor-pointer rounded-md border border-border-10 bg-white px-3 flex items-center text-sm font-medium text-on-surface-20 transition-colors hover:bg-surface-20 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-2"
+                className="h-8 cursor-pointer rounded-md border border-border-20 bg-white px-3 flex items-center text-sm font-medium text-on-surface-20 transition-colors hover:bg-surface-20 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-2 disabled:border-border-20"
               >
                 접기
               </button>

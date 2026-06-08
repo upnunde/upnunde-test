@@ -199,7 +199,7 @@ export function CharacterItem({
           <button
             type="button"
             onClick={() => onCharacterSettings?.(character)}
-            className="flex h-9 min-w-0 flex-1 cursor-pointer items-center rounded-md border border-border-10 bg-white px-3 text-sm font-medium text-on-surface-20 transition-colors hover:bg-surface-20 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-2"
+            className="flex h-9 min-w-0 flex-1 cursor-pointer items-center rounded-md border border-border-20 bg-white px-3 text-sm font-medium text-on-surface-20 transition-colors hover:bg-surface-20 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-2 disabled:border-border-20"
           >
             <span className="block w-full overflow-hidden text-ellipsis whitespace-nowrap text-center">캐릭터 설정</span>
           </button>

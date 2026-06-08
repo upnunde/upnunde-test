@@ -279,13 +279,13 @@ export function EditorSubHeader({
               {onEditEpisodeInfo ? (
                 <Button
                   type="button"
-                  variant="outline"
-                  size="icon"
-                  className="shrink-0 border-border-10 bg-white shadow-none text-on-surface-30 hover:text-on-surface-10"
+                  variant="ghost"
+                  size="icon-lg"
+                  className="shrink-0 text-on-surface-30 hover:bg-surface-20 hover:text-on-surface-10"
                   aria-label="회차 정보 수정"
                   onClick={onEditEpisodeInfo}
                 >
-                  <Pencil className="h-5 w-5" strokeWidth={2} />
+                  <Pencil />
                 </Button>
               ) : null}
             </div>
@@ -304,21 +304,19 @@ export function EditorSubHeader({
             }}
           >
             <PopoverTrigger asChild>
-              <span className="relative inline-flex shrink-0">
-                <Button
-                  type="button"
-                  variant="outline"
-                  size="icon"
-                  className="h-9 w-9 shrink-0 shadow-none bg-white"
-                  aria-label="히스토리"
-                  disabled={!isHistoryEnabled}
-                >
-                  <History className="h-5 w-5 text-on-surface-10" strokeWidth={2} />
-                </Button>
+              <Button
+                type="button"
+                variant="outline"
+                size="icon-lg"
+                className="relative shrink-0 bg-white shadow-none text-on-surface-30 hover:text-on-surface-10 disabled:border-border-20"
+                aria-label="히스토리"
+                disabled={!isHistoryEnabled}
+              >
+                <History />
                 {newHistoryEntryId ? (
                   <HistoryNewDot className="top-0 right-0" />
                 ) : null}
-              </span>
+              </Button>
             </PopoverTrigger>
             <PopoverContent
               align="end"
@@ -356,7 +354,7 @@ export function EditorSubHeader({
                           title="이 시점의 원고 불러오기"
                           onClick={() => handleHistoryLoadClick(entry.id)}
                           className={cn(
-                            "h-7 shrink-0 border-border-10 bg-white px-2 text-xs font-medium text-on-surface-10 shadow-none",
+                            "h-7 shrink-0 bg-white px-2 text-xs font-medium text-on-surface-10 shadow-none disabled:border-border-20",
                             "opacity-0 pointer-events-none transition-opacity",
                             "group-hover:opacity-100 group-hover:pointer-events-auto",
                             "[@media(hover:none)]:opacity-100 [@media(hover:none)]:pointer-events-auto",

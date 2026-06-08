@@ -1,5 +1,12 @@
 "use client";
 
+/**
+ * 내 작품 공통 레이아웃 — /series, /series/character, /series/scenario
+ *
+ * ⚠️ 회귀 방지: app/src/app/series/page.tsx 를 만들지 마세요 (같은 URL 중복 → 탭·「내 작품」 헤더 소실).
+ * 가드: npm run check:routes · .cursor/rules/page-route-guard.mdc
+ */
+
 import React, { useState } from "react";
 import { usePathname, useRouter } from "next/navigation";
 import Header from "@/components/Header/Header";

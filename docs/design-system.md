@@ -189,32 +189,32 @@ UI에서 직접 쓰지 않고, **시맨틱 토큰이 참조하는 원천 팔레�
 
 | 토큰명 | 값 |
 |--------|-----|
-| `grayscale-10` | `#F9F9FC` |
-| `grayscale-20` | `#F2F3F5` |
-| `grayscale-30` | `#E8E9EC` |
+| `grayscale-10` | `#F8F8FC` |
+| `grayscale-20` | `#F0F0F5` |
+| `grayscale-30` | `#E9E9ED` |
 | `grayscale-40` | `#E3E3E8` |
-| `grayscale-50` | `#D0D0D5` |
-| `grayscale-60` | `#C5C5C7` |
-| `grayscale-70` | `#A9A9AB` |
+| `grayscale-50` | `#D9D9DE` |
+| `grayscale-60` | `#C3C3C7` |
+| `grayscale-70` | `#B4B4B8` |
 | `grayscale-80` | `#919194` |
 | `grayscale-90` | `#767678` |
-| `grayscale-100` | `#626264` |
-| `grayscale-110` | `#434436` |
-| `grayscale-120` | `#282625` |
-| `grayscale-130` | `#1C1C1E` |
+| `grayscale-100` | `#525254` |
+| `grayscale-110` | `#343436` |
+| `grayscale-120` | `#2B2B2B` |
+| `grayscale-130` | `#1C1C1C` |
 | `grayscale-140` | `#111112` |
 
 #### Red
 
 | 토큰명 | 값 |
 |--------|-----|
-| `red-10` | `#FFF0F0` |
-| `red-20` | `#FFD8D8` |
+| `red-10` | `#FCE0E0` |
+| `red-20` | `#FCE0E0` |
 | `red-30` | `#FFBCBC` |
 | `red-40` | `#FF9B9B` |
 | `red-50` | `#F46464` |
 | `red-60` | `#F03535` |
-| `red-70` | `#EC2222` |
+| `red-70` | `#EC3232` |
 | `red-80` | `#E52828` |
 | `red-90` | `#C82424` |
 | `red-100` | `#B81C1C` |
@@ -247,18 +247,18 @@ UI에서 **실제로 사용하는 역할 기반 토큰**. 값은 프리미티브
 | 토큰명 | 참조 | 값 |
 |--------|------|-----|
 | `surface-10` | `white` | `#FFFFFF` |
-| `surface-20` | `grayscale-10` | `#F9F9FC` |
+| `surface-20` | `grayscale-10` | `#F8F8FC` |
 | `surface-disabled-10` | `black-opacity-10` | `#000000` 2% |
-| `surface-disabled-20` | `black-opacity-20` | `#000000` 4% |
-| `surface-inverse-10` | `grayscale-120` | `#282625` |
-| `surface-inverse-20` | `grayscale-140` | `#111112` |
+| `surface-disabled-20` | `black-opacity-20` | `#000000` 7% |
+| `surface-inverse-10` | `grayscale-120` | `#2B2B2B` |
+| `surface-inverse-20` | `grayscale-100` | `#525254` |
 
 #### On Surface (텍스트/아이콘)
 
 | 토큰명 | 참조 | 값 |
 |--------|------|-----|
-| `on-surface-10` | `grayscale-120` | `#282625` |
-| `on-surface-20` | `grayscale-100` | `#626264` |
+| `on-surface-10` | `grayscale-120` | `#2B2B2B` |
+| `on-surface-20` | `grayscale-100` | `#525254` |
 | `on-surface-30` | `grayscale-80` | `#919194` |
 | `on-surface-disabled` | `black-opacity-50` | `#000000` 22% |
 | `on-surface-inverse` | `white` | `#FFFFFF` |
@@ -268,7 +268,7 @@ UI에서 **실제로 사용하는 역할 기반 토큰**. 값은 프리미티브
 | 토큰명 | 참조 | 값 |
 |--------|------|-----|
 | `background-10` | `white` | `#FFFFFF` |
-| `background-20` | `grayscale-10` | `#F9F9FC` |
+| `background-20` | `grayscale-10` | `#F8F8FC` |
 
 #### Primary (브랜드)
 
@@ -276,40 +276,42 @@ UI에서 **실제로 사용하는 역할 기반 토큰**. 값은 프리미티브
 |--------|------|-----|
 | `primary` | `pink-70` | `#F642D4` |
 | `on-primary` | `white` | `#FFFFFF` |
-| `primary-container` | `pink-10` | `#FEF0FC` |
+| `primary-container` | `pink-20` | `#FEE3F9` |
 | `on-primary-container` | `pink-70` | `#F642D4` |
 
 #### Secondary
 
 | 토큰명 | 참조 | 값 |
 |--------|------|-----|
-| `secondary` | `grayscale-30` | `#E8E9EC` |
-| `on-secondary` | `grayscale-100` | `#626264` |
-| `secondary-container` | `white` | `#FFFFFF` |
+| `secondary` | `grayscale-20` | `#F0F0F5` |
+| `on-secondary` | `grayscale-100` | `#525254` |
+| `secondary-container` | `grayscale-110` | `#343436` |
 | `on-secondary-container` | `white` | `#FFFFFF` |
+
+Figma 버튼·칩 별칭은 시맨틱 토큰에 1:1 매핑한다: `secondary-secondary`→`secondary`(light), `secondary-secondary-container`→`secondary-container`(dark). 선택 칩 등 **진한 fill**이 필요하면 `secondary-container`/`on-secondary-container`를 사용한다.
 
 #### Border
 
 | 토큰명 | 참조 | 값 |
 |--------|------|-----|
-| `border-10` | `black-opacity-30` | `#000000` 8% |
-| `border-20` | `black-opacity-40` | `#000000` 12% |
+| `border-10` | `black-opacity-20` | `#000000` 7% |
+| `border-20` | `black-opacity-40` | `#000000` 13% |
 | `border-30` | `black-opacity-50` | `#000000` 22% |
-| `border-strong` | `grayscale-100` | `#626264` |
+| `border-strong` | `grayscale-120` | `#2B2B2B` |
 | `border-inverse` | `white` | `#FFFFFF` |
 
 #### Divider
 
 | 토큰명 | 참조 | 값 |
 |--------|------|-----|
-| `divider-10` | `black-opacity-10` | `#000000` 2% |
-| `divider-20` | `black-opacity-30` | `#000000` 8% |
+| `divider-10` | `black-opacity-20` | `#000000` 7% |
+| `divider-20` | `black-opacity-50` | `#000000` 22% |
 
 #### Dim (오버레이)
 
 | 토큰명 | 참조 | 값 |
 |--------|------|-----|
-| `dim-10` | `black-opacity-60` | `#000000` 38% |
+| `dim-10` | `black-opacity-60` | `#000000` 28% |
 | `dim-20` | `black-opacity-80` | `#000000` 53% |
 | `dim-30` | `black-opacity-90` | `#000000` 67% |
 
@@ -317,10 +319,10 @@ UI에서 **실제로 사용하는 역할 기반 토큰**. 값은 프리미티브
 
 | 토큰명 | 참조 | 값 |
 |--------|------|-----|
-| `error` | `red-70` | `#EC2222` |
+| `error` | `red-70` | `#EC3232` |
 | `on-error` | `white` | `#FFFFFF` |
-| `error-container` | `red-10` | `#FFF0F0` |
-| `on-error-container` | `red-70` | `#EC2222` |
+| `error-container` | `red-20` | `#FCE0E0` |
+| `on-error-container` | `red-70` | `#EC3232` |
 
 #### Success
 
@@ -379,12 +381,33 @@ UI에서 **실제로 사용하는 역할 기반 토큰**. 값은 프리미티브
 | compact — 기본 `Button`·필터 칩 M·보조 드롭다운·컴팩트 에디터 행 | `h-8` / `CONTROL_HEIGHT_CLASS` | 32px |
 | 아이콘-only 버튼 (`size="icon"`) | `size-8` | 32×32px |
 | standard — 칩 L·`Button` lg·sm 폼 필드·모달 버튼·드롭다운 트리거 | `h-9` / `CONTROL_HEIGHT_STANDARD_CLASS` | 36px |
-| 아이콘-only large (`size="icon-lg"`) | `size-9` | 36×36px |
+| 아이콘-only large (`size="icon-lg"`) | `size-9` | 36×36px · 내부 SVG **22px** · stroke **1.5** (`button.tsx` 공통) |
 | form — `Input` md·주요 텍스트 필드·로그인 CTA·출금 등 | `CONTROL_HEIGHT_FORM_CLASS` (`h-[42px]`) | 42px · 안쪽 여백 **`formFieldPadClassName`** = 8px (`px-[8px] py-[8px]`) |
 
 **같은 티어를 가로로 묶을 때:** compact → **4px** (`gap-[4px]`), standard → **8px** (`gap-[8px]`). Tailwind 기본 `gap-2`/`gap-4`(8px/16px)와 혼동하지 않는다.
 
 예외: 토스트 하단 오프셋(`bottom-[40px]`)·AI 로더 오브(`.ai-orb` 36px) 등 **비컨트롤 레이아웃·그래픽**은 유지할 수 있다.
+
+**`Button` `variant="outline"`** 테두리는 **`border-border-20`**(`#000000` 13%)을 공통 사용한다. `disabled` 상태에서도 동일 토큰을 유지한다(`disabled:border-border-20`). 구현: `components/ui/button.tsx`.
+
+#### Button 변형 매트릭스 (Figma 기준)
+
+타입은 **fill / outline / tertiary** 3종. 색 톤은 variant 또는 `text-*`/`outline-*` className 조합으로 표현한다. 컨트롤 높이는 정책상 **36/32/24**만 사용(Figma의 40px=`h-10`은 채택하지 않음).
+
+| 타입 | 톤 | variant / 조합 |
+|------|----|----------------|
+| fill | primary | `default` |
+| fill | secondary (light `#F0F0F5`) | `secondary` |
+| fill | secondary 강조 (dark `#343436`) | `secondaryContainer` |
+| fill | error | `error` (또는 `destructive`) |
+| outline | primary | `outline` + `outline-primary text-primary` |
+| outline | neutral | `outline` + `text-on-surface-30` |
+| outline | error | `outline` + `outline-error-error text-error-error` |
+| tertiary | neutral (기본) | `tertiary` |
+| tertiary | primary | `tertiary` + `text-primary` |
+| tertiary | error | `tertiary` + `text-error-error` |
+
+비활성 fill은 `bg-surface-disabled-10` + `text-on-surface-disabled`, 비활성 outline/tertiary는 `text-on-surface-disabled`를 사용한다.
 
 ---
 

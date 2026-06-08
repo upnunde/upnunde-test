@@ -107,7 +107,7 @@ export function PolicyAgreementModal({
             type="button"
             variant="outline"
             onClick={handleClose}
-            className="border-border-10"
+            className="disabled:border-border-20"
           >
             취소
           </Button>

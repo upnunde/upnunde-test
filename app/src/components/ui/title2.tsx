@@ -102,7 +102,7 @@ export function Title2({
           type="button"
           variant="secondary"
           size="icon-xs"
-          className="h-6 w-6 rounded-[999px] px-0 shrink-0 [&_svg]:size-4 text-secondary-on-secondary hover:bg-surface-20 hover:text-on-surface-10"
+          className="h-6 w-6 rounded-[999px] px-0 shrink-0 [&_svg]:size-4 text-on-secondary hover:bg-surface-20 hover:text-on-surface-10"
           onClick={onGuideClick}
           aria-label="안내 보기"
         >

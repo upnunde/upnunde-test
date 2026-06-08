@@ -124,7 +124,7 @@ export function Pagination({
         </div>
         <button
           type="submit"
-          className="h-8 cursor-pointer rounded border border-border-10 px-3 text-sm font-medium text-on-surface-20 transition-colors hover:bg-surface-20"
+          className="h-8 cursor-pointer rounded border border-border-20 px-3 text-sm font-medium text-on-surface-20 transition-colors hover:bg-surface-20 disabled:border-border-20"
         >
           Go
         </button>

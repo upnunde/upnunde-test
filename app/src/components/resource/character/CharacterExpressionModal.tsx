@@ -534,8 +534,8 @@ export function CharacterExpressionModal({
               )}
               {cropAspect === "9/16" && (
                 <>
-                  <div className="pointer-events-none absolute left-0 top-0 h-full w-[21.875%] bg-dim-20/50" aria-hidden />
-                  <div className="pointer-events-none absolute right-0 top-0 h-full w-[21.875%] bg-dim-20/50" aria-hidden />
+                  <div className="pointer-events-none absolute left-0 top-0 h-full w-[21.875%] bg-dim-30" aria-hidden />
+                  <div className="pointer-events-none absolute right-0 top-0 h-full w-[21.875%] bg-dim-30" aria-hidden />
                   <div className="pointer-events-none absolute left-[21.875%] top-0 h-full w-[56.25%] border-2 border-primary-primary" aria-hidden />
                 </>
               )}
@@ -572,7 +572,7 @@ export function CharacterExpressionModal({
                 type="button"
                 variant="outline"
                 size="icon"
-                className="shrink-0 w-8 h-8 bg-transparent hover:bg-transparent active:bg-transparent shadow-none rounded-full border border-border-10"
+                className="shrink-0 w-8 h-8 bg-transparent hover:bg-transparent active:bg-transparent shadow-none rounded-full disabled:border-border-20"
                 onClick={() => {
                   if (selectedSlot?.id) {
                     setZoom(1);
@@ -639,7 +639,7 @@ export function CharacterExpressionModal({
                 <Button
                   type="button"
                   variant="outline"
-                  className="h-8 rounded-md outline outline-1 outline-offset-[-1px] outline-border-10 font-['Pretendard_JP'] text-sm font-medium text-secondary-foreground px-3 w-auto"
+                  className="h-8 rounded-md font-['Pretendard_JP'] text-sm font-medium text-secondary-foreground px-3 w-auto disabled:border-border-20"
                   onClick={() => handleNavigateFilledSlots("prev")}
                   disabled={filledSlotIndices.length <= 1}
                 >
@@ -648,7 +648,7 @@ export function CharacterExpressionModal({
                 <Button
                   type="button"
                   variant="outline"
-                  className="h-8 rounded-md outline outline-1 outline-offset-[-1px] outline-border-10 font-['Pretendard_JP'] text-sm font-medium text-secondary-foreground px-3 w-auto"
+                  className="h-8 rounded-md font-['Pretendard_JP'] text-sm font-medium text-secondary-foreground px-3 w-auto disabled:border-border-20"
                   onClick={() => handleNavigateFilledSlots("next")}
                   disabled={filledSlotIndices.length <= 1}
                 >
@@ -724,7 +724,7 @@ export function CharacterExpressionModal({
             <Button
               type="button"
               variant="outline"
-              className="min-w-20 h-9 rounded-md outline outline-1 outline-offset-[-1px] outline-border-10 font-['Pretendard_JP'] text-base font-medium text-secondary-foreground"
+              className="min-w-20 h-9 rounded-md font-['Pretendard_JP'] text-base font-medium text-secondary-foreground disabled:border-border-20"
               onClick={handleClose}
             >
               취소

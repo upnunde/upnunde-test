@@ -49,7 +49,7 @@ export function AnalyticsScopeDropdown({
           title={label}
         >
           <span className="min-w-0 max-w-[240px] truncate">{label}</span>
-          <ChevronDown className="h-5 w-5 shrink-0 text-on-surface-10" aria-hidden />
+          <ChevronDown className="h-5 w-5 shrink-0 text-current" aria-hidden />
         </Chip>
       </DropdownMenuTrigger>
       <DropdownMenuContent align={align} className="min-w-[220px]">

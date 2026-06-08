@@ -64,7 +64,7 @@ export function SeriesFormPageScaffold({
                       variant="outline"
                       size="lg"
                       onClick={onDraftClick}
-                      className="border-border-10 bg-white text-on-surface-20 hover:bg-surface-20"
+                      className="bg-white text-on-surface-20 hover:bg-surface-20 disabled:border-border-20"
                     >
                       임시저장
                     </Button>

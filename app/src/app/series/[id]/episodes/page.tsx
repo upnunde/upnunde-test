@@ -322,7 +322,7 @@ export default function EpisodeManagementPage() {
                   <button
                     type="button"
                     onClick={handleResourceManagement}
-                    className="h-9 px-3 cursor-pointer bg-white border border-border-10 rounded-md text-on-surface-20 font-medium hover:bg-surface-20 transition-colors"
+                    className="h-9 px-3 cursor-pointer bg-white border border-border-20 rounded-md text-on-surface-20 font-medium hover:bg-surface-20 transition-colors disabled:border-border-20"
                   >
                     리소스 관리
                   </button>
@@ -331,7 +331,7 @@ export default function EpisodeManagementPage() {
                     onClick={handleAddEpisode}
                     className="h-9 px-3 cursor-pointer bg-primary text-primary-foreground hover:bg-primary/90 font-medium rounded-md transition-colors"
                   >
-                    새 에피소드 만들기
+                    새 에피소드
                   </button>
                 </div>
               </div>

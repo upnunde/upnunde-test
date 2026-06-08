@@ -243,7 +243,7 @@ export function SeriesItem({
           <button
             type="button"
             onClick={handleSeriesManage}
-            className="h-9 flex-1 min-w-0 cursor-pointer rounded-md border px-3 text-sm font-medium transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-2 border-border-10 bg-white text-on-surface-20 hover:bg-surface-20 flex items-center"
+            className="h-9 flex-1 min-w-0 cursor-pointer rounded-md border border-border-20 px-3 text-sm font-medium transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-2 bg-white text-on-surface-20 hover:bg-surface-20 flex items-center disabled:border-border-20"
           >
             <span className="block w-full overflow-hidden text-ellipsis whitespace-nowrap text-center">
               시리즈 관리
@@ -256,8 +256,8 @@ export function SeriesItem({
             onClick={handleResource}
             className={`h-9 flex-1 min-w-0 rounded-md border px-3 text-sm font-medium transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-2 flex items-center ${
               isDraft
-                ? "border-border-10 text-on-surface-30 cursor-not-allowed"
-                : "border-border-10 bg-white text-on-surface-20 hover:bg-surface-20 cursor-pointer"
+                ? "border-border-20 text-on-surface-30 cursor-not-allowed"
+                : "border-border-20 bg-white text-on-surface-20 hover:bg-surface-20 cursor-pointer"
             }`}
           >
             <span className="block w-full overflow-hidden text-ellipsis whitespace-nowrap text-center">
@@ -271,8 +271,8 @@ export function SeriesItem({
             onClick={handleEpisode}
             className={`h-9 flex-1 min-w-0 rounded-md border px-3 text-sm font-medium transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-2 flex items-center ${
               isDraft
-                ? "border-border-10 text-on-surface-30 cursor-not-allowed"
-                : "border-border-10 bg-white text-on-surface-20 hover:bg-surface-20 cursor-pointer"
+                ? "border-border-20 text-on-surface-30 cursor-not-allowed"
+                : "border-border-20 bg-white text-on-surface-20 hover:bg-surface-20 cursor-pointer"
             }`}
           >
             <span className="block w-full overflow-hidden text-ellipsis whitespace-nowrap text-center">

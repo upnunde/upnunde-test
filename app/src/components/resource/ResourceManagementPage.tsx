@@ -417,7 +417,11 @@ export function ResourceManagementPage() {
                   closeDeleteConfirm();
                 })
               }
-              onAddFromModal={(item) => setBgm((prev) => [...prev, item])}
+              onAddFromModal={(item) =>
+                setBgm((prev) =>
+                  prev.some((x) => x.id === item.id) ? prev : [...prev, item],
+                )
+              }
             />
               </div>
             </div>

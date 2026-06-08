@@ -1,0 +1,38 @@
+---
+description: 기존 화면·라우트 무허가 삭제·중복·롤백 금지. /series 등 확정된 App Router 구조 보호.
+alwaysApply: true
+---
+
+# 화면·라우트 보호 (무허가 롤백 금지)
+
+## 원칙
+
+- 사용자가 **명시적으로 요청하지 않은** 페이지·레이아웃·라우트 **삭제, 이동, 대체, “새로 작성”** 을 하지 않는다.
+- 기존 화면 수정 시 **해당 경로의 현재 파일을 먼저 읽고** 확장·패치한다. 비슷한 이름의 **새 파일을 같은 URL에 만들지 않는다**.
+- “간단히 고치기”를 이유로 **확정된 UI 구조(헤더·탭·레이아웃)를 다른 패턴으로 되돌리지 않는다**.
+
+## `/series` (내 작품) — 확정 구조
+
+| URL | 파일 | 역할 |
+|-----|------|------|
+| `/series` | `(my-works)/page.tsx` + `(my-works)/layout.tsx` | **내 작품** 헤더 + **시리즈/캐릭터/상황공략** 탭 + 시리즈 목록 |
+| `/series/character` | `(my-works)/character/page.tsx` | 캐릭터 탭 |
+| `/series/scenario` | `(my-works)/scenario/page.tsx` | 상황공략 탭 |
+
+**금지**
+
+- `app/src/app/series/page.tsx` 를 **새로 만들거나 복구**하지 않는다. `(my-works)/page.tsx` 와 **같은 `/series` URL을 중복**한다.
+- `(my-works)/layout.tsx` 를 우회하는 **독립형 전체 페이지**(Header/Sidebar를 page.tsx에 다시 넣는 패턴)로 바꾸지 않는다.
+- 탭·「내 작품」 헤더를 **「시리즈」 단독 헤더**로 바꾸지 않는다.
+
+탭 정의·경로: `app/src/lib/worksArea.ts`
+
+## 작업 전 체크
+
+1. `git status` / `git log` 로 해당 경로가 **의도적으로 만든 구조인지** 확인
+2. 같은 URL에 `page.tsx` 가 **두 군데** 생기지 않았는지 확인 (route group 포함)
+3. 변경 후 `app/` 에서 **`npm run check:routes`** 실행
+
+## 사용자에게 변경이 필요할 때
+
+- 구조를 바꿔야 하면 **먼저 이유와 영향(어떤 탭/URL이 바뀌는지)** 를 설명하고 **명시적 승인** 후 진행한다.

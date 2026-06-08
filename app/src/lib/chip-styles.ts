@@ -20,7 +20,7 @@ export const CHIP_GROUP_GAP_CLASS = CONTROL_GROUP_GAP_COMPACT_CLASS;
 
 /** FilterChip M(h-8)과 같은 행 — 날짜·드롭다운·셀렉트 트리거 높이·라운드·보더 */
 export const CHIP_COMPANION_CONTROL_CLASS =
-  "h-8 min-h-8 shrink-0 rounded-[8px] border border-border-10 bg-white px-3 text-sm font-normal leading-5 text-on-surface-20 shadow-none hover:bg-surface-20 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-2";
+  "h-8 min-h-8 shrink-0 rounded-[8px] border border-border-20 bg-white px-3 text-sm font-normal leading-5 text-on-surface-20 shadow-none hover:bg-surface-20 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-2 disabled:border-border-20";
 
 /** Figma `chips` — type × variant × corner × size × icon */
 export const chipVariants = cva(
@@ -58,7 +58,7 @@ export const chipVariants = cva(
         chipType: "fill",
         variant: "activated",
         class:
-          "border-0 bg-secondary-secondary text-secondary-on-secondary hover:opacity-90",
+          "border-0 bg-secondary-container text-on-secondary-container hover:opacity-90",
       },
       {
         chipType: "fill",

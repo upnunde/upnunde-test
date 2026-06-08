@@ -81,7 +81,7 @@ export default function EpisodeDetailPage() {
                   variant="outline"
                   size="icon"
                   onClick={() => setIsPromptModalOpen(true)}
-                  className="h-8 w-8 shrink-0 rounded-full border-border-10 shadow-none"
+                  className="h-8 w-8 shrink-0 rounded-full shadow-none disabled:border-border-20"
                   aria-label="에피소드 기준 프롬프트 보기"
                 >
                   <FileText className="h-4 w-4 text-on-surface-30" aria-hidden />
