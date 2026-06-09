@@ -35,7 +35,7 @@ export function CharacterItem({
   onSetPublic,
   onDelete,
 }: CharacterItemProps) {
-  const { title, tagline, thumbnailUrl, status, createdAt, viewCount, stat1, stat2 } = character;
+  const { title, tagline, thumbnailUrl, status, createdAt, viewCount, stat1, stat2, sourceSeries } = character;
   const [isMenuOpen, setIsMenuOpen] = useState(false);
 
   const isDraft = status === "DRAFT";
@@ -160,12 +160,26 @@ export function CharacterItem({
           </div>
         )}
 
-        <p className="mt-1 line-clamp-2 w-full text-sm text-on-surface-30">{tagline}</p>
+        <div className="mt-1 flex min-w-0 w-full flex-wrap items-center gap-2 text-sm leading-5">
+          {sourceSeries && (
+            <>
+              <span className="shrink-0 text-on-surface-30">{sourceSeries.title}</span>
+              <span
+                className="shrink-0 select-none text-xs leading-none text-border-20"
+                role="separator"
+                aria-hidden
+              >
+                ㅣ
+              </span>
+            </>
+          )}
+          <span className="shrink-0 text-on-surface-30">{tagline}</span>
+        </div>
 
         <div className="w-full flex-1" aria-hidden />
 
-        <div className="mb-5 flex flex-wrap gap-6 text-[13px] leading-5 text-on-surface-20 [&_svg]:shrink-0 [&_svg]:text-on-surface-20">
-          <div className="flex flex-col items-start justify-center gap-2 text-on-surface-20">
+        <div className="mb-5 flex w-full text-[13px] leading-5 text-on-surface-20 [&_svg]:shrink-0 [&_svg]:text-on-surface-20">
+          <div className="flex min-w-0 flex-1 flex-col items-start justify-center gap-2 text-on-surface-20">
             <div className="flex items-center gap-2 text-on-surface-20">
               <Calendar className="h-[18px] w-[18px]" aria-hidden />
               <span className="text-on-surface-20" title="등록일">
@@ -179,7 +193,7 @@ export function CharacterItem({
               </span>
             </div>
           </div>
-          <div className="flex flex-col items-start justify-start gap-2 text-on-surface-20">
+          <div className="flex min-w-0 flex-1 flex-col items-start justify-start gap-2 text-on-surface-20">
             <div className="flex items-center gap-2 text-on-surface-20">
               <Heart className="h-[18px] w-[18px]" aria-hidden />
               <span className="text-on-surface-20" title="좋아요 수">

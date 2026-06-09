@@ -13,6 +13,7 @@ export interface CharacterListProps {
   onSetPublic?: (character: CharacterData) => void;
   onDelete?: (character: CharacterData) => void;
   onCreateCharacter?: () => void;
+  onImportCharacter?: () => void;
   className?: string;
 }
 
@@ -23,6 +24,7 @@ export function CharacterList({
   onSetPublic,
   onDelete,
   onCreateCharacter,
+  onImportCharacter,
   className,
 }: CharacterListProps) {
   const isEmpty = characters.length === 0;
@@ -46,6 +48,8 @@ export function CharacterList({
           hint="새로운 캐릭터를 등록하세요"
           actionLabel="새 캐릭터 생성"
           onClick={onCreateCharacter}
+          secondaryActionLabel="캐릭터 불러오기"
+          onSecondaryClick={onImportCharacter}
         />
       </div>
     </div>

@@ -20,4 +20,6 @@ export interface SeriesData {
   createdAt: string;
   episodeCount: number;
   viewCount: number;
+  /** 누적 댓글 수 */
+  commentCount: number;
 }

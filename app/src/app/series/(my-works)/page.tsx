@@ -28,6 +28,7 @@ const MOCK_SERIES: SeriesData[] = [
     createdAt: "2025-12-01T09:00:00.000Z",
     episodeCount: 120,
     viewCount: 125000,
+    commentCount: 4211,
   },
   {
     id: "2",
@@ -37,6 +38,7 @@ const MOCK_SERIES: SeriesData[] = [
     createdAt: "2025-11-15T14:30:00.000Z",
     episodeCount: 50,
     viewCount: 8900,
+    commentCount: 128,
   },
   {
     id: "4",
@@ -46,6 +48,7 @@ const MOCK_SERIES: SeriesData[] = [
     createdAt: "2025-10-01T00:00:00.000Z",
     episodeCount: 10,
     viewCount: 3200,
+    commentCount: 42,
   },
 ];
 

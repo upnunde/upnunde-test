@@ -2,7 +2,7 @@
 
 import React, { useState } from "react";
 import Image from "next/image";
-import { MoreVertical, Eye, EyeOff, Trash2, Calendar, Layers } from "lucide-react";
+import { MoreVertical, Eye, EyeOff, Trash2, Calendar, Layers, MessageCircle } from "lucide-react";
 import {
   DropdownMenu,
   DropdownMenuTrigger,
@@ -54,7 +54,7 @@ export function SeriesItem({
   onSetPublic,
   onDelete,
 }: SeriesItemProps) {
-  const { title, thumbnailUrl, status, createdAt, episodeCount, viewCount } = series;
+  const { title, thumbnailUrl, status, createdAt, episodeCount, viewCount, commentCount } = series;
   const [isMenuOpen, setIsMenuOpen] = useState(false);
 
   const isDraft = status === "DRAFT";
@@ -63,6 +63,7 @@ export function SeriesItem({
 
   const dateStr = formatSeriesDateOrRelative(createdAt);
   const viewStr = formatSeriesViewCount(viewCount);
+  const commentStr = formatSeriesViewCount(commentCount);
 
   const handleResource = () => {
     if (isDraft) return;
@@ -213,8 +214,8 @@ export function SeriesItem({
         <div className="w-full h-full" />
 
         {/* 메타: 날짜, 회차 수, 조회수 (정책 2, 3, 4, 11 - 툴팁) */}
-        <div className="mb-5 flex flex-wrap gap-6 text-[13px] leading-5 text-on-surface-20 [&_svg]:shrink-0 [&_svg]:text-on-surface-20">
-          <div className="flex flex-col items-start justify-center gap-2 text-on-surface-20">
+        <div className="mb-5 flex w-full text-[13px] leading-5 text-on-surface-20 [&_svg]:shrink-0 [&_svg]:text-on-surface-20">
+          <div className="flex min-w-0 flex-1 flex-col items-start justify-center gap-2 text-on-surface-20">
             <div className="flex items-center gap-2 text-on-surface-20">
               <Calendar className="h-[18px] w-[18px]" aria-hidden />
               <span className="text-on-surface-20" title="생성한 날짜">
@@ -228,11 +229,17 @@ export function SeriesItem({
               </span>
             </div>
           </div>
-          <div className="flex flex-col items-start justify-start gap-2 text-on-surface-20">
+          <div className="flex min-w-0 flex-1 flex-col items-start justify-start gap-2 text-on-surface-20">
             <div className="flex items-center gap-2 text-on-surface-20">
               <Layers className="h-[18px] w-[18px]" aria-hidden />
               <span className="text-on-surface-20" title="에피소드 등록 수">
                 {episodeCount}회
+              </span>
+            </div>
+            <div className="flex items-center gap-2 text-on-surface-20">
+              <MessageCircle className="h-[18px] w-[18px]" aria-hidden />
+              <span className="text-on-surface-20" title="댓글 수">
+                {commentStr}
               </span>
             </div>
           </div>
