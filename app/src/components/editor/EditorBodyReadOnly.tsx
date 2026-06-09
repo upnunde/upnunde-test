@@ -15,11 +15,11 @@ import {
 
 /** EditorBody 줄번호 열과 동일 톤 (포커스 없을 때) */
 const INDEX_COL_CLASS =
-  "shrink-0 text-[13px] font-medium tabular-nums w-9 flex items-center justify-start mt-0 text-on-surface-disabled min-h-8 py-1";
-const READONLY_ROW_LABEL_CELL_CLASS = "w-24 shrink-0 min-h-8 py-1 flex items-center justify-start";
+  "shrink-0 text-body4_500 tabular-nums w-9 flex items-center justify-start mt-0 text-on-surface-disabled min-h-8 py-my-4";
+const READONLY_ROW_LABEL_CELL_CLASS = "w-24 shrink-0 min-h-8 py-my-4 flex items-center justify-start";
 const READONLY_ROW_CONTENT_CELL_CLASS = "min-w-0 flex-1 min-h-8 py-0 flex items-center justify-start";
 const READONLY_BODY_TEXT_CLASS =
-  "text-sm leading-6 font-normal text-[16px] text-on-surface-10 whitespace-pre-wrap break-words align-middle";
+  "text-body1_400 text-on-surface-10 whitespace-pre-wrap break-words align-middle";
 const INLINE_TAG_TOKEN_REGEX = /(<[^>]+>)/g;
 
 function renderInlineTagHighlightedText(content: string): React.ReactNode {
@@ -70,8 +70,8 @@ function ReadOnlyBlockRow({
     return (
       <>
         <div className={indexColClass}>{indexLabel}</div>
-        <div className={cn(READONLY_ROW_LABEL_CELL_CLASS, "pr-2")}>
-          <span className="inline-block w-fit max-w-[76px] truncate text-left text-xs font-medium leading-4 text-on-surface-30">
+        <div className={cn(READONLY_ROW_LABEL_CELL_CLASS, "pr-my-8")}>
+          <span className="inline-block w-fit max-w-[76px] truncate text-left text-caption1_500 text-on-surface-30">
             {speaker}
           </span>
         </div>
@@ -102,10 +102,10 @@ function ReadOnlyBlockRow({
     return (
       <>
         <div className={indexColClass}>{indexLabel}</div>
-        <div className={cn(READONLY_ROW_LABEL_CELL_CLASS, "self-start overflow-hidden pt-0.5")}>
-          <span className={cn("text-xs font-medium leading-4", labelColorClass)}>#선택지</span>
+        <div className={cn(READONLY_ROW_LABEL_CELL_CLASS, "self-start overflow-hidden pt-my-2")}>
+          <span className={cn("text-caption1_500", labelColorClass)}>#선택지</span>
         </div>
-        <div className={cn(READONLY_ROW_CONTENT_CELL_CLASS, "items-start py-1")}>
+        <div className={cn(READONLY_ROW_CONTENT_CELL_CLASS, "items-start py-my-4")}>
           <ReadonlyChoiceTable
             choices={displayChoices}
             sceneOptions={buildSceneOptions(blocks)}
@@ -120,14 +120,14 @@ function ReadOnlyBlockRow({
     return (
       <>
         <div className={cn(indexColClass, "mt-0")}>{indexLabel}</div>
-        <div className={cn(READONLY_ROW_LABEL_CELL_CLASS, "text-[13px] font-medium", labelColorClass)}>
+        <div className={cn(READONLY_ROW_LABEL_CELL_CLASS, "text-body4_500", labelColorClass)}>
           {`#장면 ${String(sceneOrdinal).padStart(2, "0")}`}
         </div>
         <div className={READONLY_ROW_CONTENT_CELL_CLASS}>
           <span
             className={cn(
               "min-w-0 flex-1 whitespace-pre-wrap break-words",
-              "text-[24px] font-bold leading-8 text-on-surface-10"
+              "text-heading2_700 text-on-surface-10"
             )}
           >
             {block.content || "—"}
@@ -141,11 +141,11 @@ function ReadOnlyBlockRow({
     return (
       <>
         <div className={cn(indexColClass, "mt-0")}>{indexLabel}</div>
-        <div className={cn(READONLY_ROW_LABEL_CELL_CLASS, "text-[13px] font-medium", labelColorClass)}>
+        <div className={cn(READONLY_ROW_LABEL_CELL_CLASS, "text-body4_500", labelColorClass)}>
           #장면정보
         </div>
         <div className={READONLY_ROW_CONTENT_CELL_CLASS}>
-          <span className="min-w-0 flex-1 h-6 text-base font-medium leading-6 text-on-surface-10 whitespace-pre-wrap break-words">
+          <span className="min-w-0 flex-1 h-6 text-body1_500 text-on-surface-10 whitespace-pre-wrap break-words">
             {renderInlineTagHighlightedText(block.content || "—")}
           </span>
         </div>
@@ -157,7 +157,7 @@ function ReadOnlyBlockRow({
     return (
       <>
         <div className={cn(indexColClass, "mt-0")}>{indexLabel}</div>
-        <div className={cn(READONLY_ROW_LABEL_CELL_CLASS, "text-[13px] font-medium", labelColorClass)}>
+        <div className={cn(READONLY_ROW_LABEL_CELL_CLASS, "text-body4_500", labelColorClass)}>
           {`#${labelKo}`}
         </div>
         <div className={READONLY_ROW_CONTENT_CELL_CLASS}>
@@ -170,7 +170,7 @@ function ReadOnlyBlockRow({
   return (
     <>
       <div className={cn(indexColClass, "mt-0")}>{indexLabel}</div>
-      <div className={cn(READONLY_ROW_LABEL_CELL_CLASS, "text-[13px] font-medium", labelColorClass)}>
+      <div className={cn(READONLY_ROW_LABEL_CELL_CLASS, "text-body4_500", labelColorClass)}>
         {`#${labelKo}`}
       </div>
       <div className={READONLY_ROW_CONTENT_CELL_CLASS}>
@@ -233,7 +233,7 @@ export function EditorBodyReadOnly() {
 
   if (!blocks || blocks.length === 0) {
     return (
-      <div className="min-h-full w-full flex items-center justify-center text-on-surface-30 text-sm">
+      <div className="min-h-full w-full flex items-center justify-center text-on-surface-30 text-body3_400">
         표시할 원고가 없습니다.
       </div>
     );
@@ -241,7 +241,7 @@ export function EditorBodyReadOnly() {
 
   return (
     <div className="min-h-full w-full cursor-default select-text">
-      <div className="mx-auto flex min-h-full w-full flex-col gap-1 px-2">
+      <div className="mx-auto flex min-h-full w-full flex-col gap-my-4 px-my-8">
         {blocks.map((block, i) => {
           const isScene = block.type === "scene";
           const prevBlock = i > 0 ? blocks[i - 1] : null;
@@ -258,7 +258,7 @@ export function EditorBodyReadOnly() {
                 tabIndex={0}
                 onClick={() => focusBlock(block.id)}
                 className={cn(
-                  "group/preview w-full rounded bg-white inline-flex items-start justify-start gap-0 px-3 py-1 text-left outline-none transition-colors hover:bg-surface-20/50"
+                  "group/preview w-full rounded bg-white inline-flex items-start justify-start gap-0 px-my-12 py-my-4 text-left outline-none transition-colors hover:bg-surface-20/50"
                 )}
               >
                 <ReadOnlyBlockRow

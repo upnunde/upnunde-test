@@ -79,7 +79,7 @@ export function AnalyticsScopeFilterBar({
 
   return (
     <div className={cn(analyticsScopeFilterShellClassName, className)}>
-      <div className="flex w-full min-w-0 flex-wrap items-center justify-between gap-x-4 gap-y-2">
+      <div className="flex w-full min-w-0 flex-wrap items-center justify-between gap-x-my-16 gap-y-my-8">
         <div className="min-w-0 flex-1">
           <SegmentedTextTabs
           aria-label="분석 영역"

@@ -306,30 +306,30 @@ export default function EpisodeManagementPage() {
         <div className="flex min-w-0 flex-1 flex-col overflow-hidden">
           <main className="flex flex-1 flex-col overflow-hidden bg-surface-20">
             {/* Sub Header (레이아웃 가이드: margin 40, max-width 1200, min-width 640) */}
-            <header className="flex h-16 shrink-0 items-center justify-center border-b border-border-10 bg-white px-5 py-0">
-              <div className="flex w-full max-w-[1200px] items-center justify-start gap-3">
+            <header className="flex h-16 shrink-0 items-center justify-center border-b border-border-10 bg-white px-my-20 py-0">
+              <div className="flex w-full max-w-[1200px] items-center justify-start gap-my-12">
                 <HeaderBackButton onClick={handleBack} aria-label="시리즈 목록으로" />
-                <h1 className="text-2xl font-bold text-on-surface-10">에피소드 관리</h1>
+                <h1 className="text-heading2_700 text-on-surface-10">에피소드 관리</h1>
               </div>
             </header>
 
-            <div className="flex-1 overflow-y-auto flex flex-col items-center py-8 gap-3 px-5">
-              <div className="w-full max-w-[1200px] mx-auto flex flex-col gap-3">
+            <div className="flex-1 overflow-y-auto flex flex-col items-center py-my-32 gap-my-12 px-my-20">
+              <div className="w-full max-w-[1200px] mx-auto flex flex-col gap-my-12">
               {/* Title & Actions - 정책 2, 3, 16 */}
               <div className="w-full px-0 flex justify-between items-center shrink-0">
-                <h2 className="text-xl font-bold text-on-surface-10">{seriesTitle}</h2>
-                <div className="flex items-center gap-3">
+                <h2 className="text-heading4_700 text-on-surface-10">{seriesTitle}</h2>
+                <div className="flex items-center gap-my-12">
                   <button
                     type="button"
                     onClick={handleResourceManagement}
-                    className="h-9 px-3 cursor-pointer bg-white border border-border-20 rounded-md text-on-surface-20 font-medium hover:bg-surface-20 transition-colors disabled:border-border-20"
+                    className="h-9 px-my-12 cursor-pointer bg-white border border-border-20 rounded-md text-on-surface-20 font-medium hover:bg-surface-20 transition-colors disabled:border-border-20"
                   >
                     리소스 관리
                   </button>
                   <button
                     type="button"
                     onClick={handleAddEpisode}
-                    className="h-9 px-3 cursor-pointer bg-primary text-primary-foreground hover:bg-primary/90 font-medium rounded-md transition-colors"
+                    className="h-9 px-my-12 cursor-pointer bg-primary text-primary-foreground hover:bg-primary/90 font-medium rounded-md transition-colors"
                   >
                     새 에피소드
                   </button>
@@ -338,7 +338,7 @@ export default function EpisodeManagementPage() {
 
               {/* 정책 14, 15: 빈 화면 배너 또는 리스트/페이지네이션 */}
               {showEmptyBanner ? (
-                <div className="w-full px-5">
+                <div className="w-full px-my-20">
                   <EmptyStateBanner />
                 </div>
               ) : (

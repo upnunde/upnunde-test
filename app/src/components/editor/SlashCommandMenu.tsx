@@ -181,7 +181,7 @@ export function SlashCommandMenu({
         onClick={onClose}
       />
       <div
-        className="fixed z-50 min-w-[200px] rounded-lg border border-border-10 bg-white py-1 shadow-lg"
+        className="fixed z-50 min-w-[200px] rounded-lg border border-border-10 bg-white py-my-4 shadow-elevation-40"
         style={{ top: adjustedPosition.top, left: adjustedPosition.left }}
         role="listbox"
       >
@@ -197,7 +197,7 @@ export function SlashCommandMenu({
               role="option"
               aria-selected={false}
               className={cn(
-                "flex w-full cursor-pointer items-center gap-2 px-3 py-2 text-left text-sm",
+                "flex w-full cursor-pointer items-center gap-my-8 px-my-12 py-my-8 text-left text-body3_400",
                 "hover:bg-surface-20 focus:bg-surface-20 focus:outline-none",
               )}
               onClick={() => {

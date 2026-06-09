@@ -44,12 +44,13 @@ export function AnalyticsScopeDropdown({
           variant="default"
           corner="square"
           size="l"
-          className={cn("max-w-[280px] justify-between gap-1", className)}
+          icon
+          trailingIcon={<ChevronDown className="size-my-20 shrink-0 text-current" />}
+          className={cn("max-w-[280px]", className)}
           aria-label={`${ariaLabelPrefix} — ${label}`}
           title={label}
         >
           <span className="min-w-0 max-w-[240px] truncate">{label}</span>
-          <ChevronDown className="h-5 w-5 shrink-0 text-current" aria-hidden />
         </Chip>
       </DropdownMenuTrigger>
       <DropdownMenuContent align={align} className="min-w-[220px]">

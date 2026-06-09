@@ -11,6 +11,7 @@ import {
 } from "@/components/ui/dropdown-menu";
 import type { Episode, EpisodeStatus } from "@/types/episode";
 import { formatViews, formatDateOrRelative } from "@/lib/formatEpisode";
+import { THUMBNAIL_DIM_OVERLAY_CLASS } from "@/lib/thumbnail-styles";
 import { cn } from "@/lib/utils";
 
 const ACTION_ICON_BUTTON_BASE =
@@ -82,16 +83,16 @@ export function EpisodeListItem({
           onRowClick?.(episode);
         }
       }}
-      className="flex items-center border-b border-divider-10 px-5 py-3 transition-colors hover:bg-surface-20 last:border-b-0 cursor-pointer"
+      className="flex items-center border-b border-divider-10 px-my-20 py-my-12 transition-colors hover:bg-surface-20 last:border-b-0 cursor-pointer"
       aria-labelledby={`episode-title-${episode.id}`}
     >
       {/* 회차 */}
-      <div className="w-20 shrink-0 text-sm text-on-surface-20" aria-hidden>
+      <div className="w-20 shrink-0 text-body3_400 text-on-surface-20" aria-hidden>
         {episode.episodeNumber}화
       </div>
 
       {/* 썸네일 & 제목 */}
-      <div className="flex min-w-0 flex-1 items-center gap-4">
+      <div className="flex min-w-0 flex-1 items-center gap-my-16">
         <div className="relative h-[107px] w-[60px] shrink-0 overflow-hidden rounded border border-border-10 bg-slate-200">
           <Image
             src={episode.thumbnail}
@@ -100,29 +101,30 @@ export function EpisodeListItem({
             sizes="60px"
             className="object-cover"
           />
+          <div className={THUMBNAIL_DIM_OVERLAY_CLASS} aria-hidden />
         </div>
         <span
           id={`episode-title-${episode.id}`}
-          className="truncate text-base font-medium text-on-surface-10"
+          className="truncate text-body1_500 text-on-surface-10"
         >
           {episode.title}
         </span>
       </div>
 
       {/* 개시일 (정책 12: YYYY.MM.DD) */}
-      <div className="w-32 shrink-0 px-0 text-sm text-on-surface-20">{dateDisplay}</div>
+      <div className="w-32 shrink-0 px-0 text-body3_400 text-on-surface-20">{dateDisplay}</div>
 
       {/* 조회수 (정책 5: 실시간 표기) */}
-      <div className="w-24 shrink-0 px-0 text-sm text-on-surface-30">{viewsDisplay}</div>
+      <div className="w-24 shrink-0 px-0 text-body3_400 text-on-surface-30">{viewsDisplay}</div>
 
       {/* 공개여부 */}
-      <div className={cn("w-24 shrink-0 px-0 text-sm", STATUS_TEXT_CLASS[status])}>
+      <div className={cn("w-24 shrink-0 px-0 text-body3_400", STATUS_TEXT_CLASS[status])}>
         {STATUS_LABEL[status]}
       </div>
 
       {/* 작업 버튼 영역 - 클릭 시 행 클릭 전파 방지 */}
       <div
-        className="flex w-48 shrink-0 items-center justify-end gap-2 px-0"
+        className="flex w-48 shrink-0 items-center justify-end gap-my-8 px-0"
         onClick={(e) => e.stopPropagation()}
       >
         {status === "DRAFT" && (
@@ -151,7 +153,7 @@ export function EpisodeListItem({
             <button
               type="button"
               onClick={() => onPublish?.(episode)}
-              className="h-8 shrink-0 cursor-pointer rounded-md border border-primary px-3 text-sm font-medium text-primary transition-colors hover:bg-primary/10 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-2"
+              className="h-8 shrink-0 cursor-pointer rounded-md border border-primary px-my-12 text-body3_500 text-primary transition-colors hover:bg-primary/10 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-2"
             >
               공개로 전환
             </button>
@@ -185,17 +187,17 @@ export function EpisodeListItem({
             </DropdownMenuTrigger>
           <DropdownMenuContent
               align="end"
-              className="w-48 rounded-lg border border-border-10 bg-white p-1"
+              className="w-48 rounded-lg border border-border-10 bg-white p-my-4"
             >
               <DropdownMenuItem
-                className="flex cursor-pointer items-center gap-2 rounded-md px-3 py-2.5 text-sm text-on-surface-20 outline-none hover:bg-surface-20"
+                className="flex cursor-pointer items-center gap-my-8 rounded-md px-my-12 py-my-8 text-body3_400 text-on-surface-20 outline-none hover:bg-surface-20"
                 onSelect={() => onLinkEditor?.(episode)}
               >
                 <FileText className="h-4 w-4 shrink-0 text-on-surface-30" aria-hidden />
                 에피소드 상세
               </DropdownMenuItem>
               <DropdownMenuItem
-                className="flex cursor-pointer items-center gap-2 rounded-md px-3 py-2.5 text-sm text-on-surface-20 outline-none hover:bg-surface-20"
+                className="flex cursor-pointer items-center gap-my-8 rounded-md px-my-12 py-my-8 text-body3_400 text-on-surface-20 outline-none hover:bg-surface-20"
                 onSelect={() => onInquiry?.(episode)}
               >
                 <Mail className="h-4 w-4 shrink-0 text-on-surface-30" aria-hidden />

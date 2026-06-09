@@ -17,7 +17,7 @@ export function Toaster({ className }: { className?: string }) {
   return (
     <div
       className={cn(
-        "fixed left-1/2 z-50 flex w-full max-w-[420px] -translate-x-1/2 flex-col gap-[16px] px-4",
+        "fixed left-1/2 z-50 flex w-full max-w-[420px] -translate-x-1/2 flex-col gap-my-16 px-my-16",
         "bottom-[40px]",
         className
       )}

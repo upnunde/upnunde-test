@@ -127,28 +127,28 @@ export function BgmListItem({
   const actionsAlwaysVisible = alwaysShowActions || (showSelectedCheck && !isHovered);
   const actionsClass = hasActions
     ? actionsAlwaysVisible
-      ? "flex items-center gap-1 shrink-0"
-      : "flex items-center gap-1 shrink-0 opacity-0 transition-opacity group-hover:opacity-100 hover:opacity-100"
+      ? "flex items-center gap-my-4 shrink-0"
+      : "flex items-center gap-my-4 shrink-0 opacity-0 transition-opacity group-hover:opacity-100 hover:opacity-100"
     : "hidden";
 
   return (
     <div
-      className="group w-full self-stretch pl-3 pr-3 pt-2 pb-2 rounded-[4px] inline-flex justify-center items-center gap-1 overflow-visible flex-col h-fit transition-colors cursor-pointer hover:bg-surface-20"
+      className="group w-full self-stretch pl-my-12 pr-my-12 pt-my-8 pb-my-8 rounded-[4px] inline-flex justify-center items-center gap-my-4 overflow-visible flex-col h-fit transition-colors cursor-pointer hover:bg-surface-20"
       onMouseEnter={() => setIsHovered(true)}
       onMouseLeave={() => setIsHovered(false)}
     >
       <div className="self-stretch flex flex-col gap-0 min-w-0 h-fit">
-        <div className="self-stretch inline-flex justify-center items-start gap-1 min-h-9 flex-shrink-0">
+        <div className="self-stretch inline-flex justify-center items-start gap-my-4 min-h-9 flex-shrink-0">
           {variant === "default" && index != null && (
-            <span className="shrink-0 w-6 text-on-surface-10 text-sm font-medium font-['Pretendard_JP'] leading-5 tabular-nums">
+            <span className="shrink-0 w-6 text-on-surface-10 text-body3_500 font-['Pretendard_JP'] tabular-nums">
               {index}
             </span>
           )}
-          <div className="flex-1 min-w-0 inline-flex flex-col justify-start items-start gap-0.5">
-            <div className="self-stretch justify-center text-on-surface-10 text-sm font-medium font-['Pretendard_JP'] leading-5 truncate">
+          <div className="flex-1 min-w-0 inline-flex flex-col justify-start items-start gap-my-2">
+            <div className="self-stretch justify-center text-on-surface-10 text-body3_500 font-['Pretendard_JP'] truncate">
               {item.title}
             </div>
-            <div className="self-stretch justify-center text-on-surface-30 text-[13px] font-normal font-['Pretendard_JP'] leading-4">
+            <div className="self-stretch justify-center text-on-surface-30 text-body4_400 font-['Pretendard_JP']">
               {timeLabel}
             </div>
           </div>
@@ -248,7 +248,7 @@ export function BgmListItem({
             aria-valuemax={showExpandedTime ? totalSeconds : undefined}
             aria-valuenow={showExpandedTime ? currentTime : undefined}
             tabIndex={showExpandedTime && onSeek ? 0 : undefined}
-            className={`self-stretch flex-shrink-0 min-w-0 rounded-full overflow-hidden touch-none select-none relative h-fit py-2 ${
+            className={`self-stretch flex-shrink-0 min-w-0 rounded-full overflow-hidden touch-none select-none relative h-fit py-my-8 ${
               onSeek ? "cursor-pointer" : ""
             }`}
             onClick={

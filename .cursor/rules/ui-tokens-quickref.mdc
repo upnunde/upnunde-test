@@ -1,0 +1,41 @@
+---
+description: 일상 UI 작업용 디자인 토큰 빠른 참조. 대량 치환은 migrate:tokens 사용.
+globs: app/src/**/*.tsx,app/src/**/*.ts,app/src/app/globals.css
+alwaysApply: false
+---
+
+# UI 토큰 빠른 참조
+
+정본: `docs/design-system.md` §0(자동 치환)·§3(매핑표). **수동 감각 치환 금지.**
+
+## 일괄 치환 (AI 대신 스크립트)
+
+```bash
+cd app && npm run migrate:tokens          # dry-run
+cd app && npm run migrate:tokens -- --write
+```
+
+규칙 소스: `app/scripts/lib/token-migrate-rules.mjs`
+
+## 자주 쓰는 매핑
+
+| 레거시 | 토큰 |
+|--------|------|
+| `px-5` / `p-5` | `px-my-20` / `p-my-20` |
+| `gap-4` | `gap-my-16` |
+| `gap-2` | `gap-my-8` |
+| `text-sm` + 굵기 | `text-body3_400` / `text-body3_500` |
+| `text-base font-bold` | `text-body1_700` |
+| `text-xs` | `text-caption1_400` |
+| `shadow-sm` / 임의 shadow | `shadow-elevation-10` 등 (§3-4) |
+| `rounded-md` on 카드·패널·모달 컨테이너 | `rounded-[4px]` |
+| `[8px]` | `my-8` · `[20px]` | `my-20` |
+
+## 1차 소스 (여기 먼저 맞춤)
+
+`ui/button`, `chip-styles.ts`, `modal-styles.ts`, `page-layout.ts`, `form-field-styles.ts`, `thumbnail-styles.ts`
+
+## 피드백·카피
+
+- 완료 → 스낵바 · 확인 필요(삭제·이탈) → 모달
+- 카피: "~해 주세요", "~했어요"

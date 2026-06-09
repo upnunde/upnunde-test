@@ -270,12 +270,12 @@ export function EditorSubHeader({
 
   return (
     <>
-      <header className="mx-auto flex h-16 w-full min-w-[800px] shrink-0 items-center justify-between px-5">
-        <div className="flex items-center gap-3">
+      <header className="mx-auto flex h-16 w-full min-w-[800px] shrink-0 items-center justify-between px-my-20">
+        <div className="flex items-center gap-my-12">
           <HeaderBackButton onClick={handleBack} />
           <div className="flex flex-col justify-center">
-            <div className="flex items-center gap-2">
-              <h1 className="text-2xl font-bold text-on-surface-10">{title}</h1>
+            <div className="flex items-center gap-my-8">
+              <h1 className="text-heading2_700 text-on-surface-10">{title}</h1>
               {onEditEpisodeInfo ? (
                 <Button
                   type="button"
@@ -290,11 +290,11 @@ export function EditorSubHeader({
               ) : null}
             </div>
             {subtitle ? (
-              <p className="text-sm text-on-surface-30 leading-5">{subtitle}</p>
+              <p className="text-body3_400 text-on-surface-30">{subtitle}</p>
             ) : null}
           </div>
         </div>
-        <div className="flex items-center gap-2">
+        <div className="flex items-center gap-my-8">
           <Popover
             open={historyOpen}
             onOpenChange={(open) => {
@@ -321,25 +321,25 @@ export function EditorSubHeader({
             <PopoverContent
               align="end"
               sideOffset={8}
-              className="w-[min(100vw-2rem,280px)] max-w-[280px] rounded-lg border border-border-10 p-0 shadow-lg"
+              className="w-[min(100vw-2rem,280px)] max-w-[280px] rounded-lg border border-border-10 p-0 shadow-elevation-40"
             >
-              <div className="px-3 pt-4 pb-1">
-                <p className="text-sm font-medium text-on-surface-30">히스토리</p>
+              <div className="px-my-12 pt-my-16 pb-my-4">
+                <p className="text-body3_500 text-on-surface-30">히스토리</p>
               </div>
-              <div className="max-h-[min(40vh,280px)] overflow-y-auto px-2 pb-1">
-                <ul className="flex flex-col gap-0.5">
+              <div className="max-h-[min(40vh,280px)] overflow-y-auto px-my-8 pb-my-4">
+                <ul className="flex flex-col gap-my-2">
                   {historyListItems.map((entry) => (
                     <li key={entry.id}>
                       <div
                         className={cn(
-                          "group relative flex min-h-9 items-center justify-between gap-2 rounded-md px-2 py-2",
+                          "group relative flex min-h-9 items-center justify-between gap-my-8 rounded-md px-my-8 py-my-8",
                           "hover:bg-surface-20"
                         )}
                       >
                         {historyOpen && newHistoryEntryId === entry.id ? (
                           <HistoryNewDot className="top-1.5 left-1.5" />
                         ) : null}
-                        <div className="min-w-0 flex items-center gap-2 text-sm font-medium">
+                        <div className="min-w-0 flex items-center gap-my-8 text-body3_500">
                           <div className="text-on-surface-10">
                             {formatScriptHistoryTimestamp(entry.savedAt)}
                           </div>
@@ -354,7 +354,7 @@ export function EditorSubHeader({
                           title="이 시점의 원고 불러오기"
                           onClick={() => handleHistoryLoadClick(entry.id)}
                           className={cn(
-                            "h-7 shrink-0 bg-white px-2 text-xs font-medium text-on-surface-10 shadow-none disabled:border-border-20",
+                            "h-7 shrink-0 bg-white px-my-8 text-caption1_500 text-on-surface-10 shadow-none disabled:border-border-20",
                             "opacity-0 pointer-events-none transition-opacity",
                             "group-hover:opacity-100 group-hover:pointer-events-auto",
                             "[@media(hover:none)]:opacity-100 [@media(hover:none)]:pointer-events-auto",
@@ -367,12 +367,12 @@ export function EditorSubHeader({
                   ))}
                 </ul>
               </div>
-              <div className="border-t border-border-10 px-2 py-2.5">
+              <div className="border-t border-border-10 px-my-8 py-my-8">
                 <Button
                   type="button"
                   variant="ghost"
                   size="sm"
-                  className="h-8 px-3 text-sm font-medium text-primary hover:bg-accent hover:text-primary"
+                  className="h-8 px-my-12 text-body3_500 text-primary hover:bg-accent hover:text-primary"
                   onClick={handleRecreate}
                 >
                   다시 만들기

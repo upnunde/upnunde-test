@@ -41,13 +41,13 @@ export function EpisodeList({
       }
     >
       {/* Table Header */}
-      <div className="h-[42px] border-b border-divider-10 flex items-center px-5 bg-white rounded-t-[4px] shrink-0">
-        <div className="w-20 text-xs text-on-surface-30">회차</div>
-        <div className="flex-1 px-0 text-xs text-on-surface-30">제목</div>
-        <div className="w-32 px-0 text-xs text-on-surface-30">개시일</div>
-        <div className="w-24 px-0 text-xs text-on-surface-30">조회수</div>
-        <div className="w-24 px-0 text-xs text-on-surface-30">공개여부</div>
-        <div className="w-48 px-0 text-xs text-on-surface-30 text-right">작업</div>
+      <div className="h-[42px] border-b border-divider-10 flex items-center px-my-20 bg-white rounded-t-[4px] shrink-0">
+        <div className="w-20 text-caption1_400 text-on-surface-30">회차</div>
+        <div className="flex-1 px-0 text-caption1_400 text-on-surface-30">제목</div>
+        <div className="w-32 px-0 text-caption1_400 text-on-surface-30">개시일</div>
+        <div className="w-24 px-0 text-caption1_400 text-on-surface-30">조회수</div>
+        <div className="w-24 px-0 text-caption1_400 text-on-surface-30">공개여부</div>
+        <div className="w-48 px-0 text-caption1_400 text-on-surface-30 text-right">작업</div>
       </div>
 
       {/* Table Body */}

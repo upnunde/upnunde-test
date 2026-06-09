@@ -21,13 +21,13 @@ export function ModalConfirmPhraseField({
   className,
 }: ModalConfirmPhraseFieldProps) {
   return (
-    <div className={cn("w-full bg-surface-10 px-6 py-2", className)}>
-      <div className="flex flex-col gap-2.5">
-        <p className="text-sm font-medium leading-5 text-on-surface-20">
+    <div className={cn("w-full bg-surface-10 px-my-24 py-my-8", className)}>
+      <div className="flex flex-col gap-my-8">
+        <p className="text-body3_500 text-on-surface-20">
           위 내용에 동의하시면 <span className="text-primary">{`‘${CONFIRM_INPUT_PHRASE}’`}</span>를 입력해
           주세요.
         </p>
-        <div className="flex flex-col items-stretch gap-2 rounded">
+        <div className="flex flex-col items-stretch gap-my-8 rounded">
           <Input
             id={inputId}
             type="text"
@@ -36,10 +36,10 @@ export function ModalConfirmPhraseField({
             placeholder={CONFIRM_INPUT_PHRASE}
             value={value}
             onChange={(e) => onChange(e.target.value)}
-            className="px-4 text-base leading-6 shadow-none placeholder:text-on-surface-disabled"
+            className="px-my-16 text-body1_400 shadow-none placeholder:text-on-surface-disabled"
           />
-          <div className="inline-flex items-center justify-end gap-2 self-stretch">
-            <p className="text-right text-xs font-normal leading-4 text-on-surface-30">
+          <div className="inline-flex items-center justify-end gap-my-8 self-stretch">
+            <p className="text-right text-caption1_400 text-on-surface-30">
               {value.length}/{maxLength}
             </p>
           </div>

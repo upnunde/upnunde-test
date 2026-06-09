@@ -17,11 +17,11 @@ export function ProfileSettingsTabBar({
   onTabChange: (tab: ProfileSettingsTabId) => void;
 }) {
   return (
-    <div className="inline-flex w-full flex-col items-start justify-start gap-2.5 self-stretch border-b border-border-10 px-5 pb-0 pt-2">
+    <div className="inline-flex w-full flex-col items-start justify-start gap-my-8 self-stretch border-b border-border-10 px-my-20 pb-0 pt-my-8">
       <div
         role="tablist"
         aria-label="내 정보 관리 탭"
-        className="inline-flex w-full items-center gap-4 overflow-hidden"
+        className="inline-flex w-full items-center gap-my-16 overflow-hidden"
       >
         {TABS.map(({ id, label }) => (
           <button

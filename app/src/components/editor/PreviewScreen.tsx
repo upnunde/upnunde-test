@@ -213,10 +213,10 @@ export function PreviewScreen(props: PreviewScreenProps = {}) {
       {/* Top-left badge: current top_desc (from state up to focused block) */}
       {currentTopDesc && (
         <div
-          className="absolute left-3 top-10 z-20 max-w-[calc(100%-24px)] rounded-lg border border-white/20 bg-black/60 px-3 py-2 backdrop-blur-sm"
+          className="absolute left-3 top-10 z-20 max-w-[calc(100%-24px)] rounded-lg border border-white/20 bg-black/60 px-my-12 py-my-8 backdrop-blur-sm"
           role="status"
         >
-          <p className="text-xs leading-relaxed text-white/95">
+          <p className="text-caption1_400 text-white/95">
             {currentTopDesc}
           </p>
         </div>
@@ -225,7 +225,7 @@ export function PreviewScreen(props: PreviewScreenProps = {}) {
       {/* Optional: BGM label (state persisted for future audio playback) */}
       {displayBgm && (
         <div
-          className="absolute right-3 top-10 z-20 rounded-lg border border-white/20 bg-black/60 px-2 py-1 text-[11px] text-white/80"
+          className="absolute right-3 top-10 z-20 rounded-lg border border-white/20 bg-black/60 px-my-8 py-my-4 text-caption2_400 text-white/80"
           role="status"
           aria-label={`BGM: ${displayBgm}`}
         >
@@ -265,20 +265,20 @@ export function PreviewScreen(props: PreviewScreenProps = {}) {
       {currentDialogue && (
         <div
           className={cn(
-            "absolute bottom-0 left-0 right-0 z-20 mx-3 mb-3 rounded-xl",
+            "absolute bottom-0 left-0 right-0 z-20 mx-3 mb-3 rounded-[4px]",
             "bg-black/75 backdrop-blur-sm",
             "border-2 border-white/20"
           )}
         >
           {currentSpeaker && currentSpeaker !== "나레이션" && (
-            <div className="border-b border-white/10 px-4 py-2">
-              <span className="text-sm font-medium text-amber-300/95">
+            <div className="border-b border-white/10 px-my-16 py-my-8">
+              <span className="text-body3_500 text-amber-300/95">
                 {currentSpeaker}
               </span>
             </div>
           )}
-          <div className="min-h-[64px] px-4 py-3">
-            <p className="text-white/95 text-sm leading-relaxed whitespace-pre-wrap">
+          <div className="min-h-[64px] px-my-16 py-my-12">
+            <p className="text-white/95 text-body3_400 whitespace-pre-wrap">
               {currentDialogue}
             </p>
           </div>
@@ -289,21 +289,21 @@ export function PreviewScreen(props: PreviewScreenProps = {}) {
       {currentChoices.length > 0 && (
         <div
           className={cn(
-            "absolute bottom-0 left-0 right-0 z-20 mx-3 mb-3 rounded-xl",
+            "absolute bottom-0 left-0 right-0 z-20 mx-3 mb-3 rounded-[4px]",
             "bg-black/75 backdrop-blur-sm",
-            "border-2 border-white/20 p-2"
+            "border-2 border-white/20 p-my-8"
           )}
         >
-          <div className="mb-2 px-2 text-[11px] font-medium tracking-wide text-white/70">
+          <div className="mb-2 px-my-8 text-caption2_500 tracking-wide text-white/70">
             선택지
           </div>
-          <div className="flex flex-col gap-2">
+          <div className="flex flex-col gap-my-8">
             {currentChoices.map((choice, idx) => (
               <div
                 key={choice.id || `${choice.text}-${idx}`}
-                className="rounded-lg border border-white/15 bg-white/10 px-3 py-2"
+                className="rounded-lg border border-white/15 bg-white/10 px-my-12 py-my-8"
               >
-                <div className="flex items-center gap-2">
+                <div className="flex items-center gap-my-8">
                   {choice.isPaid && (
                     <Image
                       src={dummyAsset("choice-paid-icon.png")}
@@ -313,7 +313,7 @@ export function PreviewScreen(props: PreviewScreenProps = {}) {
                       className="h-4 w-4 shrink-0"
                     />
                   )}
-                  <p className="text-sm leading-relaxed text-white/95">
+                  <p className="text-body3_400 text-white/95">
                     {choice.isAiMode
                       ? "✨ AI 모드로 직접 대화"
                       : (choice.text?.trim() || `선택 ${idx + 1}`)}

@@ -1,13 +1,13 @@
 "use client";
 
 const containerClassName =
-  "flex flex-col items-center justify-center gap-3 w-full min-h-[241px] rounded-[4px] border-2 border-dashed border-border-10 bg-surface-20/50";
+  "flex flex-col items-center justify-center gap-my-12 w-full min-h-[241px] rounded-[4px] border-2 border-dashed border-border-10 bg-surface-20/50";
 
 const primaryActionClassName =
-  "inline-flex items-center gap-2 rounded-md bg-slate-800 px-4 py-2 text-sm font-medium text-white hover:bg-slate-700 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-2";
+  "inline-flex items-center gap-my-8 rounded-md bg-slate-800 px-my-16 py-my-8 text-body3_500 text-white hover:bg-slate-700 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-2";
 
 const secondaryActionClassName =
-  "inline-flex items-center gap-2 rounded-md border border-border-20 bg-white px-4 py-2 text-sm font-medium text-on-surface-20 hover:bg-surface-20 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-2 disabled:border-border-20";
+  "inline-flex items-center gap-my-8 rounded-md border border-border-20 bg-white px-my-16 py-my-8 text-body3_500 text-on-surface-20 hover:bg-surface-20 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-2 disabled:border-border-20";
 
 export interface WorksEmptyCreateButtonProps {
   hint: string;
@@ -32,8 +32,8 @@ export function WorksEmptyCreateButton({
   if (hasSecondary) {
     return (
       <div className={containerClassName}>
-        <span className="text-sm text-on-surface-30">{hint}</span>
-        <div className="flex flex-wrap items-center justify-center gap-2">
+        <span className="text-body3_400 text-on-surface-30">{hint}</span>
+        <div className="flex flex-wrap items-center justify-center gap-my-8">
           <button type="button" onClick={onClick} className={primaryActionClassName}>
             {actionLabel}
           </button>
@@ -51,7 +51,7 @@ export function WorksEmptyCreateButton({
       onClick={onClick}
       className={`${containerClassName} cursor-pointer hover:bg-surface-20 transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-2`}
     >
-      <span className="text-sm text-on-surface-30">{hint}</span>
+      <span className="text-body3_400 text-on-surface-30">{hint}</span>
       <span className={primaryActionClassName}>{actionLabel}</span>
     </button>
   );

@@ -87,9 +87,9 @@ function LineIcon({ className }: { className?: string }) {
 /** 구분선: 선-텍스트-선 (Flexbox) */
 function Divider({ label = "또는" }: { label?: string }) {
   return (
-    <div className="flex w-full items-center gap-4" role="separator" aria-label={label}>
+    <div className="flex w-full items-center gap-my-16" role="separator" aria-label={label}>
       <div className="h-px flex-1 bg-border-20" />
-      <span className="text-xs text-on-surface-30">{label}</span>
+      <span className="text-caption1_400 text-on-surface-30">{label}</span>
       <div className="h-px flex-1 bg-border-20" />
     </div>
   );
@@ -112,10 +112,10 @@ export function LoginPage() {
   };
 
   return (
-    <div className="relative flex min-h-screen min-w-0 flex-col items-center justify-center bg-background-10 px-4 py-8">
+    <div className="relative flex min-h-screen min-w-0 flex-col items-center justify-center bg-background-10 px-my-16 py-my-32">
       {/* 중앙 콘텐츠: 열 방향 Flexbox */}
-      <main className="flex w-full max-w-[400px] flex-col items-center gap-6">
-        <div className="flex w-full flex-col items-center gap-3 pb-4">
+      <main className="flex w-full max-w-[400px] flex-col items-center gap-my-24">
+        <div className="flex w-full flex-col items-center gap-my-12 pb-my-16">
           <Image
             src={dummyAsset("renovel-studio-logo.png")}
             alt="RE:NOVEL Studio"
@@ -124,14 +124,14 @@ export function LoginPage() {
             priority
             className="h-9 w-auto"
           />
-          <h1 className="text-center text-[32px] font-bold text-foreground">
+          <h1 className="text-center text-heading1_700 text-foreground">
             로그인
           </h1>
         </div>
 
         <form
           onSubmit={handleSubmit}
-          className="flex w-full flex-col items-stretch gap-3"
+          className="flex w-full flex-col items-stretch gap-my-12"
           noValidate
         >
           <label htmlFor="login-email" className="sr-only">
@@ -160,15 +160,15 @@ export function LoginPage() {
 
         <Divider />
 
-        <div className="flex w-full flex-col items-stretch gap-3">
+        <div className="flex w-full flex-col items-stretch gap-my-12">
           {/* Google + 툴팁 (최근 로그인 계정) */}
           <div className="relative">
             <button
               type="button"
-              className="relative flex w-full cursor-pointer items-center justify-center gap-2 rounded-full border border-border bg-surface-10 px-4 h-[42px] text-sm font-medium text-on-surface-10 hover:bg-accent focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
+              className="relative flex w-full cursor-pointer items-center justify-center gap-my-8 rounded-full border border-border bg-surface-10 px-my-16 h-[42px] text-body3_500 text-on-surface-10 hover:bg-accent focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
               aria-label="Google로 계속하기"
             >
-              <span className="absolute -top-8 left-1/2 -translate-x-1/2 rounded bg-on-surface-10 px-2 py-1 text-xs font-medium text-surface-10 before:absolute before:left-1/2 before:top-full before:-translate-x-1/2 before:border-4 before:border-transparent before:border-t-on-surface-10">
+              <span className="absolute -top-8 left-1/2 -translate-x-1/2 rounded bg-on-surface-10 px-my-8 py-my-4 text-caption1_500 text-surface-10 before:absolute before:left-1/2 before:top-full before:-translate-x-1/2 before:border-4 before:border-transparent before:border-t-on-surface-10">
                 최근 로그인 계정
               </span>
               <GoogleIcon />
@@ -178,7 +178,7 @@ export function LoginPage() {
 
           <button
             type="button"
-            className="flex w-full cursor-pointer items-center justify-center gap-2 rounded-full border border-border bg-surface-10 px-4 h-[42px] text-sm font-medium text-on-surface-10 hover:bg-accent focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
+            className="flex w-full cursor-pointer items-center justify-center gap-my-8 rounded-full border border-border bg-surface-10 px-my-16 h-[42px] text-body3_500 text-on-surface-10 hover:bg-accent focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
             aria-label="Apple로 계속하기"
           >
             <AppleIcon className="text-on-surface-10" />
@@ -187,7 +187,7 @@ export function LoginPage() {
 
           <button
             type="button"
-            className="flex w-full cursor-pointer items-center justify-center gap-2 rounded-full border border-border bg-surface-10 px-4 h-[42px] text-sm font-medium text-on-surface-10 hover:bg-accent focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
+            className="flex w-full cursor-pointer items-center justify-center gap-my-8 rounded-full border border-border bg-surface-10 px-my-16 h-[42px] text-body3_500 text-on-surface-10 hover:bg-accent focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
             aria-label="X로 계속하기"
           >
             <XIcon />
@@ -196,7 +196,7 @@ export function LoginPage() {
 
           <button
             type="button"
-            className="flex w-full cursor-pointer items-center justify-center gap-2 rounded-full border border-border bg-surface-10 px-4 h-[42px] text-sm font-medium text-on-surface-10 hover:bg-accent focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
+            className="flex w-full cursor-pointer items-center justify-center gap-my-8 rounded-full border border-border bg-surface-10 px-my-16 h-[42px] text-body3_500 text-on-surface-10 hover:bg-accent focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
             aria-label="LINE으로 계속하기"
           >
             <LineIcon />
@@ -204,7 +204,7 @@ export function LoginPage() {
           </button>
         </div>
 
-        <p className="text-center text-sm text-muted-foreground">
+        <p className="text-center text-body3_400 text-muted-foreground">
           계정이 없으신가요?{" "}
           <Link
             href="/signup"
@@ -219,17 +219,17 @@ export function LoginPage() {
       <button
         type="button"
         onClick={() => setInquiryOpen(true)}
-        className="absolute bottom-8 right-8 cursor-pointer rounded-md border border-border bg-surface-10 px-4 py-2 text-sm font-medium text-on-surface-10 hover:bg-accent focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
+        className="absolute bottom-8 right-8 cursor-pointer rounded-md border border-border bg-surface-10 px-my-16 py-my-8 text-body3_500 text-on-surface-10 hover:bg-accent focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
       >
         문의하기
       </button>
 
       <Dialog open={inquiryOpen} onOpenChange={setInquiryOpen}>
         <DialogContent
-          className="flex max-h-[min(90vh,calc(100vh-160px))] min-h-0 w-full min-w-[480px] max-w-[640px] flex-col gap-0 overflow-hidden rounded-[4px] border border-slate-200 bg-white px-0 pt-2 pb-0 shadow-none"
+          className="flex max-h-[min(90vh,calc(100vh-160px))] min-h-0 w-full min-w-[480px] max-w-[640px] flex-col gap-0 overflow-hidden rounded-[4px] border border-slate-200 bg-white px-0 pt-my-8 pb-0 shadow-none"
           aria-describedby={undefined}
         >
-          <DialogHeader className="shrink-0 flex flex-col justify-center items-start gap-0 border-none p-0 px-5 pt-2 pb-2">
+          <DialogHeader className="shrink-0 flex flex-col justify-center items-start gap-0 border-none p-0 px-my-20 pt-my-8 pb-my-8">
             <Title2 text="문의" showDot={false} showGuide={false} subtitle={false} />
           </DialogHeader>
           <InquiryForm
@@ -241,7 +241,7 @@ export function LoginPage() {
               setSnackbar({ open: true, message: "문의내용을 전달하였습니다" });
             }}
             onCancel={() => setInquiryOpen(false)}
-            className="flex flex-col gap-10 px-5 pt-5 pb-5"
+            className="flex flex-col gap-my-40 px-my-20 pt-my-20 pb-my-20"
             rootClassName="min-h-0 flex-1 flex-col"
           />
         </DialogContent>

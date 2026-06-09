@@ -10,8 +10,8 @@ interface SeriesPreviewPanelProps {
 
 export function SeriesPreviewPanel({ coverPreviewUrl, logoPreviewUrl }: SeriesPreviewPanelProps) {
   return (
-    <div className="w-[300px] shrink-0 flex flex-col gap-3">
-      <p className="text-base font-medium text-on-surface-20">미리보기</p>
+    <div className="w-[300px] shrink-0 flex flex-col gap-my-12">
+      <p className="text-body1_500 text-on-surface-20">미리보기</p>
       <div className="w-full flex justify-center">
         <IPhone15ProFrame>
           <div className="relative w-full h-full">

@@ -26,7 +26,7 @@ export interface SidebarListProps {
 }
 
 const DEFAULT_ITEM_CLASS =
-  "flex w-full cursor-pointer items-center gap-3 rounded-md px-3 py-2.5 text-sm font-medium transition-colors outline-none focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-2";
+  "flex w-full cursor-pointer items-center gap-my-12 rounded-md px-my-12 py-my-8 text-body3_500 transition-colors outline-none focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-2";
 const DEFAULT_ACTIVE_CLASS = "text-primary";
 const DEFAULT_INACTIVE_CLASS = "text-on-surface-20 hover:bg-surface-20";
 
@@ -46,7 +46,7 @@ export function SidebarList({
 }: SidebarListProps) {
   return (
     <ul
-      className={listClassName ?? "flex flex-col gap-1"}
+      className={listClassName ?? "flex flex-col gap-my-4"}
       role="list"
       aria-label={ariaLabel}
     >
@@ -77,7 +77,7 @@ export function SidebarList({
                   {item.icon}
                 </span>
               )}
-              <span className="text-[15px] font-medium">{item.label}</span>
+              <span className="text-body2_500">{item.label}</span>
             </button>
           </li>
         );

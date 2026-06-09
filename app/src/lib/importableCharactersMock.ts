@@ -67,6 +67,28 @@ export const DEFAULT_RESOURCE_SOURCE_SERIES = {
   title: "꽃에게는 독이 필요하다",
 } as const;
 
+/** 불러오기 중복 판별용 — `seriesId:resourceCharacterId` */
+export function importedResourceKey(seriesId: string, resourceCharacterId: string): string {
+  return `${seriesId}:${resourceCharacterId}`;
+}
+
+/** 내 작품 목록에 이미 추가된 리소스 등장인물 키 (없으면 null) */
+export function importedResourceKeyFromCharacter(character: CharacterData): string | null {
+  if (!character.sourceSeries) return null;
+  const prefix = `resource-${character.sourceSeries.id}-`;
+  if (!character.id.startsWith(prefix)) return null;
+  return importedResourceKey(character.sourceSeries.id, character.id.slice(prefix.length));
+}
+
+export function collectImportedResourceKeys(characters: CharacterData[]): Set<string> {
+  const keys = new Set<string>();
+  for (const character of characters) {
+    const key = importedResourceKeyFromCharacter(character);
+    if (key) keys.add(key);
+  }
+  return keys;
+}
+
 /** 리소스 등장인물 → 내 작품 캐릭터 카드 */
 export function characterResourceToCharacterData(
   pick: ImportableCharacterPick & { sourceSeries?: CharacterSourceSeries }

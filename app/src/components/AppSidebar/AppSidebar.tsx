@@ -99,7 +99,7 @@ export default function AppSidebar({ defaultActiveId = "series", onSelect }: App
   }));
 
   return (
-    <nav className="shrink-0 flex h-full w-[240px] flex-col border-r border-border-10 bg-white py-4" aria-label="메인 메뉴">
+    <nav className="shrink-0 flex h-full w-[240px] flex-col border-r border-border-10 bg-white py-my-16" aria-label="메인 메뉴">
       <SidebarList
         items={sidebarListItems}
         activeId={activeId}
@@ -108,9 +108,9 @@ export default function AppSidebar({ defaultActiveId = "series", onSelect }: App
           if (!item) return;
           handleClick(item.id, item.path);
         }}
-        listClassName="flex flex-col gap-0 px-2"
+        listClassName="flex flex-col gap-0 px-my-8"
       />
-      <div className="mt-auto px-2">
+      <div className="mt-auto px-my-8">
         <SidebarList
           items={sidebarBottomItems}
           activeId={activeId}

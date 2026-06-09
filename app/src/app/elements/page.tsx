@@ -4,7 +4,8 @@ import React, { useState } from "react";
 import Header from "@/components/Header/Header";
 import AppSidebar from "@/components/AppSidebar/AppSidebar";
 import { Button } from "@/components/ui/button";
-import { FilterChip } from "@/components/ui/chip";
+import { Chip, FilterChip } from "@/components/ui/chip";
+import type { ChipVariantProps } from "@/lib/chip-styles";
 import { Input } from "@/components/ui/input";
 import {
   CHIP_COMPANION_CONTROL_CLASS,
@@ -30,10 +31,48 @@ const GENRE_LABELS = ["전체", "일상", "로맨스", "미스터리"] as const;
 
 function SpecRow({ label, children }: { label: string; children: React.ReactNode }) {
   return (
-    <section className="flex w-full max-w-[1200px] flex-col gap-3 rounded-[4px] border border-border-10 bg-white p-5">
-      <h2 className="text-base font-bold text-on-surface-10">{label}</h2>
+    <section className="flex w-full max-w-[1200px] flex-col gap-my-12 rounded-[4px] border border-border-10 bg-white p-my-20">
+      <h2 className="text-body1_700 text-on-surface-10">{label}</h2>
       {children}
     </section>
+  );
+}
+
+const CHIP_MATRIX_ROWS: {
+  label: string;
+  chipType: NonNullable<ChipVariantProps["chipType"]>;
+  variant: NonNullable<ChipVariantProps["variant"]>;
+  size: NonNullable<ChipVariantProps["size"]>;
+}[] = [
+  { label: "fill · activated · L", chipType: "fill", variant: "activated", size: "l" },
+  { label: "fill · default · L", chipType: "fill", variant: "default", size: "l" },
+  { label: "fill · activated · M", chipType: "fill", variant: "activated", size: "m" },
+  { label: "fill · default · M", chipType: "fill", variant: "default", size: "m" },
+  { label: "outline · activated · L", chipType: "outline", variant: "activated", size: "l" },
+  { label: "outline · default · L", chipType: "outline", variant: "default", size: "l" },
+  { label: "outline · activated · M", chipType: "outline", variant: "activated", size: "m" },
+  { label: "outline · default · M", chipType: "outline", variant: "default", size: "m" },
+];
+
+const CHIP_MATRIX_COLUMNS: {
+  label: string;
+  corner: NonNullable<ChipVariantProps["corner"]>;
+  icon: boolean;
+}[] = [
+  { label: "circle + icon", corner: "circle", icon: true },
+  { label: "circle", corner: "circle", icon: false },
+  { label: "square + icon", corner: "square", icon: true },
+  { label: "square", corner: "square", icon: false },
+];
+
+function ChipIconPlaceholder({ size }: { size: NonNullable<ChipVariantProps["size"]> }) {
+  return (
+    <span
+      className={cn(
+        "bg-current",
+        size === "l" ? "size-my-12" : "size-[10px]",
+      )}
+    />
   );
 }
 
@@ -50,13 +89,13 @@ export default function ElementsPage() {
         <AppSidebar defaultActiveId="guide" />
         <div className="flex min-w-0 flex-1 flex-col overflow-hidden">
           <main className="flex flex-1 flex-col overflow-hidden bg-surface-20">
-            <div className="flex h-16 shrink-0 items-center justify-center border-b border-border-10 bg-white px-5">
+            <div className="flex h-16 shrink-0 items-center justify-center border-b border-border-10 bg-white px-my-20">
               <div className="flex w-full max-w-[1200px] items-center justify-start">
-                <h1 className="text-2xl font-bold text-on-surface-10">UI 요소</h1>
+                <h1 className="text-heading2_700 text-on-surface-10">UI 요소</h1>
               </div>
             </div>
 
-            <div className={cn(PAGE_SCROLL_COLUMN_CLASS, "gap-5")}>
+            <div className={cn(PAGE_SCROLL_COLUMN_CLASS, "gap-my-20")}>
               <SpecRow label="Tab XL — 분석 영역 (underline false · 탭 간격 20px)">
                 <SegmentedTextTabs
                   aria-label="분석 영역 미리보기"
@@ -92,6 +131,54 @@ export default function ElementsPage() {
                   activeId="a"
                   size="m"
                 />
+              </SpecRow>
+
+              <SpecRow label="Chip 매트릭스 — Figma chips (type × variant × corner × size × icon)">
+                <div className="overflow-x-auto">
+                  <table className="w-full min-w-[720px] border-collapse text-left">
+                    <thead>
+                      <tr className="border-b border-border-10">
+                        <th className="pb-my-12 pr-my-16 text-body3_500 text-on-surface-30">상태</th>
+                        {CHIP_MATRIX_COLUMNS.map((col) => (
+                          <th
+                            key={col.label}
+                            className="pb-my-12 pr-my-16 text-body3_500 text-on-surface-30"
+                          >
+                            {col.label}
+                          </th>
+                        ))}
+                      </tr>
+                    </thead>
+                    <tbody>
+                      {CHIP_MATRIX_ROWS.map((row) => (
+                        <tr key={row.label} className="border-b border-border-10 last:border-0">
+                          <td className="py-my-12 pr-my-16 align-middle text-body3_400 text-on-surface-20">
+                            {row.label}
+                          </td>
+                          {CHIP_MATRIX_COLUMNS.map((col) => (
+                            <td key={col.label} className="py-my-12 pr-my-16 align-middle">
+                              <Chip
+                                chipType={row.chipType}
+                                variant={row.variant}
+                                corner={col.corner}
+                                size={row.size}
+                                icon={col.icon}
+                                trailingIcon={
+                                  col.icon ? (
+                                    <ChipIconPlaceholder size={row.size} />
+                                  ) : undefined
+                                }
+                                type="button"
+                              >
+                                Option
+                              </Chip>
+                            </td>
+                          ))}
+                        </tr>
+                      ))}
+                    </tbody>
+                  </table>
+                </div>
               </SpecRow>
 
               <SpecRow label="FilterChip L — h-36 · gap 8px · radius 8px (분석 범위 칩 · Tab 아님)">
@@ -167,7 +254,7 @@ export default function ElementsPage() {
               </SpecRow>
 
               <SpecRow label="높이 클래스 참고">
-                <ul className="list-inside list-disc text-sm text-on-surface-20">
+                <ul className="list-inside list-disc text-body3_400 text-on-surface-20">
                   <li>
                     <code className="text-on-surface-10">CONTROL_HEIGHT_CLASS</code> — {CONTROL_HEIGHT_CLASS}
                   </li>

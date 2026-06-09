@@ -87,8 +87,8 @@ export function Title2({
     : { showDot, showGuide, subtitle };
 
   const titleRow = (
-    <div className="inline-flex justify-start items-start gap-0.5">
-      <div className="justify-start text-on-surface-10 text-base font-bold font-['Pretendard_JP'] leading-6">
+    <div className="inline-flex justify-start items-start gap-my-2">
+      <div className="justify-start text-on-surface-10 text-body1_700 font-['Pretendard_JP']">
         {text}
       </div>
       {flags.showDot && (
@@ -113,10 +113,10 @@ export function Title2({
   );
 
   const body = (
-    <div className="self-stretch flex flex-col gap-1">
+    <div className="self-stretch flex flex-col gap-my-4">
       {titleRow}
       {flags.subtitle && (
-        <div className="self-stretch justify-start text-on-surface-30 text-[13px] font-normal font-['Pretendard_JP'] leading-4">
+        <div className="self-stretch justify-start text-on-surface-30 text-body4_400 font-['Pretendard_JP']">
           {subtitleText}
         </div>
       )}
@@ -128,7 +128,7 @@ export function Title2({
       return (
         <div
           className={cn(
-            "w-full h-fit px-5 py-3 border-b border-border-10/5 flex items-center justify-between gap-3",
+            "w-full h-fit px-my-20 py-my-12 border-b border-border-10/5 flex items-center justify-between gap-my-12",
             className
           )}
           style={{ borderBottomColor: "rgba(0, 0, 0, 0.07)" }}
@@ -141,7 +141,7 @@ export function Title2({
     return (
       <div
         className={cn(
-          "w-full h-fit px-5 py-3 border-b border-border-10/5 flex flex-col justify-center items-start",
+          "w-full h-fit px-my-20 py-my-12 border-b border-border-10/5 flex flex-col justify-center items-start",
           className
         )}
         style={{ borderBottomColor: "rgba(0, 0, 0, 0.07)" }}

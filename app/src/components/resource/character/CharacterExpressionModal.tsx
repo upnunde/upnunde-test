@@ -12,10 +12,12 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Trash2, RefreshCw } from "lucide-react";
 import { AddResourceSlot } from "@/components/resource/cards/AddResourceSlot";
+import { MODAL_CROP_STAGE_CLASS, MODAL_CROP_STAGE_SIZE_PX } from "@/lib/thumbnail-styles";
 import type { CharacterExpressionSlot } from "@/types/resource";
 
 const MAX_SLOTS = 10;
 const EXPRESSION_MAX_LENGTH = 50;
+const CHARACTER_EXPRESSION_FILE_INPUT_ID = "character-expression-modal-file";
 
 export interface CharacterExpressionModalProps {
   open: boolean;
@@ -55,16 +57,16 @@ function buildSlotsFromInitial(initial: CharacterExpressionSlot[]): CharacterExp
 
 /** 크롭 미리보기(9:16은 세로 고정)와 canvas 내보내기에 동일하게 사용 */
 function getCropViewportDimensions(
-  layoutShowSlotList: boolean,
   cropAspect: "square" | "9/16",
 ): { viewportW: number; viewportH: number } {
   if (cropAspect === "square") {
-    const side = layoutShowSlotList ? 320 : 400;
-    return { viewportW: side, viewportH: side };
+    return {
+      viewportW: MODAL_CROP_STAGE_SIZE_PX,
+      viewportH: MODAL_CROP_STAGE_SIZE_PX,
+    };
   }
-  const viewportH = layoutShowSlotList ? 320 : 400;
-  const viewportW = Math.round((viewportH * 9) / 16);
-  return { viewportW, viewportH };
+  const viewportH = MODAL_CROP_STAGE_SIZE_PX;
+  return { viewportW: Math.round((viewportH * 9) / 16), viewportH };
 }
 
 function drawCheckerboard(ctx: CanvasRenderingContext2D, width: number, height: number): void {
@@ -103,60 +105,71 @@ function drawMappedImageForCropFrame(
   ctx.restore();
 }
 
+/** blob/data·동일 출처 URL에는 crossOrigin을 붙이지 않는다(붙이면 로드 실패). */
+function shouldSetCrossOrigin(imageUrl: string): boolean {
+  if (imageUrl.startsWith("blob:") || imageUrl.startsWith("data:")) {
+    return false;
+  }
+  if (typeof window === "undefined") return false;
+  try {
+    const url = new URL(imageUrl, window.location.href);
+    return url.origin !== window.location.origin;
+  } catch {
+    return false;
+  }
+}
+
+function loadImageElement(imageUrl: string): Promise<HTMLImageElement> {
+  return new Promise((resolve, reject) => {
+    const img = new Image();
+    if (shouldSetCrossOrigin(imageUrl)) {
+      img.crossOrigin = "anonymous";
+    }
+    img.onload = () => resolve(img);
+    img.onerror = () => reject(new Error("Image load failed"));
+    img.src = imageUrl;
+  });
+}
+
 /**
  * 이미지 URL과 pan/zoom을 이용해 크롭 뷰포트에 해당하는 영역을 캔버스로 렌더링한 뒤 blob URL로 반환.
  * 모달의 크롭 영역과 동일한 좌표계(중앙 기준 pan, scale)를 사용한다.
  */
-function cropImageToBlobUrl(
+async function cropImageToBlobUrl(
   imageUrl: string,
   pan: { x: number; y: number },
   zoom: number,
   viewportW: number,
   viewportH: number,
 ): Promise<string> {
-  return new Promise((resolve, reject) => {
-    const img = new Image();
-    img.crossOrigin = "anonymous";
-    img.onload = () => {
-      try {
-        const nw = img.naturalWidth;
-        const nh = img.naturalHeight;
-        const srcX = nw / 2 - (nh * (viewportW / 2 + pan.x)) / (zoom * viewportH);
-        const srcY = nh / 2 - (nh * (viewportH / 2 + pan.y)) / (zoom * viewportH);
-        const srcW = (nh * viewportW) / (zoom * viewportH);
-        const srcH = nh / zoom;
-        const sx = Math.max(0, Math.min(nw, srcX));
-        const sy = Math.max(0, Math.min(nh, srcY));
-        const sw = Math.max(1, Math.min(nw - sx, srcW));
-        const sh = Math.max(1, Math.min(nh - sy, srcH));
+  const img = await loadImageElement(imageUrl);
+  const nw = img.naturalWidth;
+  const nh = img.naturalHeight;
+  const srcX = nw / 2 - (nh * (viewportW / 2 + pan.x)) / (zoom * viewportH);
+  const srcY = nh / 2 - (nh * (viewportH / 2 + pan.y)) / (zoom * viewportH);
+  const srcW = (nh * viewportW) / (zoom * viewportH);
+  const srcH = nh / zoom;
+  const sx = Math.max(0, Math.min(nw, srcX));
+  const sy = Math.max(0, Math.min(nh, srcY));
+  const sw = Math.max(1, Math.min(nw - sx, srcW));
+  const sh = Math.max(1, Math.min(nh - sy, srcH));
 
-        const canvas = document.createElement("canvas");
-        canvas.width = viewportW;
-        canvas.height = viewportH;
-        const ctx = canvas.getContext("2d");
-        if (!ctx) {
-          reject(new Error("Canvas 2d context not available"));
-          return;
-        }
-        ctx.drawImage(img, sx, sy, sw, sh, 0, 0, viewportW, viewportH);
-        canvas.toBlob(
-          (blob) => {
-            if (!blob) {
-              reject(new Error("toBlob failed"));
-              return;
-            }
-            resolve(URL.createObjectURL(blob));
-          },
-          "image/png",
-          0.95,
-        );
-      } catch (e) {
-        reject(e);
-      }
-    };
-    img.onerror = () => reject(new Error("Image load failed"));
-    img.src = imageUrl;
+  const canvas = document.createElement("canvas");
+  canvas.width = viewportW;
+  canvas.height = viewportH;
+  const ctx = canvas.getContext("2d");
+  if (!ctx) {
+    throw new Error("Canvas 2d context not available");
+  }
+  ctx.drawImage(img, sx, sy, sw, sh, 0, 0, viewportW, viewportH);
+
+  const blob = await new Promise<Blob | null>((resolve) => {
+    canvas.toBlob(resolve, "image/png", 0.95);
   });
+  if (!blob) {
+    throw new Error("toBlob failed");
+  }
+  return URL.createObjectURL(blob);
 }
 
 export function CharacterExpressionModal({
@@ -184,6 +197,8 @@ export function CharacterExpressionModal({
   const [panBySlotId, setPanBySlotId] = useState<Record<string, { x: number; y: number }>>({});
   const [isDragging, setIsDragging] = useState(false);
   const cropStageRef = useRef<HTMLDivElement | null>(null);
+  const leftPanelRef = useRef<HTMLDivElement | null>(null);
+  const [bodyHeight, setBodyHeight] = useState<number | undefined>(undefined);
   const cropCanvasRef = useRef<HTMLCanvasElement | null>(null);
   const loadedImageRef = useRef<HTMLImageElement | null>(null);
   const dragRef = useRef<{
@@ -300,17 +315,21 @@ export function CharacterExpressionModal({
       drawCropCanvas();
       return;
     }
-    const img = new Image();
-    img.crossOrigin = "anonymous";
-    img.onload = () => {
-      loadedImageRef.current = img;
-      drawCropCanvas();
+    let cancelled = false;
+    loadImageElement(previewImageUrl)
+      .then((img) => {
+        if (cancelled) return;
+        loadedImageRef.current = img;
+        drawCropCanvas();
+      })
+      .catch(() => {
+        if (cancelled) return;
+        loadedImageRef.current = null;
+        drawCropCanvas();
+      });
+    return () => {
+      cancelled = true;
     };
-    img.onerror = () => {
-      loadedImageRef.current = null;
-      drawCropCanvas();
-    };
-    img.src = previewImageUrl;
   }, [previewImageUrl, drawCropCanvas]);
 
   useEffect(() => {
@@ -350,7 +369,7 @@ export function CharacterExpressionModal({
   }, [open]);
 
   const handleSave = useCallback(async () => {
-    let { viewportW, viewportH } = getCropViewportDimensions(layoutShowSlotList, cropAspect);
+    let { viewportW, viewportH } = getCropViewportDimensions(cropAspect);
     const stageRect = cropStageRef.current?.getBoundingClientRect();
     if (stageRect) {
       const stageH = Math.max(1, Math.round(stageRect.height));
@@ -474,10 +493,6 @@ export function CharacterExpressionModal({
     e.target.value = "";
   }, []);
 
-  const handleAddSlot = useCallback(() => {
-    fileInputRef.current?.click();
-  }, []);
-
   /** 저장 버튼 활성화: 등록된(이미지 있는) 슬롯만 검사. 표정 섹션 있을 때는 라벨 필수 */
   const canSave = showExpressionSection
     ? slots.some((s) => Boolean(s.imageUrl)) &&
@@ -486,35 +501,62 @@ export function CharacterExpressionModal({
         .every((s) => Boolean(s.expressionLabel?.trim()) && s.expressionLabel.trim() !== "untitle")
     : slots.some((s) => Boolean(s.imageUrl));
 
+  /** 본문·우측 그리드 높이 = 좌측 편집 패널(content hug) 높이 */
+  useEffect(() => {
+    if (!open || !layoutShowSlotList) {
+      setBodyHeight(undefined);
+      return;
+    }
+    const el = leftPanelRef.current;
+    if (!el) return;
+
+    const syncHeight = () => {
+      setBodyHeight(el.getBoundingClientRect().height);
+    };
+
+    syncHeight();
+    const observer = new ResizeObserver(syncHeight);
+    observer.observe(el);
+    return () => observer.disconnect();
+  }, [open, layoutShowSlotList, showExpressionSection, slots.length]);
+
   return (
     <Dialog open={open} onOpenChange={(o) => !o && handleClose()}>
       <DialogContent
-        className={`${layoutShowSlotList ? "w-auto max-w-[calc(100vw-2rem)]" : "w-[424px] max-w-[calc(100vw-2rem)]"} gap-0 p-0 bg-surface-10 rounded-[4px] shadow-[0px_8px_16px_8px_rgba(0,0,0,0.16)] outline outline-1 outline-offset-[-1px] outline-border-10 overflow-hidden flex flex-col`}
+        className={`${layoutShowSlotList ? "w-auto max-w-[calc(100vw-2rem)]" : "w-[432px] sm:w-[440px] max-w-[calc(100vw-2rem)]"} gap-0 p-0 bg-surface-10 rounded-[4px] shadow-elevation-50 outline outline-1 outline-offset-[-1px] outline-border-10 overflow-hidden flex flex-col`}
         aria-describedby={undefined}
       >
         <DialogTitle className="sr-only">이미지 편집</DialogTitle>
         <input
+          id={CHARACTER_EXPRESSION_FILE_INPUT_ID}
           ref={fileInputRef}
           type="file"
           accept="image/*"
           multiple
-          className="sr-only"
+          className="hidden"
           onChange={handleFilesSelected}
         />
         <div
-          className="inline-flex justify-start items-start min-h-0 flex-1 w-full"
+          className={
+            layoutShowSlotList
+              ? "inline-flex w-full shrink-0 items-start justify-start overflow-hidden"
+              : "inline-flex min-h-0 w-full flex-1 items-stretch justify-start"
+          }
+          style={layoutShowSlotList && bodyHeight != null ? { height: bodyHeight } : undefined}
         >
-          {/* 왼쪽: 이미지 크롭 에디터 + 슬라이더 + 표정 입력 */}
+          {/* 왼쪽: 이미지 크롭 에디터 + 슬라이더 + 표정 입력 — 멀티 모드 height hug */}
           <div
-            className={`p-4 sm:p-5 flex-1 min-h-0 overflow-y-auto flex flex-col justify-start items-center gap-5 shrink-0 ${
-              layoutShowSlotList ? "border-r border-border-10" : "w-full"
+            ref={layoutShowSlotList ? leftPanelRef : undefined}
+            className={`flex flex-col items-center justify-start gap-my-20 p-my-16 sm:p-my-20 ${
+              layoutShowSlotList
+                ? "h-fit w-fit shrink-0 self-start border-r border-border-10"
+                : "min-h-0 w-full flex-1 shrink-0 overflow-y-auto"
             }`}
-            style={layoutShowSlotList ? { width: "fit-content" } : undefined}
           >
             {/* 정사각 스테이지 + canvas + 좌우 딤 + 9:16 가이드 프레임 */}
             <div
               ref={cropStageRef}
-              className="w-full max-w-[24rem] relative rounded-lg overflow-hidden bg-neutral-900 aspect-square"
+              className={MODAL_CROP_STAGE_CLASS}
             >
               <canvas
                 ref={cropCanvasRef}
@@ -528,9 +570,14 @@ export function CharacterExpressionModal({
                 onWheel={handleCropWheel}
               />
               {!previewImageUrl && (
-                <div className="absolute inset-0 flex items-center justify-center px-2 text-center text-on-surface-30 text-sm pointer-events-none">
-                  썸네일을 클릭하여 선택하세요
-                </div>
+                <label
+                  htmlFor={CHARACTER_EXPRESSION_FILE_INPUT_ID}
+                  className="absolute inset-0 z-[2] flex cursor-pointer items-center justify-center px-my-8 text-center text-on-surface-30 text-body3_400"
+                >
+                  {layoutShowSlotList && slots.some((s) => s.imageUrl)
+                    ? "썸네일을 클릭하여 선택하세요"
+                    : "클릭하여 이미지를 추가하세요"}
+                </label>
               )}
               {cropAspect === "9/16" && (
                 <>
@@ -541,13 +588,13 @@ export function CharacterExpressionModal({
               )}
             </div>
             {/* 슬라이더: primary 트랙 + 서피스 썸 (참고: w-14 채움 + w-48 빈 트랙 + thumb) */}
-            <div className="h-6 inline-flex justify-start items-center w-full self-stretch gap-4">
+            <div className="h-6 inline-flex justify-start items-center w-full self-stretch gap-my-16">
               <div className="relative flex-1 h-6 inline-flex items-center gap-0">
                 <div className="flex-1 flex h-2 rounded-[999px] overflow-hidden bg-surface-disabled">
                   <div className="h-full bg-primary rounded-[999px] transition-[width]" style={{ width: `${((zoom - 0.5) / 1.5) * 100}%` }} />
                 </div>
                 <div
-                  className="w-8 h-8 top-1/2 -translate-y-1/2 absolute bg-surface-10 rounded-full shadow-[0px_1px_2px_1px_rgba(0,0,0,0.16)] border border-border-20/10 -translate-x-1/2 pointer-events-none"
+                  className="w-8 h-8 top-1/2 -translate-y-1/2 absolute bg-surface-10 rounded-full shadow-elevation-10 border border-border-20/10 -translate-x-1/2 pointer-events-none"
                   style={{ left: `${((zoom - 0.5) / 1.5) * 100}%` }}
                   aria-hidden
                 />
@@ -592,14 +639,14 @@ export function CharacterExpressionModal({
             </div>
             {/* 표정: 라벨 + 설명 + 인풋 + 0/50 (showExpressionSection일 때만) */}
             {showExpressionSection && (
-              <div className="self-stretch flex flex-col justify-start items-start gap-2">
-                <div className="justify-center text-on-surface-10 text-base font-bold font-['Pretendard_JP'] leading-5">
+              <div className="self-stretch flex flex-col justify-start items-start gap-my-8">
+                <div className="justify-center text-on-surface-10 text-body1_700 font-['Pretendard_JP']">
                   표정
                 </div>
-                <div className="justify-center text-on-surface-30 text-xs font-normal font-['Pretendard_JP'] leading-4">
+                <div className="justify-center text-on-surface-30 text-caption1_400 font-['Pretendard_JP']">
                   표정은 에피소드에서 인물의 감정 표현에 사용됩니다
                 </div>
-                <div className="self-stretch rounded flex flex-col justify-center items-end gap-2 relative">
+                <div className="self-stretch rounded flex flex-col justify-center items-end gap-my-8 relative">
                   <div className="self-stretch">
                     <Input
                       value={expressionInput}
@@ -623,11 +670,11 @@ export function CharacterExpressionModal({
                       onBlur={() => setTimeout(() => setSuggestionOpen(false), 150)}
                       placeholder="인물의 표정을 입력하세요"
                       maxLength={EXPRESSION_MAX_LENGTH}
-                      className="h-[42px] w-full rounded-md border border-border-10 bg-white px-3 py-2 text-sm text-on-surface-10 placeholder:text-on-surface-30 focus:outline-none focus:ring-2 focus:ring-primary shadow-none font-['Pretendard_JP']"
+                      className="h-[42px] w-full rounded-md border border-border-10 bg-white px-my-12 py-my-8 text-body3_400 text-on-surface-10 placeholder:text-on-surface-30 focus:outline-none focus:ring-2 focus:ring-primary shadow-none font-['Pretendard_JP']"
                     />
                   </div>
-                  <div className="self-stretch inline-flex justify-end items-center gap-2">
-                    <span className="text-right justify-center text-on-surface-30 text-xs font-normal font-['Pretendard_JP'] leading-4 tabular-nums">
+                  <div className="self-stretch inline-flex justify-end items-center gap-my-8">
+                    <span className="text-right justify-center text-on-surface-30 text-caption1_400 font-['Pretendard_JP'] tabular-nums">
                       {expressionInput.length}/{EXPRESSION_MAX_LENGTH}
                     </span>
                   </div>
@@ -635,11 +682,11 @@ export function CharacterExpressionModal({
               </div>
             )}
             {layoutShowSlotList && (
-              <div className="mt-auto self-stretch flex justify-end gap-2">
+              <div className="self-stretch flex justify-end gap-my-8">
                 <Button
                   type="button"
                   variant="outline"
-                  className="h-8 rounded-md font-['Pretendard_JP'] text-sm font-medium text-secondary-foreground px-3 w-auto disabled:border-border-20"
+                  className="h-8 rounded-md font-['Pretendard_JP'] text-body3_500 text-secondary-foreground px-my-12 w-auto disabled:border-border-20"
                   onClick={() => handleNavigateFilledSlots("prev")}
                   disabled={filledSlotIndices.length <= 1}
                 >
@@ -648,7 +695,7 @@ export function CharacterExpressionModal({
                 <Button
                   type="button"
                   variant="outline"
-                  className="h-8 rounded-md font-['Pretendard_JP'] text-sm font-medium text-secondary-foreground px-3 w-auto disabled:border-border-20"
+                  className="h-8 rounded-md font-['Pretendard_JP'] text-body3_500 text-secondary-foreground px-my-12 w-auto disabled:border-border-20"
                   onClick={() => handleNavigateFilledSlots("next")}
                   disabled={filledSlotIndices.length <= 1}
                 >
@@ -660,7 +707,7 @@ export function CharacterExpressionModal({
 
           {/* 오른쪽: 썸네일 리스트 w-24 h-40, outline-primary 선택 / outline-border 비선택 */}
           {layoutShowSlotList && (
-            <div className="self-stretch min-h-0 shrink-0 w-fit min-w-fit p-5 grid grid-cols-3 auto-rows-max gap-x-2 gap-y-4 justify-start items-start overflow-y-auto h-[640px]">
+            <div className="grid h-[678px] max-h-[678px] w-fit min-w-fit shrink-0 auto-rows-max grid-cols-3 items-start justify-start gap-x-my-8 gap-y-my-16 overflow-y-auto overflow-x-hidden p-my-20">
               {slots
                 .filter((s) => Boolean(s.imageUrl))
                 .map((slot) => {
@@ -668,12 +715,12 @@ export function CharacterExpressionModal({
                   const isSelected = selectedIndex === index;
                   const label = slot.expressionLabel?.trim() || "untitle";
                   return (
-                    <div key={slot.id} className="inline-flex flex-col justify-start items-start gap-1 group">
+                    <div key={slot.id} className="inline-flex flex-col justify-start items-start gap-my-4 group">
                       <div className="relative w-[90px] h-[160px]">
                         <button
                           type="button"
                           onClick={() => handleSelectSlot(index)}
-                          className={`w-[90px] h-[160px] bg-surface-disabled/0 rounded-lg flex flex-col justify-center items-center gap-2 overflow-hidden cursor-pointer focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary ${
+                          className={`w-[90px] h-[160px] bg-surface-disabled/0 rounded-lg flex flex-col justify-center items-center gap-my-8 overflow-hidden cursor-pointer focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary ${
                             isSelected
                               ? "outline outline-2 outline-offset-[-2px] outline-primary"
                               : "outline outline-1 outline-offset-[-1px] outline-border-10/5 hover:outline-border-20"
@@ -693,14 +740,14 @@ export function CharacterExpressionModal({
                           type="button"
                           aria-label="표정 삭제"
                           onClick={() => setSlots((prev) => prev.filter((s) => s.id !== slot.id))}
-                          className="hidden group-hover:inline-flex absolute top-1 right-1 w-8 h-8 rounded-full bg-surface-10 text-on-surface-10 hover:bg-surface-20 items-center justify-center cursor-pointer shadow-sm"
+                          className="hidden group-hover:inline-flex absolute top-1 right-1 w-8 h-8 rounded-full bg-surface-10 text-on-surface-10 hover:bg-surface-20 items-center justify-center cursor-pointer shadow-elevation-10"
                         >
                           <Trash2 className="w-4 h-4 pointer-events-none" />
                         </button>
                       </div>
-                      <div className="w-[90px] inline-flex justify-start items-center gap-2.5 overflow-hidden">
+                      <div className="w-[90px] inline-flex justify-start items-center gap-my-8 overflow-hidden">
                         <div
-                          className={`w-[90px] justify-center text-sm font-normal font-['Pretendard_JP'] leading-5 truncate text-left ${
+                          className={`w-[90px] justify-center text-body3_400 font-['Pretendard_JP'] truncate text-left ${
                             label === "untitle" ? "text-on-surface-disabled" : "text-on-surface-20"
                           }`}
                         >
@@ -712,19 +759,23 @@ export function CharacterExpressionModal({
                 })}
 
               {slots.filter((s) => Boolean(s.imageUrl)).length < MAX_SLOTS && (
-                <AddResourceSlot variant="img9:16" ariaLabel="표정 추가하기" onClick={handleAddSlot} />
+                <AddResourceSlot
+                  variant="img9:16"
+                  ariaLabel="표정 추가하기"
+                  fileInputId={CHARACTER_EXPRESSION_FILE_INPUT_ID}
+                />
               )}
             </div>
           )}
         </div>
 
         {/* 푸터: border-t, 취소(아웃라인) / 저장 */}
-        <div className="self-stretch w-full p-5 border-t border-border-10 inline-flex justify-end items-center gap-2 shrink-0">
+        <div className="self-stretch w-full p-my-20 border-t border-border-10 inline-flex justify-end items-center gap-my-8 shrink-0">
           <DialogClose asChild>
             <Button
               type="button"
               variant="outline"
-              className="min-w-20 h-9 rounded-md font-['Pretendard_JP'] text-base font-medium text-secondary-foreground disabled:border-border-20"
+              className="min-w-20 h-9 rounded-md font-['Pretendard_JP'] text-body1_500 text-secondary-foreground disabled:border-border-20"
               onClick={handleClose}
             >
               취소
@@ -732,7 +783,7 @@ export function CharacterExpressionModal({
           </DialogClose>
           <Button
             type="button"
-            className="min-w-20 h-9 rounded-md font-['Pretendard_JP'] text-base font-medium"
+            className="min-w-20 h-9 rounded-md font-['Pretendard_JP'] text-body1_500"
             onClick={handleSave}
             disabled={!canSave || saving}
           >

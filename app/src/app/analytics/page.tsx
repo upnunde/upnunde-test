@@ -38,9 +38,9 @@ function AnalyticsPageContent() {
         <AppSidebar defaultActiveId="analytics" />
         <div className="flex min-w-0 flex-1 flex-col overflow-hidden">
           <main className="flex flex-1 flex-col overflow-hidden bg-surface-20">
-            <div className="flex h-[64px] w-full shrink-0 flex-col items-center justify-center border-b border-border-10 bg-white px-5">
-              <div className="flex w-full max-w-[1200px] items-center justify-start gap-4">
-                <h1 className="text-2xl font-bold text-on-surface-10">분석</h1>
+            <div className="flex h-[64px] w-full shrink-0 flex-col items-center justify-center border-b border-border-10 bg-white px-my-20">
+              <div className="flex w-full max-w-[1200px] items-center justify-start gap-my-16">
+                <h1 className="text-heading2_700 text-on-surface-10">분석</h1>
               </div>
             </div>
             <AnalyticsDashboard defaultArea={defaultArea} />

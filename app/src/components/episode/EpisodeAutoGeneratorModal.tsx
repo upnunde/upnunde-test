@@ -185,13 +185,13 @@ export function EpisodeAutoGeneratorModal({
             <Title2 text="에피소드 생성기" asSectionHeader />
             <div
               className={cn(
-                "mx-0 flex min-h-0 flex-col gap-6 overflow-y-auto border-0 px-5 pt-5 shadow-none",
+                "mx-0 flex min-h-0 flex-col gap-my-24 overflow-y-auto border-0 px-my-20 pt-my-20 shadow-none",
                 "max-h-[min(calc(88vh-10rem),680px)]",
                 FLOATING_COMPOSER_SCROLL_PAD_CLASS,
               )}
             >
-              <div className="flex flex-col gap-3">
-                <div className="flex items-start justify-between gap-3">
+              <div className="flex flex-col gap-my-12">
+                <div className="flex items-start justify-between gap-my-12">
                   <Title1
                     text="지난 사건 히스토리"
                     variant="title-subtitle-dot"
@@ -202,7 +202,7 @@ export function EpisodeAutoGeneratorModal({
                     type="button"
                     variant="outline"
                     size="sm"
-                    className="h-8 shrink-0 gap-1.5 shadow-none bg-white px-3"
+                    className="h-8 shrink-0 gap-my-8 shadow-none bg-white px-my-12"
                     disabled={
                       !canAutoFillPreviousHistory ||
                       isHistoryAutoFilling ||
@@ -221,7 +221,7 @@ export function EpisodeAutoGeneratorModal({
                 </div>
                 {isHistoryAutoFilling ? (
                   <div
-                    className="flex min-h-[120px] max-h-[280px] w-full items-start rounded-md border border-border-10 bg-white px-3 py-3"
+                    className="flex min-h-[120px] max-h-[280px] w-full items-start rounded-md border border-border-10 bg-white px-my-12 py-my-12"
                     aria-busy="true"
                     aria-label="지난 사건 히스토리"
                   >
@@ -237,16 +237,16 @@ export function EpisodeAutoGeneratorModal({
                     onChange={(e) => setHistory(e.target.value)}
                     placeholder={EPISODE_FORM_FIELD_COPY.history.placeholder}
                     aria-label="지난 사건 히스토리"
-                    className="min-h-[120px] max-h-[280px] w-full resize-y overflow-y-auto rounded-md border border-border-10 bg-white px-3 py-2 text-sm text-on-surface-10 placeholder:text-on-surface-30 focus:outline-none focus:ring-2 focus:ring-primary"
+                    className="min-h-[120px] max-h-[280px] w-full resize-y overflow-y-auto rounded-md border border-border-10 bg-white px-my-12 py-my-8 text-body3_400 text-on-surface-10 placeholder:text-on-surface-30 focus:outline-none focus:ring-2 focus:ring-primary"
                   />
                 )}
-                <div className="flex justify-end text-xs text-on-surface-30">
+                <div className="flex justify-end text-caption1_400 text-on-surface-30">
                   {isHistoryAutoFilling ? "—" : `${history.length}/${MAX_HISTORY}`}
                 </div>
               </div>
 
-              <div className="flex flex-col gap-3">
-                <div className="flex items-start justify-between gap-3">
+              <div className="flex flex-col gap-my-12">
+                <div className="flex items-start justify-between gap-my-12">
                   <Title1
                     text="에피소드 대본"
                     variant="title-subtitle-dot"
@@ -258,7 +258,7 @@ export function EpisodeAutoGeneratorModal({
                       type="button"
                       variant="outline"
                       size="sm"
-                      className="h-8 shrink-0 gap-1.5 shadow-none bg-white px-3"
+                      className="h-8 shrink-0 gap-my-8 shadow-none bg-white px-my-12"
                       disabled={
                         isComposerOpen ||
                         isGenerating ||
@@ -278,8 +278,8 @@ export function EpisodeAutoGeneratorModal({
                 />
               </div>
             </div>
-            <div className="shrink-0 border-t border-border-10 bg-white px-5 py-4">
-              <div className="flex justify-end gap-2">
+            <div className="shrink-0 border-t border-border-10 bg-white px-my-20 py-my-16">
+              <div className="flex justify-end gap-my-8">
                 <Button
                   type="button"
                   variant="outline"

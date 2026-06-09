@@ -99,7 +99,7 @@ function EditorInner() {
         <aside
           className={
             isSceneSidebarCollapsed
-              ? "relative z-20 w-fit shrink-0 border-r border-border-10 bg-white overflow-visible px-2"
+              ? "relative z-20 w-fit shrink-0 border-r border-border-10 bg-white overflow-visible px-my-8"
               : "w-[240px] shrink-0 border-r border-border-10 bg-white overflow-y-auto overscroll-none"
           }
         >
@@ -132,18 +132,18 @@ function EditorInner() {
                 type="button"
                 variant="ghost"
                 size="form"
-                className="absolute top-3 right-3 z-30 rounded-full bg-slate-800 px-4 text-sm font-medium text-white shadow-sm hover:bg-slate-700 hover:text-white"
+                className="absolute top-3 right-3 z-30 rounded-full bg-slate-800 px-my-16 text-body3_500 text-white shadow-elevation-10 hover:bg-slate-700 hover:text-white"
                 onClick={() => setIsAutoGeneratorModalOpen(true)}
               >
                 에피소드 생성기
               </Button>
-              <div className="relative z-0 flex-1 min-h-0 overflow-y-auto overscroll-none py-10 px-0">
+              <div className="relative z-0 flex-1 min-h-0 overflow-y-auto overscroll-none py-my-40 px-0">
                 <EditorBody />
               </div>
             </div>
 
             {/* Right Area: Phone Preview (Fixed size, sticky to stay visible when scrolling) */}
-            <div className="shrink-0 sticky top-10 h-full ml-auto p-10 flex flex-col justify-start items-center">
+            <div className="shrink-0 sticky top-10 h-full ml-auto p-my-40 flex flex-col justify-start items-center">
               <IPhone15ProFrame>
                 <PreviewScreen />
               </IPhone15ProFrame>

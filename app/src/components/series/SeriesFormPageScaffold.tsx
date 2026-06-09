@@ -42,8 +42,8 @@ export function SeriesFormPageScaffold({
   children,
   showDraftButton = false,
   onDraftClick,
-  contentPaddingClassName = "px-5",
-  contentGapClassName = "gap-10",
+  contentPaddingClassName = "px-my-20",
+  contentGapClassName = "gap-my-40",
 }: SeriesFormPageScaffoldProps) {
   return (
     <div className="flex flex-col h-screen w-full bg-white overflow-hidden">
@@ -51,13 +51,13 @@ export function SeriesFormPageScaffold({
       <div className="flex flex-1 overflow-hidden bg-surface-20">
         <div className="flex min-w-0 flex-1 flex-col overflow-hidden">
           <main className="flex flex-1 flex-col overflow-hidden bg-surface-20">
-            <header className="flex h-16 shrink-0 items-center justify-center border-b border-border-10 bg-white px-5 py-0">
-              <div className="flex w-full max-w-[1200px] items-center justify-between gap-4">
-                <div className="flex items-center justify-start gap-3">
+            <header className="flex h-16 shrink-0 items-center justify-center border-b border-border-10 bg-white px-my-20 py-0">
+              <div className="flex w-full max-w-[1200px] items-center justify-between gap-my-16">
+                <div className="flex items-center justify-start gap-my-12">
                   <HeaderBackButton onClick={onBack} aria-label="시리즈 목록으로" />
-                  <h1 className="text-2xl font-bold text-on-surface-10">{title}</h1>
+                  <h1 className="text-heading2_700 text-on-surface-10">{title}</h1>
                 </div>
-                <div className="flex items-center gap-3">
+                <div className="flex items-center gap-my-12">
                   {showDraftButton ? (
                     <Button
                       type="button"
@@ -86,7 +86,7 @@ export function SeriesFormPageScaffold({
 
             <div
               className={cn(
-                "flex flex-1 flex-col items-center gap-3 overflow-y-auto py-8",
+                "flex flex-1 flex-col items-center gap-my-12 overflow-y-auto py-my-32",
                 contentPaddingClassName
               )}
             >
@@ -97,7 +97,7 @@ export function SeriesFormPageScaffold({
                     className="h-fit rounded-[4px] flex flex-col shrink-0 overflow-hidden px-0 pt-0 pb-0"
                   >
                     <SeriesFormTabs activeTab={activeTab} onChange={onTabChange} />
-                    <div className="self-stretch px-5 pt-2 pb-5">{children}</div>
+                    <div className="self-stretch px-my-20 pt-my-8 pb-my-20">{children}</div>
                   </PageCard>
                 </div>
 

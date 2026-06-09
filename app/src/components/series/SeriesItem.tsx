@@ -11,6 +11,7 @@ import {
 } from "@/components/ui/dropdown-menu";
 import type { SeriesData } from "@/types/series";
 import { formatSeriesDateOrRelative, formatSeriesViewCount } from "@/lib/formatSeries";
+import { THUMBNAIL_DIM_OVERLAY_CLASS } from "@/lib/thumbnail-styles";
 
 export interface SeriesItemProps {
   series: SeriesData;
@@ -80,12 +81,12 @@ export function SeriesItem({
   };
 
   return (
-    <div className="flex min-w-0 w-full flex-col gap-5 py-5 pl-5 pr-5 min-[480px]:flex-row rounded-[4px] border border-border-10 bg-white">
+    <div className="flex min-w-0 w-full flex-col gap-my-20 py-my-20 pl-my-20 pr-my-20 min-[480px]:flex-row rounded-[4px] border border-border-10 bg-white">
       {/* 썸네일 영역 (정책 6, 8, 9, 10) */}
       <div className="aspect-[9/16] w-28 max-[479px]:self-center shrink-0 overflow-hidden rounded bg-slate-200 relative">
         {status === "DRAFT" ? (
           <div className="w-full h-full flex items-center justify-center bg-slate-200" aria-hidden>
-            <span className="text-on-surface-30 text-xs">썸네일 없음</span>
+            <span className="text-on-surface-30 text-caption1_400">썸네일 없음</span>
           </div>
         ) : (
           <>
@@ -98,9 +99,10 @@ export function SeriesItem({
                 className="object-cover"
               />
             )}
+            {thumbnailUrl && <div className={THUMBNAIL_DIM_OVERLAY_CLASS} aria-hidden />}
             {(isPrivate || isBanned) && (
               <div className="absolute inset-0 flex items-center justify-center bg-black/50">
-                <span className="text-white text-[15px] font-bold">
+                <span className="text-white text-body2_700">
                   {isBanned ? "이용금지" : "비공개"}
                 </span>
               </div>
@@ -112,8 +114,8 @@ export function SeriesItem({
       {/* 우측: 제목, 뱃지, 메타, 버튼 */}
       <div className="flex-1 flex flex-col justify-start items-start min-w-0">
         {/* 제목 + 더보기 (정책 5, 6) */}
-        <div className="w-full flex justify-between items-start gap-2">
-          <h3 className="text-lg font-bold text-on-surface-10 truncate flex-1 min-w-0">
+        <div className="w-full flex justify-between items-start gap-my-8">
+          <h3 className="text-heading5_700 text-on-surface-10 truncate flex-1 min-w-0">
             {title}
           </h3>
           <DropdownMenu open={isMenuOpen} onOpenChange={setIsMenuOpen}>
@@ -126,11 +128,11 @@ export function SeriesItem({
                 <MoreVertical className="w-5 h-5" aria-hidden />
               </button>
             </DropdownMenuTrigger>
-          <DropdownMenuContent align="end" className="w-48 rounded-lg border border-border-10 bg-white p-1">
+          <DropdownMenuContent align="end" className="w-48 rounded-lg border border-border-10 bg-white p-my-4">
               {status === "PUBLIC" && (
                 <>
                   <DropdownMenuItem
-                    className="flex cursor-pointer items-center gap-2 rounded-md px-3 py-2.5 text-sm text-on-surface-20 outline-none hover:bg-surface-20"
+                    className="flex cursor-pointer items-center gap-my-8 rounded-md px-my-12 py-my-8 text-body3_400 text-on-surface-20 outline-none hover:bg-surface-20"
                     onSelect={() => onSetPrivate?.(series)}
                   >
                     <EyeOff className="h-4 w-4 shrink-0 text-on-surface-30" aria-hidden />
@@ -138,7 +140,7 @@ export function SeriesItem({
                   </DropdownMenuItem>
                   <DropdownMenuItem
                     variant="destructive"
-                    className="flex cursor-pointer items-center gap-2 rounded-md px-3 py-2.5 text-sm"
+                    className="flex cursor-pointer items-center gap-my-8 rounded-md px-my-12 py-my-8 text-body3_400"
                     onSelect={() => onDelete?.(series)}
                   >
                     <Trash2 className="h-4 w-4 shrink-0" aria-hidden />
@@ -149,7 +151,7 @@ export function SeriesItem({
               {status === "PRIVATE" && (
                 <>
                   <DropdownMenuItem
-                    className="flex cursor-pointer items-center gap-2 rounded-md px-3 py-2.5 text-sm text-on-surface-20 outline-none hover:bg-surface-20"
+                    className="flex cursor-pointer items-center gap-my-8 rounded-md px-my-12 py-my-8 text-body3_400 text-on-surface-20 outline-none hover:bg-surface-20"
                     onSelect={() => onSetPublic?.(series)}
                   >
                     <Eye className="h-4 w-4 shrink-0 text-on-surface-30" aria-hidden />
@@ -157,7 +159,7 @@ export function SeriesItem({
                   </DropdownMenuItem>
                   <DropdownMenuItem
                     variant="destructive"
-                    className="flex cursor-pointer items-center gap-2 rounded-md px-3 py-2.5 text-sm"
+                    className="flex cursor-pointer items-center gap-my-8 rounded-md px-my-12 py-my-8 text-body3_400"
                     onSelect={() => onDelete?.(series)}
                   >
                     <Trash2 className="h-4 w-4 shrink-0" aria-hidden />
@@ -169,14 +171,14 @@ export function SeriesItem({
                 <>
                   <DropdownMenuItem
                     disabled
-                    className="flex cursor-not-allowed items-center gap-2 rounded-md px-3 py-2.5 text-sm text-on-surface-30"
+                    className="flex cursor-not-allowed items-center gap-my-8 rounded-md px-my-12 py-my-8 text-body3_400 text-on-surface-30"
                   >
                     <Eye className="h-4 w-4 shrink-0" aria-hidden />
                     공개
                   </DropdownMenuItem>
                   <DropdownMenuItem
                     variant="destructive"
-                    className="flex cursor-pointer items-center gap-2 rounded-md px-3 py-2.5 text-sm"
+                    className="flex cursor-pointer items-center gap-my-8 rounded-md px-my-12 py-my-8 text-body3_400"
                     onSelect={() => onDelete?.(series)}
                   >
                     <Trash2 className="h-4 w-4 shrink-0" aria-hidden />
@@ -190,20 +192,20 @@ export function SeriesItem({
 
         {/* 상태 뱃지 (정책 8, 9, 10) */}
         {isPrivate && (
-          <span className="inline-flex mt-1 h-fit rounded px-2 py-1 text-sm font-medium bg-primary/10 text-primary">
+          <span className="inline-flex mt-1 h-fit rounded px-my-8 py-my-4 text-body3_500 bg-primary/10 text-primary">
             비공개
           </span>
         )}
         {isDraft && (
-          <span className="inline-flex mt-1 h-fit rounded px-2 py-1 text-sm font-medium bg-primary/10 text-primary">
+          <span className="inline-flex mt-1 h-fit rounded px-my-8 py-my-4 text-body3_500 bg-primary/10 text-primary">
             작성중
           </span>
         )}
         {isBanned && (
-          <div className="inline-flex mt-1 h-7 items-center gap-1 px-2 py-1 rounded border border-destructive">
-            <div className="flex items-center gap-1">
+          <div className="inline-flex mt-1 h-7 items-center gap-my-4 px-my-8 py-my-4 rounded border border-destructive">
+            <div className="flex items-center gap-my-4">
               <ViolationIcon className="h-5 w-5 text-destructive" aria-hidden />
-              <span className="text-destructive text-sm font-medium">
+              <span className="text-destructive text-body3_500">
                 가이드 정책을 위반, 이용 금지
               </span>
             </div>
@@ -214,29 +216,29 @@ export function SeriesItem({
         <div className="w-full h-full" />
 
         {/* 메타: 날짜, 회차 수, 조회수 (정책 2, 3, 4, 11 - 툴팁) */}
-        <div className="mb-5 flex w-full text-[13px] leading-5 text-on-surface-20 [&_svg]:shrink-0 [&_svg]:text-on-surface-20">
-          <div className="flex min-w-0 flex-1 flex-col items-start justify-center gap-2 text-on-surface-20">
-            <div className="flex items-center gap-2 text-on-surface-20">
+        <div className="mb-5 flex w-full text-body4_400 text-on-surface-20 [&_svg]:shrink-0 [&_svg]:text-on-surface-20">
+          <div className="flex min-w-0 flex-1 flex-col items-start justify-center gap-my-8 text-on-surface-20">
+            <div className="flex items-center gap-my-8 text-on-surface-20">
               <Calendar className="h-[18px] w-[18px]" aria-hidden />
               <span className="text-on-surface-20" title="생성한 날짜">
                 {dateStr}
               </span>
             </div>
-            <div className="flex items-center gap-2 text-on-surface-20">
+            <div className="flex items-center gap-my-8 text-on-surface-20">
               <Eye className="h-[18px] w-[18px]" aria-hidden />
               <span className="text-on-surface-20" title="작품 누적 조회수">
                 {viewStr}
               </span>
             </div>
           </div>
-          <div className="flex min-w-0 flex-1 flex-col items-start justify-start gap-2 text-on-surface-20">
-            <div className="flex items-center gap-2 text-on-surface-20">
+          <div className="flex min-w-0 flex-1 flex-col items-start justify-start gap-my-8 text-on-surface-20">
+            <div className="flex items-center gap-my-8 text-on-surface-20">
               <Layers className="h-[18px] w-[18px]" aria-hidden />
               <span className="text-on-surface-20" title="에피소드 등록 수">
                 {episodeCount}회
               </span>
             </div>
-            <div className="flex items-center gap-2 text-on-surface-20">
+            <div className="flex items-center gap-my-8 text-on-surface-20">
               <MessageCircle className="h-[18px] w-[18px]" aria-hidden />
               <span className="text-on-surface-20" title="댓글 수">
                 {commentStr}
@@ -246,11 +248,11 @@ export function SeriesItem({
         </div>
 
         {/* 하단 관리 버튼: 모든 상태에서 활성화 (가로 영역 내에서 3등분, 버튼 폭 가변) */}
-        <div className="self-stretch flex justify-start items-start gap-[8px] pt-0">
+        <div className="self-stretch flex justify-start items-start gap-my-8 pt-0">
           <button
             type="button"
             onClick={handleSeriesManage}
-            className="h-9 flex-1 min-w-0 cursor-pointer rounded-md border border-border-20 px-3 text-sm font-medium transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-2 bg-white text-on-surface-20 hover:bg-surface-20 flex items-center disabled:border-border-20"
+            className="h-9 flex-1 min-w-0 cursor-pointer rounded-md border border-border-20 px-my-12 text-body3_500 transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-2 bg-white text-on-surface-20 hover:bg-surface-20 flex items-center disabled:border-border-20"
           >
             <span className="block w-full overflow-hidden text-ellipsis whitespace-nowrap text-center">
               시리즈 관리
@@ -261,7 +263,7 @@ export function SeriesItem({
             disabled={isDraft}
             title={isDraft ? "시리즈 작성 완료 후 이용 가능합니다" : undefined}
             onClick={handleResource}
-            className={`h-9 flex-1 min-w-0 rounded-md border px-3 text-sm font-medium transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-2 flex items-center ${
+            className={`h-9 flex-1 min-w-0 rounded-md border px-my-12 text-body3_500 transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-2 flex items-center ${
               isDraft
                 ? "border-border-20 text-on-surface-30 cursor-not-allowed"
                 : "border-border-20 bg-white text-on-surface-20 hover:bg-surface-20 cursor-pointer"
@@ -276,7 +278,7 @@ export function SeriesItem({
             disabled={isDraft}
             title={isDraft ? "시리즈 작성 완료 후 이용 가능합니다" : undefined}
             onClick={handleEpisode}
-            className={`h-9 flex-1 min-w-0 rounded-md border px-3 text-sm font-medium transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-2 flex items-center ${
+            className={`h-9 flex-1 min-w-0 rounded-md border px-my-12 text-body3_500 transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-2 flex items-center ${
               isDraft
                 ? "border-border-20 text-on-surface-30 cursor-not-allowed"
                 : "border-border-20 bg-white text-on-surface-20 hover:bg-surface-20 cursor-pointer"

@@ -4,6 +4,7 @@ import React from "react";
 import Image from "next/image";
 import { Pencil, Trash2 } from "lucide-react";
 import type { ImageResource, MediaSlotType } from "@/types/resource";
+import { THUMBNAIL_DIM_OVERLAY_CLASS } from "@/lib/thumbnail-styles";
 import { cn } from "@/lib/utils";
 
 /** [정책 6, 7] 배경/연출장면/갤러리용 이미지 카드. 클릭 시 상세 페이지, 삭제 시 확인 팝업. */
@@ -82,7 +83,7 @@ export function ImageCard({
       onClick={handleCardClick}
       onKeyDown={(e) => e.key === "Enter" && (onPreviewClick ? onPreviewClick(item) : onDetailClick(item))}
       className={cn(
-        "group inline-flex flex-col justify-start items-start gap-1 cursor-pointer",
+        "group inline-flex flex-col justify-start items-start gap-my-4 cursor-pointer",
         widthClass,
         hoveredProp !== undefined && "pointer-events-auto",
         containerClassName
@@ -92,7 +93,7 @@ export function ImageCard({
       <div
         className={cn(
           sizeClass,
-          "rounded-lg outline outline-1 outline-offset-[-1px] flex flex-col justify-center items-center gap-2 overflow-hidden relative",
+          "rounded-lg outline outline-1 outline-offset-[-1px] flex flex-col justify-center items-center gap-my-8 overflow-hidden relative",
           error
             ? "bg-error-error-container outline-error-on-error-container"
             : "bg-surface-disabled/0 outline-border-20 outline outline-1 outline-offset-[-1px]",
@@ -101,13 +102,16 @@ export function ImageCard({
         )}
       >
         {registered && (
-          <Image
-            src={item.imageUrl}
-            alt=""
-            fill
-            sizes="96px"
-            className={cn(imgClass, imageClassName)}
-          />
+          <>
+            <Image
+              src={item.imageUrl}
+              alt=""
+              fill
+              sizes="96px"
+              className={cn(imgClass, imageClassName)}
+            />
+            <div className={THUMBNAIL_DIM_OVERLAY_CLASS} aria-hidden />
+          </>
         )}
         {/* 호버 시 어두운 오버레이 */}
         {showActions && (
@@ -122,7 +126,7 @@ export function ImageCard({
             {/* 편집/삭제 버튼 */}
             <div
               className={cn(
-                "absolute right-1 top-1 flex flex-col justify-center items-start gap-1 transition-opacity",
+                "absolute right-1 top-1 flex flex-col justify-center items-start gap-my-4 transition-opacity",
                 showControls ? "opacity-100" : "opacity-0 group-hover:opacity-100"
               )}
             >
@@ -153,10 +157,10 @@ export function ImageCard({
         )}
       </div>
       {showName && (
-        <div className="self-stretch inline-flex justify-start items-center gap-2.5 overflow-hidden">
+        <div className="self-stretch inline-flex justify-start items-center gap-my-8 overflow-hidden">
           <span
             className={cn(
-              "flex-1 text-[13px] font-normal font-['Pretendard_JP'] leading-5 truncate text-left justify-start",
+              "flex-1 text-body4_400 font-['Pretendard_JP'] truncate text-left justify-start",
               error ? "text-error-on-error-container" : "text-on-surface-10"
             )}
           >

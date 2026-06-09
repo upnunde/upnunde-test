@@ -37,7 +37,7 @@ export function SeriesImageUploadField({
   onFileSelected,
 }: SeriesImageUploadFieldProps) {
   return (
-    <div className="flex flex-col gap-1">
+    <div className="flex flex-col gap-my-4">
       <Title1 text={label} variant="title-subtitle-dot" subtitleText={subtitle} />
       <label
         ref={labelRef}
@@ -76,7 +76,7 @@ export function SeriesImageUploadField({
                 e.stopPropagation();
                 onClearPreview();
               }}
-              className="absolute right-1 top-1 hidden h-8 w-8 cursor-pointer items-center justify-center rounded-full bg-surface-10 text-on-surface-10 shadow-sm group-hover:inline-flex hover:bg-surface-20"
+              className="absolute right-1 top-1 hidden h-8 w-8 cursor-pointer items-center justify-center rounded-full bg-surface-10 text-on-surface-10 shadow-elevation-10 group-hover:inline-flex hover:bg-surface-20"
             >
               <svg
                 xmlns="http://www.w3.org/2000/svg"

@@ -1,6 +1,6 @@
 ---
 description: 에디터 블록 모델, 상태 관리, 버튼 활성화 기준 등 에디터 관련 패턴
-globs: app/src/**/*.tsx,app/src/**/*.ts
+globs: app/src/app/editor/**,app/src/components/editor/**,app/src/components/script-editor/**,app/src/store/useEditorStore.ts,app/src/types/editor.ts
 alwaysApply: false
 ---
 

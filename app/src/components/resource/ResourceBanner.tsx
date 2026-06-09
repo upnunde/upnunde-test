@@ -44,25 +44,25 @@ export function ResourceBanner({ seriesId }: ResourceBannerProps) {
   if (!isClient || dismissed) return null;
 
   return (
-    <div className="self-stretch pt-0 inline-flex flex-col justify-start items-center gap-3">
-      <div className="w-full max-w-[1200px] min-w-[640px] p-5 bg-surface-10 rounded-[4px] outline outline-1 outline-offset-[-1px] outline-border-10 inline-flex justify-center items-center gap-10">
-        <div className="flex-1 flex justify-start items-center gap-5">
-          <div className="flex justify-start items-center gap-2">
+    <div className="self-stretch pt-0 inline-flex flex-col justify-start items-center gap-my-12">
+      <div className="w-full max-w-[1200px] min-w-[640px] p-my-20 bg-surface-10 rounded-[4px] outline outline-1 outline-offset-[-1px] outline-border-10 inline-flex justify-center items-center gap-my-40">
+        <div className="flex-1 flex justify-start items-center gap-my-20">
+          <div className="flex justify-start items-center gap-my-8">
             <div className="w-6 h-6 relative rounded overflow-hidden shrink-0">
               <Info
                 className="w-5 h-5 absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 text-primary"
                 aria-hidden
               />
             </div>
-            <div className="text-primary text-base font-bold font-['Pretendard_JP'] leading-6">
+            <div className="text-primary text-body1_700 font-['Pretendard_JP']">
               안내
             </div>
           </div>
-          <p className="flex-1 text-on-surface-20 text-base font-medium font-['Pretendard_JP'] leading-6">
+          <p className="flex-1 text-on-surface-20 text-body1_500 font-['Pretendard_JP']">
             등록된 리소스는 앞으로 제작할 모든 에피소드를 구성하는 근간이 되는 핵심 데이터입니다.
           </p>
         </div>
-        <div className="flex justify-start items-center gap-2">
+        <div className="flex justify-start items-center gap-my-8">
           <Button
             type="button"
             variant="ghost"
@@ -71,7 +71,7 @@ export function ResourceBanner({ seriesId }: ResourceBannerProps) {
             className="h-8 w-8 rounded-full text-on-surface-30 hover:bg-surface-20"
             aria-label="배너 닫기"
           >
-            <span className="text-lg leading-none">×</span>
+            <span className="text-heading5_700">×</span>
           </Button>
         </div>
       </div>

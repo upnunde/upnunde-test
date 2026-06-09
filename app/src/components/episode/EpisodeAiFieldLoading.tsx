@@ -12,7 +12,7 @@ export function AiFieldLoadingMessage({
 }) {
   return (
     <span
-      className={cn("inline-flex min-w-0 items-center text-sm", className)}
+      className={cn("inline-flex min-w-0 items-center text-body3_400", className)}
       role="status"
       aria-live="polite"
       aria-busy="true"
@@ -28,7 +28,7 @@ export function AiFieldLoadingMessage({
 }
 
 const inputShellClass =
-  "rounded-md border border-border-10 bg-white px-3 text-sm text-on-surface-10";
+  "rounded-md border border-border-10 bg-white px-my-12 text-body3_400 text-on-surface-10";
 
 export function EpisodeAiTextField({
   isLoading,

@@ -64,8 +64,8 @@ export function ProfilePublicTab({
   return (
     <AnalyticsPanel className="overflow-hidden border-0 bg-transparent">
       <Title2 text="공개 프로필" variant="title" asSectionHeader />
-      <div className="flex flex-col gap-8 p-5">
-        <div className="flex flex-col items-center gap-3">
+      <div className="flex flex-col gap-my-32 p-my-20">
+        <div className="flex flex-col items-center gap-my-12">
           <input
             ref={fileInputRef}
             type="file"
@@ -86,7 +86,7 @@ export function ProfilePublicTab({
                   className="h-full w-full object-cover"
                 />
               ) : (
-                <User className="h-10 w-10 text-on-surface-30" aria-hidden />
+                <User className="h-my-40 w-my-40 text-on-surface-30" aria-hidden />
               )}
             </div>
             <button
@@ -101,18 +101,18 @@ export function ProfilePublicTab({
               </svg>
             </button>
           </div>
-          <p className="text-center text-sm leading-5 text-on-surface-20">
+          <p className="text-center text-body3_400 text-on-surface-20">
             독자에게 표시되는 작가 프로필이에요.
           </p>
         </div>
 
-        <div className="flex max-w-xl flex-col gap-5">
-          <div className="flex flex-col gap-3">
+        <div className="flex max-w-xl flex-col gap-my-20">
+          <div className="flex flex-col gap-my-12">
             <ProfileFieldLabel text="아이디" hint="로그인에 사용하는 이메일이에요." />
             <input type="text" disabled value={draft.loginId} className={profileReadonlyInputClassName} />
           </div>
 
-          <div className="flex flex-col gap-3">
+          <div className="flex flex-col gap-my-12">
             <ProfileFieldLabel text="작가명" />
             <input
               type="text"
@@ -124,7 +124,7 @@ export function ProfilePublicTab({
             <ProfileCharCount current={draft.penName.length} max={PROFILE_PEN_NAME_MAX} />
           </div>
 
-          <div className="flex flex-col gap-3">
+          <div className="flex flex-col gap-my-12">
             <ProfileFieldLabel text="소개" />
             <textarea
               placeholder="소개 내용을 작성해 주세요."
@@ -142,8 +142,8 @@ export function ProfilePublicTab({
           </div>
         </div>
 
-        <div className="flex justify-end border-t border-border-10 pt-5">
-          <Button type="button" className="h-10 min-w-20 px-4" onClick={handleSave}>
+        <div className="flex justify-end border-t border-border-10 pt-my-20">
+          <Button type="button" className="h-my-36 min-w-my-80 px-my-16" onClick={handleSave}>
             저장
           </Button>
         </div>

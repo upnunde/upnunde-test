@@ -38,7 +38,7 @@ export interface AnalyticsPeriodPickerProps {
 }
 
 const TRIGGER_BASE_CLASS = cn(
-  "inline-flex h-9 min-w-0 shrink-0 cursor-pointer items-center justify-between gap-2 rounded-md border border-slate-200 bg-white px-3 text-sm font-medium text-on-surface-10 transition-colors hover:bg-slate-50 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-2 data-[state=open]:border-slate-300 data-[state=open]:bg-slate-50",
+  "inline-flex h-9 min-w-0 shrink-0 cursor-pointer items-center justify-between gap-my-8 rounded-md border border-slate-200 bg-white px-my-12 text-body3_500 text-on-surface-10 transition-colors hover:bg-slate-50 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-2 data-[state=open]:border-slate-300 data-[state=open]:bg-slate-50",
 );
 
 const TRIGGER_INLINE_CLASS = analyticsPeriodInlineTriggerClassName;
@@ -99,7 +99,7 @@ export function AnalyticsPeriodPicker({
           aria-label={`${ariaLabelPrefix} — 현재 ${triggerLabel}`}
         >
           <CalendarDays className="h-5 w-5 shrink-0 text-on-surface-20" aria-hidden />
-          <span className="min-w-0 max-w-[280px] truncate text-center text-sm font-medium leading-5">
+          <span className="min-w-0 max-w-[280px] truncate text-center text-body3_500">
             {triggerLabel}
           </span>
           <ChevronDown className="h-5 w-5 shrink-0 text-on-surface-20" aria-hidden />
@@ -108,16 +108,16 @@ export function AnalyticsPeriodPicker({
       <PopoverContent
         align="end"
         sideOffset={8}
-        className="w-[320px] rounded-[4px] border border-border-10 bg-white p-0 shadow-lg"
+        className="w-[320px] rounded-[4px] border border-border-10 bg-white p-0 shadow-elevation-40"
       >
-        <div className="border-b border-border-10/50 px-4 py-3">
-          <div className="text-sm font-bold leading-5 text-on-surface-10">기간 선택</div>
-          <p className="mt-1 text-xs text-on-surface-30">
+        <div className="border-b border-border-10/50 px-my-16 py-my-12">
+          <div className="text-body3_700 text-on-surface-10">기간 선택</div>
+          <p className="mt-1 text-caption1_400 text-on-surface-30">
             프리셋이나 사용자 지정 기간을 선택해 주세요.
           </p>
         </div>
 
-        <div role="radiogroup" aria-label="프리셋 기간" className="flex flex-col py-1">
+        <div role="radiogroup" aria-label="프리셋 기간" className="flex flex-col py-my-4">
           {ANALYTICS_PERIOD_PRESETS.map(({ value: preset, label }) => {
             const checked = activePreset === preset;
             return (
@@ -128,7 +128,7 @@ export function AnalyticsPeriodPicker({
                 aria-checked={checked}
                 onClick={() => applyPreset(preset)}
                 className={cn(
-                  "flex w-full cursor-pointer items-center justify-between px-4 py-2 text-sm font-medium transition-colors hover:bg-surface-20",
+                  "flex w-full cursor-pointer items-center justify-between px-my-16 py-my-8 text-body3_500 transition-colors hover:bg-surface-20",
                   checked
                     ? "text-on-surface-10"
                     : "text-on-surface-20",
@@ -136,7 +136,7 @@ export function AnalyticsPeriodPicker({
               >
                 <span>{label}</span>
                 {checked ? (
-                  <span className="text-xs text-primary" aria-hidden>
+                  <span className="text-caption1_400 text-primary" aria-hidden>
                     선택됨
                   </span>
                 ) : null}
@@ -145,40 +145,40 @@ export function AnalyticsPeriodPicker({
           })}
         </div>
 
-        <div className="border-t border-border-10/50 px-4 py-3">
+        <div className="border-t border-border-10/50 px-my-16 py-my-12">
           <div className="mb-2 flex items-center justify-between">
-            <span className="text-xs font-medium text-on-surface-30">사용자 지정</span>
+            <span className="text-caption1_500 text-on-surface-30">사용자 지정</span>
             {isCustomPeriod(value) ? (
-              <span className="text-xs text-primary" aria-hidden>
+              <span className="text-caption1_400 text-primary" aria-hidden>
                 선택됨
               </span>
             ) : null}
           </div>
-          <div className="flex items-center gap-2">
+          <div className="flex items-center gap-my-8">
             <input
               type="date"
               value={pendingFrom}
               max={pendingTo || undefined}
               onChange={(e) => setPendingFrom(e.target.value)}
-              className="h-8 min-w-0 flex-1 rounded-md border border-border-10 bg-white px-2 text-xs text-on-surface-10 focus:border-primary focus:outline-none"
+              className="h-8 min-w-0 flex-1 rounded-md border border-border-10 bg-white px-my-8 text-caption1_400 text-on-surface-10 focus:border-primary focus:outline-none"
               aria-label="시작 날짜"
             />
-            <span className="text-xs text-on-surface-30">~</span>
+            <span className="text-caption1_400 text-on-surface-30">~</span>
             <input
               type="date"
               value={pendingTo}
               min={pendingFrom || undefined}
               onChange={(e) => setPendingTo(e.target.value)}
-              className="h-8 min-w-0 flex-1 rounded-md border border-border-10 bg-white px-2 text-xs text-on-surface-10 focus:border-primary focus:outline-none"
+              className="h-8 min-w-0 flex-1 rounded-md border border-border-10 bg-white px-my-8 text-caption1_400 text-on-surface-10 focus:border-primary focus:outline-none"
               aria-label="종료 날짜"
             />
           </div>
           {pendingFrom && pendingTo && !customInvalid ? (
-            <p className="mt-2 text-xs text-on-surface-30">
+            <p className="mt-2 text-caption1_400 text-on-surface-30">
               {formatYmdFull(pendingFrom)} ~ {formatYmdFull(pendingTo)}
             </p>
           ) : (
-            <p className="mt-2 text-xs text-error-error">
+            <p className="mt-2 text-caption1_400 text-error-error">
               {customInvalid && pendingFrom && pendingTo
                 ? "시작일이 종료일보다 늦을 수 없어요."
                 : "시작·종료일을 선택해 주세요."}

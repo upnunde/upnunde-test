@@ -125,14 +125,14 @@ export function ProfileEditModal({ isOpen, onClose, anchorRef, onSave }: Profile
         {/* Modal Card: 프로필 버튼 바로 아래 고정 배치 */}
         <div
           ref={cardRef}
-          className="w-full max-w-96 relative bg-white rounded-[4px] shadow-[0px_8px_16px_8px_rgba(0,0,0,0.16)] border border-slate-200 flex flex-col justify-start items-start overflow-y-auto"
+          className="w-full max-w-96 relative bg-white rounded-[4px] shadow-elevation-50 border border-slate-200 flex flex-col justify-start items-start overflow-y-auto"
           style={position ? { maxHeight: position.maxHeight } : undefined}
           onClick={(e) => e.stopPropagation()}
         >
 
         {/* Header */}
         <div className="self-stretch h-16 pl-5 pr-2 pt-4 pb-2 inline-flex justify-between items-center shrink-0">
-          <div className="text-on-surface-10 text-lg font-bold leading-6">
+          <div className="text-on-surface-10 text-heading5_700">
             프로필편집
           </div>
           {/* Close Button */}
@@ -193,7 +193,7 @@ export function ProfileEditModal({ isOpen, onClose, anchorRef, onSave }: Profile
           {/* ID Field */}
           <div className="self-stretch flex flex-col justify-start items-start gap-3">
             <div className="flex flex-col justify-start items-start gap-1">
-              <div className="text-on-surface-10 text-base font-bold leading-5">아이디</div>
+              <div className="text-on-surface-10 text-body1_700">아이디</div>
             </div>
             <div className="self-stretch rounded flex flex-col justify-center items-start gap-2">
               <div className="self-stretch h-[42px] px-4 bg-slate-100 rounded-md border border-slate-200 inline-flex justify-start items-center overflow-hidden">
@@ -201,7 +201,7 @@ export function ProfileEditModal({ isOpen, onClose, anchorRef, onSave }: Profile
                   type="text"
                   disabled
                   value="selly@linefriends.com"
-                  className="w-full bg-transparent text-on-surface-30 text-base font-normal leading-6 focus:outline-none"
+                  className="w-full bg-transparent text-on-surface-30 text-body1_400 focus:outline-none"
                 />
               </div>
             </div>
@@ -210,7 +210,7 @@ export function ProfileEditModal({ isOpen, onClose, anchorRef, onSave }: Profile
           {/* Pen Name Field */}
           <div className="self-stretch flex flex-col justify-start items-start gap-3">
             <div className="flex flex-col justify-start items-start gap-1">
-              <div className="text-on-surface-10 text-base font-bold leading-5">작가명</div>
+              <div className="text-on-surface-10 text-body1_700">작가명</div>
             </div>
             <div className="self-stretch rounded flex flex-col justify-center items-start gap-2">
               <div className="self-stretch h-[42px] px-4 bg-white rounded-md border border-slate-200 inline-flex justify-start items-center overflow-hidden focus-within:border-slate-400 focus-within:ring-1 focus-within:ring-slate-400/30">
@@ -219,11 +219,11 @@ export function ProfileEditModal({ isOpen, onClose, anchorRef, onSave }: Profile
                   value={penName}
                   onChange={(e) => setPenName(e.target.value.slice(0, MAX_PEN_NAME))}
                   maxLength={MAX_PEN_NAME}
-                  className="w-full bg-transparent text-on-surface-10 text-base font-medium leading-6 focus:outline-none placeholder:text-on-surface-30"
+                  className="w-full bg-transparent text-on-surface-10 text-body1_500 focus:outline-none placeholder:text-on-surface-30"
                 />
               </div>
               <div className="self-stretch inline-flex justify-end items-center gap-2">
-                <div className="text-right text-on-surface-30 text-xs font-normal leading-4 tabular-nums">{penName.length}/{MAX_PEN_NAME}</div>
+                <div className="text-right text-on-surface-30 text-caption1_400 tabular-nums">{penName.length}/{MAX_PEN_NAME}</div>
               </div>
             </div>
           </div>
@@ -231,7 +231,7 @@ export function ProfileEditModal({ isOpen, onClose, anchorRef, onSave }: Profile
           {/* Description Field */}
           <div className="self-stretch flex flex-col justify-start items-start gap-3">
             <div className="flex flex-col justify-start items-start gap-1">
-              <div className="text-on-surface-10 text-base font-bold leading-5">소개</div>
+              <div className="text-on-surface-10 text-body1_700">소개</div>
             </div>
             <div className="self-stretch max-h-[28rem] min-h-24 flex flex-col justify-start items-start gap-2">
               <div className="self-stretch h-[120px] max-h-[28rem] p-4 relative bg-white rounded-lg border border-slate-200 flex justify-start items-stretch focus-within:border-slate-400 focus-within:ring-1 focus-within:ring-slate-400/30">
@@ -241,11 +241,11 @@ export function ProfileEditModal({ isOpen, onClose, anchorRef, onSave }: Profile
                   value={description}
                   onChange={(e) => setDescription(e.target.value.slice(0, MAX_DESCRIPTION))}
                   maxLength={MAX_DESCRIPTION}
-                  className="w-full h-full min-h-0 resize-none bg-transparent text-on-surface-10 placeholder:text-on-surface-30 text-base font-normal leading-6 focus:outline-none"
+                  className="w-full h-full min-h-0 resize-none bg-transparent text-on-surface-10 placeholder:text-on-surface-30 text-body1_400 focus:outline-none"
                 />
               </div>
               <div className="self-stretch inline-flex justify-end items-center gap-2">
-                <div className="text-right text-on-surface-30 text-xs font-normal leading-4 tabular-nums">{description.length}/{MAX_DESCRIPTION}</div>
+                <div className="text-right text-on-surface-30 text-caption1_400 tabular-nums">{description.length}/{MAX_DESCRIPTION}</div>
               </div>
             </div>
           </div>
@@ -263,7 +263,7 @@ export function ProfileEditModal({ isOpen, onClose, anchorRef, onSave }: Profile
             }}
             className="h-9 min-w-20 -ml-2 bg-transparent rounded-lg flex justify-center items-center hover:bg-red-50 transition-colors"
           >
-            <span className="text-red-600 text-base font-medium leading-5">로그아웃</span>
+            <span className="text-red-600 text-body1_500">로그아웃</span>
           </button>
           <div className="inline-flex justify-end items-center gap-2">
             <button
@@ -275,7 +275,7 @@ export function ProfileEditModal({ isOpen, onClose, anchorRef, onSave }: Profile
               }}
               className="h-9 min-w-20 px-3 rounded-md border border-slate-200 flex justify-center items-center text-slate-700 hover:bg-slate-50 transition-colors"
             >
-              <span className="text-base font-medium leading-5">취소</span>
+              <span className="text-body1_500">취소</span>
             </button>
             <button
               type="button"
@@ -285,7 +285,7 @@ export function ProfileEditModal({ isOpen, onClose, anchorRef, onSave }: Profile
               }}
               className="h-9 min-w-20 px-3 bg-slate-800 rounded-md flex justify-center items-center hover:bg-slate-900 transition-colors"
             >
-              <span className="text-white text-base font-medium leading-5">저장</span>
+              <span className="text-white text-body1_500">저장</span>
             </button>
           </div>
         </div>

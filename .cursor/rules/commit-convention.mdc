@@ -1,6 +1,6 @@
 ---
-description: 커밋 메시지 작성 규칙 (Conventional Commits + 한국어 본문)
-alwaysApply: true
+description: 커밋·PR 메시지 작성 시 적용 (Conventional Commits + 한국어). 커밋/PR 요청할 때만 참조.
+alwaysApply: false
 ---
 
 # 커밋 컨벤션

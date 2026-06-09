@@ -242,15 +242,15 @@ export function AnalyticsViewerHourlyActivityChart({
 
   if (hideChart) {
     return (
-      <div className={cn("flex flex-col gap-4", className)}>
-        <p className="text-sm font-medium leading-5 text-on-surface-20">{summaryText}</p>
+      <div className={cn("flex flex-col gap-my-16", className)}>
+        <p className="text-body3_500 text-on-surface-20">{summaryText}</p>
       </div>
     );
   }
 
   return (
-    <div className={cn("flex flex-col gap-4", className)}>
-      <p className="text-sm font-medium leading-5 text-on-surface-20">{summaryText}</p>
+    <div className={cn("flex flex-col gap-my-16", className)}>
+      <p className="text-body3_500 text-on-surface-20">{summaryText}</p>
 
       <div
         className="w-full min-w-0 overflow-hidden rounded-[4px]"

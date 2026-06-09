@@ -220,29 +220,29 @@ export function ScriptBlock({
   return (
     <div
       className={cn(
-        "group flex min-h-[2.5rem] w-full rounded-r-md px-3 py-2",
+        "group flex min-h-[2.5rem] w-full rounded-r-md px-my-12 py-my-8",
         style.className
       )}
     >
-      <div className="flex w-full items-start gap-2">
+      <div className="flex w-full items-start gap-my-8">
         <Popover>
           <PopoverTrigger asChild>
             <button
               type="button"
-              className="shrink-0 pt-1.5 text-xs font-medium text-muted-foreground hover:text-foreground"
+              className="shrink-0 pt-my-8 text-caption1_500 text-muted-foreground hover:text-foreground"
             >
               {style.label}
             </button>
           </PopoverTrigger>
-          <PopoverContent align="start" className="w-40 p-2 max-h-60 overflow-y-auto">
-            <div className="flex flex-col gap-0.5">
+          <PopoverContent align="start" className="w-40 p-my-8 max-h-60 overflow-y-auto">
+            <div className="flex flex-col gap-my-2">
               {ALL_BLOCK_TYPES.map((t) => (
                 <button
                   key={t}
                   type="button"
                   onClick={() => onTypeChange(block.id, t)}
                   className={cn(
-                    "rounded px-2 py-1.5 text-left text-sm",
+                    "rounded px-my-8 py-my-8 text-left text-body3_400",
                     block.type === t
                       ? "bg-accent font-medium"
                       : "hover:bg-accent/50"
@@ -273,7 +273,7 @@ export function ScriptBlock({
               value={block.content}
               onChange={(e) => onContentChange(block.id, e.target.value)}
               placeholder={block.content === "none" ? "해제" : "값 입력"}
-              className="min-h-[1.5rem] w-full bg-transparent outline-none text-sm"
+              className="min-h-[1.5rem] w-full bg-transparent outline-none text-body3_400"
             />
           )}
         </div>

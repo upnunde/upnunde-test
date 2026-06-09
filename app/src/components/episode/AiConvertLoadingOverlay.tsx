@@ -64,7 +64,7 @@ export function AiConvertLoadingOverlay({
   return createPortal(
     <div
       className={cn(
-        "ai-convert-overlay fixed inset-0 z-[200] flex flex-col items-center justify-center gap-6 backdrop-blur-[1.5px]",
+        "ai-convert-overlay fixed inset-0 z-[200] flex flex-col items-center justify-center gap-my-24 backdrop-blur-[1.5px]",
         className,
       )}
       style={{ backgroundColor: "var(--dim-30)" }}
@@ -74,7 +74,7 @@ export function AiConvertLoadingOverlay({
       aria-label={message}
     >
       <AiLoaderIcon />
-      <p className="ai-loading-message text-sm font-medium">
+      <p className="ai-loading-message text-body3_500">
         <span key={stepIndex} className="ai-loading-text-shimmer">
           {resolvedSteps[stepIndex] ?? message}
         </span>

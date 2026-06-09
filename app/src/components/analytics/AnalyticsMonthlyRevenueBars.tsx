@@ -26,18 +26,18 @@ export function AnalyticsMonthlyRevenueBars({
   const ordered = [...rows].reverse();
 
   return (
-    <ul className={cn("flex flex-col gap-4", className)}>
+    <ul className={cn("flex flex-col gap-my-16", className)}>
       {ordered.map((row) => {
         const pct = Math.max(4, Math.round((row.amount / max) * 100));
         return (
           <li
             key={`${row.year}-${row.month}`}
-            className="grid grid-cols-[minmax(56px,72px)_1fr_minmax(88px,auto)] items-center gap-3"
+            className="grid grid-cols-[minmax(56px,72px)_1fr_minmax(88px,auto)] items-center gap-my-12"
           >
-            <div className="min-w-0 text-sm font-medium leading-5 text-on-surface-20">
+            <div className="min-w-0 text-body3_500 text-on-surface-20">
               <span className="truncate">{row.label}</span>
               {row.inProgress ? (
-                <span className="ml-1 text-xs font-normal text-on-surface-30">(진행 중)</span>
+                <span className="ml-1 text-caption1_400 text-on-surface-30">(진행 중)</span>
               ) : null}
             </div>
             <div className="h-3 min-w-0 rounded-[2px] bg-surface-20">
@@ -47,7 +47,7 @@ export function AnalyticsMonthlyRevenueBars({
                 role="presentation"
               />
             </div>
-            <p className="text-right text-sm font-bold tabular-nums leading-5 text-on-surface-10">
+            <p className="text-right text-body3_700 tabular-nums text-on-surface-10">
               {formatWon(row.amount)}
             </p>
           </li>

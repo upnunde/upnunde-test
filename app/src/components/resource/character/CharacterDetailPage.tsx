@@ -233,10 +233,10 @@ export function CharacterDetailPage({ isNew = true, initialData }: CharacterDeta
     <main className="flex flex-1 flex-col overflow-hidden bg-surface-20">
       {/* 상단 서브 헤더 - 리소스 관리/에피소드 관리와 동일 톤 */}
       <header className={PAGE_SUBHEADER_CLASS}>
-        <div className="flex w-full max-w-[1200px] min-w-[640px] items-center justify-between gap-4">
-          <div className="flex items-center justify-start gap-3">
+        <div className="flex w-full max-w-[1200px] min-w-[640px] items-center justify-between gap-my-16">
+          <div className="flex items-center justify-start gap-my-12">
             <HeaderBackButton onClick={handleBack} aria-label="리소스 목록으로" />
-            <h1 className="text-2xl font-bold text-on-surface-10">등장인물 {isNew ? "등록" : "상세"}</h1>
+            <h1 className="text-heading2_700 text-on-surface-10">등장인물 {isNew ? "등록" : "상세"}</h1>
           </div>
         </div>
       </header>
@@ -252,67 +252,67 @@ export function CharacterDetailPage({ isNew = true, initialData }: CharacterDeta
                   type="button"
                   variant="outline"
                   onClick={() => setImportCharacterModalOpen(true)}
-                  className="h-8 rounded-md bg-white px-3 text-sm font-medium text-on-surface-10 hover:bg-surface-20 disabled:border-border-20"
+                  className="h-8 rounded-md bg-white px-my-12 text-body3_500 text-on-surface-10 hover:bg-surface-20 disabled:border-border-20"
                 >
                   캐릭터 가져오기
                 </Button>
               }
             />
 
-            <div className={`${PAGE_CONTENT_BODY_CLASS} flex flex-col gap-8`}>
+            <div className={`${PAGE_CONTENT_BODY_CLASS} flex flex-col gap-my-32`}>
               {/* 이름 */}
-              <section className="flex flex-col gap-2">
+              <section className="flex flex-col gap-my-8">
                 <Title1
                   text="이름*"
                   variant="title-subtitle-dot"
                   subtitleText="캐릭터의 이름을 입력해 주세요."
                 />
-                <div className="flex flex-col justify-center items-start gap-2">
+                <div className="flex flex-col justify-center items-start gap-my-8">
                   <Input
                     value={name}
                     onChange={(e) => setName(e.target.value.slice(0, MAX_NAME))}
                     maxLength={MAX_NAME}
                     placeholder="예) 한하루"
-                    className="h-[42px] rounded-md border border-border-10 bg-white px-3 py-2 text-sm text-on-surface-10 placeholder:text-on-surface-30 focus:outline-none focus:ring-2 focus:ring-primary shadow-none"
+                    className="h-[42px] rounded-md border border-border-10 bg-white px-my-12 py-my-8 text-body3_400 text-on-surface-10 placeholder:text-on-surface-30 focus:outline-none focus:ring-2 focus:ring-primary shadow-none"
                   />
-                  <div className="w-full inline-flex justify-end items-center gap-2">
-                    <div className="text-right text-on-surface-30 text-xs font-normal leading-4 tabular-nums">{name.length}/{MAX_NAME}</div>
+                  <div className="w-full inline-flex justify-end items-center gap-my-8">
+                    <div className="text-right text-on-surface-30 text-caption1_400 tabular-nums">{name.length}/{MAX_NAME}</div>
                   </div>
                 </div>
               </section>
 
               {/* 인물 소개 */}
-              <section className="flex flex-col gap-2">
+              <section className="flex flex-col gap-my-8">
                 <Title1
                   text="인물 소개*"
                   variant="title-subtitle-dot"
                   subtitleText="한 줄로 인물의 특징이 드러나도록 정리해 주세요."
                 />
-                <div className="flex flex-col justify-center items-start gap-2">
+                <div className="flex flex-col justify-center items-start gap-my-8">
                   <Input
                     value={summary}
                     onChange={(e) => setSummary(e.target.value.slice(0, MAX_SUMMARY))}
                     maxLength={MAX_SUMMARY}
                     placeholder="예) 사람의 소리를 볼 수 있는 소리 수집가 소년"
-                    className="h-[42px] rounded-md border border-border-10 bg-white px-3 py-2 text-sm text-on-surface-10 placeholder:text-on-surface-30 focus:outline-none focus:ring-2 focus:ring-primary"
+                    className="h-[42px] rounded-md border border-border-10 bg-white px-my-12 py-my-8 text-body3_400 text-on-surface-10 placeholder:text-on-surface-30 focus:outline-none focus:ring-2 focus:ring-primary"
                   />
-                  <div className="w-full inline-flex justify-end items-center gap-2">
-                    <div className="text-right text-on-surface-30 text-xs font-normal leading-4 tabular-nums">{summary.length}/{MAX_SUMMARY}</div>
+                  <div className="w-full inline-flex justify-end items-center gap-my-8">
+                    <div className="text-right text-on-surface-30 text-caption1_400 tabular-nums">{summary.length}/{MAX_SUMMARY}</div>
                   </div>
                 </div>
               </section>
 
               {/* 대표 썸네일 / 표정 */}
-              <section className="flex flex-col gap-4">
-                <div className="grid grid-cols-[auto,1fr] gap-8 items-start">
-                  <div className="flex flex-col gap-3">
+              <section className="flex flex-col gap-my-16">
+                <div className="grid grid-cols-[auto,1fr] gap-my-32 items-start">
+                  <div className="flex flex-col gap-my-12">
                     <Title1
                       text="대표 썸네일"
                       variant="title-subtitle"
                       subtitleText="독자에게 가장 먼저 보여질 캐릭터 이미지를 등록해 주세요."
                     />
                     {thumbnailUrl ? (
-                      <div className="inline-flex flex-col justify-start items-start gap-1 w-[90px] group">
+                      <div className="inline-flex flex-col justify-start items-start gap-my-4 w-[90px] group">
                         <div className="w-[90px] h-[160px] rounded-lg overflow-hidden border border-border-10 bg-surface-20 relative">
                           <button
                             type="button"
@@ -330,7 +330,7 @@ export function CharacterDetailPage({ isNew = true, initialData }: CharacterDeta
                             />
                           </button>
                           <div className="absolute inset-0 z-[1] bg-black/10 opacity-0 group-hover:opacity-100 transition-opacity pointer-events-none" />
-                          <div className="absolute right-1 top-1 z-[2] flex flex-col justify-center items-start gap-1 opacity-0 group-hover:opacity-100 transition-opacity pointer-events-none group-hover:pointer-events-auto">
+                          <div className="absolute right-1 top-1 z-[2] flex flex-col justify-center items-start gap-my-4 opacity-0 group-hover:opacity-100 transition-opacity pointer-events-none group-hover:pointer-events-auto">
                             <button
                               type="button"
                               className="w-8 h-8 rounded-full cursor-pointer bg-surface-10 inline-flex justify-center items-center text-on-surface-10 hover:bg-surface-20"
@@ -365,17 +365,17 @@ export function CharacterDetailPage({ isNew = true, initialData }: CharacterDeta
                     )}
                   </div>
 
-                  <div className="flex flex-col gap-3">
+                  <div className="flex flex-col gap-my-12">
                     <Title1
                       text="표정"
                       variant="title-subtitle"
                       subtitleText="다양한 감정을 표현할 수 있는 표정을 여러 장까지 등록해 둘 수 있어요. (최대 10개)"
                     />
-                    <div className="flex flex-wrap gap-3 items-start">
+                    <div className="flex flex-wrap gap-my-12 items-start">
                       {expressionSlots.filter((s) => s.imageUrl).map((slot) => (
                         <div
                           key={slot.id}
-                          className="inline-flex flex-col justify-start items-start gap-1 w-[90px] group"
+                          className="inline-flex flex-col justify-start items-start gap-my-4 w-[90px] group"
                         >
                           <div className="w-[90px] h-[160px] rounded-lg overflow-hidden border border-border-10 bg-surface-20 relative">
                             <Image
@@ -389,7 +389,7 @@ export function CharacterDetailPage({ isNew = true, initialData }: CharacterDeta
                             {/* 어두운 오버레이 */}
                             <div className="absolute inset-0 w-full h-full bg-black/10 opacity-0 group-hover:opacity-100 transition-opacity pointer-events-none" />
                             {/* 편집 / 삭제 아이콘 버튼 (9:16 썸네일과 동일 스타일) */}
-                            <div className="absolute right-1 top-1 flex flex-col justify-center items-start gap-1 opacity-0 group-hover:opacity-100 transition-opacity pointer-events-none group-hover:pointer-events-auto">
+                            <div className="absolute right-1 top-1 flex flex-col justify-center items-start gap-my-4 opacity-0 group-hover:opacity-100 transition-opacity pointer-events-none group-hover:pointer-events-auto">
                               <button
                                 type="button"
                                 className="w-8 h-8 rounded-full cursor-pointer bg-surface-10 inline-flex justify-center items-center text-on-surface-10 hover:bg-surface-20"
@@ -412,7 +412,7 @@ export function CharacterDetailPage({ isNew = true, initialData }: CharacterDeta
                               </button>
                             </div>
                           </div>
-                          <span className="w-[90px] text-xs text-on-surface-10 truncate whitespace-nowrap text-left">
+                          <span className="w-[90px] text-caption1_400 text-on-surface-10 truncate whitespace-nowrap text-left">
                             {slot.expressionLabel || "untitle"}
                           </span>
                         </div>
@@ -428,13 +428,13 @@ export function CharacterDetailPage({ isNew = true, initialData }: CharacterDeta
               </section>
 
               {/* 해시태그 */}
-              <section className="flex flex-col gap-2">
+              <section className="flex flex-col gap-my-8">
                 <Title1
                   text="해시태그"
                   variant="title-subtitle"
                   subtitleText="캐릭터를 한눈에 파악할 수 있는 키워드를 입력해 주세요. 쉼표로 구분됩니다."
                 />
-                <div className="flex flex-col justify-center items-start gap-2">
+                <div className="flex flex-col justify-center items-start gap-my-8">
                   <Input
                     value={tags}
                     onChange={(e) => setTags(e.target.value.slice(0, MAX_TAGS))}
@@ -452,11 +452,11 @@ export function CharacterDetailPage({ isNew = true, initialData }: CharacterDeta
                       }
                     }}
                     placeholder="예) 고등학생, 사진, 츤데레"
-                    className="h-[42px] rounded-md border border-border-10 bg-white px-3 py-2 text-sm text-on-surface-10 placeholder:text-on-surface-30 focus:outline-none focus:ring-2 focus:ring-primary"
+                    className="h-[42px] rounded-md border border-border-10 bg-white px-my-12 py-my-8 text-body3_400 text-on-surface-10 placeholder:text-on-surface-30 focus:outline-none focus:ring-2 focus:ring-primary"
                   />
-                  <div className="w-full inline-flex justify-end items-start gap-2">
+                  <div className="w-full inline-flex justify-end items-start gap-my-8">
                     {tagList.length > 0 && (
-                      <div className="flex flex-wrap gap-2 w-full">
+                      <div className="flex flex-wrap gap-my-8 w-full">
                         {tagList.map((tag) => (
                           <Tag key={tag} onDismiss={() => handleRemoveTag(tag)}>
                             #{tag}
@@ -464,7 +464,7 @@ export function CharacterDetailPage({ isNew = true, initialData }: CharacterDeta
                         ))}
                       </div>
                     )}
-                    <div className="w-fit text-right text-on-surface-30 text-xs font-normal leading-4 tabular-nums">
+                    <div className="w-fit text-right text-on-surface-30 text-caption1_400 tabular-nums">
                       {tags.length}/{MAX_TAGS}
                     </div>
                   </div>
@@ -472,29 +472,29 @@ export function CharacterDetailPage({ isNew = true, initialData }: CharacterDeta
               </section>
 
               {/* 인물 인사 */}
-              <section className="flex flex-col gap-2">
+              <section className="flex flex-col gap-my-8">
                 <Title1
                   text="인물 인사"
                   variant="title-subtitle"
                   subtitleText="캐릭터의 말투와 성격이 드러나는 짧은 소개 멘트를 작성해 주세요."
                 />
-                <div className="flex flex-col justify-start items-start gap-2">
+                <div className="flex flex-col justify-start items-start gap-my-8">
                   <Textarea
                     rows={5}
                     value={greeting}
                     onChange={(e) => setGreeting(e.target.value.slice(0, MAX_GREETING))}
                     maxLength={MAX_GREETING}
                     placeholder="예) 안녕, 오늘도 사진 찍으러 나갈 준비됐지?"
-                    className="resize-y rounded-md border border-border-10 bg-white px-3 py-2 text-sm text-on-surface-10 placeholder:text-on-surface-30 focus:outline-none focus:ring-2 focus:ring-primary w-full min-h-[80px]"
+                    className="resize-y rounded-md border border-border-10 bg-white px-my-12 py-my-8 text-body3_400 text-on-surface-10 placeholder:text-on-surface-30 focus:outline-none focus:ring-2 focus:ring-primary w-full min-h-[80px]"
                   />
-                  <div className="w-full inline-flex justify-end items-center gap-2">
-                    <div className="text-right text-on-surface-30 text-xs font-normal leading-4 tabular-nums">{greeting.length}/{MAX_GREETING}</div>
+                  <div className="w-full inline-flex justify-end items-center gap-my-8">
+                    <div className="text-right text-on-surface-30 text-caption1_400 tabular-nums">{greeting.length}/{MAX_GREETING}</div>
                   </div>
                 </div>
               </section>
             </div>
 
-            <div className={`${PAGE_CONTENT_FOOTER_CLASS} flex items-center justify-end gap-2`}>
+            <div className={`${PAGE_CONTENT_FOOTER_CLASS} flex items-center justify-end gap-my-8`}>
               <Button
                 type="button"
                 variant="outline"

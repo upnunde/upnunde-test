@@ -1,5 +1,5 @@
 ---
-description: 프로젝트 전반에 항상 적용되는 핵심 규칙 (구조, 언어, 개발 서버, 스타일)
+description: 프로젝트 전반에 항상 적용되는 핵심 규칙 (구조, 언어, 개발 서버)
 alwaysApply: true
 ---
 
@@ -8,34 +8,23 @@ alwaysApply: true
 ## 저장소 구조
 
 - 메인 제품 UI는 **`app/`** (Next.js App Router + TypeScript).
-- 작업은 항상 `app/` 기준. `web/`, `ink-editor/`, `prototype/`은 별도 실험용이다.
-- **화면·라우트 보호**: 기존 페이지/레이아웃을 사용자 요청 없이 삭제·중복 생성·롤백하지 않는다. `/series`는 `(my-works)/` 구조만 사용 — 상세는 `.cursor/rules/page-route-guard.mdc`. 변경 후 `app/`에서 `npm run check:routes` 실행.
-- 상태 관리: **Zustand** (`useEditorStore` 등). 스타일: **Tailwind CSS** + **Radix UI**.
+- 작업은 항상 `app/` 기준. `web/`, `ink-editor/`, `prototype/`은 별도 실험용.
+- 상태 관리: **Zustand**. 스타일: **Tailwind CSS** + **Radix UI**.
+- **라우트·페이지 구조 변경** 시 `.cursor/rules/page-route-guard.mdc` 준수 → `app/`에서 `npm run check:routes`.
 
 ## 개발 서버
 
-- **`npm run dev`**: Next.js 16 기본 개발 서버(로컬에서 가장 안정적, 포트 3000).
-- **Cursor/VS Code 미리보기(Simple Browser)** URL은 **`http://renovel.localhost:3000`** 으로 고정(`.vscode/settings.json`). `localhost:3000`과 다른 프로젝트와 구분용. 최초 1회 미리보기가 안 열리면 `app/`에서 **`npm run setup:dev-host`** 실행.
-- Webpack 전용이 필요하면 **`npm run dev:webpack`**. 다만 Node 24 등 환경에서 webpack 개발 모드가 `.next/dev` 매니페스트 오류로 실패할 수 있다(빈 화면·500). 그때는 기본 `dev`를 쓰거나 `npm run clean` 후 재시도.
-- 화면 깜빡임·클릭 무반응 같은 이상 증상이 생기면 CSS가 아닌 **dev 서버 로그부터 확인**.
-- 캐시 문제 시 `npm run clean` 후 재시작.
+- 기본: `app/`에서 **`npm run dev`** (포트 3000). 미리보기 URL: **`http://renovel.localhost:3000`**
+- 이상 시 **dev 로그 확인** → 필요 시 `npm run clean` 후 재시작.
 
 ## 언어
 
-- **답변은 항상 한국어**로 한다.
-- UI에 노출되는 문자열(버튼·라벨·메시지 등)은 **한국어** 일관성을 유지한다.
-- 코드 주석은 한국어 또는 영어 혼용 가능하나, **사용자에게 보이는 텍스트는 한국어 고정**.
+- **답변·UI 노출 문자열은 한국어.**
 
-## UI/스타일 원칙
+## UI·스타일 (요약)
 
-- 기존 컴포넌트 재사용 → variant/props 변형 → 신규 생성 순으로 우선한다.
-- 색상·간격·타이포는 `text-on-surface-10`, `primary`, `slate-*` 등 **기존 토큰/유틸리티** 우선.
-- **비인터랙티브 surface(카드, 패널, 모달 컨테이너 등)의 기본 라운드 값은 4px로 고정**한다.
-  - 버튼·칩·토글 등 조작 컴포넌트는 기존 인터랙션 라운드 정책을 유지한다.
-- 임의 하드코딩 값이 필요한 경우 먼저 기존 토큰과 매핑 가능한지 확인한다.
-
-## 피드백 패턴
-
-- 완료 알림 → **스낵바(비차단)**.
-- 이탈·삭제 등 확인이 필요한 액션 → **모달/다이얼로그**.
-- 카피 톤: "~해 주세요", "~했어요" 형태의 짧고 정중한 설명체.
+- 재사용 → variant/props → 신규 생성 순.
+- 토큰·스페이싱·타이포 상세: **`.cursor/rules/ui-tokens-quickref.mdc`** · 대량 치환은 **`npm run migrate:tokens`**.
+- 리소스·이미지 업로드·크롭: **`.cursor/rules/resource-patterns.mdc`**
+- 에디터: **`.cursor/rules/editor-patterns.mdc`**
+- 정책 카피·도메인: **`.cursor/rules/service-policy-baseline.mdc`**

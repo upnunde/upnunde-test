@@ -131,7 +131,7 @@ export function BgmSection({
   return (
     <>
       <div className="w-full max-w-[1200px] min-w-[640px] bg-surface-10 rounded-[4px] border border-border-10 flex flex-col justify-start items-start">
-        <div className="w-full self-stretch px-5 pt-5 pb-3 border-b border-border-10 inline-flex justify-between items-center gap-0">
+        <div className="w-full self-stretch px-my-20 pt-my-20 pb-my-12 border-b border-border-10 inline-flex justify-between items-center gap-0">
           <Title2
             text={title}
             asSectionHeader
@@ -150,22 +150,22 @@ export function BgmSection({
           </Button>
         </div>
         {items.length === 0 ? (
-          <div className="self-stretch h-36 p-5 rounded-[4px] flex flex-col justify-center items-center gap-4">
-            <p className="text-on-surface-30 text-sm font-normal font-['Pretendard_JP'] leading-5">
+          <div className="self-stretch h-36 p-my-20 rounded-[4px] flex flex-col justify-center items-center gap-my-16">
+            <p className="text-on-surface-30 text-body3_400 font-['Pretendard_JP']">
               {emptyMessage}
             </p>
             <Button
               type="button"
               variant="outline"
-              className="h-9 min-w-20 px-3 rounded-md border border-border-20 text-on-surface-10"
+              className="h-9 min-w-20 px-my-12 rounded-md border border-border-20 text-on-surface-10"
               onClick={() => setModalOpen(true)}
             >
               {addButtonLabel}
             </Button>
           </div>
         ) : (
-          <div className="self-stretch px-5 pb-2 pt-2 rounded-[4px] flex flex-col justify-start items-start gap-3">
-            <div className="w-full pt-0 pb-0 mt-0 mb-1 inline-flex flex-col justify-start items-start gap-2.5">
+          <div className="self-stretch px-my-20 pb-my-8 pt-my-8 rounded-[4px] flex flex-col justify-start items-start gap-my-12">
+            <div className="w-full pt-0 pb-0 mt-0 mb-1 inline-flex flex-col justify-start items-start gap-my-8">
               <div
                 className={cn(
                   "inline-flex w-full min-w-0 flex-wrap items-center overflow-x-auto",
@@ -193,7 +193,7 @@ export function BgmSection({
               </div>
             </div>
             {/* 1단 와이드 리스트 영역 */}
-            <div className="w-full grid grid-cols-3 gap-x-10 gap-y-0">
+            <div className="w-full grid grid-cols-3 gap-x-my-40 gap-y-0">
               {filteredItems.map((item, idx) => (
                 <div key={item.id} className="w-full">
                   <BgmListItem

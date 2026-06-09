@@ -187,10 +187,10 @@ export function ImageResourceDetailPage({ kind, initialData }: ImageResourceDeta
     <main className="flex flex-1 flex-col overflow-hidden bg-surface-20">
       {/* 상단 서브 헤더 */}
       <header className={PAGE_SUBHEADER_CLASS}>
-        <div className="flex w-full max-w-[1200px] min-w-[640px] items-center justify-between gap-4">
-          <div className="flex items-center justify-start gap-3">
+        <div className="flex w-full max-w-[1200px] min-w-[640px] items-center justify-between gap-my-16">
+          <div className="flex items-center justify-start gap-my-12">
             <HeaderBackButton onClick={handleBack} aria-label="리소스 목록으로" />
-            <h1 className="text-2xl font-bold text-on-surface-10">{labels.headerTitle}</h1>
+            <h1 className="text-heading2_700 text-on-surface-10">{labels.headerTitle}</h1>
           </div>
         </div>
       </header>
@@ -203,51 +203,51 @@ export function ImageResourceDetailPage({ kind, initialData }: ImageResourceDeta
               asSectionHeader
             />
 
-            <div className={`${PAGE_CONTENT_BODY_CLASS} flex flex-col gap-8`}>
+            <div className={`${PAGE_CONTENT_BODY_CLASS} flex flex-col gap-my-32`}>
               {/* 이름 */}
-              <section className="flex flex-col gap-2">
+              <section className="flex flex-col gap-my-8">
                 <Title1
                   text={labels.nameLabel}
                   variant="title-subtitle-dot"
                   subtitleText={labels.nameSubtitle}
                 />
-                <div className="flex flex-col justify-center items-start gap-2">
+                <div className="flex flex-col justify-center items-start gap-my-8">
                   <Input
                     value={name}
                     onChange={(e) => setName(e.target.value)}
                     placeholder="이름을 입력해 주세요."
-                    className="h-[42px] rounded-md border border-border-10 bg-white px-3 py-2 text-sm text-on-surface-10 placeholder:text-on-surface-30 focus:outline-none focus:ring-2 focus:ring-primary shadow-none"
+                    className="h-[42px] rounded-md border border-border-10 bg-white px-my-12 py-my-8 text-body3_400 text-on-surface-10 placeholder:text-on-surface-30 focus:outline-none focus:ring-2 focus:ring-primary shadow-none"
                   />
                 </div>
               </section>
 
               {/* 설명 */}
-              <section className="flex flex-col gap-2">
+              <section className="flex flex-col gap-my-8">
                 <Title1
                   text={labels.descriptionLabel}
                   variant="title-subtitle-dot"
                   subtitleText={labels.descriptionSubtitle}
                 />
-                <div className="flex flex-col justify-center items-start gap-2">
+                <div className="flex flex-col justify-center items-start gap-my-8">
                   <Textarea
                     rows={4}
                     value={description}
                     onChange={(e) => setDescription(e.target.value)}
                     placeholder="설명을 입력해 주세요."
-                    className="min-h-[96px] max-h-[400px] w-full resize-y rounded-md border border-border-10 bg-white px-3 py-2 text-sm text-on-surface-10 placeholder:text-on-surface-30 shadow-none focus:outline-none focus:ring-2 focus:ring-primary"
+                    className="min-h-[96px] max-h-[400px] w-full resize-y rounded-md border border-border-10 bg-white px-my-12 py-my-8 text-body3_400 text-on-surface-10 placeholder:text-on-surface-30 shadow-none focus:outline-none focus:ring-2 focus:ring-primary"
                   />
                 </div>
               </section>
 
               {/* 대표 썸네일 */}
-              <section className="flex flex-col gap-3">
+              <section className="flex flex-col gap-my-12">
                 <Title1
                   text={labels.thumbnailLabel}
                   variant="title-subtitle-dot"
                   subtitleText={labels.thumbnailSubtitle}
                 />
                 {thumbnailUrl ? (
-                  <div className="inline-flex flex-col justify-start items-start gap-1 w-[90px] group">
+                  <div className="inline-flex flex-col justify-start items-start gap-my-4 w-[90px] group">
                     <div className="w-[90px] h-[160px] rounded-lg overflow-hidden border border-border-10 bg-surface-20 relative">
                       <button
                         type="button"
@@ -265,7 +265,7 @@ export function ImageResourceDetailPage({ kind, initialData }: ImageResourceDeta
                         />
                       </button>
                       <div className="absolute inset-0 z-[1] bg-black/10 opacity-0 group-hover:opacity-100 transition-opacity pointer-events-none" />
-                      <div className="absolute right-1 top-1 z-[2] flex flex-col justify-center items-start gap-1 opacity-0 group-hover:opacity-100 transition-opacity pointer-events-none group-hover:pointer-events-auto">
+                      <div className="absolute right-1 top-1 z-[2] flex flex-col justify-center items-start gap-my-4 opacity-0 group-hover:opacity-100 transition-opacity pointer-events-none group-hover:pointer-events-auto">
                         <button
                           type="button"
                           className="w-8 h-8 rounded-full cursor-pointer bg-surface-10 inline-flex justify-center items-center text-on-surface-10 hover:bg-surface-20"
@@ -302,17 +302,17 @@ export function ImageResourceDetailPage({ kind, initialData }: ImageResourceDeta
 
               {/* 연출장면 전용: AI채팅 적용 여부 */}
               {kind === "scene" && (
-                <section className="flex flex-col gap-2">
+                <section className="flex flex-col gap-my-8">
                   <Title1
                     text="AI채팅 적용 여부*"
                     variant="title-subtitle-dot"
                     subtitleText="이 연출장면을 AI 자동 전개에 사용할지 여부를 선택해 주세요."
                   />
-                  <div className="flex items-center gap-6 mt-1">
+                  <div className="flex items-center gap-my-24 mt-1">
                     <button
                       type="button"
                       onClick={() => setSceneAiMode("apply")}
-                      className="inline-flex items-center gap-2 text-sm font-medium text-on-surface-10 cursor-pointer"
+                      className="inline-flex items-center gap-my-8 text-body3_500 text-on-surface-10 cursor-pointer"
                     >
                       <span
                         className={`flex h-4 w-4 items-center justify-center rounded-full border ${
@@ -330,7 +330,7 @@ export function ImageResourceDetailPage({ kind, initialData }: ImageResourceDeta
                     <button
                       type="button"
                       onClick={() => setSceneAiMode("none")}
-                      className="inline-flex items-center gap-2 text-sm font-medium text-on-surface-10 cursor-pointer"
+                      className="inline-flex items-center gap-my-8 text-body3_500 text-on-surface-10 cursor-pointer"
                     >
                       <span
                         className={`flex h-4 w-4 items-center justify-center rounded-full border ${
@@ -350,7 +350,7 @@ export function ImageResourceDetailPage({ kind, initialData }: ImageResourceDeta
               )}
             </div>
 
-            <div className={`${PAGE_CONTENT_FOOTER_CLASS} flex items-center justify-end gap-2`}>
+            <div className={`${PAGE_CONTENT_FOOTER_CLASS} flex items-center justify-end gap-my-8`}>
               <Button
                 type="button"
                 variant="outline"

@@ -35,7 +35,7 @@ export function ResourceSection({
     <div className="w-full max-w-[1200px] min-w-[640px] bg-surface-10 rounded-[4px] border border-border-10 flex flex-col justify-start items-start">
       {headerAction ? (
         <div
-          className="w-full h-fit px-5 py-3 border-b border-border-10/5 flex items-center justify-between gap-3"
+          className="w-full h-fit px-my-20 py-my-12 border-b border-border-10/5 flex items-center justify-between gap-my-12"
           style={{ borderBottomColor: "rgba(0, 0, 0, 0.07)" }}
         >
           <div className="min-w-0 flex-1">
@@ -47,21 +47,21 @@ export function ResourceSection({
         <Title2 text={title} asSectionHeader subtitle subtitleText={description} />
       )}
       {isEmpty ? (
-        <div className="self-stretch h-36 p-5 rounded-[4px] flex flex-col justify-center items-center gap-4">
-          <p className="text-on-surface-30 text-sm font-normal font-['Pretendard_JP'] leading-5">
+        <div className="self-stretch h-36 p-my-20 rounded-[4px] flex flex-col justify-center items-center gap-my-16">
+          <p className="text-on-surface-30 text-body3_400 font-['Pretendard_JP']">
             {emptyMessage}
           </p>
           <Button
             type="button"
             variant="outline"
-            className="h-9 min-w-20 px-3 rounded-md border border-border-20 text-on-secondary text-base font-medium font-['Pretendard_JP'] leading-5 hover:bg-surface-20"
+            className="h-9 min-w-20 px-my-12 rounded-md border border-border-20 text-on-secondary text-body1_500 font-['Pretendard_JP'] hover:bg-surface-20"
             onClick={onAddClick}
           >
             {addButtonLabel}
           </Button>
         </div>
       ) : (
-        <div className="self-stretch p-5">{children}</div>
+        <div className="self-stretch p-my-20">{children}</div>
       )}
     </div>
   );

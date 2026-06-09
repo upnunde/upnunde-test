@@ -90,6 +90,63 @@
   --color-error-error: var(--error-error);
 }
 
+/* ========== Design System: 스페이싱(my-) · Elevation 토큰 ==========
+   docs/design-system.md Part2-4 / Part2-5 / Part3 단일 소스.
+   `--spacing-my-*` → p-my-*, px-my-*, gap-my-*, h-my-*, size-my-* 등 생성.
+   기존 표준 Tailwind 유틸(px-5, gap-4 등)과 충돌 없이 병행한다. */
+@theme {
+  --spacing-my-1: 1px;
+  --spacing-my-2: 2px;
+  --spacing-my-4: 4px;
+  --spacing-my-8: 8px;
+  --spacing-my-12: 12px;
+  --spacing-my-16: 16px;
+  --spacing-my-20: 20px;
+  --spacing-my-24: 24px;
+  --spacing-my-28: 28px;
+  --spacing-my-32: 32px;
+  --spacing-my-36: 36px;
+  --spacing-my-40: 40px;
+  --spacing-my-44: 44px;
+  --spacing-my-48: 48px;
+  --spacing-my-52: 52px;
+  --spacing-my-56: 56px;
+  --spacing-my-60: 60px;
+  --spacing-my-64: 64px;
+  --spacing-my-68: 68px;
+  --spacing-my-72: 72px;
+  --spacing-my-80: 80px;
+
+  --shadow-elevation-10: 0px 1px 2px 1px rgba(0, 0, 0, 0.16);
+  --shadow-elevation-20: 0px 2px 4px 2px rgba(0, 0, 0, 0.16);
+  --shadow-elevation-30: 0px 4px 8px 4px rgba(0, 0, 0, 0.16);
+  --shadow-elevation-40: 0px 6px 12px 6px rgba(0, 0, 0, 0.16);
+  --shadow-elevation-50: 0px 8px 16px 8px rgba(0, 0, 0, 0.16);
+  --shadow-elevation-60: 0px 12px 24px 12px rgba(0, 0, 0, 0.16);
+}
+
+/* ========== Design System: Z-Index 레이어 토큰 ==========
+   v4에서 `--z-index-*` 네임스페이스는 유틸을 안정적으로 생성하지 않으므로
+   공식 권장 방식인 @utility로 직접 선언한다. docs Part2-6 단일 소스. */
+@utility z-base {
+  z-index: 0;
+}
+@utility z-dropdown {
+  z-index: 100;
+}
+@utility z-sticky {
+  z-index: 200;
+}
+@utility z-overlay {
+  z-index: 300;
+}
+@utility z-modal {
+  z-index: 400;
+}
+@utility z-toast {
+  z-index: 500;
+}
+
 :root {
   --radius: 0.625rem;
   --background: #FFFFFF;
@@ -525,3 +582,37 @@
     background-color: rgba(52, 52, 54, 0.9);
   }
 }
+
+/* ========== Design System: 타이포그래피 단일 유틸리티 ==========
+   docs/design-system.md Part2-1 단일 소스. size/line-height/weight를 묶은
+   단일 클래스만 사용하고 개별 속성 조합(text-sm + font-bold 등)은 금지.
+   폰트 패밀리(Pretendard JP)는 전역 적용이라 여기서 지정하지 않는다. */
+@utility text-heading1_700 { font-size: 32px; line-height: 38px; font-weight: 700; }
+@utility text-heading2_700 { font-size: 24px; line-height: 34px; font-weight: 700; }
+@utility text-heading2_500 { font-size: 24px; line-height: 34px; font-weight: 500; }
+@utility text-heading3_700 { font-size: 22px; line-height: 30px; font-weight: 700; }
+@utility text-heading3_500 { font-size: 22px; line-height: 30px; font-weight: 500; }
+@utility text-heading4_700 { font-size: 20px; line-height: 28px; font-weight: 700; }
+@utility text-heading4_500 { font-size: 20px; line-height: 28px; font-weight: 500; }
+@utility text-heading5_700 { font-size: 18px; line-height: 26px; font-weight: 700; }
+@utility text-heading5_500 { font-size: 18px; line-height: 26px; font-weight: 500; }
+
+@utility text-body1_700 { font-size: 16px; line-height: 24px; font-weight: 700; }
+@utility text-body1_500 { font-size: 16px; line-height: 24px; font-weight: 500; }
+@utility text-body1_400 { font-size: 16px; line-height: 24px; font-weight: 400; }
+@utility text-body2_700 { font-size: 15px; line-height: 22px; font-weight: 700; }
+@utility text-body2_500 { font-size: 15px; line-height: 22px; font-weight: 500; }
+@utility text-body2_400 { font-size: 15px; line-height: 22px; font-weight: 400; }
+@utility text-body3_700 { font-size: 14px; line-height: 20px; font-weight: 700; }
+@utility text-body3_500 { font-size: 14px; line-height: 20px; font-weight: 500; }
+@utility text-body3_400 { font-size: 14px; line-height: 20px; font-weight: 400; }
+@utility text-body4_700 { font-size: 13px; line-height: 18px; font-weight: 700; }
+@utility text-body4_500 { font-size: 13px; line-height: 18px; font-weight: 500; }
+@utility text-body4_400 { font-size: 13px; line-height: 18px; font-weight: 400; }
+
+@utility text-caption1_700 { font-size: 12px; line-height: 16px; font-weight: 700; }
+@utility text-caption1_500 { font-size: 12px; line-height: 16px; font-weight: 500; }
+@utility text-caption1_400 { font-size: 12px; line-height: 16px; font-weight: 400; }
+@utility text-caption2_700 { font-size: 11px; line-height: 14px; font-weight: 700; }
+@utility text-caption2_500 { font-size: 11px; line-height: 14px; font-weight: 500; }
+@utility text-caption2_400 { font-size: 11px; line-height: 14px; font-weight: 400; }

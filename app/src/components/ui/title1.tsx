@@ -46,8 +46,8 @@ export function Title1({
 
   const displayText = showDot && text.endsWith("*") ? text.slice(0, -1) : text;
   const titleRow = (
-    <div className="inline-flex justify-start items-start gap-0.5">
-      <div className="justify-center text-on-surface-10 text-[15px] font-bold font-['Pretendard_JP'] leading-5">
+    <div className="inline-flex justify-start items-start gap-my-2">
+      <div className="justify-center text-on-surface-10 text-body2_700 font-['Pretendard_JP']">
         {displayText}
       </div>
       {showDot && (
@@ -63,10 +63,10 @@ export function Title1({
 
   return (
     <div className={cn("relative rounded-[5px] overflow-hidden min-w-0", className)}>
-      <div className="inline-flex flex-col justify-start items-start gap-1">
+      <div className="inline-flex flex-col justify-start items-start gap-my-4">
         {titleRow}
         {subtitle && (
-          <div className="justify-center text-on-surface-30 text-[13px] font-normal font-['Pretendard_JP'] leading-4">
+          <div className="justify-center text-on-surface-30 text-body4_400 font-['Pretendard_JP']">
             {subtitleText}
           </div>
         )}

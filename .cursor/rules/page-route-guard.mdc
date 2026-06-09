@@ -1,6 +1,7 @@
 ---
-description: 기존 화면·라우트 무허가 삭제·중복·롤백 금지. /series 등 확정된 App Router 구조 보호.
-alwaysApply: true
+description: App Router 페이지·레이아웃 무허가 삭제·중복·롤백 금지. /series 등 확정 구조 보호.
+globs: app/src/app/**
+alwaysApply: false
 ---
 
 # 화면·라우트 보호 (무허가 롤백 금지)

@@ -13,8 +13,8 @@ export function PageCard({ className, children, fullWidth = false }: PageCardPro
     <div
       className={cn(
         fullWidth
-          ? "w-full rounded-[4px] border border-border-10 bg-white px-5 pt-2 pb-5 shadow-none overflow-hidden"
-          : "mx-auto w-full max-w-[1200px] min-w-[640px] rounded-[4px] border border-border-10 bg-white px-5 pt-2 pb-5 shadow-none overflow-hidden",
+          ? "w-full rounded-[4px] border border-border-10 bg-white px-my-20 pt-my-8 pb-my-20 shadow-none overflow-hidden"
+          : "mx-auto w-full max-w-[1200px] min-w-[640px] rounded-[4px] border border-border-10 bg-white px-my-20 pt-my-8 pb-my-20 shadow-none overflow-hidden",
         className,
       )}
     >

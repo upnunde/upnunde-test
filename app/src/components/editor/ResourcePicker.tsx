@@ -208,8 +208,8 @@ export function ResourcePicker({
         }}
       >
         {/* 헤더: 타이틀 + 닫기 버튼 */}
-        <div className="flex w-full items-center justify-between px-5 py-2">
-          <div className="text-on-surface-10 text-base font-bold leading-6">{title}</div>
+        <div className="flex w-full items-center justify-between px-my-20 py-my-8">
+          <div className="text-on-surface-10 text-body1_700">{title}</div>
           <button
             type="button"
             aria-label="닫기"
@@ -224,7 +224,7 @@ export function ResourcePicker({
         <div
           className={cn(
             "flex-1 max-h-full overflow-y-auto",
-            imageMode ? "px-5 pt-0 pb-5 grid grid-cols-3 gap-4 w-fit" : "pt-0 px-2 pb-2 flex flex-col gap-0.5"
+            imageMode ? "px-my-20 pt-0 pb-my-20 grid grid-cols-3 gap-my-16 w-fit" : "pt-0 px-my-8 pb-my-8 flex flex-col gap-my-2"
           )}
         >
           {imageMode ? (
@@ -236,7 +236,7 @@ export function ResourcePicker({
                   optionButtonRefs.current[0] = el;
                 }}
                 onKeyDown={(e) => handleOptionKeyDown(0, e)}
-                className="group rounded-lg cursor-pointer inline-flex flex-col justify-start items-center gap-2 col-span-1 focus:outline-none focus:ring-0"
+                className="group rounded-lg cursor-pointer inline-flex flex-col justify-start items-center gap-my-8 col-span-1 focus:outline-none focus:ring-0"
               >
                 <div
                   className={cn(
@@ -276,7 +276,7 @@ export function ResourcePicker({
                     isCharacter ? "items-center" : "items-start"
                   )}
                 >
-                  <div className="text-center justify-center text-on-surface-10 text-[13px] font-normal leading-5">
+                  <div className="text-center justify-center text-on-surface-10 text-body4_400">
                     선택 안 함
                   </div>
                 </div>
@@ -291,7 +291,7 @@ export function ResourcePicker({
                   }}
                   onKeyDown={(e) => handleOptionKeyDown(idx + 1, e)}
                   className={cn(
-                    "group rounded-lg cursor-pointer inline-flex flex-col justify-start items-center gap-2 hover:bg-surface-10/40 focus:outline-none focus:ring-0",
+                    "group rounded-lg cursor-pointer inline-flex flex-col justify-start items-center gap-my-8 hover:bg-surface-10/40 focus:outline-none focus:ring-0",
                     isCharacter ? "" : "items-start"
                   )}
                 >
@@ -311,7 +311,7 @@ export function ResourcePicker({
                         className="object-cover"
                       />
                     ) : (
-                      <div className="relative z-0 flex h-full w-full items-center justify-center text-xs text-on-surface-30">
+                      <div className="relative z-0 flex h-full w-full items-center justify-center text-caption1_400 text-on-surface-30">
                         —
                       </div>
                     )}
@@ -328,7 +328,7 @@ export function ResourcePicker({
                   >
                     <span
                       className={cn(
-                        "text-center justify-center text-[13px] font-normal leading-5 truncate",
+                        "text-center justify-center text-body4_400 truncate",
                         selectedName === item.name ? "text-primary" : "text-on-surface-10"
                       )}
                     >
@@ -348,7 +348,7 @@ export function ResourcePicker({
                     optionButtonRefs.current[0] = el;
                   }}
                   onKeyDown={(e) => handleOptionKeyDown(0, e)}
-                  className="flex cursor-pointer items-center gap-2 rounded px-2 py-2 text-left text-sm hover:bg-surface-20 focus:outline-none focus-visible:ring-2 focus-visible:ring-inset focus-visible:ring-primary/40 focus:ring-0"
+                  className="flex cursor-pointer items-center gap-my-8 rounded px-my-8 py-my-8 text-left text-body3_400 hover:bg-surface-20 focus:outline-none focus-visible:ring-2 focus-visible:ring-inset focus-visible:ring-primary/40 focus:ring-0"
                 >
                   <span className="flex h-8 w-8 shrink-0 items-center justify-center rounded bg-surface-20 text-on-surface-disabled/60">
                     —
@@ -367,7 +367,7 @@ export function ResourcePicker({
                   onKeyDown={(e) =>
                     handleOptionKeyDown(idx + (isSceneTransition ? 0 : 1), e)
                   }
-                  className="flex cursor-pointer items-center gap-2 rounded px-2 py-2 text-left text-sm hover:bg-surface-20 focus:outline-none focus-visible:ring-2 focus-visible:ring-inset focus-visible:ring-primary/40 focus:ring-0"
+                  className="flex cursor-pointer items-center gap-my-8 rounded px-my-8 py-my-8 text-left text-body3_400 hover:bg-surface-20 focus:outline-none focus-visible:ring-2 focus-visible:ring-inset focus-visible:ring-primary/40 focus:ring-0"
                 >
                   {!isSceneTransition && (
                     <span className="flex h-8 w-8 shrink-0 items-center justify-center rounded bg-surface-20 text-on-surface-30">
@@ -380,7 +380,7 @@ export function ResourcePicker({
                 </button>
               ))}
               {isSceneTransition && (
-                <div className="mt-1 border-t border-border-10 pt-1">
+                <div className="mt-1 border-t border-border-10 pt-my-4">
                   <button
                     type="button"
                     onClick={() => handleSelect(EPISODE_END_LABEL)}
@@ -388,7 +388,7 @@ export function ResourcePicker({
                       optionButtonRefs.current[items.length] = el;
                     }}
                     onKeyDown={(e) => handleOptionKeyDown(items.length, e)}
-                    className="flex w-full cursor-pointer items-center gap-2 rounded px-2 py-2 text-left text-sm hover:bg-surface-20 focus:outline-none focus-visible:ring-2 focus-visible:ring-inset focus-visible:ring-primary/40 focus:ring-0"
+                    className="flex w-full cursor-pointer items-center gap-my-8 rounded px-my-8 py-my-8 text-left text-body3_400 hover:bg-surface-20 focus:outline-none focus-visible:ring-2 focus-visible:ring-inset focus-visible:ring-primary/40 focus:ring-0"
                   >
                     <span className="truncate font-medium text-on-surface-10">
                       {EPISODE_END_LABEL}

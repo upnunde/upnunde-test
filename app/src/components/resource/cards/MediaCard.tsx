@@ -4,6 +4,7 @@ import React from "react";
 import Image from "next/image";
 import { Pencil, Trash2 } from "lucide-react";
 import type { MediaResource } from "@/types/resource";
+import { THUMBNAIL_DIM_OVERLAY_CLASS } from "@/lib/thumbnail-styles";
 import { cn } from "@/lib/utils";
 
 /** [정책 7] 미디어 카드. 썸네일 + 재생시간 표시. 클릭 시 상세 페이지, 삭제 시 확인 팝업. */
@@ -45,12 +46,12 @@ export function MediaCard({
       tabIndex={0}
       onClick={handleCardClick}
       onKeyDown={(e) => e.key === "Enter" && (onPreviewClick ? onPreviewClick(item) : onDetailClick(item))}
-      className="group inline-flex w-[90px] flex-col justify-start items-start gap-1 cursor-pointer"
+      className="group inline-flex w-[90px] flex-col justify-start items-start gap-my-4 cursor-pointer"
       aria-label={`${item.name} 상세 보기`}
     >
       <div
         className={cn(
-          "w-[90px] h-[160px] relative rounded-lg outline outline-1 outline-offset-[-1px] flex flex-col justify-center items-center gap-2 overflow-hidden",
+          "w-[90px] h-[160px] relative rounded-lg outline outline-1 outline-offset-[-1px] flex flex-col justify-center items-center gap-my-8 overflow-hidden",
           error
             ? "bg-error-error-container outline-error-on-error-container"
             : "bg-surface-disabled/0 outline-border-20"
@@ -63,8 +64,9 @@ export function MediaCard({
           sizes="90px"
           className="object-cover"
         />
+        <div className={THUMBNAIL_DIM_OVERLAY_CLASS} aria-hidden />
         <div className="w-full h-6 left-0 bottom-0 absolute inline-flex justify-center items-center pointer-events-none bg-black/40">
-          <span className="text-center text-white text-xs font-bold font-['Pretendard_JP'] leading-4">
+          <span className="text-center text-white text-caption1_700 font-['Pretendard_JP']">
             {item.duration}
           </span>
         </div>
@@ -77,7 +79,7 @@ export function MediaCard({
         />
         <div
           className={cn(
-            "absolute right-1 top-1 flex flex-col justify-center items-start gap-1 transition-opacity",
+            "absolute right-1 top-1 flex flex-col justify-center items-start gap-my-4 transition-opacity",
             showControls ? "opacity-100" : "opacity-0 group-hover:opacity-100"
           )}
         >
@@ -106,10 +108,10 @@ export function MediaCard({
         </div>
       </div>
       {showName && (
-        <div className="self-stretch inline-flex justify-start items-center gap-2.5 overflow-hidden">
+        <div className="self-stretch inline-flex justify-start items-center gap-my-8 overflow-hidden">
           <span
             className={cn(
-              "flex-1 text-[13px] font-normal font-['Pretendard_JP'] leading-5 truncate",
+              "flex-1 text-body4_400 font-['Pretendard_JP'] truncate",
               error ? "text-error-on-error-container" : "text-on-surface-10"
             )}
           >

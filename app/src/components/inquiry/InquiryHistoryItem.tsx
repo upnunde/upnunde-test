@@ -25,35 +25,35 @@ export function InquiryHistoryItem({
       <button
         type="button"
         onClick={() => onToggle?.()}
-        className="w-[calc(100%-40px)] mx-5 cursor-pointer self-stretch h-[80px] rounded-lg inline-flex justify-start items-center gap-5 transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-inset"
+        className="w-[calc(100%-40px)] mx-5 cursor-pointer self-stretch h-[80px] rounded-lg inline-flex justify-start items-center gap-my-20 transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-inset"
         aria-expanded={isOpen}
         aria-controls={`inquiry-content-${id}`}
         id={`inquiry-trigger-${id}`}
       >
         <div
-          className={`w-[72px] h-8 p-2 rounded flex justify-center items-center gap-2.5 ${
+          className={`w-[72px] h-8 p-my-8 rounded flex justify-center items-center gap-my-8 ${
             status === "answered"
               ? "bg-surface-20 text-on-surface-20"
               : "bg-primary-primary-container text-primary"
           }`}
         >
-          <div className="justify-start text-sm font-medium font-['Pretendard_JP'] leading-5">
+          <div className="justify-start text-body3_500 font-['Pretendard_JP']">
             {INQUIRY_STATUS_LABEL[status]}
           </div>
         </div>
-        <div className="flex-1 inline-flex flex-col justify-center items-start gap-1">
-          <div className="inline-flex justify-start items-center gap-5">
-            <div className="flex justify-start items-start gap-1">
-              <div className="justify-start text-on-surface-10 text-[15px] font-medium font-['Pretendard_JP'] leading-5">
+        <div className="flex-1 inline-flex flex-col justify-center items-start gap-my-4">
+          <div className="inline-flex justify-start items-center gap-my-20">
+            <div className="flex justify-start items-start gap-my-4">
+              <div className="justify-start text-on-surface-10 text-body2_500 font-['Pretendard_JP']">
                 {title}
               </div>
             </div>
           </div>
-          <div className="justify-start text-on-surface-30 text-xs font-normal font-['Pretendard_JP'] leading-4">
+          <div className="justify-start text-on-surface-30 text-caption1_400 font-['Pretendard_JP']">
             {createdAt}
           </div>
         </div>
-        <div className="w-8 h-8 px-3 rounded-[999px] flex justify-center items-center overflow-hidden bg-transparent text-on-surface-30">
+        <div className="w-8 h-8 px-my-12 rounded-[999px] flex justify-center items-center overflow-hidden bg-transparent text-on-surface-30">
           <ChevronDown
             className={`w-3 h-3 shrink-0 ${isOpen ? "rotate-180" : ""}`}
             aria-hidden
@@ -66,33 +66,33 @@ export function InquiryHistoryItem({
           id={`inquiry-content-${id}`}
           role="region"
           aria-labelledby={`inquiry-trigger-${id}`}
-          className="flex items-stretch gap-5 pl-[90px] pr-5 pb-5 pt-0"
+          className="flex items-stretch gap-my-20 pl-[90px] pr-my-20 pb-my-20 pt-0"
         >
           <div
             className="w-px shrink-0 self-stretch min-h-0 bg-surface-20 rounded-full"
             aria-hidden
           />
-          <div className="min-w-0 flex-1 flex flex-col gap-4 py-1">
+          <div className="min-w-0 flex-1 flex flex-col gap-my-16 py-my-4">
             <div>
-              <p className="text-[13px] font-bold text-on-surface-30 mb-1">문의 유형</p>
-              <p className="text-sm text-on-surface-20">{INQUIRY_CATEGORY_LABEL[category]}</p>
+              <p className="text-body4_700 text-on-surface-30 mb-1">문의 유형</p>
+              <p className="text-body3_400 text-on-surface-20">{INQUIRY_CATEGORY_LABEL[category]}</p>
             </div>
             <div>
-              <p className="text-[13px] font-bold text-on-surface-30 mb-1">상세내용</p>
-              <p className="text-sm text-on-surface-20 whitespace-pre-wrap leading-[160%]">
+              <p className="text-body4_700 text-on-surface-30 mb-1">상세내용</p>
+              <p className="text-body3_400 text-on-surface-20 whitespace-pre-wrap">
                 {content}
               </p>
             </div>
             {email && (
               <div>
-                <p className="text-[13px] font-bold text-on-surface-30 mb-1">연락 이메일</p>
-                <p className="text-sm text-on-surface-20">{email}</p>
+                <p className="text-body4_700 text-on-surface-30 mb-1">연락 이메일</p>
+                <p className="text-body3_400 text-on-surface-20">{email}</p>
               </div>
             )}
             {status === "answered" && (
-              <div className="rounded-lg bg-surface-20/50 px-4 py-3 text-on-surface-30">
-                <p className="text-[13px] font-bold text-on-surface-30 mb-1">답변</p>
-                <p className="text-sm text-on-surface-20">
+              <div className="rounded-lg bg-surface-20/50 px-my-16 py-my-12 text-on-surface-30">
+                <p className="text-body4_700 text-on-surface-30 mb-1">답변</p>
+                <p className="text-body3_400 text-on-surface-20">
                   문의해 주셔서 감사합니다. 검토 후 연락드리겠습니다.
                 </p>
               </div>
@@ -104,7 +104,7 @@ export function InquiryHistoryItem({
                   e.stopPropagation();
                   onToggle?.();
                 }}
-                className="h-8 cursor-pointer rounded-md border border-border-20 bg-white px-3 text-sm font-medium text-on-surface-20 hover:bg-surface-20 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-2 disabled:border-border-20"
+                className="h-8 cursor-pointer rounded-md border border-border-20 bg-white px-my-12 text-body3_500 text-on-surface-20 hover:bg-surface-20 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-2 disabled:border-border-20"
               >
                 접기
               </button>

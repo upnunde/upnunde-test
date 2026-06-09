@@ -49,30 +49,30 @@ export default function InquiryPage() {
         <div className="flex min-w-0 flex-1 flex-col overflow-hidden">
           <main className="flex flex-1 flex-col overflow-hidden bg-surface-20">
             {/* Sub Header (레이아웃 가이드: margin 40, max-width 1200, min-width 640) */}
-            <div className="w-full h-[64px] shrink-0 border-b border-border-10 bg-white flex flex-col items-center justify-center px-5">
-              <div className="w-full max-w-[1200px] flex items-center justify-start gap-4">
-                <h1 className="text-2xl font-bold text-on-surface-10">문의</h1>
+            <div className="w-full h-[64px] shrink-0 border-b border-border-10 bg-white flex flex-col items-center justify-center px-my-20">
+              <div className="w-full max-w-[1200px] flex items-center justify-start gap-my-16">
+                <h1 className="text-heading2_700 text-on-surface-10">문의</h1>
               </div>
             </div>
-            <div className="flex-1 overflow-y-auto flex flex-col items-center py-8 gap-3 px-5">
+            <div className="flex-1 overflow-y-auto flex flex-col items-center py-my-32 gap-my-12 px-my-20">
               <div className="w-full max-w-[1200px] mx-auto">
               <div className="w-full h-fit rounded-[4px] border border-border-10 bg-white flex flex-col shrink-0 overflow-hidden">
                 {/* 탭 헤더 - NotificationList와 동일 구조 */}
-                <div className="self-stretch px-5 pt-0 pb-0 mt-2 mb-0 border-b border-border-10 inline-flex flex-col justify-start items-start gap-2.5">
+                <div className="self-stretch px-my-20 pt-0 pb-0 mt-2 mb-0 border-b border-border-10 inline-flex flex-col justify-start items-start gap-my-8">
                   <div
                     data-size="L"
                     data-underline="true"
-                    className="w-full inline-flex justify-start items-center gap-4 overflow-hidden"
+                    className="w-full inline-flex justify-start items-center gap-my-16 overflow-hidden"
                   >
                     <button
                       type="button"
                       data-height="h40"
                       data-selectline="true"
                       className={
-                        "h-9 flex cursor-pointer justify-center items-center gap-2.5 min-w-0 " +
+                        "h-9 flex cursor-pointer justify-center items-center gap-my-8 min-w-0 " +
                         (activeTab === "inquiry"
-                          ? "border-b-2 border-slate-800 text-on-surface-10 text-base font-bold font-['Pretendard_JP'] leading-6"
-                          : "text-on-surface-disabled text-base font-bold font-['Pretendard_JP'] leading-6")
+                          ? "border-b-2 border-slate-800 text-on-surface-10 text-body1_700 font-['Pretendard_JP']"
+                          : "text-on-surface-disabled text-body1_700 font-['Pretendard_JP']")
                       }
                       onClick={() => setActiveTab("inquiry")}
                       data-activated={activeTab === "inquiry"}
@@ -84,10 +84,10 @@ export default function InquiryPage() {
                       data-height="h40"
                       data-selectline="true"
                       className={
-                        "h-9 flex cursor-pointer justify-center items-center gap-2.5 min-w-0 " +
+                        "h-9 flex cursor-pointer justify-center items-center gap-my-8 min-w-0 " +
                         (activeTab === "history"
-                          ? "border-b-2 border-slate-800 text-on-surface-10 text-base font-bold font-['Pretendard_JP'] leading-6"
-                          : "text-on-surface-disabled text-base font-bold font-['Pretendard_JP'] leading-6")
+                          ? "border-b-2 border-slate-800 text-on-surface-10 text-body1_700 font-['Pretendard_JP']"
+                          : "text-on-surface-disabled text-body1_700 font-['Pretendard_JP']")
                       }
                       onClick={() => setActiveTab("history")}
                       data-activated={activeTab === "history"}
@@ -110,7 +110,7 @@ export default function InquiryPage() {
                       }
                     />
                   ) : (
-                    <div className="flex flex-col gap-4">
+                    <div className="flex flex-col gap-my-16">
                       <InquiryHistoryList items={inquiryHistory} />
                     </div>
                   )}

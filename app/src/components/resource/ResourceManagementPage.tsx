@@ -181,22 +181,22 @@ export function ResourceManagementPage() {
       <main className="flex min-h-0 flex-1 flex-col bg-surface-20">
         {/* [정책 1] 헤더 (레이아웃 가이드: margin 40, max-width 1200, min-width 640) */}
         <header className={PAGE_SUBHEADER_CLASS}>
-          <div className="flex w-full max-w-[1200px] min-w-[640px] items-center justify-between gap-4">
-            <div className="flex items-center justify-start gap-3">
+          <div className="flex w-full max-w-[1200px] min-w-[640px] items-center justify-between gap-my-16">
+            <div className="flex items-center justify-start gap-my-12">
               <HeaderBackButton onClick={handleBack} aria-label="시리즈 목록으로" />
-              <h1 className="text-2xl font-bold text-on-surface-10">리소스 관리</h1>
+              <h1 className="text-heading2_700 text-on-surface-10">리소스 관리</h1>
             </div>
           </div>
         </header>
 
         <div className={PAGE_SCROLL_COLUMN_CLASS}>
-          <div className="w-full max-w-[1200px] min-w-[640px] mx-auto flex flex-col gap-4">
+          <div className="w-full max-w-[1200px] min-w-[640px] mx-auto flex flex-col gap-my-16">
             <ResourceBanner seriesId={seriesId} />
 
-            <div className="flex w-full flex-col items-start gap-6 lg:flex-row">
+            <div className="flex w-full flex-col items-start gap-my-24 lg:flex-row">
               {showPreview && (
                 <aside className="w-full lg:w-[380px] lg:shrink-0 lg:sticky lg:top-6">
-                  <div className="w-full bg-surface-10 rounded-[4px] border border-border-10 p-5">
+                  <div className="w-full bg-surface-10 rounded-[4px] border border-border-10 p-my-20">
                     <Title2
                       text="미리보기"
                       asSectionHeader
@@ -212,7 +212,7 @@ export function ResourceManagementPage() {
                 </aside>
               )}
 
-              <div className="flex min-w-0 flex-1 flex-col gap-4">
+              <div className="flex min-w-0 flex-1 flex-col gap-my-16">
 
             {/* 등장인물 [정책 2, 3, 5] */}
             <ResourceSection
@@ -224,7 +224,7 @@ export function ResourceManagementPage() {
               descriptionColorClassName="text-on-surface-30"
               onAddClick={() => navigateTo(ROUTES.character.new(seriesId))}
             >
-              <div className="self-stretch p-0 rounded-[4px] inline-flex justify-start items-start gap-4 flex-wrap content-start">
+              <div className="self-stretch p-0 rounded-[4px] inline-flex justify-start items-start gap-my-16 flex-wrap content-start">
                 {characters.map((c) => (
                   <CharacterCard
                     key={c.id}
@@ -263,7 +263,7 @@ export function ResourceManagementPage() {
               descriptionColorClassName="text-on-surface-30"
               onAddClick={() => navigateTo(ROUTES.background.new(seriesId))}
             >
-              <div className="self-stretch p-0 rounded-[4px] inline-flex justify-start items-start gap-4 flex-wrap content-start">
+              <div className="self-stretch p-0 rounded-[4px] inline-flex justify-start items-start gap-my-16 flex-wrap content-start">
                 {backgrounds.map((bg) => (
                   <ImageCard
                     key={bg.id}
@@ -302,7 +302,7 @@ export function ResourceManagementPage() {
               descriptionColorClassName="text-on-surface-30"
               onAddClick={() => navigateTo(ROUTES.scene.new(seriesId))}
             >
-              <div className="self-stretch p-0 rounded-[4px] inline-flex justify-start items-start gap-4 flex-wrap content-start">
+              <div className="self-stretch p-0 rounded-[4px] inline-flex justify-start items-start gap-my-16 flex-wrap content-start">
                 {visibleScenes.map((s) => (
                   <ImageCard
                     key={s.id}
@@ -339,7 +339,7 @@ export function ResourceManagementPage() {
               descriptionColorClassName="text-on-surface-30"
               onAddClick={() => navigateTo(ROUTES.media.new(seriesId))}
             >
-              <div className="self-stretch p-0 rounded-[4px] inline-flex justify-start items-start gap-4 flex-wrap content-start">
+              <div className="self-stretch p-0 rounded-[4px] inline-flex justify-start items-start gap-my-16 flex-wrap content-start">
                 {media.map((m) => (
                   <MediaCard
                     key={m.id}
@@ -375,7 +375,7 @@ export function ResourceManagementPage() {
               descriptionColorClassName="text-on-surface-30"
               onAddClick={() => navigateTo(ROUTES.gallery.new(seriesId))}
             >
-              <div className="self-stretch p-0 rounded-[4px] inline-flex justify-start items-start gap-4 flex-wrap content-start">
+              <div className="self-stretch p-0 rounded-[4px] inline-flex justify-start items-start gap-my-16 flex-wrap content-start">
                 {visibleGallery.map((g) => (
                   <ImageCard
                     key={g.id}

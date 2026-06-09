@@ -95,7 +95,7 @@ export function ScriptEditor() {
   }, [blocks, focusBlock]);
 
   return (
-    <div className="flex w-full max-w-4xl flex-col gap-1 rounded-lg border bg-background p-4">
+    <div className="flex w-full max-w-4xl flex-col gap-my-4 rounded-lg border bg-background p-my-16">
       {blocks.map((block, i) => (
         <div
           key={block.id}

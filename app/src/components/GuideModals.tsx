@@ -46,14 +46,14 @@ export function StartCheckModal({
         <DialogHeader>
           <DialogTitle>잠깐! 시작하기 전 체크</DialogTitle>
           <DialogDescription asChild>
-            <div className="text-sm text-slate-600 space-y-4 pt-2">
+            <div className="text-body3_400 text-slate-600 space-y-my-16 pt-my-8">
               <p>새로운 콘텐츠 제작 전, 아래 내용을 꼭 확인해 주세요!</p>
-              <ol className="list-decimal list-inside space-y-1.5 text-slate-700">
+              <ol className="list-decimal list-inside space-y-my-8 text-slate-700">
                 <li>선정적·폭력적 콘텐츠를 다루지 마세요.</li>
                 <li>저작권이 있는 자료를 사용하지 마세요.</li>
                 <li>부적절한 콘텐츠는 삭제 또는 제재될 수 있습니다.</li>
               </ol>
-              <div className="flex items-center gap-2 pt-2">
+              <div className="flex items-center gap-my-8 pt-my-8">
                 <input
                   type="checkbox"
                   id="policy-read"
@@ -68,7 +68,7 @@ export function StartCheckModal({
                   href={policyLink}
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="text-primary underline text-sm"
+                  className="text-primary underline text-body3_400"
                 >
                   보기
                 </a>
@@ -76,7 +76,7 @@ export function StartCheckModal({
             </div>
           </DialogDescription>
         </DialogHeader>
-        <div className="flex justify-end gap-2 mt-6">
+        <div className="flex justify-end gap-my-8 mt-6">
           <DialogClose asChild>
             <Button variant="outline">취소</Button>
           </DialogClose>
@@ -108,12 +108,12 @@ export function LeaveConfirmModal({ open, onClose, onConfirm }: LeaveConfirmModa
         <DialogHeader>
           <DialogTitle>작업을 중단하고 나가시겠습니까?</DialogTitle>
           <DialogDescription asChild>
-            <p className="text-sm text-slate-600 pt-2">
+            <p className="text-body3_400 text-slate-600 pt-my-8">
               저장하지 않은 변경 사항은 사라집니다. 나가기 전에 임시저장해 두시는 것을 권장합니다.
             </p>
           </DialogDescription>
         </DialogHeader>
-        <div className="flex justify-end gap-2 mt-6">
+        <div className="flex justify-end gap-my-8 mt-6">
           <DialogClose asChild>
             <Button variant="outline">취소</Button>
           </DialogClose>
@@ -151,7 +151,7 @@ export function ResourceDeleteModal({
         <DialogHeader>
           <DialogTitle className="text-center">리소스를 삭제하시겠어요?</DialogTitle>
           <DialogDescription asChild>
-            <div className="text-sm text-slate-600 pt-2">
+            <div className="text-body3_400 text-slate-600 pt-my-8">
               <p>
                 선택한 리소스를 삭제하면 이 리소스를 사용 중인 모든 에피소드에서 표시 오류나
                 오류가 발생할 수 있습니다.
@@ -162,7 +162,7 @@ export function ResourceDeleteModal({
             </div>
           </DialogDescription>
         </DialogHeader>
-        <div className="flex justify-end gap-2 mt-6">
+        <div className="flex justify-end gap-my-8 mt-6">
           <DialogClose asChild>
             <Button variant="outline">취소</Button>
           </DialogClose>

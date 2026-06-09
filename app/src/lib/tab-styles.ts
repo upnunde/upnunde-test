@@ -18,23 +18,23 @@ export const TAB_SIZE_META: Record<
   xl: {
     heightToken: "h48",
     heightClass: CONTROL_HEIGHT_FORM_CLASS,
-    labelClass: "text-xl leading-7",
+    labelClass: "text-heading4_700",
     /** Figma `tab` XL 행 — 탭 사이 spacing-20(20px) */
-    listGapClass: "gap-[20px]",
+    listGapClass: "gap-my-20",
   },
   l: {
     heightToken: "h40",
     heightClass: CONTROL_HEIGHT_STANDARD_CLASS,
-    labelClass: "text-base leading-6",
+    labelClass: "text-body1_700",
     /** Figma `tab` L 행 — spacing-16(16px) */
-    listGapClass: "gap-[16px]",
+    listGapClass: "gap-my-16",
   },
   m: {
     heightToken: "h32",
     heightClass: CONTROL_HEIGHT_CLASS,
-    labelClass: "text-sm leading-5",
+    labelClass: "text-body3_700",
     /** Figma `tab` M 행 — spacing-12(12px) */
-    listGapClass: "gap-[12px]",
+    listGapClass: "gap-my-12",
   },
 };
 
@@ -56,7 +56,7 @@ export function tabInstanceClassName({
 }: TabInstanceStyleOptions): string {
   const { heightClass, labelClass } = TAB_SIZE_META[size];
   return cn(
-    "inline-flex min-w-0 shrink-0 items-center justify-center gap-2.5 px-0 font-bold font-['Pretendard_JP',sans-serif] transition-colors",
+    "inline-flex min-w-0 shrink-0 items-center justify-center gap-my-8 px-0 font-['Pretendard_JP',sans-serif] transition-colors",
     heightClass,
     labelClass,
     selectline && activated && "border-b-2 border-border-strong",

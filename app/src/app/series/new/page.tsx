@@ -92,11 +92,11 @@ export default function SeriesNewPage() {
       showDraftButton
       coverPreviewUrl={coverPreviewUrl}
       logoPreviewUrl={logoPreviewUrl}
-      contentPaddingClassName="px-5"
-      contentGapClassName="gap-10"
+      contentPaddingClassName="px-my-20"
+      contentGapClassName="gap-my-40"
     >
       {activeTab === "image" && (
-                        <div className="flex flex-col gap-10">
+                        <div className="flex flex-col gap-my-40">
                           {/* 대표이미지 */}
                           <SeriesImageUploadField
                             label="대표이미지*"
@@ -144,7 +144,7 @@ export default function SeriesNewPage() {
       )}
 
       {activeTab === "info" && (
-                        <div className="flex flex-col gap-10">
+                        <div className="flex flex-col gap-my-40">
                           <SeriesFormTextInputField
                             title="시리즈 제목*"
                             subtitle="요약 내용이 AI 전개의 가이드라인이 된다는 기술적 사실을 전달합니다."
@@ -202,7 +202,7 @@ export default function SeriesNewPage() {
                             }
                           />
 
-                          <div className="flex justify-end gap-2 mt-4">
+                          <div className="flex justify-end gap-my-8 mt-4">
                             <Button
                               type="button"
                               variant="secondary"
@@ -222,7 +222,7 @@ export default function SeriesNewPage() {
       )}
 
       {activeTab === "worldview" && (
-                        <div className="flex flex-col gap-10">
+                        <div className="flex flex-col gap-my-40">
                           <SeriesFormTextareaField
                             title="세계관 프롬프트*"
                             subtitle="세계관은 모든 에피소드의 배경과 논리를 구성하는 절대적인 기준이 됩니다. 설정이 구체적일수록 AI가 원작의 의도에서 벗어나지 않고 일관성 있는 전개를 이어갈 수 있습니다."
@@ -250,7 +250,7 @@ export default function SeriesNewPage() {
                             }
                           />
 
-                          <div className="flex justify-end gap-2 mt-4">
+                          <div className="flex justify-end gap-my-8 mt-4">
                             <Button
                               type="button"
                               variant="secondary"

@@ -17,8 +17,8 @@ const Toast = React.forwardRef<
     role="status"
     aria-live="polite"
     className={cn(
-      "w-full max-w-[24rem] inline-flex justify-start items-center gap-4 rounded-lg bg-surface-10 py-3",
-      messageOnly ? "px-4" : "pl-4 pr-2",
+      "w-full max-w-[24rem] inline-flex justify-start items-center gap-my-16 rounded-lg bg-surface-10 py-my-12",
+      messageOnly ? "px-my-16" : "pl-my-16 pr-my-8",
       "data-[state=open]:animate-in data-[state=closed]:animate-out data-[state=closed]:fade-out-0 data-[state=open]:fade-in-0",
       className
     )}
@@ -35,7 +35,7 @@ const ToastTitle = React.forwardRef<
   <p
     ref={ref}
     className={cn(
-      "flex-1 min-w-0 justify-start text-on-surface-10 text-sm font-medium leading-5 font-['Pretendard_JP',sans-serif]",
+      "flex-1 min-w-0 justify-start text-on-surface-10 text-body3_500 font-['Pretendard_JP',sans-serif]",
       className
     )}
     {...props}
@@ -72,7 +72,7 @@ const ToastAction = React.forwardRef<
     ref={ref}
     type="button"
     className={cn(
-      "h-8 min-w-16 shrink-0 px-3 rounded-md cursor-pointer flex justify-center items-center gap-1 overflow-hidden text-primary text-sm font-medium leading-5 font-['Pretendard_JP',sans-serif] hover:bg-primary/10 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring",
+      "h-8 min-w-16 shrink-0 px-my-12 rounded-md cursor-pointer flex justify-center items-center gap-my-4 overflow-hidden text-primary text-body3_500 font-['Pretendard_JP',sans-serif] hover:bg-primary/10 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring",
       className
     )}
     {...props}

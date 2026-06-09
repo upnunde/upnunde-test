@@ -31,7 +31,7 @@ export function SeriesList({
 }: SeriesListProps) {
   return (
     <div
-      className={`grid w-full grid-cols-[repeat(auto-fit,minmax(min(100%,480px),1fr))] gap-4 ${className ?? ""}`}
+      className={`grid w-full grid-cols-[repeat(auto-fit,minmax(min(100%,480px),1fr))] gap-my-16 ${className ?? ""}`}
     >
       {seriesList.map((series) => (
         <SeriesItem

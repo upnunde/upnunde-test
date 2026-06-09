@@ -14,16 +14,16 @@ export function EmptyStateBanner({ className }: EmptyStateBannerProps) {
   return (
     <div
       className={
-        "flex flex-col items-center justify-center rounded-[4px] border border-border-10 bg-surface-20 py-16 px-8 text-center " +
+        "flex flex-col items-center justify-center rounded-[4px] border border-border-10 bg-surface-20 py-my-64 px-my-32 text-center " +
         (className ?? "")
       }
       role="status"
       aria-label="등록된 에피소드가 없습니다"
     >
-      <p className="text-base font-medium text-on-surface-30">
+      <p className="text-body1_500 text-on-surface-30">
         등록된 에피소드가 없습니다.
       </p>
-      <p className="mt-2 text-sm text-on-surface-30">
+      <p className="mt-2 text-body3_400 text-on-surface-30">
         에피소드를 추가하여 시리즈를 완성해 보세요.
       </p>
     </div>

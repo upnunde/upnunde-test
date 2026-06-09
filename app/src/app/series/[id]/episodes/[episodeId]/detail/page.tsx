@@ -57,7 +57,7 @@ export default function EpisodeDetailPage() {
         <aside
           className={
             isSceneSidebarCollapsed
-              ? "w-fit shrink-0 border-r border-border-10 bg-white overflow-y-auto px-2"
+              ? "w-fit shrink-0 border-r border-border-10 bg-white overflow-y-auto px-my-8"
               : "w-[240px] shrink-0 border-r border-border-10 bg-white overflow-y-auto"
           }
         >
@@ -70,11 +70,11 @@ export default function EpisodeDetailPage() {
         </aside>
         <div className="flex min-w-0 flex-1 flex-col overflow-hidden">
           <main className="flex min-w-0 flex-1 flex-col overflow-hidden">
-            <header className="flex h-16 shrink-0 items-center justify-start border-b border-border-10 bg-white px-6 py-0">
-              <div className="flex w-full min-w-[800px] items-center justify-between gap-3">
-                <div className="flex items-center justify-start gap-3">
+            <header className="flex h-16 shrink-0 items-center justify-start border-b border-border-10 bg-white px-my-24 py-0">
+              <div className="flex w-full min-w-[800px] items-center justify-between gap-my-12">
+                <div className="flex items-center justify-start gap-my-12">
                   <HeaderBackButton onClick={handleBack} aria-label="에피소드 목록으로" />
-                  <h1 className="text-2xl font-bold text-on-surface-10">{episodeHeaderTitle}</h1>
+                  <h1 className="text-heading2_700 text-on-surface-10">{episodeHeaderTitle}</h1>
                 </div>
                 <Button
                   type="button"
@@ -91,7 +91,7 @@ export default function EpisodeDetailPage() {
 
             <div className="flex flex-1 w-full min-h-0 overflow-hidden bg-white justify-center items-start">
               <div className="flex flex-1 min-h-0 h-full w-full flex-col overflow-hidden">
-                <div className="py-10 px-0 flex-1 min-h-0 overflow-y-auto overscroll-none">
+                <div className="py-my-40 px-0 flex-1 min-h-0 overflow-y-auto overscroll-none">
                   <EditorBodyReadOnly />
                 </div>
               </div>

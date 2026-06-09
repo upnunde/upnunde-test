@@ -13,7 +13,7 @@ export function AppHeader() {
     <header className="sticky top-0 z-50 flex flex-col bg-white w-full shrink-0">
       {/* Top Bar */}
       <div className="border-b border-border-10">
-        <div className="w-full flex h-14 items-center justify-between pl-5 pr-5">
+        <div className="w-full flex h-14 items-center justify-between pl-my-20 pr-my-20">
           <div
             className="flex items-center"
             style={{

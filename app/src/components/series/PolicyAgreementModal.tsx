@@ -47,24 +47,24 @@ export function PolicyAgreementModal({
   return (
     <Dialog open={open} onOpenChange={(isOpen) => !isOpen && handleClose()}>
       <DialogContent
-        className="!flex flex-col justify-center items-center gap-5 w-full max-w-[480px] rounded-[4px] border border-border-10 bg-white p-6 pt-10 shadow-lg"
+        className="!flex flex-col justify-center items-center gap-my-20 w-full max-w-[480px] rounded-[4px] border border-border-10 bg-white p-my-24 pt-my-40 shadow-elevation-40"
         aria-describedby="policy-agreement-description"
       >
         <DialogHeader className="text-center">
-          <DialogTitle className="text-2xl font-bold text-on-surface-10 text-center">
+          <DialogTitle className="text-heading2_700 text-on-surface-10 text-center">
             잠깐! 시작하기 전 체크
           </DialogTitle>
         </DialogHeader>
         <p
           id="policy-agreement-description"
-          className="text-base text-on-surface-30 text-center mt-0"
+          className="text-body1_400 text-on-surface-30 text-center mt-0"
         >
           즐거운 콘텐츠 창작 전, 아래 내용을 꼭 확인해 주세요!
         </p>
 
         {/* 정책 목록 (회색 박스) */}
-        <div className="rounded-lg bg-surface-20 px-4 py-3 w-full mt-0">
-          <ol className="list-decimal list-inside space-y-2 text-sm text-on-surface-20">
+        <div className="rounded-lg bg-surface-20 px-my-16 py-my-12 w-full mt-0">
+          <ol className="list-decimal list-inside space-y-my-8 text-body3_400 text-on-surface-20">
             {POLICIES.map((text, i) => (
               <li key={i}>{text}</li>
             ))}
@@ -72,11 +72,11 @@ export function PolicyAgreementModal({
         </div>
 
         {/* 리노벨 운영정책 동의 + 보기 링크 */}
-        <div className="flex items-center justify-between gap-2 w-full mt-0">
+        <div className="flex items-center justify-between gap-my-8 w-full mt-0">
           <button
             type="button"
             onClick={() => setAgreed((prev) => !prev)}
-            className="flex items-center gap-2 text-sm text-on-surface-20 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-2 rounded"
+            className="flex items-center gap-my-8 text-body3_400 text-on-surface-20 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-2 rounded"
             aria-pressed={agreed}
             aria-label={agreed ? "리노벨 운영정책 동의함" : "리노벨 운영정책 동의"}
           >
@@ -95,14 +95,14 @@ export function PolicyAgreementModal({
           </button>
           <Link
             href="/guide"
-            className="text-sm text-on-surface-10 underline hover:underline focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-2 rounded"
+            className="text-body3_400 text-on-surface-10 underline hover:underline focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-2 rounded"
           >
             보기
           </Link>
         </div>
 
         {/* 취소 / 동의하고 계속하기 */}
-        <div className="flex justify-end gap-2 mt-6 w-full">
+        <div className="flex justify-end gap-my-8 mt-6 w-full">
           <Button
             type="button"
             variant="outline"

@@ -40,21 +40,21 @@ export function NotificationList({
         (className ?? "")
       }
     >
-      <div className="self-stretch px-5 pt-0 pb-0 mt-2 mb-0 border-b border-border-10 inline-flex flex-col justify-start items-start gap-2.5">
+      <div className="self-stretch px-my-20 pt-0 pb-0 mt-2 mb-0 border-b border-border-10 inline-flex flex-col justify-start items-start gap-my-8">
         <div
           data-size="L"
           data-underline="true"
-          className="self-stretch inline-flex justify-start items-center gap-4 overflow-hidden"
+          className="self-stretch inline-flex justify-start items-center gap-my-16 overflow-hidden"
         >
           <button
             type="button"
             data-height="h40"
             data-selectline="true"
             className={
-              "h-9 flex cursor-pointer justify-center items-center gap-2.5 min-w-0 " +
+              "h-9 flex cursor-pointer justify-center items-center gap-my-8 min-w-0 " +
               (activeTab === "all"
-                ? "border-b-2 border-slate-800 text-on-surface-10 text-base font-bold font-['Pretendard_JP'] leading-6"
-                : "text-on-surface-disabled text-base font-bold font-['Pretendard_JP'] leading-6")
+                ? "border-b-2 border-slate-800 text-on-surface-10 text-body1_700 font-['Pretendard_JP']"
+                : "text-on-surface-disabled text-body1_700 font-['Pretendard_JP']")
             }
             onClick={() => {
               setActiveTab("all");
@@ -69,10 +69,10 @@ export function NotificationList({
             data-height="h40"
             data-selectline="true"
             className={
-              "h-9 flex cursor-pointer justify-center items-center gap-2.5 min-w-0 " +
+              "h-9 flex cursor-pointer justify-center items-center gap-my-8 min-w-0 " +
               (activeTab === "NOTICE"
-                ? "border-b-2 border-slate-800 text-on-surface-10 text-base font-bold font-['Pretendard_JP'] leading-6"
-                : "text-on-surface-disabled text-base font-bold font-['Pretendard_JP'] leading-6")
+                ? "border-b-2 border-slate-800 text-on-surface-10 text-body1_700 font-['Pretendard_JP']"
+                : "text-on-surface-disabled text-body1_700 font-['Pretendard_JP']")
             }
             onClick={() => {
               setActiveTab("NOTICE");
@@ -87,10 +87,10 @@ export function NotificationList({
             data-height="h40"
             data-selectline="true"
             className={
-              "h-9 flex cursor-pointer justify-center items-center gap-2.5 min-w-0 " +
+              "h-9 flex cursor-pointer justify-center items-center gap-my-8 min-w-0 " +
               (activeTab === "WORK_ALERT"
-                ? "border-b-2 border-slate-800 text-on-surface-10 text-base font-bold font-['Pretendard_JP'] leading-6"
-                : "text-on-surface-disabled text-base font-bold font-['Pretendard_JP'] leading-6")
+                ? "border-b-2 border-slate-800 text-on-surface-10 text-body1_700 font-['Pretendard_JP']"
+                : "text-on-surface-disabled text-body1_700 font-['Pretendard_JP']")
             }
             onClick={() => {
               setActiveTab("WORK_ALERT");

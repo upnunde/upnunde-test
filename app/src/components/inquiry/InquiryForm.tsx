@@ -34,7 +34,7 @@ export function InquiryForm({
   onSubmit = defaultSubmit,
   onSuccess,
   onCancel,
-  className = "mt-4 flex flex-col gap-10 px-5",
+  className = "mt-4 flex flex-col gap-my-40 px-my-20",
   rootClassName,
 }: InquiryFormProps) {
   const prefix = idPrefix ? `${idPrefix}-` : "";
@@ -66,7 +66,7 @@ export function InquiryForm({
         className={cn("min-h-0 flex-1 overflow-y-auto", className)}
       >
       {/* 문의 유형 */}
-      <div className="flex flex-col gap-1">
+      <div className="flex flex-col gap-my-4">
         <Title1
           text="문의 유형*"
           variant="title-subtitle-dot"
@@ -79,7 +79,7 @@ export function InquiryForm({
             onChange={(e) =>
               setCategory(e.target.value as InquiryCategory)
             }
-            className="h-9 w-full appearance-none rounded-md border border-border-10 bg-white pl-3 pr-3 text-sm text-on-surface-10 outline-none focus:outline-none focus:ring-2 focus:ring-primary"
+            className="h-9 w-full appearance-none rounded-md border border-border-10 bg-white pl-my-12 pr-my-12 text-body3_400 text-on-surface-10 outline-none focus:outline-none focus:ring-2 focus:ring-primary"
           >
             <option value="account">계정 / 로그인</option>
             <option value="payment">결제 / 정산</option>
@@ -94,7 +94,7 @@ export function InquiryForm({
       </div>
 
       {/* 제목 */}
-      <div className="flex flex-col gap-1">
+      <div className="flex flex-col gap-my-4">
         <Title1
           text="제목*"
           variant="title-subtitle-dot"
@@ -106,13 +106,13 @@ export function InquiryForm({
           value={title}
           onChange={(e) => setTitle(e.target.value)}
           placeholder="제목을 입력해주세요."
-          className="mt-1 h-[42px] rounded-md border border-border-10 bg-white px-3 py-2 text-sm text-on-surface-10 placeholder:text-on-surface-30 focus:outline-none focus:ring-2 focus:ring-primary"
+          className="mt-1 h-[42px] rounded-md border border-border-10 bg-white px-my-12 py-my-8 text-body3_400 text-on-surface-10 placeholder:text-on-surface-30 focus:outline-none focus:ring-2 focus:ring-primary"
           required
         />
       </div>
 
       {/* 상세내용 작성 */}
-      <div className="flex flex-col gap-1">
+      <div className="flex flex-col gap-my-4">
         <Title1
           text="상세내용 작성*"
           variant="title-subtitle-dot"
@@ -124,17 +124,17 @@ export function InquiryForm({
           value={content}
           onChange={(e) => setContent(e.target.value)}
           placeholder="상세내용을 작성해 주세요."
-          className="mt-1 min-h-[160px] max-h-[400px] rounded-md border border-border-10 bg-white px-3 py-2 text-sm text-on-surface-10 placeholder:text-on-surface-30 focus:outline-none focus:ring-2 focus:ring-primary"
+          className="mt-1 min-h-[160px] max-h-[400px] rounded-md border border-border-10 bg-white px-my-12 py-my-8 text-body3_400 text-on-surface-10 placeholder:text-on-surface-30 focus:outline-none focus:ring-2 focus:ring-primary"
           required
         />
-        <p className="text-xs text-on-surface-30">
+        <p className="text-caption1_400 text-on-surface-30">
           개인정보(주민등록번호, 카드번호 등) 입력은 지양해 주세요. 필요한 경우 최소한의 정보만
           적어 주셔도 충분합니다.
         </p>
       </div>
 
       {/* 이메일 */}
-      <div className="flex flex-col gap-1">
+      <div className="flex flex-col gap-my-4">
         <Title1
           text="이메일"
           variant="title-subtitle"
@@ -146,12 +146,12 @@ export function InquiryForm({
           value={email}
           onChange={(e) => setEmail(e.target.value)}
           placeholder="이메일 주소를 입력해주세요."
-          className="mt-1 h-[42px] rounded-md border border-border-10 bg-white px-3 py-2 text-sm text-on-surface-10 placeholder:text-on-surface-30 focus:outline-none focus:ring-2 focus:ring-primary"
+          className="mt-1 h-[42px] rounded-md border border-border-10 bg-white px-my-12 py-my-8 text-body3_400 text-on-surface-10 placeholder:text-on-surface-30 focus:outline-none focus:ring-2 focus:ring-primary"
         />
       </div>
 
       {/* 이미지 파일 첨부 */}
-      <div className="flex flex-col gap-1 pb-2">
+      <div className="flex flex-col gap-my-4 pb-my-8">
         <Title1
           text="이미지 파일 첨부"
           variant="title-subtitle"
@@ -176,13 +176,13 @@ export function InquiryForm({
       </form>
 
       {/* form과 동일 레벨 — 모달 하단 고정 */}
-      <div className="mx-0 mt-0 w-full shrink-0 bg-white px-5 pt-5 pb-5">
-        <div className="flex items-center justify-end gap-3">
+      <div className="mx-0 mt-0 w-full shrink-0 bg-white px-my-20 pt-my-20 pb-my-20">
+        <div className="flex items-center justify-end gap-my-12">
           <Button
             type="button"
             variant="outline"
             size="sm"
-            className="px-5"
+            className="px-my-20"
             onClick={handleCancel}
           >
             취소
@@ -191,7 +191,7 @@ export function InquiryForm({
             type="submit"
             form={formDomId}
             size="sm"
-            className="px-5"
+            className="px-my-20"
             disabled={!title || !content}
           >
             제출

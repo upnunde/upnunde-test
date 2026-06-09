@@ -13,10 +13,10 @@ export function InquiryHistoryList({ items }: InquiryHistoryListProps) {
 
   if (items.length === 0) {
     return (
-      <div className="flex flex-col gap-4">
-        <div className="flex flex-col items-center justify-center py-16 text-center">
-          <p className="text-on-surface-30 text-sm">등록된 문의내역이 없습니다.</p>
-          <p className="text-on-surface-30 text-xs mt-1">문의 탭에서 새 문의를 등록해 주세요.</p>
+      <div className="flex flex-col gap-my-16">
+        <div className="flex flex-col items-center justify-center py-my-64 text-center">
+          <p className="text-on-surface-30 text-body3_400">등록된 문의내역이 없습니다.</p>
+          <p className="text-on-surface-30 text-caption1_400 mt-1">문의 탭에서 새 문의를 등록해 주세요.</p>
         </div>
       </div>
     );

@@ -27,10 +27,10 @@ export function EpisodeScriptTextarea({
   loadingMessage = EPISODE_FORM_FIELD_COPY.aiComposer.fieldLoading.script,
 }: EpisodeScriptTextareaProps) {
   return (
-    <div className={cn("flex flex-col gap-3", className)}>
+    <div className={cn("flex flex-col gap-my-12", className)}>
       {isLoading ? (
         <div
-          className="flex h-[400px] max-h-[400px] w-full items-start rounded-md border border-border-10 bg-white px-3 py-3"
+          className="flex h-[400px] max-h-[400px] w-full items-start rounded-md border border-border-10 bg-white px-my-12 py-my-12"
           aria-busy="true"
         >
           <AiFieldLoadingMessage message={loadingMessage} />
@@ -44,12 +44,12 @@ export function EpisodeScriptTextarea({
           placeholder={EPISODE_FORM_FIELD_COPY.script.placeholder}
           aria-label="에피소드 대본"
           className={cn(
-            "h-[400px] min-h-[160px] max-h-[400px] w-full resize-y overflow-y-auto rounded-md border border-border-10 bg-white px-3 py-2 text-sm text-on-surface-10 placeholder:text-on-surface-30 focus:outline-none focus:ring-2 focus:ring-primary",
+            "h-[400px] min-h-[160px] max-h-[400px] w-full resize-y overflow-y-auto rounded-md border border-border-10 bg-white px-my-12 py-my-8 text-body3_400 text-on-surface-10 placeholder:text-on-surface-30 focus:outline-none focus:ring-2 focus:ring-primary",
             textareaClassName,
           )}
         />
       )}
-      <div className="flex justify-end text-xs text-on-surface-30">
+      <div className="flex justify-end text-caption1_400 text-on-surface-30">
         {isLoading ? "—" : value.length}/{MAX_SCRIPT}
       </div>
     </div>

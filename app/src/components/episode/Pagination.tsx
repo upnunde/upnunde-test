@@ -66,11 +66,11 @@ export function Pagination({
   return (
     <div
       className={
-        "flex h-16 items-center justify-center gap-8 border-t border-divider-10 bg-white rounded-b-[4px] " +
+        "flex h-16 items-center justify-center gap-my-32 border-t border-divider-10 bg-white rounded-b-[4px] " +
         (className ?? "")
       }
     >
-      <div className="flex items-center gap-1">
+      <div className="flex items-center gap-my-4">
         <button
           type="button"
           onClick={handlePrev}
@@ -86,7 +86,7 @@ export function Pagination({
             type="button"
             onClick={() => onPageChange(page)}
             className={
-              "h-8 w-8 rounded-full cursor-pointer text-sm font-medium transition-colors " +
+              "h-8 w-8 rounded-full cursor-pointer text-body3_500 transition-colors " +
               (page === currentPage
                 ? "bg-slate-800 text-white"
                 : "text-on-surface-30 hover:bg-surface-20")
@@ -108,8 +108,8 @@ export function Pagination({
         </button>
       </div>
 
-      <form onSubmit={handleGo} className="flex items-center gap-3">
-        <div className="flex items-center gap-2">
+      <form onSubmit={handleGo} className="flex items-center gap-my-12">
+        <div className="flex items-center gap-my-8">
           <input
             type="number"
             name="page"
@@ -117,14 +117,14 @@ export function Pagination({
             max={totalPages}
             value={pageInputValue}
             onChange={(e) => setPageInputValue(e.target.value)}
-            className="h-8 w-12 rounded border border-border-10 text-center text-sm outline-none focus:border-border-20"
+            className="h-my-32 w-my-48 rounded border border-border-10 text-center text-body3_400 outline-none focus:border-border-20"
             aria-label="페이지 번호"
           />
-          <span className="text-sm text-on-surface-30">/ {totalPages}</span>
+          <span className="text-body3_400 text-on-surface-30">/ {totalPages}</span>
         </div>
         <button
           type="submit"
-          className="h-8 cursor-pointer rounded border border-border-20 px-3 text-sm font-medium text-on-surface-20 transition-colors hover:bg-surface-20 disabled:border-border-20"
+          className="h-8 cursor-pointer rounded border border-border-20 px-my-12 text-body3_500 text-on-surface-20 transition-colors hover:bg-surface-20 disabled:border-border-20"
         >
           Go
         </button>

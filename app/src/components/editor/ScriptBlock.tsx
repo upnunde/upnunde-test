@@ -122,7 +122,7 @@ function getCharacterExpressionOptions(characterName: string): string[] {
 
 /** 한 줄 블록 전용 (장면/캐릭터/연출/배경 등): 높이 32px(h-8), px-0 py-1, gap-4 */
 const COMPACT_BLOCK_ROOT_CLASSES =
-  "flex items-center justify-start rounded-lg border-0 outline-none focus-within:bg-white min-w-0 flex-1 min-h-8 h-8 px-0 py-1 gap-4 select-none";
+  "flex items-center justify-start rounded-lg border-0 outline-none focus-within:bg-white min-w-0 flex-1 min-h-8 h-8 px-0 py-my-4 gap-my-16 select-none";
 
 /** 삭제 버튼 아이콘 공통 크기 20x20 */
 const DELETE_ICON_CLASS = "h-5 w-5";
@@ -602,9 +602,9 @@ export function ScriptBlock({
     return (
       <>
         {/* Left column: 화자 — 시안 w-[100px] min-w-14 min-h-8 */}
-        <div className="flex min-h-8 w-[100px] min-w-14 shrink-0 items-center justify-start gap-0 overflow-hidden pr-3">
+        <div className="flex min-h-8 w-[100px] min-w-14 shrink-0 items-center justify-start gap-0 overflow-hidden pr-my-12">
           {!hideIndex && (
-            <span className="text-sm font-medium text-on-surface-30 w-5 text-right tabular-nums">
+            <span className="text-body3_500 text-on-surface-30 w-5 text-right tabular-nums">
               {indexLabel}
             </span>
           )}
@@ -612,7 +612,7 @@ export function ScriptBlock({
             <DropdownMenuTrigger asChild>
               <button
                 type="button"
-                className="inline-flex h-8 min-h-8 w-full min-w-0 items-center justify-start gap-0.5 rounded-none border-0 py-0 pl-0 pr-2 text-left text-xs font-medium leading-4 text-on-surface-30 shadow-none outline-none focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring/50 focus-visible:ring-offset-0 overflow-hidden"
+                className="inline-flex h-8 min-h-8 w-full min-w-0 items-center justify-start gap-my-2 rounded-none border-0 py-0 pl-0 pr-my-8 text-left text-caption1_500 text-on-surface-30 shadow-none outline-none focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring/50 focus-visible:ring-offset-0 overflow-hidden"
               >
                 <span className="inline-block min-w-0 w-fit truncate text-left">
                   {speakerDisplay}
@@ -631,14 +631,14 @@ export function ScriptBlock({
                 직접 입력
               </DropdownMenuItem>
               <DropdownMenuSeparator />
-              <DropdownMenuLabel className="text-muted-foreground text-xs font-normal px-2 py-1.5">
+              <DropdownMenuLabel className="text-muted-foreground text-caption1_400 px-my-8 py-my-8">
                 등장인물
               </DropdownMenuLabel>
               {CHARACTERS.map((c) => (
                 <DropdownMenuItem
                   key={c.id}
                   onClick={() => updateSpeaker(c.name)}
-                  className="flex items-center gap-2"
+                  className="flex items-center gap-my-8"
                 >
                   <NextImage
                     src={c.url}
@@ -656,7 +656,7 @@ export function ScriptBlock({
           <Dialog open={speakerCustomModalOpen} onOpenChange={setSpeakerCustomModalOpen}>
             <DialogContent className="sm:max-w-md">
               <DialogHeader>
-                <DialogTitle className="text-lg">화자 이름</DialogTitle>
+                <DialogTitle className="text-heading5_700">화자 이름</DialogTitle>
               </DialogHeader>
               <Input
                 value={speakerDraft}
@@ -671,7 +671,7 @@ export function ScriptBlock({
                   }
                 }}
               />
-              <div className="flex justify-end gap-2 pt-2">
+              <div className="flex justify-end gap-my-8 pt-my-8">
                 <Button
                   type="button"
                   variant="outline"
@@ -697,7 +697,7 @@ export function ScriptBlock({
           {hasInlineTagToken && (
             <div
               aria-hidden
-              className="pointer-events-none absolute inset-0 z-0 min-h-8 pt-1 pb-0 text-base font-medium leading-6 whitespace-pre-wrap break-words text-on-surface-20"
+              className="pointer-events-none absolute inset-0 z-0 min-h-8 pt-my-4 pb-0 text-body1_500 whitespace-pre-wrap break-words text-on-surface-20"
             >
               {highlightedSegments.map((segment, idx) => {
                 const isTag = /^<[^>]+>$/.test(segment);
@@ -718,7 +718,7 @@ export function ScriptBlock({
             onMouseUp={handleTextMouseUp}
             placeholder="'/'를 눌러 메뉴를 선택하거나 텍스트를 입력할 수 있습니다."
             className={cn(
-              "relative z-10 min-h-8 h-fit min-w-0 w-full flex-1 resize-none overflow-hidden border-0 bg-transparent pt-1 pb-0 text-base font-medium leading-6 outline-none placeholder:text-on-surface-30 focus:outline-none focus:ring-0",
+              "relative z-10 min-h-8 h-fit min-w-0 w-full flex-1 resize-none overflow-hidden border-0 bg-transparent pt-my-4 pb-0 text-body1_500 outline-none placeholder:text-on-surface-30 focus:outline-none focus:ring-0",
               hasInlineTagToken ? "text-transparent caret-on-surface-10" : "text-on-surface-20"
             )}
             rows={1}
@@ -755,11 +755,11 @@ export function ScriptBlock({
             style={{ top: selection.y, left: selection.x, transform: "translate(-50%, -100%)" }}
           >
             {/* Basic Icons */}
-            <div className="flex items-center px-1">
+            <div className="flex items-center px-my-4">
               <button
                 type="button"
                 onClick={() => applyTag("<b>", "</b>")}
-                className="rounded-sm p-2 text-[var(--on-surface-inverse)] transition-colors hover:bg-[var(--surface-inverse-20)] hover:text-[var(--on-surface-inverse)]"
+                className="rounded-sm p-my-8 text-[var(--on-surface-inverse)] transition-colors hover:bg-[var(--surface-inverse-20)] hover:text-[var(--on-surface-inverse)]"
                 title="Bold"
               >
                 <Bold className="w-4 h-4" />
@@ -767,7 +767,7 @@ export function ScriptBlock({
               <button
                 type="button"
                 onClick={() => applyTag("<i>", "</i>")}
-                className="rounded-sm p-2 text-[var(--on-surface-inverse)] transition-colors hover:bg-[var(--surface-inverse-20)] hover:text-[var(--on-surface-inverse)]"
+                className="rounded-sm p-my-8 text-[var(--on-surface-inverse)] transition-colors hover:bg-[var(--surface-inverse-20)] hover:text-[var(--on-surface-inverse)]"
                 title="Italic"
               >
                 <Italic className="w-4 h-4" />
@@ -775,7 +775,7 @@ export function ScriptBlock({
               <button
                 type="button"
                 onClick={() => applyTag("<u>", "</u>")}
-                className="rounded-sm p-2 text-[var(--on-surface-inverse)] transition-colors hover:bg-[var(--surface-inverse-20)] hover:text-[var(--on-surface-inverse)]"
+                className="rounded-sm p-my-8 text-[var(--on-surface-inverse)] transition-colors hover:bg-[var(--surface-inverse-20)] hover:text-[var(--on-surface-inverse)]"
                 title="Underline"
               >
                 <Underline className="w-4 h-4" />
@@ -795,14 +795,14 @@ export function ScriptBlock({
               }}
             >
               <DropdownMenuTrigger
-                className="flex items-center gap-1 rounded-sm px-3 py-2 text-sm text-[var(--on-surface-inverse)] outline-none transition-colors hover:bg-[var(--surface-inverse-20)] hover:text-[var(--on-surface-inverse)]"
+                className="flex items-center gap-my-4 rounded-sm px-my-12 py-my-8 text-body3_400 text-[var(--on-surface-inverse)] outline-none transition-colors hover:bg-[var(--surface-inverse-20)] hover:text-[var(--on-surface-inverse)]"
               >
                 이펙트 <ChevronDown className="w-3.5 h-3.5" />
               </DropdownMenuTrigger>
               <DropdownMenuContent
                 align="start"
                 portalled={false}
-                className="z-[110] w-40 p-1 bg-white rounded-lg border border-border-10"
+                className="z-[110] w-40 p-my-4 bg-white rounded-lg border border-border-10"
                 ref={dropdownRef}
               >
                 {EFFECT_OPTIONS.map((effect) => {
@@ -811,7 +811,7 @@ export function ScriptBlock({
                     <DropdownMenuItem
                       key={effect.key}
                       onClick={() => applyEffect(effect.key)}
-                      className="flex items-center px-3 py-2.5 cursor-pointer text-sm text-on-surface-20 hover:bg-surface-20 focus:bg-surface-20 rounded-md relative"
+                      className="flex items-center px-my-12 py-my-8 cursor-pointer text-body3_400 text-on-surface-20 hover:bg-surface-20 focus:bg-surface-20 rounded-md relative"
                     >
                       {isSelected ? (
                         <Check className="w-4 h-4 mr-1 absolute left-2" />
@@ -833,14 +833,14 @@ export function ScriptBlock({
               }}
             >
               <DropdownMenuTrigger
-                className="flex items-center gap-1 rounded-sm px-3 py-2 text-sm text-[var(--on-surface-inverse)] outline-none transition-colors hover:bg-[var(--surface-inverse-20)] hover:text-[var(--on-surface-inverse)]"
+                className="flex items-center gap-my-4 rounded-sm px-my-12 py-my-8 text-body3_400 text-[var(--on-surface-inverse)] outline-none transition-colors hover:bg-[var(--surface-inverse-20)] hover:text-[var(--on-surface-inverse)]"
               >
                 컬러 <ChevronDown className="w-3.5 h-3.5" />
               </DropdownMenuTrigger>
               <DropdownMenuContent
                 align="start"
                 portalled={false}
-                className="z-[110] w-44 p-1 bg-white rounded-lg border border-border-10"
+                className="z-[110] w-44 p-my-4 bg-white rounded-lg border border-border-10"
                 ref={dropdownRef}
               >
                 {COLOR_OPTIONS.map((color) => {
@@ -848,9 +848,9 @@ export function ScriptBlock({
                     <DropdownMenuItem
                       key={color.hex}
                       onClick={() => applyColor(color.hex)}
-                      className="flex items-center px-3 py-2.5 cursor-pointer text-sm text-on-surface-20 hover:bg-surface-20 focus:bg-surface-20 rounded-md"
+                      className="flex items-center px-my-12 py-my-8 cursor-pointer text-body3_400 text-on-surface-20 hover:bg-surface-20 focus:bg-surface-20 rounded-md"
                     >
-                      <span className="inline-flex items-center gap-2">
+                      <span className="inline-flex items-center gap-my-8">
                         <span
                           className="h-5 w-5 rounded-full border border-border-10"
                           style={{ backgroundColor: color.hex }}
@@ -907,14 +907,14 @@ export function ScriptBlock({
         }}
       >
         {!hideIndex && (
-          <span className="shrink-0 text-xs font-medium text-on-surface-30 tabular-nums">
+          <span className="shrink-0 text-caption1_500 text-on-surface-30 tabular-nums">
             {indexLabel}
           </span>
         )}
         <div className="flex min-w-0 flex-1 w-full items-center gap-0">
           <span
             className={cn(
-              "flex h-8 w-[100px] shrink-0 items-center justify-start text-[13px] font-medium",
+              "flex h-8 w-[100px] shrink-0 items-center justify-start text-body4_500",
               labelColorClass
             )}
           >
@@ -928,10 +928,10 @@ export function ScriptBlock({
             onKeyDown={handleSceneKeyDown}
             placeholder={placeholder}
             className={cn(
-              "min-w-0 flex-1 rounded-md border-0 bg-transparent px-0 py-1.5 text-on-surface-10 placeholder:text-on-surface-30 outline-none transition-colors focus:outline-none focus:ring-0",
+              "min-w-0 flex-1 rounded-md border-0 bg-transparent px-0 py-my-8 text-on-surface-10 placeholder:text-on-surface-30 outline-none transition-colors focus:outline-none focus:ring-0",
               block.type === "scene"
-                ? "text-[24px] font-bold"
-                : "text-base font-medium leading-relaxed"
+                ? "text-heading2_700"
+                : "text-body1_500"
             )}
           />
           {!isSeedDefault ? (
@@ -985,14 +985,14 @@ export function ScriptBlock({
         }}
       >
         {!hideIndex && (
-          <span className="shrink-0 text-xs font-medium text-on-surface-30 tabular-nums">
+          <span className="shrink-0 text-caption1_500 text-on-surface-30 tabular-nums">
             {indexLabel}
           </span>
         )}
         <div className="flex min-w-0 flex-1 w-full items-center gap-0">
           <span
             className={cn(
-              "flex h-8 w-[100px] shrink-0 items-center justify-start text-[13px] font-medium",
+              "flex h-8 w-[100px] shrink-0 items-center justify-start text-body4_500",
               LABEL_COLOR_BY_TYPE.direction
             )}
           >
@@ -1043,13 +1043,13 @@ export function ScriptBlock({
         }}
       >
         {!hideIndex && (
-          <span className="shrink-0 text-xs font-medium text-on-surface-30 tabular-nums">
+          <span className="shrink-0 text-caption1_500 text-on-surface-30 tabular-nums">
             {indexLabel}
           </span>
         )}
         <span
           className={cn(
-            "flex h-8 w-[100px] shrink-0 items-center justify-start overflow-hidden text-xs font-medium leading-4",
+            "flex h-8 w-[100px] shrink-0 items-center justify-start overflow-hidden text-caption1_500",
             LABEL_COLOR_BY_TYPE.choice
           )}
         >
@@ -1103,15 +1103,15 @@ export function ScriptBlock({
         tabIndex={0}
       >
         {!hideIndex && (
-          <span className="shrink-0 text-xs font-medium text-on-surface-30 tabular-nums">
+          <span className="shrink-0 text-caption1_500 text-on-surface-30 tabular-nums">
             {indexLabel}
           </span>
         )}
-        <div className="flex flex-1 items-center gap-4">
+        <div className="flex flex-1 items-center gap-my-16">
           <Icon className="h-4 w-4 shrink-0 text-on-surface-30" />
           <span
             className={cn(
-              "flex h-8 w-[100px] shrink-0 items-center justify-start text-[13px] font-medium",
+              "flex h-8 w-[100px] shrink-0 items-center justify-start text-body4_500",
               LABEL_COLOR_BY_TYPE[block.type]
             )}
           >
@@ -1153,7 +1153,7 @@ export function ScriptBlock({
               }
             }}
             placeholder="Value..."
-            className="min-w-[120px] flex-1 rounded border-0 bg-white px-2 py-1.5 text-sm outline-none focus:outline-none focus:ring-0"
+            className="min-w-[120px] flex-1 rounded border-0 bg-white px-my-8 py-my-8 text-body3_400 outline-none focus:outline-none focus:ring-0"
             autoFocus
           />
           <Button
@@ -1261,14 +1261,14 @@ export function ScriptBlock({
         }}
       >
         {!hideIndex && (
-          <span className="shrink-0 text-xs font-medium text-on-surface-30 tabular-nums">
+          <span className="shrink-0 text-caption1_500 text-on-surface-30 tabular-nums">
             {indexLabel}
           </span>
         )}
         <div className="flex min-w-0 flex-1 items-center gap-0">
           <span
             className={cn(
-              "flex h-8 w-[100px] shrink-0 items-center justify-start font-medium text-[13px]",
+              "flex h-8 w-[100px] shrink-0 items-center justify-start text-body4_500",
               labelColorClass
             )}
           >
@@ -1340,7 +1340,7 @@ export function ScriptBlock({
                   }
                 }
               }}
-              className="flex h-8 min-w-0 w-fit cursor-pointer items-center gap-1 rounded-md border border-border-10 bg-white px-2 py-1.5 transition-colors duration-150 hover:bg-surface-20 focus:outline-none focus:ring-0 active:scale-[0.98]"
+              className="flex h-8 min-w-0 w-fit cursor-pointer items-center gap-my-4 rounded-md border border-border-10 bg-white px-my-8 py-my-8 transition-colors duration-150 hover:bg-surface-20 focus:outline-none focus:ring-0 active:scale-[0.98]"
             >
               {hasImageThumbnail ? (
                 <NextImage
@@ -1361,7 +1361,7 @@ export function ScriptBlock({
               ) : null}
               <span
                 className={cn(
-                  "min-w-0 flex-1 truncate text-[13px] font-medium",
+                  "min-w-0 flex-1 truncate text-body4_500",
                   isEmpty ? "text-on-surface-30" : "text-on-surface-30"
                 )}
               >
@@ -1377,11 +1377,11 @@ export function ScriptBlock({
                   type="button"
                   onClick={(e) => e.stopPropagation()}
                   onFocus={onFocusBlock}
-                  className="ml-2 flex h-8 min-w-0 w-fit cursor-pointer items-center gap-1 rounded-md border border-border-10 bg-white px-2 py-1.5 transition-colors duration-150 hover:bg-surface-20 focus:outline-none focus:ring-0 active:scale-[0.98]"
+                  className="ml-2 flex h-8 min-w-0 w-fit cursor-pointer items-center gap-my-4 rounded-md border border-border-10 bg-white px-my-8 py-my-8 transition-colors duration-150 hover:bg-surface-20 focus:outline-none focus:ring-0 active:scale-[0.98]"
                 >
                   <span
                     className={cn(
-                      "min-w-0 flex-1 truncate text-[13px] font-medium text-on-surface-30"
+                      "min-w-0 flex-1 truncate text-body4_500 text-on-surface-30"
                     )}
                   >
                     {currentExpression}
@@ -1391,7 +1391,7 @@ export function ScriptBlock({
               </DropdownMenuTrigger>
               <DropdownMenuContent
                 align="start"
-                className="w-40 p-1 bg-white rounded-lg border border-border-10"
+                className="w-40 p-my-4 bg-white rounded-lg border border-border-10"
               >
                 {characterExpressionOptions.map((expr) => (
                   <DropdownMenuItem
@@ -1402,7 +1402,7 @@ export function ScriptBlock({
                         expression: expr,
                       })
                     }
-                    className="flex items-center px-3 py-2.5 cursor-pointer text-sm text-on-surface-20 hover:bg-surface-20 focus:bg-surface-20 rounded-md"
+                    className="flex items-center px-my-12 py-my-8 cursor-pointer text-body3_400 text-on-surface-20 hover:bg-surface-20 focus:bg-surface-20 rounded-md"
                   >
                     {expr}
                   </DropdownMenuItem>
@@ -1417,9 +1417,9 @@ export function ScriptBlock({
                   type="button"
                   onClick={(e) => e.stopPropagation()}
                   onFocus={onFocusBlock}
-                  className="ml-2 flex h-8 min-w-0 w-fit cursor-pointer items-center gap-1 rounded-md border border-border-10 bg-white px-2 py-1.5 transition-colors duration-150 hover:bg-surface-20 focus:outline-none focus:ring-0 active:scale-[0.98]"
+                  className="ml-2 flex h-8 min-w-0 w-fit cursor-pointer items-center gap-my-4 rounded-md border border-border-10 bg-white px-my-8 py-my-8 transition-colors duration-150 hover:bg-surface-20 focus:outline-none focus:ring-0 active:scale-[0.98]"
                 >
-                  <span className="min-w-0 flex-1 truncate text-[13px] font-medium text-on-surface-30">
+                  <span className="min-w-0 flex-1 truncate text-body4_500 text-on-surface-30">
                     {currentVideoPlaybackLabel}
                   </span>
                   <ChevronDown className="ml-1 h-4 w-4 shrink-0 text-on-surface-30" />
@@ -1427,7 +1427,7 @@ export function ScriptBlock({
               </DropdownMenuTrigger>
               <DropdownMenuContent
                 align="start"
-                className="w-40 p-1 bg-white rounded-lg border border-border-10"
+                className="w-40 p-my-4 bg-white rounded-lg border border-border-10"
               >
                 <DropdownMenuItem
                   onClick={() =>
@@ -1436,7 +1436,7 @@ export function ScriptBlock({
                       playback: "loop",
                     })
                   }
-                  className="flex items-center px-3 py-2.5 cursor-pointer text-sm text-on-surface-20 hover:bg-surface-20 focus:bg-surface-20 rounded-md"
+                  className="flex items-center px-my-12 py-my-8 cursor-pointer text-body3_400 text-on-surface-20 hover:bg-surface-20 focus:bg-surface-20 rounded-md"
                 >
                   무한루프
                 </DropdownMenuItem>
@@ -1447,7 +1447,7 @@ export function ScriptBlock({
                       playback: "once",
                     })
                   }
-                  className="flex items-center px-3 py-2.5 cursor-pointer text-sm text-on-surface-20 hover:bg-surface-20 focus:bg-surface-20 rounded-md"
+                  className="flex items-center px-my-12 py-my-8 cursor-pointer text-body3_400 text-on-surface-20 hover:bg-surface-20 focus:bg-surface-20 rounded-md"
                 >
                   한 번만
                 </DropdownMenuItem>
@@ -1485,7 +1485,7 @@ export function ScriptBlock({
       onKeyDown={handleResourceBlockKeyDown}
     >
       {!hideIndex && (
-        <span className="shrink-0 text-xs font-medium text-on-surface-30 tabular-nums">
+        <span className="shrink-0 text-caption1_500 text-on-surface-30 tabular-nums">
           {indexLabel}
         </span>
       )}
@@ -1493,7 +1493,7 @@ export function ScriptBlock({
         <Icon className="h-4 w-4 shrink-0 text-on-surface-30" />
         <span
           className={cn(
-            "flex h-8 w-[100px] shrink-0 items-center justify-start text-[13px] font-medium",
+            "flex h-8 w-[100px] shrink-0 items-center justify-start text-body4_500",
             LABEL_COLOR_BY_TYPE[block.type]
           )}
         >
@@ -1501,7 +1501,7 @@ export function ScriptBlock({
         </span>
         <span
           className={cn(
-            "min-w-0 flex-1 truncate text-sm",
+            "min-w-0 flex-1 truncate text-body3_400",
             isNone ? "text-on-surface-30" : "text-on-surface-10"
           )}
         >

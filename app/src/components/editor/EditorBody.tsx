@@ -25,17 +25,17 @@ import type { BlockType, ScriptBlockData } from "@/types/editor";
 
 /** 텍스트(대사) 블록: 디자인 시안과 동일 — min-h-9·py-1·bg-white·rounded·flex 행 */
 const WRAPPER_CLASS_TEXT =
-  "group group/row relative flex h-fit w-full min-h-9 items-start justify-start gap-0 rounded bg-white py-1 outline-none hover:bg-surface-20/50 focus-within:bg-white";
+  "group group/row relative flex h-fit w-full min-h-9 items-start justify-start gap-0 rounded bg-white py-my-4 outline-none hover:bg-surface-20/50 focus-within:bg-white";
 const ROOT_CLASS_TEXT = "min-h-8 min-w-0 flex-1 h-fit";
 
 /** 선택지 블록: 텍스트 행과 동일 래퍼( min-h-9·py-1·bg-white·rounded·group/row ) */
 const WRAPPER_CLASS_CHOICE =
-  "group group/row relative flex h-fit w-full min-h-9 items-start justify-start gap-0 rounded bg-white py-1 outline-none hover:bg-surface-20/50 focus-within:bg-white";
+  "group group/row relative flex h-fit w-full min-h-9 items-start justify-start gap-0 rounded bg-white py-my-4 outline-none hover:bg-surface-20/50 focus-within:bg-white";
 const ROOT_CLASS_CHOICE = "min-h-8 min-w-0 flex-1 h-fit";
 
 /** 한 줄 블록 (장면/캐릭터/연출/배경 등): 고정 높이 32px(h-8), px-0 py-1 */
 const WRAPPER_CLASS_COMPACT =
-  "group flex h-fit min-h-9 items-center justify-start gap-0 rounded-lg py-1 hover:bg-surface-20/50";
+  "group flex h-fit min-h-9 items-center justify-start gap-0 rounded-lg py-my-4 hover:bg-surface-20/50";
 const ROOT_CLASS_COMPACT = "min-w-0 flex-1 min-h-8 h-8";
 
 function SortableBlockWrapper({
@@ -166,10 +166,10 @@ function SortableBlockWrapper({
       </div>
       <span
         className={cn(
-          "flex w-9 shrink-0 justify-start font-medium tabular-nums",
+          "flex w-9 shrink-0 justify-start tabular-nums",
           isTextLikeRow
-            ? "min-h-8 items-center text-xs leading-4"
-            : "h-8 items-center text-[13px]",
+            ? "min-h-8 items-center text-caption1_500"
+            : "h-8 items-center text-body4_500",
           isFocused
             ? "text-primary"
             : hasIssue
@@ -405,7 +405,7 @@ export default function EditorBody() {
           strategy={verticalListSortingStrategy}
         >
           <div
-            className="mx-auto flex min-h-full w-full flex-col gap-1 px-2"
+            className="mx-auto flex min-h-full w-full flex-col gap-my-4 px-my-8"
             onClick={handleBackgroundClick}
           >
             {blocks.map((block, i) => {

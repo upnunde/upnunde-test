@@ -11,6 +11,8 @@ export interface ChipProps
   children: React.ReactNode;
   /** 닫기 아이콘 표시 (Tag에서 사용) */
   dismissIcon?: boolean;
+  /** 우측 아이콘 슬롯 — `icon: true`일 때 X 대신 렌더 (드롭다운 chevron 등) */
+  trailingIcon?: React.ReactNode;
 }
 
 export function Chip({
@@ -20,12 +22,13 @@ export function Chip({
   size,
   icon,
   dismissIcon = false,
+  trailingIcon,
   className,
   children,
   type = "button",
   ...props
 }: ChipProps) {
-  const showIcon = icon || dismissIcon;
+  const showIcon = icon || dismissIcon || Boolean(trailingIcon);
 
   return (
     <button
@@ -46,17 +49,19 @@ export function Chip({
         <span
           className={cn(
             "relative inline-flex shrink-0 items-center justify-center",
-            size === "l" ? "h-6 w-6" : "h-5 w-5",
+            size === "l" ? "size-my-24" : "size-my-20",
           )}
           aria-hidden
         >
-          <X
-            className={cn(
-              "text-current",
-              size === "l" ? "h-3 w-3" : "h-2.5 w-2.5",
-            )}
-            strokeWidth={2.25}
-          />
+          {trailingIcon ?? (
+            <X
+              className={cn(
+                "text-current",
+                size === "l" ? "size-my-12" : "size-[10px]",
+              )}
+              strokeWidth={2.25}
+            />
+          )}
         </span>
       ) : null}
     </button>

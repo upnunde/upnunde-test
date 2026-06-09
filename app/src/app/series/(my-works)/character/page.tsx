@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useCallback, useState } from "react";
+import React, { useCallback, useMemo, useState } from "react";
 import { CharacterList } from "@/components/character/CharacterList";
 import { CharacterDeleteModal } from "@/components/character/CharacterDeleteModal";
 import {
@@ -10,6 +10,7 @@ import {
 import {
   IMPORT_CHARACTER_SERIES_GROUPS,
   characterResourceToCharacterData,
+  collectImportedResourceKeys,
 } from "@/lib/importableCharactersMock";
 import { MY_WORKS_CHARACTERS_MOCK } from "@/lib/myWorksCharactersMock";
 import type { CharacterData } from "@/types/character";
@@ -43,6 +44,11 @@ export default function WorksCharacterListPage() {
     setCharacters((prev) => (prev.some((c) => c.id === source.id) ? prev : [...prev, source]));
   }, []);
 
+  const excludeResourceKeys = useMemo(
+    () => collectImportedResourceKeys(characters),
+    [characters],
+  );
+
   return (
     <>
       <CharacterList
@@ -63,6 +69,7 @@ export default function WorksCharacterListPage() {
         open={importModalOpen}
         onOpenChange={setImportModalOpen}
         seriesGroups={IMPORT_CHARACTER_SERIES_GROUPS}
+        excludeResourceKeys={excludeResourceKeys}
         title="캐릭터 불러오기"
         description="시리즈를 선택한 뒤, 리소스에 등록한 등장인물을 내 작품 캐릭터로 추가해 주세요."
         onApply={handleImportCharacter}

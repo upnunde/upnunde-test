@@ -34,7 +34,7 @@ const DialogContent = React.forwardRef<
     <DialogPrimitive.Content
       ref={ref}
       className={cn(
-        "fixed left-1/2 top-1/2 z-50 flex w-full max-w-lg max-h-[calc(100vh-160px)] min-h-0 -translate-x-1/2 -translate-y-1/2 flex-col gap-4 bg-background p-6 shadow-xl duration-200 overflow-y-auto rounded-2xl outline-none focus:outline-none data-[state=open]:animate-in data-[state=closed]:animate-out data-[state=closed]:fade-out-0 data-[state=open]:fade-in-0 data-[state=closed]:zoom-out-95 data-[state=open]:zoom-in-95",
+        "fixed left-1/2 top-1/2 z-50 flex w-full max-w-lg max-h-[calc(100vh-160px)] min-h-0 -translate-x-1/2 -translate-y-1/2 flex-col gap-my-16 bg-background p-my-24 shadow-elevation-50 duration-200 overflow-y-auto rounded-[4px] outline-none focus:outline-none data-[state=open]:animate-in data-[state=closed]:animate-out data-[state=closed]:fade-out-0 data-[state=open]:fade-in-0 data-[state=closed]:zoom-out-95 data-[state=open]:zoom-in-95",
         className
       )}
       {...props}
@@ -51,7 +51,7 @@ const DialogHeader = ({
 }: React.HTMLAttributes<HTMLDivElement>) => (
   <div
     className={cn(
-      "flex flex-col space-y-1.5 text-center sm:text-left",
+      "flex flex-col space-y-my-8 text-center sm:text-left",
       className
     )}
     {...props}
@@ -65,7 +65,7 @@ const DialogTitle = React.forwardRef<
 >(({ className, ...props }, ref) => (
   <DialogPrimitive.Title
     ref={ref}
-    className={cn("text-2xl font-bold leading-none tracking-tight", className)}
+    className={cn("text-heading2_700 tracking-tight", className)}
     {...props}
   />
 ));
@@ -77,7 +77,7 @@ const DialogDescription = React.forwardRef<
 >(({ className, ...props }, ref) => (
   <DialogPrimitive.Description
     ref={ref}
-    className={cn("text-muted-foreground text-sm", className)}
+    className={cn("text-muted-foreground text-body3_400", className)}
     {...props}
   />
 ));

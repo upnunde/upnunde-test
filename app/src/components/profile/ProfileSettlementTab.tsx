@@ -27,7 +27,7 @@ export function ProfileSettlementTab({ onSaved }: { onSaved: () => void }) {
   };
 
   return (
-    <div className="flex flex-col gap-5">
+    <div className="flex flex-col gap-my-20">
       <AnalyticsPanel>
         <Title2
           text="정산 계좌"
@@ -36,18 +36,18 @@ export function ProfileSettlementTab({ onSaved }: { onSaved: () => void }) {
           sectionEnd={
             <Link
               href="/settlements"
-              className={cn(analyticsOutlineChipClassName, "h-9 shrink-0 px-3 text-sm")}
+              className={cn(analyticsOutlineChipClassName, "h-9 shrink-0 px-my-12 text-body3_400")}
             >
               정산 내역
             </Link>
           }
         />
-        <div className="flex max-w-xl flex-col gap-5 p-5">
-          <p className="text-sm leading-5 text-on-surface-20">
+        <div className="flex max-w-xl flex-col gap-my-20 p-my-20">
+          <p className="text-body3_400 text-on-surface-20">
             출금은 등록한 계좌로 입금돼요. 계좌 정보가 바뀌면 정산 전에 꼭 업데이트해 주세요.
           </p>
 
-          <div className="flex flex-col gap-3">
+          <div className="flex flex-col gap-my-12">
             <ProfileFieldLabel text="은행" />
             <input
               type="text"
@@ -58,7 +58,7 @@ export function ProfileSettlementTab({ onSaved }: { onSaved: () => void }) {
             />
           </div>
 
-          <div className="flex flex-col gap-3">
+          <div className="flex flex-col gap-my-12">
             <ProfileFieldLabel text="계좌번호" hint="숫자만 입력해 주세요." />
             <input
               type="text"
@@ -70,7 +70,7 @@ export function ProfileSettlementTab({ onSaved }: { onSaved: () => void }) {
             />
           </div>
 
-          <div className="flex flex-col gap-3">
+          <div className="flex flex-col gap-my-12">
             <ProfileFieldLabel text="예금주" hint="계좌 명의와 동일해야 해요." />
             <input
               type="text"
@@ -81,8 +81,8 @@ export function ProfileSettlementTab({ onSaved }: { onSaved: () => void }) {
             />
           </div>
 
-          <div className="flex justify-end border-t border-border-10 pt-5">
-            <Button type="button" className="h-10 min-w-20 px-4" onClick={handleSave}>
+          <div className="flex justify-end border-t border-border-10 pt-my-20">
+            <Button type="button" className="h-my-36 min-w-my-80 px-my-16" onClick={handleSave}>
               저장
             </Button>
           </div>
@@ -91,8 +91,8 @@ export function ProfileSettlementTab({ onSaved }: { onSaved: () => void }) {
 
       <AnalyticsPanel>
         <Title2 text="사업자·세금계산서" variant="title" asSectionHeader />
-        <div className="flex max-w-xl flex-col gap-5 p-5">
-          <div className="flex flex-col gap-3">
+        <div className="flex max-w-xl flex-col gap-my-20 p-my-20">
+          <div className="flex flex-col gap-my-12">
             <ProfileFieldLabel text="사업자등록번호" />
             <input
               type="text"
@@ -103,7 +103,7 @@ export function ProfileSettlementTab({ onSaved }: { onSaved: () => void }) {
             />
           </div>
 
-          <div className="flex flex-col gap-3">
+          <div className="flex flex-col gap-my-12">
             <ProfileFieldLabel text="세금계산서 수신 이메일" />
             <input
               type="email"
@@ -114,8 +114,8 @@ export function ProfileSettlementTab({ onSaved }: { onSaved: () => void }) {
             />
           </div>
 
-          <div className="flex justify-end border-t border-border-10 pt-5">
-            <Button type="button" className="h-10 min-w-20 px-4" onClick={handleSave}>
+          <div className="flex justify-end border-t border-border-10 pt-my-20">
+            <Button type="button" className="h-my-36 min-w-my-80 px-my-16" onClick={handleSave}>
               저장
             </Button>
           </div>

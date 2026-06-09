@@ -46,9 +46,9 @@ export function EpisodePromptReferenceModal({
         </DialogHeader>
         <div className="mx-auto w-full rounded-[4px] border border-border-10 bg-white shadow-none flex min-h-0 h-full flex-col overflow-hidden max-w-[760px] min-w-[560px]">
           <Title2 text="에피소드" asSectionHeader />
-          <div className="mx-0 max-w-none min-w-0 border-0 rounded-none px-5 pt-5 pb-5 shadow-none min-h-0 flex-1 overflow-y-auto">
-            <div className="mt-0 flex flex-col gap-6">
-              <div className="flex flex-col gap-3">
+          <div className="mx-0 max-w-none min-w-0 border-0 rounded-none px-my-20 pt-my-20 pb-my-20 shadow-none min-h-0 flex-1 overflow-y-auto">
+            <div className="mt-0 flex flex-col gap-my-24">
+              <div className="flex flex-col gap-my-12">
                 <Title1
                   text="에피소드 제목*"
                   variant="title-subtitle-dot"
@@ -60,14 +60,14 @@ export function EpisodePromptReferenceModal({
                   value={REFERENCE_TITLE}
                   readOnly
                   tabIndex={-1}
-                  className="h-[42px] rounded-md border border-border-10 bg-surface-20 px-3 py-2 text-sm text-on-surface-10 pointer-events-none"
+                  className="h-[42px] rounded-md border border-border-10 bg-surface-20 px-my-12 py-my-8 text-body3_400 text-on-surface-10 pointer-events-none"
                 />
-                <div className="flex justify-end text-xs text-on-surface-30">
+                <div className="flex justify-end text-caption1_400 text-on-surface-30">
                   {REFERENCE_TITLE.length}/{MAX_TITLE}
                 </div>
               </div>
 
-              <div className="flex flex-col gap-3">
+              <div className="flex flex-col gap-my-12">
                 <Title1
                   text="에피소드 요약*"
                   variant="title-subtitle-dot"
@@ -79,14 +79,14 @@ export function EpisodePromptReferenceModal({
                   value={REFERENCE_SUMMARY}
                   readOnly
                   tabIndex={-1}
-                  className="h-[42px] rounded-md border border-border-10 bg-surface-20 px-3 py-2 text-sm text-on-surface-10 pointer-events-none"
+                  className="h-[42px] rounded-md border border-border-10 bg-surface-20 px-my-12 py-my-8 text-body3_400 text-on-surface-10 pointer-events-none"
                 />
-                <div className="flex justify-end text-xs text-on-surface-30">
+                <div className="flex justify-end text-caption1_400 text-on-surface-30">
                   {REFERENCE_SUMMARY.length}/{MAX_SUMMARY}
                 </div>
               </div>
 
-              <div className="flex flex-col gap-3 pb-5">
+              <div className="flex flex-col gap-my-12 pb-my-20">
                 <Title1
                   text="대표 이미지*"
                   variant="title-subtitle-dot"
@@ -103,7 +103,7 @@ export function EpisodePromptReferenceModal({
                 </div>
               </div>
 
-              <div className="flex flex-col gap-3">
+              <div className="flex flex-col gap-my-12">
                 <Title1
                   text="지난 사건 히스토리*"
                   variant="title-subtitle-dot"
@@ -115,14 +115,14 @@ export function EpisodePromptReferenceModal({
                   value={REFERENCE_HISTORY}
                   readOnly
                   tabIndex={-1}
-                  className="min-h-[160px] max-h-[400px] rounded-md border border-border-10 bg-surface-20 px-3 py-2 text-sm text-on-surface-10 pointer-events-none"
+                  className="min-h-[160px] max-h-[400px] rounded-md border border-border-10 bg-surface-20 px-my-12 py-my-8 text-body3_400 text-on-surface-10 pointer-events-none"
                 />
-                <div className="flex justify-end text-xs text-on-surface-30">
+                <div className="flex justify-end text-caption1_400 text-on-surface-30">
                   {REFERENCE_HISTORY.length}/{MAX_HISTORY}
                 </div>
               </div>
 
-              <div className="flex flex-col gap-3">
+              <div className="flex flex-col gap-my-12">
                 <Title1
                   text="에피소드 대본*"
                   variant="title-subtitle-dot"
@@ -134,15 +134,15 @@ export function EpisodePromptReferenceModal({
                   value={REFERENCE_SCRIPT}
                   readOnly
                   tabIndex={-1}
-                  className="min-h-[160px] max-h-[400px] rounded-md border border-border-10 bg-surface-20 px-3 py-2 text-sm text-on-surface-10 pointer-events-none"
+                  className="min-h-[160px] max-h-[400px] rounded-md border border-border-10 bg-surface-20 px-my-12 py-my-8 text-body3_400 text-on-surface-10 pointer-events-none"
                 />
-                <div className="flex justify-end text-xs text-on-surface-30">
+                <div className="flex justify-end text-caption1_400 text-on-surface-30">
                   {REFERENCE_SCRIPT.length}/{MAX_SCRIPT}
                 </div>
               </div>
             </div>
           </div>
-          <div className="sticky bottom-0 border-t border-border-10 bg-white px-5 py-4">
+          <div className="sticky bottom-0 border-t border-border-10 bg-white px-my-20 py-my-16">
             <div className="flex justify-end">
               <Button type="button" variant="outline" onClick={() => onOpenChange(false)}>
                 닫기

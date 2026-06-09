@@ -16,17 +16,17 @@ export interface ModalHeaderProps {
 export function ModalHeader({ title, subtitle, icon, className }: ModalHeaderProps) {
   return (
     <div className={cn(modalHeaderClassName, className)}>
-      <div className="flex flex-col items-center justify-center gap-2 self-stretch">
+      <div className="flex flex-col items-center justify-center gap-my-8 self-stretch">
         {icon ? <div className="relative flex h-7 w-7 items-center justify-center">{icon}</div> : null}
         <DialogTitle asChild>
-          <h2 className="text-center font-['Pretendard_JP'] text-2xl font-bold leading-8 text-on-surface-10">
+          <h2 className="text-center font-['Pretendard_JP'] text-heading2_700 text-on-surface-10">
             {title}
           </h2>
         </DialogTitle>
       </div>
       {subtitle ? (
         <DialogDescription asChild>
-          <p className="self-stretch whitespace-pre-line text-center font-['Pretendard_JP'] text-base font-medium leading-6 text-on-surface-20">
+          <p className="self-stretch whitespace-pre-line text-center font-['Pretendard_JP'] text-body1_500 text-on-surface-20">
             {subtitle}
           </p>
         </DialogDescription>

@@ -95,7 +95,7 @@ export function AnalyticsContentTab({
   );
 
   return (
-    <div className="flex flex-col items-start justify-start gap-5 self-stretch px-0 pt-5 pb-10">
+    <div className="flex flex-col items-start justify-start gap-my-20 self-stretch px-0 pt-my-20 pb-my-40">
       <AnalyticsPanel>
         <Title2 text="주요통계" variant="title" asSectionHeader />
 
@@ -104,7 +104,7 @@ export function AnalyticsContentTab({
             const isFirst = i === 0;
             const selected = primaryMetric === stat.id;
             const shell = cn(
-              "min-w-[120px] flex-1 sm:min-w-0 self-stretch border-b border-border-10 px-5 py-10 inline-flex flex-col items-center justify-start gap-1",
+              "min-w-[120px] flex-1 sm:min-w-0 self-stretch border-b border-border-10 px-my-20 py-my-40 inline-flex flex-col items-center justify-start gap-my-4",
               i < arr.length - 1 && "border-r",
             );
             const label = PRIMARY_LABELS[stat.id];
@@ -122,17 +122,17 @@ export function AnalyticsContentTab({
                   selected ? "z-[1] bg-white" : "bg-surface-disabled-10 hover:bg-surface-10/80",
                 )}
               >
-                <div className="justify-center text-center text-sm font-medium leading-5 text-on-surface-20">
+                <div className="justify-center text-center text-body3_500 text-on-surface-20">
                   {label}
                 </div>
-                <div className="justify-center text-center text-2xl font-bold leading-8 text-on-surface-10">
+                <div className="justify-center text-center text-heading2_700 text-on-surface-10">
                   {stat.value}
                 </div>
                 {isFirst ? (
-                  <div className="inline-flex items-center justify-center gap-1">
+                  <div className="inline-flex items-center justify-center gap-my-4">
                     <div
                       className={cn(
-                        "justify-center text-center text-sm font-normal leading-5",
+                        "justify-center text-center text-body3_400",
                         deltaClassName(stat.deltaTone),
                       )}
                     >
@@ -142,7 +142,7 @@ export function AnalyticsContentTab({
                 ) : (
                   <div
                     className={cn(
-                      "justify-center text-center text-sm font-normal leading-5",
+                      "justify-center text-center text-body3_400",
                       deltaClassName(stat.deltaTone),
                     )}
                   >
@@ -154,8 +154,8 @@ export function AnalyticsContentTab({
           })}
         </div>
 
-        <div className="flex flex-col items-stretch gap-3 self-stretch px-0 py-10">
-          <p className="px-5 text-sm font-medium leading-5 text-on-surface-20">
+        <div className="flex flex-col items-stretch gap-my-12 self-stretch px-0 py-my-40">
+          <p className="px-my-20 text-body3_500 text-on-surface-20">
             {PRIMARY_LABELS[primaryMetric] ?? "조회수"} 추이
           </p>
           <AnalyticsTrendLineChart
@@ -166,7 +166,7 @@ export function AnalyticsContentTab({
         </div>
       </AnalyticsPanel>
 
-      <div className="flex w-full flex-col items-stretch gap-5 lg:flex-row">
+      <div className="flex w-full flex-col items-stretch gap-my-20 lg:flex-row">
         <PopularContentsCard rows={popularTop5Rows} isSeriesScope={isSeriesScope} />
         <AttentionContentsCard rows={attentionTop5Rows} isSeriesScope={isSeriesScope} />
       </div>
@@ -192,7 +192,7 @@ function PopularContentsCard({
         variant="title"
         asSectionHeader
       />
-      <div className="px-5 pt-3">
+      <div className="px-my-20 pt-my-12">
         <SegmentedTextTabs
           aria-label="인기 콘텐츠 기준"
           items={[
@@ -231,7 +231,7 @@ function AttentionContentsCard({
         variant="title"
         asSectionHeader
       />
-      <div className="px-5 pt-3">
+      <div className="px-my-20 pt-my-12">
         <SegmentedTextTabs
           aria-label="주의 콘텐츠 기준"
           items={[
@@ -245,8 +245,8 @@ function AttentionContentsCard({
         />
       </div>
       {isEmpty ? (
-        <div className="flex h-[584px] flex-col items-center justify-center gap-4 p-5">
-          <p className="text-sm font-normal leading-5 text-on-surface-disabled">
+        <div className="flex h-[584px] flex-col items-center justify-center gap-my-16 p-my-20">
+          <p className="text-body3_400 text-on-surface-disabled">
             데이터가 충분하지 않아 이 보고서를 표시할 수 없습니다.
           </p>
         </div>

@@ -81,7 +81,7 @@ export function AnalyticsDashboard({ defaultArea = "content", onAreaChange }: An
 
   return (
     <div className="flex min-h-0 w-full flex-1 flex-col overflow-hidden">
-      <div className="flex w-full shrink-0 flex-col items-center border-b border-border-10 bg-surface-10 px-5 pb-5 pt-2">
+      <div className="flex w-full shrink-0 flex-col items-center border-b border-border-10 bg-surface-10 px-my-20 pb-my-20 pt-my-8">
         <div className="w-full min-w-0 max-w-[1200px]">
           <AnalyticsScopeFilterBar
             analyticsArea={analyticsArea}
@@ -102,7 +102,7 @@ export function AnalyticsDashboard({ defaultArea = "content", onAreaChange }: An
         </div>
       </div>
 
-      <div className="flex min-h-0 flex-1 flex-col overflow-y-auto px-5 py-0">
+      <div className="flex min-h-0 flex-1 flex-col overflow-y-auto px-my-20 py-0">
         <div className="mx-auto flex w-full min-w-0 max-w-[1200px] flex-col">
           {analyticsArea === "content" ? (
             <AnalyticsContentTab

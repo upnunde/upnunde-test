@@ -67,7 +67,7 @@ export function ImageLightbox({
   return (
     <div
       className={cn(
-        "fixed inset-0 z-50 flex items-center justify-center p-4",
+        "fixed inset-0 z-50 flex items-center justify-center p-my-16",
         "bg-black/50 data-[state=open]:animate-in data-[state=closed]:animate-out data-[state=closed]:fade-out-0 data-[state=open]:fade-in-0",
         className
       )}
@@ -82,7 +82,7 @@ export function ImageLightbox({
       >
         {/* 이미지 프레임 */}
         <div
-          className="w-96 h-[640px] relative rounded-[4px] outline outline-4 outline-offset-[-4px] outline-white overflow-hidden shadow-xl"
+          className="w-96 h-[640px] relative rounded-[4px] outline outline-4 outline-offset-[-4px] outline-white overflow-hidden shadow-elevation-50"
           style={{
             backgroundColor: "#f8fafc",
             backgroundImage:
@@ -111,7 +111,7 @@ export function ImageLightbox({
             className={cn(
               "absolute left-0 top-1/2 -translate-y-1/2 w-14 h-14 rounded-full",
               "inline-flex justify-center items-center overflow-hidden cursor-pointer",
-              "bg-surface-10 shadow-[0px_2px_4px_2px_rgba(0,0,0,0.16)]",
+              "bg-surface-10 shadow-elevation-20",
               "hover:bg-surface-20 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-2",
               "disabled:opacity-40 disabled:pointer-events-none"
             )}
@@ -130,7 +130,7 @@ export function ImageLightbox({
             className={cn(
               "absolute right-0 top-1/2 -translate-y-1/2 w-14 h-14 rounded-full",
               "inline-flex justify-center items-center overflow-hidden cursor-pointer",
-              "bg-surface-10 shadow-[0px_2px_4px_2px_rgba(0,0,0,0.16)]",
+              "bg-surface-10 shadow-elevation-20",
               "hover:bg-surface-20 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-2",
               "disabled:opacity-40 disabled:pointer-events-none"
             )}

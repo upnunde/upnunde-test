@@ -149,7 +149,7 @@ export function FloatingComposerBar({
       className={cn(
         "flex size-9 shrink-0 items-center justify-center rounded-full transition-all",
         canSubmit
-          ? "bg-gradient-to-br from-violet-500 to-fuchsia-500 text-white shadow-sm hover:opacity-90"
+          ? "bg-gradient-to-br from-violet-500 to-fuchsia-500 text-white shadow-elevation-10 hover:opacity-90"
           : "cursor-not-allowed bg-surface-20 text-on-surface-30",
       )}
       aria-label="AI로 초안 채우기"
@@ -161,10 +161,10 @@ export function FloatingComposerBar({
   return (
     <div
       className={cn(
-        "z-30 flex w-full justify-center px-5 pb-5 pt-3",
+        "z-30 flex w-full justify-center px-my-20 pb-my-20 pt-my-12",
         placement === "fixed" && "pointer-events-none fixed inset-x-0 bottom-0",
         placement === "sticky" &&
-          "pointer-events-auto sticky bottom-0 shrink-0 bg-gradient-to-t from-surface-20 from-40% via-surface-20/95 to-transparent pt-6",
+          "pointer-events-auto sticky bottom-0 shrink-0 bg-gradient-to-t from-surface-20 from-40% via-surface-20/95 to-transparent pt-my-24",
         className,
       )}
     >
@@ -174,10 +174,10 @@ export function FloatingComposerBar({
             "composer-bar-gradient-inner",
             shellRadiusClass,
             shellShadow,
-            "grid grid-cols-[1fr_auto] pl-4 pr-2",
+            "grid grid-cols-[1fr_auto] pl-my-16 pr-my-8",
             showExpandedLayout
-              ? "gap-x-2 gap-y-1.5 py-2.5"
-              : "h-12 items-center gap-2 py-0",
+              ? "gap-x-my-8 gap-y-my-8 py-my-8"
+              : "h-[42px] items-center gap-my-8 py-0",
             isFocused && "ring-0",
             disabled && "opacity-70",
           )}
@@ -204,11 +204,11 @@ export function FloatingComposerBar({
               placeholder={`✨${placeholder}`}
               aria-label={ariaLabel}
               className={cn(
-                "block min-w-0 w-full resize-none border-0 bg-transparent text-sm leading-5 caret-primary",
+                "block min-w-0 w-full resize-none border-0 bg-transparent text-body3_400 caret-primary",
                 "text-on-surface-10 placeholder:text-on-surface-30 focus:outline-none focus:ring-0",
                 showExpandedLayout
-                  ? "max-h-[120px] py-0.5"
-                  : "min-h-5 py-0",
+                ? "max-h-[120px] py-my-2"
+                : "min-h-5 py-0",
                 isLoading && "pointer-events-none text-transparent placeholder:text-transparent",
               )}
             />
@@ -222,8 +222,8 @@ export function FloatingComposerBar({
             className={cn(
               "flex shrink-0 items-center justify-center",
               showExpandedLayout
-                ? "col-span-full row-start-2 w-full justify-end pt-0.5"
-                : "col-start-2 row-start-1 h-12",
+                ? "col-span-full row-start-2 w-full justify-end pt-my-2"
+                : "col-start-2 row-start-1 h-[42px]",
             )}
           >
             {sendButton}
@@ -235,4 +235,4 @@ export function FloatingComposerBar({
 }
 
 /** 플로팅 컴포저가 열린 모달 스크롤 영역 하단 여백 */
-export const FLOATING_COMPOSER_SCROLL_PAD_CLASS = "pb-5";
+export const FLOATING_COMPOSER_SCROLL_PAD_CLASS = "pb-my-20";

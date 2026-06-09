@@ -4,6 +4,7 @@ import React from "react";
 import Image from "next/image";
 import { Pencil, Trash2 } from "lucide-react";
 import type { CharacterResource } from "@/types/resource";
+import { THUMBNAIL_DIM_OVERLAY_CLASS } from "@/lib/thumbnail-styles";
 import { cn } from "@/lib/utils";
 
 /** [정책 2] 등장인물 전용 카드. 3인 버튼 형태(호버 시 편집/삭제 버튼). [정책 3] 클릭 시 상세 페이지 이동. */
@@ -45,12 +46,12 @@ export function CharacterCard({
       tabIndex={0}
       onClick={handleCardClick}
       onKeyDown={(e) => e.key === "Enter" && (onPreviewClick ? onPreviewClick(character) : handleCardClick(e as unknown as React.MouseEvent))}
-      className="group inline-flex w-[90px] flex-col justify-start items-start gap-1 cursor-pointer"
+      className="group inline-flex w-[90px] flex-col justify-start items-start gap-my-4 cursor-pointer"
       aria-label={`${character.name} 상세 보기`}
     >
       <div
         className={cn(
-          "w-[90px] h-[160px] rounded-lg outline outline-1 outline-offset-[-1px] flex flex-col justify-center items-center gap-2 overflow-hidden relative",
+          "w-[90px] h-[160px] rounded-lg outline outline-1 outline-offset-[-1px] flex flex-col justify-center items-center gap-my-8 overflow-hidden relative",
           error
             ? "bg-error-error-container outline-error-on-error-container"
             : "bg-surface-disabled/0 outline-border-20"
@@ -63,6 +64,7 @@ export function CharacterCard({
           sizes="90px"
           className="object-cover object-top"
         />
+        <div className={THUMBNAIL_DIM_OVERLAY_CLASS} aria-hidden />
         <div
           className={cn(
             "absolute inset-0 w-full h-full bg-black/10 transition-opacity pointer-events-none",
@@ -72,13 +74,13 @@ export function CharacterCard({
         />
         <div
           className={cn(
-            "absolute right-1 top-1 flex flex-col justify-center items-start gap-1 transition-opacity",
+            "absolute right-1 top-1 flex flex-col justify-center items-start gap-my-4 transition-opacity",
             showControls ? "opacity-100" : "opacity-0 group-hover:opacity-100"
           )}
         >
           <button
             type="button"
-            className="w-8 h-8 rounded-full cursor-pointer bg-surface-10 shadow-[0px_2px_4px_2px_rgba(0,0,0,0.16)] inline-flex justify-center items-center text-on-surface-10 hover:bg-surface-20"
+            className="w-8 h-8 rounded-full cursor-pointer bg-surface-10 shadow-elevation-20 inline-flex justify-center items-center text-on-surface-10 hover:bg-surface-20"
             aria-label="상세 페이지에서 편집"
             onClick={(e) => {
               e.stopPropagation();
@@ -89,7 +91,7 @@ export function CharacterCard({
           </button>
           <button
             type="button"
-            className="w-8 h-8 rounded-full cursor-pointer bg-surface-10 shadow-[0px_2px_4px_2px_rgba(0,0,0,0.16)] inline-flex justify-center items-center text-on-surface-10 hover:bg-surface-20"
+            className="w-8 h-8 rounded-full cursor-pointer bg-surface-10 shadow-elevation-20 inline-flex justify-center items-center text-on-surface-10 hover:bg-surface-20"
             aria-label="삭제"
             onClick={(e) => {
               e.stopPropagation();
@@ -101,10 +103,10 @@ export function CharacterCard({
         </div>
       </div>
       {showName && (
-        <div className="self-stretch inline-flex justify-start items-center gap-2.5 overflow-hidden">
+        <div className="self-stretch inline-flex justify-start items-center gap-my-8 overflow-hidden">
           <span
             className={cn(
-              "flex-1 text-[13px] font-normal font-['Pretendard_JP'] leading-5 truncate",
+              "flex-1 text-body4_400 font-['Pretendard_JP'] truncate",
               error ? "text-error-on-error-container" : "text-on-surface-10"
             )}
           >

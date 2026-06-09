@@ -23,8 +23,8 @@ export default function Header({ profileImageUrl, onProfileImageChange }: Header
   const profileButtonRef = useRef<HTMLButtonElement>(null);
 
   return (
-    <header className="flex h-14 shrink-0 items-center justify-between border-b border-border-10 bg-white pl-0 pr-4">
-      <div className="flex w-[240px] self-stretch items-center pl-4">
+    <header className="flex h-14 shrink-0 items-center justify-between border-b border-border-10 bg-white pl-0 pr-my-16">
+      <div className="flex w-[240px] self-stretch items-center pl-my-16">
         <button
           type="button"
           onClick={() => router.push("/login")}

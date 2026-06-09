@@ -11,6 +11,7 @@
     "start": "next start",
     "lint": "eslint",
     "check:routes": "node scripts/check-app-routes.mjs",
+    "migrate:tokens": "node scripts/migrate-design-tokens.mjs",
     "clean": "rm -rf .next"
   },
   "dependencies": {

@@ -74,7 +74,7 @@ export function ModalFooterButtons({
         )}
       >
         {layout === "split" && leadingButton ? <FooterActionButton config={leadingButton} /> : null}
-        <div className="flex items-center justify-start gap-2">
+        <div className="flex items-center justify-start gap-my-8">
           {trailingButtons.map((config, index) => (
             <FooterActionButton key={`${config.label}-${index}`} config={config} />
           ))}

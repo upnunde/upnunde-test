@@ -138,9 +138,9 @@ export function EpisodeForm({
   const footer = (
     <div
       className={cn(
-        "flex justify-end gap-2",
+        "flex justify-end gap-my-8",
         stickyFooter
-          ? "sticky bottom-0 border-t border-border-10 bg-white px-5 py-4"
+          ? "sticky bottom-0 border-t border-border-10 bg-white px-my-20 py-my-16"
           : "mt-8",
       )}
     >
@@ -175,12 +175,12 @@ export function EpisodeForm({
 
         <PageCard
           className={cn(
-            "mx-0 max-w-none min-w-0 border-0 rounded-none px-5 pt-5 pb-5 shadow-none",
+            "mx-0 max-w-none min-w-0 border-0 rounded-none px-my-20 pt-my-20 pb-my-20 shadow-none",
             stickyFooter && "min-h-0",
           )}
         >
-          <div className="mt-0 flex flex-col gap-6">
-            <div className="flex flex-col gap-3">
+          <div className="mt-0 flex flex-col gap-my-24">
+            <div className="flex flex-col gap-my-12">
               <Title1
                 text="에피소드 제목*"
                 variant="title-subtitle-dot"
@@ -193,14 +193,14 @@ export function EpisodeForm({
                 onChange={(e) => setTitle(e.target.value)}
                 disabled={isAiFilling}
                 placeholder={EPISODE_FORM_FIELD_COPY.title.placeholder}
-                className="h-[42px] w-full rounded-md border border-border-10 bg-white px-3 py-2 text-sm text-on-surface-10 placeholder:text-on-surface-30 focus:outline-none focus:ring-2 focus:ring-primary disabled:cursor-not-allowed disabled:opacity-60"
+                className="h-[42px] w-full rounded-md border border-border-10 bg-white px-my-12 py-my-8 text-body3_400 text-on-surface-10 placeholder:text-on-surface-30 focus:outline-none focus:ring-2 focus:ring-primary disabled:cursor-not-allowed disabled:opacity-60"
               />
-              <div className="flex justify-end text-xs text-on-surface-30">
+              <div className="flex justify-end text-caption1_400 text-on-surface-30">
                 {title.length}/{MAX_TITLE}
               </div>
             </div>
 
-            <div className="flex flex-col gap-3">
+            <div className="flex flex-col gap-my-12">
               <Title1
                 text="에피소드 요약*"
                 variant="title-subtitle-dot"
@@ -213,14 +213,14 @@ export function EpisodeForm({
                 onChange={(e) => setSummary(e.target.value)}
                 disabled={isAiFilling}
                 placeholder={EPISODE_FORM_FIELD_COPY.summary.placeholder}
-                className="h-[42px] w-full rounded-md border border-border-10 bg-white px-3 py-2 text-sm text-on-surface-10 placeholder:text-on-surface-30 focus:outline-none focus:ring-2 focus:ring-primary disabled:cursor-not-allowed disabled:opacity-60"
+                className="h-[42px] w-full rounded-md border border-border-10 bg-white px-my-12 py-my-8 text-body3_400 text-on-surface-10 placeholder:text-on-surface-30 focus:outline-none focus:ring-2 focus:ring-primary disabled:cursor-not-allowed disabled:opacity-60"
               />
-              <div className="flex justify-end text-xs text-on-surface-30">
+              <div className="flex justify-end text-caption1_400 text-on-surface-30">
                 {summary.length}/{MAX_SUMMARY}
               </div>
             </div>
 
-            <div className="flex flex-col gap-3 pb-5">
+            <div className="flex flex-col gap-my-12 pb-my-20">
               <Title1
                 text="대표 이미지*"
                 variant="title-subtitle-dot"

@@ -81,7 +81,7 @@ function ChoiceTextField({
       placeholder={placeholder}
       rows={1}
       className={cn(
-        "w-full rounded-md border-0 bg-transparent px-0 py-0 text-sm leading-5 outline-none focus:outline-none focus:ring-0 focus:ring-offset-0 align-middle overflow-hidden resize-none",
+        "w-full rounded-md border-0 bg-transparent px-0 py-0 text-body3_400 outline-none focus:outline-none focus:ring-0 focus:ring-offset-0 align-middle overflow-hidden resize-none",
         className
       )}
       style={{ height: "fit-content" }}
@@ -144,13 +144,13 @@ function ChoiceRow({
       data-choice-id={choice.id}
     >
       {/* Col 1: Label */}
-      <div className="flex min-h-9 w-[80px] shrink-0 self-stretch items-center border-r border-border-10 px-3 py-0 text-sm text-on-surface-30">
+      <div className="flex min-h-9 w-[80px] shrink-0 self-stretch items-center border-r border-border-10 px-my-12 py-0 text-body3_400 text-on-surface-30">
         선택 {index + 1}
       </div>
       {/* Col 2: Content - 텍스트 필드 분리, 줄 길이에 따라 가변 확장 */}
-      <div className="flex min-h-9 min-w-[200px] flex-1 self-stretch items-center border-r border-border-10 px-3 py-1">
+      <div className="flex min-h-9 min-w-[200px] flex-1 self-stretch items-center border-r border-border-10 px-my-12 py-my-4">
         {isAiMode ? (
-          <span className="text-sm font-medium text-primary">
+          <span className="text-body3_500 text-primary">
             ✨ AI 모드로 직접 대화
           </span>
         ) : (
@@ -168,7 +168,7 @@ function ChoiceRow({
         )}
       </div>
       {/* Col 3: 장면 전환 드롭다운 */}
-      <div className="flex min-h-9 w-[200px] min-w-[160px] max-w-[200px] shrink-0 self-stretch items-center border-r border-border-10 px-3 py-0">
+      <div className="flex min-h-9 w-[200px] min-w-[160px] max-w-[200px] shrink-0 self-stretch items-center border-r border-border-10 px-my-12 py-0">
         <select
           value={choice.nextScene}
           onChange={(e) => {
@@ -180,7 +180,7 @@ function ChoiceRow({
           }}
           title={selectedSceneLabel}
           className={cn(
-            "h-8 w-full min-w-0 rounded-md border-0 bg-transparent px-0 py-1 pr-2 text-sm overflow-hidden text-ellipsis whitespace-nowrap outline-none focus:outline-none focus:ring-0 focus:ring-offset-0",
+            "h-8 w-full min-w-0 rounded-md border-0 bg-transparent px-0 py-my-4 pr-my-8 text-body3_400 overflow-hidden text-ellipsis whitespace-nowrap outline-none focus:outline-none focus:ring-0 focus:ring-offset-0",
             isSceneUnselected ? "text-on-surface-30" : "text-on-surface-10",
             isNextSceneIssueFocused && "text-destructive"
           )}
@@ -194,7 +194,7 @@ function ChoiceRow({
         </select>
       </div>
       {/* Col 4: Actions */}
-      <div className="flex min-h-9 w-[120px] min-w-[100px] max-w-[120px] shrink-0 self-stretch items-center justify-between gap-2 px-3 py-0">
+      <div className="flex min-h-9 w-[120px] min-w-[100px] max-w-[120px] shrink-0 self-stretch items-center justify-between gap-my-8 px-my-12 py-0">
         <SwitchToggle
           checked={choice.isPaid}
           onCheckedChange={(checked) => onUpdate({ isPaid: checked })}
@@ -202,7 +202,7 @@ function ChoiceRow({
         <button
           type="button"
           onClick={onRemove}
-          className="p-1.5 rounded text-on-surface-30 opacity-0 transition-opacity transition-colors group-hover/choice-row:opacity-100 group-focus-within/choice-row:opacity-100 hover:text-red-600 hover:bg-red-50"
+          className="p-my-8 rounded text-on-surface-30 opacity-0 transition-opacity transition-colors group-hover/choice-row:opacity-100 group-focus-within/choice-row:opacity-100 hover:text-red-600 hover:bg-red-50"
           aria-label="선택지 삭제"
         >
           <Trash2 className="h-4 w-4" />
@@ -306,11 +306,11 @@ export function ChoiceBlockTable({
       data-block-id={blockId}
     >
       {/* Header */}
-      <div className="flex border-b border-border-10 bg-surface-20/80 text-on-surface-30 text-xs font-medium min-h-8">
-        <div className="w-20 shrink-0 px-3 flex items-center border-r border-border-10">선택</div>
-        <div className="flex-1 min-w-[200px] px-3 flex items-center border-r border-border-10">내용</div>
-        <div className="w-[200px] min-w-[160px] max-w-[200px] shrink-0 px-3 flex items-center border-r border-border-10">장면 전환</div>
-        <div className="w-[120px] min-w-[100px] max-w-[120px] shrink-0 px-3 flex items-center">유료 전환</div>
+      <div className="flex border-b border-border-10 bg-surface-20/80 text-on-surface-30 text-caption1_500 min-h-8">
+        <div className="w-20 shrink-0 px-my-12 flex items-center border-r border-border-10">선택</div>
+        <div className="flex-1 min-w-[200px] px-my-12 flex items-center border-r border-border-10">내용</div>
+        <div className="w-[200px] min-w-[160px] max-w-[200px] shrink-0 px-my-12 flex items-center border-r border-border-10">장면 전환</div>
+        <div className="w-[120px] min-w-[100px] max-w-[120px] shrink-0 px-my-12 flex items-center">유료 전환</div>
       </div>
       {/* Rows */}
       {choices.map((choice, index) => (
@@ -327,7 +327,7 @@ export function ChoiceBlockTable({
       ))}
       {/* Footer: Task 4 - Dropdown with "선택지 추가" and "✨ AI 모드로 직접 대화" */}
       {!isAtMaxChoices && (
-        <div className="flex h-9 items-center justify-start px-1 py-2">
+        <div className="flex h-9 items-center justify-start px-my-4 py-my-8">
           <DropdownMenu>
             <DropdownMenuTrigger asChild>
               <Button
