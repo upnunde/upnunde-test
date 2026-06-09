@@ -102,14 +102,14 @@ export function ImportCharacterDialog({
 
   return (
     <Dialog open={open} onOpenChange={handleDialogOpenChange}>
-      <DialogContent className="w-[680px] max-w-[calc(100vw-2rem)] rounded-2xl border border-border-10 bg-white p-0">
+      <DialogContent className="flex w-full max-h-[90vh] min-h-0 flex-col gap-0 overflow-hidden rounded-2xl border border-border-10 bg-white p-0 sm:max-w-2xl">
         <div className="border-b border-border-10/5 px-5 py-3">
           <DialogTitle className="text-base font-bold leading-6 text-on-surface-10">{title}</DialogTitle>
           <p className="mt-1 text-sm text-on-surface-30">{description}</p>
         </div>
 
         {showSeriesFilter && (
-          <div className="border-b border-border-10/5 px-5 py-3">
+          <div className="border-b border-border-10/5 px-5 pb-3 pt-0">
             <div
               className={cn(
                 "inline-flex w-full min-w-0 flex-wrap items-center overflow-x-auto",
@@ -138,7 +138,7 @@ export function ImportCharacterDialog({
           </div>
         )}
 
-        <div className="max-h-[420px] overflow-y-auto px-5 py-4">
+        <div className="min-h-0 flex-1 overflow-y-auto px-5 py-4">
           {visibleCharacters.length === 0 ? (
             <p className="py-8 text-center text-sm text-on-surface-30">
               이 시리즈에 등록된 등장인물이 없어요.

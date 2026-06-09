@@ -41,7 +41,9 @@ export function CharacterDeleteModal({
       <DialogContent className={modalDialogContentClassName}>
         <ModalHeader
           title="캐릭터를 삭제하시겠어요?"
-          subtitle="캐릭터를 삭제하면 설정 정보와 관련 데이터가 함께 영구 삭제되며, 복구가 불가능합니다."
+          subtitle={
+            "캐릭터를 삭제하면 설정 정보와 관련 데이터가 함께 영구 삭제되며,\n복구가 불가능합니다."
+          }
         />
 
         <ModalFooterButtons
