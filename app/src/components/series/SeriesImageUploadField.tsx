@@ -3,6 +3,7 @@
 import React from "react";
 import Image from "next/image";
 import { Title1 } from "@/components/ui/title1";
+import { THUMBNAIL_SLOT_ARIA } from "@/lib/thumbnail-styles";
 import { cn } from "@/lib/utils";
 
 interface SeriesImageUploadFieldProps {
@@ -10,6 +11,8 @@ interface SeriesImageUploadFieldProps {
   subtitle: string;
   previewUrl: string | null;
   previewAlt: string;
+  /** 빈 슬롯 클릭 시 접근성 라벨 (기본: "이미지 추가") */
+  addAriaLabel?: string;
   deleteAriaLabel: string;
   inputId: string;
   accept: string;
@@ -26,6 +29,7 @@ export function SeriesImageUploadField({
   subtitle,
   previewUrl,
   previewAlt,
+  addAriaLabel = THUMBNAIL_SLOT_ARIA.addImage,
   deleteAriaLabel,
   inputId,
   accept,
@@ -43,6 +47,7 @@ export function SeriesImageUploadField({
         ref={labelRef}
         role="button"
         tabIndex={0}
+        aria-label={previewUrl ? undefined : addAriaLabel}
         onClick={(e) => {
           e.preventDefault();
           onActivate();
@@ -124,6 +129,7 @@ export function SeriesImageUploadField({
         type="file"
         accept={accept}
         className="hidden"
+        aria-label={addAriaLabel}
         onChange={(e) => {
           const file = e.target.files?.[0];
           if (file) {

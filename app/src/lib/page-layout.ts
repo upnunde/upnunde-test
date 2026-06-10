@@ -24,12 +24,12 @@ export const PAGE_SCROLL_GUTTER_CLASS = PAGE_GUTTER_X_CLASS;
 /** 스크롤 영역 마지막 콘텐츠 하단 여백 — 80px (모든 뷰포트 공통) */
 export const PAGE_SCROLL_BOTTOM_CLASS = "pb-my-80";
 
-/** 스크롤 영역 상단 여백 — 모바일 20px · lg+ 32px */
-export const PAGE_SCROLL_TOP_CLASS = "pt-my-20 lg:pt-my-32";
+/** 스크롤 영역 상단 여백 — 20px (모든 뷰포트 공통) */
+export const PAGE_SCROLL_TOP_CLASS = "pt-my-20";
 
-/** AppShell main 스크롤 루트 — py-0 · 가로 인셋 · 하단 80px */
+/** AppShell main 스크롤 루트 — 상단 20px · 가로 인셋 · 하단 80px */
 export const PAGE_SCROLL_ROOT_CLASS =
-  `flex min-h-0 flex-1 flex-col overflow-y-auto py-0 ${PAGE_SCROLL_GUTTER_CLASS} ${PAGE_SCROLL_BOTTOM_CLASS}`;
+  `flex min-h-0 flex-1 flex-col overflow-y-auto pt-my-20 ${PAGE_SCROLL_GUTTER_CLASS} ${PAGE_SCROLL_BOTTOM_CLASS}`;
 
 /** AppShell main 스크롤 루트 — 상단 여백 · 가로 인셋 · 하단 80px */
 export const PAGE_SCROLL_ROOT_TOP_CLASS =
@@ -38,6 +38,13 @@ export const PAGE_SCROLL_ROOT_TOP_CLASS =
 /** 서브 페이지 상단 바(뒤로가기·제목) — 모바일 56px · lg+ 64px */
 export const PAGE_SUBHEADER_CLASS =
   `flex h-my-56 w-full shrink-0 items-center justify-center border-b border-border-10 bg-white ${PAGE_GUTTER_X_CLASS} py-0 lg:h-my-64`;
+
+/** 상단 필터 띠(분석 ScopeFilterBar·내 작품 범주 칩 등) */
+export const PAGE_FILTER_HEADER_CLASS =
+  `flex w-full shrink-0 flex-col items-center border-b border-border-10 bg-surface-10 ${PAGE_GUTTER_X_CLASS} py-my-12`;
+
+/** 필터 띠 내부 max-width 컨테이너 */
+export const PAGE_FILTER_HEADER_INNER_CLASS = "w-full min-w-0 max-w-[1200px]";
 
 /** 스크롤 + 중앙 정렬 레이아웃(리소스 상세·목록 등) */
 export const PAGE_SCROLL_COLUMN_CLASS =
@@ -53,9 +60,9 @@ export const PAGE_MOBILE_FIXED_ACTION_BAR_SCROLL_PAD_CLASS =
 /** 본문·카드·서브헤더 내부 — 모바일 가로 스크롤 방지 (min-w-0) */
 export const PAGE_CONTAINER_CLASS = "w-full min-w-0 max-w-[1200px] mx-auto";
 
-/** max-width 컨테이너 + 세로 스택(정산·프로필 등 AppShell 본문) */
+/** max-width 컨테이너 + 세로 스택(정산·프로필 등 — 세로 패딩은 PAGE_SCROLL_ROOT_CLASS) */
 export const PAGE_STACK_CLASS =
-  `${PAGE_CONTAINER_CLASS} flex flex-col ${PAGE_GUTTER_GAP_CLASS} py-my-20`;
+  `${PAGE_CONTAINER_CLASS} flex flex-col ${PAGE_GUTTER_GAP_CLASS}`;
 
 /** 넓은 폼·모달 (에피소드 폼 등) */
 export const PAGE_MODAL_WIDE_CLASS = "w-[min(92vw,760px)] max-w-[760px] min-w-0";

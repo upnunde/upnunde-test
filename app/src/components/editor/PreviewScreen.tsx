@@ -6,6 +6,11 @@ import type { ChoiceItem, ScriptBlock } from "@/types/editor";
 import { useEditorStore } from "@/store/useEditorStore";
 import { dummyAsset } from "@/lib/dummy-asset-path";
 import { CHARACTERS, BACKGROUNDS, BGMS } from "@/lib/mockData";
+import {
+  PREVIEW_PROGRESS_BADGE_CLASS,
+  PREVIEW_TOP_BADGE_CLASS,
+  PREVIEW_TOP_BAR_CLASS,
+} from "@/lib/preview-overlay-styles";
 import { cn } from "@/lib/utils";
 import { resolveSpeakerDisplay } from "@/lib/speakerPersona";
 
@@ -181,6 +186,8 @@ export interface PreviewScreenProps {
   focusedBlockId?: string | null;
   /** 탭으로 다음 블록 진행(모바일 재생 모드) */
   interactive?: boolean;
+  /** 모바일 미리보기 상단 진행 표시 (예: 3 / 12) */
+  progressLabel?: string;
   onTapAdvance?: () => void;
   onChoiceSelect?: (choice: ChoiceItem) => void;
 }
@@ -193,7 +200,7 @@ export function PreviewScreen(props: PreviewScreenProps = {}) {
 
   const blocks = props.blocks ?? storeBlocks;
   const focusedBlockId = props.focusedBlockId !== undefined ? props.focusedBlockId : storeFocusedBlockId;
-  const { interactive = false, onTapAdvance, onChoiceSelect } = props;
+  const { interactive = false, progressLabel, onTapAdvance, onChoiceSelect } = props;
 
   const state = useMemo(
     () => computeAccumulatedState(blocks, focusedBlockId, seriesPersona),
@@ -236,26 +243,27 @@ export function PreviewScreen(props: PreviewScreenProps = {}) {
       )}
       style={{ height: "100%", overflow: "hidden" }}
     >
-      {/* Top-left badge: current top_desc (from state up to focused block) */}
-      {currentTopDesc && (
-        <div
-          className="absolute left-3 top-10 z-20 max-w-[calc(100%-24px)] rounded-lg border border-white/20 bg-black/60 px-my-12 py-my-8 backdrop-blur-sm"
-          role="status"
-        >
-          <p className="text-caption1_400 text-white/95">
-            {currentTopDesc}
-          </p>
-        </div>
-      )}
-
-      {/* Optional: BGM label (state persisted for future audio playback) */}
-      {displayBgm && (
-        <div
-          className="absolute right-3 top-10 z-20 rounded-lg border border-white/20 bg-black/60 px-my-8 py-my-4 text-caption2_400 text-white/80"
-          role="status"
-          aria-label={`BGM: ${displayBgm}`}
-        >
-          ♪ {displayBgm}
+      {(progressLabel || currentTopDesc || displayBgm) && (
+        <div className={PREVIEW_TOP_BAR_CLASS}>
+          <div className="flex min-w-0 flex-1 items-center gap-my-8">
+            {progressLabel ? (
+              <span className={PREVIEW_PROGRESS_BADGE_CLASS}>{progressLabel}</span>
+            ) : null}
+            {currentTopDesc ? (
+              <div className={cn(PREVIEW_TOP_BADGE_CLASS, "min-w-0 max-w-full")} role="status">
+                <p className="truncate">{currentTopDesc}</p>
+              </div>
+            ) : null}
+          </div>
+          {displayBgm ? (
+            <div
+              className={cn(PREVIEW_TOP_BADGE_CLASS, "shrink-0")}
+              role="status"
+              aria-label={`BGM: ${displayBgm}`}
+            >
+              <span className="truncate">♪ {displayBgm}</span>
+            </div>
+          ) : null}
         </div>
       )}
 

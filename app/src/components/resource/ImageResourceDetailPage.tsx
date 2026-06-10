@@ -9,6 +9,7 @@ import { HeaderBackButton } from "@/components/ui/header-back-button";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import { AddResourceSlot } from "@/components/resource/cards/AddResourceSlot";
+import { THUMBNAIL_SLOT_ARIA } from "@/lib/thumbnail-styles";
 import { Title1 } from "@/components/ui/title1";
 import { Title2 } from "@/components/ui/title2";
 import {
@@ -294,7 +295,8 @@ export function ImageResourceDetailPage({ kind, initialData }: ImageResourceDeta
                 ) : (
                   <AddResourceSlot
                     variant="img9:16"
-                    ariaLabel="대표 썸네일 업로드"
+                    slotKind="thumbnail"
+                    ariaLabel={THUMBNAIL_SLOT_ARIA.addRepresentativeThumbnail}
                     onClick={handleThumbnailClick}
                   />
                 )}
@@ -375,7 +377,7 @@ export function ImageResourceDetailPage({ kind, initialData }: ImageResourceDeta
         type="file"
         accept="image/*"
         className="sr-only"
-        aria-label="대표 썸네일 이미지 선택"
+        aria-label={THUMBNAIL_SLOT_ARIA.addRepresentativeThumbnail}
         onChange={handleThumbnailFileChange}
       />
       <ImageCropPosterModal

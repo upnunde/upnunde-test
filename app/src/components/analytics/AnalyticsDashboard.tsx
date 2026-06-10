@@ -1,12 +1,17 @@
 "use client";
 
-import { useCallback, useEffect, useState } from "react";
+import { useCallback, useEffect, useRef, useState } from "react";
 import { usePathname, useRouter } from "next/navigation";
 import { AnalyticsScopeFilterBar } from "@/components/analytics/AnalyticsScopeFilterBar";
 import { useScrollHeaderCollapse } from "@/hooks/useScrollHeaderCollapse";
 import { useIsLgUp } from "@/hooks/useMediaQuery";
 import { ANALYTICS_SCROLL_ROOT_ATTR } from "@/lib/analytics-scroll";
-import { PAGE_GUTTER_X_CLASS, PAGE_SCROLL_ROOT_CLASS } from "@/lib/page-layout";
+import {
+  PAGE_FILTER_HEADER_CLASS,
+  PAGE_FILTER_HEADER_INNER_CLASS,
+  PAGE_SCROLL_ROOT_CLASS,
+  PAGE_STACK_CLASS,
+} from "@/lib/page-layout";
 import { cn } from "@/lib/utils";
 import { AnalyticsContentTab } from "@/components/analytics/AnalyticsContentTab";
 import { AnalyticsUserTab } from "@/components/analytics/AnalyticsUserTab";
@@ -45,7 +50,11 @@ export function AnalyticsDashboard({ defaultArea = "content", onAreaChange }: An
   const router = useRouter();
   const pathname = usePathname();
   const isDesktop = useIsLgUp();
-  const headerCollapsed = useScrollHeaderCollapse(ANALYTICS_SCROLL_ROOT_ATTR, !isDesktop);
+  const filterHeaderRef = useRef<HTMLDivElement>(null);
+  const headerCollapsed = useScrollHeaderCollapse(ANALYTICS_SCROLL_ROOT_ATTR, !isDesktop, {
+    compensateLayout: true,
+    headerRef: filterHeaderRef,
+  });
   const [periodRange, setPeriodRange] = useState<AnalyticsPeriodRange>("7d");
   const [analyticsArea, setAnalyticsAreaState] = useState<AnalyticsAreaTabId>(defaultArea);
 
@@ -89,15 +98,15 @@ export function AnalyticsDashboard({ defaultArea = "content", onAreaChange }: An
   return (
     <div className="flex min-h-0 w-full flex-1 flex-col overflow-hidden">
       <div
+        ref={filterHeaderRef}
         className={cn(
-          `flex w-full shrink-0 flex-col items-center border-b border-border-10 bg-surface-10 ${PAGE_GUTTER_X_CLASS}`,
-          headerCollapsed ? "max-lg:border-b-0 max-lg:py-0" : "pb-my-20 pt-my-8",
-          "lg:pb-my-20 lg:pt-my-8",
+          PAGE_FILTER_HEADER_CLASS,
+          headerCollapsed && "max-lg:border-b-0 max-lg:py-0",
         )}
       >
         <div
           className={cn(
-            "w-full min-w-0 max-w-[1200px] overflow-hidden max-lg:transition-[max-height] max-lg:duration-200 max-lg:ease-out",
+            cn(PAGE_FILTER_HEADER_INNER_CLASS, "overflow-hidden max-lg:transition-[max-height] max-lg:duration-200 max-lg:ease-out"),
             headerCollapsed ? "max-lg:max-h-0" : "max-lg:max-h-[320px]",
           )}
         >
@@ -128,10 +137,10 @@ export function AnalyticsDashboard({ defaultArea = "content", onAreaChange }: An
       </div>
 
       <div
-        className={PAGE_SCROLL_ROOT_CLASS}
+        className={cn(PAGE_SCROLL_ROOT_CLASS, "items-stretch justify-start gap-0")}
         {...{ [ANALYTICS_SCROLL_ROOT_ATTR]: "" }}
       >
-        <div className="mx-auto flex w-full min-w-0 max-w-[1200px] flex-col">
+        <div className={PAGE_STACK_CLASS}>
           {analyticsArea === "content" ? (
             <AnalyticsContentTab
               periodRange={periodRange}

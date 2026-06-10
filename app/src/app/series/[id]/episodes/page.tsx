@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState, useMemo, useCallback } from "react";
+import React, { useState, useMemo, useCallback, useRef } from "react";
 import { APP_VIEWPORT_SHELL_CLASS } from "@/lib/mobile-viewport";
 import { useRouter, usePathname } from "next/navigation";
 import Header from "@/components/Header/Header";
@@ -143,9 +143,11 @@ const MOCK_EPISODES: Episode[] = buildMockEpisodes();
 
 export default function EpisodeManagementPage() {
   const isDesktop = useIsLgUp();
+  const subHeaderRef = useRef<HTMLDivElement>(null);
   const mobileSubHeaderCollapsed = useScrollHeaderCollapse(
     PAGE_SCROLL_COLUMN_ROOT_ATTR,
     !isDesktop,
+    { compensateLayout: true, headerRef: subHeaderRef },
   );
   const router = useRouter();
   const setCurrentView = useEditorStore((s) => s.setCurrentView);
@@ -324,6 +326,7 @@ export default function EpisodeManagementPage() {
         <div className="flex min-w-0 flex-1 flex-col overflow-hidden">
           <main className="flex flex-1 flex-col overflow-hidden bg-surface-20">
             <div
+              ref={subHeaderRef}
               className={cn(
                 "w-full shrink-0 overflow-hidden bg-white max-lg:transition-[max-height] max-lg:duration-200 max-lg:ease-out max-lg:max-h-14",
                 mobileSubHeaderCollapsed && "max-lg:max-h-0",

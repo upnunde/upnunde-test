@@ -1,3 +1,12 @@
+/** 썸네일 슬롯(AddResourceSlot·SeriesImageUploadField 등) 접근성 라벨 — 일반 파일 첨부와 구분 */
+export const THUMBNAIL_SLOT_ARIA = {
+  addImage: "이미지 추가",
+  addRepresentativeThumbnail: "대표 썸네일 추가",
+  addRepresentativeImage: "대표 이미지 추가",
+  addLogo: "로고 이미지 추가",
+  addExpression: "표정 추가",
+} as const;
+
 /** 썸네일 이미지 위 #000000 2% 딤 — `surface-disabled` 토큰 */
 export const THUMBNAIL_DIM_OVERLAY_CLASS =
   "pointer-events-none absolute inset-0 z-[1] bg-surface-disabled";

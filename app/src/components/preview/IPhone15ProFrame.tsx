@@ -17,11 +17,6 @@ export function IPhone15ProFrame({ children, className }: IPhone15ProFrameProps)
       )}
     >
       <div className="relative h-full w-full min-h-0 min-w-0 overflow-hidden rounded-[2rem] bg-black">
-        {/* iPhone 15 Pro style Dynamic Island */}
-        <div
-          className="absolute left-1/2 top-2 z-30 h-[26px] w-[108px] -translate-x-1/2 rounded-full bg-black"
-          aria-hidden
-        />
         {children}
       </div>
     </div>

@@ -3,7 +3,7 @@
 import React, { useState, useMemo, useCallback } from "react";
 import { useRouter } from "next/navigation";
 import { AppShell } from "@/components/layout/AppShell";
-import { PAGE_CONTAINER_CLASS, PAGE_SCROLL_ROOT_TOP_CLASS, PAGE_SUBHEADER_CLASS } from "@/lib/page-layout";
+import { PAGE_CONTAINER_CLASS, PAGE_SCROLL_ROOT_CLASS, PAGE_SUBHEADER_CLASS } from "@/lib/page-layout";
 import { cn } from "@/lib/utils";
 import { NotificationList } from "@/components/notification/NotificationList";
 import { Pagination } from "@/components/episode/Pagination";
@@ -379,12 +379,7 @@ export default function NotificationsPage() {
           </div>
         </div>
 
-        <div
-          className={cn(
-            PAGE_SCROLL_ROOT_TOP_CLASS,
-            "items-center gap-my-12 max-lg:gap-0 max-lg:p-0",
-          )}
-        >
+        <div className={cn(PAGE_SCROLL_ROOT_CLASS, "items-center gap-my-12 max-lg:gap-0")}>
           <div className={PAGE_CONTAINER_CLASS}>
             <NotificationList
                 notifications={paginatedNotifications}

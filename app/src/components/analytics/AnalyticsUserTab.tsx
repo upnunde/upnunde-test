@@ -145,7 +145,7 @@ export function AnalyticsUserTab({
   }));
 
   return (
-    <div className="flex flex-col items-start justify-start gap-my-12 lg:gap-my-20 self-stretch px-0 pt-my-20 pb-my-40">
+    <div className="flex flex-col items-start justify-start gap-my-12 lg:gap-my-20 self-stretch px-0">
       <AnalyticsPanel>
         <Title2 text="주요통계" variant="title" asSectionHeader />
         <div className="inline-flex w-full flex-wrap items-stretch sm:flex-nowrap">

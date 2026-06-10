@@ -7,11 +7,10 @@ import { AnalyticsEpisodeScopePicker } from "@/components/analytics/AnalyticsEpi
 import type { AnalyticsAreaTabId } from "@/components/analytics/AnalyticsDashboard";
 import { type AnalyticsPeriodRange } from "@/components/analytics/analytics-date";
 import {
-  analyticsFilterChipResponsiveClassName,
   analyticsScopeFilterDividerClassName,
   analyticsScopeFilterShellClassName,
 } from "@/components/analytics/analytics-filter-chips";
-import { FilterChip } from "@/components/ui/chip";
+import { ContentScopeChipGroup } from "@/components/shared/ContentScopeChipGroup";
 import { CONTROL_GROUP_GAP_STANDARD_RESPONSIVE_CLASS } from "@/lib/chip-styles";
 import {
   ANALYTICS_SCOPE_CHIPS,
@@ -102,27 +101,12 @@ export function AnalyticsScopeFilterBar({
           CONTROL_GROUP_GAP_STANDARD_RESPONSIVE_CLASS,
         )}
       >
-        <div
-          className={cn("flex shrink-0 items-center", CONTROL_GROUP_GAP_STANDARD_RESPONSIVE_CLASS)}
-          role="group"
-          aria-label="콘텐츠 범위"
-        >
-          {ANALYTICS_SCOPE_CHIPS.map(({ id, label }) => {
-            const selected = scopeCategory === id;
-            return (
-              <FilterChip
-                key={id}
-                selected={selected}
-                chipSize="l"
-                aria-pressed={selected}
-                className={cn("min-w-20", analyticsFilterChipResponsiveClassName)}
-                onClick={() => onScopeCategoryChange(id)}
-              >
-                {label}
-              </FilterChip>
-            );
-          })}
-        </div>
+        <ContentScopeChipGroup
+          items={ANALYTICS_SCOPE_CHIPS}
+          activeId={scopeCategory}
+          onSelect={onScopeCategoryChange}
+          ariaLabel="콘텐츠 범위"
+        />
 
         {isSeriesScope || isCharacterScope || isScenarioScope ? (
           <>

@@ -3,12 +3,13 @@
 import React from "react";
 import { Plus } from "lucide-react";
 import type { MediaSlotType } from "@/types/resource";
+import { THUMBNAIL_SLOT_ARIA } from "@/lib/thumbnail-styles";
 import { cn } from "@/lib/utils";
 
-/** [정책 5] 각 카테고리 그리드 마지막 요소. + 클릭 시 신규 등록 페이지로 라우팅. */
+/** [정책 5] 리소스 그리드 마지막 요소(신규 등록) 또는 썸네일·이미지 추가 슬롯 */
 export interface AddResourceSlotProps {
   onClick?: () => void;
-  /** 지정 시 label+htmlFor로 숨김 file input과 직접 연결 (모달 등에서 OS 파일 선택창 안정 동작) */
+  /** 지정 시 label+htmlFor로 숨김 file input과 직접 연결 (모달 등에서 OS 이미지 선택창 안정 동작) */
   fileInputId?: string;
   /** 등장인물: 9:16(90×160) / img1:1: 120×120 정사각형 / img16:9: 가로 / img9:16: 세로 / mov: 세로+재생시간 */
   variant?: "character" | MediaSlotType;
@@ -16,7 +17,12 @@ export interface AddResourceSlotProps {
   error?: boolean;
   /** 하단에 "name" 라벨 표시 여부 */
   showName?: boolean;
-  /** 버튼 aria-label (기본: "새로 추가") */
+  /**
+   * - `new-resource`: 그리드 신규 등록(기본 aria "새로 추가")
+   * - `thumbnail`: 이미지·썸네일 추가 슬롯(기본 aria "이미지 추가")
+   */
+  slotKind?: "new-resource" | "thumbnail";
+  /** 버튼 aria-label (`slotKind` 기본값보다 우선) */
   ariaLabel?: string;
 }
 
@@ -34,8 +40,12 @@ export function AddResourceSlot({
   variant = "mov",
   error = false,
   showName = false,
-  ariaLabel = "새로 추가",
+  slotKind = "new-resource",
+  ariaLabel,
 }: AddResourceSlotProps) {
+  const resolvedAriaLabel =
+    ariaLabel ??
+    (slotKind === "thumbnail" ? THUMBNAIL_SLOT_ARIA.addImage : "새로 추가");
   const sizeClass = SLOT_SIZE_CLASS[variant === "character" ? "character" : variant];
   const slotClassName = cn(
     "rounded-lg flex flex-col justify-center items-center gap-my-8 overflow-hidden transition-colors cursor-pointer focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary",
@@ -53,11 +63,11 @@ export function AddResourceSlot({
   return (
     <div className="inline-flex flex-col justify-start items-start gap-my-4">
       {fileInputId ? (
-        <label htmlFor={fileInputId} className={slotClassName} aria-label={ariaLabel}>
+        <label htmlFor={fileInputId} className={slotClassName} aria-label={resolvedAriaLabel}>
           {plusIcon}
         </label>
       ) : (
-        <button type="button" onClick={onClick} className={slotClassName} aria-label={ariaLabel}>
+        <button type="button" onClick={onClick} className={slotClassName} aria-label={resolvedAriaLabel}>
           {plusIcon}
         </button>
       )}

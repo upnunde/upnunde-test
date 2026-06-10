@@ -2,7 +2,7 @@
 
 import React from "react";
 import { AppShell } from "@/components/layout/AppShell";
-import { PAGE_CONTAINER_CLASS, PAGE_SCROLL_ROOT_TOP_CLASS, PAGE_SUBHEADER_CLASS } from "@/lib/page-layout";
+import { PAGE_CONTAINER_CLASS, PAGE_SCROLL_ROOT_CLASS, PAGE_SUBHEADER_CLASS } from "@/lib/page-layout";
 import { cn } from "@/lib/utils";
 
 export default function GuidePage() {
@@ -15,7 +15,7 @@ export default function GuidePage() {
           </div>
         </div>
 
-        <div className={cn(PAGE_SCROLL_ROOT_TOP_CLASS, "items-center gap-my-12")}>
+        <div className={cn(PAGE_SCROLL_ROOT_CLASS, "items-center gap-my-12")}>
           <div className={PAGE_CONTAINER_CLASS}>{/* 가이드 콘텐츠 추후 구성 */}</div>
         </div>
       </main>

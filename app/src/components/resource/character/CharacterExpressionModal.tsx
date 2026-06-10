@@ -13,7 +13,11 @@ import { Input } from "@/components/ui/input";
 import { formDialogShellClassName, formDialogSheetBodyWrapperClassName, formDialogSheetScrollBodyClassName } from "@/components/ui/modal";
 import { Trash2, RefreshCw } from "lucide-react";
 import { AddResourceSlot } from "@/components/resource/cards/AddResourceSlot";
-import { MODAL_CROP_STAGE_CLASS, MODAL_CROP_STAGE_SIZE_PX } from "@/lib/thumbnail-styles";
+import {
+  MODAL_CROP_STAGE_CLASS,
+  MODAL_CROP_STAGE_SIZE_PX,
+  THUMBNAIL_SLOT_ARIA,
+} from "@/lib/thumbnail-styles";
 import { cn } from "@/lib/utils";
 import type { CharacterExpressionSlot } from "@/types/resource";
 
@@ -543,6 +547,7 @@ export function CharacterExpressionModal({
           accept="image/*"
           multiple
           className="hidden"
+          aria-label={THUMBNAIL_SLOT_ARIA.addExpression}
           onChange={handleFilesSelected}
         />
         <div className={formDialogSheetBodyWrapperClassName}>
@@ -771,7 +776,8 @@ export function CharacterExpressionModal({
               {slots.filter((s) => Boolean(s.imageUrl)).length < MAX_SLOTS && (
                 <AddResourceSlot
                   variant="img9:16"
-                  ariaLabel="표정 추가하기"
+                  slotKind="thumbnail"
+                  ariaLabel={THUMBNAIL_SLOT_ARIA.addExpression}
                   fileInputId={CHARACTER_EXPRESSION_FILE_INPUT_ID}
                 />
               )}

@@ -5,6 +5,7 @@ import { useRouter } from "next/navigation";
 import { Button } from "@/components/ui/button";
 import { ImageCropOnlyModal } from "@/components/resource/character/CharacterExpressionModal";
 import { SeriesImageUploadField } from "@/components/series/SeriesImageUploadField";
+import { THUMBNAIL_SLOT_ARIA } from "@/lib/thumbnail-styles";
 import { SeriesFormTextInputField } from "@/components/series/SeriesFormTextInputField";
 import { SeriesFormKeywordsField } from "@/components/series/SeriesFormKeywordsField";
 import { SeriesFormTextareaField } from "@/components/series/SeriesFormTextareaField";
@@ -100,6 +101,7 @@ export default function SeriesEditPage() {
                             subtitle="시리즈를 대표하는 공식 이미지입니다. 부적절한 이미지는 사용이 제한됩니다."
                             previewUrl={coverPreviewUrl}
                             previewAlt="대표이미지 미리보기"
+                            addAriaLabel={THUMBNAIL_SLOT_ARIA.addRepresentativeImage}
                             deleteAriaLabel="대표이미지 삭제"
                             inputId="series-cover-edit"
                             accept="image/*"
@@ -116,6 +118,7 @@ export default function SeriesEditPage() {
                             subtitle="배경이 투명한 png파일을 사용하세요."
                             previewUrl={logoPreviewUrl}
                             previewAlt="로고 미리보기"
+                            addAriaLabel={THUMBNAIL_SLOT_ARIA.addLogo}
                             deleteAriaLabel="로고 삭제"
                             inputId="series-logo-edit"
                             accept=".png,image/png"

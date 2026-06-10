@@ -47,7 +47,8 @@ export function PolicyAgreementModal({
   return (
     <Dialog open={open} onOpenChange={(isOpen) => !isOpen && handleClose()}>
       <DialogContent
-        className="!flex max-lg:max-w-none flex-col items-center justify-center gap-my-20 w-full rounded-[4px] border border-border-10 bg-white p-my-24 pt-my-24 shadow-elevation-40 lg:max-w-[480px] lg:pt-my-40"
+        presentation="center"
+        className="flex w-[480px] max-w-[calc(100vw-2rem)] flex-col items-center gap-my-20 rounded-[4px] border border-border-10 bg-white p-my-24 pt-my-24 shadow-elevation-40 lg:pt-my-40"
         aria-describedby="policy-agreement-description"
       >
         <DialogHeader className="text-center">
@@ -102,7 +103,7 @@ export function PolicyAgreementModal({
         </div>
 
         {/* 취소 / 동의하고 계속하기 */}
-        <div className="flex justify-end gap-my-8 mt-6 w-full">
+        <div className="flex justify-end gap-my-8 mt-my-24 w-full">
           <Button
             type="button"
             variant="outline"

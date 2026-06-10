@@ -9,6 +9,7 @@ import { HeaderBackButton } from "@/components/ui/header-back-button";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import { AddResourceSlot } from "@/components/resource/cards/AddResourceSlot";
+import { THUMBNAIL_SLOT_ARIA } from "@/lib/thumbnail-styles";
 import {
   CharacterExpressionMultiModal,
   CharacterExpressionSingleModal,
@@ -359,7 +360,8 @@ export function CharacterDetailPage({ isNew = true, initialData }: CharacterDeta
                     ) : (
                       <AddResourceSlot
                         variant="img9:16"
-                        ariaLabel="대표 썸네일 추가"
+                        slotKind="thumbnail"
+                        ariaLabel={THUMBNAIL_SLOT_ARIA.addRepresentativeThumbnail}
                         onClick={handleThumbnailAddClick}
                       />
                     )}
@@ -419,7 +421,8 @@ export function CharacterDetailPage({ isNew = true, initialData }: CharacterDeta
                       ))}
                       <AddResourceSlot
                         variant="img9:16"
-                        ariaLabel="썸네일로 변경"
+                        slotKind="thumbnail"
+                        ariaLabel={THUMBNAIL_SLOT_ARIA.addExpression}
                         onClick={handleExpressionAddClick}
                       />
                     </div>
@@ -521,7 +524,7 @@ export function CharacterDetailPage({ isNew = true, initialData }: CharacterDeta
         accept="image/*"
         multiple
         className="hidden"
-        aria-label="표정 이미지 선택 (최대 10장)"
+        aria-label={`${THUMBNAIL_SLOT_ARIA.addExpression} (최대 10장)`}
         onChange={handleExpressionFilesChange}
       />
       <input
@@ -529,7 +532,7 @@ export function CharacterDetailPage({ isNew = true, initialData }: CharacterDeta
         type="file"
         accept="image/*"
         className="sr-only"
-        aria-label="대표 썸네일 이미지 선택"
+        aria-label={THUMBNAIL_SLOT_ARIA.addRepresentativeThumbnail}
         onChange={handleThumbnailFileChange}
       />
       <ImageCropOnlyModal

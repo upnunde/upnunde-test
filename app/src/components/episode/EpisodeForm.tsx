@@ -4,6 +4,7 @@ import { useState, useCallback, useRef, useEffect } from "react";
 import { Button } from "@/components/ui/button";
 import { PageCard } from "@/components/layout/PageCard";
 import { AddResourceSlot } from "@/components/resource/cards/AddResourceSlot";
+import { THUMBNAIL_SLOT_ARIA } from "@/lib/thumbnail-styles";
 import { ImageCard } from "@/components/resource/cards/ImageCard";
 import { Title1 } from "@/components/ui/title1";
 import { Title2 } from "@/components/ui/title2";
@@ -225,7 +226,8 @@ export function EpisodeForm({
         ) : (
           <AddResourceSlot
             variant="img9:16"
-            ariaLabel="대표 이미지 업로드"
+            slotKind="thumbnail"
+            ariaLabel={THUMBNAIL_SLOT_ARIA.addRepresentativeImage}
             onClick={handleThumbnailClick}
           />
         )}
@@ -270,7 +272,7 @@ export function EpisodeForm({
           type="file"
           accept="image/*"
           className="sr-only"
-          aria-label="대표 이미지 업로드"
+          aria-label={THUMBNAIL_SLOT_ARIA.addRepresentativeImage}
           onChange={handleThumbnailFileChange}
         />
         <ImageCropPosterModal

@@ -27,9 +27,11 @@ export interface EditorMobilePreviewPlayerProps {
 export function EditorMobilePreviewPlayer({ isActive }: EditorMobilePreviewPlayerProps) {
   const blocks = useEditorStore((s) => s.blocks);
   const [playbackIndex, setPlaybackIndex] = useState(0);
+  const [showTapHint, setShowTapHint] = useState(true);
 
   const resetPlayback = useCallback(() => {
     setPlaybackIndex(0);
+    setShowTapHint(true);
   }, []);
 
   const syncPlaybackFromFocus = useCallback(() => {
@@ -38,7 +40,9 @@ export function EditorMobilePreviewPlayer({ isActive }: EditorMobilePreviewPlaye
   }, []);
 
   useEffect(() => {
-    if (isActive) syncPlaybackFromFocus();
+    if (!isActive) return;
+    setShowTapHint(true);
+    syncPlaybackFromFocus();
   }, [isActive, syncPlaybackFromFocus]);
 
   useEffect(() => {
@@ -58,6 +62,7 @@ export function EditorMobilePreviewPlayer({ isActive }: EditorMobilePreviewPlaye
   }, [blocks.length, safeIndex]);
 
   const handleAdvance = useCallback(() => {
+    setShowTapHint(false);
     if (!canTapAdvance) return;
     setPlaybackIndex((prev) => clampPlaybackIndex(blocks, prev + 1));
   }, [blocks, canTapAdvance]);
@@ -77,12 +82,6 @@ export function EditorMobilePreviewPlayer({ isActive }: EditorMobilePreviewPlaye
 
   return (
     <div className="relative flex min-h-0 flex-1 flex-col overflow-hidden bg-black">
-      <div className="pointer-events-none absolute inset-x-0 top-0 z-30 flex justify-center px-my-16 py-my-12">
-        <span className="rounded-full bg-black/50 px-my-12 py-my-4 text-caption1_400 text-white/80 backdrop-blur-sm">
-          {progressLabel}
-        </span>
-      </div>
-
       <button
         type="button"
         onClick={resetPlayback}
@@ -108,13 +107,14 @@ export function EditorMobilePreviewPlayer({ isActive }: EditorMobilePreviewPlaye
         <PreviewScreen
           blocks={blocks}
           focusedBlockId={focusedBlockId}
+          progressLabel={progressLabel}
           interactive
           onTapAdvance={handleAdvance}
           onChoiceSelect={handleChoiceSelect}
         />
       )}
 
-      {canTapAdvance ? (
+      {canTapAdvance && showTapHint ? (
         <div
           className={cn(
             "pointer-events-none absolute inset-x-0 bottom-24 z-30 flex justify-center",
