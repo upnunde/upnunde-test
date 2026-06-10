@@ -23,6 +23,8 @@ import {
 } from "@/lib/episode-previous-history";
 import {
   formDialogShellClassName,
+  formDialogSheetBodyWrapperClassName,
+  formDialogSheetEpisodeFormClassName,
   formDialogSheetScrollBodyClassName,
   formDialogSheetStickyFooterClassName,
 } from "@/components/ui/modal";
@@ -183,15 +185,19 @@ export function EpisodeAutoGeneratorModal({
         <DialogHeader className="sr-only">
           <DialogTitle>에피소드 생성기 입력</DialogTitle>
         </DialogHeader>
-        <div className="mx-auto flex w-full max-w-[760px] min-w-0 flex-col rounded-[4px] border border-border-10 bg-white shadow-none">
-          <div className="flex max-h-[min(88vh,820px)] flex-col overflow-hidden rounded-[3px]">
-            <Title2 text="에피소드 생성기" asSectionHeader />
+        <div className={formDialogSheetBodyWrapperClassName}>
+          <div
+            className={cn(
+              formDialogSheetEpisodeFormClassName,
+              "flex min-h-0 flex-1 flex-col",
+            )}
+          >
+            <Title2 text="에피소드 생성기" asSectionHeader className="shrink-0" />
             <div
               className={cn(
                 formDialogSheetScrollBodyClassName,
                 PAGE_GUTTER_X_CLASS,
-                "flex flex-col gap-my-24 border-0 pt-my-20 shadow-none",
-                "max-h-[min(calc(88vh-10rem),680px)]",
+                "flex flex-col gap-my-24 pt-my-20",
               )}
             >
               <div className="flex flex-col gap-my-12">

@@ -622,3 +622,24 @@
 @utility text-caption2_700 { font-size: 11px; line-height: 14px; font-weight: 700; }
 @utility text-caption2_500 { font-size: 11px; line-height: 14px; font-weight: 500; }
 @utility text-caption2_400 { font-size: 11px; line-height: 14px; font-weight: 400; }
+
+/* 모바일 Safari·Chrome: 입력 포커스 시 font-size < 16px 자동 확대 방지 */
+@media (max-width: 1023px) {
+  :where(
+    input:not(
+        [type="checkbox"],
+        [type="radio"],
+        [type="range"],
+        [type="file"],
+        [type="hidden"],
+        [type="button"],
+        [type="submit"],
+        [type="reset"],
+        [type="color"]
+      ),
+    textarea,
+    select
+  ) {
+    font-size: 16px !important;
+  }
+}

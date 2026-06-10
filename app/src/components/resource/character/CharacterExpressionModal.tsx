@@ -10,7 +10,12 @@ import {
 } from "@/components/ui/dialog";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
-import { formDialogShellClassName, formDialogSheetBodyWrapperClassName, formDialogSheetScrollBodyClassName } from "@/components/ui/modal";
+import {
+  formDialogShellClassName,
+  formDialogSheetBodyWrapperClassName,
+  formDialogSheetScrollBodyClassName,
+  formDialogSheetStickyFooterClassName,
+} from "@/components/ui/modal";
 import { Trash2, RefreshCw } from "lucide-react";
 import { AddResourceSlot } from "@/components/resource/cards/AddResourceSlot";
 import {
@@ -786,7 +791,12 @@ export function CharacterExpressionModal({
         </div>
 
         {/* 푸터: border-t, 취소(아웃라인) / 저장 */}
-        <div className="self-stretch w-full shrink-0 border-t border-border-10 p-my-20 inline-flex justify-end items-center gap-my-8">
+        <div
+          className={cn(
+            formDialogSheetStickyFooterClassName,
+            "inline-flex items-center justify-end gap-my-8",
+          )}
+        >
           <DialogClose asChild>
             <Button
               type="button"

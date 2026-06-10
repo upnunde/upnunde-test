@@ -52,6 +52,7 @@ import {
   editorBlockTrailingActionClass,
   editorRowTrailingActionClass,
 } from "@/lib/editor-control-visibility";
+import { useIsLgUp } from "@/hooks/useMediaQuery";
 import { useMobileBlockTextEdit } from "@/hooks/useMobileBlockTextEdit";
 import { cn } from "@/lib/utils";
 import {
@@ -67,6 +68,10 @@ import { resolveRegisteredResourceName } from "@/lib/resolveRegisteredResourceNa
 const RESOURCE_TYPES: BlockType[] = ["background", "bgm", "sfx", "character", "gallery", "video", "choice"];
 
 const PICKER_RESOURCE_TYPES: BlockType[] = ["background", "character", "bgm", "sfx", "gallery", "video", "event"];
+
+const TEXT_BLOCK_PLACEHOLDER_DESKTOP =
+  "'/'를 눌러 메뉴를 선택하거나 텍스트를 입력할 수 있습니다.";
+const TEXT_BLOCK_PLACEHOLDER_MOBILE = "텍스트를 입력할 수 있습니다.";
 
 const TYPE_LABELS: Record<BlockType, string> = {
   scene: "장면",
@@ -159,6 +164,7 @@ export function ScriptBlock({
   hideIndex = false,
   rootClassName,
 }: ScriptBlockProps) {
+  const isDesktop = useIsLgUp();
   const isSeedDefault = block.data?.isSeedDefault === true;
   const blocks = useEditorStore((s) => s.blocks);
   const seriesPersona = useEditorStore((s) => s.seriesPersona);
@@ -325,6 +331,9 @@ export function ScriptBlock({
       const pos = ta.selectionStart;
 
       if (e.key === "/") {
+        if (!isDesktop) {
+          return;
+        }
         // 슬래시 명령은 "빈 텍스트 블록"에서만 허용한다.
         if (ta.value.trim().length === 0) {
           const coords = getCaretCoordinates(ta, pos);
@@ -339,6 +348,9 @@ export function ScriptBlock({
       }
 
       if (e.key === "Enter" && !e.shiftKey) {
+        if (!isDesktop) {
+          return;
+        }
         if (enterSplitLockRef.current) {
           e.preventDefault();
           return;
@@ -407,6 +419,7 @@ export function ScriptBlock({
       index,
       blocks,
       prevBlock,
+      isDesktop,
       isSeedDefault,
       insertTextBlockAfterCursor,
       updateBlock,
@@ -766,7 +779,9 @@ export function ScriptBlock({
             readOnly={textMobileEdit.readOnly}
             onKeyDown={handleTextKeyDown}
             onMouseUp={handleTextMouseUp}
-            placeholder="'/'를 눌러 메뉴를 선택하거나 텍스트를 입력할 수 있습니다."
+            placeholder={
+              isDesktop ? TEXT_BLOCK_PLACEHOLDER_DESKTOP : TEXT_BLOCK_PLACEHOLDER_MOBILE
+            }
             className={cn(
               "relative z-10 min-h-8 h-fit min-w-0 w-full flex-1 resize-none overflow-hidden border-0 bg-transparent pt-my-4 pb-0 text-body1_500 outline-none placeholder:text-on-surface-30 focus:outline-none focus:ring-0",
               hasInlineTagToken ? "text-transparent caret-on-surface-10" : "text-on-surface-20"

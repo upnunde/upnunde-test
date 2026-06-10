@@ -1,4 +1,3 @@
-import { PAGE_SCROLL_BOTTOM_CLASS } from "@/lib/page-layout";
 import { cn } from "@/lib/utils";
 
 /** 가이드 modal 셸 — 480px, Header/Footer 분리 프레임 */
@@ -15,7 +14,7 @@ export { MOBILE_BOTTOM_SHEET_PAD_CLASS } from "@/lib/mobile-viewport";
 
 /** 넓은 폼 Dialog 셸 — 모바일 full-width 바텀 시트 / 데스크톱 중앙 */
 export const formDialogShellClassName =
-  "flex min-w-0 flex-col overflow-hidden border-0 bg-transparent p-0 shadow-none max-lg:h-[min(92dvh,900px)] max-lg:max-w-none max-lg:w-full max-lg:bg-white max-lg:shadow-elevation-50 lg:h-[min(90vh,calc(100dvh-80px))] lg:w-[min(92vw,760px)] lg:max-w-[760px]";
+  "flex min-w-0 flex-col overflow-hidden border-0 bg-transparent p-0 shadow-none max-lg:h-[min(92dvh,900px)] max-lg:max-w-none max-lg:w-full max-lg:bg-white max-lg:shadow-elevation-50 max-lg:pb-0 lg:h-[min(90vh,calc(100dvh-80px))] lg:w-[min(92vw,760px)] lg:max-w-[760px]";
 
 /** 바텀 시트 안 폼 본문 — EpisodeForm 등 */
 export const formDialogSheetEpisodeFormClassName =
@@ -25,15 +24,15 @@ export const formDialogSheetEpisodeFormClassName =
 export const formDialogSheetBodyWrapperClassName =
   "flex min-h-0 flex-1 flex-col overflow-hidden";
 
-/** 바텀 시트·폼 모달 스크롤 본문 — 마지막 콘텐츠 아래 80px (`PAGE_SCROLL_BOTTOM_CLASS`) */
-export const formDialogSheetScrollBodyClassName = cn(
-  "min-h-0 flex-1 overflow-y-auto overflow-x-hidden overscroll-contain",
-  PAGE_SCROLL_BOTTOM_CLASS,
-);
+/** 바텀 시트·폼 모달 스크롤 본문 — 고정 푸터 위 스크롤 영역 */
+export const formDialogSheetScrollBodyClassName =
+  "min-h-0 flex-1 overflow-y-auto overflow-x-hidden overscroll-contain pb-my-20";
 
-/** 바텀 시트·폼 모달 하단 고정 버튼 영역 — 하단 여백 없음(safe-area는 DialogContent 셸이 처리) */
-export const formDialogSheetStickyFooterClassName =
-  "shrink-0 border-t border-border-10 bg-white px-my-16 lg:px-my-20 py-my-16";
+/** 바텀 시트·폼 모달 하단 고정 버튼 영역 — 모바일 safe-area·브라우저 하단 크롬 포함 */
+export const formDialogSheetStickyFooterClassName = cn(
+  "mt-auto shrink-0 border-t border-border-10 bg-white px-my-16 lg:px-my-20 pt-my-16 pb-my-16",
+  "max-lg:pb-[calc(var(--spacing-my-16)+env(safe-area-inset-bottom,0px)+var(--app-vv-bottom,0px))]",
+);
 
 export const modalHeaderClassName =
   "flex min-h-40 w-full flex-col items-center gap-my-20 self-stretch overflow-hidden rounded-tl-[4px] rounded-tr-[4px] bg-surface-10 px-my-24 pb-my-16 pt-my-24 lg:pt-my-40";

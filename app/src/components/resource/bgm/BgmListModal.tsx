@@ -9,9 +9,13 @@ import {
   DialogClose,
 } from "@/components/ui/dialog";
 import { Button } from "@/components/ui/button";
+import { FilterChip } from "@/components/ui/chip";
+import { SegmentedTextTabs } from "@/components/ui/segmented-text-tabs";
 import { Info } from "lucide-react";
 import { SidebarList } from "@/components/AppSidebar/SidebarList";
+import { CHIP_GROUP_GAP_CLASS } from "@/lib/chip-styles";
 import { deterministicBgmDuration } from "@/lib/bgm-duration";
+import { cn } from "@/lib/utils";
 import { BgmListItem } from "./BgmListItem";
 
 function parseDurationToSeconds(duration: string): number {
@@ -188,6 +192,7 @@ const ALL_MOCK_TRACKS = Object.values(MOCK_TRACKS_BY_GENRE).flat();
 const MAX_SELECTED = 10;
 
 type PlayingSource = "list" | "selected";
+type MobilePanel = "list" | "selected";
 
 export function BgmListModal({ open, onClose, onAdd }: BgmListModalProps) {
   const [playingId, setPlayingId] = useState<string | null>(null);
@@ -196,6 +201,7 @@ export function BgmListModal({ open, onClose, onAdd }: BgmListModalProps) {
   const [activeGenre, setActiveGenre] = useState<string>(GENRES[1] ?? GENRES[0]); // 기본: 판타지
   const [selectedIds, setSelectedIds] = useState<string[]>([]);
   const [currentTimeSec, setCurrentTimeSec] = useState<number>(0);
+  const [mobilePanel, setMobilePanel] = useState<MobilePanel>("list");
 
   const listTracks = MOCK_TRACKS_BY_GENRE[activeGenre] ?? [];
   const playingTrack = ALL_MOCK_TRACKS.find((t) => t.id === playingId) ?? null;
@@ -266,9 +272,85 @@ export function BgmListModal({ open, onClose, onAdd }: BgmListModalProps) {
     };
   }, [playingId, playingTrack, playingTotalSeconds]);
 
+  useEffect(() => {
+    if (!open) {
+      setMobilePanel("list");
+    }
+  }, [open]);
+
+  const genreChips = (
+    <div
+      className={cn(
+        "flex w-full min-w-0 items-center overflow-x-auto overscroll-x-contain",
+        CHIP_GROUP_GAP_CLASS,
+      )}
+      role="tablist"
+      aria-label="BGM 장르"
+    >
+      {GENRES.map((genre) => {
+        const isActive = genre === activeGenre;
+        return (
+          <FilterChip
+            key={genre}
+            role="tab"
+            aria-selected={isActive}
+            selected={isActive}
+            chipSize="m"
+            className="shrink-0"
+            onClick={() => setActiveGenre(genre)}
+          >
+            {genre}
+          </FilterChip>
+        );
+      })}
+    </div>
+  );
+
+  const listTrackItems = listTracks.map((track, idx) => {
+    const isActiveHere = playingId === track.id && playingSource === "list";
+    return (
+      <BgmListItem
+        key={track.id}
+        variant="selection"
+        item={track}
+        index={idx + 1}
+        isActive={isActiveHere}
+        isPlaying={isActiveHere}
+        currentTime={isActiveHere ? currentTimeSec : 0}
+        onPlay={() => handlePlayFromList(track.id)}
+        onPause={handlePause}
+        onSeek={isActiveHere ? setCurrentTimeSec : undefined}
+        showPlayButton
+        onAdd={() => toggleSelect(track.id)}
+        selected={selectedIds.includes(track.id)}
+        showProgressBar
+      />
+    );
+  });
+
+  const selectedTrackItems = selectedTracks.map((track, idx) => {
+    const isActiveHere = playingId === track.id && playingSource === "selected";
+    return (
+      <BgmListItem
+        key={track.id}
+        variant="selection"
+        item={track}
+        index={idx + 1}
+        isActive={isActiveHere}
+        isPlaying={isActiveHere}
+        currentTime={isActiveHere ? currentTimeSec : 0}
+        onPlay={() => handlePlayFromSelected(track.id)}
+        onPause={handlePause}
+        onSeek={isActiveHere ? setCurrentTimeSec : undefined}
+        onDelete={(item) => toggleSelect(item.id)}
+        showProgressBar
+      />
+    );
+  });
+
   return (
     <Dialog open={open} onOpenChange={(o) => !o && onClose()}>
-      <DialogContent className="w-full max-lg:max-w-none lg:w-[800px] lg:max-w-[calc(100vw-2rem)] gap-0 bg-surface-10 rounded-[4px] border border-border-10 p-0 overflow-hidden">
+      <DialogContent className="flex w-full min-h-0 max-lg:max-w-none flex-col gap-0 overflow-hidden bg-surface-10 rounded-[4px] border border-border-10 p-0 lg:w-[800px] lg:max-w-[calc(100vw-2rem)]">
         <DialogHeader className="justify-center items-start h-9 px-my-16 lg:px-my-20 pt-my-4 pb-0 border-b border-border-10">
           <div className="flex items-center justify-center gap-my-4">
             <DialogTitle className="text-on-surface-10 text-body1_700 font-['Pretendard_JP']">
@@ -280,9 +362,38 @@ export function BgmListModal({ open, onClose, onAdd }: BgmListModalProps) {
           </div>
         </DialogHeader>
 
-        <div className="flex h-[400px]">
-          {/* 장르 목록 */}
-          <div className="w-[160px] border-r border-border-10 bg-surface-10 pl-my-20 pr-my-8 py-my-16 flex flex-col gap-my-12">
+        {/* 모바일 — 장르 칩 · 탭 전환 · 단일 패널 스크롤 */}
+        <div className="flex min-h-0 flex-1 flex-col lg:hidden">
+          <div className="shrink-0 border-b border-border-10 px-my-16 py-my-12">
+            <div className="mb-my-8 text-caption1_500 text-on-surface-30">장르</div>
+            {genreChips}
+          </div>
+
+          <div className="shrink-0 border-b border-border-10 px-my-16">
+            <SegmentedTextTabs
+              items={[
+                { id: "list", label: "리스트" },
+                {
+                  id: "selected",
+                  label: `선택한 음악 ${selectedTracks.length}/${MAX_SELECTED}`,
+                },
+              ]}
+              activeId={mobilePanel}
+              onSelect={(id) => setMobilePanel(id as MobilePanel)}
+              underline
+              size="m"
+              aria-label="BGM 패널"
+            />
+          </div>
+
+          <div className="flex min-h-[min(52dvh,480px)] flex-1 flex-col gap-my-4 overflow-y-auto px-my-8 py-my-8 [scrollbar-width:none] [&::-webkit-scrollbar]:hidden">
+            {mobilePanel === "list" ? listTrackItems : selectedTrackItems}
+          </div>
+        </div>
+
+        {/* 데스크톱 — 3열 레이아웃 */}
+        <div className="hidden h-[400px] lg:flex">
+          <div className="flex w-[160px] flex-col gap-my-12 border-r border-border-10 bg-surface-10 py-my-16 pl-my-20 pr-my-8">
             <div className="text-caption1_500 text-on-surface-30">장르</div>
             <SidebarList
               items={GENRES.map((g) => ({ id: g, label: g }))}
@@ -296,70 +407,30 @@ export function BgmListModal({ open, onClose, onAdd }: BgmListModalProps) {
             />
           </div>
 
-          {/* 리스트 - 우측(선택한 음악)과 동일한 레이아웃 구조 */}
-          <div className="flex-1 min-w-0 border-r border-border-10 px-my-8 py-0 flex flex-col gap-0">
-            <div className="flex h-8 w-full items-center justify-between text-caption1_500 text-on-surface-30 px-my-12 mt-2">
+          <div className="flex min-w-0 flex-1 flex-col gap-0 border-r border-border-10 px-my-8 py-0">
+            <div className="mt-2 flex h-8 w-full items-center justify-between px-my-12 text-caption1_500 text-on-surface-30">
               <span>리스트</span>
             </div>
-            <div className="flex-1 flex flex-col gap-my-4 overflow-y-auto pr-0 pl-0 [scrollbar-width:none] [&::-webkit-scrollbar]:hidden">
-              {listTracks.map((track, idx) => {
-                const isActiveHere = playingId === track.id && playingSource === "list";
-                return (
-                  <BgmListItem
-                    key={track.id}
-                    variant="selection"
-                    item={track}
-                    index={idx + 1}
-                    isActive={isActiveHere}
-                    isPlaying={isActiveHere}
-                    currentTime={isActiveHere ? currentTimeSec : 0}
-                    onPlay={() => handlePlayFromList(track.id)}
-                    onPause={handlePause}
-                    onSeek={isActiveHere ? setCurrentTimeSec : undefined}
-                    showPlayButton
-                    onAdd={() => toggleSelect(track.id)}
-                    selected={selectedIds.includes(track.id)}
-                    showProgressBar
-                  />
-                );
-              })}
+            <div className="flex flex-1 flex-col gap-my-4 overflow-y-auto pl-0 pr-0 [scrollbar-width:none] [&::-webkit-scrollbar]:hidden">
+              {listTrackItems}
             </div>
           </div>
 
-          {/* 선택한 음악 - 좌측(리스트)과 동일한 레이아웃 구조 */}
-          <div className="flex-1 min-w-0 px-my-8 py-0 flex flex-col gap-0">
-            <div className="flex h-8 w-full items-center justify-between text-caption1_500 text-on-surface-30 px-my-12 mt-2">
+          <div className="flex min-w-0 flex-1 flex-col gap-0 px-my-8 py-0">
+            <div className="mt-2 flex h-8 w-full items-center justify-between px-my-12 text-caption1_500 text-on-surface-30">
               <span>선택한 음악</span>
               <span className="text-on-surface-20">
                 <span className="text-on-surface-10">{selectedTracks.length}</span>
                 <span className="text-on-surface-20"> / {MAX_SELECTED}</span>
               </span>
             </div>
-            <div className="flex-1 flex flex-col gap-my-4 overflow-y-auto pr-0 pl-0 [scrollbar-width:none] [&::-webkit-scrollbar]:hidden">
-              {selectedTracks.map((track, idx) => {
-                const isActiveHere = playingId === track.id && playingSource === "selected";
-                return (
-                  <BgmListItem
-                    key={track.id}
-                    variant="selection"
-                    item={track}
-                    index={idx + 1}
-                    isActive={isActiveHere}
-                    isPlaying={isActiveHere}
-                    currentTime={isActiveHere ? currentTimeSec : 0}
-                    onPlay={() => handlePlayFromSelected(track.id)}
-                    onPause={handlePause}
-                    onSeek={isActiveHere ? setCurrentTimeSec : undefined}
-                    onDelete={(item) => toggleSelect(item.id)}
-                    showProgressBar
-                  />
-                );
-              })}
+            <div className="flex flex-1 flex-col gap-my-4 overflow-y-auto pl-0 pr-0 [scrollbar-width:none] [&::-webkit-scrollbar]:hidden">
+              {selectedTrackItems}
             </div>
           </div>
         </div>
 
-        <div className="flex justify-end gap-my-8 px-my-24 py-my-16 border-t border-border-10 bg-surface-5">
+        <div className="flex shrink-0 justify-end gap-my-8 border-t border-border-10 bg-surface-5 px-my-16 py-my-16 lg:px-my-24">
           <DialogClose asChild>
             <Button
               type="button"

@@ -131,23 +131,25 @@ export function BgmSection({
   return (
     <>
       <div className="w-full min-w-0 max-w-[1200px] mx-auto bg-surface-10 rounded-[4px] border border-border-10 flex flex-col justify-start items-start">
-        <div className="flex w-full flex-col gap-my-12 self-stretch border-b border-border-10 px-my-16 pb-my-12 pt-my-20 sm:flex-row sm:items-center sm:justify-between sm:gap-my-8 lg:px-my-20">
+        <div className="w-full self-stretch border-b border-border-10 px-my-16 pb-my-12 pt-my-20 lg:px-my-20">
           <Title2
             text={title}
             asSectionHeader
             subtitle
             subtitleText={description}
-            className="!p-0 !border-0 !border-b-0 min-w-0 flex-1"
+            className="!p-0 !px-0 !border-0 !border-b-0 w-full"
+            sectionEnd={
+              <Button
+                type="button"
+                variant="outline"
+                size="sm"
+                className="h-8 shrink-0 border-border-20 text-on-surface-10"
+                onClick={() => setModalOpen(true)}
+              >
+                추가하기
+              </Button>
+            }
           />
-          <Button
-            type="button"
-            variant="outline"
-            size="sm"
-            className="h-8 w-full shrink-0 border-border-20 text-on-surface-10 sm:w-auto"
-            onClick={() => setModalOpen(true)}
-          >
-            추가하기
-          </Button>
         </div>
         {items.length === 0 ? (
           <div className="self-stretch h-36 p-my-20 rounded-[4px] flex flex-col justify-center items-center gap-my-16">

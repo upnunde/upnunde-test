@@ -10,7 +10,7 @@ export const formFieldFocusClassName =
 
 /** 폼 텍스트 필드 공통 베이스 */
 export const formTextFieldBaseClassName =
-  "rounded-md border border-border-10 bg-white text-body3_400 text-on-surface-10 placeholder:text-on-surface-30";
+  "rounded-md border border-border-10 bg-white max-lg:text-body1_400 lg:text-body3_400 text-on-surface-10 placeholder:text-on-surface-30";
 
 /** form·md 필드 안쪽 여백 — spacing-8 = 8px */
 export const formFieldPadClassName = "px-my-8 py-my-8";
