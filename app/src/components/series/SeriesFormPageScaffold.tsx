@@ -1,6 +1,7 @@
 "use client";
 
 import { useState, type ReactNode } from "react";
+import { APP_VIEWPORT_SHELL_CLASS } from "@/lib/mobile-viewport";
 import Header from "@/components/Header/Header";
 import { PageCard } from "@/components/layout/PageCard";
 import { Button } from "@/components/ui/button";
@@ -12,7 +13,7 @@ import {
 } from "@/components/series/SeriesFormMobileTabBar";
 import { SeriesPreviewPanel } from "@/components/series/SeriesPreviewPanel";
 import { useIsLgUp } from "@/hooks/useMediaQuery";
-import { PAGE_GUTTER_X_CLASS, PAGE_SUBHEADER_CLASS } from "@/lib/page-layout";
+import { PAGE_GUTTER_X_CLASS, PAGE_SCROLL_BOTTOM_CLASS, PAGE_SUBHEADER_CLASS } from "@/lib/page-layout";
 import { cn } from "@/lib/utils";
 import type { SeriesFormTab } from "@/lib/seriesForm";
 
@@ -57,7 +58,7 @@ export function SeriesFormPageScaffold({
   const showPreviewPanel = !isLgUp && mobilePanel === "preview";
 
   return (
-    <div className="flex flex-col h-screen w-full bg-white overflow-hidden">
+    <div className={cn(APP_VIEWPORT_SHELL_CLASS, "bg-white")}>
       <Header profileImageUrl={profileImageUrl} onProfileImageChange={onProfileImageChange} />
       <div className="flex flex-1 overflow-hidden bg-surface-20">
         <div className="flex min-w-0 flex-1 flex-col overflow-hidden">
@@ -99,7 +100,8 @@ export function SeriesFormPageScaffold({
               {showFormPanel ? (
                 <div
                   className={cn(
-                    "flex min-h-0 flex-1 flex-col items-center overflow-y-auto py-my-32",
+                    "flex min-h-0 flex-1 flex-col items-center overflow-y-auto pt-my-32",
+                    PAGE_SCROLL_BOTTOM_CLASS,
                     contentPaddingClassName,
                   )}
                 >

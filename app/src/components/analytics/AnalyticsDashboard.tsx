@@ -6,7 +6,7 @@ import { AnalyticsScopeFilterBar } from "@/components/analytics/AnalyticsScopeFi
 import { useScrollHeaderCollapse } from "@/hooks/useScrollHeaderCollapse";
 import { useIsLgUp } from "@/hooks/useMediaQuery";
 import { ANALYTICS_SCROLL_ROOT_ATTR } from "@/lib/analytics-scroll";
-import { PAGE_GUTTER_X_CLASS, PAGE_SCROLL_GUTTER_CLASS } from "@/lib/page-layout";
+import { PAGE_GUTTER_X_CLASS, PAGE_SCROLL_ROOT_CLASS } from "@/lib/page-layout";
 import { cn } from "@/lib/utils";
 import { AnalyticsContentTab } from "@/components/analytics/AnalyticsContentTab";
 import { AnalyticsUserTab } from "@/components/analytics/AnalyticsUserTab";
@@ -128,7 +128,7 @@ export function AnalyticsDashboard({ defaultArea = "content", onAreaChange }: An
       </div>
 
       <div
-        className={cn("flex min-h-0 flex-1 flex-col overflow-y-auto py-0", PAGE_SCROLL_GUTTER_CLASS)}
+        className={PAGE_SCROLL_ROOT_CLASS}
         {...{ [ANALYTICS_SCROLL_ROOT_ATTR]: "" }}
       >
         <div className="mx-auto flex w-full min-w-0 max-w-[1200px] flex-col">

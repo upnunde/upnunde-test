@@ -11,7 +11,7 @@ import {
   analyticsScopeFilterShellClassName,
 } from "@/components/analytics/analytics-filter-chips";
 import { FilterChip } from "@/components/ui/chip";
-import { CONTROL_GROUP_GAP_STANDARD_CLASS } from "@/lib/chip-styles";
+import { CONTROL_GROUP_GAP_STANDARD_RESPONSIVE_CLASS } from "@/lib/chip-styles";
 import {
   ANALYTICS_SCOPE_CHIPS,
   type AnalyticsScopeCategoryId,
@@ -79,7 +79,7 @@ export function AnalyticsScopeFilterBar({
 
   return (
     <div className={cn(analyticsScopeFilterShellClassName, className)}>
-      <div className="flex w-full min-w-0 items-center justify-between gap-my-8 sm:flex-wrap sm:gap-x-my-16 sm:gap-y-my-8">
+      <div className="flex w-full min-w-0 items-center justify-between gap-my-4 sm:flex-wrap sm:gap-x-my-16 sm:gap-y-my-8 lg:gap-my-8">
         <div className="min-w-0 flex-1">
           <SegmentedTextTabs
             aria-label="분석 영역"
@@ -98,11 +98,11 @@ export function AnalyticsScopeFilterBar({
       <div
         className={cn(
           "flex w-full items-center overflow-x-auto",
-          CONTROL_GROUP_GAP_STANDARD_CLASS,
+          CONTROL_GROUP_GAP_STANDARD_RESPONSIVE_CLASS,
         )}
       >
         <div
-          className={cn("flex shrink-0 items-center", CONTROL_GROUP_GAP_STANDARD_CLASS)}
+          className={cn("flex shrink-0 items-center", CONTROL_GROUP_GAP_STANDARD_RESPONSIVE_CLASS)}
           role="group"
           aria-label="콘텐츠 범위"
         >
@@ -126,7 +126,7 @@ export function AnalyticsScopeFilterBar({
         {isSeriesScope || isCharacterScope || isScenarioScope ? (
           <>
             <div className={analyticsScopeFilterDividerClassName} aria-hidden />
-            <div className={cn("flex shrink-0 items-center", CONTROL_GROUP_GAP_STANDARD_CLASS)}>
+            <div className={cn("flex shrink-0 items-center", CONTROL_GROUP_GAP_STANDARD_RESPONSIVE_CLASS)}>
               {isSeriesScope ? (
                 <>
                   <AnalyticsScopeDropdown

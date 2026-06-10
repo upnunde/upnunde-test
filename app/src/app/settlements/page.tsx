@@ -8,7 +8,7 @@ import { AppShell } from "@/components/layout/AppShell";
 import {
   PAGE_CONTAINER_CLASS,
   PAGE_GUTTER_GAP_CLASS,
-  PAGE_SCROLL_GUTTER_CLASS,
+  PAGE_SCROLL_ROOT_CLASS,
   PAGE_STACK_CLASS,
   PAGE_SUBHEADER_CLASS,
 } from "@/lib/page-layout";
@@ -525,7 +525,7 @@ export default function MonetizationSettlementsPage() {
           </div>
         </div>
 
-        <div className={`flex min-h-0 flex-1 flex-col items-stretch justify-start gap-0 overflow-y-auto py-0 ${PAGE_SCROLL_GUTTER_CLASS}`}>
+        <div className={cn(PAGE_SCROLL_ROOT_CLASS, "items-stretch justify-start gap-0")}>
           <div className={PAGE_STACK_CLASS}>
                 <AnalyticsPanel className="rounded-[4px] border border-border-10">
                   <Title2

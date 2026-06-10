@@ -1,6 +1,7 @@
 "use client";
 
 import React, { useState, useMemo, useCallback } from "react";
+import { APP_VIEWPORT_SHELL_CLASS } from "@/lib/mobile-viewport";
 import { useRouter, usePathname } from "next/navigation";
 import Header from "@/components/Header/Header";
 import { EpisodeList } from "@/components/episode/EpisodeList";
@@ -12,8 +13,8 @@ import { EpisodeForm } from "@/components/episode/EpisodeForm";
 import { Button } from "@/components/ui/button";
 import { HeaderBackButton } from "@/components/ui/header-back-button";
 import { Dialog, DialogContent, DialogTitle } from "@/components/ui/dialog";
-import { formDialogShellClassName } from "@/components/ui/modal";
-import { PAGE_GUTTER_X_CLASS, PAGE_SCROLL_GUTTER_CLASS, PAGE_SUBHEADER_CLASS } from "@/lib/page-layout";
+import { formDialogShellClassName, formDialogSheetBodyWrapperClassName, formDialogSheetEpisodeFormClassName } from "@/components/ui/modal";
+import { PAGE_GUTTER_X_CLASS, PAGE_SCROLL_COLUMN_CLASS, PAGE_SUBHEADER_CLASS } from "@/lib/page-layout";
 import { cn } from "@/lib/utils";
 import { applyInitialScriptToEditor } from "@/lib/apply-initial-script-to-editor";
 import { createDefaultSeedBlocks, useEditorStore } from "@/store/useEditorStore";
@@ -303,7 +304,7 @@ export default function EpisodeManagementPage() {
   );
 
   return (
-    <div className="flex flex-col h-screen w-full bg-white overflow-hidden">
+    <div className={cn(APP_VIEWPORT_SHELL_CLASS, "bg-white")}>
       <Header profileImageUrl={profileImageUrl} onProfileImageChange={setProfileImageUrl} />
       <div className="flex flex-1 overflow-hidden bg-surface-20">
         <div className="flex min-w-0 flex-1 flex-col overflow-hidden">
@@ -316,7 +317,7 @@ export default function EpisodeManagementPage() {
               </div>
             </header>
 
-            <div className={`flex-1 overflow-y-auto flex flex-col items-center py-my-32 gap-my-12 ${PAGE_SCROLL_GUTTER_CLASS}`}>
+            <div className={PAGE_SCROLL_COLUMN_CLASS}>
               <div className="w-full max-w-[1200px] mx-auto flex flex-col gap-my-12">
               {/* Title & Actions - 정책 2, 3, 16 */}
               <div className="flex w-full shrink-0 flex-col gap-my-12 px-0 lg:flex-row lg:items-center lg:justify-between">
@@ -397,17 +398,24 @@ export default function EpisodeManagementPage() {
       />
       <Dialog open={isCreateEpisodeModalOpen} onOpenChange={setIsCreateEpisodeModalOpen}>
         <DialogContent
+          presentation="auto"
           className={cn(formDialogShellClassName, "max-lg:rounded-t-[4px] lg:rounded-[16px]")}
           aria-describedby={undefined}
         >
-          <DialogTitle className="sr-only">새 에피소드 생성</DialogTitle>
-          <EpisodeForm
-            onConverted={handleCreateComplete}
-            onCancel={() => setIsCreateEpisodeModalOpen(false)}
-            containerClassName="max-w-[760px] min-w-0 rounded-[16px]"
-            stickyFooter
-            sectionTitle={`${nextEpisodeNumber}화 에피소드`}
-          />
+          <div className={formDialogSheetBodyWrapperClassName}>
+            <header className="shrink-0 border-b border-border-10 px-my-12 py-my-16 lg:sr-only lg:border-0 lg:p-0">
+              <DialogTitle className="text-body1_700 text-on-surface-10">
+                새 에피소드 생성
+              </DialogTitle>
+            </header>
+            <EpisodeForm
+              onConverted={handleCreateComplete}
+              onCancel={() => setIsCreateEpisodeModalOpen(false)}
+              containerClassName={formDialogSheetEpisodeFormClassName}
+              stickyFooter
+              sectionTitle={`${nextEpisodeNumber}화 에피소드`}
+            />
+          </div>
         </DialogContent>
       </Dialog>
     </div>

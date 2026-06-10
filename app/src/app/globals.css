@@ -278,6 +278,11 @@
   --error-on-error-container: #FFF0F0;
 }
 
+:root {
+  --app-vv-top: 0px;
+  --app-vv-bottom: 0px;
+}
+
 @layer base {
   * {
     @apply border-border outline-ring/50;

@@ -26,6 +26,31 @@ export function getEditorScrollTopInset(scrollRoot: Element): number {
   return 100;
 }
 
+/** 스크롤 앵커(장면 탭 하단) 기준으로 현재 보이는 장면 블록 id */
+export function resolveActiveSceneBlockIdFromScroll(
+  sceneIds: string[],
+  scrollRoot: Element,
+): string | null {
+  if (sceneIds.length === 0) return null;
+
+  const rootRect = scrollRoot.getBoundingClientRect();
+  const anchorY = rootRect.top + getEditorScrollTopInset(scrollRoot);
+
+  let activeId = sceneIds[0];
+  for (const sceneId of sceneIds) {
+    const el = document.getElementById(`block-${sceneId}`);
+    if (!el) continue;
+
+    if (el.getBoundingClientRect().top <= anchorY + 1) {
+      activeId = sceneId;
+    } else {
+      break;
+    }
+  }
+
+  return activeId;
+}
+
 export function scrollEditorBlockIntoView(blockId: string): HTMLElement | null {
   const el = document.getElementById(`block-${blockId}`);
   if (!el) return null;

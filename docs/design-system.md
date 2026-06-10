@@ -555,6 +555,7 @@ UI에서 **실제로 사용하는 역할 기반 토큰**. 값은 프리미티브
 
 #### 페이지·카드 본문 인셋 (공통)
 - **가로 인셋**: 모바일 **`my-12`(12px)** · lg+ **`my-20`(20px)** → Tailwind **`px-my-12 lg:px-my-20`**
+- **스크롤 하단 여백**: **`my-80`(80px)** → `pb-my-80` (`PAGE_SCROLL_BOTTOM_CLASS`) — 상세 `docs/mobile-layout.md`
 - **스택 간격(gap)**: 모바일 **`my-12`** · lg+ **`my-20`** → **`gap-my-12 lg:gap-my-20`** (`PAGE_GUTTER_GAP_CLASS`)
 - **세로 인셋**: 기본 **`my-20`(20px)** → `py-my-20` / `p-my-20` (세로 패딩은 뷰포트별 분기 없음)
 - 상세·체크리스트: **`docs/mobile-layout.md`**

@@ -2,7 +2,8 @@
 
 import React, { useState } from "react";
 import { AppShell } from "@/components/layout/AppShell";
-import { PAGE_CONTAINER_CLASS, PAGE_SCROLL_GUTTER_CLASS, PAGE_SUBHEADER_CLASS } from "@/lib/page-layout";
+import { PAGE_CONTAINER_CLASS, PAGE_SCROLL_ROOT_TOP_CLASS, PAGE_SUBHEADER_CLASS } from "@/lib/page-layout";
+import { cn } from "@/lib/utils";
 import { InquiryForm } from "@/components/inquiry/InquiryForm";
 import { InquiryHistoryList } from "@/components/inquiry/InquiryHistoryList";
 import { Snackbar } from "@/components/episode/Snackbar";
@@ -48,7 +49,7 @@ export default function InquiryPage() {
             <h1 className="text-heading2_700 text-on-surface-10">문의</h1>
           </div>
         </div>
-        <div className={`flex flex-1 flex-col items-center gap-my-12 overflow-y-auto py-my-32 ${PAGE_SCROLL_GUTTER_CLASS}`}>
+        <div className={cn(PAGE_SCROLL_ROOT_TOP_CLASS, "items-center gap-my-12")}>
           <div className={PAGE_CONTAINER_CLASS}>
               <div className="w-full h-fit rounded-[4px] border border-border-10 bg-white flex flex-col shrink-0 overflow-hidden">
                 {/* 탭 헤더 - NotificationList와 동일 구조 */}

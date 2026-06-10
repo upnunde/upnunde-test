@@ -3,7 +3,8 @@
 import React, { useState, useMemo, useCallback } from "react";
 import { useRouter } from "next/navigation";
 import { AppShell } from "@/components/layout/AppShell";
-import { PAGE_CONTAINER_CLASS, PAGE_SCROLL_GUTTER_CLASS, PAGE_SUBHEADER_CLASS } from "@/lib/page-layout";
+import { PAGE_CONTAINER_CLASS, PAGE_SCROLL_ROOT_TOP_CLASS, PAGE_SUBHEADER_CLASS } from "@/lib/page-layout";
+import { cn } from "@/lib/utils";
 import { NotificationList } from "@/components/notification/NotificationList";
 import { Pagination } from "@/components/episode/Pagination";
 import type { NotificationData } from "@/types/notification";
@@ -378,7 +379,7 @@ export default function NotificationsPage() {
           </div>
         </div>
 
-        <div className={`flex flex-1 flex-col items-center gap-my-12 overflow-y-auto py-my-32 ${PAGE_SCROLL_GUTTER_CLASS}`}>
+        <div className={cn(PAGE_SCROLL_ROOT_TOP_CLASS, "items-center gap-my-12")}>
           <div className={PAGE_CONTAINER_CLASS}>
             <NotificationList
                 notifications={paginatedNotifications}

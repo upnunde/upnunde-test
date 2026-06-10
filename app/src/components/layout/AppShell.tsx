@@ -3,6 +3,7 @@
 import { useState } from "react";
 import Header from "@/components/Header/Header";
 import AppSidebar, { type SidebarItemId } from "@/components/AppSidebar/AppSidebar";
+import { APP_VIEWPORT_SHELL_CLASS } from "@/lib/mobile-viewport";
 import { cn } from "@/lib/utils";
 
 export interface AppShellProps {
@@ -17,7 +18,7 @@ export function AppShell({ sidebarActiveId, children, className }: AppShellProps
   const [sidebarOpen, setSidebarOpen] = useState(false);
 
   return (
-    <div className={cn("flex h-screen w-full flex-col overflow-hidden bg-white", className)}>
+    <div className={cn(APP_VIEWPORT_SHELL_CLASS, "bg-white", className)}>
       <Header
         profileImageUrl={profileImageUrl}
         onProfileImageChange={setProfileImageUrl}

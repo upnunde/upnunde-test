@@ -10,7 +10,7 @@ import {
 } from "@/components/ui/dropdown-menu";
 import { useIsLgUp } from "@/hooks/useMediaQuery";
 import type { EditorMenuPresentation } from "@/components/editor/EditorMenuOption";
-import { mobileBottomSheetMaxHeightClassName } from "@/components/ui/modal/modal-styles";
+import { mobileBottomSheetMaxHeightClassName, MOBILE_BOTTOM_SHEET_PAD_CLASS } from "@/components/ui/modal/modal-styles";
 import { cn } from "@/lib/utils";
 
 export interface EditorBottomSheetMenuProps {
@@ -67,7 +67,8 @@ export function EditorBottomSheetMenu({
             />
             <div
               className={cn(
-                "fixed inset-x-0 bottom-0 z-50 flex min-h-0 flex-col rounded-t-[4px] border-t border-border-10 bg-white pb-[env(safe-area-inset-bottom)] shadow-elevation-40",
+                "fixed inset-x-0 bottom-0 z-50 flex min-h-0 flex-col rounded-t-[4px] border-t border-border-10 bg-white shadow-elevation-40",
+                MOBILE_BOTTOM_SHEET_PAD_CLASS,
                 mobileBottomSheetMaxHeightClassName,
               )}
               role="dialog"

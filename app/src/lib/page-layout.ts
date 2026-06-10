@@ -21,13 +21,24 @@ export const PAGE_CONTENT_FOOTER_CLASS = `${PAGE_GUTTER_X_CLASS} py-my-16`;
 /** 메인 스크롤 영역 — max-width 컨테이너 바깥 가로 여백 */
 export const PAGE_SCROLL_GUTTER_CLASS = PAGE_GUTTER_X_CLASS;
 
+/** 스크롤 영역 마지막 콘텐츠 하단 여백 — 80px (모든 뷰포트 공통) */
+export const PAGE_SCROLL_BOTTOM_CLASS = "pb-my-80";
+
+/** AppShell main 스크롤 루트 — py-0 · 가로 인셋 · 하단 80px */
+export const PAGE_SCROLL_ROOT_CLASS =
+  `flex min-h-0 flex-1 flex-col overflow-y-auto py-0 ${PAGE_SCROLL_GUTTER_CLASS} ${PAGE_SCROLL_BOTTOM_CLASS}`;
+
+/** AppShell main 스크롤 루트 — 상단 pt-my-32 · 가로 인셋 · 하단 80px */
+export const PAGE_SCROLL_ROOT_TOP_CLASS =
+  `flex flex-1 flex-col overflow-y-auto pt-my-32 ${PAGE_SCROLL_GUTTER_CLASS} ${PAGE_SCROLL_BOTTOM_CLASS}`;
+
 /** 서브 페이지 상단 바(뒤로가기·제목) — 모바일 56px · lg+ 64px */
 export const PAGE_SUBHEADER_CLASS =
   `flex h-my-56 w-full shrink-0 items-center justify-center border-b border-border-10 bg-white ${PAGE_GUTTER_X_CLASS} py-0 lg:h-my-64`;
 
 /** 스크롤 + 중앙 정렬 레이아웃(리소스 상세·목록 등) */
 export const PAGE_SCROLL_COLUMN_CLASS =
-  `flex-1 overflow-y-auto flex flex-col items-center py-my-32 ${PAGE_GUTTER_GAP_CLASS} ${PAGE_GUTTER_X_CLASS}`;
+  `flex-1 overflow-y-auto flex flex-col items-center pt-my-32 ${PAGE_GUTTER_GAP_CLASS} ${PAGE_GUTTER_X_CLASS} ${PAGE_SCROLL_BOTTOM_CLASS}`;
 
 /** 본문·카드·서브헤더 내부 — 모바일 가로 스크롤 방지 (min-w-0) */
 export const PAGE_CONTAINER_CLASS = "w-full min-w-0 max-w-[1200px] mx-auto";

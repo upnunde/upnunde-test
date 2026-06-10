@@ -7,7 +7,7 @@ const SCROLL_DELTA_THRESHOLD = 10;
 const MIN_SCROLL_TO_HIDE = 32;
 
 /**
- * 모바일 편집 본문 스크롤 — 아래로 내리면 장면 탭 영역 접음, 위로 올리면 다시 노출.
+ * 모바일 편집 본문 스크롤 — 아래로 내리면 서브헤더 접음, 위로 올리면 다시 노출.
  */
 export function useEditorMobileSceneHeaderCollapse(enabled: boolean) {
   const [collapsed, setCollapsed] = useState(false);

@@ -41,6 +41,10 @@ export const TAB_SIZE_META: Record<
 /** Figma `tab` — underline=true일 때 탭 목록 트랙 하단선 */
 export const TAB_LIST_TRACK_UNDERLINE_CLASS = "border-b border-border-10";
 
+/** 가로 스크롤 탭·칩 행 — 스크롤바 비노출 (스와이프·휠 스크롤은 유지) */
+export const HORIZONTAL_SCROLLBAR_HIDE_CLASS =
+  "[scrollbar-width:none] [-ms-overflow-style:none] [&::-webkit-scrollbar]:hidden";
+
 export interface TabInstanceStyleOptions {
   activated: boolean;
   /** Figma `selectline` — 활성 탭만 border-b-2 */

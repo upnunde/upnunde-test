@@ -9,14 +9,11 @@ import EditorBody from "@/components/editor/EditorBody";
 import { SceneNavigation } from "@/components/editor/SceneNavigation";
 import { EditorSceneTabStrip } from "@/components/editor/EditorSceneTabStrip";
 import { EditorMobileBlockToolbar } from "@/components/editor/EditorMobileBlockToolbar";
-import { EditorMobileIssueFloatingButton } from "@/components/editor/EditorMobileIssueFloatingButton";
+import { EditorMobileFloatingActions } from "@/components/editor/EditorMobileFloatingActions";
 import { EditorMobilePreviewPlayer } from "@/components/editor/EditorMobilePreviewPlayer";
+import type { EditorMobilePanel } from "@/components/editor/editor-mobile-floating-layout";
 import { PreviewScreen } from "@/components/editor/PreviewScreen";
 import { IPhone15ProFrame } from "@/components/preview/IPhone15ProFrame";
-import {
-  EditorMobileTabBar,
-  type EditorMobilePanel,
-} from "@/components/editor/EditorMobileTabBar";
 import { EpisodeForm } from "@/components/episode/EpisodeForm";
 import type { EpisodeFormSubmitPayload } from "@/components/episode/EpisodeForm";
 import {
@@ -29,8 +26,9 @@ import { useIsLgUp } from "@/hooks/useMediaQuery";
 import { useEditorMobileSceneHeaderCollapse } from "@/hooks/useEditorMobileSceneHeaderCollapse";
 import { EditorAutoGeneratorFloatingButton } from "@/components/editor/EditorAutoGeneratorFloatingButton";
 import { Dialog, DialogContent, DialogTitle } from "@/components/ui/dialog";
-import { formDialogShellClassName } from "@/components/ui/modal";
+import { formDialogShellClassName, formDialogSheetBodyWrapperClassName, formDialogSheetEpisodeFormClassName } from "@/components/ui/modal";
 import { EDITOR_SCENE_HEADER_ID, EDITOR_SCROLL_ROOT_ATTR } from "@/lib/editor-scroll";
+import { APP_VIEWPORT_SHELL_CLASS } from "@/lib/mobile-viewport";
 import { cn } from "@/lib/utils";
 
 function EditorWorkspace({
@@ -77,7 +75,6 @@ function EditorWorkspace({
           <div className={editorScrollClass} {...{ [EDITOR_SCROLL_ROOT_ATTR]: "" }}>
             <EditorBody />
           </div>
-          <EditorMobileIssueFloatingButton />
         </div>
         {!isDesktop && mobilePanel === "edit" ? <EditorMobileBlockToolbar /> : null}
       </div>
@@ -172,12 +169,12 @@ function EditorInner() {
     [handleSceneClick],
   );
 
-  const sceneHeaderCollapsed = useEditorMobileSceneHeaderCollapse(
+  const mobileSubHeaderCollapsed = useEditorMobileSceneHeaderCollapse(
     !isDesktop && mobilePanel === "edit",
   );
 
   return (
-    <div className="flex h-dvh flex-col overflow-hidden bg-white">
+    <div className={cn(APP_VIEWPORT_SHELL_CLASS, "bg-white")}>
       <Header profileImageUrl={profileImageUrl} onProfileImageChange={setProfileImageUrl} />
 
       <div className="relative flex min-h-0 flex-1 overflow-hidden">
@@ -201,11 +198,25 @@ function EditorInner() {
           <EditorScriptBootstrap routeKey={searchParams.toString()} startEmpty={shouldStartEmpty} />
 
           <div className="w-full shrink-0 border-b border-border-10 bg-white">
-            <EditorSubHeader
-              key={searchParams.size === 0 ? "editor" : searchParams.toString()}
-              title={editorHeaderTitle}
-              onEditEpisodeInfo={() => setIsEpisodeInfoModalOpen(true)}
-            />
+            <div
+              className={cn(
+                "overflow-hidden max-lg:transition-[max-height] max-lg:duration-200 max-lg:ease-out max-lg:max-h-14",
+                mobileSubHeaderCollapsed && "max-lg:max-h-0",
+              )}
+            >
+              <div
+                className={cn(
+                  "max-lg:transition-transform max-lg:duration-200 max-lg:ease-out",
+                  mobileSubHeaderCollapsed && "max-lg:-translate-y-full",
+                )}
+              >
+                <EditorSubHeader
+                  key={searchParams.size === 0 ? "editor" : searchParams.toString()}
+                  title={editorHeaderTitle}
+                  onEditEpisodeInfo={() => setIsEpisodeInfoModalOpen(true)}
+                />
+              </div>
+            </div>
 
             <div
               id={EDITOR_SCENE_HEADER_ID}
@@ -214,25 +225,10 @@ function EditorInner() {
                 mobilePanel === "edit" && "max-lg:block",
               )}
             >
-              <div
-                className={cn(
-                  "overflow-hidden max-lg:transition-[max-height] max-lg:duration-200 max-lg:ease-out max-lg:max-h-14",
-                  sceneHeaderCollapsed && "max-lg:max-h-0",
-                )}
-              >
-                <div
-                  className={cn(
-                    "max-lg:transition-transform max-lg:duration-200 max-lg:ease-out",
-                    sceneHeaderCollapsed && "max-lg:-translate-y-full",
-                  )}
-                >
-                  <EditorSceneTabStrip
-                    onSceneClick={handleSceneNavigate}
-                    headerCollapsed={sceneHeaderCollapsed}
-                    className="w-full px-my-12"
-                  />
-                </div>
-              </div>
+              <EditorSceneTabStrip
+                onSceneClick={handleSceneNavigate}
+                className="w-full px-my-12"
+              />
               <EditorAutoGeneratorFloatingButton
                 placement="below-tabs"
                 onClick={() => setIsAutoGeneratorModalOpen(true)}
@@ -247,7 +243,11 @@ function EditorInner() {
           />
 
           {!isDesktop ? (
-            <EditorMobileTabBar active={mobilePanel} onChange={setMobilePanel} />
+            <EditorMobileFloatingActions
+              active={mobilePanel}
+              onChange={setMobilePanel}
+              showIssueFab
+            />
           ) : null}
         </main>
 
@@ -260,19 +260,26 @@ function EditorInner() {
 
       <Dialog open={isEpisodeInfoModalOpen} onOpenChange={setIsEpisodeInfoModalOpen}>
         <DialogContent
+          presentation="auto"
           className={formDialogShellClassName}
           aria-describedby={undefined}
         >
-          <DialogTitle className="sr-only">에피소드 정보 수정</DialogTitle>
-          <EpisodeForm
-            onConverted={handleEpisodeInfoUpdate}
-            onCancel={() => setIsEpisodeInfoModalOpen(false)}
-            containerClassName="max-w-[760px] min-w-0"
-            stickyFooter
-            sectionTitle={episodeHeaderSubtitle ?? "에피소드"}
-            submitLabel="수정하기"
-            initialValues={episodeFormValues}
-          />
+          <div className={formDialogSheetBodyWrapperClassName}>
+            <header className="shrink-0 border-b border-border-10 px-my-12 py-my-16 lg:sr-only lg:border-0 lg:p-0">
+              <DialogTitle className="text-body1_700 text-on-surface-10">
+                에피소드 정보 수정
+              </DialogTitle>
+            </header>
+            <EpisodeForm
+              onConverted={handleEpisodeInfoUpdate}
+              onCancel={() => setIsEpisodeInfoModalOpen(false)}
+              containerClassName={formDialogSheetEpisodeFormClassName}
+              stickyFooter
+              sectionTitle={episodeHeaderSubtitle ?? "에피소드"}
+              submitLabel="수정하기"
+              initialValues={episodeFormValues}
+            />
+          </div>
         </DialogContent>
       </Dialog>
 

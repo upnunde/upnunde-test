@@ -35,6 +35,7 @@ cd app && npm run migrate:tokens -- --write
 
 - **`PAGE_GUTTER_X_CLASS`** = `px-my-12 lg:px-my-20`
 - **`PAGE_GUTTER_GAP_CLASS`** = `gap-my-12 lg:gap-my-20` · **`PAGE_STACK_CLASS`** = 컨테이너+스택
+- **`PAGE_SCROLL_BOTTOM_CLASS`** = `pb-my-80` · **`PAGE_SCROLL_ROOT_CLASS`** = 스크롤 루트(가로 인셋+하단 80)
 - 가이드: `docs/mobile-layout.md` · `px-my-20`·`gap-my-20` 단독 사용 금지
 
 ## 1차 소스 (여기 먼저 맞춤)

@@ -3,6 +3,7 @@
 import { useCallback, useState } from "react";
 import { AlertTriangle } from "lucide-react";
 import { EditorBottomSheetMenu } from "@/components/editor/EditorBottomSheetMenu";
+import { EDITOR_MOBILE_FAB_SIZE_CLASS } from "@/components/editor/editor-mobile-floating-layout";
 import { useEditorIssues, getIssueFocusTarget } from "@/hooks/useEditorIssues";
 import { useEditorStore } from "@/store/useEditorStore";
 import { scrollEditorBlockIntoView } from "@/lib/editor-scroll";
@@ -40,7 +41,8 @@ export function EditorMobileIssueFloatingButton({ className }: { className?: str
         <button
           type="button"
           className={cn(
-            "absolute bottom-my-16 right-my-16 z-30 flex h-12 w-12 cursor-pointer items-center justify-center rounded-full border border-rose-300 bg-rose-50 text-rose-900 shadow-elevation-20 transition-colors active:bg-rose-100",
+            EDITOR_MOBILE_FAB_SIZE_CLASS,
+            "relative flex cursor-pointer items-center justify-center rounded-full border border-rose-300 bg-rose-50 text-rose-900 shadow-elevation-20 transition-colors active:bg-rose-100",
             className,
           )}
           aria-label={`오류 및 누락 알림 ${issues.length}건`}

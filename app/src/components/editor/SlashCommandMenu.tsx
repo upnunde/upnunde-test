@@ -14,6 +14,7 @@ import {
   MessageSquareText,
 } from "lucide-react";
 import type { BlockType } from "@/types/editor";
+import { MOBILE_BOTTOM_SHEET_PAD_CLASS } from "@/lib/mobile-viewport";
 import { cn } from "@/lib/utils";
 import {
   BACKGROUNDS,
@@ -224,7 +225,10 @@ export function SlashCommandMenu({
           onClick={onClose}
         />
         <div
-          className="fixed inset-x-0 bottom-0 z-50 max-h-[min(70vh,520px)] overflow-y-auto rounded-t-[4px] border-t border-border-10 bg-white pb-[env(safe-area-inset-bottom)] shadow-elevation-40"
+          className={cn(
+            "fixed inset-x-0 bottom-0 z-50 max-h-[min(70vh,520px)] overflow-y-auto rounded-t-[4px] border-t border-border-10 bg-white shadow-elevation-40",
+            MOBILE_BOTTOM_SHEET_PAD_CLASS,
+          )}
           role="listbox"
           aria-label="블록 추가"
         >

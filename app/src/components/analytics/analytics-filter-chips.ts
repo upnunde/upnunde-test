@@ -1,8 +1,11 @@
-import { chipVariants } from "@/lib/chip-styles";
+import { chipVariants, CONTROL_GROUP_GAP_STANDARD_RESPONSIVE_CLASS } from "@/lib/chip-styles";
 import { cn } from "@/lib/utils";
 
 /** 분석 상단 필터 바 셸 — 페이지 `max-w-[1200px] px-5` 안에서 사용 */
-export const analyticsScopeFilterShellClassName = cn("flex w-full flex-col gap-my-8");
+export const analyticsScopeFilterShellClassName = cn("flex w-full flex-col gap-my-4 lg:gap-my-8");
+
+/** 분석 필터 행·칩 그룹 가로 간격 — 모바일 4px · lg+ 8px */
+export const analyticsScopeFilterGroupGapClassName = CONTROL_GROUP_GAP_STANDARD_RESPONSIVE_CLASS;
 
 /** 섹션 헤더 보조 링크(수익 분석 등) — outline default M / h-8(32px) */
 export const analyticsOutlineChipClassName = chipVariants({

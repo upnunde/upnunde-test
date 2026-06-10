@@ -72,6 +72,38 @@ import { PAGE_GUTTER_GAP_CLASS, PAGE_STACK_CLASS } from "@/lib/page-layout";
 - **모달 헤더** 등 이미 `modal-styles.ts`로 정의된 영역 — 모달 전용 규칙 우선
 - 에디터 **블록 본문** 등 에디터 전용 인셋 — `docs/editor-policies.md` 참고
 
+## 스크롤 하단 여백
+
+AppShell·Header+main 등 **페이지 스크롤 영역**은 마지막 콘텐츠 아래 **80px**(`pb-my-80`)를 항상 유지한다.
+
+| 토큰 | 값 |
+|------|-----|
+| `pb-my-80` | **80px** |
+
+### 코드
+
+```ts
+import { PAGE_SCROLL_BOTTOM_CLASS, PAGE_SCROLL_ROOT_CLASS } from "@/lib/page-layout";
+
+// PAGE_SCROLL_BOTTOM_CLASS === "pb-my-80"
+// PAGE_SCROLL_ROOT_CLASS === py-0 + 가로 인셋 + pb-my-80
+// PAGE_SCROLL_ROOT_TOP_CLASS === pt-my-32 + 가로 인셋 + pb-my-80
+```
+
+`PAGE_SCROLL_COLUMN_CLASS`에도 `PAGE_SCROLL_BOTTOM_CLASS`가 포함된다.
+
+### 적용 대상
+
+- 내 작품·정산·프로필·알림·문의·가이드 등 AppShell `main` 스크롤 루트
+- 분석 대시보드 스크롤 루트
+- 리소스 관리·에피소드 목록 등 `PAGE_SCROLL_COLUMN_CLASS` 열
+
+### 적용 제외
+
+- **모달·바텀시트·드롭다운** 내부 스크롤
+- **에디터** 본문 스크롤 (`docs/editor-policies.md`)
+- 사이드바 오버레이
+
 ## 서브 헤더 높이
 
 | 뷰포트 | 토큰 | 값 |
@@ -85,6 +117,7 @@ import { PAGE_GUTTER_GAP_CLASS, PAGE_STACK_CLASS } from "@/lib/page-layout";
 
 1. 스크롤·본문 가로 인셋에 `PAGE_SCROLL_GUTTER_CLASS` 또는 `PAGE_GUTTER_X_CLASS` 사용
 2. 본문 세로 스택에 `PAGE_STACK_CLASS` 또는 `PAGE_GUTTER_GAP_CLASS` 사용
-3. 서브헤더에 `PAGE_SUBHEADER_CLASS` 사용
-4. 인라인 `px-my-20`·`gap-my-20` 단독 사용 금지 — 반드시 `*-my-12 lg:*-my-20` 또는 상수 import
-5. `npm run check:routes` (라우트 변경 시)
+3. 스크롤 루트 하단에 `PAGE_SCROLL_BOTTOM_CLASS` 또는 `PAGE_SCROLL_ROOT_CLASS` 사용
+4. 서브헤더에 `PAGE_SUBHEADER_CLASS` 사용
+5. 인라인 `px-my-20`·`gap-my-20` 단독 사용 금지 — 반드시 `*-my-12 lg:*-my-20` 또는 상수 import
+6. `npm run check:routes` (라우트 변경 시)

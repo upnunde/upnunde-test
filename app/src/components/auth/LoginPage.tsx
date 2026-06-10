@@ -16,6 +16,7 @@ import { Snackbar } from "@/components/episode/Snackbar";
 import { Title2 } from "@/components/ui/title2";
 import { cn } from "@/lib/utils";
 import { dummyAsset } from "@/lib/dummy-asset-path";
+import { MOBILE_VIEWPORT_INSET_Y_CLASS } from "@/lib/mobile-viewport";
 
 /* 소셜 로고 인라인 SVG (플랫폼 공식 비주얼) */
 function GoogleIcon({ className }: { className?: string }) {
@@ -112,7 +113,7 @@ export function LoginPage() {
   };
 
   return (
-    <div className="relative flex min-h-screen min-w-0 flex-col items-center justify-center bg-background-10 px-my-12 py-my-32 lg:px-my-16">
+    <div className={cn("relative flex min-h-screen min-w-0 flex-col items-center justify-center bg-background-10 px-my-12 py-my-32 lg:px-my-16", MOBILE_VIEWPORT_INSET_Y_CLASS)}>
       {/* 중앙 콘텐츠: 열 방향 Flexbox */}
       <main className="flex w-full max-w-[400px] flex-col items-center gap-my-24">
         <div className="flex w-full flex-col items-center gap-my-12 pb-my-16">
@@ -122,7 +123,7 @@ export function LoginPage() {
             width={187}
             height={40}
             priority
-            className="h-9 w-auto"
+            className="h-9 w-auto max-lg:h-[calc(36px*0.7)]"
           />
           <h1 className="text-center text-heading1_700 text-foreground">
             로그인

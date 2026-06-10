@@ -4,15 +4,15 @@ import { useMemo, useEffect, useState, useCallback, useRef, useLayoutEffect } fr
 import { createPortal } from "react-dom";
 import { ChevronDown, X } from "lucide-react";
 import { useEditorStore } from "@/store/useEditorStore";
+import { useEditorScrollActiveSceneId } from "@/hooks/useEditorScrollActiveSceneId";
 import { FilterChip } from "@/components/ui/chip";
 import { EDITOR_SCENE_TAB_STRIP_ID } from "@/lib/editor-scroll";
+import { HORIZONTAL_SCROLLBAR_HIDE_CLASS } from "@/lib/tab-styles";
 import { cn } from "@/lib/utils";
 
 export interface EditorSceneTabStripProps {
   onSceneClick: (blockId: string) => void;
   className?: string;
-  /** 상위 장면 헤더 접힘 시 펼침 목록 닫기 */
-  headerCollapsed?: boolean;
 }
 
 function getActiveSceneBlockId(
@@ -36,7 +36,6 @@ function getActiveSceneBlockId(
 export function EditorSceneTabStrip({
   onSceneClick,
   className,
-  headerCollapsed = false,
 }: EditorSceneTabStripProps) {
   const blocks = useEditorStore((s) => s.blocks);
   const focusBlockId = useEditorStore((s) => s.focusBlockId);
@@ -78,10 +77,6 @@ export function EditorSceneTabStrip({
     return () => window.removeEventListener("keydown", onKeyDown);
   }, [isListExpanded]);
 
-  useEffect(() => {
-    if (headerCollapsed) setIsListExpanded(false);
-  }, [headerCollapsed]);
-
   const scenes = useMemo(
     () =>
       blocks
@@ -92,10 +87,12 @@ export function EditorSceneTabStrip({
 
   const sceneIds = useMemo(() => scenes.map(({ block }) => block.id), [scenes]);
 
-  const activeSceneId = useMemo(
+  const scrollActiveSceneId = useEditorScrollActiveSceneId(sceneIds);
+  const focusActiveSceneId = useMemo(
     () => getActiveSceneBlockId(blocks, focusBlockId, sceneIds),
     [blocks, focusBlockId, sceneIds],
   );
+  const activeSceneId = scrollActiveSceneId ?? focusActiveSceneId;
 
   useEffect(() => {
     if (!activeSceneId || isListExpanded) return;
@@ -134,7 +131,10 @@ export function EditorSceneTabStrip({
     >
       <div className="flex items-center gap-my-8 py-my-8">
         <div
-          className="flex min-w-0 flex-1 items-center gap-my-8 overflow-x-auto overscroll-x-contain"
+          className={cn(
+            "flex min-w-0 flex-1 items-center gap-my-8 overflow-x-auto overscroll-x-contain",
+            HORIZONTAL_SCROLLBAR_HIDE_CLASS,
+          )}
           role="tablist"
           aria-label="장면"
         >

@@ -15,6 +15,9 @@ export const CONTROL_GROUP_GAP_COMPACT_CLASS = "gap-my-4";
 /** standard(36px) 컨트롤 그룹 가로 간격 — spacing-8 = 8px */
 export const CONTROL_GROUP_GAP_STANDARD_CLASS = "gap-my-8";
 
+/** standard 그룹 — 모바일 4px · lg+ 8px */
+export const CONTROL_GROUP_GAP_STANDARD_RESPONSIVE_CLASS = "gap-my-4 lg:gap-my-8";
+
 /** @deprecated `CONTROL_GROUP_GAP_COMPACT_CLASS` — FilterChip M 그룹 */
 export const CHIP_GROUP_GAP_CLASS = CONTROL_GROUP_GAP_COMPACT_CLASS;
 
@@ -96,12 +99,12 @@ export const chipVariants = cva(
 
 export type ChipVariantProps = VariantProps<typeof chipVariants>;
 
-/** FilterChip size → 그룹 gap (L=h-9→8px, M=h-8→4px) */
+/** FilterChip size → 그룹 gap (L: 모바일 4px · lg+ 8px, M: 4px) */
 export function chipGroupGapClass(
   chipSize: NonNullable<ChipVariantProps["size"]>,
 ): string {
   return chipSize === "l"
-    ? CONTROL_GROUP_GAP_STANDARD_CLASS
+    ? CONTROL_GROUP_GAP_STANDARD_RESPONSIVE_CLASS
     : CONTROL_GROUP_GAP_COMPACT_CLASS;
 }
 

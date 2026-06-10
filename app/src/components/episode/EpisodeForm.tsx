@@ -8,6 +8,11 @@ import { ImageCard } from "@/components/resource/cards/ImageCard";
 import { Title1 } from "@/components/ui/title1";
 import { Title2 } from "@/components/ui/title2";
 import { ImageCropPosterModal } from "@/components/resource/character/CharacterExpressionModal";
+import {
+  formDialogSheetEpisodeFormClassName,
+  formDialogSheetScrollBodyClassName,
+} from "@/components/ui/modal";
+import { PAGE_GUTTER_X_CLASS } from "@/lib/page-layout";
 import { cn } from "@/lib/utils";
 import { EPISODE_FORM_FIELD_COPY } from "@/lib/episode-form-copy";
 import type { ImageResource } from "@/types/resource";
@@ -140,7 +145,7 @@ export function EpisodeForm({
       className={cn(
         "flex justify-end gap-my-8",
         stickyFooter
-          ? "sticky bottom-0 border-t border-border-10 bg-white px-my-12 lg:px-my-20 py-my-16"
+          ? "shrink-0 border-t border-border-10 bg-white px-my-12 lg:px-my-20 py-my-16"
           : "mt-8",
       )}
     >
@@ -162,90 +167,104 @@ export function EpisodeForm({
     </div>
   );
 
+  const formFields = (
+    <div className="mt-0 flex flex-col gap-my-24">
+      <div className="flex flex-col gap-my-12">
+        <Title1
+          text="에피소드 제목*"
+          variant="title-subtitle-dot"
+          subtitleText={EPISODE_FORM_FIELD_COPY.title.subtitle}
+        />
+        <input
+          type="text"
+          maxLength={MAX_TITLE}
+          value={title}
+          onChange={(e) => setTitle(e.target.value)}
+          disabled={isAiFilling}
+          placeholder={EPISODE_FORM_FIELD_COPY.title.placeholder}
+          className="h-[42px] w-full rounded-md border border-border-10 bg-white px-my-12 py-my-8 text-body3_400 text-on-surface-10 placeholder:text-on-surface-30 focus:outline-none focus:ring-2 focus:ring-primary disabled:cursor-not-allowed disabled:opacity-60"
+        />
+        <div className="flex justify-end text-caption1_400 text-on-surface-30">
+          {title.length}/{MAX_TITLE}
+        </div>
+      </div>
+
+      <div className="flex flex-col gap-my-12">
+        <Title1
+          text="에피소드 요약*"
+          variant="title-subtitle-dot"
+          subtitleText={EPISODE_FORM_FIELD_COPY.summary.subtitle}
+        />
+        <input
+          type="text"
+          maxLength={MAX_SUMMARY}
+          value={summary}
+          onChange={(e) => setSummary(e.target.value)}
+          disabled={isAiFilling}
+          placeholder={EPISODE_FORM_FIELD_COPY.summary.placeholder}
+          className="h-[42px] w-full rounded-md border border-border-10 bg-white px-my-12 py-my-8 text-body3_400 text-on-surface-10 placeholder:text-on-surface-30 focus:outline-none focus:ring-2 focus:ring-primary disabled:cursor-not-allowed disabled:opacity-60"
+        />
+        <div className="flex justify-end text-caption1_400 text-on-surface-30">
+          {summary.length}/{MAX_SUMMARY}
+        </div>
+      </div>
+
+      <div className="flex flex-col gap-my-12">
+        <Title1
+          text="대표 이미지*"
+          variant="title-subtitle-dot"
+          subtitleText={EPISODE_FORM_FIELD_COPY.thumbnail.subtitle}
+        />
+        {thumbnailUrl ? (
+          <ImageCard
+            item={thumbnailItem}
+            slotType="img9:16"
+            showName={false}
+            onDetailClick={handleThumbnailClick}
+            onDeleteClick={handleThumbnailRemove}
+          />
+        ) : (
+          <AddResourceSlot
+            variant="img9:16"
+            ariaLabel="대표 이미지 업로드"
+            onClick={handleThumbnailClick}
+          />
+        )}
+      </div>
+    </div>
+  );
+
   return (
     <>
       <div
         className={cn(
-          "mx-auto w-full min-w-0 max-w-[1200px] rounded-[4px] border border-border-10 bg-white shadow-none",
-          stickyFooter && "flex min-h-0 flex-col",
-          containerClassName,
+          stickyFooter
+            ? cn(formDialogSheetEpisodeFormClassName, "flex min-h-0 flex-1 flex-col", containerClassName)
+            : cn(
+                "mx-auto w-full min-w-0 max-w-[1200px] rounded-[4px] border border-border-10 bg-white shadow-none",
+                containerClassName,
+              ),
         )}
       >
-        <Title2 text={sectionTitle} asSectionHeader />
+        <Title2 text={sectionTitle} asSectionHeader className="shrink-0" />
 
-        <PageCard
-          className={cn(
-            "mx-0 max-w-none min-w-0 border-0 rounded-none px-my-12 lg:px-my-20 pt-my-20 pb-my-20 shadow-none",
-            stickyFooter && "min-h-0",
-          )}
-        >
-          <div className="mt-0 flex flex-col gap-my-24">
-            <div className="flex flex-col gap-my-12">
-              <Title1
-                text="에피소드 제목*"
-                variant="title-subtitle-dot"
-                subtitleText={EPISODE_FORM_FIELD_COPY.title.subtitle}
-              />
-              <input
-                type="text"
-                maxLength={MAX_TITLE}
-                value={title}
-                onChange={(e) => setTitle(e.target.value)}
-                disabled={isAiFilling}
-                placeholder={EPISODE_FORM_FIELD_COPY.title.placeholder}
-                className="h-[42px] w-full rounded-md border border-border-10 bg-white px-my-12 py-my-8 text-body3_400 text-on-surface-10 placeholder:text-on-surface-30 focus:outline-none focus:ring-2 focus:ring-primary disabled:cursor-not-allowed disabled:opacity-60"
-              />
-              <div className="flex justify-end text-caption1_400 text-on-surface-30">
-                {title.length}/{MAX_TITLE}
-              </div>
-            </div>
-
-            <div className="flex flex-col gap-my-12">
-              <Title1
-                text="에피소드 요약*"
-                variant="title-subtitle-dot"
-                subtitleText={EPISODE_FORM_FIELD_COPY.summary.subtitle}
-              />
-              <input
-                type="text"
-                maxLength={MAX_SUMMARY}
-                value={summary}
-                onChange={(e) => setSummary(e.target.value)}
-                disabled={isAiFilling}
-                placeholder={EPISODE_FORM_FIELD_COPY.summary.placeholder}
-                className="h-[42px] w-full rounded-md border border-border-10 bg-white px-my-12 py-my-8 text-body3_400 text-on-surface-10 placeholder:text-on-surface-30 focus:outline-none focus:ring-2 focus:ring-primary disabled:cursor-not-allowed disabled:opacity-60"
-              />
-              <div className="flex justify-end text-caption1_400 text-on-surface-30">
-                {summary.length}/{MAX_SUMMARY}
-              </div>
-            </div>
-
-            <div className="flex flex-col gap-my-12 pb-my-20">
-              <Title1
-                text="대표 이미지*"
-                variant="title-subtitle-dot"
-                subtitleText={EPISODE_FORM_FIELD_COPY.thumbnail.subtitle}
-              />
-              {thumbnailUrl ? (
-                <ImageCard
-                  item={thumbnailItem}
-                  slotType="img9:16"
-                  showName={false}
-                  onDetailClick={handleThumbnailClick}
-                  onDeleteClick={handleThumbnailRemove}
-                />
-              ) : (
-                <AddResourceSlot
-                  variant="img9:16"
-                  ariaLabel="대표 이미지 업로드"
-                  onClick={handleThumbnailClick}
-                />
-              )}
-            </div>
+        {stickyFooter ? (
+          <div
+            className={cn(
+              formDialogSheetScrollBodyClassName,
+              PAGE_GUTTER_X_CLASS,
+              "pt-my-20",
+            )}
+          >
+            {formFields}
           </div>
+        ) : (
+          <PageCard className="mx-0 max-w-none min-w-0 border-0 rounded-none px-my-12 lg:px-my-20 pt-my-20 pb-my-20 shadow-none">
+            {formFields}
+            {footer}
+          </PageCard>
+        )}
 
-          {!stickyFooter && footer}
-        </PageCard>
         {stickyFooter && footer}
         <input
           ref={thumbnailFileInputRef}

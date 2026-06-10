@@ -11,7 +11,7 @@ import React from "react";
 import { usePathname, useRouter } from "next/navigation";
 import { AppShell } from "@/components/layout/AppShell";
 import { SegmentedTextTabs } from "@/components/ui/segmented-text-tabs";
-import { PAGE_CONTAINER_CLASS, PAGE_SCROLL_GUTTER_CLASS, PAGE_SUBHEADER_CLASS } from "@/lib/page-layout";
+import { PAGE_CONTAINER_CLASS, PAGE_SCROLL_ROOT_CLASS, PAGE_SUBHEADER_CLASS } from "@/lib/page-layout";
 import { cn } from "@/lib/utils";
 import { WORKS_TABS, WORKS_TAB_PATH, getWorksTabFromPathname, type WorksTabId } from "@/lib/worksArea";
 
@@ -29,7 +29,7 @@ export default function MyWorksLayout({ children }: { children: React.ReactNode 
           </div>
         </div>
 
-        <div className={`flex flex-1 flex-col items-center gap-0 overflow-y-auto py-0 ${PAGE_SCROLL_GUTTER_CLASS}`}>
+        <div className={cn(PAGE_SCROLL_ROOT_CLASS, "items-center gap-0")}>
           <div className={cn(PAGE_CONTAINER_CLASS, "mx-0")}>
             <div className="inline-flex flex-col items-start justify-start gap-my-8 self-stretch px-0 pb-my-8 pt-my-20">
               <SegmentedTextTabs

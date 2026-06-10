@@ -4,6 +4,13 @@ import { useMemo, useState } from "react";
 import dynamic from "next/dynamic";
 import { Title2 } from "@/components/ui/title2";
 import { AnalyticsPanel } from "@/components/analytics/AnalyticsPanel";
+import {
+  ANALYTICS_KEY_STAT_BUTTON_CLASS,
+  ANALYTICS_KEY_STAT_DELTA_CLASS,
+  ANALYTICS_KEY_STAT_LABEL_CLASS,
+  ANALYTICS_KEY_STAT_VALUE_CLASS,
+  ANALYTICS_KEY_STATS_ROW_CLASS,
+} from "@/components/analytics/analytics-key-stats-layout";
 import type { AnalyticsPeriodRange } from "@/components/analytics/analytics-date";
 import {
   ANALYTICS_TREND_LINE_FIXED_HEIGHT_CLASS,
@@ -84,7 +91,7 @@ export function MonetizationDashboard({
       <div className="flex flex-col items-start justify-start gap-my-12 lg:gap-my-20 self-stretch px-0 pt-my-20 pb-my-40">
         <AnalyticsPanel>
           <Title2 text="주요통계" variant="title" asSectionHeader />
-          <div className="inline-flex min-h-0 min-w-0 flex-1 flex-wrap items-stretch justify-start self-stretch sm:flex-nowrap">
+          <div className={ANALYTICS_KEY_STATS_ROW_CLASS}>
             {MONETIZATION_KEY_STATS_ROWS.map((stat, i, arr) => (
               <button
                 key={stat.label}
@@ -93,7 +100,7 @@ export function MonetizationDashboard({
                 aria-pressed={selectedMonetizationStat === stat.id}
                 aria-label={`${stat.label} 통계 선택`}
                 className={cn(
-                  "min-w-[120px] flex-1 sm:min-w-0 self-stretch border-b border-border-10 px-my-12 lg:px-my-20 py-my-40 inline-flex flex-col items-center justify-start gap-my-4",
+                  ANALYTICS_KEY_STAT_BUTTON_CLASS,
                   "cursor-pointer text-left transition-colors outline-none",
                   i < arr.length - 1 && "border-r",
                   selectedMonetizationStat === stat.id
@@ -101,19 +108,12 @@ export function MonetizationDashboard({
                     : "bg-surface-disabled-10 hover:bg-surface-10/80",
                 )}
               >
-                <div className="justify-center text-center text-body3_500 text-on-surface-20">
-                  {stat.label}
+                <div className={ANALYTICS_KEY_STAT_LABEL_CLASS}>{stat.label}</div>
+                <div className={ANALYTICS_KEY_STAT_VALUE_CLASS}>
+                  {dummy.stats[stat.id].value}
                 </div>
-                <div className="justify-center text-center text-heading2_700 text-on-surface-10">
-                {dummy.stats[stat.id].value}
-                </div>
-                <div
-                  className={cn(
-                    "justify-center text-center text-body3_400",
-                  deltaClassName(dummy.stats[stat.id].deltaTone),
-                  )}
-                >
-                {dummy.stats[stat.id].delta}
+                <div className={cn(ANALYTICS_KEY_STAT_DELTA_CLASS, deltaClassName(dummy.stats[stat.id].deltaTone))}>
+                  {dummy.stats[stat.id].delta}
                 </div>
               </button>
             ))}

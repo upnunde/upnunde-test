@@ -1,7 +1,7 @@
 "use client";
 
 import { AppShell } from "@/components/layout/AppShell";
-import { PAGE_CONTAINER_CLASS, PAGE_SCROLL_GUTTER_CLASS, PAGE_STACK_CLASS, PAGE_SUBHEADER_CLASS } from "@/lib/page-layout";
+import { PAGE_CONTAINER_CLASS, PAGE_SCROLL_ROOT_CLASS, PAGE_STACK_CLASS, PAGE_SUBHEADER_CLASS } from "@/lib/page-layout";
 
 export default function ProfilePage() {
   return (
@@ -13,7 +13,7 @@ export default function ProfilePage() {
           </div>
         </div>
 
-        <div className={`flex min-h-0 flex-1 flex-col overflow-y-auto py-0 ${PAGE_SCROLL_GUTTER_CLASS}`}>
+        <div className={PAGE_SCROLL_ROOT_CLASS}>
           <div className={PAGE_STACK_CLASS}>
             <div className="min-h-[400px] rounded-[4px] border border-border-10 bg-surface-10" />
           </div>

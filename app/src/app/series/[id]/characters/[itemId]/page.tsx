@@ -1,6 +1,8 @@
 "use client";
 
 import React, { useState, useEffect, useMemo } from "react";
+import { cn } from "@/lib/utils";
+import { APP_VIEWPORT_SHELL_CLASS } from "@/lib/mobile-viewport";
 import { useRouter, usePathname } from "next/navigation";
 import Header from "@/components/Header/Header";
 import { CharacterDetailPage } from "@/components/resource/character/CharacterDetailPage";
@@ -31,7 +33,7 @@ export default function SeriesCharacterEditPage() {
   }
 
   return (
-    <div className="flex flex-col h-screen w-full bg-white overflow-hidden">
+    <div className={cn(APP_VIEWPORT_SHELL_CLASS, "bg-white")}>
       <Header profileImageUrl={profileImageUrl} onProfileImageChange={setProfileImageUrl} />
       <div className="flex flex-1 overflow-hidden bg-surface-20">
         <div className="flex min-w-0 flex-1 flex-col overflow-hidden">

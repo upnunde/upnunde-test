@@ -10,9 +10,11 @@ import {
 } from "@/components/ui/dialog";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
+import { formDialogShellClassName, formDialogSheetBodyWrapperClassName, formDialogSheetScrollBodyClassName } from "@/components/ui/modal";
 import { Trash2, RefreshCw } from "lucide-react";
 import { AddResourceSlot } from "@/components/resource/cards/AddResourceSlot";
 import { MODAL_CROP_STAGE_CLASS, MODAL_CROP_STAGE_SIZE_PX } from "@/lib/thumbnail-styles";
+import { cn } from "@/lib/utils";
 import type { CharacterExpressionSlot } from "@/types/resource";
 
 const MAX_SLOTS = 10;
@@ -523,7 +525,14 @@ export function CharacterExpressionModal({
   return (
     <Dialog open={open} onOpenChange={(o) => !o && handleClose()}>
       <DialogContent
-        className={`gap-0 p-0 bg-surface-10 rounded-[4px] shadow-elevation-50 outline outline-1 outline-offset-[-1px] outline-border-10 overflow-hidden flex flex-col max-lg:w-full max-lg:max-w-none ${layoutShowSlotList ? "lg:w-auto lg:max-w-[calc(100vw-2rem)]" : "lg:w-[432px] lg:max-w-[calc(100vw-2rem)]"}`}
+        presentation="auto"
+        className={cn(
+          formDialogShellClassName,
+          "gap-0 overflow-hidden border-0 bg-surface-10 p-0 shadow-elevation-50 outline outline-1 outline-offset-[-1px] outline-border-10 lg:rounded-[4px]",
+          layoutShowSlotList
+            ? "lg:w-auto lg:max-w-[calc(100vw-2rem)]"
+            : "lg:w-[432px] lg:max-w-[calc(100vw-2rem)]",
+        )}
         aria-describedby={undefined}
       >
         <DialogTitle className="sr-only">이미지 편집</DialogTitle>
@@ -536,11 +545,12 @@ export function CharacterExpressionModal({
           className="hidden"
           onChange={handleFilesSelected}
         />
+        <div className={formDialogSheetBodyWrapperClassName}>
         <div
           className={
             layoutShowSlotList
               ? "inline-flex w-full shrink-0 items-start justify-start overflow-hidden"
-              : "inline-flex min-h-0 w-full flex-1 items-stretch justify-start"
+              : "flex min-h-0 w-full min-w-0 flex-1 flex-col overflow-hidden"
           }
           style={layoutShowSlotList && bodyHeight != null ? { height: bodyHeight } : undefined}
         >
@@ -550,7 +560,7 @@ export function CharacterExpressionModal({
             className={`flex flex-col items-center justify-start gap-my-20 p-my-16 sm:p-my-20 ${
               layoutShowSlotList
                 ? "h-fit w-fit shrink-0 self-start border-r border-border-10"
-                : "min-h-0 w-full flex-1 shrink-0 overflow-y-auto"
+                : cn("w-full min-w-0 shrink-0 self-stretch", formDialogSheetScrollBodyClassName)
             }`}
           >
             {/* 정사각 스테이지 + canvas + 좌우 딤 + 9:16 가이드 프레임 */}
@@ -770,7 +780,7 @@ export function CharacterExpressionModal({
         </div>
 
         {/* 푸터: border-t, 취소(아웃라인) / 저장 */}
-        <div className="self-stretch w-full p-my-20 border-t border-border-10 inline-flex justify-end items-center gap-my-8 shrink-0">
+        <div className="self-stretch w-full shrink-0 border-t border-border-10 p-my-20 inline-flex justify-end items-center gap-my-8">
           <DialogClose asChild>
             <Button
               type="button"
@@ -789,6 +799,7 @@ export function CharacterExpressionModal({
           >
             {saving ? "저장 중…" : "저장"}
           </Button>
+        </div>
         </div>
       </DialogContent>
     </Dialog>

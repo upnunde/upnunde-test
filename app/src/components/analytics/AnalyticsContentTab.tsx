@@ -5,6 +5,13 @@ import dynamic from "next/dynamic";
 import { Title2 } from "@/components/ui/title2";
 import { SegmentedTextTabs } from "@/components/ui/segmented-text-tabs";
 import { AnalyticsPanel } from "@/components/analytics/AnalyticsPanel";
+import {
+  ANALYTICS_KEY_STAT_BUTTON_CLASS,
+  ANALYTICS_KEY_STAT_DELTA_CLASS,
+  ANALYTICS_KEY_STAT_LABEL_CLASS,
+  ANALYTICS_KEY_STAT_VALUE_CLASS,
+  ANALYTICS_KEY_STATS_ROW_CLASS,
+} from "@/components/analytics/analytics-key-stats-layout";
 import { cn } from "@/lib/utils";
 import type { AnalyticsPrimaryMetric } from "@/components/analytics/AnalyticsTrendLineChart";
 import { type AnalyticsPeriodRange } from "@/components/analytics/analytics-date";
@@ -99,14 +106,9 @@ export function AnalyticsContentTab({
       <AnalyticsPanel>
         <Title2 text="주요통계" variant="title" asSectionHeader />
 
-        <div className="inline-flex min-h-0 min-w-0 flex-1 flex-wrap items-stretch justify-start self-stretch sm:flex-nowrap">
+        <div className={ANALYTICS_KEY_STATS_ROW_CLASS}>
           {primaryStats.map((stat, i, arr) => {
-            const isFirst = i === 0;
             const selected = primaryMetric === stat.id;
-            const shell = cn(
-              "min-w-[120px] flex-1 sm:min-w-0 self-stretch border-b border-border-10 px-my-12 lg:px-my-20 py-my-40 inline-flex flex-col items-center justify-start gap-my-4",
-              i < arr.length - 1 && "border-r",
-            );
             const label = PRIMARY_LABELS[stat.id];
 
             return (
@@ -117,38 +119,17 @@ export function AnalyticsContentTab({
                 aria-pressed={selected}
                 aria-label={`${label} 통계 선택, 하단 그래프에 반영`}
                 className={cn(
-                  shell,
+                  ANALYTICS_KEY_STAT_BUTTON_CLASS,
                   "cursor-pointer text-left transition-colors outline-none",
+                  i < arr.length - 1 && "border-r",
                   selected ? "z-[1] bg-white" : "bg-surface-disabled-10 hover:bg-surface-10/80",
                 )}
               >
-                <div className="justify-center text-center text-body3_500 text-on-surface-20">
-                  {label}
+                <div className={ANALYTICS_KEY_STAT_LABEL_CLASS}>{label}</div>
+                <div className={ANALYTICS_KEY_STAT_VALUE_CLASS}>{stat.value}</div>
+                <div className={cn(ANALYTICS_KEY_STAT_DELTA_CLASS, deltaClassName(stat.deltaTone))}>
+                  {stat.delta}
                 </div>
-                <div className="justify-center text-center text-heading2_700 text-on-surface-10">
-                  {stat.value}
-                </div>
-                {isFirst ? (
-                  <div className="inline-flex items-center justify-center gap-my-4">
-                    <div
-                      className={cn(
-                        "justify-center text-center text-body3_400",
-                        deltaClassName(stat.deltaTone),
-                      )}
-                    >
-                      {stat.delta}
-                    </div>
-                  </div>
-                ) : (
-                  <div
-                    className={cn(
-                      "justify-center text-center text-body3_400",
-                      deltaClassName(stat.deltaTone),
-                    )}
-                  >
-                    {stat.delta}
-                  </div>
-                )}
               </button>
             );
           })}

@@ -1,12 +1,15 @@
 "use client";
 
 import { DropdownMenuItem, DropdownMenuLabel, DropdownMenuSeparator } from "@/components/ui/dropdown-menu";
+import { CONTROL_HEIGHT_FORM_CLASS } from "@/lib/chip-styles";
 import { cn } from "@/lib/utils";
 
 export type EditorMenuPresentation = "dropdown" | "sheet";
 
-const OPTION_CLASS =
-  "flex cursor-pointer items-center gap-my-8 rounded-md px-my-12 py-my-8 text-body3_400 text-on-surface-20 outline-none focus:bg-surface-20 lg:hover:bg-surface-20";
+const OPTION_CLASS = cn(
+  CONTROL_HEIGHT_FORM_CLASS,
+  "flex cursor-pointer items-center gap-my-8 rounded-md px-my-12 py-0 text-body3_400 text-on-surface-20 outline-none focus:bg-surface-20 lg:hover:bg-surface-20",
+);
 
 const SECTION_LABEL_CLASS =
   "px-my-12 py-my-8 text-caption1_400 text-on-surface-30";
