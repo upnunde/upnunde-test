@@ -41,7 +41,7 @@ export function EpisodeList({
       }
     >
       {/* Table Header — 모바일은 카드형 행만 표시 */}
-      <div className="hidden h-[42px] shrink-0 items-center rounded-t-[4px] border-b border-divider-10 bg-white px-my-12 lg:px-my-20 lg:flex">
+      <div className="hidden h-[42px] shrink-0 items-center rounded-t-[4px] border-b border-divider-10 bg-white px-my-16 lg:px-my-20 lg:flex">
         <div className="w-20 text-caption1_400 text-on-surface-30">회차</div>
         <div className="flex-1 px-0 text-caption1_400 text-on-surface-30">제목</div>
         <div className="w-32 px-0 text-caption1_400 text-on-surface-30">개시일</div>

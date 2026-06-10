@@ -10,10 +10,7 @@ import { AiFieldLoadingMessage } from "@/components/episode/EpisodeAiFieldLoadin
 import { EpisodeScriptTextarea } from "@/components/episode/EpisodeScriptTextarea";
 import { Snackbar } from "@/components/episode/Snackbar";
 import { AiConvertLoadingOverlay } from "@/components/episode/AiConvertLoadingOverlay";
-import {
-  FLOATING_COMPOSER_SCROLL_PAD_CLASS,
-  FloatingComposerBar,
-} from "@/components/ui/floating-composer-bar";
+import { FloatingComposerBar } from "@/components/ui/floating-composer-bar";
 import {
   EPISODE_APPLY_TO_EDITOR_DELAY_MS,
   EPISODE_APPLY_TO_EDITOR_LOADING_STEPS,
@@ -24,7 +21,12 @@ import {
   canLoadPreviousEpisodeHistory,
   generatePreviousEpisodeHistory,
 } from "@/lib/episode-previous-history";
-import { formDialogShellClassName } from "@/components/ui/modal";
+import {
+  formDialogShellClassName,
+  formDialogSheetScrollBodyClassName,
+  formDialogSheetStickyFooterClassName,
+} from "@/components/ui/modal";
+import { PAGE_GUTTER_X_CLASS } from "@/lib/page-layout";
 import { cn } from "@/lib/utils";
 
 const MAX_HISTORY = 5000;
@@ -186,9 +188,10 @@ export function EpisodeAutoGeneratorModal({
             <Title2 text="에피소드 생성기" asSectionHeader />
             <div
               className={cn(
-                "mx-0 flex min-h-0 flex-col gap-my-24 overflow-y-auto border-0 px-my-12 lg:px-my-20 pt-my-20 shadow-none",
+                formDialogSheetScrollBodyClassName,
+                PAGE_GUTTER_X_CLASS,
+                "flex flex-col gap-my-24 border-0 pt-my-20 shadow-none",
                 "max-h-[min(calc(88vh-10rem),680px)]",
-                FLOATING_COMPOSER_SCROLL_PAD_CLASS,
               )}
             >
               <div className="flex flex-col gap-my-12">
@@ -279,7 +282,7 @@ export function EpisodeAutoGeneratorModal({
                 />
               </div>
             </div>
-            <div className="shrink-0 border-t border-border-10 bg-white px-my-12 lg:px-my-20 py-my-16">
+            <div className={formDialogSheetStickyFooterClassName}>
               <div className="flex justify-end gap-my-8">
                 <Button
                   type="button"

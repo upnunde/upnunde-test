@@ -7,6 +7,7 @@ import { AnalyticsEpisodeScopePicker } from "@/components/analytics/AnalyticsEpi
 import type { AnalyticsAreaTabId } from "@/components/analytics/AnalyticsDashboard";
 import { type AnalyticsPeriodRange } from "@/components/analytics/analytics-date";
 import {
+  analyticsFilterChipResponsiveClassName,
   analyticsScopeFilterDividerClassName,
   analyticsScopeFilterShellClassName,
 } from "@/components/analytics/analytics-filter-chips";
@@ -114,7 +115,7 @@ export function AnalyticsScopeFilterBar({
                 selected={selected}
                 chipSize="l"
                 aria-pressed={selected}
-                className="min-w-20"
+                className={cn("min-w-20", analyticsFilterChipResponsiveClassName)}
                 onClick={() => onScopeCategoryChange(id)}
               >
                 {label}

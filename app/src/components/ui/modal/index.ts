@@ -4,6 +4,7 @@ export {
   formDialogSheetEpisodeFormClassName,
   formDialogSheetBodyWrapperClassName,
   formDialogSheetScrollBodyClassName,
+  formDialogSheetStickyFooterClassName,
   mobileBottomSheetMaxHeightClassName,
   modalFooterButtonRowClassName,
   modalFooterButtonToneClassName,

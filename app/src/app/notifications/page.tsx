@@ -379,7 +379,12 @@ export default function NotificationsPage() {
           </div>
         </div>
 
-        <div className={cn(PAGE_SCROLL_ROOT_TOP_CLASS, "items-center gap-my-12")}>
+        <div
+          className={cn(
+            PAGE_SCROLL_ROOT_TOP_CLASS,
+            "items-center gap-my-12 max-lg:gap-0 max-lg:p-0",
+          )}
+        >
           <div className={PAGE_CONTAINER_CLASS}>
             <NotificationList
                 notifications={paginatedNotifications}

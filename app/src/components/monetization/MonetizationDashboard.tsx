@@ -120,7 +120,7 @@ export function MonetizationDashboard({
           </div>
 
           <div className="flex flex-col items-stretch gap-my-12 self-stretch px-0 py-my-40">
-            <p className="px-my-12 lg:px-my-20 text-body3_500 text-on-surface-20">수익금 추이</p>
+            <p className="px-my-16 lg:px-my-20 text-body3_500 text-on-surface-20">수익금 추이</p>
             <AnalyticsTrendLineChart
               metric="views"
               periodRange={periodRange}
@@ -136,7 +136,7 @@ export function MonetizationDashboard({
           </AnalyticsPanel>
         <AnalyticsPanel className="h-fit w-full min-w-0 flex-1 self-start lg:min-w-[260px]">
           <Title2 text="월별 수익" variant="title" asSectionHeader />
-          <div className="px-my-12 lg:px-my-20 pt-my-12">
+          <div className="px-my-16 lg:px-my-20 pt-my-12">
             <AnalyticsMonthlyRevenueRangeFilter
               value={monthlyRevenueRange}
               onChange={setMonthlyRevenueRange}

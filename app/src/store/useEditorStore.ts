@@ -257,7 +257,16 @@ export const useEditorStore = create<EditorStore>((set) => ({
       const target = state.blocks.find((b) => b.id === id);
       if (target?.data?.isSeedDefault === true) return state;
       const undoPatch = pushUndo(state);
-      return { ...undoPatch, blocks: state.blocks.filter((b) => b.id !== id) };
+      return {
+        ...undoPatch,
+        blocks: state.blocks.filter((b) => b.id !== id),
+        // 삭제된 블록이 선택 상태였다면 해제 (모바일 블록 툴바 등 잔존 방지)
+        ...(state.focusBlockId === id ? { focusBlockId: null } : {}),
+        ...(state.mobileKeyboardEditBlockId === id ? { mobileKeyboardEditBlockId: null } : {}),
+        ...(state.mobileContentEditPromptBlockId === id
+          ? { mobileContentEditPromptBlockId: null }
+          : {}),
+      };
     }),
 
   reorderBlocks: (oldIndex, newIndex) =>

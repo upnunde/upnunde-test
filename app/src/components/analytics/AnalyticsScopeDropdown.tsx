@@ -8,6 +8,7 @@ import {
   DropdownMenuRadioItem,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
+import { analyticsFilterDropdownResponsiveClassName } from "@/components/analytics/analytics-filter-chips";
 import { Chip } from "@/components/ui/chip";
 import { cn } from "@/lib/utils";
 
@@ -46,7 +47,7 @@ export function AnalyticsScopeDropdown({
           size="l"
           icon
           trailingIcon={<ChevronDown className="size-my-20 shrink-0 text-current" />}
-          className={cn("max-w-[280px]", className)}
+          className={cn("max-w-[280px]", analyticsFilterDropdownResponsiveClassName, className)}
           aria-label={`${ariaLabelPrefix} — ${label}`}
           title={label}
         >

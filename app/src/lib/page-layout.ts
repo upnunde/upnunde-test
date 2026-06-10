@@ -1,10 +1,10 @@
 /**
  * 페이지·카드 본문 인셋 — design-system spacing
- * 모바일 가로 12px · lg+ 20px → `docs/mobile-layout.md`
+ * 모바일 가로 16px · lg+ 20px → `docs/mobile-layout.md`
  */
 
-/** 페이지·카드 좌우 인셋 — 모바일 12px · lg+ 20px */
-export const PAGE_GUTTER_X_CLASS = "px-my-12 lg:px-my-20";
+/** 페이지·카드 좌우 인셋 — 모바일 16px · lg+ 20px */
+export const PAGE_GUTTER_X_CLASS = "px-my-16 lg:px-my-20";
 
 /** 페이지·섹션 스택 간격 — 모바일 12px · lg+ 20px */
 export const PAGE_GUTTER_GAP_CLASS = "gap-my-12 lg:gap-my-20";
@@ -24,13 +24,16 @@ export const PAGE_SCROLL_GUTTER_CLASS = PAGE_GUTTER_X_CLASS;
 /** 스크롤 영역 마지막 콘텐츠 하단 여백 — 80px (모든 뷰포트 공통) */
 export const PAGE_SCROLL_BOTTOM_CLASS = "pb-my-80";
 
+/** 스크롤 영역 상단 여백 — 모바일 20px · lg+ 32px */
+export const PAGE_SCROLL_TOP_CLASS = "pt-my-20 lg:pt-my-32";
+
 /** AppShell main 스크롤 루트 — py-0 · 가로 인셋 · 하단 80px */
 export const PAGE_SCROLL_ROOT_CLASS =
   `flex min-h-0 flex-1 flex-col overflow-y-auto py-0 ${PAGE_SCROLL_GUTTER_CLASS} ${PAGE_SCROLL_BOTTOM_CLASS}`;
 
-/** AppShell main 스크롤 루트 — 상단 pt-my-32 · 가로 인셋 · 하단 80px */
+/** AppShell main 스크롤 루트 — 상단 여백 · 가로 인셋 · 하단 80px */
 export const PAGE_SCROLL_ROOT_TOP_CLASS =
-  `flex flex-1 flex-col overflow-y-auto pt-my-32 ${PAGE_SCROLL_GUTTER_CLASS} ${PAGE_SCROLL_BOTTOM_CLASS}`;
+  `flex flex-1 flex-col overflow-y-auto ${PAGE_SCROLL_TOP_CLASS} ${PAGE_SCROLL_GUTTER_CLASS} ${PAGE_SCROLL_BOTTOM_CLASS}`;
 
 /** 서브 페이지 상단 바(뒤로가기·제목) — 모바일 56px · lg+ 64px */
 export const PAGE_SUBHEADER_CLASS =
@@ -38,7 +41,7 @@ export const PAGE_SUBHEADER_CLASS =
 
 /** 스크롤 + 중앙 정렬 레이아웃(리소스 상세·목록 등) */
 export const PAGE_SCROLL_COLUMN_CLASS =
-  `flex-1 overflow-y-auto flex flex-col items-center pt-my-32 ${PAGE_GUTTER_GAP_CLASS} ${PAGE_GUTTER_X_CLASS} ${PAGE_SCROLL_BOTTOM_CLASS}`;
+  `flex-1 overflow-y-auto flex flex-col items-center ${PAGE_SCROLL_TOP_CLASS} ${PAGE_GUTTER_GAP_CLASS} ${PAGE_GUTTER_X_CLASS} ${PAGE_SCROLL_BOTTOM_CLASS}`;
 
 /** 본문·카드·서브헤더 내부 — 모바일 가로 스크롤 방지 (min-w-0) */
 export const PAGE_CONTAINER_CLASS = "w-full min-w-0 max-w-[1200px] mx-auto";

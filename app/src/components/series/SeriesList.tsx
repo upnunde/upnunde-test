@@ -4,6 +4,7 @@ import React from "react";
 import { SeriesItem } from "@/components/series/SeriesItem";
 import { WorksEmptyCreateButton } from "@/components/works/WorksEmptyCreateButton";
 import type { SeriesData } from "@/types/series";
+import { WORKS_LIST_GRID_CLASS } from "@/lib/worksArea";
 
 export interface SeriesListProps {
   seriesList: SeriesData[];
@@ -30,9 +31,7 @@ export function SeriesList({
   className,
 }: SeriesListProps) {
   return (
-    <div
-      className={`grid w-full grid-cols-[repeat(auto-fit,minmax(min(100%,480px),1fr))] gap-my-16 ${className ?? ""}`}
-    >
+    <div className={`${WORKS_LIST_GRID_CLASS} ${className ?? ""}`}>
       {seriesList.map((series) => (
         <SeriesItem
           key={series.id}

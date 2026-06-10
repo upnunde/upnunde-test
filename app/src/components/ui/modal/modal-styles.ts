@@ -25,11 +25,15 @@ export const formDialogSheetEpisodeFormClassName =
 export const formDialogSheetBodyWrapperClassName =
   "flex min-h-0 flex-1 flex-col overflow-hidden";
 
-/** 바텀 시트·폼 모달 스크롤 본문 — `PAGE_SCROLL_BOTTOM_CLASS`(80px) 공통 */
+/** 바텀 시트·폼 모달 스크롤 본문 — 마지막 콘텐츠 아래 80px (`PAGE_SCROLL_BOTTOM_CLASS`) */
 export const formDialogSheetScrollBodyClassName = cn(
   "min-h-0 flex-1 overflow-y-auto overflow-x-hidden overscroll-contain",
   PAGE_SCROLL_BOTTOM_CLASS,
 );
+
+/** 바텀 시트·폼 모달 하단 고정 버튼 영역 — 하단 여백 없음(safe-area는 DialogContent 셸이 처리) */
+export const formDialogSheetStickyFooterClassName =
+  "shrink-0 border-t border-border-10 bg-white px-my-16 lg:px-my-20 py-my-16";
 
 export const modalHeaderClassName =
   "flex min-h-40 w-full flex-col items-center gap-my-20 self-stretch overflow-hidden rounded-tl-[4px] rounded-tr-[4px] bg-surface-10 px-my-24 pb-my-16 pt-my-24 lg:pt-my-40";

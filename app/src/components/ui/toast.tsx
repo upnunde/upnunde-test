@@ -4,7 +4,7 @@ import * as React from "react";
 import { X } from "lucide-react";
 import { cn } from "@/lib/utils";
 
-/** 단일 토스트 루트 — 스낵바 스타일 (surface-10, shadow, rounded-lg) */
+/** 단일 토스트 루트 — 스낵바 스타일 (반전 컬러: on-surface-10 배경, shadow, rounded-lg) */
 const Toast = React.forwardRef<
   HTMLDivElement,
   React.HTMLAttributes<HTMLDivElement> & {
@@ -17,7 +17,7 @@ const Toast = React.forwardRef<
     role="status"
     aria-live="polite"
     className={cn(
-      "w-full max-w-[24rem] inline-flex justify-start items-center gap-my-16 rounded-lg bg-surface-10 py-my-12",
+      "w-full max-w-[24rem] inline-flex justify-start items-center gap-my-16 rounded-lg bg-on-surface-10 shadow-elevation-20 py-my-12",
       messageOnly ? "px-my-16" : "pl-my-16 pr-my-8",
       "data-[state=open]:animate-in data-[state=closed]:animate-out data-[state=closed]:fade-out-0 data-[state=open]:fade-in-0",
       className
@@ -27,7 +27,7 @@ const Toast = React.forwardRef<
 ));
 Toast.displayName = "Toast";
 
-/** 토스트 메시지 — on-surface-10, Pretendard_JP */
+/** 토스트 메시지 — 반전 컬러(surface-10), Pretendard_JP */
 const ToastTitle = React.forwardRef<
   HTMLParagraphElement,
   React.HTMLAttributes<HTMLParagraphElement>
@@ -35,7 +35,7 @@ const ToastTitle = React.forwardRef<
   <p
     ref={ref}
     className={cn(
-      "flex-1 min-w-0 justify-start text-on-surface-10 text-body3_500 font-['Pretendard_JP',sans-serif]",
+      "flex-1 min-w-0 justify-start text-surface-10 text-body3_500 font-['Pretendard_JP',sans-serif]",
       className
     )}
     {...props}
@@ -53,7 +53,7 @@ const ToastClose = React.forwardRef<
     type="button"
     aria-label="닫기"
     className={cn(
-      "w-9 h-9 shrink-0 rounded-[999px] cursor-pointer flex justify-center items-center overflow-hidden text-on-surface-10 hover:bg-black/5 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring",
+      "w-9 h-9 shrink-0 rounded-[999px] cursor-pointer flex justify-center items-center overflow-hidden text-surface-10 hover:bg-white/10 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring",
       className
     )}
     {...props}
@@ -72,7 +72,7 @@ const ToastAction = React.forwardRef<
     ref={ref}
     type="button"
     className={cn(
-      "h-8 min-w-16 shrink-0 px-my-12 rounded-md cursor-pointer flex justify-center items-center gap-my-4 overflow-hidden text-primary text-body3_500 font-['Pretendard_JP',sans-serif] hover:bg-primary/10 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring",
+      "h-8 min-w-16 shrink-0 px-my-12 rounded-md cursor-pointer flex justify-center items-center gap-my-4 overflow-hidden text-primary text-body3_500 font-['Pretendard_JP',sans-serif] hover:bg-white/10 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring",
       className
     )}
     {...props}

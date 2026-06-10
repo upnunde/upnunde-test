@@ -11,6 +11,7 @@ import { ImageCropPosterModal } from "@/components/resource/character/CharacterE
 import {
   formDialogSheetEpisodeFormClassName,
   formDialogSheetScrollBodyClassName,
+  formDialogSheetStickyFooterClassName,
 } from "@/components/ui/modal";
 import { PAGE_GUTTER_X_CLASS } from "@/lib/page-layout";
 import { cn } from "@/lib/utils";
@@ -144,9 +145,7 @@ export function EpisodeForm({
     <div
       className={cn(
         "flex justify-end gap-my-8",
-        stickyFooter
-          ? "shrink-0 border-t border-border-10 bg-white px-my-12 lg:px-my-20 py-my-16"
-          : "mt-8",
+        stickyFooter ? formDialogSheetStickyFooterClassName : "mt-8",
       )}
     >
       <Button type="button" variant="outline" onClick={onCancel}>
@@ -259,7 +258,7 @@ export function EpisodeForm({
             {formFields}
           </div>
         ) : (
-          <PageCard className="mx-0 max-w-none min-w-0 border-0 rounded-none px-my-12 lg:px-my-20 pt-my-20 pb-my-20 shadow-none">
+          <PageCard className="mx-0 max-w-none min-w-0 border-0 rounded-none px-my-16 lg:px-my-20 pt-my-20 pb-my-20 shadow-none">
             {formFields}
             {footer}
           </PageCard>

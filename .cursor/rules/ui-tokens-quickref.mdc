@@ -33,8 +33,9 @@ cd app && npm run migrate:tokens -- --write
 
 ## 페이지 인셋·간격 (모바일)
 
-- **`PAGE_GUTTER_X_CLASS`** = `px-my-12 lg:px-my-20`
+- **`PAGE_GUTTER_X_CLASS`** = `px-my-16 lg:px-my-20`
 - **`PAGE_GUTTER_GAP_CLASS`** = `gap-my-12 lg:gap-my-20` · **`PAGE_STACK_CLASS`** = 컨테이너+스택
+- **`PAGE_SCROLL_TOP_CLASS`** = `pt-my-20 lg:pt-my-32`
 - **`PAGE_SCROLL_BOTTOM_CLASS`** = `pb-my-80` · **`PAGE_SCROLL_ROOT_CLASS`** = 스크롤 루트(가로 인셋+하단 80)
 - 가이드: `docs/mobile-layout.md` · `px-my-20`·`gap-my-20` 단독 사용 금지
 

@@ -75,7 +75,7 @@ export function EditorBottomSheetMenu({
               aria-modal="true"
               aria-label={title}
             >
-              <div className="flex w-full shrink-0 items-center justify-between border-b border-border-10 px-my-12 lg:px-my-20 py-my-16">
+              <div className="flex w-full shrink-0 items-center justify-between border-b border-border-10 px-my-16 lg:px-my-20 py-my-16">
                 <div className="text-body1_700 text-on-surface-10">{title}</div>
                 <button
                   type="button"

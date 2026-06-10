@@ -17,7 +17,7 @@ export function ProfileSettingsTabBar({
   onTabChange: (tab: ProfileSettingsTabId) => void;
 }) {
   return (
-    <div className="inline-flex w-full flex-col items-start justify-start gap-my-8 self-stretch border-b border-border-10 px-my-12 lg:px-my-20 pb-0 pt-my-8">
+    <div className="inline-flex w-full flex-col items-start justify-start gap-my-8 self-stretch border-b border-border-10 px-my-16 lg:px-my-20 pb-0 pt-my-8">
       <div
         role="tablist"
         aria-label="내 정보 관리 탭"

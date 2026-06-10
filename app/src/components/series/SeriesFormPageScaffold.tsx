@@ -7,13 +7,20 @@ import { PageCard } from "@/components/layout/PageCard";
 import { Button } from "@/components/ui/button";
 import { HeaderBackButton } from "@/components/ui/header-back-button";
 import { SeriesFormTabs } from "@/components/series/SeriesFormTabs";
+import { EditorMobileFloatingActions } from "@/components/editor/EditorMobileFloatingActions";
 import {
-  SeriesFormMobileTabBar,
-  type SeriesFormMobilePanel,
-} from "@/components/series/SeriesFormMobileTabBar";
+  EDITOR_MOBILE_FAB_BOTTOM_ABOVE_BLOCK_TOOLBAR_CLASS,
+  EDITOR_MOBILE_SCROLL_BOTTOM_PAD_WITH_TOOLBAR_CLASS,
+  type EditorMobilePanel,
+} from "@/components/editor/editor-mobile-floating-layout";
 import { SeriesPreviewPanel } from "@/components/series/SeriesPreviewPanel";
 import { useIsLgUp } from "@/hooks/useMediaQuery";
-import { PAGE_GUTTER_X_CLASS, PAGE_SCROLL_BOTTOM_CLASS, PAGE_SUBHEADER_CLASS } from "@/lib/page-layout";
+import {
+  PAGE_GUTTER_X_CLASS,
+  PAGE_SCROLL_BOTTOM_CLASS,
+  PAGE_SCROLL_TOP_CLASS,
+  PAGE_SUBHEADER_CLASS,
+} from "@/lib/page-layout";
 import { cn } from "@/lib/utils";
 import type { SeriesFormTab } from "@/lib/seriesForm";
 
@@ -53,8 +60,8 @@ export function SeriesFormPageScaffold({
   contentGapClassName = "gap-my-40",
 }: SeriesFormPageScaffoldProps) {
   const isLgUp = useIsLgUp();
-  const [mobilePanel, setMobilePanel] = useState<SeriesFormMobilePanel>("form");
-  const showFormPanel = isLgUp || mobilePanel === "form";
+  const [mobilePanel, setMobilePanel] = useState<EditorMobilePanel>("edit");
+  const showFormPanel = isLgUp || mobilePanel === "edit";
   const showPreviewPanel = !isLgUp && mobilePanel === "preview";
 
   return (
@@ -100,9 +107,11 @@ export function SeriesFormPageScaffold({
               {showFormPanel ? (
                 <div
                   className={cn(
-                    "flex min-h-0 flex-1 flex-col items-center overflow-y-auto pt-my-32",
-                    PAGE_SCROLL_BOTTOM_CLASS,
+                    "flex min-h-0 flex-1 flex-col items-center overflow-y-auto",
+                    PAGE_SCROLL_TOP_CLASS,
+                    isLgUp ? PAGE_SCROLL_BOTTOM_CLASS : EDITOR_MOBILE_SCROLL_BOTTOM_PAD_WITH_TOOLBAR_CLASS,
                     contentPaddingClassName,
+                    "max-lg:px-0 max-lg:pt-0",
                   )}
                 >
                   <div
@@ -114,7 +123,7 @@ export function SeriesFormPageScaffold({
                     <div className="min-w-0 flex-1">
                       <PageCard
                         fullWidth
-                        className="flex h-fit shrink-0 flex-col overflow-hidden rounded-[4px] px-0 pt-0 pb-0"
+                        className="flex h-fit shrink-0 flex-col overflow-hidden rounded-[4px] px-0 pt-0 pb-0 max-lg:rounded-none max-lg:border-0"
                       >
                         <SeriesFormTabs activeTab={activeTab} onChange={onTabChange} />
                         <div className={cn("self-stretch pt-my-8 pb-my-20", PAGE_GUTTER_X_CLASS)}>{children}</div>
@@ -142,7 +151,15 @@ export function SeriesFormPageScaffold({
                 </div>
               ) : null}
 
-              <SeriesFormMobileTabBar active={mobilePanel} onChange={setMobilePanel} />
+              {!isLgUp ? (
+                <EditorMobileFloatingActions
+                  active={mobilePanel}
+                  onChange={setMobilePanel}
+                  editTargetLabel="입력"
+                  hasBlockToolbar={false}
+                  fabBottomClassName={EDITOR_MOBILE_FAB_BOTTOM_ABOVE_BLOCK_TOOLBAR_CLASS}
+                />
+              ) : null}
             </div>
           </main>
         </div>

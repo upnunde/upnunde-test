@@ -23,7 +23,7 @@ function SeriesPreviewContent({
 }) {
   if (!coverPreviewUrl && !logoPreviewUrl) {
     return (
-      <div className="flex h-full w-full items-center justify-center bg-slate-900 px-my-12 lg:px-my-20 text-center text-body3_400 text-on-surface-30">
+      <div className="flex h-full w-full items-center justify-center bg-slate-900 px-my-16 lg:px-my-20 text-center text-body3_400 text-on-surface-30">
         이미지를 등록하면 미리볼 수 있어요
       </div>
     );

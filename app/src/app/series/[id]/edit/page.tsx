@@ -9,6 +9,7 @@ import { SeriesFormTextInputField } from "@/components/series/SeriesFormTextInpu
 import { SeriesFormKeywordsField } from "@/components/series/SeriesFormKeywordsField";
 import { SeriesFormTextareaField } from "@/components/series/SeriesFormTextareaField";
 import { SeriesFormPageScaffold } from "@/components/series/SeriesFormPageScaffold";
+import { SeriesFormStepNav } from "@/components/series/SeriesFormStepNav";
 import { useSeriesFormController } from "@/hooks/useSeriesFormController";
 
 export default function SeriesEditPage() {
@@ -126,7 +127,7 @@ export default function SeriesEditPage() {
                             onFileSelected={handleLogoFileSelected}
                           />
 
-                          <div className="flex justify-end mt-4">
+                          <SeriesFormStepNav>
                             <Button
                               type="button"
                               variant="secondary"
@@ -134,7 +135,7 @@ export default function SeriesEditPage() {
                             >
                               다음
                             </Button>
-                          </div>
+                          </SeriesFormStepNav>
                         </div>
       )}
 
@@ -197,7 +198,7 @@ export default function SeriesEditPage() {
                             }
                           />
 
-                          <div className="flex justify-end gap-my-8 mt-4">
+                          <SeriesFormStepNav>
                             <Button
                               type="button"
                               variant="secondary"
@@ -212,7 +213,7 @@ export default function SeriesEditPage() {
                             >
                               다음
                             </Button>
-                          </div>
+                          </SeriesFormStepNav>
                         </div>
       )}
 
@@ -245,7 +246,7 @@ export default function SeriesEditPage() {
                             }
                           />
 
-                          <div className="flex justify-end gap-my-8 mt-4">
+                          <SeriesFormStepNav>
                             <Button
                               type="button"
                               variant="secondary"
@@ -253,7 +254,7 @@ export default function SeriesEditPage() {
                             >
                               이전
                             </Button>
-                          </div>
+                          </SeriesFormStepNav>
                         </div>
       )}
       <ImageCropOnlyModal

@@ -49,7 +49,7 @@ export default function Header({ profileImageUrl, onProfileImageChange, onMenuCl
             width={94}
             height={20}
             priority
-            className="h-5 w-auto object-contain object-left"
+            className="h-5 w-auto object-contain object-left max-lg:h-4"
           />
         </button>
       </div>
@@ -58,7 +58,7 @@ export default function Header({ profileImageUrl, onProfileImageChange, onMenuCl
           ref={profileButtonRef}
           type="button"
           onClick={() => setIsProfileModalOpen(true)}
-          className="w-8 h-8 rounded-full bg-surface-20 border border-border-10 flex cursor-pointer items-center justify-center hover:bg-slate-200 transition-colors overflow-hidden"
+          className="size-my-36 rounded-full bg-surface-20 border border-border-10 flex cursor-pointer items-center justify-center hover:bg-slate-200 transition-colors overflow-hidden"
           aria-label="프로필 편집"
         >
           {profileImageUrl ? (
@@ -71,7 +71,7 @@ export default function Header({ profileImageUrl, onProfileImageChange, onMenuCl
               className="w-full h-full object-cover"
             />
           ) : (
-            <User className="h-4 w-4 text-on-surface-30" />
+            <User className="h-5 w-5 text-on-surface-30" />
           )}
         </button>
       </div>

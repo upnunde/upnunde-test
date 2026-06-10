@@ -53,7 +53,7 @@ export default function InquiryPage() {
           <div className={PAGE_CONTAINER_CLASS}>
               <div className="w-full h-fit rounded-[4px] border border-border-10 bg-white flex flex-col shrink-0 overflow-hidden">
                 {/* 탭 헤더 - NotificationList와 동일 구조 */}
-                <div className="self-stretch px-my-12 lg:px-my-20 pt-0 pb-0 mt-2 mb-0 border-b border-border-10 inline-flex flex-col justify-start items-start gap-my-8">
+                <div className="self-stretch px-my-16 lg:px-my-20 pt-0 pb-0 mt-2 mb-0 border-b border-border-10 inline-flex flex-col justify-start items-start gap-my-8">
                   <div
                     data-size="L"
                     data-underline="true"

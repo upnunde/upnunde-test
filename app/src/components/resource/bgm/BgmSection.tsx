@@ -131,7 +131,7 @@ export function BgmSection({
   return (
     <>
       <div className="w-full min-w-0 max-w-[1200px] mx-auto bg-surface-10 rounded-[4px] border border-border-10 flex flex-col justify-start items-start">
-        <div className="w-full self-stretch px-my-12 lg:px-my-20 pt-my-20 pb-my-12 border-b border-border-10 inline-flex justify-between items-center gap-0">
+        <div className="flex w-full flex-col gap-my-12 self-stretch border-b border-border-10 px-my-16 pb-my-12 pt-my-20 sm:flex-row sm:items-center sm:justify-between sm:gap-my-8 lg:px-my-20">
           <Title2
             text={title}
             asSectionHeader
@@ -143,7 +143,7 @@ export function BgmSection({
             type="button"
             variant="outline"
             size="sm"
-            className="h-8 border-border-20 text-on-surface-10 shrink-0"
+            className="h-8 w-full shrink-0 border-border-20 text-on-surface-10 sm:w-auto"
             onClick={() => setModalOpen(true)}
           >
             추가하기
@@ -164,11 +164,13 @@ export function BgmSection({
             </Button>
           </div>
         ) : (
-          <div className="self-stretch px-my-12 lg:px-my-20 pb-my-8 pt-my-8 rounded-[4px] flex flex-col justify-start items-start gap-my-12">
-            <div className="w-full pt-0 pb-0 mt-0 mb-1 inline-flex flex-col justify-start items-start gap-my-8">
+          <div className="self-stretch px-my-16 lg:px-my-20 pb-my-8 pt-my-8 rounded-[4px] flex flex-col justify-start items-start gap-my-12">
+            <div className="mb-1 mt-0 w-full pt-0 pb-0">
               <div
                 className={cn(
-                  "inline-flex w-full min-w-0 flex-wrap items-center overflow-x-auto",
+                  "flex w-full min-w-0 items-center overflow-x-auto overscroll-x-contain",
+                  "max-lg:flex-nowrap max-lg:pb-my-4",
+                  "lg:flex-wrap",
                   CHIP_GROUP_GAP_CLASS,
                 )}
                 role="tablist"
@@ -192,10 +194,12 @@ export function BgmSection({
                 })}
               </div>
             </div>
-            {/* 1단 와이드 리스트 영역 */}
-            <div className="w-full grid grid-cols-3 gap-x-my-40 gap-y-0">
+            <div className="w-full grid grid-cols-1 gap-y-0 lg:grid-cols-3 lg:gap-x-my-40">
               {filteredItems.map((item, idx) => (
-                <div key={item.id} className="w-full">
+                <div
+                  key={item.id}
+                  className="w-full border-b border-border-10 last:border-b-0 lg:border-b-0"
+                >
                   <BgmListItem
                     variant="default"
                     item={item}

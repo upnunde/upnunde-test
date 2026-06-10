@@ -192,7 +192,7 @@ export function SlashCommandMenu({
         aria-selected={false}
         className={cn(
           "flex w-full cursor-pointer items-center gap-my-12 text-left text-body3_400",
-          isSheet ? "px-my-12 lg:px-my-20 py-my-16" : "gap-my-8 px-my-12 py-my-8",
+          isSheet ? "px-my-16 lg:px-my-20 py-my-16" : "gap-my-8 px-my-12 py-my-8",
           "hover:bg-surface-20 focus:bg-surface-20 focus:outline-none",
         )}
         onClick={() => {
@@ -232,7 +232,7 @@ export function SlashCommandMenu({
           role="listbox"
           aria-label="블록 추가"
         >
-          <div className="border-b border-border-10 px-my-12 lg:px-my-20 py-my-16">
+          <div className="border-b border-border-10 px-my-16 lg:px-my-20 py-my-16">
             <p className="text-body1_500 text-on-surface-10">블록 추가</p>
             <p className="mt-my-4 text-caption1_400 text-on-surface-30">
               아래에 추가할 블록을 선택해 주세요

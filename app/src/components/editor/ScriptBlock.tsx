@@ -740,6 +740,7 @@ export function ScriptBlock({
             "relative flex min-h-8 min-w-0 flex-1 items-start justify-start self-stretch",
             rootClassName
           )}
+          onPointerDown={textMobileEdit.onContentAreaPointerDown}
         >
           {hasInlineTagToken && (
             <div
@@ -761,6 +762,7 @@ export function ScriptBlock({
             value={block.content}
             onChange={(e) => updateBlock(block.id, e.target.value)}
             onFocus={textMobileEdit.onContentFocus}
+            onPointerDown={textMobileEdit.onContentPointerDown}
             readOnly={textMobileEdit.readOnly}
             onKeyDown={handleTextKeyDown}
             onMouseUp={handleTextMouseUp}
@@ -978,6 +980,7 @@ export function ScriptBlock({
             value={block.content}
             onChange={(e) => updateBlock(block.id, e.target.value)}
             onFocus={sceneMobileEdit.onContentFocus}
+            onPointerDown={sceneMobileEdit.onContentPointerDown}
             readOnly={sceneMobileEdit.readOnly}
             onKeyDown={handleSceneKeyDown}
             placeholder={placeholder}
@@ -1118,7 +1121,7 @@ export function ScriptBlock({
           #선택지
         </span>
         <ChoiceBlockTable
-          className="min-w-0 flex-1"
+          className="min-w-0 flex-1 max-lg:max-w-full"
           blockId={block.id}
           choices={block.data?.choices ?? []}
           onChange={(newChoices) =>

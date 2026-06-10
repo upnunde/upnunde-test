@@ -128,27 +128,27 @@ export function BgmListItem({
   const actionsClass = hasActions
     ? actionsAlwaysVisible
       ? "flex items-center gap-my-4 shrink-0"
-      : "flex items-center gap-my-4 shrink-0 opacity-0 transition-opacity group-hover:opacity-100 hover:opacity-100"
+      : "flex items-center gap-my-4 shrink-0 opacity-0 transition-opacity group-hover:opacity-100 hover:opacity-100 max-lg:opacity-100"
     : "hidden";
 
   return (
     <div
-      className="group w-full self-stretch pl-my-12 pr-my-12 pt-my-8 pb-my-8 rounded-[4px] inline-flex justify-center items-center gap-my-4 overflow-visible flex-col h-fit transition-colors cursor-pointer hover:bg-surface-20"
+      className="group inline-flex h-fit w-full cursor-pointer flex-col items-center justify-center gap-my-4 self-stretch overflow-visible rounded-[4px] px-my-8 py-my-8 transition-colors hover:bg-surface-20 max-lg:px-my-4 lg:px-my-12"
       onMouseEnter={() => setIsHovered(true)}
       onMouseLeave={() => setIsHovered(false)}
     >
-      <div className="self-stretch flex flex-col gap-0 min-w-0 h-fit">
-        <div className="self-stretch inline-flex justify-center items-start gap-my-4 min-h-9 flex-shrink-0">
+      <div className="flex h-fit min-w-0 flex-col gap-0 self-stretch">
+        <div className="inline-flex min-h-9 flex-shrink-0 items-start justify-center gap-my-8 self-stretch max-lg:gap-my-4">
           {variant === "default" && index != null && (
-            <span className="shrink-0 w-6 text-on-surface-10 text-body3_500 font-['Pretendard_JP'] tabular-nums">
+            <span className="w-6 shrink-0 tabular-nums text-body3_500 text-on-surface-10 max-lg:w-5 max-lg:text-caption1_500">
               {index}
             </span>
           )}
-          <div className="flex-1 min-w-0 inline-flex flex-col justify-start items-start gap-my-2">
-            <div className="self-stretch justify-center text-on-surface-10 text-body3_500 font-['Pretendard_JP'] truncate">
+          <div className="inline-flex min-w-0 flex-1 flex-col items-start justify-start gap-my-2">
+            <div className="w-full truncate text-body3_500 text-on-surface-10 max-lg:text-caption1_500">
               {item.title}
             </div>
-            <div className="self-stretch justify-center text-on-surface-30 text-body4_400 font-['Pretendard_JP']">
+            <div className="w-full text-body4_400 text-on-surface-30 max-lg:text-caption2_400">
               {timeLabel}
             </div>
           </div>

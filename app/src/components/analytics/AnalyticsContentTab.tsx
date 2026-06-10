@@ -136,7 +136,7 @@ export function AnalyticsContentTab({
         </div>
 
         <div className="flex flex-col items-stretch gap-my-12 self-stretch px-0 py-my-40">
-          <p className="px-my-12 lg:px-my-20 text-body3_500 text-on-surface-20">
+          <p className="px-my-16 lg:px-my-20 text-body3_500 text-on-surface-20">
             {PRIMARY_LABELS[primaryMetric] ?? "조회수"} 추이
           </p>
           <AnalyticsTrendLineChart
@@ -173,7 +173,7 @@ function PopularContentsCard({
         variant="title"
         asSectionHeader
       />
-      <div className="px-my-12 lg:px-my-20 pt-my-12">
+      <div className="px-my-16 lg:px-my-20 pt-my-12">
         <SegmentedTextTabs
           aria-label="인기 콘텐츠 기준"
           items={[
@@ -212,7 +212,7 @@ function AttentionContentsCard({
         variant="title"
         asSectionHeader
       />
-      <div className="px-my-12 lg:px-my-20 pt-my-12">
+      <div className="px-my-16 lg:px-my-20 pt-my-12">
         <SegmentedTextTabs
           aria-label="주의 콘텐츠 기준"
           items={[

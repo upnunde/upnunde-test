@@ -35,7 +35,7 @@ export function ResourceSection({
     <div className="w-full min-w-0 max-w-[1200px] mx-auto bg-surface-10 rounded-[4px] border border-border-10 flex flex-col justify-start items-start">
       {headerAction ? (
         <div
-          className="w-full h-fit px-my-12 lg:px-my-20 py-my-12 border-b border-border-10/5 flex items-center justify-between gap-my-12"
+          className="w-full h-fit px-my-16 lg:px-my-20 py-my-12 border-b border-border-10/5 flex items-center justify-between gap-my-12"
           style={{ borderBottomColor: "rgba(0, 0, 0, 0.07)" }}
         >
           <div className="min-w-0 flex-1">

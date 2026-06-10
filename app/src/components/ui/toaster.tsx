@@ -7,7 +7,7 @@ import { cn } from "@/lib/utils";
 
 /**
  * Toaster 컨테이너 — 기획서 정책 적용
- * - 최하단 여백(Bottom offset): 화면 바닥에서 40px
+ * - 뷰포트 상단 노출 (safe-area·visualViewport 보정)
  * - 토스트 스택 수직 간격(Gap): 16px
  * - 최대 3개 노출 (store에서 FIFO 처리)
  */
@@ -18,7 +18,7 @@ export function Toaster({ className }: { className?: string }) {
     <div
       className={cn(
         "fixed left-1/2 z-50 flex w-full max-w-[420px] -translate-x-1/2 flex-col gap-my-16 px-my-16",
-        "bottom-[40px]",
+        "top-[calc(env(safe-area-inset-top,0px)+var(--app-vv-top,0px)+var(--spacing-my-16))]",
         className
       )}
       aria-label="알림 목록"

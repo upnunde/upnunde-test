@@ -9,6 +9,7 @@ import { useEditorStore } from "@/store/useEditorStore";
 import {
   clampPlaybackIndex,
   findSceneBlockIndex,
+  resolvePlaybackIndexFromFocus,
 } from "@/lib/preview-playback";
 import { cn } from "@/lib/utils";
 
@@ -26,9 +27,14 @@ export function EditorMobilePreviewPlayer({ isActive }: EditorMobilePreviewPlaye
     setPlaybackIndex(0);
   }, []);
 
+  const syncPlaybackFromFocus = useCallback(() => {
+    const { blocks: currentBlocks, focusBlockId: currentFocusId } = useEditorStore.getState();
+    setPlaybackIndex(resolvePlaybackIndexFromFocus(currentBlocks, currentFocusId));
+  }, []);
+
   useEffect(() => {
-    if (isActive) resetPlayback();
-  }, [isActive, resetPlayback]);
+    if (isActive) syncPlaybackFromFocus();
+  }, [isActive, syncPlaybackFromFocus]);
 
   useEffect(() => {
     setPlaybackIndex((prev) => clampPlaybackIndex(blocks, prev));
@@ -84,7 +90,7 @@ export function EditorMobilePreviewPlayer({ isActive }: EditorMobilePreviewPlaye
       </div>
 
       {blocks.length === 0 ? (
-        <div className="flex flex-1 items-center justify-center px-my-12 lg:px-my-20 text-center text-body3_400 text-on-surface-30">
+        <div className="flex flex-1 items-center justify-center px-my-16 lg:px-my-20 text-center text-body3_400 text-on-surface-30">
           원고를 작성하면 미리볼 수 있어요
         </div>
       ) : (

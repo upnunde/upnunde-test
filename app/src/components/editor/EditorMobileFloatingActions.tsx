@@ -24,6 +24,8 @@ export interface EditorMobileFloatingActionsProps {
   showIssueFab?: boolean;
   /** false면 블록 추가 툴바 없음 — FAB를 하단 우측에 고정 */
   hasBlockToolbar?: boolean;
+  /** FAB 하단 offset — 미지정 시 툴바 유무에 따라 자동 */
+  fabBottomClassName?: string;
 }
 
 /**
@@ -37,6 +39,7 @@ export function EditorMobileFloatingActions({
   editTargetLabel = "편집",
   showIssueFab = false,
   hasBlockToolbar = true,
+  fabBottomClassName,
 }: EditorMobileFloatingActionsProps) {
   const { isKeyboardOpen } = useVisualKeyboardInset();
   const mounted = useClientMounted();
@@ -57,9 +60,11 @@ export function EditorMobileFloatingActions({
     return null;
   }
 
-  const bottomClass = toolbarVisible
-    ? EDITOR_MOBILE_FAB_BOTTOM_ABOVE_BLOCK_TOOLBAR_CLASS
-    : EDITOR_MOBILE_FAB_BOTTOM_BASE_CLASS;
+  const bottomClass =
+    fabBottomClassName ??
+    (toolbarVisible
+      ? EDITOR_MOBILE_FAB_BOTTOM_ABOVE_BLOCK_TOOLBAR_CLASS
+      : EDITOR_MOBILE_FAB_BOTTOM_BASE_CLASS);
 
   const handleToggle = () => {
     onChange(isEdit ? "preview" : "edit");

@@ -1,6 +1,7 @@
 "use client";
 
 import React from "react";
+import Image from "next/image";
 import { useRouter, usePathname } from "next/navigation";
 import {
   BarChart3,
@@ -10,8 +11,11 @@ import {
   Mail,
   Receipt,
   UserRoundCog,
+  X,
 } from "lucide-react";
 import { SidebarList } from "./SidebarList";
+import { Button } from "@/components/ui/button";
+import { dummyAsset } from "@/lib/dummy-asset-path";
 import { cn } from "@/lib/utils";
 
 const SIDEBAR_ITEMS = [
@@ -81,6 +85,40 @@ function deriveActiveId(pathname: string | null, fallback: SidebarItemId): Sideb
   return fallback;
 }
 
+function AppSidebarMobileHeader({ onClose }: { onClose: () => void }) {
+  const router = useRouter();
+
+  return (
+    <div className="flex h-14 shrink-0 items-center justify-between border-b border-border-10 bg-white pl-my-12 pr-my-16 lg:hidden">
+      <button
+        type="button"
+        onClick={() => router.push("/login")}
+        className="flex cursor-pointer items-center"
+        aria-label="로그인 화면으로 이동"
+      >
+        <Image
+          src={dummyAsset("renovel-studio-logo.png")}
+          alt="RE:NOVEL Studio"
+          width={94}
+          height={20}
+          priority
+          className="h-5 w-auto object-contain object-left max-lg:h-4"
+        />
+      </button>
+      <Button
+        type="button"
+        variant="outline"
+        size="icon-sm"
+        className="h-8 w-8 shrink-0"
+        onClick={onClose}
+        aria-label="메뉴 닫기"
+      >
+        <X className="h-4 w-4" aria-hidden />
+      </Button>
+    </div>
+  );
+}
+
 export default function AppSidebar({
   defaultActiveId = "series",
   onSelect,
@@ -114,51 +152,59 @@ export default function AppSidebar({
   return (
     <nav
       className={cn(
-        "flex h-full w-[240px] shrink-0 flex-col border-r border-border-10 bg-white py-my-16",
-        "max-lg:fixed max-lg:inset-0 max-lg:z-50 max-lg:w-full max-lg:max-w-none max-lg:overflow-y-auto max-lg:border-r-0",
+        "flex h-full w-[240px] shrink-0 flex-col border-r border-border-10 bg-white lg:py-my-16",
+        "max-lg:fixed max-lg:inset-0 max-lg:z-50 max-lg:w-full max-lg:max-w-none max-lg:overflow-hidden max-lg:border-r-0",
         !mobileOpen && "max-lg:hidden",
         "lg:relative",
       )}
       aria-label="메인 메뉴"
     >
-      <SidebarList
-        items={sidebarListItems}
-        activeId={activeId}
-        onSelect={(id) => {
-          const item = SIDEBAR_ITEMS.find((i) => i.id === id);
-          if (!item) return;
-          handleClick(item.id, item.path);
-        }}
-        listClassName="flex flex-col gap-0 px-my-8"
-      />
+      <AppSidebarMobileHeader onClose={() => onNavigate?.()} />
 
-      {/* 모바일: 알림 아래 구분선 후 하단 메뉴 순서대로 노출 */}
-      <div className="px-my-8 lg:hidden">
-        <div className="border-t border-border-10" role="separator" aria-hidden />
+      <div className="flex min-h-0 flex-1 flex-col max-lg:overflow-y-auto max-lg:py-my-16 lg:contents">
         <SidebarList
-          items={sidebarBottomItems}
+          items={sidebarListItems}
           activeId={activeId}
           onSelect={(id) => {
-            const item = SIDEBAR_BOTTOM_ITEMS.find((i) => i.id === id);
+            const item = SIDEBAR_ITEMS.find((i) => i.id === id);
             if (!item) return;
             handleClick(item.id, item.path);
           }}
-          listClassName="flex flex-col gap-0"
+          listClassName="flex flex-col gap-0 px-my-8"
         />
-      </div>
 
-      {/* 데스크톱: 하단 고정 */}
-      <div className="mt-auto hidden px-my-8 lg:block">
-        <SidebarList
-          items={sidebarBottomItems}
-          activeId={activeId}
-          onSelect={(id) => {
-            const item = SIDEBAR_BOTTOM_ITEMS.find((i) => i.id === id);
-            if (!item) return;
-            handleClick(item.id, item.path);
-          }}
-          listClassName="flex flex-col gap-0"
+        {/* 모바일: 알림 아래 구분선 후 하단 메뉴 순서대로 노출 */}
+        <div
+          className="mx-my-20 my-my-8 border-t border-border-10 lg:hidden"
+          role="separator"
+          aria-hidden
         />
+        <div className="px-my-8 lg:hidden">
+          <SidebarList
+            items={sidebarBottomItems}
+            activeId={activeId}
+            onSelect={(id) => {
+              const item = SIDEBAR_BOTTOM_ITEMS.find((i) => i.id === id);
+              if (!item) return;
+              handleClick(item.id, item.path);
+            }}
+            listClassName="flex flex-col gap-my-4"
+          />
+        </div>
+
+        {/* 데스크톱: 하단 고정 */}
+        <div className="mt-auto hidden px-my-8 lg:block">
+          <SidebarList
+            items={sidebarBottomItems}
+            activeId={activeId}
+            onSelect={(id) => {
+              const item = SIDEBAR_BOTTOM_ITEMS.find((i) => i.id === id);
+              if (!item) return;
+              handleClick(item.id, item.path);
+            }}
+            listClassName="flex flex-col gap-0"
+          />
+        </div>
       </div>
     </nav>
   );

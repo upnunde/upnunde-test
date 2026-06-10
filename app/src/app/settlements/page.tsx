@@ -69,7 +69,6 @@ const SETTLEMENT_SUMMARY = {
 const SETTLEMENT_PAGE_SIZE = 10;
 
 type RangePreset = "all" | "1m" | "3m" | "6m" | "ytd" | "custom";
-type StatusFilter = "all" | SettlementStatus;
 
 const RANGE_PRESET_OPTIONS: ReadonlyArray<{ value: Exclude<RangePreset, "custom">; label: string }> = [
   { value: "all", label: "전체 기간" },
@@ -77,12 +76,6 @@ const RANGE_PRESET_OPTIONS: ReadonlyArray<{ value: Exclude<RangePreset, "custom"
   { value: "3m", label: "3개월" },
   { value: "6m", label: "6개월" },
   { value: "ytd", label: "올해" },
-];
-
-const STATUS_FILTER_OPTIONS: Array<{ value: StatusFilter; label: string }> = [
-  { value: "all", label: "전체 상태" },
-  { value: "reviewing", label: "지급 심사중" },
-  { value: "completed", label: "지급 완료" },
 ];
 
 function getSettlementStatusLabel(status: SettlementStatus): string {
@@ -178,7 +171,7 @@ function SettlementSummaryCard({
   amount: number;
 }) {
   return (
-    <div className="flex min-h-[100px] w-full min-w-0 flex-col justify-between gap-my-12 rounded-[4px] border border-border-10 bg-surface-10 px-my-12 lg:px-my-20 py-my-16 lg:min-h-0 lg:flex-1 lg:flex-row lg:items-center lg:justify-between lg:gap-my-16 lg:py-my-20">
+    <div className="flex min-h-[100px] w-full min-w-0 flex-col justify-between gap-my-12 rounded-[4px] border border-border-10 bg-surface-10 px-my-16 lg:px-my-20 py-my-16 lg:min-h-0 lg:flex-1 lg:flex-row lg:items-center lg:justify-between lg:gap-my-16 lg:py-my-20">
       <p className="min-w-0 text-body3_700 text-on-surface-20 lg:shrink">{title}</p>
       <div className="inline-flex min-w-0 flex-wrap items-baseline gap-x-my-4 gap-y-0 tabular-nums">
         <p className="text-heading4_700 text-on-surface-10 lg:text-2xl">{formatAmount(amount)}</p>
@@ -350,7 +343,6 @@ export default function MonetizationSettlementsPage() {
   const [taxDetailTarget, setTaxDetailTarget] = useState<SettlementItem | null>(null);
   const [rejectionReasonTarget, setRejectionReasonTarget] = useState<SettlementItem | null>(null);
   const [rangePreset, setRangePreset] = useState<RangePreset>("all");
-  const [statusFilter, setStatusFilter] = useState<StatusFilter>("all");
   const initialEndDate = toInputDateValue(new Date(2026, 4, 29));
   const initialStartDate = toInputDateValue(new Date(2024, 4, 29));
   const [startDate, setStartDate] = useState(initialStartDate);
@@ -359,11 +351,11 @@ export default function MonetizationSettlementsPage() {
   const [pendingStartDate, setPendingStartDate] = useState(initialStartDate);
   const [pendingEndDate, setPendingEndDate] = useState(initialEndDate);
 
-  const statusFilterLabel = useMemo(
-    () => STATUS_FILTER_OPTIONS.find((option) => option.value === statusFilter)?.label ?? "전체 상태",
-    [statusFilter]
-  );
   const rangeLabel = useMemo(() => formatRangeLabel(startDate, endDate), [startDate, endDate]);
+  const rangePresetLabel = useMemo(() => {
+    if (rangePreset === "custom") return rangeLabel;
+    return RANGE_PRESET_OPTIONS.find((option) => option.value === rangePreset)?.label ?? "전체 기간";
+  }, [rangeLabel, rangePreset]);
 
   const applyPresetRange = useCallback((preset: RangePreset) => {
     const end = new Date(2026, 4, 29);
@@ -400,15 +392,14 @@ export default function MonetizationSettlementsPage() {
     const end = endDate ? new Date(`${endDate}T23:59:59`) : null;
     return SETTLEMENT_ITEMS
       .filter((item) => {
-        const statusMatched = statusFilter === "all" ? true : item.status === statusFilter;
         const dateMatched =
           (!start || item.requestedDate >= start) &&
           (!end || item.requestedDate <= end) &&
           item.payoutDueDate >= item.requestedDate;
-        return statusMatched && dateMatched;
+        return dateMatched;
       })
       .sort((a, b) => b.requestedDate.getTime() - a.requestedDate.getTime());
-  }, [endDate, startDate, statusFilter]);
+  }, [endDate, startDate]);
 
   const pagedSettlementItems = useMemo(() => {
     const start = (currentPage - 1) * SETTLEMENT_PAGE_SIZE;
@@ -589,7 +580,7 @@ export default function MonetizationSettlementsPage() {
                 </AnalyticsPanel>
 
                 <AnalyticsPanel className="rounded-[4px] border border-border-10">
-                  <div className="border-b border-border-10 px-my-12 lg:px-my-20 py-my-16">
+                  <div className="border-b border-border-10 px-my-16 lg:px-my-20 py-my-16">
                     <div className="flex flex-wrap items-center justify-between gap-my-12">
                       <h3 className="text-heading5_700 text-on-surface-10">정산 내역</h3>
                     </div>
@@ -600,8 +591,39 @@ export default function MonetizationSettlementsPage() {
                           CHIP_GROUP_GAP_CLASS,
                         )}
                       >
+                        <DropdownMenu>
+                          <DropdownMenuTrigger asChild>
+                            <Button
+                              type="button"
+                              variant="outline"
+                              size="sm"
+                              className={cn(
+                                CHIP_COMPANION_CONTROL_CLASS,
+                                "min-w-0 justify-between lg:hidden",
+                              )}
+                              aria-label={`정산 내역 조회 기간 — ${rangePresetLabel}`}
+                            >
+                              <span className="truncate">{rangePresetLabel}</span>
+                              <ChevronDown className="h-4 w-4 shrink-0 text-on-surface-30" aria-hidden />
+                            </Button>
+                          </DropdownMenuTrigger>
+                          <DropdownMenuContent
+                            align="start"
+                            className="w-[160px] rounded-[4px] border border-border-10 bg-white p-my-4"
+                          >
+                            {RANGE_PRESET_OPTIONS.map((option) => (
+                              <DropdownMenuItem
+                                key={option.value}
+                                className="cursor-pointer rounded-[4px] px-my-12 py-my-8 text-body3_400 text-on-surface-20 hover:bg-surface-20"
+                                onSelect={() => applyPresetRange(option.value)}
+                              >
+                                {option.label}
+                              </DropdownMenuItem>
+                            ))}
+                          </DropdownMenuContent>
+                        </DropdownMenu>
                         <div
-                          className={cn("flex flex-wrap items-center", CHIP_GROUP_GAP_CLASS)}
+                          className={cn("hidden flex-wrap items-center lg:flex", CHIP_GROUP_GAP_CLASS)}
                           role="group"
                           aria-label="정산 내역 조회 기간"
                         >
@@ -621,56 +643,19 @@ export default function MonetizationSettlementsPage() {
                             );
                           })}
                         </div>
-                        <div
+                        <Button
+                          type="button"
+                          variant="outline"
+                          size="sm"
                           className={cn(
-                            "flex min-w-0 flex-wrap items-center",
-                            CHIP_GROUP_GAP_CLASS,
+                            CHIP_COMPANION_CONTROL_CLASS,
+                            "min-w-0 max-w-full flex-1 justify-between sm:min-w-[200px] sm:max-w-[min(100%,320px)]",
                           )}
+                          onClick={() => setDatePickerOpen(true)}
                         >
-                          <Button
-                            type="button"
-                            variant="outline"
-                            size="sm"
-                            className={cn(
-                              CHIP_COMPANION_CONTROL_CLASS,
-                              "min-w-0 max-w-full flex-1 justify-between sm:min-w-[200px] sm:max-w-[min(100%,320px)]",
-                            )}
-                            onClick={() => setDatePickerOpen(true)}
-                          >
-                            <span className="truncate">{rangeLabel}</span>
-                            <CalendarDays className="h-4 w-4 shrink-0 text-on-surface-30" aria-hidden />
-                          </Button>
-                          <DropdownMenu>
-                            <DropdownMenuTrigger asChild>
-                              <Button
-                                type="button"
-                                variant="outline"
-                                size="sm"
-                                className={cn(
-                                  CHIP_COMPANION_CONTROL_CLASS,
-                                  "min-w-0 max-w-full flex-1 justify-between sm:min-w-[108px] sm:flex-initial sm:max-w-none",
-                                )}
-                              >
-                                <span>{statusFilterLabel}</span>
-                                <ChevronDown className="h-4 w-4 text-on-surface-30" aria-hidden />
-                              </Button>
-                            </DropdownMenuTrigger>
-                            <DropdownMenuContent align="start" className="w-[160px] rounded-[4px] border border-border-10 bg-white p-my-4">
-                              {STATUS_FILTER_OPTIONS.map((option) => (
-                                <DropdownMenuItem
-                                  key={option.value}
-                                  className="cursor-pointer rounded-[4px] px-my-12 py-my-8 text-body3_400 text-on-surface-20 hover:bg-surface-20"
-                                  onSelect={() => {
-                                    setStatusFilter(option.value);
-                                    setCurrentPage(1);
-                                  }}
-                                >
-                                  {option.label}
-                                </DropdownMenuItem>
-                              ))}
-                            </DropdownMenuContent>
-                          </DropdownMenu>
-                        </div>
+                          <span className="truncate">{rangeLabel}</span>
+                          <CalendarDays className="h-4 w-4 shrink-0 text-on-surface-30" aria-hidden />
+                        </Button>
                       </div>
                       <Button
                         type="button"
@@ -680,14 +665,14 @@ export default function MonetizationSettlementsPage() {
                         onClick={handleDownloadCsv}
                       >
                         <Download className="h-4 w-4 shrink-0" aria-hidden />
-                        <span className="truncate">내역 다운로드 (CSV)</span>
+                        <span className="truncate">내역 저장</span>
                       </Button>
                     </div>
                   </div>
                   <div className="w-full min-w-0">
                     {pagedSettlementItems.length === 0 ? (
-                      <div className="px-my-12 lg:px-my-20 py-my-40 text-center text-body3_400 text-on-surface-30">
-                        조건에 맞는 정산 내역이 없어요. 기간 또는 상태를 다시 선택해 주세요.
+                      <div className="px-my-16 lg:px-my-20 py-my-40 text-center text-body3_400 text-on-surface-30">
+                        조건에 맞는 정산 내역이 없어요. 기간을 다시 선택해 주세요.
                       </div>
                     ) : (
                       <>
@@ -830,18 +815,18 @@ export default function MonetizationSettlementsPage() {
       </Dialog>
       <Dialog open={!!rejectionReasonTarget} onOpenChange={(open) => !open && setRejectionReasonTarget(null)}>
         <DialogContent presentation="center" className="w-[420px] max-w-[calc(100vw-2rem)] rounded-[4px] border border-border-10 bg-white p-0">
-          <div className="border-b border-divider-10 px-my-12 lg:px-my-20 py-my-12">
+          <div className="border-b border-divider-10 px-my-16 lg:px-my-20 py-my-12">
             <DialogTitle className="text-body1_700 text-on-surface-10">반려 사유</DialogTitle>
           </div>
           {rejectionReasonTarget ? (
             <>
-              <div className="px-my-12 lg:px-my-20 py-my-16">
+              <div className="px-my-16 lg:px-my-20 py-my-16">
                 <p className="text-body3_400 text-on-surface-20">{rejectionReasonTarget.rejectionReason}</p>
                 <p className="mt-2 text-caption1_400 text-on-surface-30">
                   신청일 {rejectionReasonTarget.requestedAt} · 상태 {getSettlementStatusLabel(rejectionReasonTarget.status)}
                 </p>
               </div>
-              <div className="flex items-center justify-end border-t border-divider-10 px-my-12 lg:px-my-20 py-my-12">
+              <div className="flex items-center justify-end border-t border-divider-10 px-my-16 lg:px-my-20 py-my-12">
                 <Button type="button" size="sm" onClick={() => setRejectionReasonTarget(null)}>
                   확인
                 </Button>
@@ -852,11 +837,11 @@ export default function MonetizationSettlementsPage() {
       </Dialog>
       <Dialog open={datePickerOpen} onOpenChange={setDatePickerOpen}>
         <DialogContent className="w-full max-lg:max-w-none lg:w-[420px] lg:max-w-[calc(100vw-2rem)] rounded-[4px] border border-border-10 bg-white p-0">
-          <div className="border-b border-divider-10 px-my-12 lg:px-my-20 py-my-12">
+          <div className="border-b border-divider-10 px-my-16 lg:px-my-20 py-my-12">
             <DialogTitle className="text-body1_700 text-on-surface-10">기간 선택</DialogTitle>
             <p className="mt-1 text-body3_400 text-on-surface-30">조회할 신청일 기간을 설정해 주세요.</p>
           </div>
-          <div className="px-my-12 lg:px-my-20 py-my-16">
+          <div className="px-my-16 lg:px-my-20 py-my-16">
             <div className="flex items-center gap-my-8">
               <input
                 type="date"
@@ -873,7 +858,7 @@ export default function MonetizationSettlementsPage() {
               />
             </div>
           </div>
-          <div className="flex items-center justify-end gap-my-8 border-t border-divider-10 px-my-12 lg:px-my-20 py-my-12">
+          <div className="flex items-center justify-end gap-my-8 border-t border-divider-10 px-my-16 lg:px-my-20 py-my-12">
             <Button
               type="button"
               variant="outline"

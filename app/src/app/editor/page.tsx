@@ -260,6 +260,7 @@ function EditorInner() {
               />
               <EditorAutoGeneratorFloatingButton
                 placement="below-tabs"
+                compact={mobileSubHeaderCollapsed}
                 onClick={() => setIsAutoGeneratorModalOpen(true)}
               />
             </div>

@@ -14,7 +14,7 @@
 
 | 뷰포트 | 토큰 | 값 |
 |--------|------|-----|
-| 모바일 (`< lg`) | `px-my-12` | **12px** |
+| 모바일 (`< lg`) | `px-my-16` | **16px** |
 | 데스크톱 (`lg+`) | `px-my-20` | 20px |
 
 ### 코드
@@ -22,7 +22,7 @@
 ```ts
 import { PAGE_GUTTER_X_CLASS } from "@/lib/page-layout";
 
-// PAGE_GUTTER_X_CLASS === "px-my-12 lg:px-my-20"
+// PAGE_GUTTER_X_CLASS === "px-my-16 lg:px-my-20"
 ```
 
 파생 상수(`PAGE_SCROLL_GUTTER_CLASS`, `PAGE_CONTENT_PAD_X_CLASS`, `PAGE_SUBHEADER_CLASS` 등)는 모두 `PAGE_GUTTER_X_CLASS`를 사용한다.
@@ -72,6 +72,17 @@ import { PAGE_GUTTER_GAP_CLASS, PAGE_STACK_CLASS } from "@/lib/page-layout";
 - **모달 헤더** 등 이미 `modal-styles.ts`로 정의된 영역 — 모달 전용 규칙 우선
 - 에디터 **블록 본문** 등 에디터 전용 인셋 — `docs/editor-policies.md` 참고
 
+## 스크롤 상단 여백
+
+서브헤더 아래 **스크롤 본문** 상단 패딩은 아래를 따른다.
+
+| 뷰포트 | 토큰 | 값 |
+|--------|------|-----|
+| 모바일 (`< lg`) | `pt-my-20` | **20px** |
+| 데스크톱 (`lg+`) | `pt-my-32` | 32px |
+
+`PAGE_SCROLL_TOP_CLASS` · `PAGE_SCROLL_ROOT_TOP_CLASS` · `PAGE_SCROLL_COLUMN_CLASS` · 시리즈 폼 스크롤 등에 공통 적용.
+
 ## 스크롤 하단 여백
 
 AppShell·Header+main 등 **페이지 스크롤 영역**은 마지막 콘텐츠 아래 **80px**(`pb-my-80`)를 항상 유지한다.
@@ -87,7 +98,8 @@ import { PAGE_SCROLL_BOTTOM_CLASS, PAGE_SCROLL_ROOT_CLASS } from "@/lib/page-lay
 
 // PAGE_SCROLL_BOTTOM_CLASS === "pb-my-80"
 // PAGE_SCROLL_ROOT_CLASS === py-0 + 가로 인셋 + pb-my-80
-// PAGE_SCROLL_ROOT_TOP_CLASS === pt-my-32 + 가로 인셋 + pb-my-80
+// PAGE_SCROLL_TOP_CLASS === pt-my-20 lg:pt-my-32
+// PAGE_SCROLL_ROOT_TOP_CLASS === PAGE_SCROLL_TOP_CLASS + 가로 인셋 + pb-my-80
 ```
 
 `PAGE_SCROLL_COLUMN_CLASS`에도 `PAGE_SCROLL_BOTTOM_CLASS`가 포함된다.
@@ -100,9 +112,22 @@ import { PAGE_SCROLL_BOTTOM_CLASS, PAGE_SCROLL_ROOT_CLASS } from "@/lib/page-lay
 
 ### 적용 제외
 
-- **모달·바텀시트·드롭다운** 내부 스크롤
+- **드롭다운·짧은 팝오버** 내부 스크롤
 - **에디터** 본문 스크롤 (`docs/editor-policies.md`)
 - 사이드바 오버레이
+
+### 바텀 시트 모달 (고정 푸터)
+
+`presentation="auto"` 폼·입력 모달(에피소드 생성기, 에피소드 폼 등)은 **스크롤 본문**과 **하단 고정 버튼 영역**의 하단 여백을 분리한다.
+
+| 영역 | 하단 여백 | 코드 |
+|------|----------|------|
+| 스크롤 본문 | **80px** (`pb-my-80`) | `formDialogSheetScrollBodyClassName` |
+| 고정 푸터(취소·생성하기 등) | **없음** — 시트 하단에 밀착 | `formDialogSheetStickyFooterClassName` |
+
+- 스크롤 본문의 80px는 마지막 필드·텍스트아rea 아래 **콘텐츠 끝** 여백이다.
+- 고정 푸터에는 `pb-my-80`·`PAGE_SCROLL_BOTTOM_CLASS`를 주지 않는다. iPhone safe-area·브라우저 하단 크롬은 `DialogContent` 셸(`max-lg:pb-[calc(env(safe-area-inset-bottom)+…)]`)이 처리한다.
+- 플로팅 컴포저 등 본문 위에 겹치는 입력 UI가 열릴 때는 `FLOATING_COMPOSER_SCROLL_PAD_CLASS` 등 **추가** 패딩을 별도로 검토한다.
 
 ## 서브 헤더 높이
 
@@ -119,5 +144,5 @@ import { PAGE_SCROLL_BOTTOM_CLASS, PAGE_SCROLL_ROOT_CLASS } from "@/lib/page-lay
 2. 본문 세로 스택에 `PAGE_STACK_CLASS` 또는 `PAGE_GUTTER_GAP_CLASS` 사용
 3. 스크롤 루트 하단에 `PAGE_SCROLL_BOTTOM_CLASS` 또는 `PAGE_SCROLL_ROOT_CLASS` 사용
 4. 서브헤더에 `PAGE_SUBHEADER_CLASS` 사용
-5. 인라인 `px-my-20`·`gap-my-20` 단독 사용 금지 — 반드시 `*-my-12 lg:*-my-20` 또는 상수 import
+5. 인라인 `px-my-20`·`gap-my-20` 단독 사용 금지 — 가로는 `PAGE_GUTTER_X_CLASS` 또는 `*-my-16 lg:*-my-20`, gap은 `PAGE_GUTTER_GAP_CLASS` 또는 `*-my-12 lg:*-my-20`
 6. `npm run check:routes` (라우트 변경 시)

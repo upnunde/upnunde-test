@@ -16,7 +16,7 @@ const ITEMS: Array<{ id: SeriesFormTab; label: string }> = [
 
 export function SeriesFormTabs({ activeTab, onChange }: SeriesFormTabsProps) {
   return (
-    <div className="mb-2 mt-2 inline-flex flex-col items-start justify-start gap-my-8 self-stretch border-b border-border-10 px-my-12 lg:px-my-20 pb-0 pt-0">
+    <div className="mb-2 mt-2 inline-flex flex-col items-start justify-start gap-my-8 self-stretch border-b border-border-10 px-my-16 lg:px-my-20 pb-0 pt-0">
       <SegmentedTextTabs
         aria-label="시리즈 폼 섹션"
         items={ITEMS}

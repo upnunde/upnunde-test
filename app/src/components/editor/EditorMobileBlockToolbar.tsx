@@ -1,6 +1,6 @@
 "use client";
 
-import { useCallback, useEffect, useMemo, useState } from "react";
+import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import { createPortal } from "react-dom";
 import { Pencil, Plus, Trash2 } from "lucide-react";
 import { SlashCommandMenu, type SlashSelectPayload } from "@/components/editor/SlashCommandMenu";
@@ -63,8 +63,13 @@ export function EditorMobileBlockToolbar({ className }: { className?: string }) 
     mobileKeyboardEditBlockId,
   });
 
+  const wasKeyboardOpenRef = useRef(isKeyboardOpen);
   useEffect(() => {
-    if (!isKeyboardOpen && mobileKeyboardEditBlockId) {
+    const wasOpen = wasKeyboardOpenRef.current;
+    wasKeyboardOpenRef.current = isKeyboardOpen;
+
+    // 키보드가 닫힐 때만 편집 모드 해제 (열리기 전에는 mobileKeyboardEditBlockId 유지)
+    if (wasOpen && !isKeyboardOpen && mobileKeyboardEditBlockId) {
       setMobileKeyboardEditBlockId(null);
       setMobileContentEditPromptBlockId(null);
       if (document.activeElement instanceof HTMLElement) {

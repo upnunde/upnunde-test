@@ -12,6 +12,11 @@ import {
 import type { SeriesData } from "@/types/series";
 import { formatSeriesDateOrRelative, formatSeriesViewCount } from "@/lib/formatSeries";
 import { THUMBNAIL_DIM_OVERLAY_CLASS } from "@/lib/thumbnail-styles";
+import {
+  WORKS_ITEM_CARD_CLASS,
+  WORKS_ITEM_CARD_INNER_CLASS,
+  WORKS_ITEM_THUMBNAIL_CLASS,
+} from "@/lib/worksArea";
 
 export interface SeriesItemProps {
   series: SeriesData;
@@ -125,11 +130,11 @@ export function SeriesItem({
   );
 
   return (
-    <div className="flex min-w-0 w-full flex-col gap-my-12 lg:gap-my-20 py-my-20 pl-my-12 pr-my-12 min-[480px]:flex-row min-[480px]:pl-my-20 min-[480px]:pr-my-20 rounded-[4px] border border-border-10 bg-white">
+    <div className={WORKS_ITEM_CARD_CLASS}>
       {/* 모바일: 썸네일+정보 가로 / 데스크톱: contents로 썸네일·우측열을 flex-row 자식으로 */}
-      <div className="flex min-w-0 w-full flex-row gap-my-12 lg:gap-my-20 min-[480px]:contents">
+      <div className={WORKS_ITEM_CARD_INNER_CLASS}>
         {/* 썸네일 영역 (정책 6, 8, 9, 10) */}
-        <div className="relative aspect-[9/16] w-28 shrink-0 overflow-hidden rounded bg-slate-200">
+        <div className={WORKS_ITEM_THUMBNAIL_CLASS}>
         {status === "DRAFT" ? (
           <div className="w-full h-full flex items-center justify-center bg-slate-200" aria-hidden>
             <span className="text-on-surface-30 text-caption1_400">썸네일 없음</span>

@@ -62,7 +62,10 @@ function ChoiceTextField({
   className?: string;
 }) {
   const textareaRef = useRef<HTMLTextAreaElement>(null);
-  const { readOnly, onContentFocus } = useMobileBlockTextEdit(blockId, textareaRef);
+  const { readOnly, onContentFocus, onContentPointerDown } = useMobileBlockTextEdit(
+    blockId,
+    textareaRef,
+  );
 
   const adjustHeight = useCallback(() => {
     const ta = textareaRef.current;
@@ -82,6 +85,7 @@ function ChoiceTextField({
       value={value}
       onChange={(e) => onChange(e.target.value)}
       onFocus={onContentFocus}
+      onPointerDown={onContentPointerDown}
       readOnly={readOnly}
       onInput={adjustHeight}
       placeholder={placeholder}
@@ -312,26 +316,30 @@ export function ChoiceBlockTable({
       )}
       data-block-id={blockId}
     >
-      {/* Header */}
-      <div className="flex border-b border-border-10 bg-surface-20/80 text-on-surface-30 text-caption1_500 min-h-8">
-        <div className="w-20 shrink-0 px-my-12 flex items-center border-r border-border-10">선택</div>
-        <div className="flex-1 min-w-[200px] px-my-12 flex items-center border-r border-border-10">내용</div>
-        <div className="w-[200px] min-w-[160px] max-w-[200px] shrink-0 px-my-12 flex items-center border-r border-border-10">장면 전환</div>
-        <div className="w-[120px] min-w-[100px] max-w-[120px] shrink-0 px-my-12 flex items-center">유료 전환</div>
+      <div className="max-lg:overflow-x-auto max-lg:overscroll-x-contain">
+        <div className="max-lg:min-w-[600px]">
+          {/* Header */}
+          <div className="flex border-b border-border-10 bg-surface-20/80 text-on-surface-30 text-caption1_500 min-h-8">
+            <div className="w-20 shrink-0 px-my-12 flex items-center border-r border-border-10">선택</div>
+            <div className="flex-1 min-w-[200px] px-my-12 flex items-center border-r border-border-10">내용</div>
+            <div className="w-[200px] min-w-[160px] max-w-[200px] shrink-0 px-my-12 flex items-center border-r border-border-10">장면 전환</div>
+            <div className="w-[120px] min-w-[100px] max-w-[120px] shrink-0 px-my-12 flex items-center">유료 전환</div>
+          </div>
+          {/* Rows */}
+          {choices.map((choice, index) => (
+            <ChoiceRow
+              blockId={blockId}
+              key={choice.id}
+              index={index}
+              choice={choice}
+              onUpdate={(patch) => handleUpdate(index, patch)}
+              onRemove={() => handleRemove(index)}
+              sceneOptions={sceneOptions}
+              showBottomBorder={index < choices.length - 1 || !isAtMaxChoices}
+            />
+          ))}
+        </div>
       </div>
-      {/* Rows */}
-      {choices.map((choice, index) => (
-        <ChoiceRow
-          blockId={blockId}
-          key={choice.id}
-          index={index}
-          choice={choice}
-          onUpdate={(patch) => handleUpdate(index, patch)}
-          onRemove={() => handleRemove(index)}
-          sceneOptions={sceneOptions}
-          showBottomBorder={index < choices.length - 1 || !isAtMaxChoices}
-        />
-      ))}
       {/* Footer: Task 4 - Dropdown with "선택지 추가" and "✨ AI 모드로 직접 대화" */}
       {!isAtMaxChoices && (
         <div className="flex h-9 items-center justify-start px-my-4 py-my-8">

@@ -7,6 +7,21 @@
 export const WORKS_GRID_CELL_MAX_WIDTH_CLASS =
   "min-w-0 w-full max-w-[592px] justify-self-start" as const;
 
+/** 내 작품 목록 카드(시리즈·캐릭터·상황공략) 공통 셸 */
+export const WORKS_ITEM_CARD_CLASS =
+  "flex min-w-0 w-full flex-col gap-my-12 lg:gap-my-20 rounded-[4px] border border-border-10 bg-white py-my-20 px-my-16 lg:px-my-20 min-[480px]:flex-row";
+
+/** 모바일 가로(썸네일+정보) · 데스크톱 contents */
+export const WORKS_ITEM_CARD_INNER_CLASS =
+  "flex min-w-0 w-full flex-row gap-my-12 lg:gap-my-20 min-[480px]:contents";
+
+export const WORKS_ITEM_THUMBNAIL_CLASS =
+  "relative aspect-[9/16] w-28 shrink-0 overflow-hidden rounded bg-slate-200";
+
+/** 내 작품 목록 그리드 */
+export const WORKS_LIST_GRID_CLASS =
+  "grid w-full grid-cols-[repeat(auto-fit,minmax(min(100%,480px),1fr))] gap-my-16";
+
 export const WORKS_TABS = [
   { id: "series", label: "시리즈" },
   { id: "character", label: "캐릭터" },
