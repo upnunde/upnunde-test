@@ -179,6 +179,10 @@ function computeAccumulatedState(
 export interface PreviewScreenProps {
   blocks?: ScriptBlock[];
   focusedBlockId?: string | null;
+  /** 탭으로 다음 블록 진행(모바일 재생 모드) */
+  interactive?: boolean;
+  onTapAdvance?: () => void;
+  onChoiceSelect?: (choice: ChoiceItem) => void;
 }
 
 /** If blocks/focusedBlockId are not passed, reads from useEditorStore (recommended). */
@@ -189,6 +193,7 @@ export function PreviewScreen(props: PreviewScreenProps = {}) {
 
   const blocks = props.blocks ?? storeBlocks;
   const focusedBlockId = props.focusedBlockId !== undefined ? props.focusedBlockId : storeFocusedBlockId;
+  const { interactive = false, onTapAdvance, onChoiceSelect } = props;
 
   const state = useMemo(
     () => computeAccumulatedState(blocks, focusedBlockId, seriesPersona),
@@ -205,9 +210,30 @@ export function PreviewScreen(props: PreviewScreenProps = {}) {
   } = state;
   const displayBgm = resolveBgmName(currentBgm);
 
+  const handleRootClick = () => {
+    if (!interactive || currentChoices.length > 0) return;
+    onTapAdvance?.();
+  };
+
+  const handleRootKeyDown = (event: React.KeyboardEvent<HTMLDivElement>) => {
+    if (!interactive || currentChoices.length > 0) return;
+    if (event.key === "Enter" || event.key === " ") {
+      event.preventDefault();
+      onTapAdvance?.();
+    }
+  };
+
   return (
     <div
-      className="relative flex h-full min-h-0 w-full flex-shrink-0 items-stretch justify-stretch overflow-hidden overscroll-none"
+      role={interactive ? "button" : undefined}
+      tabIndex={interactive && currentChoices.length === 0 ? 0 : undefined}
+      aria-label={interactive ? "다음으로 진행" : undefined}
+      onClick={interactive ? handleRootClick : undefined}
+      onKeyDown={interactive ? handleRootKeyDown : undefined}
+      className={cn(
+        "relative flex h-full min-h-0 w-full flex-shrink-0 items-stretch justify-stretch overflow-hidden overscroll-none",
+        interactive && currentChoices.length === 0 && "cursor-pointer",
+      )}
       style={{ height: "100%", overflow: "hidden" }}
     >
       {/* Top-left badge: current top_desc (from state up to focused block) */}
@@ -298,29 +324,58 @@ export function PreviewScreen(props: PreviewScreenProps = {}) {
             선택지
           </div>
           <div className="flex flex-col gap-my-8">
-            {currentChoices.map((choice, idx) => (
-              <div
-                key={choice.id || `${choice.text}-${idx}`}
-                className="rounded-lg border border-white/15 bg-white/10 px-my-12 py-my-8"
-              >
-                <div className="flex items-center gap-my-8">
-                  {choice.isPaid && (
-                    <Image
-                      src={dummyAsset("choice-paid-icon.png")}
-                      alt=""
-                      width={16}
-                      height={16}
-                      className="h-4 w-4 shrink-0"
-                    />
-                  )}
-                  <p className="text-body3_400 text-white/95">
-                    {choice.isAiMode
-                      ? "✨ AI 모드로 직접 대화"
-                      : (choice.text?.trim() || `선택 ${idx + 1}`)}
-                  </p>
+            {currentChoices.map((choice, idx) => {
+              const label = choice.isAiMode
+                ? "✨ AI 모드로 직접 대화"
+                : (choice.text?.trim() || `선택 ${idx + 1}`);
+
+              if (interactive) {
+                return (
+                  <button
+                    key={choice.id || `${choice.text}-${idx}`}
+                    type="button"
+                    onClick={(event) => {
+                      event.stopPropagation();
+                      onChoiceSelect?.(choice);
+                    }}
+                    className="w-full rounded-lg border border-white/15 bg-white/10 px-my-12 py-my-8 text-left transition-colors hover:bg-white/20 active:bg-white/25"
+                  >
+                    <div className="flex items-center gap-my-8">
+                      {choice.isPaid ? (
+                        <Image
+                          src={dummyAsset("choice-paid-icon.png")}
+                          alt=""
+                          width={16}
+                          height={16}
+                          className="h-4 w-4 shrink-0"
+                        />
+                      ) : null}
+                      <p className="text-body3_400 text-white/95">{label}</p>
+                    </div>
+                  </button>
+                );
+              }
+
+              return (
+                <div
+                  key={choice.id || `${choice.text}-${idx}`}
+                  className="rounded-lg border border-white/15 bg-white/10 px-my-12 py-my-8"
+                >
+                  <div className="flex items-center gap-my-8">
+                    {choice.isPaid ? (
+                      <Image
+                        src={dummyAsset("choice-paid-icon.png")}
+                        alt=""
+                        width={16}
+                        height={16}
+                        className="h-4 w-4 shrink-0"
+                      />
+                    ) : null}
+                    <p className="text-body3_400 text-white/95">{label}</p>
+                  </div>
                 </div>
-              </div>
-            ))}
+              );
+            })}
           </div>
         </div>
       )}

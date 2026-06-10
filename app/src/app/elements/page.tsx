@@ -1,8 +1,7 @@
 "use client";
 
 import React, { useState } from "react";
-import Header from "@/components/Header/Header";
-import AppSidebar from "@/components/AppSidebar/AppSidebar";
+import { AppShell } from "@/components/layout/AppShell";
 import { Button } from "@/components/ui/button";
 import { Chip, FilterChip } from "@/components/ui/chip";
 import type { ChipVariantProps } from "@/lib/chip-styles";
@@ -17,7 +16,7 @@ import {
   chipGroupGapClass,
 } from "@/lib/chip-styles";
 import { SegmentedTextTabs } from "@/components/ui/segmented-text-tabs";
-import { PAGE_SCROLL_COLUMN_CLASS } from "@/lib/page-layout";
+import { PAGE_CONTAINER_CLASS, PAGE_SCROLL_COLUMN_CLASS } from "@/lib/page-layout";
 import { cn } from "@/lib/utils";
 
 const AREA_TABS = [
@@ -77,25 +76,20 @@ function ChipIconPlaceholder({ size }: { size: NonNullable<ChipVariantProps["siz
 }
 
 export default function ElementsPage() {
-  const [profileImageUrl, setProfileImageUrl] = useState<string | null>(null);
   const [areaTab, setAreaTab] = useState<(typeof AREA_TABS)[number]["id"]>("content");
   const [scope, setScope] = useState<(typeof SCOPE_LABELS)[number]>("시리즈");
   const [genre, setGenre] = useState<(typeof GENRE_LABELS)[number]>("전체");
 
   return (
-    <div className="flex h-screen w-full flex-col overflow-hidden bg-white">
-      <Header profileImageUrl={profileImageUrl} onProfileImageChange={setProfileImageUrl} />
-      <div className="flex flex-1 overflow-hidden bg-surface-20">
-        <AppSidebar defaultActiveId="guide" />
-        <div className="flex min-w-0 flex-1 flex-col overflow-hidden">
-          <main className="flex flex-1 flex-col overflow-hidden bg-surface-20">
-            <div className="flex h-16 shrink-0 items-center justify-center border-b border-border-10 bg-white px-my-20">
-              <div className="flex w-full max-w-[1200px] items-center justify-start">
-                <h1 className="text-heading2_700 text-on-surface-10">UI 요소</h1>
-              </div>
-            </div>
+    <AppShell sidebarActiveId="guide">
+      <main className="flex flex-1 flex-col overflow-hidden bg-surface-20">
+        <div className="flex h-16 shrink-0 items-center justify-center border-b border-border-10 bg-white px-my-20">
+          <div className={`${PAGE_CONTAINER_CLASS} flex items-center justify-start`}>
+            <h1 className="text-heading2_700 text-on-surface-10">UI 요소</h1>
+          </div>
+        </div>
 
-            <div className={cn(PAGE_SCROLL_COLUMN_CLASS, "gap-my-20")}>
+        <div className={cn(PAGE_SCROLL_COLUMN_CLASS, "gap-my-20")}>
               <SpecRow label="Tab XL — 분석 영역 (underline false · 탭 간격 20px)">
                 <SegmentedTextTabs
                   aria-label="분석 영역 미리보기"
@@ -274,10 +268,8 @@ export default function ElementsPage() {
                   </li>
                 </ul>
               </SpecRow>
-            </div>
-          </main>
         </div>
-      </div>
-    </div>
+      </main>
+    </AppShell>
   );
 }

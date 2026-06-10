@@ -394,14 +394,14 @@ export default function EpisodeManagementPage() {
       />
       <Dialog open={isCreateEpisodeModalOpen} onOpenChange={setIsCreateEpisodeModalOpen}>
         <DialogContent
-          className="fixed left-1/2 top-1/2 w-[min(92vw,760px)] max-w-[760px] min-w-[560px] -translate-x-1/2 -translate-y-1/2 overflow-hidden rounded-[16px] border-0 bg-transparent p-0 shadow-none"
+          className="fixed left-1/2 top-1/2 w-[min(92vw,760px)] max-w-[760px] min-w-0 -translate-x-1/2 -translate-y-1/2 overflow-hidden rounded-[16px] border-0 bg-transparent p-0 shadow-none"
           aria-describedby={undefined}
         >
           <DialogTitle className="sr-only">새 에피소드 생성</DialogTitle>
           <EpisodeForm
             onConverted={handleCreateComplete}
             onCancel={() => setIsCreateEpisodeModalOpen(false)}
-            containerClassName="max-w-[760px] min-w-[560px] rounded-[16px]"
+            containerClassName="max-w-[760px] min-w-0 rounded-[16px]"
             stickyFooter
             sectionTitle={`${nextEpisodeNumber}화 에피소드`}
           />

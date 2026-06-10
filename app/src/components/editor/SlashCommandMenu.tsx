@@ -33,10 +33,14 @@ type SlashMenuOption =
   | { id: "add_sentence"; label: string; icon: React.ElementType }
   | { id: BlockType; type: BlockType; label: string; icon: React.ElementType };
 
+export type SlashCommandMenuPresentation = "popover" | "sheet";
+
 export interface SlashCommandMenuProps {
   position: { top: number; left: number };
   onSelect: (payload: SlashSelectPayload) => void;
   onClose: () => void;
+  /** 모바일: 하단 시트 / 데스크톱: 커서 근처 팝오버 */
+  presentation?: SlashCommandMenuPresentation;
   /** 향후 블록 단위 컨텍스트 식별용 (현재는 미사용) */
   targetBlockId?: string;
 }
@@ -99,6 +103,7 @@ export function SlashCommandMenu({
   position,
   onSelect,
   onClose,
+  presentation = "popover",
 }: SlashCommandMenuProps) {
   const buttonRefs = useRef<(HTMLButtonElement | null)[]>([]);
   const OPTIONS = MENU_OPTIONS;
@@ -173,6 +178,70 @@ export function SlashCommandMenu({
     return { top, left };
   })();
 
+  const renderOption = (option: SlashMenuOption, index: number, isSheet: boolean) => {
+    const Icon = option.icon;
+    return (
+      <button
+        key={option.id}
+        ref={(el) => {
+          buttonRefs.current[index] = el;
+        }}
+        type="button"
+        role="option"
+        aria-selected={false}
+        className={cn(
+          "flex w-full cursor-pointer items-center gap-my-12 text-left text-body3_400",
+          isSheet ? "px-my-20 py-my-16" : "gap-my-8 px-my-12 py-my-8",
+          "hover:bg-surface-20 focus:bg-surface-20 focus:outline-none",
+        )}
+        onClick={() => {
+          if (option.id === "add_sentence") {
+            onSelect({ action: "add_sentence" });
+            return;
+          }
+          const type = option.type;
+          const defaultPayload = getDefaultPayloadForType(type);
+          if (defaultPayload) {
+            onSelect(defaultPayload);
+          } else {
+            onSelect(type);
+          }
+        }}
+        onKeyDown={(e) => handleOptionKeyDown(index, e)}
+      >
+        <Icon className={cn("shrink-0 text-on-surface-30", isSheet ? "h-5 w-5" : "h-4 w-4")} />
+        <span className="text-on-surface-10">{option.label}</span>
+      </button>
+    );
+  };
+
+  if (presentation === "sheet") {
+    return (
+      <>
+        <div
+          className="fixed inset-0 z-40 bg-black/30"
+          aria-hidden
+          onClick={onClose}
+        />
+        <div
+          className="fixed inset-x-0 bottom-0 z-50 max-h-[min(70vh,520px)] overflow-y-auto rounded-t-[4px] border-t border-border-10 bg-white pb-[env(safe-area-inset-bottom)] shadow-elevation-40"
+          role="listbox"
+          aria-label="블록 추가"
+        >
+          <div className="border-b border-border-10 px-my-20 py-my-16">
+            <p className="text-body1_500 text-on-surface-10">블록 추가</p>
+            <p className="mt-my-4 text-caption1_400 text-on-surface-30">
+              아래에 추가할 블록을 선택해 주세요
+            </p>
+          </div>
+          <div className="py-my-8">
+            {OPTIONS.map((option, index) => renderOption(option, index, true))}
+          </div>
+        </div>
+      </>
+    );
+  }
+
   return (
     <>
       <div
@@ -185,41 +254,7 @@ export function SlashCommandMenu({
         style={{ top: adjustedPosition.top, left: adjustedPosition.left }}
         role="listbox"
       >
-        {OPTIONS.map((option, index) => {
-          const Icon = option.icon;
-          return (
-            <button
-              key={option.id}
-              ref={(el) => {
-                buttonRefs.current[index] = el;
-              }}
-              type="button"
-              role="option"
-              aria-selected={false}
-              className={cn(
-                "flex w-full cursor-pointer items-center gap-my-8 px-my-12 py-my-8 text-left text-body3_400",
-                "hover:bg-surface-20 focus:bg-surface-20 focus:outline-none",
-              )}
-              onClick={() => {
-                if (option.id === "add_sentence") {
-                  onSelect({ action: "add_sentence" });
-                  return;
-                }
-                const type = option.type;
-                const defaultPayload = getDefaultPayloadForType(type);
-                if (defaultPayload) {
-                  onSelect(defaultPayload);
-                } else {
-                  onSelect(type);
-                }
-              }}
-              onKeyDown={(e) => handleOptionKeyDown(index, e)}
-            >
-              <Icon className="h-4 w-4 shrink-0 text-on-surface-30" />
-              <span className="text-on-surface-10">{option.label}</span>
-            </button>
-          );
-        })}
+        {OPTIONS.map((option, index) => renderOption(option, index, false))}
       </div>
     </>
   );

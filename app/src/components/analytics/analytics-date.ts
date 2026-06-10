@@ -129,6 +129,31 @@ export function getAnalyticsDateRangeLabel(
 }
 
 /**
+ * 좁은 화면 트리거용 축약 라벨.
+ * - 같은 해·같은 달: `MM.DD~DD`
+ * - 같은 해: `MM.DD~MM.DD`
+ * - 해가 다르면 연도 2자리 포함
+ */
+export function getAnalyticsDateRangeCompactLabel(
+  period: AnalyticsPeriodRange,
+  now: Date,
+): string {
+  const win = getAnalyticsPeriodWindow(period, now);
+  if (win.isAll || !win.fromYmd) return "전체";
+
+  const [fy, fm, fd] = win.fromYmd.split("-").map(Number);
+  const [ty, tm, td] = win.toYmd.split("-").map(Number);
+
+  if (fy === ty && fm === tm) {
+    return `${pad2(fm)}.${pad2(fd)}~${pad2(td)}`;
+  }
+  if (fy === ty) {
+    return `${pad2(fm)}.${pad2(fd)}~${pad2(tm)}.${pad2(td)}`;
+  }
+  return `${String(fy).slice(-2)}.${pad2(fm)}.${pad2(fd)}~${String(ty).slice(-2)}.${pad2(tm)}.${pad2(td)}`;
+}
+
+/**
  * 추이 차트 포인트 수 — 짧은 일수 구간은 일 단위로 제한(축 라벨 중복 방지), 긴 구간은 최대 11.
  * API 연동 시에도 동일 규칙을 맞추면 축·시계열 길이가 일치합니다.
  */

@@ -166,7 +166,7 @@ export function EpisodeAutoGeneratorModal({
   return (
     <Dialog open={open} onOpenChange={onOpenChange} modal={false}>
       <DialogContent
-        className="!z-[60] flex w-[min(92vw,760px)] max-w-[760px] min-w-[560px] flex-col overflow-hidden border-0 bg-transparent p-0 shadow-none"
+        className="!z-[60] flex w-[min(92vw,760px)] max-w-[760px] min-w-0 flex-col overflow-hidden border-0 bg-transparent p-0 shadow-none"
         aria-describedby={undefined}
         onPointerDownOutside={(event) => {
           // 하단 자동 입력기 및 외부 클릭으로 모달이 자동 닫히지 않도록 유지
@@ -180,7 +180,7 @@ export function EpisodeAutoGeneratorModal({
         <DialogHeader className="sr-only">
           <DialogTitle>에피소드 생성기 입력</DialogTitle>
         </DialogHeader>
-        <div className="mx-auto flex w-full max-w-[760px] min-w-[560px] flex-col rounded-[4px] border border-border-10 bg-white shadow-none">
+        <div className="mx-auto flex w-full max-w-[760px] min-w-0 flex-col rounded-[4px] border border-border-10 bg-white shadow-none">
           <div className="flex max-h-[min(88vh,820px)] flex-col overflow-hidden rounded-[3px]">
             <Title2 text="에피소드 생성기" asSectionHeader />
             <div

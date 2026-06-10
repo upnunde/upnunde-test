@@ -47,7 +47,7 @@ export function AnalyticsMonthlyRevenueBars({
                 role="presentation"
               />
             </div>
-            <p className="text-right text-body3_700 tabular-nums text-on-surface-10">
+            <p className="text-right text-body3_500 tabular-nums text-on-surface-10">
               {formatWon(row.amount)}
             </p>
           </li>

@@ -1,16 +1,20 @@
 "use client";
 
 import type { ReactNode } from "react";
+import { cn } from "@/lib/utils";
 
 interface IPhone15ProFrameProps {
   children: ReactNode;
   className?: string;
 }
 
-export function IPhone15ProFrame({ children, className = "" }: IPhone15ProFrameProps) {
+export function IPhone15ProFrame({ children, className }: IPhone15ProFrameProps) {
   return (
     <div
-      className={`relative w-[300px] h-[650px] rounded-[2.25rem] bg-surface-30 outline outline-[3px] outline-slate-800 overflow-hidden flex flex-col ${className}`}
+      className={cn(
+        "relative flex h-[650px] w-[300px] flex-col overflow-hidden rounded-[2.25rem] bg-surface-30 outline outline-[3px] outline-slate-800",
+        className,
+      )}
     >
       <div className="relative h-full w-full min-h-0 min-w-0 overflow-hidden rounded-[2rem] bg-black">
         {/* iPhone 15 Pro style Dynamic Island */}

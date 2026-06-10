@@ -1,10 +1,10 @@
 "use client";
 
 import dynamic from "next/dynamic";
-import React, { Suspense, useState } from "react";
+import React, { Suspense } from "react";
 import { useSearchParams } from "next/navigation";
-import Header from "@/components/Header/Header";
-import AppSidebar from "@/components/AppSidebar/AppSidebar";
+import { AppShell } from "@/components/layout/AppShell";
+import { PAGE_CONTAINER_CLASS } from "@/lib/page-layout";
 import type { AnalyticsAreaTabId } from "@/components/analytics/AnalyticsDashboard";
 
 const AnalyticsDashboard = dynamic(
@@ -29,25 +29,17 @@ function parseDefaultArea(searchParams: URLSearchParams): AnalyticsAreaTabId {
 function AnalyticsPageContent() {
   const searchParams = useSearchParams();
   const defaultArea = parseDefaultArea(searchParams);
-  const [profileImageUrl, setProfileImageUrl] = useState<string | null>(null);
-
   return (
-    <div className="flex h-screen w-full flex-col overflow-hidden bg-white">
-      <Header profileImageUrl={profileImageUrl} onProfileImageChange={setProfileImageUrl} />
-      <div className="flex flex-1 overflow-hidden bg-surface-20">
-        <AppSidebar defaultActiveId="analytics" />
-        <div className="flex min-w-0 flex-1 flex-col overflow-hidden">
-          <main className="flex flex-1 flex-col overflow-hidden bg-surface-20">
-            <div className="flex h-[64px] w-full shrink-0 flex-col items-center justify-center border-b border-border-10 bg-white px-my-20">
-              <div className="flex w-full max-w-[1200px] items-center justify-start gap-my-16">
-                <h1 className="text-heading2_700 text-on-surface-10">분석</h1>
-              </div>
-            </div>
-            <AnalyticsDashboard defaultArea={defaultArea} />
-          </main>
+    <AppShell sidebarActiveId="analytics">
+      <main className="flex flex-1 flex-col overflow-hidden bg-surface-20">
+        <div className="flex h-[64px] w-full shrink-0 flex-col items-center justify-center border-b border-border-10 bg-white px-my-20">
+          <div className={`${PAGE_CONTAINER_CLASS} flex items-center justify-start gap-my-16`}>
+            <h1 className="text-heading2_700 text-on-surface-10">분석</h1>
+          </div>
         </div>
-      </div>
-    </div>
+        <AnalyticsDashboard defaultArea={defaultArea} />
+      </main>
+    </AppShell>
   );
 }
 

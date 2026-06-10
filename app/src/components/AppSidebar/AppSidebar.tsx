@@ -12,6 +12,7 @@ import {
   UserRoundCog,
 } from "lucide-react";
 import { SidebarList } from "./SidebarList";
+import { cn } from "@/lib/utils";
 
 const SIDEBAR_ITEMS = [
   { id: "series", label: "내 작품", path: "/series" },
@@ -61,6 +62,10 @@ export interface AppSidebarProps {
   defaultActiveId?: SidebarItemId;
   /** 메뉴 클릭 시 호출 (선택 사항) */
   onSelect?: (id: SidebarItemId) => void;
+  /** 모바일 드로어 열림 (lg 미만) */
+  mobileOpen?: boolean;
+  /** 라우트 이동 후 모바일 드로어 닫기 */
+  onNavigate?: () => void;
 }
 
 function deriveActiveId(pathname: string | null, fallback: SidebarItemId): SidebarItemId {
@@ -76,7 +81,12 @@ function deriveActiveId(pathname: string | null, fallback: SidebarItemId): Sideb
   return fallback;
 }
 
-export default function AppSidebar({ defaultActiveId = "series", onSelect }: AppSidebarProps) {
+export default function AppSidebar({
+  defaultActiveId = "series",
+  onSelect,
+  mobileOpen = false,
+  onNavigate,
+}: AppSidebarProps) {
   const router = useRouter();
   const pathname = usePathname();
   /** 라우트 경로에서 직접 파생 — 별도의 setState 동기화가 필요 없음 */
@@ -84,7 +94,10 @@ export default function AppSidebar({ defaultActiveId = "series", onSelect }: App
 
   const handleClick = (id: SidebarItemId, path?: string) => {
     onSelect?.(id);
-    if (path) router.push(path);
+    if (path) {
+      router.push(path);
+      onNavigate?.();
+    }
   };
 
   const sidebarListItems = SIDEBAR_ITEMS.map(({ id, label }) => ({
@@ -99,7 +112,15 @@ export default function AppSidebar({ defaultActiveId = "series", onSelect }: App
   }));
 
   return (
-    <nav className="shrink-0 flex h-full w-[240px] flex-col border-r border-border-10 bg-white py-my-16" aria-label="메인 메뉴">
+    <nav
+      className={cn(
+        "flex h-full w-[240px] shrink-0 flex-col border-r border-border-10 bg-white py-my-16",
+        "max-lg:fixed max-lg:inset-y-0 max-lg:left-0 max-lg:z-50 max-lg:shadow-elevation-50",
+        !mobileOpen && "max-lg:hidden",
+        "lg:relative",
+      )}
+      aria-label="메인 메뉴"
+    >
       <SidebarList
         items={sidebarListItems}
         activeId={activeId}

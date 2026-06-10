@@ -187,7 +187,7 @@ export function ImageResourceDetailPage({ kind, initialData }: ImageResourceDeta
     <main className="flex flex-1 flex-col overflow-hidden bg-surface-20">
       {/* 상단 서브 헤더 */}
       <header className={PAGE_SUBHEADER_CLASS}>
-        <div className="flex w-full max-w-[1200px] min-w-[640px] items-center justify-between gap-my-16">
+        <div className="flex w-full min-w-0 max-w-[1200px] mx-auto items-center justify-between gap-my-16">
           <div className="flex items-center justify-start gap-my-12">
             <HeaderBackButton onClick={handleBack} aria-label="리소스 목록으로" />
             <h1 className="text-heading2_700 text-on-surface-10">{labels.headerTitle}</h1>
@@ -196,7 +196,7 @@ export function ImageResourceDetailPage({ kind, initialData }: ImageResourceDeta
       </header>
 
       <div className={PAGE_SCROLL_COLUMN_CLASS}>
-        <div className="w-full max-w-[1200px] min-w-[640px] mx-auto">
+        <div className="w-full min-w-0 max-w-[1200px] mx-auto mx-auto">
           <div className="w-full rounded-[4px] border border-border-10 bg-white">
             <Title2
               text={labels.sectionTitle}

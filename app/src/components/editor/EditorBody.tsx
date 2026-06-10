@@ -5,7 +5,8 @@ import {
   DndContext,
   closestCenter,
   type DragEndEvent,
-  PointerSensor,
+  MouseSensor,
+  TouchSensor,
   useSensor,
   useSensors,
 } from "@dnd-kit/core";
@@ -16,6 +17,8 @@ import {
 } from "@dnd-kit/sortable";
 import { CSS } from "@dnd-kit/utilities";
 import { useEditorStore, hydrateSeriesPersonaFromSession } from "@/store/useEditorStore";
+import { editorLeadingControlsClass } from "@/lib/editor-control-visibility";
+import { useIsLgUp } from "@/hooks/useMediaQuery";
 import { cn } from "@/lib/utils";
 import { Button } from "@/components/ui/button";
 import { Plus } from "lucide-react";
@@ -46,6 +49,7 @@ function SortableBlockWrapper({
   addBlock,
   removeBlock,
   focusBlock,
+  isDesktop,
 }: {
   block: import("@/types/editor").ScriptBlock;
   index: number;
@@ -59,12 +63,13 @@ function SortableBlockWrapper({
   ) => string;
   removeBlock: (id: string) => void;
   focusBlock: (id: string) => void;
+  isDesktop: boolean;
 }) {
   const focusBlockId = useEditorStore((s) => s.focusBlockId);
   const isFocused = focusBlockId === block.id;
   const isSeedDefault = block.data?.isSeedDefault === true;
   const isTextLikeRow = block.type === "text" || block.type === "choice";
-  
+
   const {
     attributes,
     listeners,
@@ -73,6 +78,11 @@ function SortableBlockWrapper({
     transition,
     isDragging,
   } = useSortable({ id: block.id, disabled: isSeedDefault });
+
+  const mobileIndexDragProps =
+    !isDesktop && !isSeedDefault ? { ...attributes, ...listeners } : undefined;
+  const desktopHandleDragProps =
+    isDesktop && !isSeedDefault ? { ...attributes, ...listeners } : undefined;
 
   const style = {
     transform: CSS.Transform.toString(transform),
@@ -127,10 +137,10 @@ function SortableBlockWrapper({
           : block.type === "choice"
             ? WRAPPER_CLASS_CHOICE
             : WRAPPER_CLASS_COMPACT,
-        isDragging && "opacity-50"
+        isDragging && "opacity-50",
       )}
     >
-      <div className="relative flex shrink-0 items-center justify-start gap-0 opacity-0 transition-opacity group-hover:opacity-100">
+      <div className={editorLeadingControlsClass()}>
         <Button
           type="button"
           variant="ghost"
@@ -148,8 +158,7 @@ function SortableBlockWrapper({
             type="button"
             className="flex h-8 w-6 shrink-0 cursor-grab touch-none items-center justify-center rounded-full p-0 text-on-surface-30 hover:bg-surface-20 hover:text-on-surface-30 active:cursor-grabbing"
             aria-label="Drag to reorder"
-            {...attributes}
-            {...listeners}
+            {...desktopHandleDragProps}
           >
             <svg className="h-5 w-5" viewBox="0 0 24 24" fill="currentColor" aria-hidden>
               <circle cx="8" cy="6" r="2" />
@@ -165,6 +174,7 @@ function SortableBlockWrapper({
         )}
       </div>
       <span
+        {...mobileIndexDragProps}
         className={cn(
           "flex w-9 shrink-0 justify-start tabular-nums",
           isTextLikeRow
@@ -176,8 +186,10 @@ function SortableBlockWrapper({
               ? "text-rose-600"
               : isTextLikeRow
                 ? "text-on-surface-disabled"
-                : "text-on-surface-disabled"
+                : "text-on-surface-disabled",
+          !isDesktop && !isSeedDefault && "max-lg:touch-none",
         )}
+        aria-label={!isDesktop && !isSeedDefault ? "길게 눌러 순서 변경" : undefined}
       >
         {String(index).padStart(2, "0")}
       </span>
@@ -200,6 +212,7 @@ function SortableBlockWrapper({
       {insertMenuPosition ? (
         <SlashCommandMenu
           position={insertMenuPosition}
+          presentation={isDesktop ? "popover" : "sheet"}
           onSelect={handleInsertMenuSelect}
           onClose={() => setInsertMenuPosition(null)}
         />
@@ -209,6 +222,7 @@ function SortableBlockWrapper({
 }
 
 export default function EditorBody() {
+  const isDesktop = useIsLgUp();
   const blocks = useEditorStore((s) => s.blocks);
   const setFocusBlockId = useEditorStore((s) => s.setFocusBlockId);
   const undo = useEditorStore((s) => s.undo);
@@ -356,7 +370,10 @@ export default function EditorBody() {
   );
 
   const sensors = useSensors(
-    useSensor(PointerSensor, { activationConstraint: { distance: 8 } })
+    useSensor(MouseSensor, { activationConstraint: { distance: 8 } }),
+    useSensor(TouchSensor, {
+      activationConstraint: { delay: 450, tolerance: 8 },
+    }),
   );
 
   const issueBlockIds = React.useMemo(() => {
@@ -425,6 +442,7 @@ export default function EditorBody() {
                     addBlock={addBlock}
                     removeBlock={removeBlock}
                     focusBlock={focusBlock}
+                    isDesktop={isDesktop}
                   />
                 </Fragment>
               );

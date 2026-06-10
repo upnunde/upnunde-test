@@ -40,14 +40,14 @@ export function EpisodeList({
         (className ?? "")
       }
     >
-      {/* Table Header */}
-      <div className="h-[42px] border-b border-divider-10 flex items-center px-my-20 bg-white rounded-t-[4px] shrink-0">
+      {/* Table Header — 모바일은 카드형 행만 표시 */}
+      <div className="hidden h-[42px] shrink-0 items-center rounded-t-[4px] border-b border-divider-10 bg-white px-my-20 lg:flex">
         <div className="w-20 text-caption1_400 text-on-surface-30">회차</div>
         <div className="flex-1 px-0 text-caption1_400 text-on-surface-30">제목</div>
         <div className="w-32 px-0 text-caption1_400 text-on-surface-30">개시일</div>
         <div className="w-24 px-0 text-caption1_400 text-on-surface-30">조회수</div>
         <div className="w-24 px-0 text-caption1_400 text-on-surface-30">공개여부</div>
-        <div className="w-48 px-0 text-caption1_400 text-on-surface-30 text-right">작업</div>
+        <div className="w-48 px-0 text-right text-caption1_400 text-on-surface-30">작업</div>
       </div>
 
       {/* Table Body */}

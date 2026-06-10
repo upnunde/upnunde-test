@@ -79,18 +79,18 @@ export function AnalyticsScopeFilterBar({
 
   return (
     <div className={cn(analyticsScopeFilterShellClassName, className)}>
-      <div className="flex w-full min-w-0 flex-wrap items-center justify-between gap-x-my-16 gap-y-my-8">
+      <div className="flex w-full min-w-0 flex-col gap-my-8 sm:flex-row sm:flex-wrap sm:items-center sm:justify-between sm:gap-x-my-16 sm:gap-y-my-8">
         <div className="min-w-0 flex-1">
           <SegmentedTextTabs
-          aria-label="분석 영역"
-          items={[...AREA_TABS]}
-          activeId={analyticsArea}
-          onSelect={(id) => onAnalyticsAreaChange(id as AnalyticsAreaTabId)}
-          size="xl"
+            aria-label="분석 영역"
+            items={[...AREA_TABS]}
+            activeId={analyticsArea}
+            onSelect={(id) => onAnalyticsAreaChange(id as AnalyticsAreaTabId)}
+            size="xl"
             underline={false}
           />
         </div>
-        <div className="shrink-0">
+        <div className="flex shrink-0 justify-end sm:justify-start">
           <AnalyticsPeriodPicker value={periodRange} onChange={onPeriodRangeChange} variant="inline" />
         </div>
       </div>

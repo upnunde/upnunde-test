@@ -5,6 +5,7 @@ import { CalendarDays, ChevronDown } from "lucide-react";
 import {
   ANALYTICS_PERIOD_PRESETS,
   formatYmdFull,
+  getAnalyticsDateRangeCompactLabel,
   getAnalyticsDateRangeLabel,
   getAnalyticsPeriodWindow,
   isCustomPeriod,
@@ -57,6 +58,11 @@ export function AnalyticsPeriodPicker({
     [value],
   );
 
+  const triggerCompactLabel = useMemo(
+    () => getAnalyticsDateRangeCompactLabel(value, new Date()),
+    [value],
+  );
+
   const activePreset: AnalyticsPeriodPreset | null = useMemo(
     () => (typeof value === "string" ? value : null),
     [value],
@@ -98,11 +104,17 @@ export function AnalyticsPeriodPicker({
           className={cn(variant === "inline" ? TRIGGER_INLINE_CLASS : TRIGGER_BASE_CLASS, triggerClassName)}
           aria-label={`${ariaLabelPrefix} — 현재 ${triggerLabel}`}
         >
-          <CalendarDays className="h-5 w-5 shrink-0 text-on-surface-20" aria-hidden />
-          <span className="min-w-0 max-w-[280px] truncate text-center text-body3_500">
+          <CalendarDays
+            className="h-5 w-5 shrink-0 text-on-surface-20 max-sm:hidden"
+            aria-hidden
+          />
+          <span className="min-w-0 truncate text-center text-body3_500 sm:hidden">
+            {triggerCompactLabel}
+          </span>
+          <span className="hidden min-w-0 max-w-[280px] truncate text-center text-body3_500 sm:inline">
             {triggerLabel}
           </span>
-          <ChevronDown className="h-5 w-5 shrink-0 text-on-surface-20" aria-hidden />
+          <ChevronDown className="h-4 w-4 shrink-0 text-on-surface-20 sm:h-5 sm:w-5" aria-hidden />
         </button>
       </PopoverTrigger>
       <PopoverContent

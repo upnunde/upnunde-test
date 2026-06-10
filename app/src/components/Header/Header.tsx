@@ -2,7 +2,7 @@
 
 import { useState, useRef } from "react";
 import Image from "next/image";
-import { User } from "lucide-react";
+import { Menu, User } from "lucide-react";
 import { ProfileEditModal } from "@/components/ProfileEditModal";
 import { useRouter } from "next/navigation";
 import { dummyAsset } from "@/lib/dummy-asset-path";
@@ -14,17 +14,29 @@ export interface HeaderProps {
   profileImageUrl?: string | null;
   /** 프로필 편집 모달에서 저장 시 호출 */
   onProfileImageChange?: (avatarUrl: string | null) => void;
+  /** 모바일 메뉴 열기 (미전달 시 햄버거 버튼 숨김) */
+  onMenuClick?: () => void;
 }
 
 /** Global top header: Logo + User avatar only. Full width. */
-export default function Header({ profileImageUrl, onProfileImageChange }: HeaderProps) {
+export default function Header({ profileImageUrl, onProfileImageChange, onMenuClick }: HeaderProps) {
   const router = useRouter();
   const [isProfileModalOpen, setIsProfileModalOpen] = useState(false);
   const profileButtonRef = useRef<HTMLButtonElement>(null);
 
   return (
     <header className="flex h-14 shrink-0 items-center justify-between border-b border-border-10 bg-white pl-0 pr-my-16">
-      <div className="flex w-[240px] self-stretch items-center pl-my-16">
+      <div className="flex items-center gap-my-8 self-stretch pl-my-16 lg:w-[240px]">
+        {onMenuClick ? (
+          <button
+            type="button"
+            onClick={onMenuClick}
+            className="flex h-8 w-8 shrink-0 cursor-pointer items-center justify-center rounded-md text-on-surface-20 hover:bg-surface-20 lg:hidden"
+            aria-label="메뉴 열기"
+          >
+            <Menu className="h-5 w-5" aria-hidden />
+          </button>
+        ) : null}
         <button
           type="button"
           onClick={() => router.push("/login")}

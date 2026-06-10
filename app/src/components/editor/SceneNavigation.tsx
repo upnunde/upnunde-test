@@ -232,16 +232,18 @@ export function SceneNavigation({
               장면 목록
             </h2>
           )}
-          <Button
-            type="button"
-            variant="outline"
-            size="icon-lg"
-            onClick={onToggleCollapsed}
-            className="shrink-0 rounded-full shadow-none text-on-surface-30 disabled:border-border-20"
-            aria-label={collapsed ? "장면 목록 펼치기" : "장면 목록 최소화"}
-          >
-            <Menu aria-hidden="true" />
-          </Button>
+          {onToggleCollapsed ? (
+            <Button
+              type="button"
+              variant="outline"
+              size="icon-lg"
+              onClick={onToggleCollapsed}
+              className="shrink-0 rounded-full shadow-none text-on-surface-30 disabled:border-border-20"
+              aria-label={collapsed ? "장면 목록 펼치기" : "장면 목록 최소화"}
+            >
+              <Menu aria-hidden="true" />
+            </Button>
+          ) : null}
         </div>
 
         {!collapsed &&

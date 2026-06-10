@@ -21,3 +21,9 @@ export const PAGE_SUBHEADER_CLASS =
 /** 스크롤 + 중앙 정렬 레이아웃(리소스 상세·목록 등) */
 export const PAGE_SCROLL_COLUMN_CLASS =
   "flex-1 overflow-y-auto flex flex-col items-center py-my-32 gap-my-16 px-my-20";
+
+/** 본문·카드·서브헤더 내부 — 모바일 가로 스크롤 방지 (min-w-0) */
+export const PAGE_CONTAINER_CLASS = "w-full min-w-0 max-w-[1200px] mx-auto";
+
+/** 넓은 폼·모달 (에피소드 폼 등) */
+export const PAGE_MODAL_WIDE_CLASS = "w-[min(92vw,760px)] max-w-[760px] min-w-0";

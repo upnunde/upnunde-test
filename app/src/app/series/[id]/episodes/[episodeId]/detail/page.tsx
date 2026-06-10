@@ -71,7 +71,7 @@ export default function EpisodeDetailPage() {
         <div className="flex min-w-0 flex-1 flex-col overflow-hidden">
           <main className="flex min-w-0 flex-1 flex-col overflow-hidden">
             <header className="flex h-16 shrink-0 items-center justify-start border-b border-border-10 bg-white px-my-24 py-0">
-              <div className="flex w-full min-w-[800px] items-center justify-between gap-my-12">
+              <div className="flex w-full min-w-0 items-center justify-between gap-my-12">
                 <div className="flex items-center justify-start gap-my-12">
                   <HeaderBackButton onClick={handleBack} aria-label="에피소드 목록으로" />
                   <h1 className="text-heading2_700 text-on-surface-10">{episodeHeaderTitle}</h1>

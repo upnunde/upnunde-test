@@ -4,8 +4,8 @@ import React, { useCallback, useMemo, useState } from "react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { AlertCircle, CalendarDays, ChevronDown, Download, FileText } from "lucide-react";
-import Header from "@/components/Header/Header";
-import AppSidebar from "@/components/AppSidebar/AppSidebar";
+import { AppShell } from "@/components/layout/AppShell";
+import { PAGE_CONTAINER_CLASS } from "@/lib/page-layout";
 import { Button } from "@/components/ui/button";
 import { FilterChip } from "@/components/ui/chip";
 import { CHIP_COMPANION_CONTROL_CLASS, CHIP_GROUP_GAP_CLASS } from "@/lib/chip-styles";
@@ -340,7 +340,6 @@ function SettlementRowMobile({
 
 export default function MonetizationSettlementsPage() {
   const router = useRouter();
-  const [profileImageUrl, setProfileImageUrl] = useState<string | null>(null);
   const [currentPage, setCurrentPage] = useState(1);
   const [taxDetailTarget, setTaxDetailTarget] = useState<SettlementItem | null>(null);
   const [rejectionReasonTarget, setRejectionReasonTarget] = useState<SettlementItem | null>(null);
@@ -512,20 +511,16 @@ export default function MonetizationSettlementsPage() {
   }, []);
 
   return (
-    <div className="flex h-screen w-full flex-col overflow-hidden bg-white">
-      <Header profileImageUrl={profileImageUrl} onProfileImageChange={setProfileImageUrl} />
-      <div className="flex flex-1 overflow-hidden bg-surface-20">
-        <AppSidebar defaultActiveId="settlements" />
-        <div className="flex min-w-0 flex-1 flex-col overflow-hidden">
-          <main className="flex flex-1 flex-col overflow-hidden bg-surface-20">
-            <div className="flex h-[64px] w-full shrink-0 flex-col items-center justify-center border-b border-border-10 bg-white px-my-20">
-              <div className="flex w-full max-w-[1200px] items-center justify-start gap-my-16">
-                <h1 className="text-heading2_700 text-on-surface-10">정산</h1>
-              </div>
-            </div>
+    <AppShell sidebarActiveId="settlements">
+      <main className="flex flex-1 flex-col overflow-hidden bg-surface-20">
+        <div className="flex h-[64px] w-full shrink-0 flex-col items-center justify-center border-b border-border-10 bg-white px-my-20">
+          <div className={`${PAGE_CONTAINER_CLASS} flex items-center justify-start gap-my-16`}>
+            <h1 className="text-heading2_700 text-on-surface-10">정산</h1>
+          </div>
+        </div>
 
-            <div className="flex min-h-0 flex-1 flex-col justify-start items-stretch gap-0 overflow-y-auto px-my-20 py-0">
-              <div className="mx-auto flex w-full min-w-0 max-w-[1200px] flex-col gap-my-20 py-my-20">
+        <div className="flex min-h-0 flex-1 flex-col items-stretch justify-start gap-0 overflow-y-auto px-my-20 py-0">
+          <div className={`${PAGE_CONTAINER_CLASS} flex flex-col gap-my-20 py-my-20`}>
                 <AnalyticsPanel className="rounded-[4px] border border-border-10">
                   <Title2
                     text="정산 요약"
@@ -746,9 +741,7 @@ export default function MonetizationSettlementsPage() {
                 </AnalyticsPanel>
               </div>
             </div>
-          </main>
-        </div>
-      </div>
+      </main>
       <Dialog open={!!taxDetailTarget} onOpenChange={(open) => !open && setTaxDetailTarget(null)}>
         <DialogContent className="w-[560px] max-w-[calc(100vw-2rem)] rounded-[4px] border border-border-10 bg-white p-0">
           <div className="border-b border-divider-10 px-my-24 py-my-16">
@@ -893,6 +886,6 @@ export default function MonetizationSettlementsPage() {
           </div>
         </DialogContent>
       </Dialog>
-    </div>
+    </AppShell>
   );
 }

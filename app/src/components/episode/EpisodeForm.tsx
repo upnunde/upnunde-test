@@ -166,7 +166,7 @@ export function EpisodeForm({
     <>
       <div
         className={cn(
-          "mx-auto w-full max-w-[1200px] min-w-[640px] rounded-[4px] border border-border-10 bg-white shadow-none",
+          "mx-auto w-full min-w-0 max-w-[1200px] rounded-[4px] border border-border-10 bg-white shadow-none",
           stickyFooter && "flex min-h-0 flex-col",
           containerClassName,
         )}

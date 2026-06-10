@@ -51,6 +51,110 @@ export interface EpisodeListItemProps {
   onInquiry?: (episode: Episode) => void;
 }
 
+function EpisodeListItemActions({
+  episode,
+  status,
+  onPublish,
+  onEdit,
+  onDelete,
+  onLinkEditor,
+  onInquiry,
+  className,
+}: {
+  episode: Episode;
+  status: EpisodeStatus;
+  onPublish?: (episode: Episode) => void;
+  onEdit?: (episode: Episode) => void;
+  onDelete?: (episode: Episode) => void;
+  onLinkEditor?: (episode: Episode) => void;
+  onInquiry?: (episode: Episode) => void;
+  className?: string;
+}) {
+  return (
+    <div className={cn("flex shrink-0 items-center justify-end gap-my-8", className)}>
+      {status === "DRAFT" && (
+        <>
+          <button
+            type="button"
+            onClick={() => onEdit?.(episode)}
+            className={`${ACTION_ICON_BUTTON_BASE} ${ACTION_ICON_BUTTON_EDIT_HOVER}`}
+            aria-label="수정"
+          >
+            <Pencil className="h-4 w-4" aria-hidden />
+          </button>
+          <button
+            type="button"
+            onClick={() => onDelete?.(episode)}
+            className={`${ACTION_ICON_BUTTON_BASE} ${ACTION_ICON_BUTTON_DELETE_HOVER}`}
+            aria-label="삭제"
+          >
+            <Trash2 className="h-4 w-4" aria-hidden />
+          </button>
+        </>
+      )}
+
+      {status === "PRIVATE" && (
+        <>
+          <button
+            type="button"
+            onClick={() => onPublish?.(episode)}
+            className="h-8 shrink-0 cursor-pointer rounded-md border border-primary px-my-8 text-body3_500 text-primary transition-colors hover:bg-primary/10 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-2 sm:px-my-12"
+          >
+            공개로 전환
+          </button>
+          <button
+            type="button"
+            onClick={() => onEdit?.(episode)}
+            className={`${ACTION_ICON_BUTTON_BASE} ${ACTION_ICON_BUTTON_EDIT_HOVER}`}
+            aria-label="수정"
+          >
+            <Pencil className="h-4 w-4" aria-hidden />
+          </button>
+          <button
+            type="button"
+            onClick={() => onDelete?.(episode)}
+            className={`${ACTION_ICON_BUTTON_BASE} ${ACTION_ICON_BUTTON_DELETE_HOVER}`}
+            aria-label="삭제"
+          >
+            <Trash2 className="h-4 w-4" aria-hidden />
+          </button>
+        </>
+      )}
+
+      {status === "PUBLISHED" && (
+        <DropdownMenu>
+          <DropdownMenuTrigger
+            type="button"
+            className={`${ACTION_ICON_BUTTON_BASE} ${ACTION_ICON_BUTTON_MORE_HOVER}`}
+            aria-label="더보기"
+          >
+            <MoreVertical className="h-4 w-4" aria-hidden />
+          </DropdownMenuTrigger>
+          <DropdownMenuContent
+            align="end"
+            className="w-48 rounded-lg border border-border-10 bg-white p-my-4"
+          >
+            <DropdownMenuItem
+              className="flex cursor-pointer items-center gap-my-8 rounded-md px-my-12 py-my-8 text-body3_400 text-on-surface-20 outline-none hover:bg-surface-20"
+              onSelect={() => onLinkEditor?.(episode)}
+            >
+              <FileText className="h-4 w-4 shrink-0 text-on-surface-30" aria-hidden />
+              에피소드 상세
+            </DropdownMenuItem>
+            <DropdownMenuItem
+              className="flex cursor-pointer items-center gap-my-8 rounded-md px-my-12 py-my-8 text-body3_400 text-on-surface-20 outline-none hover:bg-surface-20"
+              onSelect={() => onInquiry?.(episode)}
+            >
+              <Mail className="h-4 w-4 shrink-0 text-on-surface-30" aria-hidden />
+              문의하기
+            </DropdownMenuItem>
+          </DropdownMenuContent>
+        </DropdownMenu>
+      )}
+    </div>
+  );
+}
+
 export function EpisodeListItem({
   episode,
   onRowClick,
@@ -83,129 +187,90 @@ export function EpisodeListItem({
           onRowClick?.(episode);
         }
       }}
-      className="flex items-center border-b border-divider-10 px-my-20 py-my-12 transition-colors hover:bg-surface-20 last:border-b-0 cursor-pointer"
-      aria-labelledby={`episode-title-${episode.id}`}
+      className="cursor-pointer border-b border-divider-10 px-my-16 py-my-16 transition-colors last:border-b-0 hover:bg-surface-20 lg:px-my-20 lg:py-my-12"
+      aria-label={`${episode.episodeNumber}화 ${episode.title}`}
     >
-      {/* 회차 */}
-      <div className="w-20 shrink-0 text-body3_400 text-on-surface-20" aria-hidden>
-        {episode.episodeNumber}화
-      </div>
-
-      {/* 썸네일 & 제목 */}
-      <div className="flex min-w-0 flex-1 items-center gap-my-16">
-        <div className="relative h-[107px] w-[60px] shrink-0 overflow-hidden rounded border border-border-10 bg-slate-200">
+      {/* 모바일: 썸네일 + 제목 + 작업 */}
+      <div className="flex items-start gap-my-12 lg:hidden">
+        <div className="relative h-[84px] w-[47px] shrink-0 overflow-hidden rounded border border-border-10 bg-slate-200">
           <Image
             src={episode.thumbnail}
             alt=""
             fill
-            sizes="60px"
+            sizes="47px"
             className="object-cover"
           />
           <div className={THUMBNAIL_DIM_OVERLAY_CLASS} aria-hidden />
         </div>
-        <span
-          id={`episode-title-${episode.id}`}
-          className="truncate text-body1_500 text-on-surface-10"
-        >
-          {episode.title}
-        </span>
+
+        <div className="flex min-w-0 flex-1 flex-col gap-my-4">
+          <div className="flex items-start justify-between gap-my-8">
+            <div className="min-w-0 flex-1">
+              <p className="text-caption1_400 text-on-surface-30">{episode.episodeNumber}화</p>
+              <span className="mt-my-4 line-clamp-2 text-body2_500 text-on-surface-10">
+                {episode.title}
+              </span>
+            </div>
+            <div onClick={(e) => e.stopPropagation()}>
+              <EpisodeListItemActions
+                episode={episode}
+                status={status}
+                onPublish={onPublish}
+                onEdit={onEdit}
+                onDelete={onDelete}
+                onLinkEditor={onLinkEditor}
+                onInquiry={onInquiry}
+                className="self-start"
+              />
+            </div>
+          </div>
+          <div className="flex flex-wrap items-center gap-x-my-12 gap-y-my-4 text-caption1_400 text-on-surface-30">
+            <span>{dateDisplay}</span>
+            {!isDraft ? <span>{viewsDisplay}</span> : null}
+            <span className={STATUS_TEXT_CLASS[status]}>{STATUS_LABEL[status]}</span>
+          </div>
+        </div>
       </div>
 
-      {/* 개시일 (정책 12: YYYY.MM.DD) */}
-      <div className="w-32 shrink-0 px-0 text-body3_400 text-on-surface-20">{dateDisplay}</div>
+      {/* lg 이상: 기존 테이블 행 (헤더 컬럼 폭과 동일) */}
+      <div className="hidden w-full items-center lg:flex">
+        <div className="w-20 shrink-0 text-body3_400 text-on-surface-20" aria-hidden>
+          {episode.episodeNumber}화
+        </div>
 
-      {/* 조회수 (정책 5: 실시간 표기) */}
-      <div className="w-24 shrink-0 px-0 text-body3_400 text-on-surface-30">{viewsDisplay}</div>
+        <div className="flex min-w-0 flex-1 items-center gap-my-16">
+          <div className="relative h-[107px] w-[60px] shrink-0 overflow-hidden rounded border border-border-10 bg-slate-200">
+            <Image
+              src={episode.thumbnail}
+              alt=""
+              fill
+              sizes="60px"
+              className="object-cover"
+            />
+            <div className={THUMBNAIL_DIM_OVERLAY_CLASS} aria-hidden />
+          </div>
+          <span className="min-w-0 flex-1 truncate text-body1_500 text-on-surface-10">
+            {episode.title}
+          </span>
+        </div>
 
-      {/* 공개여부 */}
-      <div className={cn("w-24 shrink-0 px-0 text-body3_400", STATUS_TEXT_CLASS[status])}>
-        {STATUS_LABEL[status]}
-      </div>
+        <div className="w-32 shrink-0 px-0 text-body3_400 text-on-surface-20">{dateDisplay}</div>
+        <div className="w-24 shrink-0 px-0 text-body3_400 text-on-surface-30">{viewsDisplay}</div>
+        <div className={cn("w-24 shrink-0 px-0 text-body3_400", STATUS_TEXT_CLASS[status])}>
+          {STATUS_LABEL[status]}
+        </div>
 
-      {/* 작업 버튼 영역 - 클릭 시 행 클릭 전파 방지 */}
-      <div
-        className="flex w-48 shrink-0 items-center justify-end gap-my-8 px-0"
-        onClick={(e) => e.stopPropagation()}
-      >
-        {status === "DRAFT" && (
-          <>
-            <button
-              type="button"
-              onClick={() => onEdit?.(episode)}
-              className={`${ACTION_ICON_BUTTON_BASE} ${ACTION_ICON_BUTTON_EDIT_HOVER}`}
-              aria-label="수정"
-            >
-              <Pencil className="h-4 w-4" aria-hidden />
-            </button>
-            <button
-              type="button"
-              onClick={() => onDelete?.(episode)}
-              className={`${ACTION_ICON_BUTTON_BASE} ${ACTION_ICON_BUTTON_DELETE_HOVER}`}
-              aria-label="삭제"
-            >
-              <Trash2 className="h-4 w-4" aria-hidden />
-            </button>
-          </>
-        )}
-
-        {status === "PRIVATE" && (
-          <>
-            <button
-              type="button"
-              onClick={() => onPublish?.(episode)}
-              className="h-8 shrink-0 cursor-pointer rounded-md border border-primary px-my-12 text-body3_500 text-primary transition-colors hover:bg-primary/10 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-2"
-            >
-              공개로 전환
-            </button>
-            <button
-              type="button"
-              onClick={() => onEdit?.(episode)}
-              className={`${ACTION_ICON_BUTTON_BASE} ${ACTION_ICON_BUTTON_EDIT_HOVER}`}
-              aria-label="수정"
-            >
-              <Pencil className="h-4 w-4" aria-hidden />
-            </button>
-            <button
-              type="button"
-              onClick={() => onDelete?.(episode)}
-              className={`${ACTION_ICON_BUTTON_BASE} ${ACTION_ICON_BUTTON_DELETE_HOVER}`}
-              aria-label="삭제"
-            >
-              <Trash2 className="h-4 w-4" aria-hidden />
-            </button>
-          </>
-        )}
-
-        {status === "PUBLISHED" && (
-          <DropdownMenu>
-            <DropdownMenuTrigger
-              type="button"
-              className={`${ACTION_ICON_BUTTON_BASE} ${ACTION_ICON_BUTTON_MORE_HOVER}`}
-              aria-label="더보기"
-            >
-              <MoreVertical className="h-4 w-4" aria-hidden />
-            </DropdownMenuTrigger>
-          <DropdownMenuContent
-              align="end"
-              className="w-48 rounded-lg border border-border-10 bg-white p-my-4"
-            >
-              <DropdownMenuItem
-                className="flex cursor-pointer items-center gap-my-8 rounded-md px-my-12 py-my-8 text-body3_400 text-on-surface-20 outline-none hover:bg-surface-20"
-                onSelect={() => onLinkEditor?.(episode)}
-              >
-                <FileText className="h-4 w-4 shrink-0 text-on-surface-30" aria-hidden />
-                에피소드 상세
-              </DropdownMenuItem>
-              <DropdownMenuItem
-                className="flex cursor-pointer items-center gap-my-8 rounded-md px-my-12 py-my-8 text-body3_400 text-on-surface-20 outline-none hover:bg-surface-20"
-                onSelect={() => onInquiry?.(episode)}
-              >
-                <Mail className="h-4 w-4 shrink-0 text-on-surface-30" aria-hidden />
-                문의하기
-              </DropdownMenuItem>
-            </DropdownMenuContent>
-          </DropdownMenu>
-        )}
+        <div className="w-48 shrink-0" onClick={(e) => e.stopPropagation()}>
+          <EpisodeListItemActions
+            episode={episode}
+            status={status}
+            onPublish={onPublish}
+            onEdit={onEdit}
+            onDelete={onDelete}
+            onLinkEditor={onLinkEditor}
+            onInquiry={onInquiry}
+          />
+        </div>
       </div>
     </article>
   );

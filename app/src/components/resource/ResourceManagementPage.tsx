@@ -181,7 +181,7 @@ export function ResourceManagementPage() {
       <main className="flex min-h-0 flex-1 flex-col bg-surface-20">
         {/* [정책 1] 헤더 (레이아웃 가이드: margin 40, max-width 1200, min-width 640) */}
         <header className={PAGE_SUBHEADER_CLASS}>
-          <div className="flex w-full max-w-[1200px] min-w-[640px] items-center justify-between gap-my-16">
+          <div className="flex w-full min-w-0 max-w-[1200px] mx-auto items-center justify-between gap-my-16">
             <div className="flex items-center justify-start gap-my-12">
               <HeaderBackButton onClick={handleBack} aria-label="시리즈 목록으로" />
               <h1 className="text-heading2_700 text-on-surface-10">리소스 관리</h1>
@@ -190,7 +190,7 @@ export function ResourceManagementPage() {
         </header>
 
         <div className={PAGE_SCROLL_COLUMN_CLASS}>
-          <div className="w-full max-w-[1200px] min-w-[640px] mx-auto flex flex-col gap-my-16">
+          <div className="w-full min-w-0 max-w-[1200px] mx-auto mx-auto flex flex-col gap-my-16">
             <ResourceBanner seriesId={seriesId} />
 
             <div className="flex w-full flex-col items-start gap-my-24 lg:flex-row">

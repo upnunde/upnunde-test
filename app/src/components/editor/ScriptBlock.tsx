@@ -44,6 +44,10 @@ import { getCaretCoordinates } from "@/lib/caretPosition";
 import { SlashCommandMenu, type SlashSelectPayload } from "./SlashCommandMenu";
 import { ResourcePicker } from "./ResourcePicker";
 import { ChoiceBlockTable } from "./ChoiceBlockTable";
+import {
+  editorBlockTrailingActionClass,
+  editorRowTrailingActionClass,
+} from "@/lib/editor-control-visibility";
 import { cn } from "@/lib/utils";
 import {
   SPEAKER_PERSONA_TOKEN,
@@ -730,7 +734,10 @@ export function ScriptBlock({
             type="button"
             variant="ghost"
             size="icon"
-            className="ml-auto h-8 w-8 shrink-0 rounded-full p-0 text-on-surface-30 opacity-0 transition-opacity hover:bg-red-50 hover:text-red-500 group-hover/row:opacity-100"
+            className={cn(
+              "ml-auto h-8 w-8 shrink-0 rounded-full p-0 text-on-surface-30 hover:bg-red-50 hover:text-red-500",
+              editorRowTrailingActionClass(),
+            )}
             aria-label="Delete block"
             onClick={handleDeleteBlock}
           >
@@ -939,7 +946,10 @@ export function ScriptBlock({
               type="button"
               variant="ghost"
               size="icon"
-              className="ml-auto shrink-0 opacity-0 transition-opacity group-hover:opacity-100 h-8 w-8 text-on-surface-30 hover:bg-red-50 hover:text-red-500"
+              className={cn(
+              "ml-auto h-8 w-8 shrink-0 text-on-surface-30 hover:bg-red-50 hover:text-red-500",
+              editorBlockTrailingActionClass(),
+            )}
               aria-label="Delete block"
               onClick={(e) => {
                 e.preventDefault();
@@ -1002,7 +1012,10 @@ export function ScriptBlock({
             type="button"
             variant="ghost"
             size="icon"
-            className="ml-auto shrink-0 opacity-0 transition-opacity group-hover:opacity-100 h-8 w-8 text-on-surface-30 hover:bg-red-50 hover:text-red-500"
+            className={cn(
+              "ml-auto h-8 w-8 shrink-0 text-on-surface-30 hover:bg-red-50 hover:text-red-500",
+              editorBlockTrailingActionClass(),
+            )}
             aria-label="Delete block"
             onClick={(e) => {
               e.preventDefault();
@@ -1076,7 +1089,10 @@ export function ScriptBlock({
           type="button"
           variant="ghost"
           size="icon"
-          className="ml-auto h-8 w-8 shrink-0 rounded-full p-0 text-on-surface-30 opacity-0 transition-opacity hover:bg-red-50 hover:text-red-500 group-hover/row:opacity-100"
+          className={cn(
+              "ml-auto h-8 w-8 shrink-0 rounded-full p-0 text-on-surface-30 hover:bg-red-50 hover:text-red-500",
+              editorRowTrailingActionClass(),
+            )}
           aria-label="Delete block"
           onClick={(e) => {
             e.preventDefault();
@@ -1160,7 +1176,10 @@ export function ScriptBlock({
             type="button"
             variant="ghost"
             size="icon"
-            className="ml-auto shrink-0 opacity-0 transition-opacity group-hover:opacity-100 h-8 w-8 text-on-surface-30 hover:bg-red-50 hover:text-red-500"
+            className={cn(
+              "ml-auto h-8 w-8 shrink-0 text-on-surface-30 hover:bg-red-50 hover:text-red-500",
+              editorBlockTrailingActionClass(),
+            )}
             aria-label="Delete block"
             onClick={(e) => {
               e.preventDefault();
@@ -1458,7 +1477,10 @@ export function ScriptBlock({
             type="button"
             variant="ghost"
             size="icon"
-            className="ml-auto shrink-0 opacity-0 transition-opacity group-hover:opacity-100 h-8 w-8 text-on-surface-30 hover:bg-red-50 hover:text-red-500"
+            className={cn(
+              "ml-auto h-8 w-8 shrink-0 text-on-surface-30 hover:bg-red-50 hover:text-red-500",
+              editorBlockTrailingActionClass(),
+            )}
             aria-label="Delete block"
             onClick={(e) => {
               e.preventDefault();
@@ -1511,7 +1533,10 @@ export function ScriptBlock({
           type="button"
           variant="ghost"
           size="icon"
-          className="ml-auto shrink-0 opacity-0 transition-opacity group-hover:opacity-100 h-8 w-8 text-on-surface-30 hover:bg-red-50 hover:text-red-500"
+          className={cn(
+              "ml-auto h-8 w-8 shrink-0 text-on-surface-30 hover:bg-red-50 hover:text-red-500",
+              editorBlockTrailingActionClass(),
+            )}
           aria-label="Delete block"
           onClick={(e) => {
             e.preventDefault();

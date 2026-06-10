@@ -2,8 +2,8 @@
 
 import React, { useState, useMemo, useCallback } from "react";
 import { useRouter } from "next/navigation";
-import Header from "@/components/Header/Header";
-import AppSidebar from "@/components/AppSidebar/AppSidebar";
+import { AppShell } from "@/components/layout/AppShell";
+import { PAGE_CONTAINER_CLASS } from "@/lib/page-layout";
 import { NotificationList } from "@/components/notification/NotificationList";
 import { Pagination } from "@/components/episode/Pagination";
 import type { NotificationData } from "@/types/notification";
@@ -352,7 +352,6 @@ const MOCK_NOTIFICATIONS: NotificationData[] = buildMockNotifications();
 
 export default function NotificationsPage() {
   const router = useRouter();
-  const [profileImageUrl, setProfileImageUrl] = useState<string | null>(null);
   const [notifications] = useState<NotificationData[]>(MOCK_NOTIFICATIONS);
   const [currentPage, setCurrentPage] = useState(1);
 
@@ -371,22 +370,17 @@ export default function NotificationsPage() {
   );
 
   return (
-    <div className="flex flex-col h-screen w-full bg-white overflow-hidden">
-      <Header profileImageUrl={profileImageUrl} onProfileImageChange={setProfileImageUrl} />
-      <div className="flex flex-1 overflow-hidden bg-surface-20">
-        <AppSidebar defaultActiveId="notification" />
-        <div className="flex min-w-0 flex-1 flex-col overflow-hidden">
-          <main className="flex flex-1 flex-col overflow-hidden bg-surface-20">
-            {/* Sub Header (레이아웃 가이드: margin 40, max-width 1200, min-width 640) */}
-            <div className="w-full h-[64px] shrink-0 border-b border-border-10 bg-white flex flex-col items-center justify-center px-my-20">
-              <div className="w-full max-w-[1200px] flex items-center justify-start gap-my-16">
-                <h1 className="text-heading2_700 text-on-surface-10">알림</h1>
-              </div>
-            </div>
+    <AppShell sidebarActiveId="notification">
+      <main className="flex flex-1 flex-col overflow-hidden bg-surface-20">
+        <div className="flex h-[64px] w-full shrink-0 flex-col items-center justify-center border-b border-border-10 bg-white px-my-20">
+          <div className={`${PAGE_CONTAINER_CLASS} flex items-center justify-start gap-my-16`}>
+            <h1 className="text-heading2_700 text-on-surface-10">알림</h1>
+          </div>
+        </div>
 
-            <div className="flex-1 overflow-y-auto flex flex-col items-center py-my-32 gap-my-12 px-my-20">
-              <div className="w-full max-w-[1200px] mx-auto">
-              <NotificationList
+        <div className="flex flex-1 flex-col items-center gap-my-12 overflow-y-auto px-my-20 py-my-32">
+          <div className={PAGE_CONTAINER_CLASS}>
+            <NotificationList
                 notifications={paginatedNotifications}
                 onContactClick={handleContactClick}
                 footer={
@@ -399,12 +393,10 @@ export default function NotificationsPage() {
                     />
                   ) : undefined
                 }
-              />
-              </div>
-            </div>
-          </main>
+            />
+          </div>
         </div>
-      </div>
-    </div>
+      </main>
+    </AppShell>
   );
 }

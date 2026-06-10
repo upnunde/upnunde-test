@@ -130,7 +130,7 @@ export function BgmSection({
 
   return (
     <>
-      <div className="w-full max-w-[1200px] min-w-[640px] bg-surface-10 rounded-[4px] border border-border-10 flex flex-col justify-start items-start">
+      <div className="w-full min-w-0 max-w-[1200px] mx-auto bg-surface-10 rounded-[4px] border border-border-10 flex flex-col justify-start items-start">
         <div className="w-full self-stretch px-my-20 pt-my-20 pb-my-12 border-b border-border-10 inline-flex justify-between items-center gap-0">
           <Title2
             text={title}

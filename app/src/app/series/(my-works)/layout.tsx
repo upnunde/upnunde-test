@@ -7,53 +7,47 @@
  * 가드: npm run check:routes · .cursor/rules/page-route-guard.mdc
  */
 
-import React, { useState } from "react";
+import React from "react";
 import { usePathname, useRouter } from "next/navigation";
-import Header from "@/components/Header/Header";
-import AppSidebar from "@/components/AppSidebar/AppSidebar";
+import { AppShell } from "@/components/layout/AppShell";
 import { SegmentedTextTabs } from "@/components/ui/segmented-text-tabs";
+import { PAGE_CONTAINER_CLASS } from "@/lib/page-layout";
+import { cn } from "@/lib/utils";
 import { WORKS_TABS, WORKS_TAB_PATH, getWorksTabFromPathname, type WorksTabId } from "@/lib/worksArea";
 
 export default function MyWorksLayout({ children }: { children: React.ReactNode }) {
   const router = useRouter();
   const pathname = usePathname();
-  const [profileImageUrl, setProfileImageUrl] = useState<string | null>(null);
   const activeWorksTab = getWorksTabFromPathname(pathname);
 
   return (
-    <div className="flex flex-col h-screen w-full bg-white overflow-hidden">
-      <Header profileImageUrl={profileImageUrl} onProfileImageChange={setProfileImageUrl} />
-      <div className="flex flex-1 overflow-hidden bg-surface-20">
-        <AppSidebar defaultActiveId="series" />
-        <div className="flex min-w-0 flex-1 flex-col overflow-hidden">
-          <main className="flex flex-1 flex-col overflow-hidden bg-surface-20">
-            <div className="w-full h-[64px] shrink-0 border-b border-border-10 bg-white flex flex-col items-center justify-center px-my-20">
-              <div className="w-full max-w-[1200px] flex items-center justify-start gap-my-16">
-                <h1 className="text-heading2_700 text-on-surface-10">내 작품</h1>
-              </div>
-            </div>
-
-            <div className="flex-1 overflow-y-auto flex flex-col items-center py-0 gap-0 px-my-20">
-              <div className="w-full max-w-[1200px] mx-0">
-                <div className="inline-flex flex-col items-start justify-start gap-my-8 self-stretch px-0 pb-my-8 pt-my-20">
-                  <SegmentedTextTabs
-                    aria-label="내 작품 범주"
-                    items={WORKS_TABS}
-                    activeId={activeWorksTab}
-                    onSelect={(id) => {
-                      if (id === "series" || id === "character" || id === "scenario") {
-                        router.push(WORKS_TAB_PATH[id as WorksTabId]);
-                      }
-                    }}
-                    size="xl"
-                  />
-                </div>
-              </div>
-              <div className="w-full max-w-[1200px] mx-0">{children}</div>
-            </div>
-          </main>
+    <AppShell sidebarActiveId="series">
+      <main className="flex flex-1 flex-col overflow-hidden bg-surface-20">
+        <div className="flex h-[64px] w-full shrink-0 flex-col items-center justify-center border-b border-border-10 bg-white px-my-20">
+          <div className={cn(PAGE_CONTAINER_CLASS, "mx-0 flex items-center justify-start gap-my-16")}>
+            <h1 className="text-heading2_700 text-on-surface-10">내 작품</h1>
+          </div>
         </div>
-      </div>
-    </div>
+
+        <div className="flex flex-1 flex-col items-center gap-0 overflow-y-auto px-my-20 py-0">
+          <div className={cn(PAGE_CONTAINER_CLASS, "mx-0")}>
+            <div className="inline-flex flex-col items-start justify-start gap-my-8 self-stretch px-0 pb-my-8 pt-my-20">
+              <SegmentedTextTabs
+                aria-label="내 작품 범주"
+                items={WORKS_TABS}
+                activeId={activeWorksTab}
+                onSelect={(id) => {
+                  if (id === "series" || id === "character" || id === "scenario") {
+                    router.push(WORKS_TAB_PATH[id as WorksTabId]);
+                  }
+                }}
+                size="xl"
+              />
+            </div>
+          </div>
+          <div className={cn(PAGE_CONTAINER_CLASS, "mx-0")}>{children}</div>
+        </div>
+      </main>
+    </AppShell>
   );
 }

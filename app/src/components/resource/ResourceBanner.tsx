@@ -45,7 +45,7 @@ export function ResourceBanner({ seriesId }: ResourceBannerProps) {
 
   return (
     <div className="self-stretch pt-0 inline-flex flex-col justify-start items-center gap-my-12">
-      <div className="w-full max-w-[1200px] min-w-[640px] p-my-20 bg-surface-10 rounded-[4px] outline outline-1 outline-offset-[-1px] outline-border-10 inline-flex justify-center items-center gap-my-40">
+      <div className="w-full min-w-0 max-w-[1200px] mx-auto p-my-20 bg-surface-10 rounded-[4px] outline outline-1 outline-offset-[-1px] outline-border-10 inline-flex justify-center items-center gap-my-40">
         <div className="flex-1 flex justify-start items-center gap-my-20">
           <div className="flex justify-start items-center gap-my-8">
             <div className="w-6 h-6 relative rounded overflow-hidden shrink-0">

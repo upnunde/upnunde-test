@@ -7,8 +7,15 @@ import { EditorScriptBootstrap } from "@/components/editor/EditorScriptBootstrap
 import { EditorSubHeader } from "@/components/editor/EditorSubHeader";
 import EditorBody from "@/components/editor/EditorBody";
 import { SceneNavigation } from "@/components/editor/SceneNavigation";
+import { EditorSceneTabStrip } from "@/components/editor/EditorSceneTabStrip";
+import { EditorMobileBlockToolbar } from "@/components/editor/EditorMobileBlockToolbar";
+import { EditorMobilePreviewPlayer } from "@/components/editor/EditorMobilePreviewPlayer";
 import { PreviewScreen } from "@/components/editor/PreviewScreen";
 import { IPhone15ProFrame } from "@/components/preview/IPhone15ProFrame";
+import {
+  EditorMobileTabBar,
+  type EditorMobilePanel,
+} from "@/components/editor/EditorMobileTabBar";
 import { EpisodeForm } from "@/components/episode/EpisodeForm";
 import type { EpisodeFormSubmitPayload } from "@/components/episode/EpisodeForm";
 import {
@@ -17,15 +24,78 @@ import {
 } from "@/components/episode/EpisodeAutoGeneratorModal";
 import { applyInitialScriptToEditor } from "@/lib/apply-initial-script-to-editor";
 import { useSceneClickHandler } from "@/hooks/useSceneClickHandler";
+import { useIsLgUp } from "@/hooks/useMediaQuery";
+import { EditorAutoGeneratorFloatingButton } from "@/components/editor/EditorAutoGeneratorFloatingButton";
 import { Dialog, DialogContent, DialogTitle } from "@/components/ui/dialog";
-import { Button } from "@/components/ui/button";
+import { EDITOR_SCENE_HEADER_ID, EDITOR_SCROLL_ROOT_ATTR } from "@/lib/editor-scroll";
+import { cn } from "@/lib/utils";
+
+function EditorWorkspace({
+  isDesktop,
+  mobilePanel,
+  onOpenAutoGenerator,
+}: {
+  isDesktop: boolean;
+  mobilePanel: EditorMobilePanel;
+  onOpenAutoGenerator: () => void;
+}) {
+  const editorScrollClass = cn(
+    "relative z-0 min-h-0 flex-1 overflow-y-auto overscroll-none",
+    isDesktop ? "py-my-40 px-0" : "px-my-16 pb-my-8 pt-0",
+  );
+
+  if (isDesktop) {
+    return (
+      <div className="flex min-h-0 w-full flex-1 items-start justify-center overflow-hidden bg-white">
+        <div className="relative flex h-full min-h-0 w-full flex-1 flex-col overflow-hidden border-r border-border-10">
+          <EditorAutoGeneratorFloatingButton onClick={onOpenAutoGenerator} />
+          <div className={editorScrollClass} {...{ [EDITOR_SCROLL_ROOT_ATTR]: "" }}>
+            <EditorBody />
+          </div>
+        </div>
+        <div className="sticky top-10 ml-auto flex h-full shrink-0 flex-col items-center justify-start p-my-40">
+          <IPhone15ProFrame>
+            <PreviewScreen />
+          </IPhone15ProFrame>
+        </div>
+      </div>
+    );
+  }
+
+  return (
+    <div className="flex min-h-0 flex-1 flex-col overflow-hidden bg-white">
+      <div
+        className={cn(
+          "relative flex min-h-0 flex-1 flex-col overflow-hidden",
+          mobilePanel !== "edit" && "hidden",
+        )}
+      >
+        <div className={editorScrollClass} {...{ [EDITOR_SCROLL_ROOT_ATTR]: "" }}>
+          <EditorBody />
+        </div>
+        {!isDesktop && mobilePanel === "edit" ? <EditorMobileBlockToolbar /> : null}
+      </div>
+
+      <div
+        className={cn(
+          "flex min-h-0 flex-1 flex-col overflow-hidden bg-black",
+          mobilePanel !== "preview" && "hidden",
+        )}
+      >
+        <EditorMobilePreviewPlayer isActive={mobilePanel === "preview"} />
+      </div>
+    </div>
+  );
+}
 
 function EditorInner() {
   const router = useRouter();
   const searchParams = useSearchParams();
   const handleSceneClick = useSceneClickHandler();
+  const isDesktop = useIsLgUp();
   const [profileImageUrl, setProfileImageUrl] = useState<string | null>(null);
   const [isSceneSidebarCollapsed, setIsSceneSidebarCollapsed] = useState(false);
+  const [mobilePanel, setMobilePanel] = useState<EditorMobilePanel>("edit");
   const [isEpisodeInfoModalOpen, setIsEpisodeInfoModalOpen] = useState(false);
   const [isAutoGeneratorModalOpen, setIsAutoGeneratorModalOpen] = useState(false);
   const [autoGeneratorValues, setAutoGeneratorValues] = useState<EpisodeAutoGeneratorPayload>({
@@ -88,82 +158,92 @@ function EditorInner() {
     setIsAutoGeneratorModalOpen(false);
   }, []);
 
+  const handleSceneNavigate = useCallback(
+    (blockId: string) => {
+      handleSceneClick(blockId);
+      setMobilePanel("edit");
+    },
+    [handleSceneClick],
+  );
+
   return (
     <div className="flex h-screen flex-col overflow-hidden bg-white">
-      {/* 1. Global Top Header (Logo, User Avatar) - Full Width */}
       <Header profileImageUrl={profileImageUrl} onProfileImageChange={setProfileImageUrl} />
 
-      {/* 2. Main Flex Container */}
       <div className="relative flex min-h-0 flex-1 overflow-hidden">
-        {/* 2-1. Left Sidebar (Scene List) - Fixed Width, Full Height */}
-        <aside
-          className={
-            isSceneSidebarCollapsed
-              ? "relative z-20 w-fit shrink-0 border-r border-border-10 bg-white overflow-visible px-my-8"
-              : "w-[240px] shrink-0 border-r border-border-10 bg-white overflow-y-auto overscroll-none"
-          }
-        >
-          <SceneNavigation
-            onSceneClick={handleSceneClick}
-            collapsed={isSceneSidebarCollapsed}
-            onToggleCollapsed={() =>
-              setIsSceneSidebarCollapsed((prev) => !prev)
+        {isDesktop ? (
+          <aside
+            className={
+              isSceneSidebarCollapsed
+                ? "relative z-20 w-fit shrink-0 overflow-visible border-r border-border-10 bg-white px-my-8"
+                : "w-[240px] shrink-0 overflow-y-auto overscroll-none border-r border-border-10 bg-white"
             }
-          />
-        </aside>
+          >
+            <SceneNavigation
+              onSceneClick={handleSceneClick}
+              collapsed={isSceneSidebarCollapsed}
+              onToggleCollapsed={() => setIsSceneSidebarCollapsed((prev) => !prev)}
+            />
+          </aside>
+        ) : null}
 
-        {/* 2-2. Right Content Area (Sub-header + Editor + Preview) */}
         <main className="flex min-w-0 flex-1 flex-col overflow-hidden">
           <EditorScriptBootstrap routeKey={searchParams.toString()} startEmpty={shouldStartEmpty} />
-          {/* 2-2-a. Sub Header (Back, Title, Actions) */}
-          <div className="w-full border-b border-border-10">
+
+          <div className="w-full shrink-0 border-b border-border-10 bg-white">
             <EditorSubHeader
               key={searchParams.size === 0 ? "editor" : searchParams.toString()}
               title={editorHeaderTitle}
               onEditEpisodeInfo={() => setIsEpisodeInfoModalOpen(true)}
             />
-          </div>
 
-          {/* Container: fixed height, no scroll — only inner content scrolls */}
-          <div className="flex flex-1 w-full min-h-0 overflow-hidden bg-white justify-center items-start">
-            {/* Left Area: bordered panel fixed in view, only inner content scrolls */}
-            <div className="relative flex flex-1 min-h-0 h-full w-full flex-col border-r border-border-10 overflow-hidden">
-              <Button
-                type="button"
-                variant="ghost"
-                size="form"
-                className="absolute top-3 right-3 z-30 rounded-full bg-slate-800 px-my-16 text-body3_500 text-white shadow-elevation-10 hover:bg-slate-700 hover:text-white"
+            <div
+              id={EDITOR_SCENE_HEADER_ID}
+              className={cn(
+                "relative hidden w-full shrink-0 border-t border-border-10 bg-white",
+                mobilePanel === "edit" && "max-lg:block",
+              )}
+            >
+              <EditorSceneTabStrip
+                onSceneClick={handleSceneNavigate}
+                className="w-full px-my-16"
+              />
+              <EditorAutoGeneratorFloatingButton
+                placement="below-tabs"
                 onClick={() => setIsAutoGeneratorModalOpen(true)}
-              >
-                에피소드 생성기
-              </Button>
-              <div className="relative z-0 flex-1 min-h-0 overflow-y-auto overscroll-none py-my-40 px-0">
-                <EditorBody />
-              </div>
-            </div>
-
-            {/* Right Area: Phone Preview (Fixed size, sticky to stay visible when scrolling) */}
-            <div className="shrink-0 sticky top-10 h-full ml-auto p-my-40 flex flex-col justify-start items-center">
-              <IPhone15ProFrame>
-                <PreviewScreen />
-              </IPhone15ProFrame>
+                className="right-my-16"
+              />
             </div>
           </div>
+
+          <EditorWorkspace
+            isDesktop={isDesktop}
+            mobilePanel={mobilePanel}
+            onOpenAutoGenerator={() => setIsAutoGeneratorModalOpen(true)}
+          />
+
+          {!isDesktop ? (
+            <EditorMobileTabBar active={mobilePanel} onChange={setMobilePanel} />
+          ) : null}
         </main>
 
-        {/* 2-3. Profile modal portal target (DOM order: 프로필 아이콘 바로 아래 위치용) */}
-        <div id="profile-modal-portal" className="absolute left-0 top-0 w-0 h-0 overflow-visible" aria-hidden />
+        <div
+          id="profile-modal-portal"
+          className="absolute left-0 top-0 h-0 w-0 overflow-visible"
+          aria-hidden
+        />
       </div>
+
       <Dialog open={isEpisodeInfoModalOpen} onOpenChange={setIsEpisodeInfoModalOpen}>
         <DialogContent
-          className="flex h-[min(90vh,calc(100vh-80px))] w-[min(92vw,760px)] max-w-[760px] min-w-[560px] flex-col overflow-hidden border-0 bg-transparent p-0 shadow-none"
+          className="flex h-[min(90vh,calc(100vh-80px))] w-[min(92vw,760px)] max-w-[760px] min-w-0 flex-col overflow-hidden border-0 bg-transparent p-0 shadow-none"
           aria-describedby={undefined}
         >
           <DialogTitle className="sr-only">에피소드 정보 수정</DialogTitle>
           <EpisodeForm
             onConverted={handleEpisodeInfoUpdate}
             onCancel={() => setIsEpisodeInfoModalOpen(false)}
-            containerClassName="max-w-[760px] min-w-[560px]"
+            containerClassName="max-w-[760px] min-w-0"
             stickyFooter
             sectionTitle={episodeHeaderSubtitle ?? "에피소드"}
             submitLabel="수정하기"
@@ -171,6 +251,7 @@ function EditorInner() {
           />
         </DialogContent>
       </Dialog>
+
       <EpisodeAutoGeneratorModal
         open={isAutoGeneratorModalOpen}
         onOpenChange={setIsAutoGeneratorModalOpen}
