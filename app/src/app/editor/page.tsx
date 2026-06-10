@@ -35,6 +35,7 @@ import { useEditorStore } from "@/store/useEditorStore";
 import {
   EDITOR_MOBILE_SCROLL_BOTTOM_PAD_FAB_ONLY_CLASS,
   EDITOR_MOBILE_SCROLL_BOTTOM_PAD_WITH_TOOLBAR_CLASS,
+  editorMobilePreviewChromeHiddenClass,
   isEditorMobileBlockToolbarVisible,
 } from "@/components/editor/editor-mobile-floating-layout";
 import { cn } from "@/lib/utils";
@@ -202,9 +203,13 @@ function EditorInner() {
     !isDesktop && mobilePanel === "edit",
   );
 
+  const previewChromeHidden = editorMobilePreviewChromeHiddenClass(isDesktop, mobilePanel);
+
   return (
     <div className={cn(APP_VIEWPORT_SHELL_CLASS, "bg-white")}>
-      <Header profileImageUrl={profileImageUrl} onProfileImageChange={setProfileImageUrl} />
+      <div className={cn(previewChromeHidden)}>
+        <Header profileImageUrl={profileImageUrl} onProfileImageChange={setProfileImageUrl} />
+      </div>
 
       <div className="relative flex min-h-0 flex-1 overflow-hidden">
         {isDesktop ? (
@@ -226,7 +231,7 @@ function EditorInner() {
         <main className="flex min-h-0 min-w-0 flex-1 flex-col overflow-hidden">
           <EditorScriptBootstrap routeKey={searchParams.toString()} startEmpty={shouldStartEmpty} />
 
-          <div className="w-full shrink-0 border-b border-border-10 bg-white">
+          <div className={cn("w-full shrink-0 border-b border-border-10 bg-white", previewChromeHidden)}>
             <div
               className={cn(
                 "overflow-hidden max-lg:transition-[max-height] max-lg:duration-200 max-lg:ease-out max-lg:max-h-14",

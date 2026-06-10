@@ -34,7 +34,7 @@ const STATUS_LABEL: Record<EpisodeStatus, string> = {
 const STATUS_TEXT_CLASS: Record<EpisodeStatus, string> = {
   DRAFT: "text-error-error",
   PRIVATE: "text-error-error",
-  PUBLISHED: "text-on-surface-30",
+  PUBLISHED: "text-blue-600",
 };
 
 export interface EpisodeListItemProps {
@@ -341,7 +341,7 @@ export function EpisodeListItem({
               />
             </div>
           </div>
-          <span className="line-clamp-2 text-body2_500 text-on-surface-10">{episode.title}</span>
+          <span className="line-clamp-2 text-body1_700 text-on-surface-10">{episode.title}</span>
           <span className={cn("text-caption1_400", STATUS_TEXT_CLASS[status])}>
             {STATUS_LABEL[status]}
           </span>

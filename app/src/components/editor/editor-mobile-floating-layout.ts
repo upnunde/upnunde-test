@@ -2,6 +2,22 @@ import { MOBILE_FIXED_BOTTOM_OFFSET_CLASS } from "@/lib/mobile-viewport";
 
 export type EditorMobilePanel = "edit" | "preview";
 
+/** 모바일 미리보기 탭 활성 여부 */
+export function isEditorMobilePreviewActive(
+  isDesktop: boolean,
+  panel: EditorMobilePanel,
+): boolean {
+  return !isDesktop && panel === "preview";
+}
+
+/** 모바일 미리보기 시 앱 헤더·서브헤더 등 크롬 숨김 */
+export function editorMobilePreviewChromeHiddenClass(
+  isDesktop: boolean,
+  panel: EditorMobilePanel,
+): string | undefined {
+  return isEditorMobilePreviewActive(isDesktop, panel) ? "max-lg:hidden" : undefined;
+}
+
 /** 모바일 에디터 FAB 공통 크기 — 48×48 */
 export const EDITOR_MOBILE_FAB_SIZE_CLASS = "h-12 w-12 shrink-0";
 
@@ -13,6 +29,10 @@ export const EDITOR_MOBILE_FAB_STACK_GAP_CLASS = "gap-my-8";
 
 /** 뷰포트 하단 기준 inset (블록 툴바 없음) */
 export const EDITOR_MOBILE_FAB_BOTTOM_BASE_CLASS = MOBILE_FIXED_BOTTOM_OFFSET_CLASS;
+
+/** 전환 FAB(48px) 바로 위 — 미리보기 「처음부터」 FAB */
+export const EDITOR_MOBILE_FAB_BOTTOM_ABOVE_PANEL_TOGGLE_CLASS =
+  "max-lg:bottom-[calc(var(--spacing-my-16)+3rem+var(--spacing-my-8)+env(safe-area-inset-bottom,0px)+var(--app-vv-bottom,0px))]";
 
 /** 블록 도킹 툴바 높이(py-my-8 + h-10) — 3.5rem */
 export const EDITOR_MOBILE_DOCKED_TOOLBAR_HEIGHT = "3.5rem";

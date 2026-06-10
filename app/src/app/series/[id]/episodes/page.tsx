@@ -14,7 +14,16 @@ import { Button } from "@/components/ui/button";
 import { HeaderBackButton } from "@/components/ui/header-back-button";
 import { Dialog, DialogContent, DialogTitle } from "@/components/ui/dialog";
 import { formDialogShellClassName, formDialogSheetBodyWrapperClassName, formDialogSheetEpisodeFormClassName } from "@/components/ui/modal";
-import { PAGE_GUTTER_X_CLASS, PAGE_SCROLL_COLUMN_CLASS, PAGE_SUBHEADER_CLASS } from "@/lib/page-layout";
+import {
+  PAGE_GUTTER_X_CLASS,
+  PAGE_MOBILE_FIXED_ACTION_BAR_SCROLL_PAD_CLASS,
+  PAGE_SCROLL_COLUMN_CLASS,
+  PAGE_SCROLL_COLUMN_ROOT_ATTR,
+  PAGE_SUBHEADER_CLASS,
+} from "@/lib/page-layout";
+import { SeriesFormStepNav } from "@/components/series/SeriesFormStepNav";
+import { useScrollHeaderCollapse } from "@/hooks/useScrollHeaderCollapse";
+import { useIsLgUp } from "@/hooks/useMediaQuery";
 import { cn } from "@/lib/utils";
 import { applyInitialScriptToEditor } from "@/lib/apply-initial-script-to-editor";
 import { createDefaultSeedBlocks, useEditorStore } from "@/store/useEditorStore";
@@ -133,6 +142,11 @@ function buildMockEpisodes(): Episode[] {
 const MOCK_EPISODES: Episode[] = buildMockEpisodes();
 
 export default function EpisodeManagementPage() {
+  const isDesktop = useIsLgUp();
+  const mobileSubHeaderCollapsed = useScrollHeaderCollapse(
+    PAGE_SCROLL_COLUMN_ROOT_ATTR,
+    !isDesktop,
+  );
   const router = useRouter();
   const setCurrentView = useEditorStore((s) => s.setCurrentView);
   const setBlocks = useEditorStore((s) => s.setBlocks);
@@ -309,34 +323,42 @@ export default function EpisodeManagementPage() {
       <div className="flex flex-1 overflow-hidden bg-surface-20">
         <div className="flex min-w-0 flex-1 flex-col overflow-hidden">
           <main className="flex flex-1 flex-col overflow-hidden bg-surface-20">
-            {/* Sub Header (레이아웃 가이드: margin 40, max-width 1200, min-width 640) */}
-            <header className={PAGE_SUBHEADER_CLASS}>
-              <div className="flex w-full max-w-[1200px] items-center justify-start gap-my-12">
-                <HeaderBackButton onClick={handleBack} aria-label="시리즈 목록으로" />
-                <h1 className="text-heading2_700 text-on-surface-10">에피소드 관리</h1>
+            <div
+              className={cn(
+                "w-full shrink-0 overflow-hidden bg-white max-lg:transition-[max-height] max-lg:duration-200 max-lg:ease-out max-lg:max-h-14",
+                mobileSubHeaderCollapsed && "max-lg:max-h-0",
+              )}
+            >
+              <div
+                className={cn(
+                  "max-lg:transition-transform max-lg:duration-200 max-lg:ease-out",
+                  mobileSubHeaderCollapsed && "max-lg:-translate-y-full",
+                )}
+              >
+                <header className={PAGE_SUBHEADER_CLASS}>
+                  <div className="flex w-full max-w-[1200px] items-center justify-start gap-my-12">
+                    <HeaderBackButton onClick={handleBack} aria-label="시리즈 목록으로" />
+                    <h1 className="text-heading2_700 text-on-surface-10">에피소드 관리</h1>
+                  </div>
+                </header>
               </div>
-            </header>
+            </div>
 
-            <div className={PAGE_SCROLL_COLUMN_CLASS}>
+            <div
+              className={cn(PAGE_SCROLL_COLUMN_CLASS, PAGE_MOBILE_FIXED_ACTION_BAR_SCROLL_PAD_CLASS)}
+              {...{ [PAGE_SCROLL_COLUMN_ROOT_ATTR]: "" }}
+            >
               <div className="w-full max-w-[1200px] mx-auto flex flex-col gap-my-12">
               {/* Title & Actions - 정책 2, 3, 16 */}
               <div className="flex w-full shrink-0 flex-col gap-my-12 px-0 lg:flex-row lg:items-center lg:justify-between">
                 <h2 className="min-w-0 text-heading4_700 text-on-surface-10">{seriesTitle}</h2>
-                <div className="flex w-full items-center gap-my-8 lg:w-auto lg:gap-my-12">
-                  <button
-                    type="button"
-                    onClick={handleResourceManagement}
-                    className="h-9 min-w-0 flex-1 cursor-pointer rounded-md border border-border-20 bg-white px-my-12 font-medium text-on-surface-20 transition-colors hover:bg-surface-20 disabled:border-border-20 lg:flex-none"
-                  >
+                <div className="hidden items-center gap-my-12 lg:flex">
+                  <Button type="button" variant="outline" onClick={handleResourceManagement}>
                     리소스 관리
-                  </button>
-                  <button
-                    type="button"
-                    onClick={handleAddEpisode}
-                    className="h-9 min-w-0 flex-1 cursor-pointer rounded-md bg-primary px-my-12 font-medium text-primary-foreground transition-colors hover:bg-primary/90 lg:flex-none"
-                  >
+                  </Button>
+                  <Button type="button" onClick={handleAddEpisode}>
                     새 에피소드
-                  </button>
+                  </Button>
                 </div>
               </div>
 
@@ -369,6 +391,15 @@ export default function EpisodeManagementPage() {
               )}
               </div>
             </div>
+
+            <SeriesFormStepNav className="lg:hidden">
+              <Button type="button" variant="outline" onClick={handleResourceManagement}>
+                리소스 관리
+              </Button>
+              <Button type="button" onClick={handleAddEpisode}>
+                새 에피소드
+              </Button>
+            </SeriesFormStepNav>
           </main>
         </div>
       </div>

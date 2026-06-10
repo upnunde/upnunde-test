@@ -1,3 +1,6 @@
+"use client";
+
+import { flushSync } from "react-dom";
 import type { BlockType } from "@/types/editor";
 import { useEditorStore } from "@/store/useEditorStore";
 
@@ -30,6 +33,27 @@ function resolveTextInput(
   return null;
 }
 
+function applyTextInputFocus(input: HTMLTextAreaElement | HTMLInputElement) {
+  input.focus({ preventScroll: false });
+  const len = input.value.length;
+  try {
+    input.setSelectionRange(len, len);
+  } catch {
+    // type=text 외 input은 setSelectionRange 미지원
+  }
+}
+
+/** 사용자 제스처 직후 동기 포커스 — 모바일 키보드 활성화용 */
+function focusBlockTextInputSync(
+  blockId: string,
+  preferredInput?: HTMLElement | null,
+): boolean {
+  const input = resolveTextInput(blockId, preferredInput);
+  if (!input || input.readOnly) return false;
+  applyTextInputFocus(input);
+  return document.activeElement === input;
+}
+
 function focusBlockTextInput(
   blockId: string,
   preferredInput?: HTMLElement | null,
@@ -39,19 +63,13 @@ function focusBlockTextInput(
   if (!input) return;
 
   if (input.readOnly) {
-    if (attempt < 12) {
+    if (attempt < 24) {
       requestAnimationFrame(() => focusBlockTextInput(blockId, preferredInput, attempt + 1));
     }
     return;
   }
 
-  input.focus({ preventScroll: false });
-  const len = input.value.length;
-  try {
-    input.setSelectionRange(len, len);
-  } catch {
-    // type=text 외 input은 setSelectionRange 미지원
-  }
+  applyTextInputFocus(input);
 }
 
 /** 본문 탭 — 「내용수정」 버튼만 노출 (키보드는 열지 않음) */
@@ -76,11 +94,23 @@ export function requestMobileBlockContentEdit(blockId: string) {
     setMobileKeyboardEditBlockId,
     setMobileContentEditPromptBlockId,
   } = useEditorStore.getState();
-  setFocusBlockId(blockId);
-  setMobileContentEditPromptBlockId(null);
-  setMobileKeyboardEditBlockId(blockId);
 
-  requestAnimationFrame(() => {
-    requestAnimationFrame(() => focusBlockTextInput(blockId, preferred));
+  const input = resolveTextInput(blockId, preferred);
+
+  // 모바일 Safari: focus()는 사용자 제스처와 같은 턴에서 호출해야 키보드가 열림
+  if (input) {
+    input.readOnly = false;
+  }
+
+  flushSync(() => {
+    setFocusBlockId(blockId);
+    setMobileContentEditPromptBlockId(null);
+    setMobileKeyboardEditBlockId(blockId);
   });
+
+  if (input) {
+    applyTextInputFocus(input);
+  } else if (!focusBlockTextInputSync(blockId, preferred)) {
+    requestAnimationFrame(() => focusBlockTextInput(blockId, preferred));
+  }
 }

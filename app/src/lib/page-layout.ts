@@ -43,6 +43,13 @@ export const PAGE_SUBHEADER_CLASS =
 export const PAGE_SCROLL_COLUMN_CLASS =
   `flex-1 overflow-y-auto flex flex-col items-center ${PAGE_SCROLL_TOP_CLASS} ${PAGE_GUTTER_GAP_CLASS} ${PAGE_GUTTER_X_CLASS} ${PAGE_SCROLL_BOTTOM_CLASS}`;
 
+/** PAGE_SCROLL_COLUMN 스크롤 루트 식별자 — 모바일 헤더 접힘 훅용 */
+export const PAGE_SCROLL_COLUMN_ROOT_ATTR = "data-page-scroll-column-root";
+
+/** 모바일 하단 고정 액션 바(36px 버튼 + py-12×2) 위 스크롤 하단 여백 */
+export const PAGE_MOBILE_FIXED_ACTION_BAR_SCROLL_PAD_CLASS =
+  "max-lg:pb-[calc(var(--spacing-my-80)+var(--spacing-my-12)+var(--spacing-my-36)+var(--spacing-my-12)+env(safe-area-inset-bottom,0px)+var(--app-vv-bottom,0px))]";
+
 /** 본문·카드·서브헤더 내부 — 모바일 가로 스크롤 방지 (min-w-0) */
 export const PAGE_CONTAINER_CLASS = "w-full min-w-0 max-w-[1200px] mx-auto";
 

@@ -11,6 +11,7 @@ import { EditorMobileFloatingActions } from "@/components/editor/EditorMobileFlo
 import {
   EDITOR_MOBILE_FAB_BOTTOM_ABOVE_BLOCK_TOOLBAR_CLASS,
   EDITOR_MOBILE_SCROLL_BOTTOM_PAD_WITH_TOOLBAR_CLASS,
+  editorMobilePreviewChromeHiddenClass,
   type EditorMobilePanel,
 } from "@/components/editor/editor-mobile-floating-layout";
 import { SeriesPreviewPanel } from "@/components/series/SeriesPreviewPanel";
@@ -63,14 +64,17 @@ export function SeriesFormPageScaffold({
   const [mobilePanel, setMobilePanel] = useState<EditorMobilePanel>("edit");
   const showFormPanel = isLgUp || mobilePanel === "edit";
   const showPreviewPanel = !isLgUp && mobilePanel === "preview";
+  const previewChromeHidden = editorMobilePreviewChromeHiddenClass(isLgUp, mobilePanel);
 
   return (
     <div className={cn(APP_VIEWPORT_SHELL_CLASS, "bg-white")}>
-      <Header profileImageUrl={profileImageUrl} onProfileImageChange={onProfileImageChange} />
+      <div className={cn(previewChromeHidden)}>
+        <Header profileImageUrl={profileImageUrl} onProfileImageChange={onProfileImageChange} />
+      </div>
       <div className="flex flex-1 overflow-hidden bg-surface-20">
         <div className="flex min-w-0 flex-1 flex-col overflow-hidden">
           <main className="flex flex-1 flex-col overflow-hidden bg-surface-20">
-            <header className={PAGE_SUBHEADER_CLASS}>
+            <header className={cn(PAGE_SUBHEADER_CLASS, previewChromeHidden)}>
               <div className="flex w-full max-w-[1200px] items-center justify-between gap-my-16">
                 <div className="flex items-center justify-start gap-my-12">
                   <HeaderBackButton onClick={onBack} aria-label="시리즈 목록으로" />

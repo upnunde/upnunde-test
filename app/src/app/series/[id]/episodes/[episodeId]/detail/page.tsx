@@ -11,7 +11,10 @@ import { SceneNavigation } from "@/components/editor/SceneNavigation";
 import { EditorSceneTabStrip } from "@/components/editor/EditorSceneTabStrip";
 import { EditorMobilePreviewPlayer } from "@/components/editor/EditorMobilePreviewPlayer";
 import { EditorMobileFloatingActions } from "@/components/editor/EditorMobileFloatingActions";
-import type { EditorMobilePanel } from "@/components/editor/editor-mobile-floating-layout";
+import {
+  editorMobilePreviewChromeHiddenClass,
+  type EditorMobilePanel,
+} from "@/components/editor/editor-mobile-floating-layout";
 import { EpisodePromptReferenceModal } from "@/components/episode/EpisodePromptReferenceModal";
 import { parseScriptToBlocks } from "@/utils/scriptParser";
 import { useEditorStore, hydrateSeriesPersonaFromSession } from "@/store/useEditorStore";
@@ -68,9 +71,13 @@ export default function EpisodeDetailPage() {
     isDesktop ? "px-0 py-my-40" : "pb-my-8 pl-my-16 pr-my-12 pt-0",
   );
 
+  const previewChromeHidden = editorMobilePreviewChromeHiddenClass(isDesktop, mobilePanel);
+
   return (
     <div className={cn(APP_VIEWPORT_SHELL_CLASS, "bg-white")}>
-      <Header profileImageUrl={profileImageUrl} onProfileImageChange={setProfileImageUrl} />
+      <div className={cn(previewChromeHidden)}>
+        <Header profileImageUrl={profileImageUrl} onProfileImageChange={setProfileImageUrl} />
+      </div>
       <div className="relative flex min-h-0 flex-1 overflow-hidden">
         {isDesktop ? (
           <aside
@@ -91,7 +98,7 @@ export default function EpisodeDetailPage() {
 
         <div className="flex min-h-0 min-w-0 flex-1 flex-col overflow-hidden">
           <main className="flex min-h-0 min-w-0 flex-1 flex-col overflow-hidden">
-            <div className="w-full shrink-0 border-b border-border-10 bg-white">
+            <div className={cn("w-full shrink-0 border-b border-border-10 bg-white", previewChromeHidden)}>
               <div
                 className={cn(
                   "overflow-hidden max-lg:transition-[max-height] max-lg:duration-200 max-lg:ease-out max-lg:max-h-14",

@@ -4,7 +4,12 @@ import { useCallback, useEffect, useMemo, useState } from "react";
 import { RotateCcw } from "lucide-react";
 import type { ChoiceItem } from "@/types/editor";
 import { PreviewScreen } from "@/components/editor/PreviewScreen";
-import { Button } from "@/components/ui/button";
+import {
+  EDITOR_MOBILE_FAB_BOTTOM_ABOVE_PANEL_TOGGLE_CLASS,
+  EDITOR_MOBILE_FAB_BUTTON_CLASS,
+  EDITOR_MOBILE_FAB_RIGHT_CLASS,
+  EDITOR_MOBILE_FAB_SIZE_CLASS,
+} from "@/components/editor/editor-mobile-floating-layout";
 import { useEditorStore } from "@/store/useEditorStore";
 import {
   clampPlaybackIndex,
@@ -72,22 +77,28 @@ export function EditorMobilePreviewPlayer({ isActive }: EditorMobilePreviewPlaye
 
   return (
     <div className="relative flex min-h-0 flex-1 flex-col overflow-hidden bg-black">
-      <div className="pointer-events-none absolute inset-x-0 top-0 z-30 flex items-center justify-between px-my-16 py-my-12">
+      <div className="pointer-events-none absolute inset-x-0 top-0 z-30 flex justify-center px-my-16 py-my-12">
         <span className="rounded-full bg-black/50 px-my-12 py-my-4 text-caption1_400 text-white/80 backdrop-blur-sm">
           {progressLabel}
         </span>
-        <Button
-          type="button"
-          variant="ghost"
-          size="sm"
-          className="pointer-events-auto h-8 gap-my-4 rounded-full bg-black/50 px-my-12 text-caption1_500 text-white/90 shadow-none backdrop-blur-sm hover:bg-black/70 hover:text-white"
-          onClick={resetPlayback}
-          disabled={blocks.length === 0}
-        >
-          <RotateCcw className="h-3.5 w-3.5" aria-hidden />
-          처음부터
-        </Button>
       </div>
+
+      <button
+        type="button"
+        onClick={resetPlayback}
+        disabled={blocks.length === 0}
+        className={cn(
+          "fixed z-40 lg:hidden",
+          EDITOR_MOBILE_FAB_RIGHT_CLASS,
+          EDITOR_MOBILE_FAB_BOTTOM_ABOVE_PANEL_TOGGLE_CLASS,
+          EDITOR_MOBILE_FAB_SIZE_CLASS,
+          EDITOR_MOBILE_FAB_BUTTON_CLASS,
+          "disabled:cursor-not-allowed disabled:opacity-50",
+        )}
+        aria-label="처음부터"
+      >
+        <RotateCcw className="h-5 w-5 shrink-0" aria-hidden />
+      </button>
 
       {blocks.length === 0 ? (
         <div className="flex flex-1 items-center justify-center px-my-16 lg:px-my-20 text-center text-body3_400 text-on-surface-30">
