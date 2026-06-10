@@ -3,6 +3,7 @@
 import React, { useState } from "react";
 import { NotificationItem } from "@/components/notification/NotificationItem";
 import type { NotificationData } from "@/types/notification";
+import { PAGE_CARD_SHELL_MOBILE_FLUSH_CLASS } from "@/lib/page-layout";
 import { cn } from "@/lib/utils";
 
 export type NotificationTab = "all" | "NOTICE" | "WORK_ALERT";
@@ -38,7 +39,7 @@ export function NotificationList({
     <div
       className={cn(
         "flex h-fit w-full shrink-0 flex-col overflow-hidden rounded-[4px] border border-border-10 bg-white",
-        "max-lg:border-t-0 max-lg:rounded-t-none",
+        PAGE_CARD_SHELL_MOBILE_FLUSH_CLASS,
         className,
       )}
     >

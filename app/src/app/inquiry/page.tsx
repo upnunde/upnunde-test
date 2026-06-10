@@ -2,7 +2,13 @@
 
 import React, { useState } from "react";
 import { AppShell } from "@/components/layout/AppShell";
-import { PAGE_CONTAINER_CLASS, PAGE_SCROLL_ROOT_CLASS, PAGE_SUBHEADER_CLASS } from "@/lib/page-layout";
+import {
+  PAGE_CARD_SHELL_MOBILE_FLUSH_CLASS,
+  PAGE_CONTAINER_CLASS,
+  PAGE_SCROLL_ROOT_CLASS,
+  PAGE_SCROLL_ROOT_MOBILE_FLUSH_CLASS,
+  PAGE_SUBHEADER_CLASS,
+} from "@/lib/page-layout";
 import { cn } from "@/lib/utils";
 import { InquiryForm } from "@/components/inquiry/InquiryForm";
 import { InquiryHistoryList } from "@/components/inquiry/InquiryHistoryList";
@@ -49,9 +55,20 @@ export default function InquiryPage() {
             <h1 className="text-heading2_700 text-on-surface-10">문의</h1>
           </div>
         </div>
-        <div className={cn(PAGE_SCROLL_ROOT_CLASS, "items-center gap-my-12")}>
+        <div
+          className={cn(
+            PAGE_SCROLL_ROOT_CLASS,
+            PAGE_SCROLL_ROOT_MOBILE_FLUSH_CLASS,
+            "items-center gap-my-12",
+          )}
+        >
           <div className={PAGE_CONTAINER_CLASS}>
-              <div className="w-full h-fit rounded-[4px] border border-border-10 bg-white flex flex-col shrink-0 overflow-hidden">
+              <div
+                className={cn(
+                  "flex h-fit w-full shrink-0 flex-col overflow-hidden rounded-[4px] border border-border-10 bg-white",
+                  PAGE_CARD_SHELL_MOBILE_FLUSH_CLASS,
+                )}
+              >
                 {/* 탭 헤더 - NotificationList와 동일 구조 */}
                 <div className="self-stretch px-my-16 lg:px-my-20 pt-0 pb-0 mt-2 mb-0 border-b border-border-10 inline-flex flex-col justify-start items-start gap-my-8">
                   <div

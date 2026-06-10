@@ -117,9 +117,9 @@ export function AnalyticsTopFiveRowList({ rows }: { rows: readonly AnalyticsTopF
                 />
                 <div className={THUMBNAIL_DIM_OVERLAY_CLASS} aria-hidden />
               </div>
-              <div className="flex min-w-0 flex-1 flex-col items-end justify-center gap-my-4 lg:items-start">
+              <div className="flex min-w-0 flex-1 flex-col items-start justify-center gap-my-4">
                 <ContentTypeBadge tone={row.tone}>{row.badge}</ContentTypeBadge>
-                <span className="line-clamp-2 text-right text-body1_500 text-on-surface-10 lg:text-left">
+                <span className="line-clamp-2 text-left text-body1_500 text-on-surface-10">
                   {row.title}
                 </span>
               </div>

@@ -9,6 +9,7 @@ import {
   PAGE_CONTAINER_CLASS,
   PAGE_GUTTER_GAP_CLASS,
   PAGE_SCROLL_ROOT_CLASS,
+  PAGE_SCROLL_ROOT_MOBILE_FLUSH_CLASS,
   PAGE_STACK_CLASS,
   PAGE_SUBHEADER_CLASS,
 } from "@/lib/page-layout";
@@ -516,9 +517,15 @@ export default function MonetizationSettlementsPage() {
           </div>
         </div>
 
-        <div className={cn(PAGE_SCROLL_ROOT_CLASS, "items-stretch justify-start gap-0")}>
+        <div
+          className={cn(
+            PAGE_SCROLL_ROOT_CLASS,
+            PAGE_SCROLL_ROOT_MOBILE_FLUSH_CLASS,
+            "items-stretch justify-start gap-0",
+          )}
+        >
           <div className={PAGE_STACK_CLASS}>
-                <AnalyticsPanel className="rounded-[4px] border border-border-10">
+                <AnalyticsPanel>
                   <Title2
                     text="정산 요약"
                     variant="title"
@@ -579,7 +586,7 @@ export default function MonetizationSettlementsPage() {
                   </div>
                 </AnalyticsPanel>
 
-                <AnalyticsPanel className="rounded-[4px] border border-border-10">
+                <AnalyticsPanel>
                   <div className="border-b border-border-10 px-my-16 lg:px-my-20 py-my-16">
                     <div className="flex flex-wrap items-center justify-between gap-my-12">
                       <h3 className="text-heading5_700 text-on-surface-10">정산 내역</h3>

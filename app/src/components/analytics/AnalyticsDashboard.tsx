@@ -10,6 +10,7 @@ import {
   PAGE_FILTER_HEADER_CLASS,
   PAGE_FILTER_HEADER_INNER_CLASS,
   PAGE_SCROLL_ROOT_CLASS,
+  PAGE_SCROLL_ROOT_MOBILE_FLUSH_CLASS,
   PAGE_STACK_CLASS,
 } from "@/lib/page-layout";
 import { cn } from "@/lib/utils";
@@ -137,7 +138,11 @@ export function AnalyticsDashboard({ defaultArea = "content", onAreaChange }: An
       </div>
 
       <div
-        className={cn(PAGE_SCROLL_ROOT_CLASS, "items-stretch justify-start gap-0")}
+        className={cn(
+          PAGE_SCROLL_ROOT_CLASS,
+          PAGE_SCROLL_ROOT_MOBILE_FLUSH_CLASS,
+          "items-stretch justify-start gap-0",
+        )}
         {...{ [ANALYTICS_SCROLL_ROOT_ATTR]: "" }}
       >
         <div className={PAGE_STACK_CLASS}>

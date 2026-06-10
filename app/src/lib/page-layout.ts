@@ -31,6 +31,12 @@ export const PAGE_SCROLL_TOP_CLASS = "pt-my-20";
 export const PAGE_SCROLL_ROOT_CLASS =
   `flex min-h-0 flex-1 flex-col overflow-y-auto pt-my-20 ${PAGE_SCROLL_GUTTER_CLASS} ${PAGE_SCROLL_BOTTOM_CLASS}`;
 
+/** 모바일 풀블리드 스크롤 루트 — 외곽 패딩만 제거(콘텐츠 gap은 페이지에서 유지) */
+export const PAGE_SCROLL_ROOT_MOBILE_FLUSH_CLASS = "max-lg:pt-0 max-lg:px-0 max-lg:pb-0";
+
+/** 모바일 풀블리드 카드 셸 — 테두리·모서리 라운드 제거 */
+export const PAGE_CARD_SHELL_MOBILE_FLUSH_CLASS = "max-lg:rounded-none max-lg:border-0";
+
 /** AppShell main 스크롤 루트 — 상단 여백 · 가로 인셋 · 하단 80px */
 export const PAGE_SCROLL_ROOT_TOP_CLASS =
   `flex flex-1 flex-col overflow-y-auto ${PAGE_SCROLL_TOP_CLASS} ${PAGE_SCROLL_GUTTER_CLASS} ${PAGE_SCROLL_BOTTOM_CLASS}`;
