@@ -15,6 +15,7 @@ import { THUMBNAIL_DIM_OVERLAY_CLASS } from "@/lib/thumbnail-styles";
 import {
   WORKS_ITEM_CARD_CLASS,
   WORKS_ITEM_CARD_INNER_CLASS,
+  WORKS_ITEM_META_ROW_CLASS,
   WORKS_ITEM_THUMBNAIL_CLASS,
 } from "@/lib/worksArea";
 
@@ -88,7 +89,25 @@ export function CharacterItem({
 
         <div className="flex min-w-0 flex-1 flex-col items-start justify-start">
           <div className="flex w-full items-start justify-between gap-my-8">
-            <h3 className="min-w-0 flex-1 truncate text-heading5_700 text-on-surface-10">{title}</h3>
+            <div className="flex min-w-0 flex-1 items-center gap-my-8">
+              {isPrivate && (
+                <span className="inline-flex h-fit shrink-0 rounded px-my-8 py-my-4 text-body3_500 bg-primary/10 text-primary">
+                  비공개
+                </span>
+              )}
+              {isDraft && (
+                <span className="inline-flex h-fit shrink-0 rounded px-my-8 py-my-4 text-body3_500 bg-primary/10 text-primary">
+                  작성중
+                </span>
+              )}
+              {isBanned && (
+                <div className="inline-flex h-7 max-w-[45%] shrink-0 items-center gap-my-4 overflow-hidden rounded border border-destructive px-my-8 py-my-4">
+                  <ViolationIcon className="h-5 w-5 shrink-0 text-destructive" aria-hidden />
+                  <span className="truncate text-body3_500 text-destructive">가이드 정책을 위반, 이용 금지</span>
+                </div>
+              )}
+              <h3 className="min-w-0 flex-1 truncate text-heading5_700 text-on-surface-10">{title}</h3>
+            </div>
             <DropdownMenu open={isMenuOpen} onOpenChange={setIsMenuOpen}>
               <DropdownMenuTrigger asChild>
                 <button
@@ -161,27 +180,10 @@ export function CharacterItem({
             </DropdownMenu>
           </div>
 
-          {isPrivate && (
-            <span className="mt-1 inline-flex h-fit rounded px-my-8 py-my-4 text-body3_500 bg-primary/10 text-primary">
-              비공개
-            </span>
-          )}
-          {isDraft && (
-            <span className="mt-1 inline-flex h-fit rounded px-my-8 py-my-4 text-body3_500 bg-primary/10 text-primary">
-              작성중
-            </span>
-          )}
-          {isBanned && (
-            <div className="mt-1 inline-flex h-7 items-center gap-my-4 rounded border border-destructive px-my-8 py-my-4">
-              <ViolationIcon className="h-5 w-5 text-destructive" aria-hidden />
-              <span className="text-body3_500 text-destructive">가이드 정책을 위반, 이용 금지</span>
-            </div>
-          )}
-
-          <div className="mt-1 flex min-w-0 w-full flex-wrap items-center gap-my-8 text-body3_400">
+          <div className="mt-1 flex min-w-0 w-full items-center gap-my-8 overflow-hidden text-body3_400">
             {sourceSeries ? (
               <>
-                <span className="shrink-0 text-on-surface-30">{sourceSeries.title}</span>
+                <span className="max-w-[45%] shrink-0 truncate text-on-surface-30">{sourceSeries.title}</span>
                 <span
                   className="shrink-0 select-none text-caption1_400 text-border-20"
                   role="separator"
@@ -191,12 +193,12 @@ export function CharacterItem({
                 </span>
               </>
             ) : null}
-            <span className="shrink-0 text-on-surface-30">{tagline}</span>
+            <span className="min-w-0 flex-1 truncate text-on-surface-30">{tagline}</span>
           </div>
 
           <div className="hidden w-full flex-1 min-[480px]:block" aria-hidden />
 
-          <div className="mt-my-12 flex w-full text-body4_400 text-on-surface-20 min-[480px]:mb-5 min-[480px]:mt-0 [&_svg]:shrink-0 [&_svg]:text-on-surface-20">
+          <div className={WORKS_ITEM_META_ROW_CLASS}>
             <div className="flex min-w-0 flex-1 flex-col items-start justify-center gap-my-8 text-on-surface-20">
               <div className="flex items-center gap-my-8 text-on-surface-20">
                 <Calendar className="h-[18px] w-[18px]" aria-hidden />

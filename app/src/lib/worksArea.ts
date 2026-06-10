@@ -18,6 +18,10 @@ export const WORKS_ITEM_CARD_INNER_CLASS =
 export const WORKS_ITEM_THUMBNAIL_CLASS =
   "relative aspect-[9/16] w-28 shrink-0 overflow-hidden rounded bg-slate-200";
 
+/** 내 작품 카드 메타(날짜·조회수 등) — 모바일 상단 20px · 480px+ mt-0 */
+export const WORKS_ITEM_META_ROW_CLASS =
+  "mt-my-20 flex w-full text-body4_400 text-on-surface-20 min-[480px]:mb-5 min-[480px]:mt-0 [&_svg]:shrink-0 [&_svg]:text-on-surface-20";
+
 /** 내 작품 목록 그리드 */
 export const WORKS_LIST_GRID_CLASS =
   "grid w-full grid-cols-[repeat(auto-fit,minmax(min(100%,480px),1fr))] gap-my-16";

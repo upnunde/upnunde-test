@@ -15,6 +15,7 @@ import { THUMBNAIL_DIM_OVERLAY_CLASS } from "@/lib/thumbnail-styles";
 import {
   WORKS_ITEM_CARD_CLASS,
   WORKS_ITEM_CARD_INNER_CLASS,
+  WORKS_ITEM_META_ROW_CLASS,
   WORKS_ITEM_THUMBNAIL_CLASS,
 } from "@/lib/worksArea";
 
@@ -164,11 +165,27 @@ export function SeriesItem({
 
         {/* 우측: 제목, 뱃지, 메타 (+ 데스크톱 버튼) */}
         <div className="flex min-w-0 flex-1 flex-col items-start justify-start">
-        {/* 제목 + 더보기 (정책 5, 6) */}
-        <div className="w-full flex justify-between items-start gap-my-8">
-          <h3 className="text-heading5_700 text-on-surface-10 truncate flex-1 min-w-0">
-            {title}
-          </h3>
+        {/* 제목 + 더보기 (정책 5, 6) — 상태 뱃지는 제목 앞 */}
+        <div className="flex w-full items-start justify-between gap-my-8">
+          <div className="flex min-w-0 flex-1 items-center gap-my-8">
+            {isPrivate && (
+              <span className="inline-flex h-fit shrink-0 rounded px-my-8 py-my-4 text-body3_500 bg-primary/10 text-primary">
+                비공개
+              </span>
+            )}
+            {isDraft && (
+              <span className="inline-flex h-fit shrink-0 rounded px-my-8 py-my-4 text-body3_500 bg-primary/10 text-primary">
+                작성중
+              </span>
+            )}
+            {isBanned && (
+              <div className="inline-flex h-7 max-w-[45%] shrink-0 items-center gap-my-4 overflow-hidden rounded border border-destructive px-my-8 py-my-4">
+                <ViolationIcon className="h-5 w-5 shrink-0 text-destructive" aria-hidden />
+                <span className="truncate text-body3_500 text-destructive">가이드 정책을 위반, 이용 금지</span>
+              </div>
+            )}
+            <h3 className="min-w-0 flex-1 truncate text-heading5_700 text-on-surface-10">{title}</h3>
+          </div>
           <DropdownMenu open={isMenuOpen} onOpenChange={setIsMenuOpen}>
             <DropdownMenuTrigger asChild>
               <button
@@ -241,33 +258,11 @@ export function SeriesItem({
           </DropdownMenu>
         </div>
 
-        {/* 상태 뱃지 (정책 8, 9, 10) */}
-        {isPrivate && (
-          <span className="inline-flex mt-1 h-fit rounded px-my-8 py-my-4 text-body3_500 bg-primary/10 text-primary">
-            비공개
-          </span>
-        )}
-        {isDraft && (
-          <span className="inline-flex mt-1 h-fit rounded px-my-8 py-my-4 text-body3_500 bg-primary/10 text-primary">
-            작성중
-          </span>
-        )}
-        {isBanned && (
-          <div className="inline-flex mt-1 h-7 items-center gap-my-4 px-my-8 py-my-4 rounded border border-destructive">
-            <div className="flex items-center gap-my-4">
-              <ViolationIcon className="h-5 w-5 text-destructive" aria-hidden />
-              <span className="text-destructive text-body3_500">
-                가이드 정책을 위반, 이용 금지
-              </span>
-            </div>
-          </div>
-        )}
-
         {/* 데스크톱: 버튼을 열 하단으로 정렬 */}
         <div className="hidden w-full flex-1 min-[480px]:block" aria-hidden />
 
         {/* 메타: 날짜, 회차 수, 조회수 (정책 2, 3, 4, 11 - 툴팁) */}
-        <div className="mt-my-12 flex w-full text-body4_400 text-on-surface-20 min-[480px]:mb-5 min-[480px]:mt-0 [&_svg]:shrink-0 [&_svg]:text-on-surface-20">
+        <div className={WORKS_ITEM_META_ROW_CLASS}>
           <div className="flex min-w-0 flex-1 flex-col items-start justify-center gap-my-8 text-on-surface-20">
             <div className="flex items-center gap-my-8 text-on-surface-20">
               <Calendar className="h-[18px] w-[18px]" aria-hidden />
