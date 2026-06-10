@@ -6,30 +6,13 @@ import { ChevronDown, X } from "lucide-react";
 import { useEditorStore } from "@/store/useEditorStore";
 import { useEditorScrollActiveSceneId } from "@/hooks/useEditorScrollActiveSceneId";
 import { FilterChip } from "@/components/ui/chip";
-import { EDITOR_SCENE_TAB_STRIP_ID } from "@/lib/editor-scroll";
+import { EDITOR_SCENE_TAB_STRIP_ID, resolveEditorActiveSceneId } from "@/lib/editor-scroll";
 import { HORIZONTAL_SCROLLBAR_HIDE_CLASS } from "@/lib/tab-styles";
 import { cn } from "@/lib/utils";
 
 export interface EditorSceneTabStripProps {
   onSceneClick: (blockId: string) => void;
   className?: string;
-}
-
-function getActiveSceneBlockId(
-  blocks: { id: string; type: string }[],
-  focusBlockId: string | null,
-  sceneIds: string[],
-): string | null {
-  if (sceneIds.length === 0) return null;
-  if (!focusBlockId) return sceneIds[0] ?? null;
-
-  const focusIndex = blocks.findIndex((b) => b.id === focusBlockId);
-  if (focusIndex === -1) return sceneIds[0] ?? null;
-
-  for (let i = focusIndex; i >= 0; i--) {
-    if (blocks[i]?.type === "scene") return blocks[i].id;
-  }
-  return sceneIds[0] ?? null;
 }
 
 /** 모바일 편집 — SubHeader 아래 가로 장면 탭 + 펼침 목록 */
@@ -88,11 +71,10 @@ export function EditorSceneTabStrip({
   const sceneIds = useMemo(() => scenes.map(({ block }) => block.id), [scenes]);
 
   const scrollActiveSceneId = useEditorScrollActiveSceneId(sceneIds);
-  const focusActiveSceneId = useMemo(
-    () => getActiveSceneBlockId(blocks, focusBlockId, sceneIds),
-    [blocks, focusBlockId, sceneIds],
+  const activeSceneId = useMemo(
+    () => resolveEditorActiveSceneId(blocks, focusBlockId, sceneIds, scrollActiveSceneId),
+    [blocks, focusBlockId, sceneIds, scrollActiveSceneId],
   );
-  const activeSceneId = scrollActiveSceneId ?? focusActiveSceneId;
 
   useEffect(() => {
     if (!activeSceneId || isListExpanded) return;

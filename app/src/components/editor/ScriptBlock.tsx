@@ -45,9 +45,14 @@ import { EditorBottomSheetMenu } from "./EditorBottomSheetMenu";
 import { EditorMenuOption, EditorMenuSectionLabel } from "./EditorMenuOption";
 import { ChoiceBlockTable } from "./ChoiceBlockTable";
 import {
+  EDITOR_BLOCK_LABEL_COLUMN_CLASS,
+  EDITOR_BLOCK_SPEAKER_COLUMN_CLASS,
+} from "@/lib/editor-block-layout";
+import {
   editorBlockTrailingActionClass,
   editorRowTrailingActionClass,
 } from "@/lib/editor-control-visibility";
+import { useMobileBlockTextEdit } from "@/hooks/useMobileBlockTextEdit";
 import { cn } from "@/lib/utils";
 import {
   SPEAKER_PERSONA_TOKEN,
@@ -162,6 +167,7 @@ export function ScriptBlock({
   const onFocusBlock = useCallback(() => setFocusBlockId(block.id), [block.id, setFocusBlockId]);
 
   const textareaRef = useRef<HTMLTextAreaElement | null>(null);
+  const sceneInputRef = useRef<HTMLInputElement | null>(null);
   const pendingSelectionRef = useRef<number | null>(null);
   const enterSplitLockRef = useRef(false);
   const toolbarRef = useRef<HTMLDivElement | null>(null);
@@ -190,6 +196,9 @@ export function ScriptBlock({
 
   const indexLabel = String(index).padStart(2, "0");
   const prevBlock = index > 0 ? blocks[index - 1] : null;
+
+  const textMobileEdit = useMobileBlockTextEdit(block.id, textareaRef);
+  const sceneMobileEdit = useMobileBlockTextEdit(block.id, sceneInputRef);
 
   const getDefaultResourceContent = useCallback((type: BlockType): string => {
     switch (type) {
@@ -607,7 +616,12 @@ export function ScriptBlock({
     return (
       <>
         {/* Left column: 화자 — 시안 w-[100px] min-w-14 min-h-8 */}
-        <div className="flex min-h-8 w-[100px] min-w-14 shrink-0 items-center justify-start gap-0 overflow-hidden pr-my-12">
+        <div
+          className={cn(
+            "flex min-h-8 items-center justify-start gap-0 overflow-hidden pr-my-12",
+            EDITOR_BLOCK_SPEAKER_COLUMN_CLASS,
+          )}
+        >
           {!hideIndex && (
             <span className="text-body3_500 text-on-surface-30 w-5 text-right tabular-nums">
               {indexLabel}
@@ -746,7 +760,8 @@ export function ScriptBlock({
             ref={textareaRef}
             value={block.content}
             onChange={(e) => updateBlock(block.id, e.target.value)}
-            onFocus={onFocusBlock}
+            onFocus={textMobileEdit.onContentFocus}
+            readOnly={textMobileEdit.readOnly}
             onKeyDown={handleTextKeyDown}
             onMouseUp={handleTextMouseUp}
             placeholder="'/'를 눌러 메뉴를 선택하거나 텍스트를 입력할 수 있습니다."
@@ -950,17 +965,20 @@ export function ScriptBlock({
         <div className="flex min-w-0 flex-1 w-full items-center gap-0">
           <span
             className={cn(
-              "flex h-8 w-[100px] shrink-0 items-center justify-start text-body4_500",
+              "flex h-8 items-center justify-start text-body4_500",
+              EDITOR_BLOCK_LABEL_COLUMN_CLASS,
               labelColorClass
             )}
           >
             {labelText}
           </span>
           <input
+            ref={sceneInputRef}
             type="text"
             value={block.content}
             onChange={(e) => updateBlock(block.id, e.target.value)}
-            onFocus={onFocusBlock}
+            onFocus={sceneMobileEdit.onContentFocus}
+            readOnly={sceneMobileEdit.readOnly}
             onKeyDown={handleSceneKeyDown}
             placeholder={placeholder}
             className={cn(
@@ -1031,7 +1049,8 @@ export function ScriptBlock({
         <div className="flex min-w-0 flex-1 w-full items-center gap-0">
           <span
             className={cn(
-              "flex h-8 w-[100px] shrink-0 items-center justify-start text-body4_500",
+              "flex h-8 items-center justify-start text-body4_500",
+              EDITOR_BLOCK_LABEL_COLUMN_CLASS,
               LABEL_COLOR_BY_TYPE.direction
             )}
           >
@@ -1091,7 +1110,8 @@ export function ScriptBlock({
         )}
         <span
           className={cn(
-            "flex h-8 w-[100px] shrink-0 items-center justify-start overflow-hidden text-caption1_500",
+            "flex h-8 items-center justify-start overflow-hidden text-caption1_500",
+            EDITOR_BLOCK_LABEL_COLUMN_CLASS,
             LABEL_COLOR_BY_TYPE.choice
           )}
         >
@@ -1156,7 +1176,8 @@ export function ScriptBlock({
           <Icon className="h-4 w-4 shrink-0 text-on-surface-30" />
           <span
             className={cn(
-              "flex h-8 w-[100px] shrink-0 items-center justify-start text-body4_500",
+              "flex h-8 items-center justify-start text-body4_500",
+              EDITOR_BLOCK_LABEL_COLUMN_CLASS,
               LABEL_COLOR_BY_TYPE[block.type]
             )}
           >
@@ -1316,7 +1337,8 @@ export function ScriptBlock({
         <div className="flex min-w-0 flex-1 items-center gap-0">
           <span
             className={cn(
-              "flex h-8 w-[100px] shrink-0 items-center justify-start text-body4_500",
+              "flex h-8 items-center justify-start text-body4_500",
+              EDITOR_BLOCK_LABEL_COLUMN_CLASS,
               labelColorClass
             )}
           >
@@ -1553,7 +1575,8 @@ export function ScriptBlock({
         <Icon className="h-4 w-4 shrink-0 text-on-surface-30" />
         <span
           className={cn(
-            "flex h-8 w-[100px] shrink-0 items-center justify-start text-body4_500",
+            "flex h-8 items-center justify-start text-body4_500",
+            EDITOR_BLOCK_LABEL_COLUMN_CLASS,
             LABEL_COLOR_BY_TYPE[block.type]
           )}
         >

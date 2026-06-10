@@ -35,6 +35,8 @@ export function EditorScriptBootstrap({
       undoStack: [],
       redoStack: [],
       focusBlockId: null,
+      mobileKeyboardEditBlockId: null,
+      mobileContentEditPromptBlockId: null,
       issueFocus: null,
     });
   }, [routeKey, startEmpty]);

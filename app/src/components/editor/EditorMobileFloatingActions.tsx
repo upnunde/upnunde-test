@@ -7,10 +7,12 @@ import {
   EDITOR_MOBILE_FAB_BOTTOM_BASE_CLASS,
   EDITOR_MOBILE_FAB_RIGHT_CLASS,
   EDITOR_MOBILE_FAB_STACK_GAP_CLASS,
+  isEditorMobileBlockToolbarVisible,
   type EditorMobilePanel,
 } from "@/components/editor/editor-mobile-floating-layout";
-import { useEditorMobileSceneHeaderCollapse } from "@/hooks/useEditorMobileSceneHeaderCollapse";
 import { useVisualKeyboardInset } from "@/hooks/useVisualKeyboardInset";
+import { useClientMounted } from "@/hooks/useClientMounted";
+import { useEditorStore } from "@/store/useEditorStore";
 import { cn } from "@/lib/utils";
 
 export interface EditorMobileFloatingActionsProps {
@@ -37,18 +39,27 @@ export function EditorMobileFloatingActions({
   hasBlockToolbar = true,
 }: EditorMobileFloatingActionsProps) {
   const { isKeyboardOpen } = useVisualKeyboardInset();
+  const mounted = useClientMounted();
   const isEdit = active === "edit";
-  const trackToolbar = hasBlockToolbar && isEdit && !isKeyboardOpen;
-  const blockToolbarCollapsed = useEditorMobileSceneHeaderCollapse(trackToolbar);
+  const focusBlockId = useEditorStore((s) => s.focusBlockId);
+  const mobileKeyboardEditBlockId = useEditorStore((s) => s.mobileKeyboardEditBlockId);
+  const toolbarVisible =
+    mounted &&
+    hasBlockToolbar &&
+    isEdit &&
+    isEditorMobileBlockToolbarVisible({
+      focusBlockId,
+      isKeyboardOpen,
+      mobileKeyboardEditBlockId,
+    });
 
   if (isEdit && isKeyboardOpen) {
     return null;
   }
 
-  const bottomClass =
-    hasBlockToolbar && isEdit && !blockToolbarCollapsed
-      ? EDITOR_MOBILE_FAB_BOTTOM_ABOVE_BLOCK_TOOLBAR_CLASS
-      : EDITOR_MOBILE_FAB_BOTTOM_BASE_CLASS;
+  const bottomClass = toolbarVisible
+    ? EDITOR_MOBILE_FAB_BOTTOM_ABOVE_BLOCK_TOOLBAR_CLASS
+    : EDITOR_MOBILE_FAB_BOTTOM_BASE_CLASS;
 
   const handleToggle = () => {
     onChange(isEdit ? "preview" : "edit");
@@ -57,7 +68,7 @@ export function EditorMobileFloatingActions({
   return (
     <div
       className={cn(
-        "pointer-events-none fixed z-30 flex flex-col-reverse items-end lg:hidden",
+        "pointer-events-none fixed z-40 flex flex-col-reverse items-end lg:hidden",
         EDITOR_MOBILE_FAB_RIGHT_CLASS,
         EDITOR_MOBILE_FAB_STACK_GAP_CLASS,
         bottomClass,

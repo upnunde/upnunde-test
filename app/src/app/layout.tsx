@@ -24,6 +24,8 @@ export const viewport: Viewport = {
   width: "device-width",
   initialScale: 1,
   viewportFit: "cover",
+  /** 키보드가 visual viewport만 줄여 화면이 눌리는 동작 완화 (Chrome 등) */
+  interactiveWidget: "resizes-content",
 };
 
 export default function RootLayout({

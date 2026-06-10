@@ -17,6 +17,7 @@ import {
 } from "@dnd-kit/sortable";
 import { CSS } from "@dnd-kit/utilities";
 import { useEditorStore, hydrateSeriesPersonaFromSession } from "@/store/useEditorStore";
+import { EDITOR_BLOCK_INDEX_COLUMN_CLASS } from "@/lib/editor-block-layout";
 import { editorLeadingControlsClass, editorRowHoverClass } from "@/lib/editor-control-visibility";
 import { useIsLgUp } from "@/hooks/useMediaQuery";
 import { cn } from "@/lib/utils";
@@ -181,7 +182,8 @@ function SortableBlockWrapper({
       <span
         {...mobileIndexDragProps}
         className={cn(
-          "flex w-9 shrink-0 justify-start tabular-nums",
+          "flex justify-start tabular-nums",
+          EDITOR_BLOCK_INDEX_COLUMN_CLASS,
           isTextLikeRow
             ? "min-h-8 items-center text-caption1_500"
             : "h-8 items-center text-body4_500",
@@ -267,6 +269,9 @@ export default function EditorBody() {
   const focusBlock = useCallback(
     (id: string) => {
       setFocusBlockId(id);
+      const mobileKeyboardEditBlockId = useEditorStore.getState().mobileKeyboardEditBlockId;
+      const shouldFocusInput = isDesktop || mobileKeyboardEditBlockId === id;
+
       // Focus next/previous block: run after state + DOM update so the target block is in the tree.
       // Double rAF ensures React has committed and focus reliably moves (fixes arrow-key focus stuck on previous block).
       requestAnimationFrame(() => {
@@ -315,15 +320,17 @@ export default function EditorBody() {
             div.classList.contains("group")
           ) ?? rootDivs[0];
 
-          const focusable = textarea ?? input ?? pickerButton ?? rootDiv;
+          const focusable = shouldFocusInput
+            ? (textarea ?? input ?? pickerButton ?? rootDiv)
+            : (rootDiv ?? pickerButton);
 
           if (focusable && typeof (focusable as HTMLElement).focus === "function") {
             (focusable as HTMLElement).focus();
-            if (textarea && textarea instanceof HTMLTextAreaElement) {
+            if (textarea && textarea instanceof HTMLTextAreaElement && shouldFocusInput) {
               const textLength = textarea.value.length;
               textarea.setSelectionRange(textLength, textLength);
             }
-            if (input && input instanceof HTMLInputElement) {
+            if (input && input instanceof HTMLInputElement && shouldFocusInput) {
               const textLength = input.value.length;
               input.setSelectionRange(textLength, textLength);
             }
@@ -335,7 +342,7 @@ export default function EditorBody() {
         });
       });
     },
-    [setFocusBlockId]
+    [isDesktop, setFocusBlockId],
   );
 
   const handleBackgroundClick = useCallback(

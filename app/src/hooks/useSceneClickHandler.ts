@@ -1,20 +1,27 @@
 "use client";
 
 import { useCallback } from "react";
+import { useIsLgUp } from "@/hooks/useMediaQuery";
 import { useEditorStore } from "@/store/useEditorStore";
 import { scrollEditorBlockIntoView } from "@/lib/editor-scroll";
 
-/** Returns a handler to scroll to and focus a block when a scene is clicked in the sidebar. */
+/** 장면·탭 클릭 시 앵커 스크롤 + (데스크톱) 포커스 이동 */
 export function useSceneClickHandler() {
+  const isDesktop = useIsLgUp();
   const setFocusBlockId = useEditorStore((s) => s.setFocusBlockId);
+  const setMobileContentEditPromptBlockId = useEditorStore(
+    (s) => s.setMobileContentEditPromptBlockId,
+  );
 
   return useCallback(
     (blockId: string) => {
       setFocusBlockId(blockId);
+      setMobileContentEditPromptBlockId(null);
+
       requestAnimationFrame(() => {
         requestAnimationFrame(() => {
           const el = scrollEditorBlockIntoView(blockId);
-          if (!el) return;
+          if (!el || !isDesktop) return;
 
           const textarea = el.querySelector("textarea");
           const input = el.querySelector("input");
@@ -51,6 +58,6 @@ export function useSceneClickHandler() {
         });
       });
     },
-    [setFocusBlockId],
+    [isDesktop, setFocusBlockId, setMobileContentEditPromptBlockId],
   );
 }

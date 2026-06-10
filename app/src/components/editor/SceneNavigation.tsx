@@ -9,6 +9,8 @@ import {
   getIssueFocusTarget,
   type EditorIssue,
 } from "@/hooks/useEditorIssues";
+import { useEditorScrollActiveSceneId } from "@/hooks/useEditorScrollActiveSceneId";
+import { resolveEditorActiveSceneId } from "@/lib/editor-scroll";
 import { cn } from "@/lib/utils";
 
 interface SceneNavigationProps {
@@ -113,6 +115,13 @@ export function SceneNavigation({
       .filter(({ block }) => block.type === "scene");
   }, [blocks]);
 
+  const sceneIds = useMemo(() => scenes.map(({ block }) => block.id), [scenes]);
+  const scrollActiveSceneId = useEditorScrollActiveSceneId(sceneIds);
+  const activeSceneId = useMemo(
+    () => resolveEditorActiveSceneId(blocks, focusBlockId, sceneIds, scrollActiveSceneId),
+    [blocks, focusBlockId, sceneIds, scrollActiveSceneId],
+  );
+
   const issues = useEditorIssues();
 
   const commitEdit = (blockId: string, _currentContent: string) => {
@@ -188,7 +197,7 @@ export function SceneNavigation({
             <ul className="space-y-my-4 px-my-4">
               {scenes.map(({ block, index }) => {
                 const sceneNumber = blocks.slice(0, index).filter((b) => b.type === "scene").length + 1;
-                const isActive = focusBlockId === block.id;
+                const isActive = activeSceneId === block.id;
                 const sceneTitle = block.content?.trim() || `장면 ${sceneNumber}`;
                 const isEditing = editingBlockId === block.id;
 

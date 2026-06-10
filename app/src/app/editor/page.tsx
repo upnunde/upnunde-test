@@ -29,6 +29,14 @@ import { Dialog, DialogContent, DialogTitle } from "@/components/ui/dialog";
 import { formDialogShellClassName, formDialogSheetBodyWrapperClassName, formDialogSheetEpisodeFormClassName } from "@/components/ui/modal";
 import { EDITOR_SCENE_HEADER_ID, EDITOR_SCROLL_ROOT_ATTR } from "@/lib/editor-scroll";
 import { APP_VIEWPORT_SHELL_CLASS } from "@/lib/mobile-viewport";
+import { useVisualKeyboardInset } from "@/hooks/useVisualKeyboardInset";
+import { useClientMounted } from "@/hooks/useClientMounted";
+import { useEditorStore } from "@/store/useEditorStore";
+import {
+  EDITOR_MOBILE_SCROLL_BOTTOM_PAD_FAB_ONLY_CLASS,
+  EDITOR_MOBILE_SCROLL_BOTTOM_PAD_WITH_TOOLBAR_CLASS,
+  isEditorMobileBlockToolbarVisible,
+} from "@/components/editor/editor-mobile-floating-layout";
 import { cn } from "@/lib/utils";
 
 function EditorWorkspace({
@@ -40,9 +48,30 @@ function EditorWorkspace({
   mobilePanel: EditorMobilePanel;
   onOpenAutoGenerator: () => void;
 }) {
+  const focusBlockId = useEditorStore((s) => s.focusBlockId);
+  const mobileKeyboardEditBlockId = useEditorStore((s) => s.mobileKeyboardEditBlockId);
+  const { isKeyboardOpen } = useVisualKeyboardInset();
+  const mounted = useClientMounted();
+  const mobileToolbarVisible =
+    mounted &&
+    !isDesktop &&
+    mobilePanel === "edit" &&
+    isEditorMobileBlockToolbarVisible({
+      focusBlockId,
+      isKeyboardOpen,
+      mobileKeyboardEditBlockId,
+    });
+
   const editorScrollClass = cn(
     "relative z-0 min-h-0 flex-1 overflow-y-auto overscroll-none",
-    isDesktop ? "py-my-40 px-0" : "px-my-12 pb-my-8 pt-0",
+    isDesktop
+      ? "py-my-40 px-0"
+      : cn(
+          "px-my-12 pt-0",
+          mobileToolbarVisible
+            ? EDITOR_MOBILE_SCROLL_BOTTOM_PAD_WITH_TOOLBAR_CLASS
+            : EDITOR_MOBILE_SCROLL_BOTTOM_PAD_FAB_ONLY_CLASS,
+        ),
   );
 
   if (isDesktop) {

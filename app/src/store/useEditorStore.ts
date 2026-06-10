@@ -103,6 +103,10 @@ interface EditorState {
   seriesPersona: string;
   blocks: ScriptBlock[];
   focusBlockId: string | null;
+  /** 모바일: 「내용수정」으로 키보드 편집 중인 블록 id */
+  mobileKeyboardEditBlockId: string | null;
+  /** 모바일: 텍스트 영역 탭 후 「내용수정」 버튼 노출 대상 블록 id */
+  mobileContentEditPromptBlockId: string | null;
   issueFocus:
     | {
         blockId: string;
@@ -121,6 +125,8 @@ interface EditorState {
 interface EditorActions {
   setBlocks: (blocks: ScriptBlock[]) => void;
   setFocusBlockId: (id: string | null) => void;
+  setMobileKeyboardEditBlockId: (id: string | null) => void;
+  setMobileContentEditPromptBlockId: (id: string | null) => void;
   setIssueFocus: (issue: EditorState["issueFocus"]) => void;
   clearIssueFocus: () => void;
   setCurrentView: (view: CurrentView) => void;
@@ -157,6 +163,8 @@ export const useEditorStore = create<EditorStore>((set) => ({
   seriesPersona: "",
   blocks: [],
   focusBlockId: null,
+  mobileKeyboardEditBlockId: null,
+  mobileContentEditPromptBlockId: null,
   issueFocus: null,
   /** 기본은 원고 에디터; 에피소드 생성은 `/editor?view=form`으로만 전환 */
   currentView: "editor",
@@ -167,7 +175,23 @@ export const useEditorStore = create<EditorStore>((set) => ({
 
   setBlocks: (blocks) => set({ blocks }),
 
-  setFocusBlockId: (focusBlockId) => set({ focusBlockId }),
+  setFocusBlockId: (focusBlockId) =>
+    set((state) => ({
+      focusBlockId,
+      mobileKeyboardEditBlockId:
+        focusBlockId != null && focusBlockId === state.mobileKeyboardEditBlockId
+          ? state.mobileKeyboardEditBlockId
+          : null,
+      mobileContentEditPromptBlockId:
+        focusBlockId != null && focusBlockId === state.mobileContentEditPromptBlockId
+          ? state.mobileContentEditPromptBlockId
+          : null,
+    })),
+
+  setMobileKeyboardEditBlockId: (mobileKeyboardEditBlockId) => set({ mobileKeyboardEditBlockId }),
+
+  setMobileContentEditPromptBlockId: (mobileContentEditPromptBlockId) =>
+    set({ mobileContentEditPromptBlockId }),
 
   setIssueFocus: (issueFocus) => set({ issueFocus }),
 

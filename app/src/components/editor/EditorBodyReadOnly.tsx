@@ -4,6 +4,10 @@ import React, { Fragment, useCallback, useEffect } from "react";
 import { useEditorStore, hydrateSeriesPersonaFromSession } from "@/store/useEditorStore";
 import { resolveSpeakerDisplay } from "@/lib/speakerPersona";
 import type { ScriptBlock } from "@/types/editor";
+import {
+  EDITOR_BLOCK_INDEX_COLUMN_CLASS,
+  EDITOR_BLOCK_LABEL_COLUMN_CLASS,
+} from "@/lib/editor-block-layout";
 import { cn } from "@/lib/utils";
 import { scrollEditorBlockIntoView } from "@/lib/editor-scroll";
 import { LABEL_COLOR_BY_TYPE } from "@/lib/blockLabelColors";
@@ -15,9 +19,14 @@ import {
 } from "./ReadonlyResourceValues";
 
 /** EditorBody 줄번호 열과 동일 톤 (포커스 없을 때) */
-const INDEX_COL_CLASS =
-  "shrink-0 text-body4_500 tabular-nums w-9 flex items-center justify-start mt-0 text-on-surface-disabled min-h-8 py-my-4";
-const READONLY_ROW_LABEL_CELL_CLASS = "w-24 shrink-0 min-h-8 py-my-4 flex items-center justify-start";
+const INDEX_COL_CLASS = cn(
+  "text-body4_500 tabular-nums flex items-center justify-start mt-0 text-on-surface-disabled min-h-8 py-my-4",
+  EDITOR_BLOCK_INDEX_COLUMN_CLASS,
+);
+const READONLY_ROW_LABEL_CELL_CLASS = cn(
+  EDITOR_BLOCK_LABEL_COLUMN_CLASS,
+  "min-h-8 py-my-4 flex items-center justify-start",
+);
 const READONLY_ROW_CONTENT_CELL_CLASS = "min-w-0 flex-1 min-h-8 py-0 flex items-center justify-start";
 const READONLY_BODY_TEXT_CLASS =
   "text-body1_400 text-on-surface-10 whitespace-pre-wrap break-words align-middle";

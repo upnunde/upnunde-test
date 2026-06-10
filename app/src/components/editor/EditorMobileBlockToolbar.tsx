@@ -1,12 +1,20 @@
 "use client";
 
-import { useCallback, useMemo, useState } from "react";
+import { useCallback, useEffect, useMemo, useState } from "react";
 import { createPortal } from "react-dom";
-import { Plus, Trash2 } from "lucide-react";
+import { Pencil, Plus, Trash2 } from "lucide-react";
 import { SlashCommandMenu, type SlashSelectPayload } from "@/components/editor/SlashCommandMenu";
 import { Button } from "@/components/ui/button";
+import {
+  EDITOR_MOBILE_DOCKED_TOOLBAR_SHELL_CLASS,
+  isEditorMobileBlockToolbarVisible,
+} from "@/components/editor/editor-mobile-floating-layout";
 import { useVisualKeyboardInset } from "@/hooks/useVisualKeyboardInset";
-import { useEditorMobileSceneHeaderCollapse } from "@/hooks/useEditorMobileSceneHeaderCollapse";
+import { useClientMounted } from "@/hooks/useClientMounted";
+import {
+  isMobileKeyboardEditableBlock,
+  requestMobileBlockContentEdit,
+} from "@/lib/editor-mobile-text-edit";
 import { useEditorStore } from "@/store/useEditorStore";
 import { useToast } from "@/store/useToastStore";
 import type { BlockType } from "@/types/editor";
@@ -14,11 +22,15 @@ import { cn } from "@/lib/utils";
 
 /**
  * 모바일 편집 — 하이브리드 블록 액션 바.
- * - 키보드 닫힘: 워크스페이스 하단 도킹 툴바
+ * - 키보드 닫힘: 뷰포트 하단 고정 도킹 툴바
  * - 키보드 열림: visualViewport 기준 키보드 바로 위 액세서리(Notion식)
  */
 export function EditorMobileBlockToolbar({ className }: { className?: string }) {
   const focusBlockId = useEditorStore((s) => s.focusBlockId);
+  const mobileKeyboardEditBlockId = useEditorStore((s) => s.mobileKeyboardEditBlockId);
+  const setMobileKeyboardEditBlockId = useEditorStore((s) => s.setMobileKeyboardEditBlockId);
+  const mobileContentEditPromptBlockId = useEditorStore((s) => s.mobileContentEditPromptBlockId);
+  const setMobileContentEditPromptBlockId = useEditorStore((s) => s.setMobileContentEditPromptBlockId);
   const blocks = useEditorStore((s) => s.blocks);
   const addBlock = useEditorStore((s) => s.addBlock);
   const removeBlock = useEditorStore((s) => s.removeBlock);
@@ -28,8 +40,7 @@ export function EditorMobileBlockToolbar({ className }: { className?: string }) 
   const { toast } = useToast();
   const { keyboardInset, isKeyboardOpen } = useVisualKeyboardInset();
   const [menuOpen, setMenuOpen] = useState(false);
-  // 장면 탭 숨김과 동일한 스크롤 방향 감지 — 아래로 스크롤 시 도킹 툴바 숨김
-  const scrollCollapsed = useEditorMobileSceneHeaderCollapse(!isKeyboardOpen);
+  const mounted = useClientMounted();
 
   const focusedIndex = useMemo(
     () => (focusBlockId ? blocks.findIndex((b) => b.id === focusBlockId) : -1),
@@ -37,6 +48,30 @@ export function EditorMobileBlockToolbar({ className }: { className?: string }) 
   );
   const focusedBlock = focusedIndex >= 0 ? blocks[focusedIndex] : null;
   const canDelete = focusedBlock != null && focusedBlock.data?.isSeedDefault !== true;
+  const canEditContent =
+    focusedBlock != null && isMobileKeyboardEditableBlock(focusedBlock.type);
+  const isEditingContent = mobileKeyboardEditBlockId === focusBlockId;
+  const showContentEditButton =
+    !isKeyboardOpen &&
+    canEditContent &&
+    mobileContentEditPromptBlockId != null &&
+    mobileContentEditPromptBlockId === focusBlockId &&
+    !isEditingContent;
+  const showToolbar = isEditorMobileBlockToolbarVisible({
+    focusBlockId,
+    isKeyboardOpen,
+    mobileKeyboardEditBlockId,
+  });
+
+  useEffect(() => {
+    if (!isKeyboardOpen && mobileKeyboardEditBlockId) {
+      setMobileKeyboardEditBlockId(null);
+      setMobileContentEditPromptBlockId(null);
+      if (document.activeElement instanceof HTMLElement) {
+        document.activeElement.blur();
+      }
+    }
+  }, [isKeyboardOpen, mobileKeyboardEditBlockId, setMobileContentEditPromptBlockId, setMobileKeyboardEditBlockId]);
 
   const handleInsert = useCallback(
     (payload: SlashSelectPayload) => {
@@ -75,6 +110,11 @@ export function EditorMobileBlockToolbar({ className }: { className?: string }) 
     });
   }, [canDelete, focusBlockId, removeBlock, toast, undo]);
 
+  const handleContentEdit = useCallback(() => {
+    if (!focusBlockId || !canEditContent || isEditingContent) return;
+    requestMobileBlockContentEdit(focusBlockId);
+  }, [canEditContent, focusBlockId, isEditingContent]);
+
   const toolbarButtons = (
     <>
       <Button
@@ -92,6 +132,19 @@ export function EditorMobileBlockToolbar({ className }: { className?: string }) 
         <Plus className="h-4 w-4 shrink-0" aria-hidden />
         {!isKeyboardOpen ? "블록 추가" : null}
       </Button>
+      {!isKeyboardOpen && showContentEditButton ? (
+        <Button
+          type="button"
+          variant="outline"
+          size="sm"
+          className="h-10 flex-1 gap-my-8 bg-white shadow-none"
+          onClick={handleContentEdit}
+          aria-label="내용 수정"
+        >
+          <Pencil className="h-4 w-4 shrink-0" aria-hidden />
+          내용수정
+        </Button>
+      ) : null}
       <Button
         type="button"
         variant="outline"
@@ -106,45 +159,34 @@ export function EditorMobileBlockToolbar({ className }: { className?: string }) 
     </>
   );
 
-  const keyboardAccessory =
-    typeof document !== "undefined"
+  const toolbarLayer =
+    mounted && showToolbar && typeof document !== "undefined"
       ? createPortal(
-          <div
-            className="fixed inset-x-0 z-40 border-t border-border-10 bg-white px-my-12 py-my-8 lg:hidden"
-            style={{ bottom: keyboardInset }}
-            role="toolbar"
-            aria-label="블록 편집"
-          >
-            <div className="flex items-center justify-between gap-my-8">{toolbarButtons}</div>
-          </div>,
+          !isKeyboardOpen ? (
+            <div
+              className={cn(EDITOR_MOBILE_DOCKED_TOOLBAR_SHELL_CLASS, className)}
+              role="toolbar"
+              aria-label="블록 편집"
+            >
+              <div className="flex items-center gap-my-8">{toolbarButtons}</div>
+            </div>
+          ) : (
+            <div
+              className="fixed inset-x-0 z-40 border-t border-border-10 bg-white px-my-12 py-my-8 lg:hidden"
+              style={{ bottom: keyboardInset }}
+              role="toolbar"
+              aria-label="블록 편집"
+            >
+              <div className="flex items-center justify-between gap-my-8">{toolbarButtons}</div>
+            </div>
+          ),
           document.body,
         )
       : null;
 
   return (
     <>
-      {!isKeyboardOpen ? (
-        <div
-          className={cn(
-            "shrink-0 overflow-hidden transition-[max-height] duration-200 ease-out lg:hidden",
-            scrollCollapsed ? "max-h-0" : "max-h-16",
-          )}
-        >
-          <div
-            className={cn(
-              "border-t border-border-10 bg-white px-my-12 py-my-8 transition-transform duration-200 ease-out",
-              scrollCollapsed && "translate-y-full",
-              className,
-            )}
-            role="toolbar"
-            aria-label="블록 편집"
-          >
-            <div className="flex items-center gap-my-8">{toolbarButtons}</div>
-          </div>
-        </div>
-      ) : (
-        keyboardAccessory
-      )}
+      {toolbarLayer}
 
       {menuOpen ? (
         <SlashCommandMenu

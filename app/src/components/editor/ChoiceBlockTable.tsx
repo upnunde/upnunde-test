@@ -4,6 +4,7 @@ import { useCallback, useEffect, useRef } from "react";
 import { Trash2 } from "lucide-react";
 import type { ChoiceItem } from "@/types/editor";
 import { Button } from "@/components/ui/button";
+import { useMobileBlockTextEdit } from "@/hooks/useMobileBlockTextEdit";
 import { cn } from "@/lib/utils";
 import {
   DropdownMenu,
@@ -48,17 +49,20 @@ function createAiChoice(): ChoiceItem {
 
 /** 선택지 내용 전용 텍스트 필드. 영역 고정 확장이 아니라 텍스트 줄 수에 따라 높이만 가변 확장 */
 function ChoiceTextField({
+  blockId,
   value,
   onChange,
   placeholder,
   className,
 }: {
+  blockId: string;
   value: string;
   onChange: (value: string) => void;
   placeholder: string;
   className?: string;
 }) {
   const textareaRef = useRef<HTMLTextAreaElement>(null);
+  const { readOnly, onContentFocus } = useMobileBlockTextEdit(blockId, textareaRef);
 
   const adjustHeight = useCallback(() => {
     const ta = textareaRef.current;
@@ -77,6 +81,8 @@ function ChoiceTextField({
       ref={textareaRef}
       value={value}
       onChange={(e) => onChange(e.target.value)}
+      onFocus={onContentFocus}
+      readOnly={readOnly}
       onInput={adjustHeight}
       placeholder={placeholder}
       rows={1}
@@ -155,6 +161,7 @@ function ChoiceRow({
           </span>
         ) : (
           <ChoiceTextField
+            blockId={blockId}
             value={choice.text}
             onChange={(text) => {
               onUpdate({ text });

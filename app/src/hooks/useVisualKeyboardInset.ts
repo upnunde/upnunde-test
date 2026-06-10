@@ -1,8 +1,7 @@
 "use client";
 
 import { useEffect, useState } from "react";
-
-const KEYBOARD_OPEN_THRESHOLD_PX = 80;
+import { KEYBOARD_OPEN_THRESHOLD_PX } from "@/lib/visual-viewport-chrome";
 
 /**
  * visualViewport 기준 키보드(또는 IME)로 가려진 하단 inset.

@@ -16,14 +16,52 @@ export function getEditorScrollTopInset(scrollRoot: Element): number {
   if (anchor) {
     const rootRect = scrollRoot.getBoundingClientRect();
     const anchorRect = anchor.getBoundingClientRect();
-    if (anchorRect.bottom > rootRect.top) {
+    if (anchorRect.height > 0 && anchorRect.bottom > rootRect.top) {
       return anchorRect.bottom - rootRect.top + gap;
     }
-    // 탭 바가 스크롤 영역 위에 고정된 경우 — 본문 상단 여백만
-    return gap;
+    // 탭·헤더가 스크롤 영역 바로 위에 고정된 경우
+    if (anchorRect.height > 0 && anchorRect.bottom <= rootRect.top) {
+      return gap;
+    }
   }
 
   return 100;
+}
+
+/** 포커스 블록이 속한 장면 id (포커스가 장면 블록이면 그 id) */
+export function resolveSceneBlockIdFromFocus(
+  blocks: { id: string; type: string }[],
+  focusBlockId: string | null,
+  sceneIds: string[],
+): string | null {
+  if (sceneIds.length === 0) return null;
+  if (!focusBlockId) return sceneIds[0] ?? null;
+
+  const focused = blocks.find((b) => b.id === focusBlockId);
+  if (focused?.type === "scene") return focusBlockId;
+
+  const focusIndex = blocks.findIndex((b) => b.id === focusBlockId);
+  if (focusIndex === -1) return sceneIds[0] ?? null;
+
+  for (let i = focusIndex; i >= 0; i--) {
+    if (blocks[i]?.type === "scene") return blocks[i].id;
+  }
+  return sceneIds[0] ?? null;
+}
+
+/** 탭·사이드바 하이라이트 — 탭 클릭(장면 포커스) 우선, 그 외 스크롤 위치 */
+export function resolveEditorActiveSceneId(
+  blocks: { id: string; type: string }[],
+  focusBlockId: string | null,
+  sceneIds: string[],
+  scrollActiveSceneId: string | null,
+): string | null {
+  if (sceneIds.length === 0) return null;
+
+  const focused = focusBlockId ? blocks.find((b) => b.id === focusBlockId) : null;
+  if (focused?.type === "scene") return focusBlockId;
+
+  return scrollActiveSceneId ?? resolveSceneBlockIdFromFocus(blocks, focusBlockId, sceneIds);
 }
 
 /** 스크롤 앵커(장면 탭 하단) 기준으로 현재 보이는 장면 블록 id */

@@ -7,6 +7,8 @@ const BLOCKED_DYNAMIC_API_ERRORS = [
   "The keys of `searchParams` were accessed directly. `searchParams` is a Promise and must be unwrapped with `React.use()` before accessing its properties.",
 ];
 
+/** Cursor IDE 미리보기가 DOM에 주입하는 속성 — hydration 경고 노이즈 */
+
 export default function DevConsoleFilter() {
   useEffect(() => {
     if (process.env.NODE_ENV !== "development") return;
@@ -20,6 +22,16 @@ export default function DevConsoleFilter() {
       });
 
       if (hasBlockedMessage) {
+        return;
+      }
+
+      const joinedText = args
+        .filter((arg): arg is string => typeof arg === "string")
+        .join("\n");
+      if (
+        joinedText.includes("data-cursor-element-id") &&
+        (joinedText.includes("hydration") || joinedText.includes("hydrated"))
+      ) {
         return;
       }
 

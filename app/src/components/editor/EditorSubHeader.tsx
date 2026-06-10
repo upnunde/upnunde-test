@@ -171,6 +171,8 @@ export function EditorSubHeader({
       undoStack: [],
       redoStack: [],
       focusBlockId: null,
+      mobileKeyboardEditBlockId: null,
+      mobileContentEditPromptBlockId: null,
     });
     setSavedSnapshot(JSON.stringify(nextBlocks));
     setIsHistoryEnabled(false);

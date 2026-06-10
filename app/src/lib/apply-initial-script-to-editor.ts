@@ -24,6 +24,8 @@ export function applyInitialScriptToEditor(): void {
     undoStack: [],
     redoStack: [],
     focusBlockId: null,
+    mobileKeyboardEditBlockId: null,
+    mobileContentEditPromptBlockId: null,
     issueFocus: null,
   });
 }
