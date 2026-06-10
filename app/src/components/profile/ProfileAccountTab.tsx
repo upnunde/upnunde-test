@@ -18,10 +18,10 @@ export function ProfileAccountTab() {
   const loginId = loadProfileSettings().public.loginId;
 
   return (
-    <div className="flex flex-col gap-my-20">
+    <div className="flex flex-col gap-my-12 lg:gap-my-20">
       <AnalyticsPanel>
         <Title2 text="로그인 정보" variant="title" asSectionHeader />
-        <div className="flex max-w-xl flex-col gap-my-20 p-my-20">
+        <div className="flex max-w-xl flex-col gap-my-12 lg:gap-my-20 p-my-20">
           <div className="flex flex-col gap-my-12">
             <ProfileFieldLabel text="아이디" />
             <input type="text" disabled value={loginId} className={profileReadonlyInputClassName} />

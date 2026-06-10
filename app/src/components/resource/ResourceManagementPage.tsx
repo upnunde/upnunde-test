@@ -13,7 +13,7 @@ import { MediaCard } from "./cards/MediaCard";
 import { AddResourceSlot } from "./cards/AddResourceSlot";
 import { BgmSection } from "./bgm/BgmSection";
 import { ConfirmDeleteModal } from "./modals/ConfirmDeleteModal";
-import { PAGE_SCROLL_COLUMN_CLASS, PAGE_SUBHEADER_CLASS } from "@/lib/page-layout";
+import { PAGE_GUTTER_GAP_CLASS, PAGE_SCROLL_COLUMN_CLASS, PAGE_SUBHEADER_CLASS } from "@/lib/page-layout";
 import type { ImageLightboxItem } from "./ImageLightbox";
 import type {
   ResourceCategory,
@@ -190,7 +190,7 @@ export function ResourceManagementPage() {
         </header>
 
         <div className={PAGE_SCROLL_COLUMN_CLASS}>
-          <div className="w-full min-w-0 max-w-[1200px] mx-auto mx-auto flex flex-col gap-my-16">
+          <div className={`w-full min-w-0 max-w-[1200px] mx-auto flex flex-col ${PAGE_GUTTER_GAP_CLASS}`}>
             <ResourceBanner seriesId={seriesId} />
 
             <div className="flex w-full flex-col items-start gap-my-24 lg:flex-row">

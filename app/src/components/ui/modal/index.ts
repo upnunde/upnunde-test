@@ -1,5 +1,7 @@
 export {
   modalDialogContentClassName,
+  formDialogShellClassName,
+  mobileBottomSheetMaxHeightClassName,
   modalFooterButtonRowClassName,
   modalFooterButtonToneClassName,
   modalFooterShellClassName,

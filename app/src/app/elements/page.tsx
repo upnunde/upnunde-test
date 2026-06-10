@@ -16,7 +16,11 @@ import {
   chipGroupGapClass,
 } from "@/lib/chip-styles";
 import { SegmentedTextTabs } from "@/components/ui/segmented-text-tabs";
-import { PAGE_CONTAINER_CLASS, PAGE_SCROLL_COLUMN_CLASS } from "@/lib/page-layout";
+import {
+  PAGE_CONTAINER_CLASS,
+  PAGE_SCROLL_COLUMN_CLASS,
+  PAGE_SUBHEADER_CLASS,
+} from "@/lib/page-layout";
 import { cn } from "@/lib/utils";
 
 const AREA_TABS = [
@@ -83,13 +87,13 @@ export default function ElementsPage() {
   return (
     <AppShell sidebarActiveId="guide">
       <main className="flex flex-1 flex-col overflow-hidden bg-surface-20">
-        <div className="flex h-16 shrink-0 items-center justify-center border-b border-border-10 bg-white px-my-20">
+        <div className={PAGE_SUBHEADER_CLASS}>
           <div className={`${PAGE_CONTAINER_CLASS} flex items-center justify-start`}>
             <h1 className="text-heading2_700 text-on-surface-10">UI 요소</h1>
           </div>
         </div>
 
-        <div className={cn(PAGE_SCROLL_COLUMN_CLASS, "gap-my-20")}>
+        <div className={PAGE_SCROLL_COLUMN_CLASS}>
               <SpecRow label="Tab XL — 분석 영역 (underline false · 탭 간격 20px)">
                 <SegmentedTextTabs
                   aria-label="분석 영역 미리보기"

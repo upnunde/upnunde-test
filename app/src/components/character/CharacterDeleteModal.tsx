@@ -38,7 +38,7 @@ export function CharacterDeleteModal({
 
   return (
     <Dialog open={open} onOpenChange={handleOpenChange}>
-      <DialogContent className={modalDialogContentClassName}>
+      <DialogContent presentation="center" className={modalDialogContentClassName}>
         <ModalHeader
           title="캐릭터를 삭제하시겠어요?"
           subtitle={

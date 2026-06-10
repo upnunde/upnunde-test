@@ -80,10 +80,56 @@ export function SeriesItem({
     onSeriesManage?.(series);
   };
 
+  const manageButtons = (
+    <>
+      <button
+        type="button"
+        onClick={handleSeriesManage}
+        className="flex h-9 min-w-0 flex-1 cursor-pointer items-center rounded-md border border-border-20 bg-white px-my-12 text-body3_500 text-on-surface-20 transition-colors hover:bg-surface-20 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-2 disabled:border-border-20"
+      >
+        <span className="block w-full overflow-hidden text-ellipsis whitespace-nowrap text-center">
+          시리즈 관리
+        </span>
+      </button>
+      <button
+        type="button"
+        disabled={isDraft}
+        title={isDraft ? "시리즈 작성 완료 후 이용 가능합니다" : undefined}
+        onClick={handleResource}
+        className={`flex h-9 min-w-0 flex-1 items-center rounded-md border px-my-12 text-body3_500 transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-2 ${
+          isDraft
+            ? "cursor-not-allowed border-border-20 text-on-surface-30"
+            : "cursor-pointer border-border-20 bg-white text-on-surface-20 hover:bg-surface-20"
+        }`}
+      >
+        <span className="block w-full overflow-hidden text-ellipsis whitespace-nowrap text-center">
+          리소스 관리
+        </span>
+      </button>
+      <button
+        type="button"
+        disabled={isDraft}
+        title={isDraft ? "시리즈 작성 완료 후 이용 가능합니다" : undefined}
+        onClick={handleEpisode}
+        className={`flex h-9 min-w-0 flex-1 items-center rounded-md border px-my-12 text-body3_500 transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-2 ${
+          isDraft
+            ? "cursor-not-allowed border-border-20 text-on-surface-30"
+            : "cursor-pointer border-border-20 bg-white text-on-surface-20 hover:bg-surface-20"
+        }`}
+      >
+        <span className="block w-full overflow-hidden text-ellipsis whitespace-nowrap text-center">
+          에피소드 관리
+        </span>
+      </button>
+    </>
+  );
+
   return (
-    <div className="flex min-w-0 w-full flex-col gap-my-20 py-my-20 pl-my-20 pr-my-20 min-[480px]:flex-row rounded-[4px] border border-border-10 bg-white">
-      {/* 썸네일 영역 (정책 6, 8, 9, 10) */}
-      <div className="aspect-[9/16] w-28 max-[479px]:self-center shrink-0 overflow-hidden rounded bg-slate-200 relative">
+    <div className="flex min-w-0 w-full flex-col gap-my-12 lg:gap-my-20 py-my-20 pl-my-12 pr-my-12 min-[480px]:flex-row min-[480px]:pl-my-20 min-[480px]:pr-my-20 rounded-[4px] border border-border-10 bg-white">
+      {/* 모바일: 썸네일+정보 가로 / 데스크톱: contents로 썸네일·우측열을 flex-row 자식으로 */}
+      <div className="flex min-w-0 w-full flex-row gap-my-12 lg:gap-my-20 min-[480px]:contents">
+        {/* 썸네일 영역 (정책 6, 8, 9, 10) */}
+        <div className="relative aspect-[9/16] w-28 shrink-0 overflow-hidden rounded bg-slate-200">
         {status === "DRAFT" ? (
           <div className="w-full h-full flex items-center justify-center bg-slate-200" aria-hidden>
             <span className="text-on-surface-30 text-caption1_400">썸네일 없음</span>
@@ -109,10 +155,10 @@ export function SeriesItem({
             )}
           </>
         )}
-      </div>
+        </div>
 
-      {/* 우측: 제목, 뱃지, 메타, 버튼 */}
-      <div className="flex-1 flex flex-col justify-start items-start min-w-0">
+        {/* 우측: 제목, 뱃지, 메타 (+ 데스크톱 버튼) */}
+        <div className="flex min-w-0 flex-1 flex-col items-start justify-start">
         {/* 제목 + 더보기 (정책 5, 6) */}
         <div className="w-full flex justify-between items-start gap-my-8">
           <h3 className="text-heading5_700 text-on-surface-10 truncate flex-1 min-w-0">
@@ -212,11 +258,11 @@ export function SeriesItem({
           </div>
         )}
 
-        {/* 레이아웃 정렬을 위한 빈 블록 */}
-        <div className="w-full h-full" />
+        {/* 데스크톱: 버튼을 열 하단으로 정렬 */}
+        <div className="hidden w-full flex-1 min-[480px]:block" aria-hidden />
 
         {/* 메타: 날짜, 회차 수, 조회수 (정책 2, 3, 4, 11 - 툴팁) */}
-        <div className="mb-5 flex w-full text-body4_400 text-on-surface-20 [&_svg]:shrink-0 [&_svg]:text-on-surface-20">
+        <div className="mt-my-12 flex w-full text-body4_400 text-on-surface-20 min-[480px]:mb-5 min-[480px]:mt-0 [&_svg]:shrink-0 [&_svg]:text-on-surface-20">
           <div className="flex min-w-0 flex-1 flex-col items-start justify-center gap-my-8 text-on-surface-20">
             <div className="flex items-center gap-my-8 text-on-surface-20">
               <Calendar className="h-[18px] w-[18px]" aria-hidden />
@@ -247,48 +293,16 @@ export function SeriesItem({
           </div>
         </div>
 
-        {/* 하단 관리 버튼: 모든 상태에서 활성화 (가로 영역 내에서 3등분, 버튼 폭 가변) */}
-        <div className="self-stretch flex justify-start items-start gap-my-8 pt-0">
-          <button
-            type="button"
-            onClick={handleSeriesManage}
-            className="h-9 flex-1 min-w-0 cursor-pointer rounded-md border border-border-20 px-my-12 text-body3_500 transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-2 bg-white text-on-surface-20 hover:bg-surface-20 flex items-center disabled:border-border-20"
-          >
-            <span className="block w-full overflow-hidden text-ellipsis whitespace-nowrap text-center">
-              시리즈 관리
-            </span>
-          </button>
-          <button
-            type="button"
-            disabled={isDraft}
-            title={isDraft ? "시리즈 작성 완료 후 이용 가능합니다" : undefined}
-            onClick={handleResource}
-            className={`h-9 flex-1 min-w-0 rounded-md border px-my-12 text-body3_500 transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-2 flex items-center ${
-              isDraft
-                ? "border-border-20 text-on-surface-30 cursor-not-allowed"
-                : "border-border-20 bg-white text-on-surface-20 hover:bg-surface-20 cursor-pointer"
-            }`}
-          >
-            <span className="block w-full overflow-hidden text-ellipsis whitespace-nowrap text-center">
-              리소스 관리
-            </span>
-          </button>
-          <button
-            type="button"
-            disabled={isDraft}
-            title={isDraft ? "시리즈 작성 완료 후 이용 가능합니다" : undefined}
-            onClick={handleEpisode}
-            className={`h-9 flex-1 min-w-0 rounded-md border px-my-12 text-body3_500 transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-2 flex items-center ${
-              isDraft
-                ? "border-border-20 text-on-surface-30 cursor-not-allowed"
-                : "border-border-20 bg-white text-on-surface-20 hover:bg-surface-20 cursor-pointer"
-            }`}
-          >
-            <span className="block w-full overflow-hidden text-ellipsis whitespace-nowrap text-center">
-              에피소드 관리
-            </span>
-          </button>
+        {/* 데스크톱: 우측열 하단 버튼 */}
+        <div className="hidden w-full items-start justify-start gap-my-8 min-[480px]:flex">
+          {manageButtons}
         </div>
+        </div>
+      </div>
+
+      {/* 모바일: 카드 하단 버튼 */}
+      <div className="flex w-full items-start justify-start gap-my-8 min-[480px]:hidden">
+        {manageButtons}
       </div>
     </div>
   );

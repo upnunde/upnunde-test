@@ -112,7 +112,7 @@ export function LoginPage() {
   };
 
   return (
-    <div className="relative flex min-h-screen min-w-0 flex-col items-center justify-center bg-background-10 px-my-16 py-my-32">
+    <div className="relative flex min-h-screen min-w-0 flex-col items-center justify-center bg-background-10 px-my-12 py-my-32 lg:px-my-16">
       {/* 중앙 콘텐츠: 열 방향 Flexbox */}
       <main className="flex w-full max-w-[400px] flex-col items-center gap-my-24">
         <div className="flex w-full flex-col items-center gap-my-12 pb-my-16">
@@ -226,10 +226,10 @@ export function LoginPage() {
 
       <Dialog open={inquiryOpen} onOpenChange={setInquiryOpen}>
         <DialogContent
-          className="flex max-h-[min(90vh,calc(100vh-160px))] min-h-0 w-full min-w-[480px] max-w-[640px] flex-col gap-0 overflow-hidden rounded-[4px] border border-slate-200 bg-white px-0 pt-my-8 pb-0 shadow-none"
+          className="flex max-lg:h-[min(92dvh,900px)] max-lg:max-w-none min-h-0 w-full min-w-0 flex-col gap-0 overflow-hidden rounded-[4px] border border-slate-200 bg-white px-0 pt-my-8 pb-0 shadow-none lg:min-w-[480px] lg:max-w-[640px] lg:max-h-[min(90vh,calc(100dvh-160px))]"
           aria-describedby={undefined}
         >
-          <DialogHeader className="shrink-0 flex flex-col justify-center items-start gap-0 border-none p-0 px-my-20 pt-my-8 pb-my-8">
+          <DialogHeader className="shrink-0 flex flex-col justify-center items-start gap-0 border-none p-0 px-my-12 lg:px-my-20 pt-my-8 pb-my-8">
             <Title2 text="문의" showDot={false} showGuide={false} subtitle={false} />
           </DialogHeader>
           <InquiryForm
@@ -241,7 +241,7 @@ export function LoginPage() {
               setSnackbar({ open: true, message: "문의내용을 전달하였습니다" });
             }}
             onCancel={() => setInquiryOpen(false)}
-            className="flex flex-col gap-my-40 px-my-20 pt-my-20 pb-my-20"
+            className="flex flex-col gap-my-40 px-my-12 lg:px-my-20 pt-my-20 pb-my-20"
             rootClassName="min-h-0 flex-1 flex-col"
           />
         </DialogContent>

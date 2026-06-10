@@ -106,7 +106,7 @@ export function ProfilePublicTab({
           </p>
         </div>
 
-        <div className="flex max-w-xl flex-col gap-my-20">
+        <div className="flex max-w-xl flex-col gap-my-12 lg:gap-my-20">
           <div className="flex flex-col gap-my-12">
             <ProfileFieldLabel text="아이디" hint="로그인에 사용하는 이메일이에요." />
             <input type="text" disabled value={draft.loginId} className={profileReadonlyInputClassName} />

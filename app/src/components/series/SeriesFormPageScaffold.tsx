@@ -12,6 +12,7 @@ import {
 } from "@/components/series/SeriesFormMobileTabBar";
 import { SeriesPreviewPanel } from "@/components/series/SeriesPreviewPanel";
 import { useIsLgUp } from "@/hooks/useMediaQuery";
+import { PAGE_GUTTER_X_CLASS, PAGE_SUBHEADER_CLASS } from "@/lib/page-layout";
 import { cn } from "@/lib/utils";
 import type { SeriesFormTab } from "@/lib/seriesForm";
 
@@ -47,7 +48,7 @@ export function SeriesFormPageScaffold({
   children,
   showDraftButton = false,
   onDraftClick,
-  contentPaddingClassName = "px-my-20",
+  contentPaddingClassName = PAGE_GUTTER_X_CLASS,
   contentGapClassName = "gap-my-40",
 }: SeriesFormPageScaffoldProps) {
   const isLgUp = useIsLgUp();
@@ -61,7 +62,7 @@ export function SeriesFormPageScaffold({
       <div className="flex flex-1 overflow-hidden bg-surface-20">
         <div className="flex min-w-0 flex-1 flex-col overflow-hidden">
           <main className="flex flex-1 flex-col overflow-hidden bg-surface-20">
-            <header className="flex h-16 shrink-0 items-center justify-center border-b border-border-10 bg-white px-my-20 py-0">
+            <header className={PAGE_SUBHEADER_CLASS}>
               <div className="flex w-full max-w-[1200px] items-center justify-between gap-my-16">
                 <div className="flex items-center justify-start gap-my-12">
                   <HeaderBackButton onClick={onBack} aria-label="시리즈 목록으로" />
@@ -114,7 +115,7 @@ export function SeriesFormPageScaffold({
                         className="flex h-fit shrink-0 flex-col overflow-hidden rounded-[4px] px-0 pt-0 pb-0"
                       >
                         <SeriesFormTabs activeTab={activeTab} onChange={onTabChange} />
-                        <div className="self-stretch px-my-20 pt-my-8 pb-my-20">{children}</div>
+                        <div className={cn("self-stretch pt-my-8 pb-my-20", PAGE_GUTTER_X_CLASS)}>{children}</div>
                       </PageCard>
                     </div>
 

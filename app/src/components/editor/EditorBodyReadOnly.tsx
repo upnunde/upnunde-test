@@ -5,6 +5,7 @@ import { useEditorStore, hydrateSeriesPersonaFromSession } from "@/store/useEdit
 import { resolveSpeakerDisplay } from "@/lib/speakerPersona";
 import type { ScriptBlock } from "@/types/editor";
 import { cn } from "@/lib/utils";
+import { scrollEditorBlockIntoView } from "@/lib/editor-scroll";
 import { LABEL_COLOR_BY_TYPE } from "@/lib/blockLabelColors";
 import { BLOCK_LABEL_KO } from "@/lib/blockTypeLabels";
 import { ReadonlyChoiceTable } from "./ReadonlyChoiceTable";
@@ -192,13 +193,11 @@ export function EditorBodyReadOnly() {
     (id: string) => {
       setFocusBlockId(id);
       requestAnimationFrame(() => {
-        const el = document.getElementById(`block-${id}`);
-        if (!el) return;
-        el.focus();
-        el.scrollIntoView({ block: "nearest", behavior: "auto" });
+        const el = scrollEditorBlockIntoView(id);
+        el?.focus();
       });
     },
-    [setFocusBlockId]
+    [setFocusBlockId],
   );
 
   useEffect(() => {
@@ -241,7 +240,7 @@ export function EditorBodyReadOnly() {
 
   return (
     <div className="min-h-full w-full cursor-default select-text">
-      <div className="mx-auto flex min-h-full w-full flex-col gap-my-4 px-my-8">
+      <div className="mx-auto flex min-h-full w-full flex-col gap-my-4 pl-my-8 pr-0">
         {blocks.map((block, i) => {
           const isScene = block.type === "scene";
           const prevBlock = i > 0 ? blocks[i - 1] : null;

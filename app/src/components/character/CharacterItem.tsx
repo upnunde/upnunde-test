@@ -49,7 +49,7 @@ export function CharacterItem({
   const stat2Str = formatSeriesViewCount(stat2);
 
   return (
-    <div className="flex min-h-0 min-w-0 w-full flex-col gap-my-20 py-my-20 pl-my-20 pr-my-20 min-[480px]:flex-row rounded-[4px] border border-border-10 bg-white">
+    <div className="flex min-h-0 min-w-0 w-full flex-col gap-my-12 lg:gap-my-20 py-my-20 pl-my-12 pr-my-12 min-[480px]:flex-row min-[480px]:pl-my-20 min-[480px]:pr-my-20 rounded-[4px] border border-border-10 bg-white">
       <div className="relative aspect-[9/16] w-28 max-[479px]:self-center shrink-0 overflow-hidden rounded bg-slate-200">
         {isDraft || !thumbnailUrl ? (
           <div className="flex h-full w-full items-center justify-center bg-slate-200" aria-hidden>

@@ -92,7 +92,6 @@ export default function SeriesNewPage() {
       showDraftButton
       coverPreviewUrl={coverPreviewUrl}
       logoPreviewUrl={logoPreviewUrl}
-      contentPaddingClassName="px-my-20"
       contentGapClassName="gap-my-40"
     >
       {activeTab === "image" && (

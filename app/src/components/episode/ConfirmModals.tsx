@@ -48,7 +48,7 @@ export function PublishConfirmModal({
         }
       }}
     >
-      <DialogContent className="w-[480px] max-w-[calc(100vw-2rem)] p-0 gap-0 bg-surface-10 rounded-[4px] shadow-elevation-50 border-0 outline-none focus:outline-none">
+      <DialogContent presentation="center" className="w-[480px] max-w-[calc(100vw-2rem)] p-0 gap-0 bg-surface-10 rounded-[4px] shadow-elevation-50 border-0 outline-none focus:outline-none">
         {/* 상단: 제목 + 부제 (가이드 레이아웃) */}
         <div className="self-stretch px-my-24 pt-my-40 pb-my-16 bg-surface-10 rounded-t-[4px] flex flex-col justify-start items-center gap-my-20">
           <div className="self-stretch flex flex-col justify-center items-center gap-my-8">
@@ -146,7 +146,7 @@ export function DeleteConfirmModal({
         if (!o) onClose();
       }}
     >
-      <DialogContent className={modalDialogContentClassName}>
+      <DialogContent presentation="center" className={modalDialogContentClassName}>
         <ModalHeader
           title="에피소드를 삭제하시겠어요?"
           subtitle="정말 삭제하시겠어요? 삭제 후에는 복구할 수 없어요."

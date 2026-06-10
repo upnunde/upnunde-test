@@ -4,7 +4,7 @@ import dynamic from "next/dynamic";
 import React, { Suspense } from "react";
 import { useSearchParams } from "next/navigation";
 import { AppShell } from "@/components/layout/AppShell";
-import { PAGE_CONTAINER_CLASS } from "@/lib/page-layout";
+import { PAGE_CONTAINER_CLASS, PAGE_SUBHEADER_CLASS } from "@/lib/page-layout";
 import type { AnalyticsAreaTabId } from "@/components/analytics/AnalyticsDashboard";
 
 const AnalyticsDashboard = dynamic(
@@ -32,7 +32,7 @@ function AnalyticsPageContent() {
   return (
     <AppShell sidebarActiveId="analytics">
       <main className="flex flex-1 flex-col overflow-hidden bg-surface-20">
-        <div className="flex h-[64px] w-full shrink-0 flex-col items-center justify-center border-b border-border-10 bg-white px-my-20">
+        <div className={PAGE_SUBHEADER_CLASS}>
           <div className={`${PAGE_CONTAINER_CLASS} flex items-center justify-start gap-my-16`}>
             <h1 className="text-heading2_700 text-on-surface-10">분석</h1>
           </div>

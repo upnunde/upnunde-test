@@ -2,8 +2,18 @@
 export const modalDialogContentClassName =
   "flex w-[480px] max-w-[calc(100vw-2rem)] flex-col items-stretch gap-0 overflow-hidden border-0 bg-surface-10 p-0 shadow-elevation-50 rounded-[4px]";
 
+/**
+ * M3 모달 바텀 시트 최대 높이 — `100dvh` 기준 92% detent(상단 스크림 ~8% peek), 대형 뷰 상한 900px.
+ * `dialog.tsx` `presentation="auto"`, `formDialogShellClassName`과 동일.
+ */
+export const mobileBottomSheetMaxHeightClassName = "max-h-[min(92dvh,900px)]";
+
+/** 넓은 폼 Dialog 셸 — 모바일 full-width 바텀 시트 / 데스크톱 중앙 */
+export const formDialogShellClassName =
+  "flex min-w-0 flex-col overflow-hidden border-0 bg-transparent p-0 shadow-none max-lg:h-[min(92dvh,900px)] max-lg:max-w-none max-lg:w-full lg:h-[min(90vh,calc(100dvh-80px))] lg:w-[min(92vw,760px)] lg:max-w-[760px]";
+
 export const modalHeaderClassName =
-  "flex min-h-40 w-full flex-col items-center gap-my-20 self-stretch overflow-hidden rounded-tl-[4px] rounded-tr-[4px] bg-surface-10 px-my-24 pb-my-16 pt-my-40";
+  "flex min-h-40 w-full flex-col items-center gap-my-20 self-stretch overflow-hidden rounded-tl-[4px] rounded-tr-[4px] bg-surface-10 px-my-24 pb-my-16 pt-my-24 lg:pt-my-40";
 
 export const modalFooterShellClassName =
   "self-stretch overflow-hidden rounded-bl-[4px] rounded-br-[4px] bg-surface-10";

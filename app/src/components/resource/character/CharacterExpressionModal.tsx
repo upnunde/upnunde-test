@@ -523,7 +523,7 @@ export function CharacterExpressionModal({
   return (
     <Dialog open={open} onOpenChange={(o) => !o && handleClose()}>
       <DialogContent
-        className={`${layoutShowSlotList ? "w-auto max-w-[calc(100vw-2rem)]" : "w-[432px] sm:w-[440px] max-w-[calc(100vw-2rem)]"} gap-0 p-0 bg-surface-10 rounded-[4px] shadow-elevation-50 outline outline-1 outline-offset-[-1px] outline-border-10 overflow-hidden flex flex-col`}
+        className={`gap-0 p-0 bg-surface-10 rounded-[4px] shadow-elevation-50 outline outline-1 outline-offset-[-1px] outline-border-10 overflow-hidden flex flex-col max-lg:w-full max-lg:max-w-none ${layoutShowSlotList ? "lg:w-auto lg:max-w-[calc(100vw-2rem)]" : "lg:w-[432px] lg:max-w-[calc(100vw-2rem)]"}`}
         aria-describedby={undefined}
       >
         <DialogTitle className="sr-only">이미지 편집</DialogTitle>

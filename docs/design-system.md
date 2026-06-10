@@ -554,10 +554,13 @@ UI에서 **실제로 사용하는 역할 기반 토큰**. 값은 프리미티브
 | `spacing-36` | `my-36` | 36px | - | - | - |
 
 #### 페이지·카드 본문 인셋 (공통)
-- **기본 가로·세로 인셋 = `my-20`(20px)** → Tailwind **`px-my-20` / `py-my-20` / `p-my-20`**
-- 코드 단일 소스: `app/src/lib/page-layout.ts` (`PAGE_CONTENT_PAD_X_CLASS`, `PAGE_CONTENT_BODY_CLASS`, `PAGE_SCROLL_GUTTER_CLASS` 등)
-- `Title2` `asSectionHeader` 기본값도 **`px-my-20 py-my-12`** — 임의의 값으로 덮어쓰지 않는다.
-- `PageCard`·`SeriesFormPageScaffold` 본문·정산/분석 `px-my-20` 열과 동일.
+- **가로 인셋**: 모바일 **`my-12`(12px)** · lg+ **`my-20`(20px)** → Tailwind **`px-my-12 lg:px-my-20`**
+- **스택 간격(gap)**: 모바일 **`my-12`** · lg+ **`my-20`** → **`gap-my-12 lg:gap-my-20`** (`PAGE_GUTTER_GAP_CLASS`)
+- **세로 인셋**: 기본 **`my-20`(20px)** → `py-my-20` / `p-my-20` (세로 패딩은 뷰포트별 분기 없음)
+- 상세·체크리스트: **`docs/mobile-layout.md`**
+- 코드 단일 소스: `app/src/lib/page-layout.ts` (`PAGE_GUTTER_X_CLASS`, `PAGE_CONTENT_PAD_X_CLASS`, `PAGE_SCROLL_GUTTER_CLASS` 등)
+- `Title2` `asSectionHeader`·`PageCard`·`SeriesFormPageScaffold` 본문·정산/분석 스크롤 열은 **`PAGE_GUTTER_X_CLASS`** 와 동일하게 맞춘다.
+- 페이지 가로 인셋·스택 gap에 **`px-my-20`·`gap-my-20` 단독 사용 금지** — `PAGE_GUTTER_X_CLASS` / `PAGE_GUTTER_GAP_CLASS` 또는 `*-my-12 lg:*-my-20`.
 
 ---
 

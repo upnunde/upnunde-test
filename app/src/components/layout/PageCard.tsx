@@ -1,5 +1,5 @@
 import type { ReactNode } from "react";
-import { PAGE_CONTAINER_CLASS } from "@/lib/page-layout";
+import { PAGE_CONTAINER_CLASS, PAGE_GUTTER_X_CLASS } from "@/lib/page-layout";
 import { cn } from "@/lib/utils";
 
 interface PageCardProps {
@@ -14,8 +14,8 @@ export function PageCard({ className, children, fullWidth = false }: PageCardPro
     <div
       className={cn(
         fullWidth
-          ? "w-full rounded-[4px] border border-border-10 bg-white px-my-20 pt-my-8 pb-my-20 shadow-none overflow-hidden"
-          : cn(PAGE_CONTAINER_CLASS, "rounded-[4px] border border-border-10 bg-white px-my-20 pt-my-8 pb-my-20 shadow-none overflow-hidden"),
+          ? `w-full rounded-[4px] border border-border-10 bg-white ${PAGE_GUTTER_X_CLASS} pt-my-8 pb-my-20 shadow-none overflow-hidden`
+          : cn(PAGE_CONTAINER_CLASS, `rounded-[4px] border border-border-10 bg-white ${PAGE_GUTTER_X_CLASS} pt-my-8 pb-my-20 shadow-none overflow-hidden`),
         className,
       )}
     >

@@ -6,6 +6,7 @@ import { Plus, Trash2 } from "lucide-react";
 import { SlashCommandMenu, type SlashSelectPayload } from "@/components/editor/SlashCommandMenu";
 import { Button } from "@/components/ui/button";
 import { useVisualKeyboardInset } from "@/hooks/useVisualKeyboardInset";
+import { useEditorMobileSceneHeaderCollapse } from "@/hooks/useEditorMobileSceneHeaderCollapse";
 import { useEditorStore } from "@/store/useEditorStore";
 import { useToast } from "@/store/useToastStore";
 import type { BlockType } from "@/types/editor";
@@ -27,6 +28,8 @@ export function EditorMobileBlockToolbar({ className }: { className?: string }) 
   const { toast } = useToast();
   const { keyboardInset, isKeyboardOpen } = useVisualKeyboardInset();
   const [menuOpen, setMenuOpen] = useState(false);
+  // 장면 탭 숨김과 동일한 스크롤 방향 감지 — 아래로 스크롤 시 도킹 툴바 숨김
+  const scrollCollapsed = useEditorMobileSceneHeaderCollapse(!isKeyboardOpen);
 
   const focusedIndex = useMemo(
     () => (focusBlockId ? blocks.findIndex((b) => b.id === focusBlockId) : -1),
@@ -72,8 +75,6 @@ export function EditorMobileBlockToolbar({ className }: { className?: string }) 
     });
   }, [canDelete, focusBlockId, removeBlock, toast, undo]);
 
-  if (!focusedBlock) return null;
-
   const toolbarButtons = (
     <>
       <Button
@@ -84,6 +85,7 @@ export function EditorMobileBlockToolbar({ className }: { className?: string }) 
           "gap-my-8 bg-white shadow-none",
           isKeyboardOpen ? "h-11 w-11 shrink-0 p-0" : "h-10 flex-1",
         )}
+        disabled={focusedIndex < 0}
         onClick={() => setMenuOpen(true)}
         aria-label="블록 추가"
       >
@@ -93,17 +95,13 @@ export function EditorMobileBlockToolbar({ className }: { className?: string }) 
       <Button
         type="button"
         variant="outline"
-        size="sm"
-        className={cn(
-          "shrink-0 gap-my-8 bg-white shadow-none text-on-surface-30 hover:bg-red-50 hover:text-red-600 disabled:border-border-20",
-          isKeyboardOpen ? "h-11 w-11 p-0" : "h-10 px-my-16",
-        )}
+        size="icon"
+        className="h-10 w-10 shrink-0 bg-white shadow-none text-on-surface-30 lg:hover:bg-red-50 lg:hover:text-red-600 disabled:border-border-20"
         disabled={!canDelete}
         onClick={handleDelete}
         aria-label="블록 삭제"
       >
         <Trash2 className="h-4 w-4 shrink-0" aria-hidden />
-        {!isKeyboardOpen ? "삭제" : null}
       </Button>
     </>
   );
@@ -112,7 +110,7 @@ export function EditorMobileBlockToolbar({ className }: { className?: string }) 
     typeof document !== "undefined"
       ? createPortal(
           <div
-            className="fixed inset-x-0 z-40 border-t border-border-10 bg-white px-my-16 py-my-8 lg:hidden"
+            className="fixed inset-x-0 z-40 border-t border-border-10 bg-white px-my-12 py-my-8 lg:hidden"
             style={{ bottom: keyboardInset }}
             role="toolbar"
             aria-label="블록 편집"
@@ -128,16 +126,21 @@ export function EditorMobileBlockToolbar({ className }: { className?: string }) 
       {!isKeyboardOpen ? (
         <div
           className={cn(
-            "shrink-0 border-t border-border-10 bg-white px-my-16 py-my-8 lg:hidden",
-            className,
+            "shrink-0 overflow-hidden transition-[max-height] duration-200 ease-out lg:hidden",
+            scrollCollapsed ? "max-h-0" : "max-h-16",
           )}
-          role="toolbar"
-          aria-label="블록 편집"
         >
-          <div className="flex items-center gap-my-8">{toolbarButtons}</div>
-          <p className="mt-my-8 text-center text-caption2_400 text-on-surface-30">
-            번호를 길게 눌러 순서를 바꿀 수 있어요
-          </p>
+          <div
+            className={cn(
+              "border-t border-border-10 bg-white px-my-12 py-my-8 transition-transform duration-200 ease-out",
+              scrollCollapsed && "translate-y-full",
+              className,
+            )}
+            role="toolbar"
+            aria-label="블록 편집"
+          >
+            <div className="flex items-center gap-my-8">{toolbarButtons}</div>
+          </div>
         </div>
       ) : (
         keyboardAccessory

@@ -42,7 +42,7 @@ export function StartCheckModal({
 
   return (
     <Dialog open={open} onOpenChange={handleOpenChange}>
-      <DialogContent className="sm:max-w-md">
+      <DialogContent presentation="center" className="sm:max-w-md">
         <DialogHeader>
           <DialogTitle>잠깐! 시작하기 전 체크</DialogTitle>
           <DialogDescription asChild>
@@ -104,7 +104,7 @@ export function LeaveConfirmModal({ open, onClose, onConfirm }: LeaveConfirmModa
 
   return (
     <Dialog open={open} onOpenChange={(o) => !o && onClose()}>
-      <DialogContent className="sm:max-w-md">
+      <DialogContent presentation="center" className="sm:max-w-md">
         <DialogHeader>
           <DialogTitle>작업을 중단하고 나가시겠습니까?</DialogTitle>
           <DialogDescription asChild>
@@ -147,7 +147,7 @@ export function ResourceDeleteModal({
 
   return (
     <Dialog open={open} onOpenChange={(o) => !o && onClose()}>
-      <DialogContent className="sm:max-w-md">
+      <DialogContent presentation="center" className="sm:max-w-md">
         <DialogHeader>
           <DialogTitle className="text-center">리소스를 삭제하시겠어요?</DialogTitle>
           <DialogDescription asChild>

@@ -8,6 +8,7 @@
 | [repository-architecture.md](./repository-architecture.md) | 모노레포 구성, 패키지 역할, 실행 단위 |
 | [editor-policies.md](./editor-policies.md) | 스크립트 에디터·히스토리·임시저장·검증 정책 |
 | [design-system.md](./design-system.md) | UI 원칙, 디자인 토큰(타이포·컬러·스페이싱·레디어스), 표기 규칙 |
+| [mobile-layout.md](./mobile-layout.md) | 모바일 레이아웃 — 페이지 좌우 인셋(12px)·서브헤더 높이(56px) |
 | [service-policy-baseline.md](./service-policy-baseline.md) | 서비스 전반 핵심 개념(Ink/핸드오프/챗 모드/도메인) 정책 기준 |
 | [ai-role-automation-playbook.md](./ai-role-automation-playbook.md) | AI 역할군 우선순위, 핸드오프 규칙, n8n 자동화 운영 가이드 |
 | [n8n-workflow-descriptions.md](./n8n-workflow-descriptions.md) | n8n 워크플로 Description 표준 문구 모음 |

@@ -12,6 +12,9 @@ import { EpisodeForm } from "@/components/episode/EpisodeForm";
 import { Button } from "@/components/ui/button";
 import { HeaderBackButton } from "@/components/ui/header-back-button";
 import { Dialog, DialogContent, DialogTitle } from "@/components/ui/dialog";
+import { formDialogShellClassName } from "@/components/ui/modal";
+import { PAGE_GUTTER_X_CLASS, PAGE_SCROLL_GUTTER_CLASS, PAGE_SUBHEADER_CLASS } from "@/lib/page-layout";
+import { cn } from "@/lib/utils";
 import { applyInitialScriptToEditor } from "@/lib/apply-initial-script-to-editor";
 import { createDefaultSeedBlocks, useEditorStore } from "@/store/useEditorStore";
 import type { Episode, SortOptions, SnackbarState, SeriesType } from "@/types/episode";
@@ -306,30 +309,30 @@ export default function EpisodeManagementPage() {
         <div className="flex min-w-0 flex-1 flex-col overflow-hidden">
           <main className="flex flex-1 flex-col overflow-hidden bg-surface-20">
             {/* Sub Header (레이아웃 가이드: margin 40, max-width 1200, min-width 640) */}
-            <header className="flex h-16 shrink-0 items-center justify-center border-b border-border-10 bg-white px-my-20 py-0">
+            <header className={PAGE_SUBHEADER_CLASS}>
               <div className="flex w-full max-w-[1200px] items-center justify-start gap-my-12">
                 <HeaderBackButton onClick={handleBack} aria-label="시리즈 목록으로" />
                 <h1 className="text-heading2_700 text-on-surface-10">에피소드 관리</h1>
               </div>
             </header>
 
-            <div className="flex-1 overflow-y-auto flex flex-col items-center py-my-32 gap-my-12 px-my-20">
+            <div className={`flex-1 overflow-y-auto flex flex-col items-center py-my-32 gap-my-12 ${PAGE_SCROLL_GUTTER_CLASS}`}>
               <div className="w-full max-w-[1200px] mx-auto flex flex-col gap-my-12">
               {/* Title & Actions - 정책 2, 3, 16 */}
-              <div className="w-full px-0 flex justify-between items-center shrink-0">
-                <h2 className="text-heading4_700 text-on-surface-10">{seriesTitle}</h2>
-                <div className="flex items-center gap-my-12">
+              <div className="flex w-full shrink-0 flex-col gap-my-12 px-0 lg:flex-row lg:items-center lg:justify-between">
+                <h2 className="min-w-0 text-heading4_700 text-on-surface-10">{seriesTitle}</h2>
+                <div className="flex w-full items-center gap-my-8 lg:w-auto lg:gap-my-12">
                   <button
                     type="button"
                     onClick={handleResourceManagement}
-                    className="h-9 px-my-12 cursor-pointer bg-white border border-border-20 rounded-md text-on-surface-20 font-medium hover:bg-surface-20 transition-colors disabled:border-border-20"
+                    className="h-9 min-w-0 flex-1 cursor-pointer rounded-md border border-border-20 bg-white px-my-12 font-medium text-on-surface-20 transition-colors hover:bg-surface-20 disabled:border-border-20 lg:flex-none"
                   >
                     리소스 관리
                   </button>
                   <button
                     type="button"
                     onClick={handleAddEpisode}
-                    className="h-9 px-my-12 cursor-pointer bg-primary text-primary-foreground hover:bg-primary/90 font-medium rounded-md transition-colors"
+                    className="h-9 min-w-0 flex-1 cursor-pointer rounded-md bg-primary px-my-12 font-medium text-primary-foreground transition-colors hover:bg-primary/90 lg:flex-none"
                   >
                     새 에피소드
                   </button>
@@ -338,7 +341,7 @@ export default function EpisodeManagementPage() {
 
               {/* 정책 14, 15: 빈 화면 배너 또는 리스트/페이지네이션 */}
               {showEmptyBanner ? (
-                <div className="w-full px-my-20">
+                <div className={`w-full ${PAGE_GUTTER_X_CLASS}`}>
                   <EmptyStateBanner />
                 </div>
               ) : (
@@ -394,7 +397,7 @@ export default function EpisodeManagementPage() {
       />
       <Dialog open={isCreateEpisodeModalOpen} onOpenChange={setIsCreateEpisodeModalOpen}>
         <DialogContent
-          className="fixed left-1/2 top-1/2 w-[min(92vw,760px)] max-w-[760px] min-w-0 -translate-x-1/2 -translate-y-1/2 overflow-hidden rounded-[16px] border-0 bg-transparent p-0 shadow-none"
+          className={cn(formDialogShellClassName, "max-lg:rounded-t-[4px] lg:rounded-[16px]")}
           aria-describedby={undefined}
         >
           <DialogTitle className="sr-only">새 에피소드 생성</DialogTitle>

@@ -115,7 +115,7 @@ export default function AppSidebar({
     <nav
       className={cn(
         "flex h-full w-[240px] shrink-0 flex-col border-r border-border-10 bg-white py-my-16",
-        "max-lg:fixed max-lg:inset-y-0 max-lg:left-0 max-lg:z-50 max-lg:shadow-elevation-50",
+        "max-lg:fixed max-lg:inset-0 max-lg:z-50 max-lg:w-full max-lg:max-w-none max-lg:overflow-y-auto max-lg:border-r-0",
         !mobileOpen && "max-lg:hidden",
         "lg:relative",
       )}
@@ -131,7 +131,24 @@ export default function AppSidebar({
         }}
         listClassName="flex flex-col gap-0 px-my-8"
       />
-      <div className="mt-auto px-my-8">
+
+      {/* 모바일: 알림 아래 구분선 후 하단 메뉴 순서대로 노출 */}
+      <div className="px-my-8 lg:hidden">
+        <div className="border-t border-border-10" role="separator" aria-hidden />
+        <SidebarList
+          items={sidebarBottomItems}
+          activeId={activeId}
+          onSelect={(id) => {
+            const item = SIDEBAR_BOTTOM_ITEMS.find((i) => i.id === id);
+            if (!item) return;
+            handleClick(item.id, item.path);
+          }}
+          listClassName="flex flex-col gap-0"
+        />
+      </div>
+
+      {/* 데스크톱: 하단 고정 */}
+      <div className="mt-auto hidden px-my-8 lg:block">
         <SidebarList
           items={sidebarBottomItems}
           activeId={activeId}

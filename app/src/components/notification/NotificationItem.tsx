@@ -37,7 +37,7 @@ export function NotificationItem({
       <button
         type="button"
         onClick={() => onToggle?.()}
-        className="mx-5 w-[calc(100%-40px)] cursor-pointer self-stretch h-[80px] rounded-lg inline-flex justify-start items-center gap-my-20 transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-inset"
+        className="mx-5 w-[calc(100%-40px)] cursor-pointer self-stretch h-[80px] rounded-lg inline-flex justify-start items-center gap-my-12 lg:gap-my-20 transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-inset"
         aria-expanded={isOpen}
         aria-controls={`notification-content-${id}`}
         id={`notification-trigger-${id}`}
@@ -54,7 +54,7 @@ export function NotificationItem({
           </div>
         </div>
         <div className="flex-1 inline-flex flex-col justify-center items-start gap-my-4">
-          <div className="inline-flex justify-start items-center gap-my-20">
+          <div className="inline-flex justify-start items-center gap-my-12 lg:gap-my-20">
             <div className="flex justify-start items-start gap-my-4">
               <div className="justify-start text-on-surface-10 text-body2_500 font-['Pretendard_JP']">
                 {title}
@@ -78,7 +78,7 @@ export function NotificationItem({
           id={`notification-content-${id}`}
           role="region"
           aria-labelledby={`notification-trigger-${id}`}
-          className="flex items-stretch gap-my-20 pl-[90px] pr-my-20 pb-my-20 pt-0"
+          className="flex items-stretch gap-my-12 lg:gap-my-20 pl-[90px] pr-my-12 pb-my-20 pt-0 lg:pr-my-20"
         >
           <div
             className="w-px shrink-0 self-stretch min-h-0 bg-surface-20 rounded-full"

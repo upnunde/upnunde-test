@@ -7,7 +7,7 @@ export type EditorAutoGeneratorButtonPlacement = "overlay" | "below-tabs";
 
 export interface EditorAutoGeneratorFloatingButtonProps {
   onClick: () => void;
-  /** overlay: 본문 위 우상단(데스크톱) / below-tabs: 장면 탭 바로 아래 플로팅(모바일) */
+  /** overlay: 본문 위 우상단(데스크톱) / below-tabs: 장면 탭 아래 플로팅(모바일) */
   placement?: EditorAutoGeneratorButtonPlacement;
   className?: string;
 }
@@ -30,7 +30,7 @@ export function EditorAutoGeneratorFloatingButton({
         buttonVisualClass,
         placement === "overlay" && "absolute top-my-12 right-my-12 z-30",
         placement === "below-tabs" &&
-          "absolute top-full right-my-16 z-30 mt-my-8",
+          "absolute top-full right-my-8 z-30 mt-my-8 shrink-0",
         className,
       )}
       onClick={onClick}

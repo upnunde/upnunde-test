@@ -24,6 +24,7 @@ import {
   canLoadPreviousEpisodeHistory,
   generatePreviousEpisodeHistory,
 } from "@/lib/episode-previous-history";
+import { formDialogShellClassName } from "@/components/ui/modal";
 import { cn } from "@/lib/utils";
 
 const MAX_HISTORY = 5000;
@@ -166,7 +167,7 @@ export function EpisodeAutoGeneratorModal({
   return (
     <Dialog open={open} onOpenChange={onOpenChange} modal={false}>
       <DialogContent
-        className="!z-[60] flex w-[min(92vw,760px)] max-w-[760px] min-w-0 flex-col overflow-hidden border-0 bg-transparent p-0 shadow-none"
+        className={cn(formDialogShellClassName, "!z-[60]")}
         aria-describedby={undefined}
         onPointerDownOutside={(event) => {
           // 하단 자동 입력기 및 외부 클릭으로 모달이 자동 닫히지 않도록 유지
@@ -185,7 +186,7 @@ export function EpisodeAutoGeneratorModal({
             <Title2 text="에피소드 생성기" asSectionHeader />
             <div
               className={cn(
-                "mx-0 flex min-h-0 flex-col gap-my-24 overflow-y-auto border-0 px-my-20 pt-my-20 shadow-none",
+                "mx-0 flex min-h-0 flex-col gap-my-24 overflow-y-auto border-0 px-my-12 lg:px-my-20 pt-my-20 shadow-none",
                 "max-h-[min(calc(88vh-10rem),680px)]",
                 FLOATING_COMPOSER_SCROLL_PAD_CLASS,
               )}
@@ -278,7 +279,7 @@ export function EpisodeAutoGeneratorModal({
                 />
               </div>
             </div>
-            <div className="shrink-0 border-t border-border-10 bg-white px-my-20 py-my-16">
+            <div className="shrink-0 border-t border-border-10 bg-white px-my-12 lg:px-my-20 py-my-16">
               <div className="flex justify-end gap-my-8">
                 <Button
                   type="button"

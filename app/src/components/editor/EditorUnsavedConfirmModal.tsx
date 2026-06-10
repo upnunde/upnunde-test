@@ -27,7 +27,7 @@ export function EditorUnsavedConfirmModal({
 }: EditorUnsavedConfirmModalProps) {
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
-      <DialogContent className={modalDialogContentClassName}>
+      <DialogContent presentation="center" className={modalDialogContentClassName}>
         <ModalHeader title={title} subtitle={description} />
         <ModalFooterButtons
           layout="split"

@@ -40,7 +40,7 @@ export function ConfirmDeleteModal({
         if (!o) onClose();
       }}
     >
-      <DialogContent className={modalDialogContentClassName}>
+      <DialogContent presentation="center" className={modalDialogContentClassName}>
         <ModalHeader
           title={RESOURCE_DELETE_TITLE}
           subtitle={RESOURCE_DELETE_SUBTITLE}

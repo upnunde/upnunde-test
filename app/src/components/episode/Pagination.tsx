@@ -98,7 +98,7 @@ export function Pagination({
       <div
         className={cn(
           shellClassName,
-          "flex h-14 items-center justify-between gap-my-12 px-my-16 sm:hidden",
+          "flex h-14 items-center justify-between gap-my-12 px-my-12 sm:hidden",
         )}
       >
         <PageNavButton direction="prev" disabled={!canPrev} onClick={handlePrev} />

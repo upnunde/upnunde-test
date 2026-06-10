@@ -140,7 +140,7 @@ export function EpisodeForm({
       className={cn(
         "flex justify-end gap-my-8",
         stickyFooter
-          ? "sticky bottom-0 border-t border-border-10 bg-white px-my-20 py-my-16"
+          ? "sticky bottom-0 border-t border-border-10 bg-white px-my-12 lg:px-my-20 py-my-16"
           : "mt-8",
       )}
     >
@@ -175,7 +175,7 @@ export function EpisodeForm({
 
         <PageCard
           className={cn(
-            "mx-0 max-w-none min-w-0 border-0 rounded-none px-my-20 pt-my-20 pb-my-20 shadow-none",
+            "mx-0 max-w-none min-w-0 border-0 rounded-none px-my-12 lg:px-my-20 pt-my-20 pb-my-20 shadow-none",
             stickyFooter && "min-h-0",
           )}
         >

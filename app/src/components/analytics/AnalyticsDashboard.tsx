@@ -3,6 +3,11 @@
 import { useCallback, useEffect, useState } from "react";
 import { usePathname, useRouter } from "next/navigation";
 import { AnalyticsScopeFilterBar } from "@/components/analytics/AnalyticsScopeFilterBar";
+import { useScrollHeaderCollapse } from "@/hooks/useScrollHeaderCollapse";
+import { useIsLgUp } from "@/hooks/useMediaQuery";
+import { ANALYTICS_SCROLL_ROOT_ATTR } from "@/lib/analytics-scroll";
+import { PAGE_GUTTER_X_CLASS, PAGE_SCROLL_GUTTER_CLASS } from "@/lib/page-layout";
+import { cn } from "@/lib/utils";
 import { AnalyticsContentTab } from "@/components/analytics/AnalyticsContentTab";
 import { AnalyticsUserTab } from "@/components/analytics/AnalyticsUserTab";
 import { MonetizationDashboard } from "@/components/monetization/MonetizationDashboard";
@@ -39,6 +44,8 @@ export interface AnalyticsDashboardProps {
 export function AnalyticsDashboard({ defaultArea = "content", onAreaChange }: AnalyticsDashboardProps) {
   const router = useRouter();
   const pathname = usePathname();
+  const isDesktop = useIsLgUp();
+  const headerCollapsed = useScrollHeaderCollapse(ANALYTICS_SCROLL_ROOT_ATTR, !isDesktop);
   const [periodRange, setPeriodRange] = useState<AnalyticsPeriodRange>("7d");
   const [analyticsArea, setAnalyticsAreaState] = useState<AnalyticsAreaTabId>(defaultArea);
 
@@ -81,28 +88,49 @@ export function AnalyticsDashboard({ defaultArea = "content", onAreaChange }: An
 
   return (
     <div className="flex min-h-0 w-full flex-1 flex-col overflow-hidden">
-      <div className="flex w-full shrink-0 flex-col items-center border-b border-border-10 bg-surface-10 px-my-20 pb-my-20 pt-my-8">
-        <div className="w-full min-w-0 max-w-[1200px]">
-          <AnalyticsScopeFilterBar
-            analyticsArea={analyticsArea}
-            onAnalyticsAreaChange={setAnalyticsArea}
-            periodRange={periodRange}
-            onPeriodRangeChange={setPeriodRangeDeferred}
-            scopeCategory={scopeCategory}
-            onScopeCategoryChange={setScopeCategory}
-            seriesId={seriesId}
-            onSeriesIdChange={setSeriesId}
-            characterId={characterId}
-            onCharacterIdChange={setCharacterId}
-            scenarioId={scenarioId}
-            onScenarioIdChange={setScenarioId}
-            statsEpisodeNo={statsEpisodeNo}
-            onStatsEpisodeNoChange={setStatsEpisodeNo}
-          />
+      <div
+        className={cn(
+          `flex w-full shrink-0 flex-col items-center border-b border-border-10 bg-surface-10 ${PAGE_GUTTER_X_CLASS}`,
+          headerCollapsed ? "max-lg:border-b-0 max-lg:py-0" : "pb-my-20 pt-my-8",
+          "lg:pb-my-20 lg:pt-my-8",
+        )}
+      >
+        <div
+          className={cn(
+            "w-full min-w-0 max-w-[1200px] overflow-hidden max-lg:transition-[max-height] max-lg:duration-200 max-lg:ease-out",
+            headerCollapsed ? "max-lg:max-h-0" : "max-lg:max-h-[320px]",
+          )}
+        >
+          <div
+            className={cn(
+              "max-lg:transition-transform max-lg:duration-200 max-lg:ease-out",
+              headerCollapsed && "max-lg:-translate-y-full",
+            )}
+          >
+            <AnalyticsScopeFilterBar
+              analyticsArea={analyticsArea}
+              onAnalyticsAreaChange={setAnalyticsArea}
+              periodRange={periodRange}
+              onPeriodRangeChange={setPeriodRangeDeferred}
+              scopeCategory={scopeCategory}
+              onScopeCategoryChange={setScopeCategory}
+              seriesId={seriesId}
+              onSeriesIdChange={setSeriesId}
+              characterId={characterId}
+              onCharacterIdChange={setCharacterId}
+              scenarioId={scenarioId}
+              onScenarioIdChange={setScenarioId}
+              statsEpisodeNo={statsEpisodeNo}
+              onStatsEpisodeNoChange={setStatsEpisodeNo}
+            />
+          </div>
         </div>
       </div>
 
-      <div className="flex min-h-0 flex-1 flex-col overflow-y-auto px-my-20 py-0">
+      <div
+        className={cn("flex min-h-0 flex-1 flex-col overflow-y-auto py-0", PAGE_SCROLL_GUTTER_CLASS)}
+        {...{ [ANALYTICS_SCROLL_ROOT_ATTR]: "" }}
+      >
         <div className="mx-auto flex w-full min-w-0 max-w-[1200px] flex-col">
           {analyticsArea === "content" ? (
             <AnalyticsContentTab

@@ -2,7 +2,7 @@
 
 import React, { useState } from "react";
 import { AppShell } from "@/components/layout/AppShell";
-import { PAGE_CONTAINER_CLASS } from "@/lib/page-layout";
+import { PAGE_CONTAINER_CLASS, PAGE_SCROLL_GUTTER_CLASS, PAGE_SUBHEADER_CLASS } from "@/lib/page-layout";
 import { InquiryForm } from "@/components/inquiry/InquiryForm";
 import { InquiryHistoryList } from "@/components/inquiry/InquiryHistoryList";
 import { Snackbar } from "@/components/episode/Snackbar";
@@ -43,16 +43,16 @@ export default function InquiryPage() {
   return (
     <AppShell sidebarActiveId="inquiry">
       <main className="flex flex-1 flex-col overflow-hidden bg-surface-20">
-        <div className="flex h-[64px] w-full shrink-0 flex-col items-center justify-center border-b border-border-10 bg-white px-my-20">
+        <div className={PAGE_SUBHEADER_CLASS}>
           <div className={`${PAGE_CONTAINER_CLASS} flex items-center justify-start gap-my-16`}>
             <h1 className="text-heading2_700 text-on-surface-10">문의</h1>
           </div>
         </div>
-        <div className="flex flex-1 flex-col items-center gap-my-12 overflow-y-auto px-my-20 py-my-32">
+        <div className={`flex flex-1 flex-col items-center gap-my-12 overflow-y-auto py-my-32 ${PAGE_SCROLL_GUTTER_CLASS}`}>
           <div className={PAGE_CONTAINER_CLASS}>
               <div className="w-full h-fit rounded-[4px] border border-border-10 bg-white flex flex-col shrink-0 overflow-hidden">
                 {/* 탭 헤더 - NotificationList와 동일 구조 */}
-                <div className="self-stretch px-my-20 pt-0 pb-0 mt-2 mb-0 border-b border-border-10 inline-flex flex-col justify-start items-start gap-my-8">
+                <div className="self-stretch px-my-12 lg:px-my-20 pt-0 pb-0 mt-2 mb-0 border-b border-border-10 inline-flex flex-col justify-start items-start gap-my-8">
                   <div
                     data-size="L"
                     data-underline="true"

@@ -40,13 +40,13 @@ export function EpisodePromptReferenceModal({
 }: EpisodePromptReferenceModalProps) {
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
-      <DialogContent className="w-full max-w-[760px] min-w-0 border-0 bg-transparent p-0 shadow-none">
+      <DialogContent className="w-full max-lg:max-w-none max-lg:rounded-t-[4px] lg:max-w-[760px] min-w-0 border-0 bg-transparent p-0 shadow-none">
         <DialogHeader className="sr-only">
           <DialogTitle>에피소드 기준 프롬프트</DialogTitle>
         </DialogHeader>
         <div className="mx-auto w-full rounded-[4px] border border-border-10 bg-white shadow-none flex min-h-0 h-full flex-col overflow-hidden max-w-[760px] min-w-0">
           <Title2 text="에피소드" asSectionHeader />
-          <div className="mx-0 max-w-none min-w-0 border-0 rounded-none px-my-20 pt-my-20 pb-my-20 shadow-none min-h-0 flex-1 overflow-y-auto">
+          <div className="mx-0 max-w-none min-w-0 border-0 rounded-none px-my-12 lg:px-my-20 pt-my-20 pb-my-20 shadow-none min-h-0 flex-1 overflow-y-auto">
             <div className="mt-0 flex flex-col gap-my-24">
               <div className="flex flex-col gap-my-12">
                 <Title1
@@ -142,7 +142,7 @@ export function EpisodePromptReferenceModal({
               </div>
             </div>
           </div>
-          <div className="sticky bottom-0 border-t border-border-10 bg-white px-my-20 py-my-16">
+          <div className="sticky bottom-0 border-t border-border-10 bg-white px-my-12 lg:px-my-20 py-my-16">
             <div className="flex justify-end">
               <Button type="button" variant="outline" onClick={() => onOpenChange(false)}>
                 닫기

@@ -131,7 +131,7 @@ export function BgmSection({
   return (
     <>
       <div className="w-full min-w-0 max-w-[1200px] mx-auto bg-surface-10 rounded-[4px] border border-border-10 flex flex-col justify-start items-start">
-        <div className="w-full self-stretch px-my-20 pt-my-20 pb-my-12 border-b border-border-10 inline-flex justify-between items-center gap-0">
+        <div className="w-full self-stretch px-my-12 lg:px-my-20 pt-my-20 pb-my-12 border-b border-border-10 inline-flex justify-between items-center gap-0">
           <Title2
             text={title}
             asSectionHeader
@@ -164,7 +164,7 @@ export function BgmSection({
             </Button>
           </div>
         ) : (
-          <div className="self-stretch px-my-20 pb-my-8 pt-my-8 rounded-[4px] flex flex-col justify-start items-start gap-my-12">
+          <div className="self-stretch px-my-12 lg:px-my-20 pb-my-8 pt-my-8 rounded-[4px] flex flex-col justify-start items-start gap-my-12">
             <div className="w-full pt-0 pb-0 mt-0 mb-1 inline-flex flex-col justify-start items-start gap-my-8">
               <div
                 className={cn(

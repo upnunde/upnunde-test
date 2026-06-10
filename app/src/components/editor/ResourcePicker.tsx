@@ -1,6 +1,7 @@
 "use client";
 
 import { useCallback, useEffect, useMemo, useRef } from "react";
+import { createPortal } from "react-dom";
 import Image from "next/image";
 import { X } from "lucide-react";
 import {
@@ -8,6 +9,8 @@ import {
   PopoverContent,
   PopoverAnchor,
 } from "@/components/ui/popover";
+import { useIsLgUp } from "@/hooks/useMediaQuery";
+import { mobileBottomSheetMaxHeightClassName } from "@/components/ui/modal/modal-styles";
 import { BACKGROUNDS, CHARACTERS, BGMS, SFX, GALLERIES, VIDEOS } from "@/lib/mockData";
 import type { BlockType } from "@/types/editor";
 import { cn } from "@/lib/utils";
@@ -100,6 +103,246 @@ const PICKER_TITLE: Record<BlockType, string> = {
   direction: "연출",
 };
 
+interface ResourcePickerOptionsProps {
+  type: BlockType;
+  items: { id: string; name: string; url?: string; fileUrl?: string }[];
+  selectedName?: string;
+  isSheet: boolean;
+  optionButtonRefs: React.MutableRefObject<(HTMLButtonElement | null)[]>;
+  onSelect: (name: string) => void;
+  onOptionKeyDown: (index: number, e: React.KeyboardEvent<HTMLButtonElement>) => void;
+}
+
+function ResourcePickerOptions({
+  type,
+  items,
+  selectedName,
+  isSheet,
+  optionButtonRefs,
+  onSelect,
+  onOptionKeyDown,
+}: ResourcePickerOptionsProps) {
+  const imageMode = isImageType(type);
+  const isCharacter = type === "character";
+
+  const imageThumbClass = (selected?: boolean) =>
+    cn(
+      isSheet
+        ? isCharacter
+          ? "relative aspect-square w-full overflow-hidden rounded-[999px] bg-surface-disabled-10/0"
+          : "relative aspect-[2/3] w-full overflow-hidden rounded-lg bg-surface-disabled-10/0"
+        : isCharacter
+          ? cn(
+              "relative overflow-hidden rounded-[999px] bg-surface-disabled-10/0",
+              selected === undefined ? "h-24 w-24" : "h-[100px] w-[100px] border border-[rgba(0,0,0,0.07)]",
+            )
+          : "relative h-44 w-24 overflow-hidden rounded-lg bg-surface-disabled-10/0",
+    );
+
+  const imageCellClass = cn(
+    "group flex min-w-0 cursor-pointer flex-col rounded-lg focus:outline-none focus:ring-0",
+    isSheet
+      ? cn(
+          "w-full items-center active:bg-surface-20/60",
+          isCharacter ? "gap-my-4 px-my-2 py-my-8" : "gap-my-4 px-my-4 py-my-4",
+        )
+      : cn(
+          "inline-flex items-center justify-start gap-my-8 hover:bg-surface-10/40",
+          isCharacter ? "items-center" : "items-start",
+        ),
+  );
+
+  const imageLabelClass = cn(
+    "w-full min-w-0 text-body4_400",
+    isSheet
+      ? "line-clamp-2 min-h-[2lh] px-my-2 text-center leading-snug"
+      : cn("truncate", isCharacter ? "text-center" : "text-left"),
+  );
+
+  const isSceneTransition = type === "event";
+
+  const sheetImageGridClass = isCharacter
+    ? "grid-cols-4 gap-x-my-8 gap-y-my-12"
+    : "grid-cols-3 gap-x-my-12 gap-y-my-16";
+
+  return (
+    <div
+      className={cn(
+        !isSheet && "max-h-full overflow-y-auto",
+        imageMode
+          ? cn(
+              "grid",
+              isSheet
+                ? cn("w-full px-my-12 pb-my-16 pt-my-8", sheetImageGridClass)
+                : "w-fit grid-cols-3 gap-my-16 px-my-12 lg:px-my-20 pb-my-20 pt-0",
+            )
+          : cn(
+              "flex flex-col",
+              isSheet
+                ? "w-full gap-my-4 px-my-12 pb-my-16 pt-my-8"
+                : "gap-my-2 px-my-8 pb-my-8 pt-0",
+            ),
+      )}
+    >
+      {imageMode ? (
+        <>
+          <button
+            type="button"
+            onClick={() => onSelect("")}
+            ref={(el) => {
+              optionButtonRefs.current[0] = el;
+            }}
+            onKeyDown={(e) => onOptionKeyDown(0, e)}
+            className={cn(imageCellClass, !isSheet && "col-span-1")}
+          >
+            <div className={imageThumbClass()}>
+              <div className="absolute inset-0 z-0 bg-surface-disabled/30">
+                <div className="absolute inset-0" aria-hidden>
+                  <svg
+                    className="absolute inset-0 h-full w-full text-border-20/20"
+                    viewBox="0 0 100 100"
+                    preserveAspectRatio="none"
+                    aria-hidden
+                  >
+                    <line x1="0" y1="100" x2="100" y2="0" stroke="currentColor" strokeWidth="2" />
+                  </svg>
+                </div>
+              </div>
+              <ThumbnailFrameOverlay isCharacter={isCharacter} isActive={selectedName === ""} />
+            </div>
+            <span className={cn(imageLabelClass, "text-on-surface-10")}>선택 안 함</span>
+          </button>
+          {items.map((item, idx) => (
+            <button
+              key={item.id}
+              type="button"
+              onClick={() => onSelect(item.name)}
+              ref={(el) => {
+                optionButtonRefs.current[idx + 1] = el;
+              }}
+              onKeyDown={(e) => onOptionKeyDown(idx + 1, e)}
+              className={imageCellClass}
+            >
+              <div className={imageThumbClass(true)}>
+                {"url" in item && item.url ? (
+                  <Image
+                    src={item.url}
+                    alt={item.name}
+                    fill
+                    sizes={isSheet ? "(max-width: 1024px) 28vw, 100px" : isCharacter ? "100px" : "96px"}
+                    className="object-cover"
+                  />
+                ) : (
+                  <div className="relative z-0 flex h-full w-full items-center justify-center text-caption1_400 text-on-surface-30">
+                    —
+                  </div>
+                )}
+                <ThumbnailFrameOverlay
+                  isCharacter={isCharacter}
+                  isActive={selectedName === item.name}
+                />
+              </div>
+              <span
+                className={cn(
+                  imageLabelClass,
+                  selectedName === item.name ? "text-primary" : "text-on-surface-10",
+                )}
+              >
+                {item.name}
+              </span>
+            </button>
+          ))}
+        </>
+      ) : (
+        <>
+          {!isSceneTransition && (
+            <button
+              type="button"
+              onClick={() => onSelect("")}
+              ref={(el) => {
+                optionButtonRefs.current[0] = el;
+              }}
+              onKeyDown={(e) => onOptionKeyDown(0, e)}
+              className={cn(
+                "flex cursor-pointer items-center gap-my-8 rounded px-my-8 py-my-8 text-left text-body3_400 hover:bg-surface-20 focus:outline-none focus:ring-0 focus-visible:ring-2 focus-visible:ring-inset focus-visible:ring-primary/40",
+                isSheet && "min-h-12",
+              )}
+            >
+              <span className="flex h-8 w-8 shrink-0 items-center justify-center rounded bg-surface-20 text-on-surface-disabled/60">
+                —
+              </span>
+              <span className="truncate font-medium text-on-surface-10">선택 안 함</span>
+            </button>
+          )}
+          {items.map((item, idx) => (
+            <button
+              key={item.id}
+              type="button"
+              onClick={() => onSelect(item.name)}
+              ref={(el) => {
+                optionButtonRefs.current[idx + (isSceneTransition ? 0 : 1)] = el;
+              }}
+              onKeyDown={(e) => onOptionKeyDown(idx + (isSceneTransition ? 0 : 1), e)}
+              className={cn(
+                "flex cursor-pointer items-center gap-my-8 rounded px-my-8 py-my-8 text-left text-body3_400 hover:bg-surface-20 focus:outline-none focus:ring-0 focus-visible:ring-2 focus-visible:ring-inset focus-visible:ring-primary/40",
+                isSheet && "min-h-12",
+              )}
+            >
+              {!isSceneTransition && (
+                <span className="flex h-8 w-8 shrink-0 items-center justify-center rounded bg-surface-20 text-on-surface-30">
+                  ♪
+                </span>
+              )}
+              <span className="truncate font-medium text-on-surface-10">{item.name}</span>
+            </button>
+          ))}
+          {isSceneTransition && (
+            <div className="mt-1 border-t border-border-10 pt-my-4">
+              <button
+                type="button"
+                onClick={() => onSelect(EPISODE_END_LABEL)}
+                ref={(el) => {
+                  optionButtonRefs.current[items.length] = el;
+                }}
+                onKeyDown={(e) => onOptionKeyDown(items.length, e)}
+                className={cn(
+                  "flex w-full cursor-pointer items-center gap-my-8 rounded px-my-8 py-my-8 text-left text-body3_400 hover:bg-surface-20 focus:outline-none focus:ring-0 focus-visible:ring-2 focus-visible:ring-inset focus-visible:ring-primary/40",
+                  isSheet && "min-h-12",
+                )}
+              >
+                <span className="truncate font-medium text-on-surface-10">{EPISODE_END_LABEL}</span>
+              </button>
+            </div>
+          )}
+        </>
+      )}
+    </div>
+  );
+}
+
+function ResourcePickerHeader({
+  title,
+  onClose,
+}: {
+  title: string;
+  onClose: () => void;
+}) {
+  return (
+    <div className="flex w-full shrink-0 items-center justify-between border-b border-border-10 px-my-12 py-my-12 lg:px-my-20 lg:py-my-8">
+      <div className="text-body1_700 text-on-surface-10">{title}</div>
+      <button
+        type="button"
+        aria-label="닫기"
+        onClick={onClose}
+        className="flex h-8 w-8 cursor-pointer items-center justify-center rounded-full text-on-surface-30 transition-colors hover:bg-surface-20/60 hover:text-on-surface-10 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-inset focus-visible:ring-primary"
+        style={{ marginRight: -8 }}
+      >
+        <X className="h-5 w-5" aria-hidden />
+      </button>
+    </div>
+  );
+}
+
 export function ResourcePicker({
   type,
   isOpen,
@@ -110,12 +353,11 @@ export function ResourcePicker({
   itemsOverride,
   children,
 }: ResourcePickerProps) {
+  const isDesktop = useIsLgUp();
   const optionButtonRefs = useRef<(HTMLButtonElement | null)[]>([]);
   const items = useMemo(() => {
     const base = itemsOverride ?? getItemsForType(type);
-    // 외부에서 순서를 정의해 주입한 경우(장면 전환 목록 등)에는 그대로 유지한다.
     if (itemsOverride) return [...base];
-    // 데모용 더미 리소스 — type 문자열에서 파생한 고정 시드로 한 번만 섞어 재렌더 시 순서를 고정한다
     let seed = 1;
     for (let i = 0; i < type.length; i += 1) {
       seed = (seed * 31 + type.charCodeAt(i)) % 9973;
@@ -126,19 +368,24 @@ export function ResourcePicker({
       .map((entry) => entry.item);
   }, [type, itemsOverride]);
 
-  const handleSelect = (name: string) => {
-    onSelect(name);
+  const handleSelect = useCallback(
+    (name: string) => {
+      onSelect(name);
+      onOpenChange(false);
+      onClose();
+    },
+    [onClose, onOpenChange, onSelect],
+  );
+
+  const handleDismiss = useCallback(() => {
     onOpenChange(false);
     onClose();
-  };
+  }, [onClose, onOpenChange]);
 
   const isPickerType = PICKER_TYPES.includes(type);
   const imageMode = isImageType(type);
-  const isCharacter = type === "character";
-  const isSceneTransition = type === "event";
   const title = PICKER_TITLE[type] ?? "리소스";
-  const gridColumns = 3;
-
+  const gridColumns = type === "character" && !isDesktop ? 4 : 3;
   const optionCount = imageMode ? 1 + items.length : items.length + 1;
 
   const focusFirstOption = useCallback(() => {
@@ -148,11 +395,22 @@ export function ResourcePicker({
   }, []);
 
   useEffect(() => {
-    if (!isPickerType) return;
-    if (!isOpen) return;
+    if (!isPickerType || !isOpen) return;
     optionButtonRefs.current = optionButtonRefs.current.slice(0, optionCount);
     focusFirstOption();
-  }, [isPickerType, isOpen, optionCount, focusFirstOption]);
+  }, [focusFirstOption, isOpen, isPickerType, optionCount]);
+
+  useEffect(() => {
+    if (!isPickerType || !isOpen || isDesktop) return;
+    const onKeyDown = (e: KeyboardEvent) => {
+      if (e.key === "Escape") {
+        e.preventDefault();
+        handleDismiss();
+      }
+    };
+    window.addEventListener("keydown", onKeyDown);
+    return () => window.removeEventListener("keydown", onKeyDown);
+  }, [handleDismiss, isDesktop, isOpen, isPickerType]);
 
   if (!isPickerType) return <>{children}</>;
 
@@ -164,8 +422,7 @@ export function ResourcePicker({
   const handleOptionKeyDown = (index: number, e: React.KeyboardEvent<HTMLButtonElement>) => {
     if (e.key === "Escape") {
       e.preventDefault();
-      onOpenChange(false);
-      onClose();
+      handleDismiss();
       return;
     }
 
@@ -195,209 +452,67 @@ export function ResourcePicker({
     }
   };
 
+  const optionsProps = {
+    type,
+    items,
+    selectedName,
+    optionButtonRefs,
+    onSelect: handleSelect,
+    onOptionKeyDown: handleOptionKeyDown,
+  };
+
+  const mobileSheet =
+    !isDesktop && isOpen && typeof document !== "undefined"
+      ? createPortal(
+          <>
+            <div
+              className="fixed inset-0 z-40 bg-black/30"
+              aria-hidden
+              onClick={handleDismiss}
+            />
+            <div
+              className={cn(
+                "fixed inset-x-0 bottom-0 z-50 flex min-h-0 flex-col rounded-t-[4px] border-t border-border-10 bg-surface-10 pb-[env(safe-area-inset-bottom)] shadow-elevation-40",
+                mobileBottomSheetMaxHeightClassName,
+              )}
+              role="dialog"
+              aria-modal="true"
+              aria-label={title}
+            >
+              <ResourcePickerHeader title={title} onClose={handleDismiss} />
+              <div className="min-h-0 flex-1 overflow-y-auto overscroll-contain px-0">
+                <ResourcePickerOptions {...optionsProps} isSheet />
+              </div>
+            </div>
+          </>,
+          document.body,
+        )
+      : null;
+
+  if (!isDesktop) {
+    return (
+      <>
+        {children}
+        {mobileSheet}
+      </>
+    );
+  }
+
   return (
     <Popover open={isOpen} onOpenChange={onOpenChange}>
       <PopoverAnchor asChild>{children}</PopoverAnchor>
       <PopoverContent
         align="start"
-        className="w-fit max-h-[420px] flex flex-col justify-start items-stretch overflow-hidden p-0 bg-surface-10 rounded-[4px] border border-[rgba(0,0,0,0.07)] outline outline-1 outline-offset-[-1px] outline-border-20/10"
+        className="flex max-h-[420px] w-fit flex-col items-stretch justify-start overflow-hidden rounded-[4px] border border-[rgba(0,0,0,0.07)] bg-surface-10 p-0 outline outline-1 outline-offset-[-1px] outline-border-20/10"
         onCloseAutoFocus={(e) => e.preventDefault()}
         onOpenAutoFocus={(e) => {
           e.preventDefault();
           focusFirstOption();
         }}
       >
-        {/* 헤더: 타이틀 + 닫기 버튼 */}
-        <div className="flex w-full items-center justify-between px-my-20 py-my-8">
-          <div className="text-on-surface-10 text-body1_700">{title}</div>
-          <button
-            type="button"
-            aria-label="닫기"
-            onClick={() => onOpenChange(false)}
-            className="w-8 h-8 cursor-pointer flex items-center justify-center rounded-full hover:bg-surface-20/60 text-on-surface-30 hover:text-on-surface-10 transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-inset focus-visible:ring-primary"
-            style={{ marginLeft: 0, marginRight: -8 }}
-          >
-            <X className="w-5 h-5" aria-hidden />
-          </button>
-        </div>
-
-        <div
-          className={cn(
-            "flex-1 max-h-full overflow-y-auto",
-            imageMode ? "px-my-20 pt-0 pb-my-20 grid grid-cols-3 gap-my-16 w-fit" : "pt-0 px-my-8 pb-my-8 flex flex-col gap-my-2"
-          )}
-        >
-          {imageMode ? (
-            <>
-              <button
-                type="button"
-                onClick={() => handleSelect("")}
-                ref={(el) => {
-                  optionButtonRefs.current[0] = el;
-                }}
-                onKeyDown={(e) => handleOptionKeyDown(0, e)}
-                className="group rounded-lg cursor-pointer inline-flex flex-col justify-start items-center gap-my-8 col-span-1 focus:outline-none focus:ring-0"
-              >
-                <div
-                  className={cn(
-                    isCharacter
-                      ? "w-24 h-24 relative bg-surface-disabled-10/0 rounded-[999px] overflow-hidden"
-                      : "w-24 h-44 relative bg-surface-disabled-10/0 rounded-lg overflow-hidden"
-                  )}
-                >
-                  <div
-                    className={cn(
-                      isCharacter ? "w-24 h-24" : "w-24 h-44",
-                      "left-0 top-0 absolute z-0 bg-surface-disabled/30"
-                    )}
-                  >
-                    <div
-                      className="absolute inset-0"
-                      aria-hidden
-                    >
-                      <svg
-                        className="absolute inset-0 h-full w-full text-border-20/20"
-                        viewBox="0 0 100 100"
-                        preserveAspectRatio="none"
-                        aria-hidden
-                      >
-                        <line x1="0" y1="100" x2="100" y2="0" stroke="currentColor" strokeWidth="2" />
-                      </svg>
-                    </div>
-                  </div>
-                  <ThumbnailFrameOverlay
-                    isCharacter={isCharacter}
-                    isActive={selectedName === ""}
-                  />
-                </div>
-                <div
-                  className={cn(
-                    "self-stretch flex flex-col justify-center",
-                    isCharacter ? "items-center" : "items-start"
-                  )}
-                >
-                  <div className="text-center justify-center text-on-surface-10 text-body4_400">
-                    선택 안 함
-                  </div>
-                </div>
-              </button>
-              {items.map((item, idx) => (
-                <button
-                  key={item.id}
-                  type="button"
-                  onClick={() => handleSelect(item.name)}
-                  ref={(el) => {
-                    optionButtonRefs.current[idx + 1] = el;
-                  }}
-                  onKeyDown={(e) => handleOptionKeyDown(idx + 1, e)}
-                  className={cn(
-                    "group rounded-lg cursor-pointer inline-flex flex-col justify-start items-center gap-my-8 hover:bg-surface-10/40 focus:outline-none focus:ring-0",
-                    isCharacter ? "" : "items-start"
-                  )}
-                >
-                  <div
-                    className={cn(
-                      isCharacter
-                        ? "w-[100px] h-[100px] relative rounded-[999px] overflow-hidden border border-[rgba(0,0,0,0.07)]"
-                        : "w-24 h-44 relative rounded-lg overflow-hidden bg-surface-disabled-10/0"
-                    )}
-                  >
-                    {"url" in item && item.url ? (
-                      <Image
-                        src={item.url}
-                        alt={item.name}
-                        fill
-                        sizes={isCharacter ? "100px" : "96px"}
-                        className="object-cover"
-                      />
-                    ) : (
-                      <div className="relative z-0 flex h-full w-full items-center justify-center text-caption1_400 text-on-surface-30">
-                        —
-                      </div>
-                    )}
-                    <ThumbnailFrameOverlay
-                      isCharacter={isCharacter}
-                      isActive={selectedName === item.name}
-                    />
-                  </div>
-                  <div
-                    className={cn(
-                      "self-stretch flex flex-col justify-center",
-                      isCharacter ? "items-center" : "items-start"
-                    )}
-                  >
-                    <span
-                      className={cn(
-                        "text-center justify-center text-body4_400 truncate",
-                        selectedName === item.name ? "text-primary" : "text-on-surface-10"
-                      )}
-                    >
-                      {item.name}
-                    </span>
-                  </div>
-                </button>
-              ))}
-            </>
-          ) : (
-            <>
-              {!isSceneTransition && (
-                <button
-                  type="button"
-                  onClick={() => handleSelect("")}
-                  ref={(el) => {
-                    optionButtonRefs.current[0] = el;
-                  }}
-                  onKeyDown={(e) => handleOptionKeyDown(0, e)}
-                  className="flex cursor-pointer items-center gap-my-8 rounded px-my-8 py-my-8 text-left text-body3_400 hover:bg-surface-20 focus:outline-none focus-visible:ring-2 focus-visible:ring-inset focus-visible:ring-primary/40 focus:ring-0"
-                >
-                  <span className="flex h-8 w-8 shrink-0 items-center justify-center rounded bg-surface-20 text-on-surface-disabled/60">
-                    —
-                  </span>
-                  <span className="truncate font-medium text-on-surface-10">선택 안 함</span>
-                </button>
-              )}
-              {items.map((item, idx) => (
-                <button
-                  key={item.id}
-                  type="button"
-                  onClick={() => handleSelect(item.name)}
-                  ref={(el) => {
-                    optionButtonRefs.current[idx + (isSceneTransition ? 0 : 1)] = el;
-                  }}
-                  onKeyDown={(e) =>
-                    handleOptionKeyDown(idx + (isSceneTransition ? 0 : 1), e)
-                  }
-                  className="flex cursor-pointer items-center gap-my-8 rounded px-my-8 py-my-8 text-left text-body3_400 hover:bg-surface-20 focus:outline-none focus-visible:ring-2 focus-visible:ring-inset focus-visible:ring-primary/40 focus:ring-0"
-                >
-                  {!isSceneTransition && (
-                    <span className="flex h-8 w-8 shrink-0 items-center justify-center rounded bg-surface-20 text-on-surface-30">
-                      ♪
-                    </span>
-                  )}
-                  <span className="truncate font-medium text-on-surface-10">
-                    {item.name}
-                  </span>
-                </button>
-              ))}
-              {isSceneTransition && (
-                <div className="mt-1 border-t border-border-10 pt-my-4">
-                  <button
-                    type="button"
-                    onClick={() => handleSelect(EPISODE_END_LABEL)}
-                    ref={(el) => {
-                      optionButtonRefs.current[items.length] = el;
-                    }}
-                    onKeyDown={(e) => handleOptionKeyDown(items.length, e)}
-                    className="flex w-full cursor-pointer items-center gap-my-8 rounded px-my-8 py-my-8 text-left text-body3_400 hover:bg-surface-20 focus:outline-none focus-visible:ring-2 focus-visible:ring-inset focus-visible:ring-primary/40 focus:ring-0"
-                  >
-                    <span className="truncate font-medium text-on-surface-10">
-                      {EPISODE_END_LABEL}
-                    </span>
-                  </button>
-                </div>
-              )}
-            </>
-          )}
+        <ResourcePickerHeader title={title} onClose={() => onOpenChange(false)} />
+        <div className="flex-1 max-h-full overflow-hidden">
+          <ResourcePickerOptions {...optionsProps} isSheet={false} />
         </div>
       </PopoverContent>
     </Popover>

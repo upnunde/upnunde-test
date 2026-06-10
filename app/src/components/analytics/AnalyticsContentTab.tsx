@@ -95,7 +95,7 @@ export function AnalyticsContentTab({
   );
 
   return (
-    <div className="flex flex-col items-start justify-start gap-my-20 self-stretch px-0 pt-my-20 pb-my-40">
+    <div className="flex flex-col items-start justify-start gap-my-12 lg:gap-my-20 self-stretch px-0 pt-my-20 pb-my-40">
       <AnalyticsPanel>
         <Title2 text="주요통계" variant="title" asSectionHeader />
 
@@ -104,7 +104,7 @@ export function AnalyticsContentTab({
             const isFirst = i === 0;
             const selected = primaryMetric === stat.id;
             const shell = cn(
-              "min-w-[120px] flex-1 sm:min-w-0 self-stretch border-b border-border-10 px-my-20 py-my-40 inline-flex flex-col items-center justify-start gap-my-4",
+              "min-w-[120px] flex-1 sm:min-w-0 self-stretch border-b border-border-10 px-my-12 lg:px-my-20 py-my-40 inline-flex flex-col items-center justify-start gap-my-4",
               i < arr.length - 1 && "border-r",
             );
             const label = PRIMARY_LABELS[stat.id];
@@ -155,7 +155,7 @@ export function AnalyticsContentTab({
         </div>
 
         <div className="flex flex-col items-stretch gap-my-12 self-stretch px-0 py-my-40">
-          <p className="px-my-20 text-body3_500 text-on-surface-20">
+          <p className="px-my-12 lg:px-my-20 text-body3_500 text-on-surface-20">
             {PRIMARY_LABELS[primaryMetric] ?? "조회수"} 추이
           </p>
           <AnalyticsTrendLineChart
@@ -166,7 +166,7 @@ export function AnalyticsContentTab({
         </div>
       </AnalyticsPanel>
 
-      <div className="flex w-full flex-col items-stretch gap-my-20 lg:flex-row">
+      <div className="flex w-full flex-col items-stretch gap-my-12 lg:gap-my-20 lg:flex-row">
         <PopularContentsCard rows={popularTop5Rows} isSeriesScope={isSeriesScope} />
         <AttentionContentsCard rows={attentionTop5Rows} isSeriesScope={isSeriesScope} />
       </div>
@@ -192,7 +192,7 @@ function PopularContentsCard({
         variant="title"
         asSectionHeader
       />
-      <div className="px-my-20 pt-my-12">
+      <div className="px-my-12 lg:px-my-20 pt-my-12">
         <SegmentedTextTabs
           aria-label="인기 콘텐츠 기준"
           items={[
@@ -231,7 +231,7 @@ function AttentionContentsCard({
         variant="title"
         asSectionHeader
       />
-      <div className="px-my-20 pt-my-12">
+      <div className="px-my-12 lg:px-my-20 pt-my-12">
         <SegmentedTextTabs
           aria-label="주의 콘텐츠 기준"
           items={[

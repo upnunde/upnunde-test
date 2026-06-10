@@ -5,7 +5,13 @@ import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { AlertCircle, CalendarDays, ChevronDown, Download, FileText } from "lucide-react";
 import { AppShell } from "@/components/layout/AppShell";
-import { PAGE_CONTAINER_CLASS } from "@/lib/page-layout";
+import {
+  PAGE_CONTAINER_CLASS,
+  PAGE_GUTTER_GAP_CLASS,
+  PAGE_SCROLL_GUTTER_CLASS,
+  PAGE_STACK_CLASS,
+  PAGE_SUBHEADER_CLASS,
+} from "@/lib/page-layout";
 import { Button } from "@/components/ui/button";
 import { FilterChip } from "@/components/ui/chip";
 import { CHIP_COMPANION_CONTROL_CLASS, CHIP_GROUP_GAP_CLASS } from "@/lib/chip-styles";
@@ -172,7 +178,7 @@ function SettlementSummaryCard({
   amount: number;
 }) {
   return (
-    <div className="flex min-h-[100px] w-full min-w-0 flex-col justify-between gap-my-12 rounded-[4px] border border-border-10 bg-surface-10 px-my-20 py-my-16 lg:min-h-0 lg:flex-1 lg:flex-row lg:items-center lg:justify-between lg:gap-my-16 lg:py-my-20">
+    <div className="flex min-h-[100px] w-full min-w-0 flex-col justify-between gap-my-12 rounded-[4px] border border-border-10 bg-surface-10 px-my-12 lg:px-my-20 py-my-16 lg:min-h-0 lg:flex-1 lg:flex-row lg:items-center lg:justify-between lg:gap-my-16 lg:py-my-20">
       <p className="min-w-0 text-body3_700 text-on-surface-20 lg:shrink">{title}</p>
       <div className="inline-flex min-w-0 flex-wrap items-baseline gap-x-my-4 gap-y-0 tabular-nums">
         <p className="text-heading4_700 text-on-surface-10 lg:text-2xl">{formatAmount(amount)}</p>
@@ -246,15 +252,15 @@ function SettlementRowDesktop({
           <Button
             type="button"
             variant="ghost"
-            size="sm"
-            className="h-8 w-8 shrink-0 rounded-full p-0 text-on-surface-30 hover:bg-surface-20"
+            size="icon-sm"
+            className="shrink-0 rounded-full text-on-surface-30 hover:bg-surface-20"
             onClick={onTaxDetail}
             aria-label="세금 계산 상세 보기"
           >
             <FileText className="h-4 w-4" aria-hidden />
           </Button>
         ) : (
-          <span aria-hidden className="h-8 w-8" />
+          <span aria-hidden className="size-my-32" />
         )}
       </div>
     </div>
@@ -303,8 +309,8 @@ function SettlementRowMobile({
           <Button
             type="button"
             variant="ghost"
-            size="sm"
-            className="h-8 w-8 shrink-0 rounded-full p-0 text-on-surface-30 hover:bg-surface-20"
+            size="icon-sm"
+            className="shrink-0 rounded-full text-on-surface-30 hover:bg-surface-20"
             onClick={onTaxDetail}
             aria-label="세금 계산 상세 보기"
           >
@@ -513,14 +519,14 @@ export default function MonetizationSettlementsPage() {
   return (
     <AppShell sidebarActiveId="settlements">
       <main className="flex flex-1 flex-col overflow-hidden bg-surface-20">
-        <div className="flex h-[64px] w-full shrink-0 flex-col items-center justify-center border-b border-border-10 bg-white px-my-20">
+        <div className={PAGE_SUBHEADER_CLASS}>
           <div className={`${PAGE_CONTAINER_CLASS} flex items-center justify-start gap-my-16`}>
             <h1 className="text-heading2_700 text-on-surface-10">정산</h1>
           </div>
         </div>
 
-        <div className="flex min-h-0 flex-1 flex-col items-stretch justify-start gap-0 overflow-y-auto px-my-20 py-0">
-          <div className={`${PAGE_CONTAINER_CLASS} flex flex-col gap-my-20 py-my-20`}>
+        <div className={`flex min-h-0 flex-1 flex-col items-stretch justify-start gap-0 overflow-y-auto py-0 ${PAGE_SCROLL_GUTTER_CLASS}`}>
+          <div className={PAGE_STACK_CLASS}>
                 <AnalyticsPanel className="rounded-[4px] border border-border-10">
                   <Title2
                     text="정산 요약"
@@ -535,9 +541,9 @@ export default function MonetizationSettlementsPage() {
                       </Link>
                     }
                   />
-                  <div className="flex flex-col gap-my-20 p-my-20">
-                    <div className="flex flex-col gap-my-24 rounded-[4px] bg-surface-20 p-my-20 sm:p-my-32 lg:flex-row lg:items-center lg:justify-between lg:p-my-40">
-                      <div className="flex flex-col items-start justify-start gap-my-20">
+                  <div className={cn("flex flex-col p-my-20", PAGE_GUTTER_GAP_CLASS)}>
+                    <div className="flex flex-col gap-my-12 rounded-[4px] bg-surface-20 p-my-20 sm:p-my-32 lg:flex-row lg:items-center lg:justify-between lg:gap-my-24 lg:p-my-40">
+                      <div className={cn("flex flex-col items-start justify-start", PAGE_GUTTER_GAP_CLASS)}>
                         <p className="text-body3_700 text-on-surface-20">지금 출금 가능한 금액</p>
                         <div className="flex flex-col items-start gap-my-8">
                           <div className="inline-flex items-center gap-my-4">
@@ -569,7 +575,7 @@ export default function MonetizationSettlementsPage() {
                       </Button>
                     </div>
 
-                    <div className="flex w-full min-w-0 flex-col items-stretch gap-my-16 md:gap-my-20 lg:flex-row lg:items-stretch">
+                    <div className={cn("flex w-full min-w-0 flex-col items-stretch lg:flex-row lg:items-stretch", PAGE_GUTTER_GAP_CLASS)}>
                       <SettlementSummaryCard
                         title={SETTLEMENT_SUMMARY.expectedMonthLabel}
                         amount={SETTLEMENT_SUMMARY.expectedAmount}
@@ -583,7 +589,7 @@ export default function MonetizationSettlementsPage() {
                 </AnalyticsPanel>
 
                 <AnalyticsPanel className="rounded-[4px] border border-border-10">
-                  <div className="border-b border-border-10 px-my-20 py-my-16">
+                  <div className="border-b border-border-10 px-my-12 lg:px-my-20 py-my-16">
                     <div className="flex flex-wrap items-center justify-between gap-my-12">
                       <h3 className="text-heading5_700 text-on-surface-10">정산 내역</h3>
                     </div>
@@ -680,7 +686,7 @@ export default function MonetizationSettlementsPage() {
                   </div>
                   <div className="w-full min-w-0">
                     {pagedSettlementItems.length === 0 ? (
-                      <div className="px-my-20 py-my-40 text-center text-body3_400 text-on-surface-30">
+                      <div className="px-my-12 lg:px-my-20 py-my-40 text-center text-body3_400 text-on-surface-30">
                         조건에 맞는 정산 내역이 없어요. 기간 또는 상태를 다시 선택해 주세요.
                       </div>
                     ) : (
@@ -743,7 +749,7 @@ export default function MonetizationSettlementsPage() {
             </div>
       </main>
       <Dialog open={!!taxDetailTarget} onOpenChange={(open) => !open && setTaxDetailTarget(null)}>
-        <DialogContent className="w-[560px] max-w-[calc(100vw-2rem)] rounded-[4px] border border-border-10 bg-white p-0">
+        <DialogContent className="w-full max-lg:max-w-none lg:w-[560px] lg:max-w-[calc(100vw-2rem)] rounded-[4px] border border-border-10 bg-white p-0">
           <div className="border-b border-divider-10 px-my-24 py-my-16">
             <DialogTitle className="text-heading5_700 text-on-surface-10">
               세금 계산 내역
@@ -823,19 +829,19 @@ export default function MonetizationSettlementsPage() {
         </DialogContent>
       </Dialog>
       <Dialog open={!!rejectionReasonTarget} onOpenChange={(open) => !open && setRejectionReasonTarget(null)}>
-        <DialogContent className="w-[420px] max-w-[calc(100vw-2rem)] rounded-[4px] border border-border-10 bg-white p-0">
-          <div className="border-b border-divider-10 px-my-20 py-my-12">
+        <DialogContent presentation="center" className="w-[420px] max-w-[calc(100vw-2rem)] rounded-[4px] border border-border-10 bg-white p-0">
+          <div className="border-b border-divider-10 px-my-12 lg:px-my-20 py-my-12">
             <DialogTitle className="text-body1_700 text-on-surface-10">반려 사유</DialogTitle>
           </div>
           {rejectionReasonTarget ? (
             <>
-              <div className="px-my-20 py-my-16">
+              <div className="px-my-12 lg:px-my-20 py-my-16">
                 <p className="text-body3_400 text-on-surface-20">{rejectionReasonTarget.rejectionReason}</p>
                 <p className="mt-2 text-caption1_400 text-on-surface-30">
                   신청일 {rejectionReasonTarget.requestedAt} · 상태 {getSettlementStatusLabel(rejectionReasonTarget.status)}
                 </p>
               </div>
-              <div className="flex items-center justify-end border-t border-divider-10 px-my-20 py-my-12">
+              <div className="flex items-center justify-end border-t border-divider-10 px-my-12 lg:px-my-20 py-my-12">
                 <Button type="button" size="sm" onClick={() => setRejectionReasonTarget(null)}>
                   확인
                 </Button>
@@ -845,12 +851,12 @@ export default function MonetizationSettlementsPage() {
         </DialogContent>
       </Dialog>
       <Dialog open={datePickerOpen} onOpenChange={setDatePickerOpen}>
-        <DialogContent className="w-[420px] max-w-[calc(100vw-2rem)] rounded-[4px] border border-border-10 bg-white p-0">
-          <div className="border-b border-divider-10 px-my-20 py-my-12">
+        <DialogContent className="w-full max-lg:max-w-none lg:w-[420px] lg:max-w-[calc(100vw-2rem)] rounded-[4px] border border-border-10 bg-white p-0">
+          <div className="border-b border-divider-10 px-my-12 lg:px-my-20 py-my-12">
             <DialogTitle className="text-body1_700 text-on-surface-10">기간 선택</DialogTitle>
             <p className="mt-1 text-body3_400 text-on-surface-30">조회할 신청일 기간을 설정해 주세요.</p>
           </div>
-          <div className="px-my-20 py-my-16">
+          <div className="px-my-12 lg:px-my-20 py-my-16">
             <div className="flex items-center gap-my-8">
               <input
                 type="date"
@@ -867,7 +873,7 @@ export default function MonetizationSettlementsPage() {
               />
             </div>
           </div>
-          <div className="flex items-center justify-end gap-my-8 border-t border-divider-10 px-my-20 py-my-12">
+          <div className="flex items-center justify-end gap-my-8 border-t border-divider-10 px-my-12 lg:px-my-20 py-my-12">
             <Button
               type="button"
               variant="outline"

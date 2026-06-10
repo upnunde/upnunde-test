@@ -277,33 +277,33 @@ export function EditorSubHeader({
     [scriptHistory],
   );
 
-  const titleBlock = (
-    <div className="flex min-w-0 flex-1 items-center gap-my-8">
-      <h1 className="min-w-0 truncate text-body1_700 text-on-surface-10 lg:text-heading2_700">
-        {title}
-      </h1>
-      {onEditEpisodeInfo ? (
-        <Button
-          type="button"
-          variant="ghost"
-          size="icon-lg"
-          className="shrink-0 text-on-surface-30 hover:bg-surface-20 hover:text-on-surface-10"
-          aria-label="회차 정보 수정"
-          onClick={onEditEpisodeInfo}
-        >
-          <Pencil />
-        </Button>
-      ) : null}
-    </div>
+  const titleHeading = (
+    <h1 className="min-w-0 truncate text-body1_700 text-on-surface-10 lg:text-heading2_700">
+      {title}
+    </h1>
   );
+
+  const editEpisodeInfoButton =
+    onEditEpisodeInfo != null ? (
+      <Button
+        type="button"
+        variant="ghost"
+        size="icon-lg"
+        className="shrink-0 text-on-surface-30 hover:bg-surface-20 hover:text-on-surface-10"
+        aria-label="회차 정보 수정"
+        onClick={onEditEpisodeInfo}
+      >
+        <Pencil />
+      </Button>
+    ) : null;
 
   return (
     <>
-      <header className="relative mx-auto w-full min-w-0 shrink-0 px-my-16 lg:px-my-20">
+      <header className="relative mx-auto w-full min-w-0 shrink-0 px-my-12 lg:px-my-20">
         {/* 모바일 */}
         <div className="flex h-14 items-center gap-my-8 lg:hidden">
           <HeaderBackButton onClick={handleBack} />
-          {titleBlock}
+          <div className="flex min-w-0 flex-1 items-center gap-my-8">{titleHeading}</div>
           <Button
             type="button"
             size="sm"
@@ -329,19 +329,27 @@ export function EditorSubHeader({
               </Button>
             </DropdownMenuTrigger>
             <DropdownMenuContent align="end" className={MORE_MENU_CONTENT_CLASS}>
-              <DropdownMenuItem
-                disabled={!isHistoryEnabled}
-                className={MORE_MENU_ITEM_CLASS}
-                onSelect={() => setHistoryOpen(true)}
-              >
-                히스토리
-              </DropdownMenuItem>
+              {onEditEpisodeInfo ? (
+                <DropdownMenuItem
+                  className={MORE_MENU_ITEM_CLASS}
+                  onSelect={onEditEpisodeInfo}
+                >
+                  정보수정
+                </DropdownMenuItem>
+              ) : null}
               <DropdownMenuItem
                 disabled={!hasChangesSinceSave}
                 className={MORE_MENU_ITEM_CLASS}
                 onSelect={handleTemporarySave}
               >
                 임시저장
+              </DropdownMenuItem>
+              <DropdownMenuItem
+                disabled={!isHistoryEnabled}
+                className={MORE_MENU_ITEM_CLASS}
+                onSelect={() => setHistoryOpen(true)}
+              >
+                히스토리
               </DropdownMenuItem>
             </DropdownMenuContent>
           </DropdownMenu>
@@ -351,7 +359,10 @@ export function EditorSubHeader({
         <div className="hidden h-16 items-center justify-between gap-my-12 lg:flex">
           <div className="flex min-w-0 items-center gap-my-12">
             <HeaderBackButton onClick={handleBack} />
-            {titleBlock}
+            <div className="flex min-w-0 flex-1 items-center gap-my-8">
+              {titleHeading}
+              {editEpisodeInfoButton}
+            </div>
           </div>
           <div className="flex shrink-0 items-center gap-my-8">
             <Button

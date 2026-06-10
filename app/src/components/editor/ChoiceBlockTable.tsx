@@ -202,7 +202,7 @@ function ChoiceRow({
         <button
           type="button"
           onClick={onRemove}
-          className="p-my-8 rounded text-on-surface-30 opacity-0 transition-opacity transition-colors group-hover/choice-row:opacity-100 group-focus-within/choice-row:opacity-100 hover:text-red-600 hover:bg-red-50"
+          className="p-my-8 rounded text-on-surface-30 max-lg:hidden opacity-0 transition-opacity lg:group-hover/choice-row:opacity-100 lg:group-focus-within/choice-row:opacity-100 lg:hover:text-red-600 lg:hover:bg-red-50"
           aria-label="선택지 삭제"
         >
           <Trash2 className="h-4 w-4" />

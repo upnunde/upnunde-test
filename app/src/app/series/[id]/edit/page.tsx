@@ -91,8 +91,6 @@ export default function SeriesEditPage() {
       submitDisabled={!isFormValid}
       coverPreviewUrl={coverPreviewUrl}
       logoPreviewUrl={logoPreviewUrl}
-      contentPaddingClassName="px-my-20"
-      contentGapClassName="gap-my-20"
     >
       {activeTab === "image" && (
                         <div className="flex flex-col gap-my-40">

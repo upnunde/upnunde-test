@@ -1,14 +1,16 @@
 "use client";
 
-import React from "react";
+import React, { useState } from "react";
 import Image from "next/image";
-import { Pencil, Trash2, MoreVertical, FileText, Mail } from "lucide-react";
+import { Pencil, Trash2, MoreVertical, FileText, Mail, Eye } from "lucide-react";
 import {
   DropdownMenu,
   DropdownMenuTrigger,
   DropdownMenuContent,
   DropdownMenuItem,
 } from "@/components/ui/dropdown-menu";
+import { EditorBottomSheetMenu } from "@/components/editor/EditorBottomSheetMenu";
+import { EditorMenuOption } from "@/components/editor/EditorMenuOption";
 import type { Episode, EpisodeStatus } from "@/types/episode";
 import { formatViews, formatDateOrRelative } from "@/lib/formatEpisode";
 import { THUMBNAIL_DIM_OVERLAY_CLASS } from "@/lib/thumbnail-styles";
@@ -59,6 +61,7 @@ function EpisodeListItemActions({
   onDelete,
   onLinkEditor,
   onInquiry,
+  mobile = false,
   className,
 }: {
   episode: Episode;
@@ -68,8 +71,125 @@ function EpisodeListItemActions({
   onDelete?: (episode: Episode) => void;
   onLinkEditor?: (episode: Episode) => void;
   onInquiry?: (episode: Episode) => void;
+  mobile?: boolean;
   className?: string;
 }) {
+  const [sheetOpen, setSheetOpen] = useState(false);
+
+  const closeSheet = () => setSheetOpen(false);
+
+  if (mobile) {
+    return (
+      <EditorBottomSheetMenu
+        open={sheetOpen}
+        onOpenChange={setSheetOpen}
+        title="에피소드 작업"
+        trigger={
+          <button
+            type="button"
+            className={cn(
+              "flex h-8 w-8 shrink-0 cursor-pointer items-center justify-center rounded-full text-on-surface-30 transition-colors active:bg-surface-20 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-2",
+              className,
+            )}
+            aria-label="에피소드 작업"
+          >
+            <MoreVertical className="h-5 w-5" aria-hidden />
+          </button>
+        }
+      >
+        {(presentation) => (
+          <div className="flex flex-col pb-my-8">
+            {status === "DRAFT" && (
+              <>
+                <EditorMenuOption
+                  presentation={presentation}
+                  onSelect={() => {
+                    onEdit?.(episode);
+                    closeSheet();
+                  }}
+                >
+                  <Pencil className="h-4 w-4 shrink-0 text-on-surface-30" aria-hidden />
+                  수정
+                </EditorMenuOption>
+                <EditorMenuOption
+                  presentation={presentation}
+                  onSelect={() => {
+                    onDelete?.(episode);
+                    closeSheet();
+                  }}
+                  className="text-destructive"
+                >
+                  <Trash2 className="h-4 w-4 shrink-0" aria-hidden />
+                  삭제
+                </EditorMenuOption>
+              </>
+            )}
+            {status === "PRIVATE" && (
+              <>
+                <EditorMenuOption
+                  presentation={presentation}
+                  onSelect={() => {
+                    onPublish?.(episode);
+                    closeSheet();
+                  }}
+                  className="text-primary"
+                >
+                  <Eye className="h-4 w-4 shrink-0" aria-hidden />
+                  공개로 전환
+                </EditorMenuOption>
+                <EditorMenuOption
+                  presentation={presentation}
+                  onSelect={() => {
+                    onEdit?.(episode);
+                    closeSheet();
+                  }}
+                >
+                  <Pencil className="h-4 w-4 shrink-0 text-on-surface-30" aria-hidden />
+                  수정
+                </EditorMenuOption>
+                <EditorMenuOption
+                  presentation={presentation}
+                  onSelect={() => {
+                    onDelete?.(episode);
+                    closeSheet();
+                  }}
+                  className="text-destructive"
+                >
+                  <Trash2 className="h-4 w-4 shrink-0" aria-hidden />
+                  삭제
+                </EditorMenuOption>
+              </>
+            )}
+            {status === "PUBLISHED" && (
+              <>
+                <EditorMenuOption
+                  presentation={presentation}
+                  onSelect={() => {
+                    onLinkEditor?.(episode);
+                    closeSheet();
+                  }}
+                >
+                  <FileText className="h-4 w-4 shrink-0 text-on-surface-30" aria-hidden />
+                  에피소드 상세
+                </EditorMenuOption>
+                <EditorMenuOption
+                  presentation={presentation}
+                  onSelect={() => {
+                    onInquiry?.(episode);
+                    closeSheet();
+                  }}
+                >
+                  <Mail className="h-4 w-4 shrink-0 text-on-surface-30" aria-hidden />
+                  문의하기
+                </EditorMenuOption>
+              </>
+            )}
+          </div>
+        )}
+      </EditorBottomSheetMenu>
+    );
+  }
+
   return (
     <div className={cn("flex shrink-0 items-center justify-end gap-my-8", className)}>
       {status === "DRAFT" && (
@@ -187,31 +307,28 @@ export function EpisodeListItem({
           onRowClick?.(episode);
         }
       }}
-      className="cursor-pointer border-b border-divider-10 px-my-16 py-my-16 transition-colors last:border-b-0 hover:bg-surface-20 lg:px-my-20 lg:py-my-12"
+      className="cursor-pointer border-b border-divider-10 px-my-12 py-my-16 transition-colors last:border-b-0 hover:bg-surface-20 lg:px-my-20 lg:py-my-12"
       aria-label={`${episode.episodeNumber}화 ${episode.title}`}
     >
-      {/* 모바일: 썸네일 + 제목 + 작업 */}
+      {/* 모바일: 썸네일 + 제목·상태·메타 / 우상단 ⋮ 메뉴 */}
       <div className="flex items-start gap-my-12 lg:hidden">
-        <div className="relative h-[84px] w-[47px] shrink-0 overflow-hidden rounded border border-border-10 bg-slate-200">
+        <div className="relative aspect-[9/16] h-[120px] shrink-0 overflow-hidden rounded border border-border-10 bg-slate-200">
           <Image
             src={episode.thumbnail}
             alt=""
             fill
-            sizes="47px"
+            sizes="(max-width: 1024px) 68px, 60px"
             className="object-cover"
           />
           <div className={THUMBNAIL_DIM_OVERLAY_CLASS} aria-hidden />
         </div>
 
         <div className="flex min-w-0 flex-1 flex-col gap-my-4">
-          <div className="flex items-start justify-between gap-my-8">
-            <div className="min-w-0 flex-1">
-              <p className="text-caption1_400 text-on-surface-30">{episode.episodeNumber}화</p>
-              <span className="mt-my-4 line-clamp-2 text-body2_500 text-on-surface-10">
-                {episode.title}
-              </span>
-            </div>
-            <div onClick={(e) => e.stopPropagation()}>
+          <div className="flex items-center justify-between gap-my-4">
+            <p className="min-w-0 text-caption1_400 text-on-surface-30">
+              {episode.episodeNumber}화
+            </p>
+            <div className="-mr-2 shrink-0" onClick={(e) => e.stopPropagation()}>
               <EpisodeListItemActions
                 episode={episode}
                 status={status}
@@ -220,14 +337,17 @@ export function EpisodeListItem({
                 onDelete={onDelete}
                 onLinkEditor={onLinkEditor}
                 onInquiry={onInquiry}
-                className="self-start"
+                mobile
               />
             </div>
           </div>
-          <div className="flex flex-wrap items-center gap-x-my-12 gap-y-my-4 text-caption1_400 text-on-surface-30">
+          <span className="line-clamp-2 text-body2_500 text-on-surface-10">{episode.title}</span>
+          <span className={cn("text-caption1_400", STATUS_TEXT_CLASS[status])}>
+            {STATUS_LABEL[status]}
+          </span>
+          <div className="flex items-center gap-x-my-12 text-caption1_400 text-on-surface-30">
             <span>{dateDisplay}</span>
             {!isDraft ? <span>{viewsDisplay}</span> : null}
-            <span className={STATUS_TEXT_CLASS[status]}>{STATUS_LABEL[status]}</span>
           </div>
         </div>
       </div>

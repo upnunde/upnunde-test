@@ -13,16 +13,28 @@ const TABS: { id: EditorMobilePanel; label: string; icon: typeof FileText }[] = 
 export interface EditorMobileTabBarProps {
   active: EditorMobilePanel;
   onChange: (panel: EditorMobilePanel) => void;
+  /** 기본 「편집」 — 읽기 전용 화면에서는 「원고」 등으로 교체 */
+  editTabLabel?: string;
+  ariaLabel?: string;
 }
 
 /** lg 미만 에디터 하단 — 편집 / 미리보기 */
-export function EditorMobileTabBar({ active, onChange }: EditorMobileTabBarProps) {
+export function EditorMobileTabBar({
+  active,
+  onChange,
+  editTabLabel = "편집",
+  ariaLabel = "에디터 패널",
+}: EditorMobileTabBarProps) {
+  const tabs = TABS.map((tab) =>
+    tab.id === "edit" ? { ...tab, label: editTabLabel } : tab,
+  );
+
   return (
     <nav
       className="flex h-14 shrink-0 border-t border-border-10 bg-white px-my-8"
-      aria-label="에디터 패널"
+      aria-label={ariaLabel}
     >
-      {TABS.map(({ id, label, icon: Icon }) => {
+      {tabs.map(({ id, label, icon: Icon }) => {
         const selected = active === id;
         return (
           <button

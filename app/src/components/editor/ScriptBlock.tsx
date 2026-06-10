@@ -28,8 +28,6 @@ import {
   DropdownMenu,
   DropdownMenuContent,
   DropdownMenuItem,
-  DropdownMenuLabel,
-  DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import { Button } from "@/components/ui/button";
@@ -43,6 +41,8 @@ import { Input } from "@/components/ui/input";
 import { getCaretCoordinates } from "@/lib/caretPosition";
 import { SlashCommandMenu, type SlashSelectPayload } from "./SlashCommandMenu";
 import { ResourcePicker } from "./ResourcePicker";
+import { EditorBottomSheetMenu } from "./EditorBottomSheetMenu";
+import { EditorMenuOption, EditorMenuSectionLabel } from "./EditorMenuOption";
 import { ChoiceBlockTable } from "./ChoiceBlockTable";
 import {
   editorBlockTrailingActionClass,
@@ -182,6 +182,7 @@ export function ScriptBlock({
   );
   const [expressionMenuOpen, setExpressionMenuOpen] = useState(false);
   const [videoOptionMenuOpen, setVideoOptionMenuOpen] = useState(false);
+  const [speakerMenuOpen, setSpeakerMenuOpen] = useState(false);
   const [speakerCustomModalOpen, setSpeakerCustomModalOpen] = useState(false);
   const [speakerDraft, setSpeakerDraft] = useState("");
   const [effectMenuOpen, setEffectMenuOpen] = useState(false);
@@ -612,8 +613,12 @@ export function ScriptBlock({
               {indexLabel}
             </span>
           )}
-          <DropdownMenu>
-            <DropdownMenuTrigger asChild>
+          <EditorBottomSheetMenu
+            open={speakerMenuOpen}
+            onOpenChange={setSpeakerMenuOpen}
+            title="화자"
+            contentClassName="min-w-[200px]"
+            trigger={
               <button
                 type="button"
                 className="inline-flex h-8 min-h-8 w-full min-w-0 items-center justify-start gap-my-2 rounded-none border-0 py-0 pl-0 pr-my-8 text-left text-caption1_500 text-on-surface-30 shadow-none outline-none focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring/50 focus-visible:ring-offset-0 overflow-hidden"
@@ -623,39 +628,63 @@ export function ScriptBlock({
                 </span>
                 <ChevronDown className="h-4 w-4 shrink-0" />
               </button>
-            </DropdownMenuTrigger>
-            <DropdownMenuContent align="start" className="min-w-[200px]">
-              <DropdownMenuItem onClick={() => updateSpeaker("나레이션")}>
-                나레이션
-              </DropdownMenuItem>
-              <DropdownMenuItem onClick={() => updateSpeaker(SPEAKER_PERSONA_TOKEN)}>
-                {formatPersonaSpeakerLabel(seriesPersona)}
-              </DropdownMenuItem>
-              <DropdownMenuItem onSelect={() => openCustomSpeakerModal()}>
-                직접 입력
-              </DropdownMenuItem>
-              <DropdownMenuSeparator />
-              <DropdownMenuLabel className="text-muted-foreground text-caption1_400 px-my-8 py-my-8">
-                등장인물
-              </DropdownMenuLabel>
-              {CHARACTERS.map((c) => (
-                <DropdownMenuItem
-                  key={c.id}
-                  onClick={() => updateSpeaker(c.name)}
-                  className="flex items-center gap-my-8"
+            }
+          >
+            {(presentation) => (
+              <>
+                <EditorMenuOption
+                  presentation={presentation}
+                  onSelect={() => {
+                    updateSpeaker("나레이션");
+                    setSpeakerMenuOpen(false);
+                  }}
                 >
-                  <NextImage
-                    src={c.url}
-                    alt=""
-                    width={24}
-                    height={24}
-                    className="size-6 shrink-0 rounded-full object-cover bg-surface-20"
-                  />
-                  {c.name}
-                </DropdownMenuItem>
-              ))}
-            </DropdownMenuContent>
-          </DropdownMenu>
+                  나레이션
+                </EditorMenuOption>
+                <EditorMenuOption
+                  presentation={presentation}
+                  onSelect={() => {
+                    updateSpeaker(SPEAKER_PERSONA_TOKEN);
+                    setSpeakerMenuOpen(false);
+                  }}
+                >
+                  {formatPersonaSpeakerLabel(seriesPersona)}
+                </EditorMenuOption>
+                <EditorMenuOption
+                  presentation={presentation}
+                  onSelect={() => {
+                    setSpeakerMenuOpen(false);
+                    openCustomSpeakerModal();
+                  }}
+                >
+                  직접 입력
+                </EditorMenuOption>
+                <EditorMenuSectionLabel presentation={presentation}>
+                  등장인물
+                </EditorMenuSectionLabel>
+                {CHARACTERS.map((c) => (
+                  <EditorMenuOption
+                    key={c.id}
+                    presentation={presentation}
+                    onSelect={() => {
+                      updateSpeaker(c.name);
+                      setSpeakerMenuOpen(false);
+                    }}
+                    className="flex items-center gap-my-8"
+                  >
+                    <NextImage
+                      src={c.url}
+                      alt=""
+                      width={24}
+                      height={24}
+                      className="size-6 shrink-0 rounded-full object-cover bg-surface-20"
+                    />
+                    {c.name}
+                  </EditorMenuOption>
+                ))}
+              </>
+            )}
+          </EditorBottomSheetMenu>
 
           <Dialog open={speakerCustomModalOpen} onOpenChange={setSpeakerCustomModalOpen}>
             <DialogContent className="sm:max-w-md">
@@ -735,7 +764,7 @@ export function ScriptBlock({
             variant="ghost"
             size="icon"
             className={cn(
-              "ml-auto h-8 w-8 shrink-0 rounded-full p-0 text-on-surface-30 hover:bg-red-50 hover:text-red-500",
+              "ml-auto h-8 w-8 shrink-0 rounded-full p-0 text-on-surface-30 lg:hover:bg-red-50 lg:hover:text-red-500",
               editorRowTrailingActionClass(),
             )}
             aria-label="Delete block"
@@ -818,7 +847,7 @@ export function ScriptBlock({
                     <DropdownMenuItem
                       key={effect.key}
                       onClick={() => applyEffect(effect.key)}
-                      className="flex items-center px-my-12 py-my-8 cursor-pointer text-body3_400 text-on-surface-20 hover:bg-surface-20 focus:bg-surface-20 rounded-md relative"
+                      className="flex items-center px-my-12 py-my-8 cursor-pointer text-body3_400 text-on-surface-20 focus:bg-surface-20 lg:hover:bg-surface-20 rounded-md relative"
                     >
                       {isSelected ? (
                         <Check className="w-4 h-4 mr-1 absolute left-2" />
@@ -855,7 +884,7 @@ export function ScriptBlock({
                     <DropdownMenuItem
                       key={color.hex}
                       onClick={() => applyColor(color.hex)}
-                      className="flex items-center px-my-12 py-my-8 cursor-pointer text-body3_400 text-on-surface-20 hover:bg-surface-20 focus:bg-surface-20 rounded-md"
+                      className="flex items-center px-my-12 py-my-8 cursor-pointer text-body3_400 text-on-surface-20 focus:bg-surface-20 lg:hover:bg-surface-20 rounded-md"
                     >
                       <span className="inline-flex items-center gap-my-8">
                         <span
@@ -947,7 +976,7 @@ export function ScriptBlock({
               variant="ghost"
               size="icon"
               className={cn(
-              "ml-auto h-8 w-8 shrink-0 text-on-surface-30 hover:bg-red-50 hover:text-red-500",
+              "ml-auto h-8 w-8 shrink-0 text-on-surface-30 lg:hover:bg-red-50 lg:hover:text-red-500",
               editorBlockTrailingActionClass(),
             )}
               aria-label="Delete block"
@@ -1013,7 +1042,7 @@ export function ScriptBlock({
             variant="ghost"
             size="icon"
             className={cn(
-              "ml-auto h-8 w-8 shrink-0 text-on-surface-30 hover:bg-red-50 hover:text-red-500",
+              "ml-auto h-8 w-8 shrink-0 text-on-surface-30 lg:hover:bg-red-50 lg:hover:text-red-500",
               editorBlockTrailingActionClass(),
             )}
             aria-label="Delete block"
@@ -1090,7 +1119,7 @@ export function ScriptBlock({
           variant="ghost"
           size="icon"
           className={cn(
-              "ml-auto h-8 w-8 shrink-0 rounded-full p-0 text-on-surface-30 hover:bg-red-50 hover:text-red-500",
+              "ml-auto h-8 w-8 shrink-0 rounded-full p-0 text-on-surface-30 lg:hover:bg-red-50 lg:hover:text-red-500",
               editorRowTrailingActionClass(),
             )}
           aria-label="Delete block"
@@ -1177,7 +1206,7 @@ export function ScriptBlock({
             variant="ghost"
             size="icon"
             className={cn(
-              "ml-auto h-8 w-8 shrink-0 text-on-surface-30 hover:bg-red-50 hover:text-red-500",
+              "ml-auto h-8 w-8 shrink-0 text-on-surface-30 lg:hover:bg-red-50 lg:hover:text-red-500",
               editorBlockTrailingActionClass(),
             )}
             aria-label="Delete block"
@@ -1359,7 +1388,7 @@ export function ScriptBlock({
                   }
                 }
               }}
-              className="flex h-8 min-w-0 w-fit cursor-pointer items-center gap-my-4 rounded-md border border-border-10 bg-white px-my-8 py-my-8 transition-colors duration-150 hover:bg-surface-20 focus:outline-none focus:ring-0 active:scale-[0.98]"
+              className="flex h-8 min-w-0 w-fit cursor-pointer items-center gap-my-4 rounded-md border border-border-10 bg-white px-my-8 py-my-8 transition-colors duration-150 lg:hover:bg-surface-20 focus:outline-none focus:ring-0 active:scale-[0.98]"
             >
               {hasImageThumbnail ? (
                 <NextImage
@@ -1390,13 +1419,17 @@ export function ScriptBlock({
             </button>
           </ResourcePicker>
           {isCharacter && !isEmpty && (
-            <DropdownMenu open={expressionMenuOpen} onOpenChange={setExpressionMenuOpen}>
-              <DropdownMenuTrigger asChild>
+            <EditorBottomSheetMenu
+              open={expressionMenuOpen}
+              onOpenChange={setExpressionMenuOpen}
+              title="표정"
+              contentClassName="w-40 p-my-4 bg-white rounded-lg border border-border-10"
+              trigger={
                 <button
                   type="button"
                   onClick={(e) => e.stopPropagation()}
                   onFocus={onFocusBlock}
-                  className="ml-2 flex h-8 min-w-0 w-fit cursor-pointer items-center gap-my-4 rounded-md border border-border-10 bg-white px-my-8 py-my-8 transition-colors duration-150 hover:bg-surface-20 focus:outline-none focus:ring-0 active:scale-[0.98]"
+                  className="ml-2 flex h-8 min-w-0 w-fit cursor-pointer items-center gap-my-4 rounded-md border border-border-10 bg-white px-my-8 py-my-8 transition-colors duration-150 lg:hover:bg-surface-20 focus:outline-none focus:ring-0 active:scale-[0.98]"
                 >
                   <span
                     className={cn(
@@ -1407,78 +1440,83 @@ export function ScriptBlock({
                   </span>
                   <ChevronDown className="ml-1 h-4 w-4 shrink-0 text-on-surface-30" />
                 </button>
-              </DropdownMenuTrigger>
-              <DropdownMenuContent
-                align="start"
-                className="w-40 p-my-4 bg-white rounded-lg border border-border-10"
-              >
-                {characterExpressionOptions.map((expr) => (
-                  <DropdownMenuItem
+              }
+            >
+              {(presentation) =>
+                characterExpressionOptions.map((expr) => (
+                  <EditorMenuOption
                     key={expr}
-                    onClick={() =>
+                    presentation={presentation}
+                    onSelect={() => {
                       updateBlock(block.id, block.content, {
                         ...(block.data ?? {}),
                         expression: expr,
-                      })
-                    }
-                    className="flex items-center px-my-12 py-my-8 cursor-pointer text-body3_400 text-on-surface-20 hover:bg-surface-20 focus:bg-surface-20 rounded-md"
+                      });
+                      setExpressionMenuOpen(false);
+                    }}
                   >
                     {expr}
-                  </DropdownMenuItem>
-                ))}
-              </DropdownMenuContent>
-            </DropdownMenu>
+                  </EditorMenuOption>
+                ))
+              }
+            </EditorBottomSheetMenu>
           )}
           {isVideo && !isEmpty && (
-            <DropdownMenu open={videoOptionMenuOpen} onOpenChange={setVideoOptionMenuOpen}>
-              <DropdownMenuTrigger asChild>
+            <EditorBottomSheetMenu
+              open={videoOptionMenuOpen}
+              onOpenChange={setVideoOptionMenuOpen}
+              title="재생"
+              contentClassName="w-40 p-my-4 bg-white rounded-lg border border-border-10"
+              trigger={
                 <button
                   type="button"
                   onClick={(e) => e.stopPropagation()}
                   onFocus={onFocusBlock}
-                  className="ml-2 flex h-8 min-w-0 w-fit cursor-pointer items-center gap-my-4 rounded-md border border-border-10 bg-white px-my-8 py-my-8 transition-colors duration-150 hover:bg-surface-20 focus:outline-none focus:ring-0 active:scale-[0.98]"
+                  className="ml-2 flex h-8 min-w-0 w-fit cursor-pointer items-center gap-my-4 rounded-md border border-border-10 bg-white px-my-8 py-my-8 transition-colors duration-150 lg:hover:bg-surface-20 focus:outline-none focus:ring-0 active:scale-[0.98]"
                 >
                   <span className="min-w-0 flex-1 truncate text-body4_500 text-on-surface-30">
                     {currentVideoPlaybackLabel}
                   </span>
                   <ChevronDown className="ml-1 h-4 w-4 shrink-0 text-on-surface-30" />
                 </button>
-              </DropdownMenuTrigger>
-              <DropdownMenuContent
-                align="start"
-                className="w-40 p-my-4 bg-white rounded-lg border border-border-10"
-              >
-                <DropdownMenuItem
-                  onClick={() =>
-                    updateBlock(block.id, block.content, {
-                      ...(block.data ?? {}),
-                      playback: "loop",
-                    })
-                  }
-                  className="flex items-center px-my-12 py-my-8 cursor-pointer text-body3_400 text-on-surface-20 hover:bg-surface-20 focus:bg-surface-20 rounded-md"
-                >
-                  무한루프
-                </DropdownMenuItem>
-                <DropdownMenuItem
-                  onClick={() =>
-                    updateBlock(block.id, block.content, {
-                      ...(block.data ?? {}),
-                      playback: "once",
-                    })
-                  }
-                  className="flex items-center px-my-12 py-my-8 cursor-pointer text-body3_400 text-on-surface-20 hover:bg-surface-20 focus:bg-surface-20 rounded-md"
-                >
-                  한 번만
-                </DropdownMenuItem>
-              </DropdownMenuContent>
-            </DropdownMenu>
+              }
+            >
+              {(presentation) => (
+                <>
+                  <EditorMenuOption
+                    presentation={presentation}
+                    onSelect={() => {
+                      updateBlock(block.id, block.content, {
+                        ...(block.data ?? {}),
+                        playback: "loop",
+                      });
+                      setVideoOptionMenuOpen(false);
+                    }}
+                  >
+                    무한루프
+                  </EditorMenuOption>
+                  <EditorMenuOption
+                    presentation={presentation}
+                    onSelect={() => {
+                      updateBlock(block.id, block.content, {
+                        ...(block.data ?? {}),
+                        playback: "once",
+                      });
+                      setVideoOptionMenuOpen(false);
+                    }}
+                  >
+                    한 번만
+                  </EditorMenuOption>
+                </>
+              )}
+            </EditorBottomSheetMenu>
           )}
           <Button
             type="button"
             variant="ghost"
             size="icon"
             className={cn(
-              "ml-auto h-8 w-8 shrink-0 text-on-surface-30 hover:bg-red-50 hover:text-red-500",
+              "ml-auto h-8 w-8 shrink-0 text-on-surface-30 lg:hover:bg-red-50 lg:hover:text-red-500",
               editorBlockTrailingActionClass(),
             )}
             aria-label="Delete block"
@@ -1534,7 +1572,7 @@ export function ScriptBlock({
           variant="ghost"
           size="icon"
           className={cn(
-              "ml-auto h-8 w-8 shrink-0 text-on-surface-30 hover:bg-red-50 hover:text-red-500",
+              "ml-auto h-8 w-8 shrink-0 text-on-surface-30 lg:hover:bg-red-50 lg:hover:text-red-500",
               editorBlockTrailingActionClass(),
             )}
           aria-label="Delete block"

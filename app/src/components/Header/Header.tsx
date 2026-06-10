@@ -26,7 +26,7 @@ export default function Header({ profileImageUrl, onProfileImageChange, onMenuCl
 
   return (
     <header className="flex h-14 shrink-0 items-center justify-between border-b border-border-10 bg-white pl-0 pr-my-16">
-      <div className="flex items-center gap-my-8 self-stretch pl-my-16 lg:w-[240px]">
+      <div className="flex items-center gap-my-8 self-stretch pl-my-12 lg:w-[240px] lg:pl-my-16">
         {onMenuClick ? (
           <button
             type="button"

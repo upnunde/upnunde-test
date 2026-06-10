@@ -9,6 +9,7 @@ import EditorBody from "@/components/editor/EditorBody";
 import { SceneNavigation } from "@/components/editor/SceneNavigation";
 import { EditorSceneTabStrip } from "@/components/editor/EditorSceneTabStrip";
 import { EditorMobileBlockToolbar } from "@/components/editor/EditorMobileBlockToolbar";
+import { EditorMobileIssueFloatingButton } from "@/components/editor/EditorMobileIssueFloatingButton";
 import { EditorMobilePreviewPlayer } from "@/components/editor/EditorMobilePreviewPlayer";
 import { PreviewScreen } from "@/components/editor/PreviewScreen";
 import { IPhone15ProFrame } from "@/components/preview/IPhone15ProFrame";
@@ -25,8 +26,10 @@ import {
 import { applyInitialScriptToEditor } from "@/lib/apply-initial-script-to-editor";
 import { useSceneClickHandler } from "@/hooks/useSceneClickHandler";
 import { useIsLgUp } from "@/hooks/useMediaQuery";
+import { useEditorMobileSceneHeaderCollapse } from "@/hooks/useEditorMobileSceneHeaderCollapse";
 import { EditorAutoGeneratorFloatingButton } from "@/components/editor/EditorAutoGeneratorFloatingButton";
 import { Dialog, DialogContent, DialogTitle } from "@/components/ui/dialog";
+import { formDialogShellClassName } from "@/components/ui/modal";
 import { EDITOR_SCENE_HEADER_ID, EDITOR_SCROLL_ROOT_ATTR } from "@/lib/editor-scroll";
 import { cn } from "@/lib/utils";
 
@@ -41,7 +44,7 @@ function EditorWorkspace({
 }) {
   const editorScrollClass = cn(
     "relative z-0 min-h-0 flex-1 overflow-y-auto overscroll-none",
-    isDesktop ? "py-my-40 px-0" : "px-my-16 pb-my-8 pt-0",
+    isDesktop ? "py-my-40 px-0" : "px-my-12 pb-my-8 pt-0",
   );
 
   if (isDesktop) {
@@ -70,8 +73,11 @@ function EditorWorkspace({
           mobilePanel !== "edit" && "hidden",
         )}
       >
-        <div className={editorScrollClass} {...{ [EDITOR_SCROLL_ROOT_ATTR]: "" }}>
-          <EditorBody />
+        <div className="relative flex min-h-0 min-w-0 flex-1 flex-col overflow-hidden">
+          <div className={editorScrollClass} {...{ [EDITOR_SCROLL_ROOT_ATTR]: "" }}>
+            <EditorBody />
+          </div>
+          <EditorMobileIssueFloatingButton />
         </div>
         {!isDesktop && mobilePanel === "edit" ? <EditorMobileBlockToolbar /> : null}
       </div>
@@ -166,8 +172,12 @@ function EditorInner() {
     [handleSceneClick],
   );
 
+  const sceneHeaderCollapsed = useEditorMobileSceneHeaderCollapse(
+    !isDesktop && mobilePanel === "edit",
+  );
+
   return (
-    <div className="flex h-screen flex-col overflow-hidden bg-white">
+    <div className="flex h-dvh flex-col overflow-hidden bg-white">
       <Header profileImageUrl={profileImageUrl} onProfileImageChange={setProfileImageUrl} />
 
       <div className="relative flex min-h-0 flex-1 overflow-hidden">
@@ -187,7 +197,7 @@ function EditorInner() {
           </aside>
         ) : null}
 
-        <main className="flex min-w-0 flex-1 flex-col overflow-hidden">
+        <main className="flex min-h-0 min-w-0 flex-1 flex-col overflow-hidden">
           <EditorScriptBootstrap routeKey={searchParams.toString()} startEmpty={shouldStartEmpty} />
 
           <div className="w-full shrink-0 border-b border-border-10 bg-white">
@@ -200,18 +210,32 @@ function EditorInner() {
             <div
               id={EDITOR_SCENE_HEADER_ID}
               className={cn(
-                "relative hidden w-full shrink-0 border-t border-border-10 bg-white",
+                "relative hidden w-full shrink-0 overflow-visible border-t border-border-10 bg-white",
                 mobilePanel === "edit" && "max-lg:block",
               )}
             >
-              <EditorSceneTabStrip
-                onSceneClick={handleSceneNavigate}
-                className="w-full px-my-16"
-              />
+              <div
+                className={cn(
+                  "overflow-hidden max-lg:transition-[max-height] max-lg:duration-200 max-lg:ease-out max-lg:max-h-14",
+                  sceneHeaderCollapsed && "max-lg:max-h-0",
+                )}
+              >
+                <div
+                  className={cn(
+                    "max-lg:transition-transform max-lg:duration-200 max-lg:ease-out",
+                    sceneHeaderCollapsed && "max-lg:-translate-y-full",
+                  )}
+                >
+                  <EditorSceneTabStrip
+                    onSceneClick={handleSceneNavigate}
+                    headerCollapsed={sceneHeaderCollapsed}
+                    className="w-full px-my-12"
+                  />
+                </div>
+              </div>
               <EditorAutoGeneratorFloatingButton
                 placement="below-tabs"
                 onClick={() => setIsAutoGeneratorModalOpen(true)}
-                className="right-my-16"
               />
             </div>
           </div>
@@ -236,7 +260,7 @@ function EditorInner() {
 
       <Dialog open={isEpisodeInfoModalOpen} onOpenChange={setIsEpisodeInfoModalOpen}>
         <DialogContent
-          className="flex h-[min(90vh,calc(100vh-80px))] w-[min(92vw,760px)] max-w-[760px] min-w-0 flex-col overflow-hidden border-0 bg-transparent p-0 shadow-none"
+          className={formDialogShellClassName}
           aria-describedby={undefined}
         >
           <DialogTitle className="sr-only">에피소드 정보 수정</DialogTitle>

@@ -40,7 +40,7 @@ export function NotificationList({
         (className ?? "")
       }
     >
-      <div className="self-stretch px-my-20 pt-0 pb-0 mt-2 mb-0 border-b border-border-10 inline-flex flex-col justify-start items-start gap-my-8">
+      <div className="self-stretch px-my-12 lg:px-my-20 pt-0 pb-0 mt-2 mb-0 border-b border-border-10 inline-flex flex-col justify-start items-start gap-my-8">
         <div
           data-size="L"
           data-underline="true"

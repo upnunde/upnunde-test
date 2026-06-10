@@ -27,7 +27,7 @@ export function ProfileSettlementTab({ onSaved }: { onSaved: () => void }) {
   };
 
   return (
-    <div className="flex flex-col gap-my-20">
+    <div className="flex flex-col gap-my-12 lg:gap-my-20">
       <AnalyticsPanel>
         <Title2
           text="정산 계좌"
@@ -42,7 +42,7 @@ export function ProfileSettlementTab({ onSaved }: { onSaved: () => void }) {
             </Link>
           }
         />
-        <div className="flex max-w-xl flex-col gap-my-20 p-my-20">
+        <div className="flex max-w-xl flex-col gap-my-12 lg:gap-my-20 p-my-20">
           <p className="text-body3_400 text-on-surface-20">
             출금은 등록한 계좌로 입금돼요. 계좌 정보가 바뀌면 정산 전에 꼭 업데이트해 주세요.
           </p>
@@ -91,7 +91,7 @@ export function ProfileSettlementTab({ onSaved }: { onSaved: () => void }) {
 
       <AnalyticsPanel>
         <Title2 text="사업자·세금계산서" variant="title" asSectionHeader />
-        <div className="flex max-w-xl flex-col gap-my-20 p-my-20">
+        <div className="flex max-w-xl flex-col gap-my-12 lg:gap-my-20 p-my-20">
           <div className="flex flex-col gap-my-12">
             <ProfileFieldLabel text="사업자등록번호" />
             <input
