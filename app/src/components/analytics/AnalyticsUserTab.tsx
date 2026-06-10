@@ -349,10 +349,10 @@ export function AnalyticsUserTab({
 
           <AnalyticsPanel>
             <Title2 text="가장 적극 활동중인 팔로워" variant="title" asSectionHeader />
-            <div className="grid grid-cols-5 justify-items-center gap-x-my-20 gap-y-my-24 p-my-20">
+            <div className="grid grid-cols-3 justify-items-center gap-x-my-12 gap-y-my-16 px-my-16 py-my-20 sm:grid-cols-4 lg:grid-cols-5 lg:gap-x-my-20 lg:gap-y-my-24 lg:p-my-20">
               {userDummy.activeFollowers.map(({ id, nick }) => (
-                <div key={id} className="flex w-full max-w-28 flex-col items-center justify-center gap-my-8">
-                  <div className="relative h-16 w-16 overflow-hidden rounded-full bg-zinc-100">
+                <div key={id} className="flex w-full min-w-0 max-w-28 flex-col items-center justify-center gap-my-8">
+                  <div className="relative h-14 w-14 shrink-0 overflow-hidden rounded-full bg-zinc-100 sm:h-16 sm:w-16">
                     <img
                       src={getFollowerDummyProfileUrl(nick)}
                       alt={`${nick} 프로필`}
@@ -360,7 +360,9 @@ export function AnalyticsUserTab({
                       loading="lazy"
                     />
                   </div>
-                  <span className="w-full text-center text-body4_400 text-on-surface-20">{nick}</span>
+                  <span className="w-full truncate text-center text-caption1_400 text-on-surface-20 sm:text-body4_400">
+                    {nick}
+                  </span>
                 </div>
               ))}
             </div>

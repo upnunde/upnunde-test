@@ -44,7 +44,7 @@ export function ContentTypeBadge({
 export function RankDecoration({ rank, tone }: { rank: number; tone: ContentTone }) {
   if (rank === 2) {
     return (
-      <div className="flex w-9 items-center justify-start gap-my-4">
+      <div className="flex w-9 items-center justify-center gap-my-4 lg:justify-start">
         <div className="relative h-5 w-5">
           <div
             className="absolute left-[4.38px] top-[9.38px] h-[1.25px] w-3 bg-on-surface-30"
@@ -56,7 +56,7 @@ export function RankDecoration({ rank, tone }: { rank: number; tone: ContentTone
   }
   if (rank === 5) {
     return (
-      <div className="flex w-9 items-center justify-start gap-my-4">
+      <div className="flex w-9 items-center justify-center gap-my-4 lg:justify-start">
         <div className="text-center justify-center text-error-error text-body3_400 font-['Pretendard_JP']">
           New
         </div>
@@ -66,7 +66,7 @@ export function RankDecoration({ rank, tone }: { rank: number; tone: ContentTone
   if (rank === 4 || tone === "seriesBlue" || tone === "character") {
     const num = "3";
     return (
-      <div className="flex w-9 items-center gap-my-2">
+      <div className="flex w-9 items-center justify-center gap-my-2 lg:justify-start">
         <span className="text-body3_400 text-blue-500" aria-hidden>
           ▼
         </span>
@@ -76,7 +76,7 @@ export function RankDecoration({ rank, tone }: { rank: number; tone: ContentTone
   }
   const num = rank === 3 ? "1" : "3";
   return (
-    <div className="flex w-9 items-center gap-my-2">
+    <div className="flex w-9 items-center justify-center gap-my-2 lg:justify-start">
       <span className="text-body3_400 text-error-error" aria-hidden>
         ▲
       </span>
@@ -92,15 +92,18 @@ export function AnalyticsTopFiveRowList({ rows }: { rows: readonly AnalyticsTopF
         const count = row.countLabel ?? "5,678";
         const suffix = row.countSuffix ?? "회";
         return (
-          <div key={row.rank} className="inline-flex items-center justify-between self-stretch">
-            <div className="flex items-center justify-start gap-my-16">
-              <div className="inline-flex w-14 items-center justify-start gap-my-4">
+          <div
+            key={row.rank}
+            className="flex w-full items-center justify-between gap-my-8 self-stretch lg:gap-my-12"
+          >
+            <div className="flex min-w-0 flex-1 items-center gap-my-12 lg:gap-my-16">
+              <div className="flex w-9 shrink-0 flex-col items-center justify-center gap-my-4 lg:w-14 lg:flex-row lg:items-center lg:justify-start lg:gap-my-4">
                 <RankDecoration rank={row.rank} tone={row.tone} />
-                <div className="justify-center text-body1_700 text-on-surface-10 font-['Pretendard_JP']">
+                <div className="text-body1_700 text-on-surface-10 font-['Pretendard_JP']">
                   {row.rank}
                 </div>
               </div>
-              <div className="relative h-24 w-14 shrink-0 overflow-hidden rounded-[4px] outline outline-1 outline-offset-[-1px] outline-border-10/5">
+              <div className="relative aspect-[9/16] w-14 shrink-0 overflow-hidden rounded-[4px] outline outline-1 outline-offset-[-1px] outline-border-10/5">
                 <Image
                   src={getAnalyticsTopFiveThumbnailUrl({
                     rank: row.rank,
@@ -114,14 +117,16 @@ export function AnalyticsTopFiveRowList({ rows }: { rows: readonly AnalyticsTopF
                 />
                 <div className={THUMBNAIL_DIM_OVERLAY_CLASS} aria-hidden />
               </div>
-              <div className="inline-flex flex-col items-start justify-center gap-my-4">
+              <div className="flex min-w-0 flex-1 flex-col items-end justify-center gap-my-4 lg:items-start">
                 <ContentTypeBadge tone={row.tone}>{row.badge}</ContentTypeBadge>
-                <span className="text-center text-body1_500 text-on-surface-10">{row.title}</span>
+                <span className="line-clamp-2 text-right text-body1_500 text-on-surface-10 lg:text-left">
+                  {row.title}
+                </span>
               </div>
             </div>
-            <div className="flex items-center justify-end gap-my-4">
-              <span className="text-center text-body1_500 text-on-surface-10">{count}</span>
-              <span className="text-center text-body1_500 text-on-surface-30">{suffix}</span>
+            <div className="flex shrink-0 items-center justify-end gap-my-4">
+              <span className="text-body1_500 text-on-surface-10">{count}</span>
+              <span className="text-body1_500 text-on-surface-30">{suffix}</span>
             </div>
           </div>
         );
