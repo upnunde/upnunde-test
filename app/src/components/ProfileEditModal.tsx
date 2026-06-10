@@ -47,7 +47,7 @@ function ProfileEditFormFields({
 }) {
   return (
     <>
-      <div className="self-stretch shrink-0 pt-my-20 pb-my-12 inline-flex justify-center items-center">
+      <div className="self-stretch shrink-0 pt-my-20 pb-my-20 inline-flex justify-center items-center">
         <input
           ref={fileInputRef}
           type="file"
@@ -148,7 +148,7 @@ function ProfileEditFooter({
   className?: string;
 }) {
   return (
-    <div className={cn("flex shrink-0 items-center justify-between gap-my-8 border-t border-border-10 pt-my-16", className)}>
+    <div className={cn("flex shrink-0 items-center justify-between gap-my-8 border-t border-border-10 pt-my-12 pb-my-12", className)}>
       <button
         type="button"
         onClick={onLogout}
