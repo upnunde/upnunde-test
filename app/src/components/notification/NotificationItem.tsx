@@ -33,7 +33,7 @@ export function NotificationItem({
   };
 
   return (
-    <div className="transition-colors hover:bg-surface-20">
+    <div className="px-my-16 transition-colors hover:bg-surface-20 lg:px-0">
       <button
         type="button"
         onClick={() => onToggle?.()}
@@ -56,18 +56,18 @@ export function NotificationItem({
         <div className="flex-1 inline-flex flex-col justify-center items-start gap-my-4">
           <div className="inline-flex justify-start items-center gap-my-12 lg:gap-my-20">
             <div className="flex justify-start items-start gap-my-4">
-              <div className="justify-start text-on-surface-10 text-body2_500 font-['Pretendard_JP']">
+              <div className="justify-start text-body1_700 text-on-surface-10 lg:text-body2_500">
                 {title}
               </div>
             </div>
           </div>
-          <div className="justify-start text-on-surface-30 text-caption1_400 font-['Pretendard_JP']">
+          <div className="justify-start text-body4_400 text-on-surface-30 lg:text-caption1_400">
             {date}
           </div>
         </div>
         <div className="w-8 h-8 px-my-12 rounded-[999px] flex justify-center items-center overflow-hidden bg-transparent text-on-surface-30">
           <ChevronDown
-            className={`w-3 h-3 shrink-0 ${isOpen ? "rotate-180" : ""}`}
+            className={`h-4 w-4 shrink-0 ${isOpen ? "rotate-180" : ""}`}
             aria-hidden
           />
         </div>
@@ -78,13 +78,13 @@ export function NotificationItem({
           id={`notification-content-${id}`}
           role="region"
           aria-labelledby={`notification-trigger-${id}`}
-          className="flex items-stretch gap-my-12 lg:gap-my-20 pl-[90px] pr-my-12 pb-my-20 pt-0 lg:pr-my-20"
+          className="flex items-stretch gap-my-20 pb-my-16 pt-0 lg:gap-my-20 lg:pl-[90px] lg:pr-my-20 lg:pb-my-20"
         >
           <div
-            className="w-px shrink-0 self-stretch min-h-0 bg-surface-20 rounded-full"
+            className="hidden w-px shrink-0 self-stretch min-h-0 rounded-full bg-surface-20 lg:block"
             aria-hidden
           />
-          <div className="min-w-0 flex-1 flex flex-col gap-my-12 py-my-4">
+          <div className="min-w-0 flex-1 flex flex-col gap-my-20 py-my-4 lg:gap-my-12">
             {content != null && content !== "" ? (
               <p className="text-body3_400 text-on-surface-20 whitespace-pre-wrap">{content}</p>
             ) : (
