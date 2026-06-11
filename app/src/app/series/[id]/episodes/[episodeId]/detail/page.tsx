@@ -19,6 +19,7 @@ import {
 import { EpisodePromptReferenceModal } from "@/components/episode/EpisodePromptReferenceModal";
 import { parseScriptToBlocks } from "@/utils/scriptParser";
 import { useEditorStore, hydrateSeriesPersonaFromSession } from "@/store/useEditorStore";
+import { useEditorMobileKeyboardScrollIntoView } from "@/hooks/useEditorMobileKeyboardScrollIntoView";
 import { useEditorMobileSceneHeaderCollapse } from "@/hooks/useEditorMobileSceneHeaderCollapse";
 import { useSceneClickHandler } from "@/hooks/useSceneClickHandler";
 import { useIsLgUp } from "@/hooks/useMediaQuery";
@@ -62,6 +63,7 @@ export default function EpisodeDetailPage() {
   const mobileSubHeaderHide = useEditorMobileSceneHeaderCollapse(
     !isDesktop && mobilePanel === "edit",
   );
+  useEditorMobileKeyboardScrollIntoView(!isDesktop && mobilePanel === "edit");
 
   useEffect(() => {
     hydrateSeriesPersonaFromSession();

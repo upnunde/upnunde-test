@@ -214,6 +214,31 @@ export function resolveActiveSceneBlockIdFromScroll(
   return activeId;
 }
 
+const MOBILE_KEYBOARD_INPUT_SCROLL_GAP_PX = 12;
+
+/** 모바일 키보드 편집 — sticky 크롬·키보드 사이에 입력란이 보이도록 문서 스크롤 보정 */
+export function scrollMobileEditorInputIntoView(target: HTMLElement): void {
+  if (!isMobileDocumentScrollMode()) return;
+
+  const vv = window.visualViewport;
+  if (!vv) return;
+
+  const rect = target.getBoundingClientRect();
+  const anchorTop = getEditorScrollAnchorViewportY();
+  const visibleBottom = vv.offsetTop + vv.height - MOBILE_KEYBOARD_INPUT_SCROLL_GAP_PX;
+
+  let delta = 0;
+  if (rect.top < anchorTop) {
+    delta = rect.top - anchorTop;
+  } else if (rect.bottom > visibleBottom) {
+    delta = rect.bottom - visibleBottom;
+  }
+
+  if (delta !== 0) {
+    window.scrollBy({ top: delta, behavior: "auto" });
+  }
+}
+
 export function scrollEditorBlockIntoView(blockId: string): HTMLElement | null {
   const el = document.getElementById(`block-${blockId}`);
   if (!el) return null;

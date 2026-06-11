@@ -23,6 +23,7 @@ import {
 import { applyInitialScriptToEditor } from "@/lib/apply-initial-script-to-editor";
 import { useSceneClickHandler } from "@/hooks/useSceneClickHandler";
 import { useIsLgUp } from "@/hooks/useMediaQuery";
+import { useEditorMobileKeyboardScrollIntoView } from "@/hooks/useEditorMobileKeyboardScrollIntoView";
 import { useEditorMobileSceneHeaderCollapse } from "@/hooks/useEditorMobileSceneHeaderCollapse";
 import { EditorAutoGeneratorFloatingButton } from "@/components/editor/EditorAutoGeneratorFloatingButton";
 import { Dialog, DialogContent, DialogTitle } from "@/components/ui/dialog";
@@ -218,6 +219,7 @@ function EditorInner() {
   const mobileSubHeaderHide = useEditorMobileSceneHeaderCollapse(
     !isDesktop && mobilePanel === "edit",
   );
+  useEditorMobileKeyboardScrollIntoView(!isDesktop && mobilePanel === "edit");
 
   const previewChromeHidden = editorMobilePreviewChromeHiddenClass(isDesktop, mobilePanel);
 

@@ -94,9 +94,9 @@ export function isEditorMobileBlockToolbarVisible(options: {
   isKeyboardOpen: boolean;
   mobileKeyboardEditBlockId: string | null;
 }): boolean {
-  const { focusBlockId, isKeyboardOpen, mobileKeyboardEditBlockId } = options;
+  const { focusBlockId, isKeyboardOpen } = options;
   if (isKeyboardOpen) {
-    return mobileKeyboardEditBlockId != null;
+    return false;
   }
   return focusBlockId != null;
 }

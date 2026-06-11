@@ -2,6 +2,7 @@
 
 import { flushSync } from "react-dom";
 import type { BlockType } from "@/types/editor";
+import { scrollMobileEditorInputIntoView } from "@/lib/editor-scroll";
 import { useEditorStore } from "@/store/useEditorStore";
 
 /** 모바일에서 「내용수정」 버튼으로만 키보드를 여는 블록 타입 */
@@ -110,6 +111,9 @@ export function requestMobileBlockContentEdit(blockId: string) {
 
   if (input) {
     applyTextInputFocus(input);
+    requestAnimationFrame(() => {
+      requestAnimationFrame(() => scrollMobileEditorInputIntoView(input));
+    });
   } else if (!focusBlockTextInputSync(blockId, preferred)) {
     requestAnimationFrame(() => focusBlockTextInput(blockId, preferred));
   }

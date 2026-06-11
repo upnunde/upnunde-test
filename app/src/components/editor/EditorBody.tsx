@@ -18,6 +18,8 @@ import {
 import { CSS } from "@dnd-kit/utilities";
 import { useEditorStore, hydrateSeriesPersonaFromSession } from "@/store/useEditorStore";
 import { EDITOR_BLOCK_INDEX_COLUMN_CLASS } from "@/lib/editor-block-layout";
+import { scrollMobileEditorInputIntoView } from "@/lib/editor-scroll";
+import { isMobileDocumentScrollMode } from "@/lib/mobile-document-scroll";
 import { editorLeadingControlsClass, editorRowHoverClass } from "@/lib/editor-control-visibility";
 import { useIsLgUp } from "@/hooks/useMediaQuery";
 import { cn } from "@/lib/utils";
@@ -321,6 +323,11 @@ export default function EditorBody() {
               editorContainer.scrollTo({ top: editorContainer.scrollTop + delta, behavior: "auto" });
             }
             // 이미 뷰포트 안에 있으면 스크롤 위치 변경 없음
+          } else if (isMobileDocumentScrollMode() && shouldFocusInput) {
+            const input = el.querySelector("textarea, input[type='text']");
+            if (input instanceof HTMLElement) {
+              scrollMobileEditorInputIntoView(input);
+            }
           }
 
           // Priority: textarea > input > button (for picker) > div with tabIndex (root).
@@ -347,10 +354,16 @@ export default function EditorBody() {
             if (textarea && textarea instanceof HTMLTextAreaElement && shouldFocusInput) {
               const textLength = textarea.value.length;
               textarea.setSelectionRange(textLength, textLength);
+              if (isMobileDocumentScrollMode()) {
+                scrollMobileEditorInputIntoView(textarea);
+              }
             }
             if (input && input instanceof HTMLInputElement && shouldFocusInput) {
               const textLength = input.value.length;
               input.setSelectionRange(textLength, textLength);
+              if (isMobileDocumentScrollMode()) {
+                scrollMobileEditorInputIntoView(input);
+              }
             }
             setTimeout(() => {
               const focusEvent = new FocusEvent("focus", { bubbles: true, cancelable: true });

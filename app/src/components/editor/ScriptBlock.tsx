@@ -58,7 +58,6 @@ import {
 } from "@/lib/editor-control-visibility";
 import { useIsLgUp } from "@/hooks/useMediaQuery";
 import { useMobileBlockTextEdit } from "@/hooks/useMobileBlockTextEdit";
-import { promptMobileBlockContentEdit } from "@/lib/editor-mobile-text-edit";
 import { cn } from "@/lib/utils";
 import {
   SPEAKER_PERSONA_TOKEN,
@@ -955,11 +954,11 @@ export function ScriptBlock({
     const labelColorClass = LABEL_COLOR_BY_TYPE[block.type];
     const placeholder =
       block.type === "scene" ? "장면 제목" : "장면정보를 입력하세요";
-    const showSceneValueAsSpan = !isDesktop && sceneMobileEdit.readOnly;
     const sceneDisplayClass =
       block.type === "scene" ? EDITOR_SCENE_TITLE_DISPLAY_CLASS : EDITOR_TOP_DESC_DISPLAY_CLASS;
     const sceneInputClass =
       block.type === "scene" ? EDITOR_SCENE_TITLE_INPUT_CLASS : EDITOR_TOP_DESC_INPUT_CLASS;
+    const showSceneValueAsReadOnly = !isDesktop && sceneMobileEdit.readOnly;
 
     return (
       <>
@@ -977,36 +976,28 @@ export function ScriptBlock({
         >
           {labelText}
         </span>
-        {showSceneValueAsSpan ? (
-          <span
-            className={cn(
-              sceneDisplayClass,
-              "block min-h-8",
-              block.type === "scene" && "py-0",
-              rootClassName,
-              !block.content?.trim() && "text-on-surface-30",
-            )}
-            onPointerDown={(e) => {
-              e.preventDefault();
-              promptMobileBlockContentEdit(block.id, null);
-            }}
-          >
-            {block.content?.trim() || placeholder}
-          </span>
-        ) : (
-          <input
-            ref={sceneInputRef}
-            type="text"
-            value={block.content}
-            onChange={(e) => updateBlock(block.id, e.target.value)}
-            onFocus={sceneMobileEdit.onContentFocus}
-            onPointerDown={sceneMobileEdit.onContentPointerDown}
-            readOnly={sceneMobileEdit.readOnly}
-            onKeyDown={handleSceneKeyDown}
-            placeholder={placeholder}
-            className={cn(sceneInputClass, rootClassName)}
-          />
-        )}
+        <input
+          ref={sceneInputRef}
+          type="text"
+          value={block.content}
+          onChange={(e) => updateBlock(block.id, e.target.value)}
+          onFocus={sceneMobileEdit.onContentFocus}
+          onPointerDown={sceneMobileEdit.onContentPointerDown}
+          readOnly={sceneMobileEdit.readOnly}
+          onKeyDown={handleSceneKeyDown}
+          placeholder={placeholder}
+          className={cn(
+            showSceneValueAsReadOnly
+              ? cn(
+                  sceneDisplayClass,
+                  "block min-h-8 h-auto cursor-text border-0 bg-transparent outline-none focus:outline-none focus:ring-0",
+                  block.type === "scene" && "py-0",
+                )
+              : sceneInputClass,
+            rootClassName,
+            showSceneValueAsReadOnly && !block.content?.trim() && "text-on-surface-30",
+          )}
+        />
         {!isSeedDefault ? (
           <Button
             type="button"
