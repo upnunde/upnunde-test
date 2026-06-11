@@ -31,6 +31,7 @@ import {
   EDITOR_MOBILE_SUB_HEADER_INNER_CLASS,
   EDITOR_SCENE_HEADER_ID,
   EDITOR_SCROLL_ROOT_ATTR,
+  EDITOR_SUB_HEADER_SHELL_ID,
   editorMobileSceneHeaderShellClass,
   editorMobileSubHeaderHideVarStyle,
   editorMobileSubHeaderShellClass,
@@ -250,6 +251,7 @@ function EditorInner() {
           <EditorScriptBootstrap routeKey={searchParams.toString()} startEmpty={shouldStartEmpty} />
 
           <div
+            id={EDITOR_SUB_HEADER_SHELL_ID}
             className={cn(
               editorMobileSubHeaderShellClass(mobileSubHeaderHide.isFullyHidden),
               previewChromeHidden,

@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useLayoutEffect, useRef, useState } from "react";
 import {
   EDITOR_MOBILE_SUB_HEADER_HEIGHT_PX,
   EDITOR_SCROLL_ROOT_ATTR,
@@ -20,6 +20,34 @@ export interface EditorMobileSubHeaderScrollHide {
 export function useEditorMobileSceneHeaderCollapse(enabled: boolean): EditorMobileSubHeaderScrollHide {
   const [hiddenPx, setHiddenPx] = useState(0);
   const hiddenRef = useRef(0);
+  const lastScrollTopRef = useRef(0);
+  const suppressScrollRef = useRef(false);
+
+  hiddenRef.current = hiddenPx;
+
+  // hidePx 변경 → 레이아웃 reflow → spurious scroll delta 방지
+  useLayoutEffect(() => {
+    if (!enabled) return;
+
+    suppressScrollRef.current = true;
+
+    const syncScrollBaseline = () => {
+      lastScrollTopRef.current = isMobileDocumentScrollMode()
+        ? getDocumentScrollTop()
+        : (document.querySelector(`[${EDITOR_SCROLL_ROOT_ATTR}]`) as HTMLElement | null)?.scrollTop ?? 0;
+    };
+
+    syncScrollBaseline();
+    const rafId = requestAnimationFrame(() => {
+      syncScrollBaseline();
+      suppressScrollRef.current = false;
+    });
+
+    return () => {
+      cancelAnimationFrame(rafId);
+      suppressScrollRef.current = false;
+    };
+  }, [enabled, hiddenPx]);
 
   useEffect(() => {
     if (!enabled) {
@@ -35,11 +63,13 @@ export function useEditorMobileSceneHeaderCollapse(enabled: boolean): EditorMobi
         ? getDocumentScrollTop()
         : (document.querySelector(`[${EDITOR_SCROLL_ROOT_ATTR}]`) as HTMLElement | null)?.scrollTop ?? 0;
 
-    let lastScrollTop = getScrollTop();
+    lastScrollTopRef.current = getScrollTop();
 
     const onScroll = () => {
+      if (suppressScrollRef.current) return;
+
       const scrollTop = getScrollTop();
-      const delta = scrollTop - lastScrollTop;
+      const delta = scrollTop - lastScrollTopRef.current;
 
       if (scrollTop <= 0) {
         hiddenRef.current = 0;
@@ -48,7 +78,7 @@ export function useEditorMobileSceneHeaderCollapse(enabled: boolean): EditorMobi
       }
 
       setHiddenPx(hiddenRef.current);
-      lastScrollTop = scrollTop;
+      lastScrollTopRef.current = scrollTop;
     };
 
     if (isMobileDocumentScrollMode()) {

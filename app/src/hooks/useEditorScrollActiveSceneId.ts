@@ -2,8 +2,9 @@
 
 import { useEffect, useState } from "react";
 import {
-  EDITOR_SCENE_HEADER_ID,
+  EDITOR_SCENE_TAB_STRIP_ID,
   EDITOR_SCROLL_ROOT_ATTR,
+  EDITOR_SUB_HEADER_SHELL_ID,
   resolveActiveSceneBlockIdFromScroll,
 } from "@/lib/editor-scroll";
 import { isMobileDocumentScrollMode } from "@/lib/mobile-document-scroll";
@@ -64,8 +65,10 @@ export function useEditorScrollActiveSceneId(sceneIds: string[], enabled = true)
 
       const observer = new ResizeObserver(onLayoutChange);
       observer.observe(root);
-      const sceneHeader = document.getElementById(EDITOR_SCENE_HEADER_ID);
-      if (sceneHeader) observer.observe(sceneHeader);
+      const subHeaderShell = document.getElementById(EDITOR_SUB_HEADER_SHELL_ID);
+      if (subHeaderShell) observer.observe(subHeaderShell);
+      const tabStrip = document.getElementById(EDITOR_SCENE_TAB_STRIP_ID);
+      if (tabStrip) observer.observe(tabStrip);
       for (const sceneId of sceneIds) {
         const el = document.getElementById(`block-${sceneId}`);
         if (el) observer.observe(el);

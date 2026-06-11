@@ -8,6 +8,9 @@ export const EDITOR_SCENE_TAB_STRIP_ID = "editor-scene-tab-strip";
 /** 모바일 — 장면 탭 + 생성기 버튼 등 스크롤 상단 고정 영역 */
 export const EDITOR_SCENE_HEADER_ID = "editor-scene-header";
 
+/** 모바일 — 서브헤더 sticky 셸 (숨김 높이 변화 감지용) */
+export const EDITOR_SUB_HEADER_SHELL_ID = "editor-sub-header-shell";
+
 /** 모바일 에디터 서브헤더 높이(px) — h-14 */
 export const EDITOR_MOBILE_SUB_HEADER_HEIGHT_PX = 56;
 
@@ -49,16 +52,69 @@ export function editorMobileSceneHeaderShellClass() {
   ].join(" ");
 }
 
-function getEditorScrollAnchorElement(): HTMLElement | null {
-  return (
+const EDITOR_GLOBAL_HEADER_PX = 56;
+const EDITOR_SCROLL_ANCHOR_GAP_PX = 8;
+/** 장면 탭 strip 기본 높이(px) — 측정 실패 시 fallback */
+const EDITOR_SCENE_TAB_STRIP_FALLBACK_PX = 48;
+
+/** main에 설정된 서브헤더 숨김(px) — sticky 겹침 시 rect 대신 사용 */
+export function getEditorMobileSubHeaderHidePx(): number {
+  if (typeof document === "undefined") return 0;
+
+  const el =
     document.getElementById(EDITOR_SCENE_HEADER_ID) ??
-    document.getElementById(EDITOR_SCENE_TAB_STRIP_ID)
-  );
+    document.querySelector("main");
+  if (!el) return 0;
+
+  const raw = getComputedStyle(el).getPropertyValue(EDITOR_SUB_HEADER_HIDE_VAR).trim();
+  if (!raw) return 0;
+
+  const parsed = parseFloat(raw);
+  if (!Number.isFinite(parsed)) return 0;
+
+  return Math.max(0, Math.min(EDITOR_MOBILE_SUB_HEADER_HEIGHT_PX, parsed));
+}
+
+function getEditorSceneTabStripHeightPx(): number {
+  const tabStrip = document.getElementById(EDITOR_SCENE_TAB_STRIP_ID);
+  if (!tabStrip) return 0;
+
+  const height = tabStrip.getBoundingClientRect().height;
+  return height > 0 ? height : EDITOR_SCENE_TAB_STRIP_FALLBACK_PX;
+}
+
+/**
+ * 모바일 sticky 크롬 기준 앵커 Y(px).
+ * `#editor-scene-header` rect는 서브헤더·탭 펼침 시 겹쳐 오측정되므로, 고정 높이 + hide 변수로 계산한다.
+ */
+function getEditorMobileStickyChromeAnchorViewportY(): number {
+  const hidePx = getEditorMobileSubHeaderHidePx();
+  const visibleSubHeader = EDITOR_MOBILE_SUB_HEADER_HEIGHT_PX - hidePx;
+  const tabStrip = document.getElementById(EDITOR_SCENE_TAB_STRIP_ID);
+
+  if (tabStrip) {
+    return (
+      EDITOR_GLOBAL_HEADER_PX +
+      visibleSubHeader +
+      getEditorSceneTabStripHeightPx() +
+      EDITOR_SCROLL_ANCHOR_GAP_PX
+    );
+  }
+
+  return EDITOR_GLOBAL_HEADER_PX + visibleSubHeader + EDITOR_SCROLL_ANCHOR_GAP_PX;
+}
+
+function getEditorScrollAnchorElement(): HTMLElement | null {
+  return document.getElementById(EDITOR_SCENE_TAB_STRIP_ID);
 }
 
 /** 장면 탭·고정 헤더 하단 기준 뷰포트 Y(px) — 모바일 문서 스크롤 */
 export function getEditorScrollAnchorViewportY(): number {
-  const gap = 8;
+  if (isMobileDocumentScrollMode()) {
+    return getEditorMobileStickyChromeAnchorViewportY();
+  }
+
+  const gap = EDITOR_SCROLL_ANCHOR_GAP_PX;
   const anchor = getEditorScrollAnchorElement();
   if (anchor) {
     const anchorRect = anchor.getBoundingClientRect();
@@ -71,7 +127,7 @@ export function getEditorScrollAnchorViewportY(): number {
 
 /** 장면 블록이 탭·고정 영역 바로 아래 오도록 스크롤 inset(px) — 데스크톱 내부 스크롤 루트 기준 */
 export function getEditorScrollTopInset(scrollRoot: Element): number {
-  const gap = 8;
+  const gap = EDITOR_SCROLL_ANCHOR_GAP_PX;
   const anchor = getEditorScrollAnchorElement();
 
   if (anchor) {
