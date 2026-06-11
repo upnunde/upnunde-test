@@ -47,7 +47,7 @@ function ProfileEditFormFields({
 }) {
   return (
     <>
-      <div className="self-stretch shrink-0 pt-my-20 pb-my-20 inline-flex justify-center items-center">
+      <div className="flex w-full shrink-0 items-center justify-center self-stretch pt-my-20 pb-my-20">
         <input
           ref={fileInputRef}
           type="file"

@@ -24,6 +24,8 @@ export interface AddResourceSlotProps {
   slotKind?: "new-resource" | "thumbnail";
   /** 버튼 aria-label (`slotKind` 기본값보다 우선) */
   ariaLabel?: string;
+  /** variant 기본 크기 대신 사용 (모바일 캐러셀 등) */
+  sizeClassName?: string;
 }
 
 const SLOT_SIZE_CLASS: Record<"character" | MediaSlotType, string> = {
@@ -42,11 +44,12 @@ export function AddResourceSlot({
   showName = false,
   slotKind = "new-resource",
   ariaLabel,
+  sizeClassName,
 }: AddResourceSlotProps) {
   const resolvedAriaLabel =
     ariaLabel ??
     (slotKind === "thumbnail" ? THUMBNAIL_SLOT_ARIA.addImage : "새로 추가");
-  const sizeClass = SLOT_SIZE_CLASS[variant === "character" ? "character" : variant];
+  const sizeClass = sizeClassName ?? SLOT_SIZE_CLASS[variant === "character" ? "character" : variant];
   const slotClassName = cn(
     "rounded-lg flex flex-col justify-center items-center gap-my-8 overflow-hidden transition-colors cursor-pointer focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary",
     sizeClass,
@@ -55,8 +58,8 @@ export function AddResourceSlot({
       : "border border-dashed border-border-20 bg-white text-muted-foreground hover:border-border-10 hover:bg-surface-20",
   );
   const plusIcon = (
-    <span className="w-5 h-5 flex items-center justify-center">
-      <Plus className="w-5 h-5 shrink-0" aria-hidden />
+    <span className={cn("flex items-center justify-center shrink-0", sizeClassName ? "h-4 w-4" : "h-5 w-5")}>
+      <Plus className={cn("shrink-0", sizeClassName ? "h-4 w-4" : "h-5 w-5")} aria-hidden />
     </span>
   );
 

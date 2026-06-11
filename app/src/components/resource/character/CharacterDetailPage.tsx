@@ -23,11 +23,13 @@ import { Tag } from "@/components/ui/tag";
 import { Title1 } from "@/components/ui/title1";
 import { Title2 } from "@/components/ui/title2";
 import {
+  PAGE_CARD_SHELL_MOBILE_FLUSH_CLASS,
   PAGE_CONTENT_BODY_CLASS,
   PAGE_CONTENT_FOOTER_CLASS,
   PAGE_SCROLL_COLUMN_CLASS,
   PAGE_SUBHEADER_WITH_STICKY_CLASS,
 } from "@/lib/page-layout";
+import { cn } from "@/lib/utils";
 import type { CharacterResource, CharacterExpressionSlot } from "@/types/resource";
 
 interface CharacterDetailPageProps {
@@ -242,9 +244,14 @@ export function CharacterDetailPage({ isNew = true, initialData }: CharacterDeta
         </div>
       </header>
 
-      <div className={PAGE_SCROLL_COLUMN_CLASS}>
+      <div className={cn(PAGE_SCROLL_COLUMN_CLASS, "max-lg:px-0 max-lg:pt-0 max-lg:gap-0")}>
         <div className="w-full min-w-0 max-w-[1200px] mx-auto mx-auto">
-          <div className="w-full rounded-[4px] border border-border-10 bg-white">
+          <div
+            className={cn(
+              "w-full rounded-[4px] border border-border-10 bg-white",
+              PAGE_CARD_SHELL_MOBILE_FLUSH_CLASS,
+            )}
+          >
             <Title2
               text="인물정보"
               asSectionHeader

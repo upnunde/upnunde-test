@@ -5,6 +5,7 @@ import dynamic from "next/dynamic";
 import { Button } from "@/components/ui/button";
 import { FilterChip } from "@/components/ui/chip";
 import { CHIP_GROUP_GAP_CLASS } from "@/lib/chip-styles";
+import { PAGE_CARD_SHELL_MOBILE_FLUSH_CLASS } from "@/lib/page-layout";
 import { cn } from "@/lib/utils";
 import { Title2 } from "@/components/ui/title2";
 import { BgmListItem } from "./BgmListItem";
@@ -130,7 +131,12 @@ export function BgmSection({
 
   return (
     <>
-      <div className="w-full min-w-0 max-w-[1200px] mx-auto bg-surface-10 rounded-[4px] border border-border-10 flex flex-col justify-start items-start">
+      <div
+        className={cn(
+          "mx-auto flex w-full min-w-0 max-w-[1200px] flex-col items-start justify-start rounded-[4px] border border-border-10 bg-surface-10",
+          PAGE_CARD_SHELL_MOBILE_FLUSH_CLASS,
+        )}
+      >
         <div className="w-full self-stretch border-b border-border-10 px-my-16 pb-my-12 pt-my-20 lg:px-my-20">
           <Title2
             text={title}

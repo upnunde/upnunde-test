@@ -336,6 +336,25 @@
   }
 }
 
+/*
+ * 가로 스크롤바(가이드바) 전역 비노출 — 스와이프·휠·트랙패드 가로 스크롤은 유지
+ * WebKit: horizontal pseudo로 세로 스크롤바는 유지
+ */
+*::-webkit-scrollbar:horizontal {
+  height: 0;
+  display: none;
+}
+
+:where([class*="overflow-x-auto"], [class*="overflow-x-scroll"]) {
+  scrollbar-width: none;
+  -ms-overflow-style: none;
+}
+
+:where([class*="overflow-x-auto"], [class*="overflow-x-scroll"])::-webkit-scrollbar {
+  height: 0;
+  display: none;
+}
+
 /* 에디터 변환 로딩: 딤드 오버레이 + 4도트 모노톤 */
 @keyframes ai-overlay-fade-in {
   from {

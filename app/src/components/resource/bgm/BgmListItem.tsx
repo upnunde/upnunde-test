@@ -138,17 +138,17 @@ export function BgmListItem({
       onMouseLeave={() => setIsHovered(false)}
     >
       <div className="flex h-fit min-w-0 flex-col gap-0 self-stretch">
-        <div className="inline-flex min-h-9 flex-shrink-0 items-start justify-center gap-my-8 self-stretch max-lg:gap-my-4">
+        <div className="inline-flex min-h-9 flex-shrink-0 items-center justify-center gap-my-8 self-stretch max-lg:gap-my-4">
           {variant === "default" && index != null && (
-            <span className="w-6 shrink-0 tabular-nums text-body3_500 text-on-surface-10 max-lg:w-5 max-lg:text-caption1_500">
+            <span className="w-8 shrink-0 tabular-nums text-body3_500 text-on-surface-10">
               {index}
             </span>
           )}
           <div className="inline-flex min-w-0 flex-1 flex-col items-start justify-start gap-my-2">
-            <div className="w-full truncate text-body3_500 text-on-surface-10 max-lg:text-caption1_500">
+            <div className="w-full truncate text-body3_500 text-on-surface-10 max-lg:text-body2_500">
               {item.title}
             </div>
-            <div className="w-full text-body4_400 text-on-surface-30 max-lg:text-caption2_400">
+            <div className="w-full text-body4_400 text-on-surface-30">
               {timeLabel}
             </div>
           </div>

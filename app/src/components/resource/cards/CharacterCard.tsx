@@ -2,8 +2,8 @@
 
 import React from "react";
 import Image from "next/image";
-import { Pencil, Trash2 } from "lucide-react";
 import type { CharacterResource } from "@/types/resource";
+import { ResourceThumbnailActions } from "@/components/resource/cards/ResourceThumbnailActions";
 import { THUMBNAIL_DIM_OVERLAY_CLASS } from "@/lib/thumbnail-styles";
 import { cn } from "@/lib/utils";
 
@@ -65,42 +65,12 @@ export function CharacterCard({
           className="object-cover object-top"
         />
         <div className={THUMBNAIL_DIM_OVERLAY_CLASS} aria-hidden />
-        <div
-          className={cn(
-            "absolute inset-0 w-full h-full bg-black/10 transition-opacity pointer-events-none",
-            showControls ? "opacity-100" : "opacity-0 group-hover:opacity-100"
-          )}
-          aria-hidden
+        <ResourceThumbnailActions
+          forceVisible={showControls}
+          elevated
+          onEdit={() => onDetailClick(character)}
+          onDelete={() => onDeleteClick(character)}
         />
-        <div
-          className={cn(
-            "absolute right-1 top-1 flex flex-col justify-center items-start gap-my-4 transition-opacity",
-            showControls ? "opacity-100" : "opacity-0 group-hover:opacity-100"
-          )}
-        >
-          <button
-            type="button"
-            className="w-8 h-8 rounded-full cursor-pointer bg-surface-10 shadow-elevation-20 inline-flex justify-center items-center text-on-surface-10 hover:bg-surface-20"
-            aria-label="상세 페이지에서 편집"
-            onClick={(e) => {
-              e.stopPropagation();
-              onDetailClick(character);
-            }}
-          >
-            <Pencil className="w-4 h-4" />
-          </button>
-          <button
-            type="button"
-            className="w-8 h-8 rounded-full cursor-pointer bg-surface-10 shadow-elevation-20 inline-flex justify-center items-center text-on-surface-10 hover:bg-surface-20"
-            aria-label="삭제"
-            onClick={(e) => {
-              e.stopPropagation();
-              onDeleteClick(character);
-            }}
-          >
-            <Trash2 className="w-4 h-4" />
-          </button>
-        </div>
       </div>
       {showName && (
         <div className="self-stretch inline-flex justify-start items-center gap-my-8 overflow-hidden">

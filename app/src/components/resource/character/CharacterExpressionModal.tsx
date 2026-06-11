@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState, useCallback, useEffect, useRef } from "react";
+import React, { useState, useCallback, useEffect, useRef, useMemo } from "react";
 import NextImage from "next/image";
 import {
   Dialog,
@@ -24,10 +24,14 @@ import {
   THUMBNAIL_SLOT_ARIA,
 } from "@/lib/thumbnail-styles";
 import { cn } from "@/lib/utils";
+import { useIsLgUp } from "@/hooks/useMediaQuery";
 import type { CharacterExpressionSlot } from "@/types/resource";
 
 const MAX_SLOTS = 10;
 const EXPRESSION_MAX_LENGTH = 50;
+/** 모바일 표정 캐러셀 — 400px급 뷰포트에서 약 5개 동시 노출 */
+const MOBILE_EXPRESSION_CAROUSEL_THUMB_CLASS = "aspect-[9/16] h-auto w-[64px] min-h-0";
+const MOBILE_EXPRESSION_CAROUSEL_ITEM_CLASS = "w-[64px]";
 const CHARACTER_EXPRESSION_FILE_INPUT_ID = "character-expression-modal-file";
 
 export interface CharacterExpressionModalProps {
@@ -194,6 +198,7 @@ export function CharacterExpressionModal({
   cropGuide: _cropGuideProp,
   showCropGuide: _showCropGuideProp,
 }: CharacterExpressionModalProps) {
+  const isLgUp = useIsLgUp();
   // 레이아웃용 showSlotList는 모달이 열린 동안 고정하여,
   // 부모에서 prop이 변경되더라도 폭이 순간적으로 바뀌지 않도록 한다.
   const [layoutShowSlotList] = useState(showSlotList);
@@ -211,6 +216,7 @@ export function CharacterExpressionModal({
   const leftPanelRef = useRef<HTMLDivElement | null>(null);
   const [bodyHeight, setBodyHeight] = useState<number | undefined>(undefined);
   const cropCanvasRef = useRef<HTMLCanvasElement | null>(null);
+  const mobileSlotItemRefs = useRef<Map<number, HTMLDivElement>>(new Map());
   const loadedImageRef = useRef<HTMLImageElement | null>(null);
   const dragRef = useRef<{
     slotId: string;
@@ -453,6 +459,121 @@ export function CharacterExpressionModal({
     .map((s, i) => (s.imageUrl ? i : null))
     .filter((i): i is number => i !== null);
 
+  const filledImageSlots = useMemo(
+    () => slots.filter((s) => Boolean(s.imageUrl)),
+    [slots],
+  );
+  const canAddMoreExpressionSlots = filledImageSlots.length < MAX_SLOTS;
+
+  useEffect(() => {
+    if (isLgUp || !layoutShowSlotList || selectedIndex === null) return;
+    const el = mobileSlotItemRefs.current.get(selectedIndex);
+    el?.scrollIntoView({ behavior: "smooth", inline: "nearest", block: "nearest" });
+  }, [selectedIndex, isLgUp, layoutShowSlotList]);
+
+  const renderExpressionSlotItem = useCallback(
+    (
+      slot: CharacterExpressionSlot,
+      index: number,
+      options?: { carouselItem?: boolean },
+    ) => {
+      const isSelected = selectedIndex === index;
+      const label = slot.expressionLabel?.trim() || "untitle";
+      const isCarousel = Boolean(options?.carouselItem);
+      const thumbClass = isCarousel ? MOBILE_EXPRESSION_CAROUSEL_THUMB_CLASS : "h-[160px] w-[90px]";
+      const itemWidthClass = isCarousel ? MOBILE_EXPRESSION_CAROUSEL_ITEM_CLASS : "w-[90px]";
+      return (
+        <div
+          key={slot.id}
+          ref={
+            isCarousel
+              ? (node) => {
+                  if (node) mobileSlotItemRefs.current.set(index, node);
+                  else mobileSlotItemRefs.current.delete(index);
+                }
+              : undefined
+          }
+          className={cn(
+            "group inline-flex flex-col items-start justify-start",
+            isCarousel ? "w-[64px] shrink-0 snap-start gap-my-2" : "gap-my-4",
+          )}
+        >
+          <div className={cn("relative", itemWidthClass)}>
+            <button
+              type="button"
+              onClick={() => handleSelectSlot(index)}
+              className={cn(
+                "flex cursor-pointer flex-col items-center justify-center overflow-hidden rounded-lg bg-surface-disabled/0 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary",
+                thumbClass,
+                isCarousel ? "gap-0" : "gap-my-8",
+                isSelected
+                  ? "outline outline-2 outline-offset-[-2px] outline-primary"
+                  : "outline outline-1 outline-offset-[-1px] outline-border-10/5 hover:outline-border-20",
+              )}
+              aria-label={`표정 ${index + 1}: ${label}`}
+              aria-current={isSelected ? "true" : undefined}
+            >
+              <NextImage
+                src={slot.imageUrl!}
+                alt=""
+                width={isCarousel ? 64 : 90}
+                height={isCarousel ? 114 : 160}
+                unoptimized
+                className={cn("object-cover object-top", thumbClass)}
+              />
+            </button>
+            <button
+              type="button"
+              aria-label="표정 삭제"
+              onClick={() => setSlots((prev) => prev.filter((s) => s.id !== slot.id))}
+              className={cn(
+                "absolute flex cursor-pointer items-center justify-center rounded-full bg-surface-10 text-on-surface-10 shadow-elevation-10 hover:bg-surface-20",
+                isCarousel
+                  ? "right-0.5 top-0.5 h-6 w-6"
+                  : "right-1 top-1 hidden h-8 w-8 max-lg:inline-flex lg:group-hover:inline-flex",
+              )}
+            >
+              <Trash2 className={cn("pointer-events-none", isCarousel ? "h-3 w-3" : "h-4 w-4")} />
+            </button>
+          </div>
+          <div className={cn("inline-flex items-center justify-start overflow-hidden", itemWidthClass)}>
+            <div
+              className={cn(
+                "truncate text-left font-['Pretendard_JP']",
+                itemWidthClass,
+                isCarousel ? "text-caption1_400" : "text-body3_400",
+                label === "untitle" ? "text-on-surface-disabled" : "text-on-surface-20",
+              )}
+            >
+              {label}
+            </div>
+          </div>
+        </div>
+      );
+    },
+    [handleSelectSlot, selectedIndex],
+  );
+
+  const renderAddExpressionSlot = (options?: { carouselItem?: boolean }) => {
+    if (!canAddMoreExpressionSlots) return null;
+    return (
+      <div
+        className={cn(
+          "shrink-0",
+          options?.carouselItem && cn(MOBILE_EXPRESSION_CAROUSEL_ITEM_CLASS, "snap-start"),
+        )}
+      >
+        <AddResourceSlot
+          variant="img9:16"
+          slotKind="thumbnail"
+          ariaLabel={THUMBNAIL_SLOT_ARIA.addExpression}
+          fileInputId={CHARACTER_EXPRESSION_FILE_INPUT_ID}
+          sizeClassName={options?.carouselItem ? MOBILE_EXPRESSION_CAROUSEL_THUMB_CLASS : undefined}
+        />
+      </div>
+    );
+  };
+
   const handleNavigateFilledSlots = useCallback((direction: "prev" | "next") => {
     if (filledSlotIndices.length === 0) return;
 
@@ -512,9 +633,9 @@ export function CharacterExpressionModal({
         .every((s) => Boolean(s.expressionLabel?.trim()) && s.expressionLabel.trim() !== "untitle")
     : slots.some((s) => Boolean(s.imageUrl));
 
-  /** 본문·우측 그리드 높이 = 좌측 편집 패널(content hug) 높이 */
+  /** 본문·우측 그리드 높이 = 좌측 편집 패널(content hug) 높이 — 데스크톱 멀티 모드만 */
   useEffect(() => {
-    if (!open || !layoutShowSlotList) {
+    if (!open || !layoutShowSlotList || !isLgUp) {
       setBodyHeight(undefined);
       return;
     }
@@ -529,7 +650,7 @@ export function CharacterExpressionModal({
     const observer = new ResizeObserver(syncHeight);
     observer.observe(el);
     return () => observer.disconnect();
-  }, [open, layoutShowSlotList, showExpressionSection, slots.length]);
+  }, [open, layoutShowSlotList, showExpressionSection, slots.length, isLgUp]);
 
   return (
     <Dialog open={open} onOpenChange={(o) => !o && handleClose()}>
@@ -557,21 +678,24 @@ export function CharacterExpressionModal({
         />
         <div className={formDialogSheetBodyWrapperClassName}>
         <div
-          className={
+          className={cn(
             layoutShowSlotList
-              ? "inline-flex w-full shrink-0 items-start justify-start overflow-hidden"
-              : "flex min-h-0 w-full min-w-0 flex-1 flex-col overflow-hidden"
+              ? "flex min-h-0 w-full flex-1 flex-col overflow-y-auto overflow-x-hidden overscroll-contain max-lg:gap-0 lg:inline-flex lg:shrink-0 lg:items-start lg:justify-start lg:overflow-hidden"
+              : "flex min-h-0 w-full min-w-0 flex-1 flex-col overflow-hidden",
+          )}
+          style={
+            layoutShowSlotList && isLgUp && bodyHeight != null ? { height: bodyHeight } : undefined
           }
-          style={layoutShowSlotList && bodyHeight != null ? { height: bodyHeight } : undefined}
         >
           {/* 왼쪽: 이미지 크롭 에디터 + 슬라이더 + 표정 입력 — 멀티 모드 height hug */}
           <div
             ref={layoutShowSlotList ? leftPanelRef : undefined}
-            className={`flex flex-col items-center justify-start gap-my-20 p-my-16 sm:p-my-20 ${
+            className={cn(
+              "flex flex-col items-center justify-start gap-my-20 p-my-16 sm:p-my-20",
               layoutShowSlotList
-                ? "h-fit w-fit shrink-0 self-start border-r border-border-10"
-                : cn("w-full min-w-0 shrink-0 self-stretch", formDialogSheetScrollBodyClassName)
-            }`}
+                ? "w-full min-w-0 shrink-0 self-stretch max-lg:border-b max-lg:border-border-10 lg:h-fit lg:w-fit lg:self-start lg:border-r lg:border-border-10"
+                : cn("w-full min-w-0 shrink-0 self-stretch", formDialogSheetScrollBodyClassName),
+            )}
           >
             {/* 정사각 스테이지 + canvas + 좌우 딤 + 9:16 가이드 프레임 */}
             <div
@@ -725,68 +849,25 @@ export function CharacterExpressionModal({
             )}
           </div>
 
-          {/* 오른쪽: 썸네일 리스트 w-24 h-40, outline-primary 선택 / outline-border 비선택 */}
+          {/* 모바일: 가로 스냅 캐러셀 / 데스크톱: 3열 그리드 */}
           {layoutShowSlotList && (
-            <div className="grid h-[678px] max-h-[678px] w-fit min-w-fit shrink-0 auto-rows-max grid-cols-3 items-start justify-start gap-x-my-8 gap-y-my-16 overflow-y-auto overflow-x-hidden p-my-20">
-              {slots
-                .filter((s) => Boolean(s.imageUrl))
-                .map((slot) => {
-                  const index = slots.indexOf(slot);
-                  const isSelected = selectedIndex === index;
-                  const label = slot.expressionLabel?.trim() || "untitle";
-                  return (
-                    <div key={slot.id} className="inline-flex flex-col justify-start items-start gap-my-4 group">
-                      <div className="relative w-[90px] h-[160px]">
-                        <button
-                          type="button"
-                          onClick={() => handleSelectSlot(index)}
-                          className={`w-[90px] h-[160px] bg-surface-disabled/0 rounded-lg flex flex-col justify-center items-center gap-my-8 overflow-hidden cursor-pointer focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary ${
-                            isSelected
-                              ? "outline outline-2 outline-offset-[-2px] outline-primary"
-                              : "outline outline-1 outline-offset-[-1px] outline-border-10/5 hover:outline-border-20"
-                          }`}
-                          aria-label={`표정 ${index + 1}: ${label}`}
-                        >
-                          <NextImage
-                            src={slot.imageUrl!}
-                            alt=""
-                            width={90}
-                            height={160}
-                            unoptimized
-                            className="w-[90px] h-[160px] object-cover object-top"
-                          />
-                        </button>
-                        <button
-                          type="button"
-                          aria-label="표정 삭제"
-                          onClick={() => setSlots((prev) => prev.filter((s) => s.id !== slot.id))}
-                          className="hidden group-hover:inline-flex absolute top-1 right-1 w-8 h-8 rounded-full bg-surface-10 text-on-surface-10 hover:bg-surface-20 items-center justify-center cursor-pointer shadow-elevation-10"
-                        >
-                          <Trash2 className="w-4 h-4 pointer-events-none" />
-                        </button>
-                      </div>
-                      <div className="w-[90px] inline-flex justify-start items-center gap-my-8 overflow-hidden">
-                        <div
-                          className={`w-[90px] justify-center text-body3_400 font-['Pretendard_JP'] truncate text-left ${
-                            label === "untitle" ? "text-on-surface-disabled" : "text-on-surface-20"
-                          }`}
-                        >
-                          {label}
-                        </div>
-                      </div>
-                    </div>
-                  );
-                })}
+            <>
+              <div className="w-full shrink-0 px-my-16 py-my-8 lg:hidden">
+                <div className="flex snap-x snap-mandatory gap-my-4 overflow-x-auto overscroll-x-contain scroll-px-my-16 [-ms-overflow-style:none] [scrollbar-width:none] [&::-webkit-scrollbar]:hidden">
+                  {filledImageSlots.map((slot) =>
+                    renderExpressionSlotItem(slot, slots.indexOf(slot), { carouselItem: true }),
+                  )}
+                  {renderAddExpressionSlot({ carouselItem: true })}
+                </div>
+              </div>
 
-              {slots.filter((s) => Boolean(s.imageUrl)).length < MAX_SLOTS && (
-                <AddResourceSlot
-                  variant="img9:16"
-                  slotKind="thumbnail"
-                  ariaLabel={THUMBNAIL_SLOT_ARIA.addExpression}
-                  fileInputId={CHARACTER_EXPRESSION_FILE_INPUT_ID}
-                />
-              )}
-            </div>
+              <div className="hidden w-fit min-w-fit shrink-0 auto-rows-max grid-cols-3 items-start justify-start gap-x-my-8 gap-y-my-16 overflow-x-hidden p-my-20 lg:grid lg:h-[678px] lg:max-h-[678px] lg:overflow-y-auto">
+                {filledImageSlots.map((slot) =>
+                  renderExpressionSlotItem(slot, slots.indexOf(slot)),
+                )}
+                {renderAddExpressionSlot()}
+              </div>
+            </>
           )}
         </div>
 

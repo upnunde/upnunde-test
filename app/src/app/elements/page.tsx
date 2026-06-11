@@ -73,7 +73,7 @@ function ChipIconPlaceholder({ size }: { size: NonNullable<ChipVariantProps["siz
     <span
       className={cn(
         "bg-current",
-        size === "l" ? "size-my-12" : "size-[10px]",
+        size === "l" ? "size-my-16" : "size-my-12",
       )}
     />
   );

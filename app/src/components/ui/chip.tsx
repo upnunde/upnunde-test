@@ -57,7 +57,7 @@ export function Chip({
             <X
               className={cn(
                 "text-current",
-                size === "l" ? "size-my-12" : "size-[10px]",
+                size === "l" ? "size-my-16" : "size-my-12",
               )}
               strokeWidth={2.25}
             />

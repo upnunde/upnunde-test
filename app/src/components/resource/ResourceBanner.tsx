@@ -3,6 +3,8 @@
 import React, { useState, useSyncExternalStore } from "react";
 import { Info } from "lucide-react";
 import { Button } from "@/components/ui/button";
+import { PAGE_CARD_SHELL_MOBILE_FLUSH_CLASS } from "@/lib/page-layout";
+import { cn } from "@/lib/utils";
 
 const STORAGE_KEY_PREFIX = "resource-mgmt-banner-dismissed";
 
@@ -44,8 +46,14 @@ export function ResourceBanner({ seriesId }: ResourceBannerProps) {
   if (!isClient || dismissed) return null;
 
   return (
-    <div className="self-stretch pt-0 inline-flex flex-col justify-start items-center gap-my-12">
-      <div className="w-full min-w-0 max-w-[1200px] mx-auto p-my-20 bg-surface-10 rounded-[4px] outline outline-1 outline-offset-[-1px] outline-border-10 inline-flex justify-center items-center gap-my-40">
+    <div className="inline-flex self-stretch flex-col items-center justify-start gap-my-12 pt-0">
+      <div
+        className={cn(
+          "mx-auto inline-flex w-full min-w-0 max-w-[1200px] items-center justify-center gap-my-40 rounded-[4px] bg-surface-10 p-my-20 outline outline-1 outline-offset-[-1px] outline-border-10",
+          PAGE_CARD_SHELL_MOBILE_FLUSH_CLASS,
+          "max-lg:outline-none",
+        )}
+      >
         <div className="flex-1 flex justify-start items-center gap-my-12 lg:gap-my-20">
           <div className="flex justify-start items-center gap-my-8">
             <div className="w-6 h-6 relative rounded overflow-hidden shrink-0">
