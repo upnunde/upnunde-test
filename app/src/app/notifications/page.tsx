@@ -414,7 +414,7 @@ export default function NotificationsPage() {
             <div className="min-w-0 flex-1">
               <PageCard
                 fullWidth
-                className="flex h-fit shrink-0 flex-col gap-0 overflow-hidden rounded-[4px] px-0 pt-my-8 pb-my-20 max-lg:rounded-none max-lg:border-0 lg:gap-my-20 lg:px-0"
+                className="flex h-fit shrink-0 flex-col gap-0 overflow-hidden rounded-[4px] px-0 pt-my-8 pb-my-20 max-lg:rounded-none max-lg:border-0 lg:px-0"
               >
                 <NotificationTabStrip
                   activeTab={activeTab}
@@ -423,22 +423,21 @@ export default function NotificationsPage() {
                     setCurrentPage(1);
                   }}
                 />
-                <div className="self-stretch px-0 pt-0 pb-0 lg:px-my-20">
-                  <NotificationList
-                    notifications={paginatedNotifications}
-                    onContactClick={handleContactClick}
-                    footer={
-                      showPagination ? (
-                        <Pagination
-                          currentPage={currentPage}
-                          totalItems={totalItems}
-                          onPageChange={setCurrentPage}
-                          pageSize={PAGE_SIZE}
-                        />
-                      ) : undefined
-                    }
-                  />
-                </div>
+                <NotificationList
+                  className="self-stretch"
+                  notifications={paginatedNotifications}
+                  onContactClick={handleContactClick}
+                  footer={
+                    showPagination ? (
+                      <Pagination
+                        currentPage={currentPage}
+                        totalItems={totalItems}
+                        onPageChange={setCurrentPage}
+                        pageSize={PAGE_SIZE}
+                      />
+                    ) : undefined
+                  }
+                />
               </PageCard>
             </div>
           </div>

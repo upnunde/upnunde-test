@@ -57,29 +57,27 @@ export function NotificationList({
 
   return (
     <div className={cn("flex h-fit w-full shrink-0 flex-col", className)}>
-      <div className="pt-0 pb-0">
-        <ul className="flex flex-col" role="list">
-          {notifications.map((notification, index) => (
-            <React.Fragment key={notification.id}>
-              {index > 0 ? (
-                <li aria-hidden className="list-none">
-                  <div className="my-0 h-px w-full bg-surface-20" role="separator" />
-                </li>
-              ) : null}
-              <li>
-                <NotificationItem
-                  notification={notification}
-                  onContactClick={onContactClick}
-                  isOpen={expandedId === notification.id}
-                  onToggle={() =>
-                    setExpandedId((prev) => (prev === notification.id ? null : notification.id))
-                  }
-                />
+      <ul className="flex flex-col" role="list">
+        {notifications.map((notification, index) => (
+          <React.Fragment key={notification.id}>
+            {index > 0 ? (
+              <li aria-hidden className="list-none">
+                <div className="my-0 h-px w-full bg-surface-20" role="separator" />
               </li>
-            </React.Fragment>
-          ))}
-        </ul>
-      </div>
+            ) : null}
+            <li>
+              <NotificationItem
+                notification={notification}
+                onContactClick={onContactClick}
+                isOpen={expandedId === notification.id}
+                onToggle={() =>
+                  setExpandedId((prev) => (prev === notification.id ? null : notification.id))
+                }
+              />
+            </li>
+          </React.Fragment>
+        ))}
+      </ul>
       {footer != null ? footer : null}
     </div>
   );

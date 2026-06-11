@@ -2,12 +2,12 @@
 
 import React, { useState } from "react";
 import { AppShell } from "@/components/layout/AppShell";
+import { PageCard } from "@/components/layout/PageCard";
 import {
-  PAGE_CARD_SHELL_MOBILE_FLUSH_CLASS,
   PAGE_CONTAINER_CLASS,
-  PAGE_INLINE_TAB_STRIP_SHELL_CLASS,
-  PAGE_SCROLL_ROOT_CLASS,
-  PAGE_SCROLL_ROOT_MOBILE_FLUSH_CLASS,
+  PAGE_GUTTER_X_CLASS,
+  PAGE_SCROLL_BOTTOM_CLASS,
+  PAGE_SCROLL_TOP_CLASS,
   PAGE_SUBHEADER_WITH_FILTER_CLASS,
 } from "@/lib/page-layout";
 import { cn } from "@/lib/utils";
@@ -55,41 +55,36 @@ export default function InquiryPage() {
           </div>
         </div>
 
-        <div className={PAGE_INLINE_TAB_STRIP_SHELL_CLASS}>
-          <div className={PAGE_CONTAINER_CLASS}>
-            <InquiryTabStrip activeTab={activeTab} onTabChange={setActiveTab} />
-          </div>
-        </div>
-
         <div
           className={cn(
-            PAGE_SCROLL_ROOT_CLASS,
-            PAGE_SCROLL_ROOT_MOBILE_FLUSH_CLASS,
-            "items-center gap-my-12 max-lg:gap-0",
+            "flex flex-col items-center max-lg:overflow-visible lg:min-h-0 lg:flex-1 lg:overflow-y-auto",
+            PAGE_SCROLL_TOP_CLASS,
+            PAGE_SCROLL_BOTTOM_CLASS,
+            PAGE_GUTTER_X_CLASS,
+            "max-lg:px-0 max-lg:pt-0",
           )}
         >
-          <div className={PAGE_CONTAINER_CLASS}>
-            <div
-              className={cn(
-                "flex h-fit w-full shrink-0 flex-col rounded-[4px] border border-border-10 bg-white max-lg:overflow-visible lg:overflow-hidden",
-                PAGE_CARD_SHELL_MOBILE_FLUSH_CLASS,
-              )}
-            >
-              {activeTab === "inquiry" ? (
-                <InquiryForm
-                  onSubmit={(e) => {
-                    e.preventDefault();
-                    // TODO: 실제 문의 접수 API 연동
-                  }}
-                  onSuccess={() =>
-                    setSnackbar({ open: true, message: "문의내용을 전달하였습니다" })
-                  }
-                />
-              ) : (
-                <div className="flex flex-col gap-my-16">
-                  <InquiryHistoryList items={inquiryHistory} />
-                </div>
-              )}
+          <div className="mx-auto flex w-full max-w-[1200px]">
+            <div className="min-w-0 flex-1">
+              <PageCard
+                fullWidth
+                className="flex h-fit shrink-0 flex-col gap-0 overflow-hidden rounded-[4px] px-0 pt-my-8 pb-my-20 max-lg:rounded-none max-lg:border-0 lg:px-0"
+              >
+                <InquiryTabStrip activeTab={activeTab} onTabChange={setActiveTab} />
+                {activeTab === "inquiry" ? (
+                  <InquiryForm
+                    onSubmit={(e) => {
+                      e.preventDefault();
+                      // TODO: 실제 문의 접수 API 연동
+                    }}
+                    onSuccess={() =>
+                      setSnackbar({ open: true, message: "문의내용을 전달하였습니다" })
+                    }
+                  />
+                ) : (
+                  <InquiryHistoryList className="self-stretch" items={inquiryHistory} />
+                )}
+              </PageCard>
             </div>
           </div>
         </div>

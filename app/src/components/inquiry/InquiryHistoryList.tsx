@@ -3,48 +3,50 @@
 import React, { useState } from "react";
 import { InquiryHistoryItem } from "./InquiryHistoryItem";
 import type { InquiryHistoryItem as InquiryHistoryItemType } from "@/types/inquiry";
+import { cn } from "@/lib/utils";
 
 export interface InquiryHistoryListProps {
   items: InquiryHistoryItemType[];
+  className?: string;
 }
 
-export function InquiryHistoryList({ items }: InquiryHistoryListProps) {
+/** 문의내역 목록 본문 — 카드 셸은 페이지 `PageCard`가 담당 */
+export function InquiryHistoryList({ items, className }: InquiryHistoryListProps) {
   const [expandedId, setExpandedId] = useState<string | null>(null);
 
   if (items.length === 0) {
     return (
-      <div className="flex flex-col gap-my-16">
+      <div className={cn("flex h-fit w-full shrink-0 flex-col", className)}>
         <div className="flex flex-col items-center justify-center py-my-64 text-center">
-          <p className="text-on-surface-30 text-body3_400">등록된 문의내역이 없습니다.</p>
-          <p className="text-on-surface-30 text-caption1_400 mt-1">문의 탭에서 새 문의를 등록해 주세요.</p>
+          <p className="text-body3_400 text-on-surface-30">등록된 문의내역이 없습니다.</p>
+          <p className="mt-1 text-caption1_400 text-on-surface-30">문의 탭에서 새 문의를 등록해 주세요.</p>
         </div>
       </div>
     );
   }
 
   return (
-    <ul className="flex flex-col" role="list">
-      {items.map((item, index) => (
-        <React.Fragment key={item.id}>
-          {index > 0 ? (
-            <li aria-hidden className="list-none">
-              <div
-                className="mx-5 my-0 h-px bg-surface-20"
-                role="separator"
+    <div className={cn("flex h-fit w-full shrink-0 flex-col", className)}>
+      <ul className="flex flex-col" role="list">
+        {items.map((item, index) => (
+          <React.Fragment key={item.id}>
+            {index > 0 ? (
+              <li aria-hidden className="list-none">
+                <div className="my-0 h-px w-full bg-surface-20" role="separator" />
+              </li>
+            ) : null}
+            <li>
+              <InquiryHistoryItem
+                item={item}
+                isOpen={expandedId === item.id}
+                onToggle={() =>
+                  setExpandedId((prev) => (prev === item.id ? null : item.id))
+                }
               />
             </li>
-          ) : null}
-          <li>
-            <InquiryHistoryItem
-              item={item}
-              isOpen={expandedId === item.id}
-              onToggle={() =>
-                setExpandedId((prev) => (prev === item.id ? null : item.id))
-              }
-            />
-          </li>
-        </React.Fragment>
-      ))}
-    </ul>
+          </React.Fragment>
+        ))}
+      </ul>
+    </div>
   );
 }
