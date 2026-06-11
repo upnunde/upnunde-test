@@ -826,7 +826,7 @@ export function CharacterExpressionModal({
               </div>
             )}
             {layoutShowSlotList && (
-              <div className="self-stretch flex justify-end gap-my-8">
+              <div className="hidden self-stretch justify-end gap-my-8 lg:flex">
                 <Button
                   type="button"
                   variant="outline"
