@@ -112,7 +112,7 @@ export function LoginPage() {
   };
 
   return (
-    <div className="relative flex min-h-dvh min-w-0 flex-col items-center justify-center bg-background-10 px-my-12 py-my-32 lg:px-my-16">
+    <div className="relative flex min-h-dvh min-w-0 flex-col items-center justify-center bg-background-10 px-my-24 py-my-32">
       {/* 중앙 콘텐츠: 열 방향 Flexbox */}
       <main className="flex w-full max-w-[400px] flex-col items-center gap-my-24">
         <div className="flex w-full flex-col items-center gap-my-12 pb-my-16">
