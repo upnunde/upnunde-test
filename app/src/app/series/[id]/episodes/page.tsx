@@ -1,9 +1,8 @@
 "use client";
 
-import React, { useState, useMemo, useCallback, useRef } from "react";
-import { APP_VIEWPORT_SHELL_CLASS } from "@/lib/mobile-viewport";
+import React, { useState, useMemo, useCallback } from "react";
 import { useRouter, usePathname } from "next/navigation";
-import Header from "@/components/Header/Header";
+import { StandaloneHeaderPage } from "@/components/layout/StandaloneHeaderPage";
 import { EpisodeList } from "@/components/episode/EpisodeList";
 import { EmptyStateBanner } from "@/components/episode/EmptyStateBanner";
 import { Pagination } from "@/components/episode/Pagination";
@@ -19,11 +18,9 @@ import {
   PAGE_MOBILE_FIXED_ACTION_BAR_SCROLL_PAD_CLASS,
   PAGE_SCROLL_COLUMN_CLASS,
   PAGE_SCROLL_COLUMN_ROOT_ATTR,
-  PAGE_SUBHEADER_CLASS,
+  PAGE_SUBHEADER_WITH_STICKY_CLASS,
 } from "@/lib/page-layout";
 import { SeriesFormStepNav } from "@/components/series/SeriesFormStepNav";
-import { useScrollHeaderCollapse } from "@/hooks/useScrollHeaderCollapse";
-import { useIsLgUp } from "@/hooks/useMediaQuery";
 import { cn } from "@/lib/utils";
 import { applyInitialScriptToEditor } from "@/lib/apply-initial-script-to-editor";
 import { createDefaultSeedBlocks, useEditorStore } from "@/store/useEditorStore";
@@ -142,13 +139,6 @@ function buildMockEpisodes(): Episode[] {
 const MOCK_EPISODES: Episode[] = buildMockEpisodes();
 
 export default function EpisodeManagementPage() {
-  const isDesktop = useIsLgUp();
-  const subHeaderRef = useRef<HTMLDivElement>(null);
-  const mobileSubHeaderCollapsed = useScrollHeaderCollapse(
-    PAGE_SCROLL_COLUMN_ROOT_ATTR,
-    !isDesktop,
-    { compensateLayout: true, headerRef: subHeaderRef },
-  );
   const router = useRouter();
   const setCurrentView = useEditorStore((s) => s.setCurrentView);
   const setBlocks = useEditorStore((s) => s.setBlocks);
@@ -320,32 +310,16 @@ export default function EpisodeManagementPage() {
   );
 
   return (
-    <div className={cn(APP_VIEWPORT_SHELL_CLASS, "bg-white")}>
-      <Header profileImageUrl={profileImageUrl} onProfileImageChange={setProfileImageUrl} />
-      <div className="flex flex-1 overflow-hidden bg-surface-20">
-        <div className="flex min-w-0 flex-1 flex-col overflow-hidden">
-          <main className="flex flex-1 flex-col overflow-hidden bg-surface-20">
-            <div
-              ref={subHeaderRef}
-              className={cn(
-                "w-full shrink-0 overflow-hidden bg-white max-lg:transition-[max-height] max-lg:duration-200 max-lg:ease-out max-lg:max-h-14",
-                mobileSubHeaderCollapsed && "max-lg:max-h-0",
-              )}
-            >
-              <div
-                className={cn(
-                  "max-lg:transition-transform max-lg:duration-200 max-lg:ease-out",
-                  mobileSubHeaderCollapsed && "max-lg:-translate-y-full",
-                )}
-              >
-                <header className={PAGE_SUBHEADER_CLASS}>
-                  <div className="flex w-full max-w-[1200px] items-center justify-start gap-my-12">
-                    <HeaderBackButton onClick={handleBack} aria-label="시리즈 목록으로" />
-                    <h1 className="text-heading2_700 text-on-surface-10">에피소드 관리</h1>
-                  </div>
-                </header>
+    <StandaloneHeaderPage
+      profileImageUrl={profileImageUrl}
+      onProfileImageChange={setProfileImageUrl}
+    >
+      <header className={PAGE_SUBHEADER_WITH_STICKY_CLASS}>
+              <div className="flex w-full max-w-[1200px] items-center justify-start gap-my-12">
+                <HeaderBackButton onClick={handleBack} aria-label="시리즈 목록으로" />
+                <h1 className="text-heading2_700 text-on-surface-10">에피소드 관리</h1>
               </div>
-            </div>
+            </header>
 
             <div
               className={cn(PAGE_SCROLL_COLUMN_CLASS, PAGE_MOBILE_FIXED_ACTION_BAR_SCROLL_PAD_CLASS)}
@@ -403,9 +377,6 @@ export default function EpisodeManagementPage() {
                 새 에피소드
               </Button>
             </SeriesFormStepNav>
-          </main>
-        </div>
-      </div>
 
       <PublishConfirmModal
         open={isPublishModalOpen}
@@ -452,6 +423,6 @@ export default function EpisodeManagementPage() {
           </div>
         </DialogContent>
       </Dialog>
-    </div>
+    </StandaloneHeaderPage>
   );
 }

@@ -5,17 +5,17 @@ import { AppShell } from "@/components/layout/AppShell";
 import {
   PAGE_CARD_SHELL_MOBILE_FLUSH_CLASS,
   PAGE_CONTAINER_CLASS,
+  PAGE_INLINE_TAB_STRIP_SHELL_CLASS,
   PAGE_SCROLL_ROOT_CLASS,
   PAGE_SCROLL_ROOT_MOBILE_FLUSH_CLASS,
-  PAGE_SUBHEADER_CLASS,
+  PAGE_SUBHEADER_WITH_FILTER_CLASS,
 } from "@/lib/page-layout";
 import { cn } from "@/lib/utils";
 import { InquiryForm } from "@/components/inquiry/InquiryForm";
 import { InquiryHistoryList } from "@/components/inquiry/InquiryHistoryList";
+import { InquiryTabStrip, type InquiryTab } from "@/components/inquiry/InquiryTabStrip";
 import { Snackbar } from "@/components/episode/Snackbar";
 import type { InquiryHistoryItem } from "@/types/inquiry";
-
-type InquiryTab = "inquiry" | "history";
 
 /** 문의내역 목업 (답변대기 1건 + 답변완료 1건) */
 const MOCK_INQUIRY_HISTORY: InquiryHistoryItem[] = [
@@ -49,88 +49,50 @@ export default function InquiryPage() {
 
   return (
     <AppShell sidebarActiveId="inquiry">
-      <main className="flex flex-1 flex-col overflow-hidden bg-surface-20">
-        <div className={PAGE_SUBHEADER_CLASS}>
+      <div className={PAGE_SUBHEADER_WITH_FILTER_CLASS}>
           <div className={`${PAGE_CONTAINER_CLASS} flex items-center justify-start gap-my-16`}>
             <h1 className="text-heading2_700 text-on-surface-10">문의</h1>
           </div>
         </div>
+
+        <div className={PAGE_INLINE_TAB_STRIP_SHELL_CLASS}>
+          <div className={PAGE_CONTAINER_CLASS}>
+            <InquiryTabStrip activeTab={activeTab} onTabChange={setActiveTab} />
+          </div>
+        </div>
+
         <div
           className={cn(
             PAGE_SCROLL_ROOT_CLASS,
             PAGE_SCROLL_ROOT_MOBILE_FLUSH_CLASS,
-            "items-center gap-my-12",
+            "items-center gap-my-12 max-lg:gap-0",
           )}
         >
           <div className={PAGE_CONTAINER_CLASS}>
-              <div
-                className={cn(
-                  "flex h-fit w-full shrink-0 flex-col overflow-hidden rounded-[4px] border border-border-10 bg-white",
-                  PAGE_CARD_SHELL_MOBILE_FLUSH_CLASS,
-                )}
-              >
-                {/* 탭 헤더 - NotificationList와 동일 구조 */}
-                <div className="self-stretch px-my-16 lg:px-my-20 pt-0 pb-0 mt-2 mb-0 border-b border-border-10 inline-flex flex-col justify-start items-start gap-my-8">
-                  <div
-                    data-size="L"
-                    data-underline="true"
-                    className="w-full inline-flex justify-start items-center gap-my-16 overflow-hidden"
-                  >
-                    <button
-                      type="button"
-                      data-height="h40"
-                      data-selectline="true"
-                      className={
-                        "h-9 flex cursor-pointer justify-center items-center gap-my-8 min-w-0 " +
-                        (activeTab === "inquiry"
-                          ? "border-b-2 border-slate-800 text-on-surface-10 text-body1_700 font-['Pretendard_JP']"
-                          : "text-on-surface-disabled text-body1_700 font-['Pretendard_JP']")
-                      }
-                      onClick={() => setActiveTab("inquiry")}
-                      data-activated={activeTab === "inquiry"}
-                    >
-                      <span className="justify-start">문의</span>
-                    </button>
-                    <button
-                      type="button"
-                      data-height="h40"
-                      data-selectline="true"
-                      className={
-                        "h-9 flex cursor-pointer justify-center items-center gap-my-8 min-w-0 " +
-                        (activeTab === "history"
-                          ? "border-b-2 border-slate-800 text-on-surface-10 text-body1_700 font-['Pretendard_JP']"
-                          : "text-on-surface-disabled text-body1_700 font-['Pretendard_JP']")
-                      }
-                      onClick={() => setActiveTab("history")}
-                      data-activated={activeTab === "history"}
-                    >
-                      <span className="justify-start">문의내역</span>
-                    </button>
-                  </div>
+            <div
+              className={cn(
+                "flex h-fit w-full shrink-0 flex-col rounded-[4px] border border-border-10 bg-white max-lg:overflow-visible lg:overflow-hidden",
+                PAGE_CARD_SHELL_MOBILE_FLUSH_CLASS,
+              )}
+            >
+              {activeTab === "inquiry" ? (
+                <InquiryForm
+                  onSubmit={(e) => {
+                    e.preventDefault();
+                    // TODO: 실제 문의 접수 API 연동
+                  }}
+                  onSuccess={() =>
+                    setSnackbar({ open: true, message: "문의내용을 전달하였습니다" })
+                  }
+                />
+              ) : (
+                <div className="flex flex-col gap-my-16">
+                  <InquiryHistoryList items={inquiryHistory} />
                 </div>
-
-                {/* 콘텐츠 영역 */}
-                <div className="pt-0 pb-0">
-                  {activeTab === "inquiry" ? (
-                    <InquiryForm
-                      onSubmit={(e) => {
-                        e.preventDefault();
-                        // TODO: 실제 문의 접수 API 연동
-                      }}
-                      onSuccess={() =>
-                        setSnackbar({ open: true, message: "문의내용을 전달하였습니다" })
-                      }
-                    />
-                  ) : (
-                    <div className="flex flex-col gap-my-16">
-                      <InquiryHistoryList items={inquiryHistory} />
-                    </div>
-                  )}
-                </div>
-              </div>
+              )}
+            </div>
           </div>
         </div>
-      </main>
       <Snackbar
         open={snackbar.open}
         message={snackbar.message}

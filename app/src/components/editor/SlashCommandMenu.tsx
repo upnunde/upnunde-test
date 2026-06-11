@@ -226,7 +226,7 @@ export function SlashCommandMenu({
         />
         <div
           className={cn(
-            "fixed inset-x-0 bottom-0 z-50 max-h-[min(70vh,520px)] overflow-y-auto rounded-t-[4px] border-t border-border-10 bg-white shadow-elevation-40",
+            "fixed inset-x-0 z-50 max-h-[min(70vh,520px)] overflow-y-auto rounded-t-[4px] border-t border-border-10 bg-white shadow-elevation-40",
             MOBILE_BOTTOM_SHEET_PAD_CLASS,
           )}
           role="listbox"

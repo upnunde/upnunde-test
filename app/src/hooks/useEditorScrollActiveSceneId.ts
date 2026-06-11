@@ -6,6 +6,7 @@ import {
   EDITOR_SCROLL_ROOT_ATTR,
   resolveActiveSceneBlockIdFromScroll,
 } from "@/lib/editor-scroll";
+import { isMobileDocumentScrollMode } from "@/lib/mobile-document-scroll";
 
 function findEditorScrollRoot(): HTMLElement | null {
   const root = document.querySelector(`[${EDITOR_SCROLL_ROOT_ATTR}]`);
@@ -49,7 +50,12 @@ export function useEditorScrollActiveSceneId(sceneIds: string[], enabled = true)
       update();
 
       const onLayoutChange = () => update();
-      root.addEventListener("scroll", onLayoutChange, { passive: true });
+      const useDocumentScroll = isMobileDocumentScrollMode();
+      if (useDocumentScroll) {
+        window.addEventListener("scroll", onLayoutChange, { passive: true });
+      } else {
+        root.addEventListener("scroll", onLayoutChange, { passive: true });
+      }
       window.addEventListener("resize", onLayoutChange);
 
       const viewport = window.visualViewport;
@@ -66,7 +72,11 @@ export function useEditorScrollActiveSceneId(sceneIds: string[], enabled = true)
       }
 
       cleanup = () => {
-        root.removeEventListener("scroll", onLayoutChange);
+        if (useDocumentScroll) {
+          window.removeEventListener("scroll", onLayoutChange);
+        } else {
+          root.removeEventListener("scroll", onLayoutChange);
+        }
         window.removeEventListener("resize", onLayoutChange);
         viewport?.removeEventListener("resize", onLayoutChange);
         viewport?.removeEventListener("scroll", onLayoutChange);

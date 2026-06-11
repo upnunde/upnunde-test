@@ -3,7 +3,8 @@
 import { useState } from "react";
 import Header from "@/components/Header/Header";
 import AppSidebar, { type SidebarItemId } from "@/components/AppSidebar/AppSidebar";
-import { APP_VIEWPORT_SHELL_CLASS } from "@/lib/mobile-viewport";
+import { APP_BROWSER_BG_CLASS, APP_PAGE_ROOT_CLASS } from "@/lib/mobile-viewport";
+import { APP_MAIN_CLASS, APP_SHELL_BODY_ROW_CLASS } from "@/lib/page-layout";
 import { cn } from "@/lib/utils";
 
 export interface AppShellProps {
@@ -18,13 +19,13 @@ export function AppShell({ sidebarActiveId, children, className }: AppShellProps
   const [sidebarOpen, setSidebarOpen] = useState(false);
 
   return (
-    <div className={cn(APP_VIEWPORT_SHELL_CLASS, "bg-white", className)}>
+    <div className={cn(APP_PAGE_ROOT_CLASS, APP_BROWSER_BG_CLASS, className)}>
       <Header
         profileImageUrl={profileImageUrl}
         onProfileImageChange={setProfileImageUrl}
         onMenuClick={() => setSidebarOpen(true)}
       />
-      <div className="relative flex flex-1 overflow-hidden bg-surface-20">
+      <div className={cn(APP_SHELL_BODY_ROW_CLASS, "bg-surface-20")}>
         {sidebarOpen ? (
           <button
             type="button"
@@ -38,7 +39,7 @@ export function AppShell({ sidebarActiveId, children, className }: AppShellProps
           mobileOpen={sidebarOpen}
           onNavigate={() => setSidebarOpen(false)}
         />
-        <div className="flex min-w-0 flex-1 flex-col overflow-hidden">{children}</div>
+        <main className={APP_MAIN_CLASS}>{children}</main>
       </div>
     </div>
   );

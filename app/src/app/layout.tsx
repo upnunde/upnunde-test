@@ -4,6 +4,8 @@ import "./globals.css";
 import { MobileViewportSync } from "@/components/MobileViewportSync";
 import { Toaster } from "@/components/ui/toaster";
 import DevConsoleFilter from "@/components/DevConsoleFilter";
+import { APP_BROWSER_BG_CLASS, APP_VIEWPORT_SHELL_CLASS } from "@/lib/mobile-viewport";
+import { cn } from "@/lib/utils";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -24,6 +26,7 @@ export const viewport: Viewport = {
   width: "device-width",
   initialScale: 1,
   viewportFit: "cover",
+  themeColor: "#F8F8FC",
   /** 키보드가 visual viewport만 줄여 화면이 눌리는 동작 완화 (Chrome 등) */
   interactiveWidget: "resizes-content",
 };
@@ -40,7 +43,7 @@ export default function RootLayout({
       >
         <DevConsoleFilter />
         <MobileViewportSync />
-        {children}
+        <div className={cn(APP_VIEWPORT_SHELL_CLASS, APP_BROWSER_BG_CLASS)}>{children}</div>
         <Toaster />
       </body>
     </html>

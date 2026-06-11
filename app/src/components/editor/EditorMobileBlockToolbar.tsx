@@ -7,6 +7,7 @@ import { SlashCommandMenu, type SlashSelectPayload } from "@/components/editor/S
 import { Button } from "@/components/ui/button";
 import {
   EDITOR_MOBILE_DOCKED_TOOLBAR_SHELL_CLASS,
+  EDITOR_MOBILE_KEYBOARD_TOOLBAR_SHELL_CLASS,
   isEditorMobileBlockToolbarVisible,
 } from "@/components/editor/editor-mobile-floating-layout";
 import { useVisualKeyboardInset } from "@/hooks/useVisualKeyboardInset";
@@ -38,7 +39,7 @@ export function EditorMobileBlockToolbar({ className }: { className?: string }) 
   const undo = useEditorStore((s) => s.undo);
 
   const { toast } = useToast();
-  const { keyboardInset, isKeyboardOpen } = useVisualKeyboardInset();
+  const { isKeyboardOpen } = useVisualKeyboardInset();
   const [menuOpen, setMenuOpen] = useState(false);
   const mounted = useClientMounted();
 
@@ -167,24 +168,25 @@ export function EditorMobileBlockToolbar({ className }: { className?: string }) 
   const toolbarLayer =
     mounted && showToolbar && typeof document !== "undefined"
       ? createPortal(
-          !isKeyboardOpen ? (
+          <div
+            className={cn(
+              isKeyboardOpen
+                ? EDITOR_MOBILE_KEYBOARD_TOOLBAR_SHELL_CLASS
+                : EDITOR_MOBILE_DOCKED_TOOLBAR_SHELL_CLASS,
+              className,
+            )}
+            role="toolbar"
+            aria-label="블록 편집"
+          >
             <div
-              className={cn(EDITOR_MOBILE_DOCKED_TOOLBAR_SHELL_CLASS, className)}
-              role="toolbar"
-              aria-label="블록 편집"
+              className={cn(
+                "flex items-center gap-my-8",
+                isKeyboardOpen && "justify-between",
+              )}
             >
-              <div className="flex items-center gap-my-8">{toolbarButtons}</div>
+              {toolbarButtons}
             </div>
-          ) : (
-            <div
-              className="fixed inset-x-0 z-40 border-t border-border-10 bg-white px-my-12 py-my-8 lg:hidden"
-              style={{ bottom: keyboardInset }}
-              role="toolbar"
-              aria-label="블록 편집"
-            >
-              <div className="flex items-center justify-between gap-my-8">{toolbarButtons}</div>
-            </div>
-          ),
+          </div>,
           document.body,
         )
       : null;

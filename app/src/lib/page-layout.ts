@@ -27,9 +27,36 @@ export const PAGE_SCROLL_BOTTOM_CLASS = "pb-my-80";
 /** 스크롤 영역 상단 여백 — 20px (모든 뷰포트 공통) */
 export const PAGE_SCROLL_TOP_CLASS = "pt-my-20";
 
+/**
+ * 모바일: 문서(body) 스크롤 — 콘텐츠 높이만큼 부모가 늘어나야 sticky containing block이 유효함.
+ * (flex-1+min-h-0이면 main 높이가 뷰포트에 고정되어 sticky가 즉시 풀림)
+ * 데스크톱: flex-1 내부 스크롤
+ */
+const PAGE_SCROLL_MOBILE_FILL_CLASS = "";
+const PAGE_SCROLL_LG_TRAP_CLASS = "lg:min-h-0 lg:flex-1 lg:overflow-y-auto";
+
+/**
+ * 앱 본문 유일 main — AppShell·StandaloneHeaderPage에서 한 번만 사용.
+ * 모바일: 콘텐츠 높이만큼 확장(문서 스크롤·sticky) / lg: flex-1 내부 스크롤
+ */
+export const APP_MAIN_CLASS =
+  "flex min-w-0 w-full flex-col bg-surface-20 max-lg:overflow-visible lg:min-h-0 lg:flex-1 lg:overflow-hidden";
+
+/** AppShell·시리즈 페이지 본문 패널 */
+export const APP_MAIN_PANEL_CLASS =
+  "flex w-full flex-col lg:min-h-0 lg:flex-1 lg:overflow-hidden";
+
+/**
+ * AppShell 사이드바+본문 행
+ * - 모바일: flex-1/min-h-0 없음 · overflow-visible (sticky 조상 트랩 금지, `display:contents` 사용 금지)
+ * - 데스크톱: flex-row + flex-1 내부 스크롤
+ */
+export const APP_SHELL_BODY_ROW_CLASS =
+  "relative flex w-full min-w-0 flex-col max-lg:overflow-visible lg:min-h-0 lg:flex-1 lg:flex-row lg:overflow-hidden";
+
 /** AppShell main 스크롤 루트 — 상단 20px · 가로 인셋 · 하단 80px */
 export const PAGE_SCROLL_ROOT_CLASS =
-  `flex min-h-0 flex-1 flex-col overflow-y-auto pt-my-20 ${PAGE_SCROLL_GUTTER_CLASS} ${PAGE_SCROLL_BOTTOM_CLASS}`;
+  `flex flex-col max-lg:overflow-visible ${PAGE_SCROLL_MOBILE_FILL_CLASS} ${PAGE_SCROLL_LG_TRAP_CLASS} pt-my-20 ${PAGE_SCROLL_GUTTER_CLASS} ${PAGE_SCROLL_BOTTOM_CLASS}`;
 
 /** 모바일 풀블리드 스크롤 루트 — 외곽 패딩만 제거(콘텐츠 gap은 페이지에서 유지) */
 export const PAGE_SCROLL_ROOT_MOBILE_FLUSH_CLASS = "max-lg:pt-0 max-lg:px-0 max-lg:pb-0";
@@ -39,29 +66,59 @@ export const PAGE_CARD_SHELL_MOBILE_FLUSH_CLASS = "max-lg:rounded-none max-lg:bo
 
 /** AppShell main 스크롤 루트 — 상단 여백 · 가로 인셋 · 하단 80px */
 export const PAGE_SCROLL_ROOT_TOP_CLASS =
-  `flex flex-1 flex-col overflow-y-auto ${PAGE_SCROLL_TOP_CLASS} ${PAGE_SCROLL_GUTTER_CLASS} ${PAGE_SCROLL_BOTTOM_CLASS}`;
+  `flex flex-col max-lg:overflow-visible lg:flex-1 lg:overflow-y-auto ${PAGE_SCROLL_TOP_CLASS} ${PAGE_SCROLL_GUTTER_CLASS} ${PAGE_SCROLL_BOTTOM_CLASS}`;
+
+/** @deprecated 서브헤더 sticky 미사용 */
+export const PAGE_SUBHEADER_STICKY_CLASS = "";
+
+/** 모바일 fixed 글로벌 헤더(h-14) 바로 아래 sticky — 필터·탭 띠 전용 */
+export const PAGE_FILTER_HEADER_STICKY_CLASS =
+  "max-lg:sticky max-lg:top-14 max-lg:z-30";
 
 /** 서브 페이지 상단 바(뒤로가기·제목) — 모바일 56px · lg+ 64px */
 export const PAGE_SUBHEADER_CLASS =
   `flex h-my-56 w-full shrink-0 items-center justify-center border-b border-border-10 bg-white ${PAGE_GUTTER_X_CLASS} py-0 lg:h-my-64`;
 
-/** 상단 필터 띠(분석 ScopeFilterBar·내 작품 범주 칩 등) */
-export const PAGE_FILTER_HEADER_CLASS =
-  `flex w-full shrink-0 flex-col items-center border-b border-border-10 bg-surface-10 ${PAGE_GUTTER_X_CLASS} py-my-12`;
+/** 필터 띠와 함께 쓰는 서브헤더 */
+export const PAGE_SUBHEADER_WITH_FILTER_CLASS = PAGE_SUBHEADER_CLASS;
+
+/** @deprecated `PAGE_SUBHEADER_CLASS`와 동일 — 서브헤더 sticky 미사용 */
+export const PAGE_SUBHEADER_WITH_STICKY_CLASS = PAGE_SUBHEADER_CLASS;
+
+/**
+ * 상단 필터 띠 셸 — 스크롤 본문과 형제로 배치.
+ * 모바일 글로벌 헤더 아래 sticky.
+ */
+export const PAGE_FILTER_HEADER_SHELL_CLASS = [
+  "flex w-full shrink-0 flex-col items-center border-b border-border-10 bg-surface-10",
+  PAGE_GUTTER_X_CLASS,
+  "py-my-12",
+  PAGE_FILTER_HEADER_STICKY_CLASS,
+].join(" ");
+
+/** @deprecated `PAGE_FILTER_HEADER_SHELL_CLASS` 사용 */
+export const PAGE_FILTER_HEADER_CLASS = PAGE_FILTER_HEADER_SHELL_CLASS;
 
 /** 필터 띠 내부 max-width 컨테이너 */
 export const PAGE_FILTER_HEADER_INNER_CLASS = "w-full min-w-0 max-w-[1200px]";
 
+/** 인라인 탭 띠 셸(알림·문의 등) — 모바일 헤더 아래 sticky, 하단 구분선 유지 */
+export const PAGE_INLINE_TAB_STRIP_SHELL_CLASS = [
+  "w-full shrink-0 border-b border-border-10 bg-white",
+  PAGE_GUTTER_X_CLASS,
+  PAGE_FILTER_HEADER_STICKY_CLASS,
+].join(" ");
+
 /** 스크롤 + 중앙 정렬 레이아웃(리소스 상세·목록 등) */
 export const PAGE_SCROLL_COLUMN_CLASS =
-  `flex-1 overflow-y-auto flex flex-col items-center ${PAGE_SCROLL_TOP_CLASS} ${PAGE_GUTTER_GAP_CLASS} ${PAGE_GUTTER_X_CLASS} ${PAGE_SCROLL_BOTTOM_CLASS}`;
+  `flex flex-col items-center max-lg:overflow-visible ${PAGE_SCROLL_MOBILE_FILL_CLASS} lg:flex-1 lg:overflow-y-auto ${PAGE_SCROLL_TOP_CLASS} ${PAGE_GUTTER_GAP_CLASS} ${PAGE_GUTTER_X_CLASS} ${PAGE_SCROLL_BOTTOM_CLASS}`;
 
 /** PAGE_SCROLL_COLUMN 스크롤 루트 식별자 — 모바일 헤더 접힘 훅용 */
 export const PAGE_SCROLL_COLUMN_ROOT_ATTR = "data-page-scroll-column-root";
 
 /** 모바일 하단 고정 액션 바(36px 버튼 + py-12×2) 위 스크롤 하단 여백 */
 export const PAGE_MOBILE_FIXED_ACTION_BAR_SCROLL_PAD_CLASS =
-  "max-lg:pb-[calc(var(--spacing-my-80)+var(--spacing-my-12)+var(--spacing-my-36)+var(--spacing-my-12)+env(safe-area-inset-bottom,0px)+var(--app-vv-bottom,0px))]";
+  "max-lg:pb-[calc(var(--spacing-my-80)+var(--spacing-my-12)+var(--spacing-my-36)+var(--spacing-my-12)+env(safe-area-inset-bottom,0px))]";
 
 /** 본문·카드·서브헤더 내부 — 모바일 가로 스크롤 방지 (min-w-0) */
 export const PAGE_CONTAINER_CLASS = "w-full min-w-0 max-w-[1200px] mx-auto";
@@ -72,3 +129,7 @@ export const PAGE_STACK_CLASS =
 
 /** 넓은 폼·모달 (에피소드 폼 등) */
 export const PAGE_MODAL_WIDE_CLASS = "w-[min(92vw,760px)] max-w-[760px] min-w-0";
+
+/** 에디터·에피소드 상세 본문 — 모바일 문서 스크롤 / lg 내부 스크롤 */
+export const EDITOR_PAGE_SCROLL_CLASS =
+  "relative z-0 flex flex-col overscroll-none max-lg:overflow-visible lg:min-h-0 lg:flex-1 lg:overflow-y-auto";

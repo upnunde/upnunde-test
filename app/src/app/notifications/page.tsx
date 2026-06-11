@@ -5,12 +5,18 @@ import { useRouter } from "next/navigation";
 import { AppShell } from "@/components/layout/AppShell";
 import {
   PAGE_CONTAINER_CLASS,
+  PAGE_INLINE_TAB_STRIP_SHELL_CLASS,
   PAGE_SCROLL_ROOT_CLASS,
   PAGE_SCROLL_ROOT_MOBILE_FLUSH_CLASS,
-  PAGE_SUBHEADER_CLASS,
+  PAGE_SUBHEADER_WITH_FILTER_CLASS,
 } from "@/lib/page-layout";
 import { cn } from "@/lib/utils";
-import { NotificationList } from "@/components/notification/NotificationList";
+import {
+  filterNotificationsByTab,
+  NotificationList,
+  NotificationTabStrip,
+  type NotificationTab,
+} from "@/components/notification/NotificationList";
 import { Pagination } from "@/components/episode/Pagination";
 import type { NotificationData } from "@/types/notification";
 
@@ -360,12 +366,17 @@ export default function NotificationsPage() {
   const router = useRouter();
   const [notifications] = useState<NotificationData[]>(MOCK_NOTIFICATIONS);
   const [currentPage, setCurrentPage] = useState(1);
+  const [activeTab, setActiveTab] = useState<NotificationTab>("all");
 
-  const totalItems = notifications.length;
+  const filteredNotifications = useMemo(
+    () => filterNotificationsByTab(notifications, activeTab),
+    [activeTab, notifications],
+  );
+  const totalItems = filteredNotifications.length;
   const paginatedNotifications = useMemo(() => {
     const start = (currentPage - 1) * PAGE_SIZE;
-    return notifications.slice(start, start + PAGE_SIZE);
-  }, [notifications, currentPage]);
+    return filteredNotifications.slice(start, start + PAGE_SIZE);
+  }, [filteredNotifications, currentPage]);
   const showPagination = totalItems > PAGE_SIZE;
 
   const handleContactClick = useCallback(
@@ -377,10 +388,21 @@ export default function NotificationsPage() {
 
   return (
     <AppShell sidebarActiveId="notification">
-      <main className="flex flex-1 flex-col overflow-hidden bg-surface-20">
-        <div className={PAGE_SUBHEADER_CLASS}>
+      <div className={PAGE_SUBHEADER_WITH_FILTER_CLASS}>
           <div className={`${PAGE_CONTAINER_CLASS} flex items-center justify-start gap-my-16`}>
             <h1 className="text-heading2_700 text-on-surface-10">알림</h1>
+          </div>
+        </div>
+
+        <div className={PAGE_INLINE_TAB_STRIP_SHELL_CLASS}>
+          <div className={PAGE_CONTAINER_CLASS}>
+            <NotificationTabStrip
+              activeTab={activeTab}
+              onTabChange={(tab) => {
+                setActiveTab(tab);
+                setCurrentPage(1);
+              }}
+            />
           </div>
         </div>
 
@@ -393,22 +415,21 @@ export default function NotificationsPage() {
         >
           <div className={PAGE_CONTAINER_CLASS}>
             <NotificationList
-                notifications={paginatedNotifications}
-                onContactClick={handleContactClick}
-                footer={
-                  showPagination ? (
-                    <Pagination
-                      currentPage={currentPage}
-                      totalItems={totalItems}
-                      onPageChange={setCurrentPage}
-                      pageSize={PAGE_SIZE}
-                    />
-                  ) : undefined
-                }
+              notifications={paginatedNotifications}
+              onContactClick={handleContactClick}
+              footer={
+                showPagination ? (
+                  <Pagination
+                    currentPage={currentPage}
+                    totalItems={totalItems}
+                    onPageChange={setCurrentPage}
+                    pageSize={PAGE_SIZE}
+                  />
+                ) : undefined
+              }
             />
           </div>
         </div>
-      </main>
     </AppShell>
   );
 }

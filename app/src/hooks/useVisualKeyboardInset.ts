@@ -1,7 +1,10 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import { KEYBOARD_OPEN_THRESHOLD_PX } from "@/lib/visual-viewport-chrome";
+import {
+  KEYBOARD_OPEN_THRESHOLD_PX,
+  measureVisualViewportBottomInset,
+} from "@/lib/visual-viewport-chrome";
 
 /**
  * visualViewport 기준 키보드(또는 IME)로 가려진 하단 inset.
@@ -22,7 +25,7 @@ export function useVisualKeyboardInset(threshold = KEYBOARD_OPEN_THRESHOLD_PX) {
         return;
       }
 
-      const inset = Math.max(0, Math.round(window.innerHeight - vv.offsetTop - vv.height));
+      const inset = measureVisualViewportBottomInset(vv);
       setKeyboardInset(inset);
       setIsKeyboardOpen(inset >= threshold);
     };
@@ -33,11 +36,15 @@ export function useVisualKeyboardInset(threshold = KEYBOARD_OPEN_THRESHOLD_PX) {
     vv?.addEventListener("resize", update);
     vv?.addEventListener("scroll", update);
     window.addEventListener("resize", update);
+    window.addEventListener("scroll", update, { passive: true });
+    window.addEventListener("orientationchange", update);
 
     return () => {
       vv?.removeEventListener("resize", update);
       vv?.removeEventListener("scroll", update);
       window.removeEventListener("resize", update);
+      window.removeEventListener("scroll", update);
+      window.removeEventListener("orientationchange", update);
     };
   }, [threshold]);
 

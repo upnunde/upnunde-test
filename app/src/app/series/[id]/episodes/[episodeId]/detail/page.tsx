@@ -12,6 +12,7 @@ import { EditorSceneTabStrip } from "@/components/editor/EditorSceneTabStrip";
 import { EditorMobilePreviewPlayer } from "@/components/editor/EditorMobilePreviewPlayer";
 import { EditorMobileFloatingActions } from "@/components/editor/EditorMobileFloatingActions";
 import {
+  EDITOR_MOBILE_PREVIEW_SHELL_CLASS,
   editorMobilePreviewChromeHiddenClass,
   type EditorMobilePanel,
 } from "@/components/editor/editor-mobile-floating-layout";
@@ -21,8 +22,16 @@ import { useEditorStore, hydrateSeriesPersonaFromSession } from "@/store/useEdit
 import { useEditorMobileSceneHeaderCollapse } from "@/hooks/useEditorMobileSceneHeaderCollapse";
 import { useSceneClickHandler } from "@/hooks/useSceneClickHandler";
 import { useIsLgUp } from "@/hooks/useMediaQuery";
-import { EDITOR_SCENE_HEADER_ID, EDITOR_SCROLL_ROOT_ATTR } from "@/lib/editor-scroll";
-import { APP_VIEWPORT_SHELL_CLASS } from "@/lib/mobile-viewport";
+import {
+  EDITOR_MOBILE_SUB_HEADER_INNER_CLASS,
+  EDITOR_SCENE_HEADER_ID,
+  EDITOR_SCROLL_ROOT_ATTR,
+  editorMobileSceneHeaderShellClass,
+  editorMobileSubHeaderHideVarStyle,
+  editorMobileSubHeaderShellClass,
+} from "@/lib/editor-scroll";
+import { APP_BROWSER_BG_CLASS, APP_PAGE_ROOT_CLASS } from "@/lib/mobile-viewport";
+import { APP_MAIN_PANEL_CLASS, EDITOR_PAGE_SCROLL_CLASS } from "@/lib/page-layout";
 import { INITIAL_SCRIPT } from "@/lib/initialScript";
 import { cn } from "@/lib/utils";
 
@@ -49,7 +58,7 @@ export default function EpisodeDetailPage() {
   const [isPromptModalOpen, setIsPromptModalOpen] = useState(false);
   const [mobilePanel, setMobilePanel] = useState<EditorMobilePanel>("edit");
   const handleSceneClick = useSceneClickHandler();
-  const mobileSubHeaderCollapsed = useEditorMobileSceneHeaderCollapse(
+  const mobileSubHeaderHide = useEditorMobileSceneHeaderCollapse(
     !isDesktop && mobilePanel === "edit",
   );
 
@@ -67,18 +76,18 @@ export default function EpisodeDetailPage() {
   };
 
   const scrollClassName = cn(
-    "relative z-0 min-h-0 flex-1 overflow-y-auto overscroll-none",
+    EDITOR_PAGE_SCROLL_CLASS,
     isDesktop ? "px-0 py-my-40" : "pb-my-8 pl-my-16 pr-my-12 pt-0",
   );
 
   const previewChromeHidden = editorMobilePreviewChromeHiddenClass(isDesktop, mobilePanel);
 
   return (
-    <div className={cn(APP_VIEWPORT_SHELL_CLASS, "bg-white")}>
+    <div className={cn(APP_PAGE_ROOT_CLASS, APP_BROWSER_BG_CLASS)}>
       <div className={cn(previewChromeHidden)}>
         <Header profileImageUrl={profileImageUrl} onProfileImageChange={setProfileImageUrl} />
       </div>
-      <div className="relative flex min-h-0 flex-1 overflow-hidden">
+      <div className={cn("relative flex", APP_MAIN_PANEL_CLASS)}>
         {isDesktop ? (
           <aside
             className={
@@ -96,97 +105,97 @@ export default function EpisodeDetailPage() {
           </aside>
         ) : null}
 
-        <div className="flex min-h-0 min-w-0 flex-1 flex-col overflow-hidden">
-          <main className="flex min-h-0 min-w-0 flex-1 flex-col overflow-hidden">
-            <div className={cn("w-full shrink-0 border-b border-border-10 bg-white", previewChromeHidden)}>
+        <main
+          className={cn("flex min-w-0 flex-col", APP_MAIN_PANEL_CLASS)}
+          style={
+            !isDesktop && mobilePanel === "edit"
+              ? editorMobileSubHeaderHideVarStyle(mobileSubHeaderHide.hiddenPx)
+              : undefined
+          }
+        >
+          <div
+            className={cn(
+              editorMobileSubHeaderShellClass(mobileSubHeaderHide.isFullyHidden),
+              previewChromeHidden,
+            )}
+          >
+            <div className={EDITOR_MOBILE_SUB_HEADER_INNER_CLASS}>
+              <header className="flex h-my-56 shrink-0 items-center justify-start py-0 pl-my-16 pr-my-12 lg:h-my-64 lg:px-my-24">
+                <div className="flex w-full min-w-0 items-center justify-between gap-my-12">
+                  <div className="flex min-w-0 items-center justify-start gap-my-8 lg:gap-my-12">
+                    <HeaderBackButton onClick={handleBack} aria-label="에피소드 목록으로" />
+                    <h1 className="min-w-0 truncate text-body1_700 text-on-surface-10 lg:text-heading2_700">
+                      {episodeHeaderTitle}
+                    </h1>
+                  </div>
+                  <Button
+                    type="button"
+                    variant="outline"
+                    size="icon"
+                    onClick={() => setIsPromptModalOpen(true)}
+                    className="h-8 w-8 shrink-0 rounded-full shadow-none disabled:border-border-20"
+                    aria-label="에피소드 기준 프롬프트 보기"
+                  >
+                    <FileText className="h-4 w-4 text-on-surface-30" aria-hidden />
+                  </Button>
+                </div>
+              </header>
+            </div>
+          </div>
+
+          {!isDesktop && mobilePanel === "edit" ? (
+            <div
+              id={EDITOR_SCENE_HEADER_ID}
+              className={cn(editorMobileSceneHeaderShellClass(), "max-lg:block")}
+            >
+              <EditorSceneTabStrip
+                onSceneClick={handleSceneClick}
+                className="w-full pl-my-16 pr-my-12"
+              />
+            </div>
+          ) : null}
+
+          {isDesktop ? (
+            <div className="flex min-h-0 w-full flex-1 flex-col overflow-hidden bg-white">
+              <div className={scrollClassName} {...{ [EDITOR_SCROLL_ROOT_ATTR]: "" }}>
+                <EditorBodyReadOnly />
+              </div>
+            </div>
+          ) : (
+            <>
               <div
                 className={cn(
-                  "overflow-hidden max-lg:transition-[max-height] max-lg:duration-200 max-lg:ease-out max-lg:max-h-14",
-                  mobileSubHeaderCollapsed && "max-lg:max-h-0",
+                  "flex flex-col bg-white",
+                  APP_MAIN_PANEL_CLASS,
+                  mobilePanel !== "edit" && "hidden",
                 )}
               >
-                <div
-                  className={cn(
-                    "max-lg:transition-transform max-lg:duration-200 max-lg:ease-out",
-                    mobileSubHeaderCollapsed && "max-lg:-translate-y-full",
-                  )}
-                >
-                  <header className="flex h-my-56 shrink-0 items-center justify-start py-0 pl-my-16 pr-my-12 lg:h-my-64 lg:px-my-24">
-                    <div className="flex w-full min-w-0 items-center justify-between gap-my-12">
-                      <div className="flex min-w-0 items-center justify-start gap-my-8 lg:gap-my-12">
-                        <HeaderBackButton onClick={handleBack} aria-label="에피소드 목록으로" />
-                        <h1 className="min-w-0 truncate text-body1_700 text-on-surface-10 lg:text-heading2_700">
-                          {episodeHeaderTitle}
-                        </h1>
-                      </div>
-                      <Button
-                        type="button"
-                        variant="outline"
-                        size="icon"
-                        onClick={() => setIsPromptModalOpen(true)}
-                        className="h-8 w-8 shrink-0 rounded-full shadow-none disabled:border-border-20"
-                        aria-label="에피소드 기준 프롬프트 보기"
-                      >
-                        <FileText className="h-4 w-4 text-on-surface-30" aria-hidden />
-                      </Button>
-                    </div>
-                  </header>
-                </div>
-              </div>
-
-              {!isDesktop && mobilePanel === "edit" ? (
-                <div
-                  id={EDITOR_SCENE_HEADER_ID}
-                  className="relative w-full shrink-0 border-t border-border-10 bg-white"
-                >
-                  <EditorSceneTabStrip
-                    onSceneClick={handleSceneClick}
-                    className="w-full pl-my-16 pr-my-12"
-                  />
-                </div>
-              ) : null}
-            </div>
-
-            {isDesktop ? (
-              <div className="flex min-h-0 w-full flex-1 flex-col overflow-hidden bg-white">
                 <div className={scrollClassName} {...{ [EDITOR_SCROLL_ROOT_ATTR]: "" }}>
                   <EditorBodyReadOnly />
                 </div>
               </div>
-            ) : (
-              <>
-                <div
-                  className={cn(
-                    "flex min-h-0 flex-1 flex-col overflow-hidden bg-white",
-                    mobilePanel !== "edit" && "hidden",
-                  )}
-                >
-                  <div className={scrollClassName} {...{ [EDITOR_SCROLL_ROOT_ATTR]: "" }}>
-                    <EditorBodyReadOnly />
-                  </div>
-                </div>
 
-                <div
-                  className={cn(
-                    "flex min-h-0 flex-1 flex-col overflow-hidden bg-black",
-                    mobilePanel !== "preview" && "hidden",
-                  )}
-                >
-                  <EditorMobilePreviewPlayer isActive={mobilePanel === "preview"} />
-                </div>
-              </>
-            )}
+              <div
+                className={cn(
+                  EDITOR_MOBILE_PREVIEW_SHELL_CLASS,
+                  APP_MAIN_PANEL_CLASS,
+                  mobilePanel !== "preview" && "hidden",
+                )}
+              >
+                <EditorMobilePreviewPlayer isActive={mobilePanel === "preview"} />
+              </div>
+            </>
+          )}
 
-            {!isDesktop ? (
-              <EditorMobileFloatingActions
-                active={mobilePanel}
-                onChange={setMobilePanel}
-                editTargetLabel="원고"
-                hasBlockToolbar={false}
-              />
-            ) : null}
-          </main>
-        </div>
+          {!isDesktop ? (
+            <EditorMobileFloatingActions
+              active={mobilePanel}
+              onChange={setMobilePanel}
+              editTargetLabel="원고"
+              hasBlockToolbar={false}
+            />
+          ) : null}
+        </main>
 
         <div
           id="profile-modal-portal"

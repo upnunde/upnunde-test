@@ -13,7 +13,7 @@ import { MediaCard } from "./cards/MediaCard";
 import { AddResourceSlot } from "./cards/AddResourceSlot";
 import { BgmSection } from "./bgm/BgmSection";
 import { ConfirmDeleteModal } from "./modals/ConfirmDeleteModal";
-import { PAGE_GUTTER_GAP_CLASS, PAGE_SCROLL_COLUMN_CLASS, PAGE_SUBHEADER_CLASS } from "@/lib/page-layout";
+import { PAGE_GUTTER_GAP_CLASS, PAGE_SCROLL_COLUMN_CLASS, PAGE_SUBHEADER_WITH_STICKY_CLASS } from "@/lib/page-layout";
 import type { ImageLightboxItem } from "./ImageLightbox";
 import type {
   ResourceCategory,
@@ -178,9 +178,9 @@ export function ResourceManagementPage() {
 
   return (
     <>
-      <main className="flex min-h-0 flex-1 flex-col bg-surface-20">
+      <div className="flex flex-col bg-surface-20">
         {/* [정책 1] 헤더 (레이아웃 가이드: margin 40, max-width 1200, min-width 640) */}
-        <header className={PAGE_SUBHEADER_CLASS}>
+        <header className={PAGE_SUBHEADER_WITH_STICKY_CLASS}>
           <div className="flex w-full min-w-0 max-w-[1200px] mx-auto items-center justify-between gap-my-16">
             <div className="flex items-center justify-start gap-my-12">
               <HeaderBackButton onClick={handleBack} aria-label="시리즈 목록으로" />
@@ -427,7 +427,7 @@ export function ResourceManagementPage() {
             </div>
           </div>
         </div>
-      </main>
+      </div>
 
       {/* 썸네일 크게 보기 라이트박스 */}
       <ImageLightbox

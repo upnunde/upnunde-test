@@ -16,7 +16,7 @@ import {
   PAGE_CONTENT_BODY_CLASS,
   PAGE_CONTENT_FOOTER_CLASS,
   PAGE_SCROLL_COLUMN_CLASS,
-  PAGE_SUBHEADER_CLASS,
+  PAGE_SUBHEADER_WITH_STICKY_CLASS,
 } from "@/lib/page-layout";
 import { ImageCropPosterModal } from "@/components/resource/character/CharacterExpressionModal";
 import type { ImageResource, MediaResource } from "@/types/resource";
@@ -185,9 +185,9 @@ export function ImageResourceDetailPage({ kind, initialData }: ImageResourceDeta
   );
 
   return (
-    <main className="flex flex-1 flex-col overflow-hidden bg-surface-20">
+    <div className="flex flex-col bg-surface-20">
       {/* 상단 서브 헤더 */}
-      <header className={PAGE_SUBHEADER_CLASS}>
+      <header className={PAGE_SUBHEADER_WITH_STICKY_CLASS}>
         <div className="flex w-full min-w-0 max-w-[1200px] mx-auto items-center justify-between gap-my-16">
           <div className="flex items-center justify-start gap-my-12">
             <HeaderBackButton onClick={handleBack} aria-label="리소스 목록으로" />
@@ -413,7 +413,7 @@ export function ImageResourceDetailPage({ kind, initialData }: ImageResourceDeta
           });
         }}
       />
-    </main>
+    </div>
   );
 }
 

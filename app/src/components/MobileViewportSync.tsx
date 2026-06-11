@@ -1,53 +1,46 @@
 "use client";
 
 import { useEffect } from "react";
+import { MOBILE_MEDIA_QUERY } from "@/lib/mobile-viewport";
 import {
   readVisualViewportChromeInsets,
   type VisualViewportChromeState,
 } from "@/lib/visual-viewport-chrome";
 
-const MOBILE_MQ = "(max-width: 1023px)";
+const VIEWPORT_CSS_VARS = [
+  "--app-vv-top",
+  "--app-vv-bottom",
+  "--app-vv-height",
+  "--app-vv-offset-top",
+  "--app-keyboard-inset",
+] as const;
 
-function isMobileViewport() {
-  return typeof window !== "undefined" && window.matchMedia(MOBILE_MQ).matches;
-}
-
-function applyChromeVars(snapshot: VisualViewportChromeState) {
-  const root = document.documentElement;
-  root.style.setProperty("--app-vv-top", `${snapshot.top}px`);
-  root.style.setProperty("--app-vv-bottom", `${snapshot.bottom}px`);
-  root.style.setProperty("--app-vv-height", `${snapshot.height}px`);
-  root.style.setProperty("--app-vv-offset-top", `${snapshot.offsetTop}px`);
-}
-
-function clearChromeVars() {
-  const root = document.documentElement;
-  root.style.removeProperty("--app-vv-top");
-  root.style.removeProperty("--app-vv-bottom");
-  root.style.removeProperty("--app-vv-height");
-  root.style.removeProperty("--app-vv-offset-top");
+function clearViewportCssVars(root: HTMLElement) {
+  for (const name of VIEWPORT_CSS_VARS) {
+    root.style.removeProperty(name);
+  }
 }
 
 /**
- * visualViewport 기준 모바일 브라우저 상·하단 크롬 inset을 CSS 변수로 동기화한다.
- * - `--app-vv-top`: URL/상단 UI offset (safe-area는 CSS `env()`로 별도 합산)
- * - `--app-vv-bottom`: 하단 브라우저 바(키보드 제외)
- * - `--app-vv-height` / `--app-vv-offset-top`: 앱 셸 고정 배치용 visual viewport 크기
- * 키보드 열림 시 inset을 고정해 화면이 추가로 눌리지 않게 한다.
- *
- * 모바일에서는 내부 스크롤 시 window를 1px 스크롤해 iOS Safari URL 바 접힘을 유도한다.
+ * visualViewport 기준 브라우저 상·하단 크롬 inset을 CSS 변수로 동기화한다.
+ * 모바일 문서 스크롤 레이아웃에서 하단 고정 UI(`--app-vv-bottom`) 위치 보정에 사용한다.
  */
 export function MobileViewportSync() {
   useEffect(() => {
     if (typeof window === "undefined") return;
 
+    const mq = window.matchMedia(MOBILE_MEDIA_QUERY);
     let lastChrome: VisualViewportChromeState = { top: 0, bottom: 0, height: 0, offsetTop: 0 };
-
-    const syncMobileMode = () => {
-      document.documentElement.classList.toggle("app-mobile-vv-sync", isMobileViewport());
-    };
+    let rafId = 0;
 
     const apply = () => {
+      const root = document.documentElement;
+
+      if (!mq.matches) {
+        clearViewportCssVars(root);
+        return;
+      }
+
       const snapshot = readVisualViewportChromeInsets(lastChrome);
       if (!snapshot.keyboardOpen) {
         lastChrome = {
@@ -56,61 +49,43 @@ export function MobileViewportSync() {
           height: snapshot.height,
           offsetTop: snapshot.offsetTop,
         };
+        root.style.removeProperty("--app-keyboard-inset");
+      } else {
+        root.style.setProperty("--app-keyboard-inset", `${snapshot.liveBottom}px`);
       }
-      applyChromeVars(lastChrome);
+
+      root.style.setProperty("--app-vv-top", `${lastChrome.top}px`);
+      root.style.setProperty("--app-vv-bottom", `${lastChrome.bottom}px`);
+      root.style.setProperty("--app-vv-height", `${lastChrome.height}px`);
+      root.style.setProperty("--app-vv-offset-top", `${lastChrome.offsetTop}px`);
     };
 
-    const nudgeWindowScrollForBrowserChrome = (event: Event) => {
-      if (!isMobileViewport()) return;
-
-      const target = event.target;
-      if (
-        target === document ||
-        target === document.documentElement ||
-        target === document.body
-      ) {
-        return;
-      }
-      if (!(target instanceof HTMLElement)) return;
-
-      if (target.scrollTop > 0 && window.scrollY === 0) {
-        window.scrollTo(0, 1);
-      } else if (target.scrollTop <= 0 && window.scrollY > 0) {
-        window.scrollTo(0, 0);
-      }
+    const scheduleApply = () => {
+      cancelAnimationFrame(rafId);
+      rafId = requestAnimationFrame(apply);
     };
 
-    const onScroll = (event: Event) => {
-      apply();
-      nudgeWindowScrollForBrowserChrome(event);
-    };
-
-    syncMobileMode();
     apply();
 
     const viewport = window.visualViewport;
-    const mq = window.matchMedia(MOBILE_MQ);
-    const onMqChange = () => {
-      syncMobileMode();
-      apply();
-    };
-
-    viewport?.addEventListener("resize", apply);
-    viewport?.addEventListener("scroll", apply);
-    window.addEventListener("resize", apply);
-    window.addEventListener("orientationchange", apply);
-    mq.addEventListener("change", onMqChange);
-    document.addEventListener("scroll", onScroll, { capture: true, passive: true });
+    viewport?.addEventListener("resize", scheduleApply);
+    viewport?.addEventListener("scroll", scheduleApply);
+    window.addEventListener("resize", scheduleApply);
+    window.addEventListener("orientationchange", scheduleApply);
+    window.addEventListener("scroll", scheduleApply, { passive: true });
+    window.addEventListener("pageshow", scheduleApply);
+    mq.addEventListener("change", scheduleApply);
 
     return () => {
-      viewport?.removeEventListener("resize", apply);
-      viewport?.removeEventListener("scroll", apply);
-      window.removeEventListener("resize", apply);
-      window.removeEventListener("orientationchange", apply);
-      mq.removeEventListener("change", onMqChange);
-      document.removeEventListener("scroll", onScroll, { capture: true });
-      document.documentElement.classList.remove("app-mobile-vv-sync");
-      clearChromeVars();
+      cancelAnimationFrame(rafId);
+      viewport?.removeEventListener("resize", scheduleApply);
+      viewport?.removeEventListener("scroll", scheduleApply);
+      window.removeEventListener("resize", scheduleApply);
+      window.removeEventListener("orientationchange", scheduleApply);
+      window.removeEventListener("scroll", scheduleApply);
+      window.removeEventListener("pageshow", scheduleApply);
+      mq.removeEventListener("change", scheduleApply);
+      clearViewportCssVars(document.documentElement);
     };
   }, []);
 

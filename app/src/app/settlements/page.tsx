@@ -11,7 +11,7 @@ import {
   PAGE_SCROLL_ROOT_CLASS,
   PAGE_SCROLL_ROOT_MOBILE_FLUSH_CLASS,
   PAGE_STACK_CLASS,
-  PAGE_SUBHEADER_CLASS,
+  PAGE_SUBHEADER_WITH_STICKY_CLASS,
 } from "@/lib/page-layout";
 import { Button } from "@/components/ui/button";
 import { FilterChip } from "@/components/ui/chip";
@@ -172,8 +172,8 @@ function SettlementSummaryCard({
   amount: number;
 }) {
   return (
-    <div className="flex min-h-[100px] w-full min-w-0 flex-col justify-between gap-my-12 rounded-[4px] border border-border-10 bg-surface-10 px-my-16 lg:px-my-20 py-my-16 lg:min-h-0 lg:flex-1 lg:flex-row lg:items-center lg:justify-between lg:gap-my-16 lg:py-my-20">
-      <p className="min-w-0 text-body3_700 text-on-surface-20 lg:shrink">{title}</p>
+    <div className="flex h-[80px] w-full min-w-0 flex-col justify-center gap-my-4 rounded-[4px] border border-border-10 bg-surface-10 px-my-16 lg:px-my-20 max-lg:py-0 lg:min-h-0 lg:h-auto lg:flex-1 lg:flex-row lg:items-center lg:justify-between lg:gap-my-16 lg:py-my-20">
+      <p className="min-w-0 text-body3_500 text-on-surface-20 lg:shrink">{title}</p>
       <div className="inline-flex min-w-0 flex-wrap items-baseline gap-x-my-4 gap-y-0 tabular-nums">
         <p className="text-heading4_700 text-on-surface-10 lg:text-2xl">{formatAmount(amount)}</p>
         <p className="text-heading4_700 text-on-surface-10 lg:text-2xl">원</p>
@@ -312,7 +312,7 @@ function SettlementRowMobile({
           </Button>
         ) : null}
       </div>
-      <div className="mt-3 grid grid-cols-2 gap-x-my-16 gap-y-my-8 text-body3_400">
+      <div className="mt-3 grid grid-cols-2 gap-x-my-16 gap-y-my-16 text-body1_400">
         <div>
           <p className="text-caption1_400 text-on-surface-30">수익금</p>
           <p className="font-bold text-on-surface-10">{item.revenueAmount}원</p>
@@ -510,8 +510,7 @@ export default function MonetizationSettlementsPage() {
 
   return (
     <AppShell sidebarActiveId="settlements">
-      <main className="flex flex-1 flex-col overflow-hidden bg-surface-20">
-        <div className={PAGE_SUBHEADER_CLASS}>
+      <div className={PAGE_SUBHEADER_WITH_STICKY_CLASS}>
           <div className={`${PAGE_CONTAINER_CLASS} flex items-center justify-start gap-my-16`}>
             <h1 className="text-heading2_700 text-on-surface-10">정산</h1>
           </div>
@@ -541,7 +540,7 @@ export default function MonetizationSettlementsPage() {
                   />
                   <div className={cn("flex flex-col p-my-20", PAGE_GUTTER_GAP_CLASS)}>
                     <div className="flex flex-col gap-my-12 rounded-[4px] bg-surface-20 p-my-20 sm:p-my-32 lg:flex-row lg:items-center lg:justify-between lg:gap-my-24 lg:p-my-40">
-                      <div className={cn("flex flex-col items-start justify-start", PAGE_GUTTER_GAP_CLASS)}>
+                      <div className={cn("flex flex-col items-start justify-start mb-my-20", PAGE_GUTTER_GAP_CLASS)}>
                         <p className="text-body3_700 text-on-surface-20">지금 출금 가능한 금액</p>
                         <div className="flex flex-col items-start gap-my-8">
                           <div className="inline-flex items-center gap-my-4">
@@ -739,7 +738,6 @@ export default function MonetizationSettlementsPage() {
                 </AnalyticsPanel>
               </div>
             </div>
-      </main>
       <Dialog open={!!taxDetailTarget} onOpenChange={(open) => !open && setTaxDetailTarget(null)}>
         <DialogContent className="w-full max-lg:max-w-none lg:w-[560px] lg:max-w-[calc(100vw-2rem)] rounded-[4px] border border-border-10 bg-white p-0">
           <div className="border-b border-divider-10 px-my-24 py-my-16">

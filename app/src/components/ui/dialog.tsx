@@ -39,7 +39,7 @@ const dialogContentCenterClass = cn(
 const dialogContentAutoClass = cn(
   "fixed z-50 flex w-full min-h-0 flex-col bg-background shadow-elevation-50 outline-none focus:outline-none",
   dialogContentAnimationClass,
-  "max-lg:inset-x-0 max-lg:bottom-0 max-lg:top-auto max-lg:max-h-[min(92dvh,900px)] max-lg:translate-x-0 max-lg:translate-y-0 max-lg:gap-0 max-lg:overflow-hidden max-lg:rounded-t-[4px] max-lg:rounded-b-none max-lg:border-t border-border-10 max-lg:p-0 max-lg:pb-[calc(env(safe-area-inset-bottom,0px)+var(--app-vv-bottom,0px))] max-lg:data-[state=open]:slide-in-from-bottom max-lg:data-[state=closed]:slide-out-to-bottom",
+  "max-lg:inset-x-0 max-lg:bottom-[var(--app-vv-bottom,0px)] max-lg:top-auto max-lg:max-h-[min(92dvh,900px)] max-lg:translate-x-0 max-lg:translate-y-0 max-lg:gap-0 max-lg:overflow-hidden max-lg:rounded-t-[4px] max-lg:rounded-b-none max-lg:border-t border-border-10 max-lg:p-0 max-lg:pb-[env(safe-area-inset-bottom,0px)] max-lg:data-[state=open]:slide-in-from-bottom max-lg:data-[state=closed]:slide-out-to-bottom",
   "lg:left-1/2 lg:top-1/2 lg:max-w-lg lg:max-h-[calc(100dvh-160px)] lg:-translate-x-1/2 lg:-translate-y-1/2 lg:gap-my-16 lg:overflow-y-auto lg:rounded-[4px] lg:border-t-0 lg:p-my-24 lg:shadow-elevation-50 lg:pb-my-24",
   "lg:data-[state=closed]:zoom-out-95 lg:data-[state=open]:zoom-in-95",
 );

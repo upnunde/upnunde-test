@@ -10,7 +10,12 @@ export const modalDialogContentClassName =
  */
 export const mobileBottomSheetMaxHeightClassName = "max-h-[min(92dvh,900px)]";
 
-export { MOBILE_BOTTOM_SHEET_PAD_CLASS } from "@/lib/mobile-viewport";
+export {
+  MOBILE_BOTTOM_SHEET_PAD_CLASS,
+  MOBILE_FIXED_BOTTOM_ANCHOR_CLASS,
+  MOBILE_FIXED_BOTTOM_BAR_SHELL_CLASS,
+  MOBILE_FIXED_BOTTOM_SAFE_PAD_CLASS,
+} from "@/lib/mobile-viewport";
 
 /** 넓은 폼 Dialog 셸 — 모바일 full-width 바텀 시트 / 데스크톱 중앙 */
 export const formDialogShellClassName =
@@ -31,7 +36,7 @@ export const formDialogSheetScrollBodyClassName =
 /** 바텀 시트·폼 모달 하단 고정 버튼 영역 — 모바일 safe-area·브라우저 하단 크롬 포함 */
 export const formDialogSheetStickyFooterClassName = cn(
   "mt-auto shrink-0 border-t border-border-10 bg-white px-my-16 lg:px-my-20 pt-my-16 pb-my-16",
-  "max-lg:pb-[calc(var(--spacing-my-16)+env(safe-area-inset-bottom,0px)+var(--app-vv-bottom,0px))]",
+  "max-lg:pb-[calc(var(--spacing-my-16)+env(safe-area-inset-bottom,0px))]",
 );
 
 export const modalHeaderClassName =

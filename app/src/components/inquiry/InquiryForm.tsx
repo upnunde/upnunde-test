@@ -59,11 +59,16 @@ export function InquiryForm({
   };
 
   return (
-    <div className={cn("flex min-h-0 flex-1 flex-col overflow-hidden", rootClassName)}>
+    <div
+      className={cn(
+        "flex flex-col max-lg:overflow-visible lg:min-h-0 lg:flex-1 lg:overflow-hidden",
+        rootClassName,
+      )}
+    >
       <form
         id={formDomId}
         onSubmit={handleSubmit}
-        className={cn("min-h-0 flex-1 overflow-y-auto", className)}
+        className={cn("max-lg:overflow-visible lg:min-h-0 lg:flex-1 lg:overflow-y-auto", className)}
       >
       {/* 문의 유형 */}
       <div className="flex flex-col gap-my-4">

@@ -5,7 +5,9 @@ import Image from "next/image";
 import { Menu, User } from "lucide-react";
 import { ProfileEditModal } from "@/components/ProfileEditModal";
 import { useRouter } from "next/navigation";
+import { APP_HEADER_FIXED_CLASS, APP_HEADER_SPACER_CLASS } from "@/lib/mobile-viewport";
 import { dummyAsset } from "@/lib/dummy-asset-path";
+import { cn } from "@/lib/utils";
 
 export interface HeaderProps {
   /** Reserved for future use */
@@ -16,16 +18,24 @@ export interface HeaderProps {
   onProfileImageChange?: (avatarUrl: string | null) => void;
   /** 모바일 메뉴 열기 (미전달 시 햄버거 버튼 숨김) */
   onMenuClick?: () => void;
+  className?: string;
 }
 
 /** Global top header: Logo + User avatar only. Full width. */
-export default function Header({ profileImageUrl, onProfileImageChange, onMenuClick }: HeaderProps) {
+export default function Header({ profileImageUrl, onProfileImageChange, onMenuClick, className }: HeaderProps) {
   const router = useRouter();
   const [isProfileModalOpen, setIsProfileModalOpen] = useState(false);
   const profileButtonRef = useRef<HTMLButtonElement>(null);
 
   return (
-    <header className="flex h-14 shrink-0 items-center justify-between border-b border-border-10 bg-white pl-0 pr-my-16">
+    <>
+    <header
+      className={cn(
+        "flex h-14 shrink-0 items-center justify-between border-b border-border-10 bg-white pl-0 pr-my-16",
+        APP_HEADER_FIXED_CLASS,
+        className,
+      )}
+    >
       <div className="flex items-center gap-my-8 self-stretch pl-my-12 lg:w-[240px] lg:pl-my-16">
         {onMenuClick ? (
           <button
@@ -85,5 +95,7 @@ export default function Header({ profileImageUrl, onProfileImageChange, onMenuCl
         }}
       />
     </header>
+    <div className={APP_HEADER_SPACER_CLASS} aria-hidden />
+    </>
   );
 }

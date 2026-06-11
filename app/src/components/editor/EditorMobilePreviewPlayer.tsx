@@ -9,7 +9,9 @@ import {
   EDITOR_MOBILE_FAB_BUTTON_CLASS,
   EDITOR_MOBILE_FAB_RIGHT_CLASS,
   EDITOR_MOBILE_FAB_SIZE_CLASS,
+  EDITOR_MOBILE_PREVIEW_HINT_BOTTOM_CLASS,
 } from "@/components/editor/editor-mobile-floating-layout";
+import { useMobilePreviewScrollLock } from "@/hooks/useMobilePreviewScrollLock";
 import { useEditorStore } from "@/store/useEditorStore";
 import {
   clampPlaybackIndex,
@@ -25,6 +27,7 @@ export interface EditorMobilePreviewPlayerProps {
 
 /** 모바일 에디터 — 풀화면 탭 진행 미리보기 */
 export function EditorMobilePreviewPlayer({ isActive }: EditorMobilePreviewPlayerProps) {
+  useMobilePreviewScrollLock(isActive);
   const blocks = useEditorStore((s) => s.blocks);
   const [playbackIndex, setPlaybackIndex] = useState(0);
   const [showTapHint, setShowTapHint] = useState(true);
@@ -117,8 +120,10 @@ export function EditorMobilePreviewPlayer({ isActive }: EditorMobilePreviewPlaye
       {canTapAdvance && showTapHint ? (
         <div
           className={cn(
-            "pointer-events-none absolute inset-x-0 bottom-24 z-30 flex justify-center",
-            focusedBlock?.type === "text" && "bottom-36",
+            "pointer-events-none absolute inset-x-0 z-30 flex justify-center",
+            EDITOR_MOBILE_PREVIEW_HINT_BOTTOM_CLASS,
+            focusedBlock?.type === "text" &&
+              "max-lg:bottom-[calc(var(--spacing-my-16)+3rem+var(--spacing-my-36)+env(safe-area-inset-bottom,0px)+var(--app-keyboard-inset,var(--app-vv-bottom,0px)))]",
           )}
         >
           <span className="rounded-full bg-black/45 px-my-12 py-my-4 text-caption2_400 text-white/70 backdrop-blur-sm">
@@ -128,7 +133,12 @@ export function EditorMobilePreviewPlayer({ isActive }: EditorMobilePreviewPlaye
       ) : null}
 
       {isAtEnd && blocks.length > 0 ? (
-        <div className="pointer-events-none absolute inset-x-0 bottom-24 z-30 flex justify-center">
+        <div
+          className={cn(
+            "pointer-events-none absolute inset-x-0 z-30 flex justify-center",
+            EDITOR_MOBILE_PREVIEW_HINT_BOTTOM_CLASS,
+          )}
+        >
           <span className="rounded-full bg-black/55 px-my-16 py-my-8 text-caption1_400 text-white/85 backdrop-blur-sm">
             미리보기가 끝났어요
           </span>

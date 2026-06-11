@@ -19,7 +19,7 @@ import { SegmentedTextTabs } from "@/components/ui/segmented-text-tabs";
 import {
   PAGE_CONTAINER_CLASS,
   PAGE_SCROLL_COLUMN_CLASS,
-  PAGE_SUBHEADER_CLASS,
+  PAGE_SUBHEADER_WITH_STICKY_CLASS,
 } from "@/lib/page-layout";
 import { cn } from "@/lib/utils";
 
@@ -86,8 +86,7 @@ export default function ElementsPage() {
 
   return (
     <AppShell sidebarActiveId="guide">
-      <main className="flex flex-1 flex-col overflow-hidden bg-surface-20">
-        <div className={PAGE_SUBHEADER_CLASS}>
+      <div className={PAGE_SUBHEADER_WITH_STICKY_CLASS}>
           <div className={`${PAGE_CONTAINER_CLASS} flex items-center justify-start`}>
             <h1 className="text-heading2_700 text-on-surface-10">UI 요소</h1>
           </div>
@@ -273,7 +272,6 @@ export default function ElementsPage() {
                 </ul>
               </SpecRow>
         </div>
-      </main>
     </AppShell>
   );
 }

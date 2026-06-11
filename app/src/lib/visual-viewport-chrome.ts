@@ -10,6 +10,8 @@ export type VisualViewportChromeState = {
 
 export type VisualViewportChromeSnapshot = VisualViewportChromeState & {
   keyboardOpen: boolean;
+  /** visualViewport 실측 하단 inset — 키보드·브라우저 하단 크롬 포함 */
+  liveBottom: number;
 };
 
 const DEFAULT_CHROME_STATE: VisualViewportChromeState = {
@@ -28,10 +30,10 @@ export function readVisualViewportChromeInsets(
 ): VisualViewportChromeSnapshot {
   const vv = window.visualViewport;
   if (!vv) {
-    return { ...lastChrome, keyboardOpen: false };
+    return { ...lastChrome, keyboardOpen: false, liveBottom: 0 };
   }
 
-  const rawBottom = Math.max(0, Math.round(window.innerHeight - vv.offsetTop - vv.height));
+  const rawBottom = measureVisualViewportBottomInset(vv);
   const rawTop = Math.max(0, Math.round(vv.offsetTop));
   const rawHeight =
     Math.max(0, Math.round(vv.height)) || Math.max(0, Math.round(window.innerHeight));
@@ -39,7 +41,7 @@ export function readVisualViewportChromeInsets(
   const keyboardOpen = rawBottom >= KEYBOARD_OPEN_THRESHOLD_PX;
 
   if (keyboardOpen) {
-    return { ...lastChrome, keyboardOpen: true };
+    return { ...lastChrome, keyboardOpen: true, liveBottom: rawBottom };
   }
 
   return {
@@ -48,5 +50,17 @@ export function readVisualViewportChromeInsets(
     height: rawHeight,
     offsetTop: rawOffsetTop,
     keyboardOpen: false,
+    liveBottom: rawBottom,
   };
+}
+
+/** visualViewport 기준 하단 inset — 브라우저별 innerHeight·clientHeight 차이 흡수 */
+export function measureVisualViewportBottomInset(vv: VisualViewport): number {
+  const layoutHeight = Math.max(
+    window.innerHeight,
+    document.documentElement.clientHeight,
+  );
+  const fromLayout = layoutHeight - vv.offsetTop - vv.height;
+  const fromInner = window.innerHeight - vv.offsetTop - vv.height;
+  return Math.max(0, Math.round(Math.max(fromLayout, fromInner)));
 }

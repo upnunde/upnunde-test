@@ -1,7 +1,8 @@
 "use client";
 
 import { useState, type ReactNode } from "react";
-import { APP_VIEWPORT_SHELL_CLASS } from "@/lib/mobile-viewport";
+import { APP_BROWSER_BG_CLASS, APP_PAGE_ROOT_CLASS } from "@/lib/mobile-viewport";
+import { APP_MAIN_CLASS, APP_MAIN_PANEL_CLASS } from "@/lib/page-layout";
 import Header from "@/components/Header/Header";
 import { PageCard } from "@/components/layout/PageCard";
 import { Button } from "@/components/ui/button";
@@ -9,8 +10,6 @@ import { HeaderBackButton } from "@/components/ui/header-back-button";
 import { SeriesFormTabs } from "@/components/series/SeriesFormTabs";
 import { EditorMobileFloatingActions } from "@/components/editor/EditorMobileFloatingActions";
 import {
-  EDITOR_MOBILE_FAB_BOTTOM_ABOVE_BLOCK_TOOLBAR_CLASS,
-  EDITOR_MOBILE_SCROLL_BOTTOM_PAD_WITH_TOOLBAR_CLASS,
   editorMobilePreviewChromeHiddenClass,
   type EditorMobilePanel,
 } from "@/components/editor/editor-mobile-floating-layout";
@@ -20,7 +19,7 @@ import {
   PAGE_GUTTER_X_CLASS,
   PAGE_SCROLL_BOTTOM_CLASS,
   PAGE_SCROLL_TOP_CLASS,
-  PAGE_SUBHEADER_CLASS,
+  PAGE_SUBHEADER_WITH_STICKY_CLASS,
 } from "@/lib/page-layout";
 import { cn } from "@/lib/utils";
 import type { SeriesFormTab } from "@/lib/seriesForm";
@@ -67,14 +66,12 @@ export function SeriesFormPageScaffold({
   const previewChromeHidden = editorMobilePreviewChromeHiddenClass(isLgUp, mobilePanel);
 
   return (
-    <div className={cn(APP_VIEWPORT_SHELL_CLASS, "bg-white")}>
+    <div className={cn(APP_PAGE_ROOT_CLASS, APP_BROWSER_BG_CLASS)}>
       <div className={cn(previewChromeHidden)}>
         <Header profileImageUrl={profileImageUrl} onProfileImageChange={onProfileImageChange} />
       </div>
-      <div className="flex flex-1 overflow-hidden bg-surface-20">
-        <div className="flex min-w-0 flex-1 flex-col overflow-hidden">
-          <main className="flex flex-1 flex-col overflow-hidden bg-surface-20">
-            <header className={cn(PAGE_SUBHEADER_CLASS, previewChromeHidden)}>
+      <main className={cn(APP_MAIN_CLASS, "bg-surface-20")}>
+            <header className={cn(PAGE_SUBHEADER_WITH_STICKY_CLASS, previewChromeHidden)}>
               <div className="flex w-full max-w-[1200px] items-center justify-between gap-my-16">
                 <div className="flex items-center justify-start gap-my-12">
                   <HeaderBackButton onClick={onBack} aria-label="시리즈 목록으로" />
@@ -107,13 +104,13 @@ export function SeriesFormPageScaffold({
               </div>
             </header>
 
-            <div className="flex min-h-0 flex-1 flex-col overflow-hidden">
+            <div className={APP_MAIN_PANEL_CLASS}>
               {showFormPanel ? (
                 <div
                   className={cn(
-                    "flex min-h-0 flex-1 flex-col items-center overflow-y-auto",
+                    "flex flex-col items-center max-lg:overflow-visible lg:min-h-0 lg:flex-1 lg:overflow-y-auto",
                     PAGE_SCROLL_TOP_CLASS,
-                    isLgUp ? PAGE_SCROLL_BOTTOM_CLASS : EDITOR_MOBILE_SCROLL_BOTTOM_PAD_WITH_TOOLBAR_CLASS,
+                    isLgUp && PAGE_SCROLL_BOTTOM_CLASS,
                     contentPaddingClassName,
                     "max-lg:px-0 max-lg:pt-0",
                   )}
@@ -146,7 +143,7 @@ export function SeriesFormPageScaffold({
               ) : null}
 
               {showPreviewPanel ? (
-                <div className="flex min-h-0 flex-1 flex-col overflow-hidden bg-black">
+                <div className={cn("flex flex-col bg-black max-lg:min-h-dvh", APP_MAIN_PANEL_CLASS)}>
                   <SeriesPreviewPanel
                     coverPreviewUrl={coverPreviewUrl}
                     logoPreviewUrl={logoPreviewUrl}
@@ -161,13 +158,10 @@ export function SeriesFormPageScaffold({
                   onChange={setMobilePanel}
                   editTargetLabel="입력"
                   hasBlockToolbar={false}
-                  fabBottomClassName={EDITOR_MOBILE_FAB_BOTTOM_ABOVE_BLOCK_TOOLBAR_CLASS}
                 />
               ) : null}
             </div>
-          </main>
-        </div>
-      </div>
+      </main>
     </div>
   );
 }

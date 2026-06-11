@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect, useLayoutEffect, useRef, useState, type RefObject } from "react";
+import { getDocumentScrollTop, isMobileDocumentScrollMode } from "@/lib/mobile-document-scroll";
 
 const SCROLL_DELTA_THRESHOLD = 10;
 const MIN_SCROLL_TO_HIDE = 32;
@@ -8,11 +9,26 @@ const MIN_SCROLL_TO_HIDE = 32;
 export interface UseScrollHeaderCollapseOptions {
   /**
    * 접힘 시 형제 헤더가 document flow에서 사라질 때 scrollTop을 보정해
-   * 본문이 화면에서 갑자기 밀려 올라가는 현상을 방지한다.
+   * 본문이 화면에서 갑자기 밀려 올라가는 현상을 방지한다. (데스크톱 내부 스크롤 전용)
    */
   compensateLayout?: boolean;
   /** compensateLayout 시 높이 측정 대상 (접히기 전 형제 헤더 래퍼) */
   headerRef?: RefObject<HTMLElement | null>;
+}
+
+function applyCollapseFromScroll(scrollTop: number, lastScrollTop: number, collapsedRef: { current: boolean }) {
+  const delta = scrollTop - lastScrollTop;
+
+  if (scrollTop <= 0) {
+    return false;
+  }
+  if (delta > SCROLL_DELTA_THRESHOLD && scrollTop > MIN_SCROLL_TO_HIDE) {
+    return true;
+  }
+  if (delta < -SCROLL_DELTA_THRESHOLD) {
+    return false;
+  }
+  return collapsedRef.current;
 }
 
 /** 스크롤 방향 — 아래로 내리면 헤더 접음, 위로 올리면 다시 노출 */
@@ -35,7 +51,7 @@ export function useScrollHeaderCollapse(
   collapsedRef.current = collapsed;
 
   useLayoutEffect(() => {
-    if (!enabled || !compensateLayout || !headerRef?.current) return;
+    if (!enabled || !compensateLayout || isMobileDocumentScrollMode() || !headerRef?.current) return;
 
     const el = headerRef.current;
 
@@ -52,7 +68,7 @@ export function useScrollHeaderCollapse(
   }, [collapsed, compensateLayout, enabled, headerRef]);
 
   useLayoutEffect(() => {
-    if (!enabled || !compensateLayout) return;
+    if (!enabled || !compensateLayout || isMobileDocumentScrollMode()) return;
 
     const scrollRoot = document.querySelector(`[${scrollRootAttr}]`);
     if (!(scrollRoot instanceof HTMLElement)) return;
@@ -78,6 +94,23 @@ export function useScrollHeaderCollapse(
       return;
     }
 
+    if (isMobileDocumentScrollMode()) {
+      let lastScrollTop = getDocumentScrollTop();
+
+      const onScroll = () => {
+        const scrollTop = getDocumentScrollTop();
+        const next = applyCollapseFromScroll(scrollTop, lastScrollTop, collapsedRef);
+        if (compensateLayoutRef.current && headerRefHolder.current?.current && next && !collapsedRef.current) {
+          headerHeightRef.current = headerRefHolder.current.current.offsetHeight;
+        }
+        setCollapsed(next);
+        lastScrollTop = scrollTop;
+      };
+
+      window.addEventListener("scroll", onScroll, { passive: true });
+      return () => window.removeEventListener("scroll", onScroll);
+    }
+
     const scrollRoot = document.querySelector(`[${scrollRootAttr}]`);
     if (!(scrollRoot instanceof HTMLElement)) return;
 
@@ -85,19 +118,11 @@ export function useScrollHeaderCollapse(
 
     const onScroll = () => {
       const scrollTop = scrollRoot.scrollTop;
-      const delta = scrollTop - lastScrollTop;
-
-      if (scrollTop <= 0) {
-        setCollapsed(false);
-      } else if (delta > SCROLL_DELTA_THRESHOLD && scrollTop > MIN_SCROLL_TO_HIDE) {
-        if (compensateLayoutRef.current && headerRefHolder.current?.current && !collapsedRef.current) {
-          headerHeightRef.current = headerRefHolder.current.current.offsetHeight;
-        }
-        setCollapsed(true);
-      } else if (delta < -SCROLL_DELTA_THRESHOLD) {
-        setCollapsed(false);
+      const next = applyCollapseFromScroll(scrollTop, lastScrollTop, collapsedRef);
+      if (compensateLayoutRef.current && headerRefHolder.current?.current && next && !collapsedRef.current) {
+        headerHeightRef.current = headerRefHolder.current.current.offsetHeight;
       }
-
+      setCollapsed(next);
       lastScrollTop = scrollTop;
     };
 

@@ -8,6 +8,49 @@ import { cn } from "@/lib/utils";
 
 export type NotificationTab = "all" | "NOTICE" | "WORK_ALERT";
 
+export interface NotificationTabStripProps {
+  activeTab: NotificationTab;
+  onTabChange: (tab: NotificationTab) => void;
+}
+
+/** 알림 목록 상단 탭(전체/공지/작품알림) — 페이지 레벨 sticky 셸 안에 배치 */
+export function NotificationTabStrip({ activeTab, onTabChange }: NotificationTabStripProps) {
+  return (
+    <div className="inline-flex w-full flex-col items-start justify-start gap-my-8 pt-0 pb-0 mt-2 mb-0">
+      <div
+        data-size="L"
+        data-underline="true"
+        className="inline-flex w-full items-center justify-start gap-my-16 overflow-hidden"
+      >
+        {(
+          [
+            { id: "all" as const, label: "전체" },
+            { id: "NOTICE" as const, label: "공지" },
+            { id: "WORK_ALERT" as const, label: "작품알림" },
+          ] as const
+        ).map(({ id, label }) => (
+          <button
+            key={id}
+            type="button"
+            data-height="h40"
+            data-selectline="true"
+            className={cn(
+              "flex h-9 min-w-0 cursor-pointer items-center justify-center gap-my-8 font-['Pretendard_JP'] text-body1_700",
+              activeTab === id
+                ? "border-b-2 border-slate-800 text-on-surface-10"
+                : "text-on-surface-disabled",
+            )}
+            onClick={() => onTabChange(id)}
+            data-activated={activeTab === id}
+          >
+            <span className="justify-start">{label}</span>
+          </button>
+        ))}
+      </div>
+    </div>
+  );
+}
+
 export interface NotificationListProps {
   /** 알림 데이터 배열 */
   notifications: NotificationData[];
@@ -18,103 +61,30 @@ export interface NotificationListProps {
   className?: string;
 }
 
-/**
- * 알림 목록 컨테이너: 탭(전체/공지/작품알림) + notifications를 map하여 NotificationItem 렌더링
- */
+/** 알림 목록 카드 — 탭은 `NotificationTabStrip` + `PAGE_INLINE_TAB_STRIP_SHELL_CLASS`로 페이지에서 분리 */
 export function NotificationList({
   notifications,
   onContactClick,
   footer,
   className,
 }: NotificationListProps) {
-  const [activeTab, setActiveTab] = useState<NotificationTab>("all");
   const [expandedId, setExpandedId] = useState<NotificationData["id"] | null>(null);
-
-  const filteredNotifications =
-    activeTab === "all"
-      ? notifications
-      : notifications.filter((n) => n.category === activeTab);
 
   return (
     <div
       className={cn(
-        "flex h-fit w-full shrink-0 flex-col overflow-hidden rounded-[4px] border border-border-10 bg-white",
+        "flex h-fit w-full shrink-0 flex-col rounded-[4px] border border-border-10 bg-white max-lg:overflow-visible lg:overflow-hidden",
         PAGE_CARD_SHELL_MOBILE_FLUSH_CLASS,
         className,
       )}
     >
-      <div className="self-stretch px-my-16 lg:px-my-20 pt-0 pb-0 mt-2 mb-0 border-b border-border-10 inline-flex flex-col justify-start items-start gap-my-8">
-        <div
-          data-size="L"
-          data-underline="true"
-          className="self-stretch inline-flex justify-start items-center gap-my-16 overflow-hidden"
-        >
-          <button
-            type="button"
-            data-height="h40"
-            data-selectline="true"
-            className={
-              "h-9 flex cursor-pointer justify-center items-center gap-my-8 min-w-0 " +
-              (activeTab === "all"
-                ? "border-b-2 border-slate-800 text-on-surface-10 text-body1_700 font-['Pretendard_JP']"
-                : "text-on-surface-disabled text-body1_700 font-['Pretendard_JP']")
-            }
-            onClick={() => {
-              setActiveTab("all");
-              setExpandedId(null);
-            }}
-            data-activated={activeTab === "all"}
-          >
-            <span className="justify-start">전체</span>
-          </button>
-          <button
-            type="button"
-            data-height="h40"
-            data-selectline="true"
-            className={
-              "h-9 flex cursor-pointer justify-center items-center gap-my-8 min-w-0 " +
-              (activeTab === "NOTICE"
-                ? "border-b-2 border-slate-800 text-on-surface-10 text-body1_700 font-['Pretendard_JP']"
-                : "text-on-surface-disabled text-body1_700 font-['Pretendard_JP']")
-            }
-            onClick={() => {
-              setActiveTab("NOTICE");
-              setExpandedId(null);
-            }}
-            data-activated={activeTab === "NOTICE"}
-          >
-            <span className="justify-start">공지</span>
-          </button>
-          <button
-            type="button"
-            data-height="h40"
-            data-selectline="true"
-            className={
-              "h-9 flex cursor-pointer justify-center items-center gap-my-8 min-w-0 " +
-              (activeTab === "WORK_ALERT"
-                ? "border-b-2 border-slate-800 text-on-surface-10 text-body1_700 font-['Pretendard_JP']"
-                : "text-on-surface-disabled text-body1_700 font-['Pretendard_JP']")
-            }
-            onClick={() => {
-              setActiveTab("WORK_ALERT");
-              setExpandedId(null);
-            }}
-            data-activated={activeTab === "WORK_ALERT"}
-          >
-            <span className="justify-start">작품알림</span>
-          </button>
-        </div>
-      </div>
       <div className="pt-0 pb-0">
         <ul className="flex flex-col" role="list">
-          {filteredNotifications.map((notification, index) => (
+          {notifications.map((notification, index) => (
             <React.Fragment key={notification.id}>
               {index > 0 ? (
                 <li aria-hidden className="list-none">
-                  <div
-                    className="mx-5 my-0 h-px bg-surface-20"
-                    role="separator"
-                  />
+                  <div className="mx-5 my-0 h-px bg-surface-20" role="separator" />
                 </li>
               ) : null}
               <li>
@@ -134,4 +104,12 @@ export function NotificationList({
       {footer != null ? footer : null}
     </div>
   );
+}
+
+export function filterNotificationsByTab(
+  notifications: NotificationData[],
+  activeTab: NotificationTab,
+): NotificationData[] {
+  if (activeTab === "all") return notifications;
+  return notifications.filter((n) => n.category === activeTab);
 }

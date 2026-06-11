@@ -6,6 +6,7 @@ import type { ChoiceItem, ScriptBlock } from "@/types/editor";
 import { useEditorStore } from "@/store/useEditorStore";
 import { dummyAsset } from "@/lib/dummy-asset-path";
 import { CHARACTERS, BACKGROUNDS, BGMS } from "@/lib/mockData";
+import { EDITOR_MOBILE_PREVIEW_OVERLAY_BOTTOM_CLASS } from "@/components/editor/editor-mobile-floating-layout";
 import {
   PREVIEW_PROGRESS_BADGE_CLASS,
   PREVIEW_TOP_BADGE_CLASS,
@@ -299,7 +300,10 @@ export function PreviewScreen(props: PreviewScreenProps = {}) {
       {currentDialogue && (
         <div
           className={cn(
-            "absolute bottom-0 left-0 right-0 z-20 mx-3 mb-3 rounded-[4px]",
+            "absolute left-0 right-0 z-20 mx-3 rounded-[4px]",
+            interactive
+              ? cn("bottom-0 mb-3", EDITOR_MOBILE_PREVIEW_OVERLAY_BOTTOM_CLASS, "max-lg:mb-0")
+              : "bottom-0 mb-3",
             "bg-black/75 backdrop-blur-sm",
             "border-2 border-white/20"
           )}
@@ -323,7 +327,10 @@ export function PreviewScreen(props: PreviewScreenProps = {}) {
       {currentChoices.length > 0 && (
         <div
           className={cn(
-            "absolute bottom-0 left-0 right-0 z-20 mx-3 mb-3 rounded-[4px]",
+            "absolute left-0 right-0 z-20 mx-3 rounded-[4px]",
+            interactive
+              ? cn("bottom-0 mb-3", EDITOR_MOBILE_PREVIEW_OVERLAY_BOTTOM_CLASS, "max-lg:mb-0")
+              : "bottom-0 mb-3",
             "bg-black/75 backdrop-blur-sm",
             "border-2 border-white/20 p-my-8"
           )}

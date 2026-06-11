@@ -1,14 +1,12 @@
 "use client";
 
-import { useCallback, useEffect, useRef, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 import { usePathname, useRouter } from "next/navigation";
 import { AnalyticsScopeFilterBar } from "@/components/analytics/AnalyticsScopeFilterBar";
-import { useScrollHeaderCollapse } from "@/hooks/useScrollHeaderCollapse";
-import { useIsLgUp } from "@/hooks/useMediaQuery";
 import { ANALYTICS_SCROLL_ROOT_ATTR } from "@/lib/analytics-scroll";
 import {
-  PAGE_FILTER_HEADER_CLASS,
   PAGE_FILTER_HEADER_INNER_CLASS,
+  PAGE_FILTER_HEADER_SHELL_CLASS,
   PAGE_SCROLL_ROOT_CLASS,
   PAGE_SCROLL_ROOT_MOBILE_FLUSH_CLASS,
   PAGE_STACK_CLASS,
@@ -50,12 +48,6 @@ export interface AnalyticsDashboardProps {
 export function AnalyticsDashboard({ defaultArea = "content", onAreaChange }: AnalyticsDashboardProps) {
   const router = useRouter();
   const pathname = usePathname();
-  const isDesktop = useIsLgUp();
-  const filterHeaderRef = useRef<HTMLDivElement>(null);
-  const headerCollapsed = useScrollHeaderCollapse(ANALYTICS_SCROLL_ROOT_ATTR, !isDesktop, {
-    compensateLayout: true,
-    headerRef: filterHeaderRef,
-  });
   const [periodRange, setPeriodRange] = useState<AnalyticsPeriodRange>("7d");
   const [analyticsArea, setAnalyticsAreaState] = useState<AnalyticsAreaTabId>(defaultArea);
 
@@ -97,43 +89,25 @@ export function AnalyticsDashboard({ defaultArea = "content", onAreaChange }: An
     : statsEpisodeNo;
 
   return (
-    <div className="flex min-h-0 w-full flex-1 flex-col overflow-hidden">
-      <div
-        ref={filterHeaderRef}
-        className={cn(
-          PAGE_FILTER_HEADER_CLASS,
-          headerCollapsed && "max-lg:border-b-0 max-lg:py-0",
-        )}
-      >
-        <div
-          className={cn(
-            cn(PAGE_FILTER_HEADER_INNER_CLASS, "overflow-hidden max-lg:transition-[max-height] max-lg:duration-200 max-lg:ease-out"),
-            headerCollapsed ? "max-lg:max-h-0" : "max-lg:max-h-[320px]",
-          )}
-        >
-          <div
-            className={cn(
-              "max-lg:transition-transform max-lg:duration-200 max-lg:ease-out",
-              headerCollapsed && "max-lg:-translate-y-full",
-            )}
-          >
-            <AnalyticsScopeFilterBar
-              analyticsArea={analyticsArea}
-              onAnalyticsAreaChange={setAnalyticsArea}
-              periodRange={periodRange}
-              onPeriodRangeChange={setPeriodRangeDeferred}
-              scopeCategory={scopeCategory}
-              onScopeCategoryChange={setScopeCategory}
-              seriesId={seriesId}
-              onSeriesIdChange={setSeriesId}
-              characterId={characterId}
-              onCharacterIdChange={setCharacterId}
-              scenarioId={scenarioId}
-              onScenarioIdChange={setScenarioId}
-              statsEpisodeNo={statsEpisodeNo}
-              onStatsEpisodeNoChange={setStatsEpisodeNo}
-            />
-          </div>
+    <>
+      <div className={PAGE_FILTER_HEADER_SHELL_CLASS}>
+        <div className={PAGE_FILTER_HEADER_INNER_CLASS}>
+          <AnalyticsScopeFilterBar
+            analyticsArea={analyticsArea}
+            onAnalyticsAreaChange={setAnalyticsArea}
+            periodRange={periodRange}
+            onPeriodRangeChange={setPeriodRangeDeferred}
+            scopeCategory={scopeCategory}
+            onScopeCategoryChange={setScopeCategory}
+            seriesId={seriesId}
+            onSeriesIdChange={setSeriesId}
+            characterId={characterId}
+            onCharacterIdChange={setCharacterId}
+            scenarioId={scenarioId}
+            onScenarioIdChange={setScenarioId}
+            statsEpisodeNo={statsEpisodeNo}
+            onStatsEpisodeNoChange={setStatsEpisodeNo}
+          />
         </div>
       </div>
 
@@ -175,6 +149,6 @@ export function AnalyticsDashboard({ defaultArea = "content", onAreaChange }: An
           )}
         </div>
       </div>
-    </div>
+    </>
   );
 }

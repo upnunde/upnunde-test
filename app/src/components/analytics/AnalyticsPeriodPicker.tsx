@@ -302,7 +302,7 @@ export function AnalyticsPeriodPicker({
               <div className="fixed inset-0 z-40 bg-black/50" aria-hidden onClick={handleDismiss} />
               <div
                 className={cn(
-                  "fixed inset-x-0 bottom-0 z-50 flex min-h-0 flex-col rounded-t-[4px] border-t border-border-10 bg-white shadow-elevation-40",
+                  "fixed inset-x-0 z-50 flex min-h-0 flex-col rounded-t-[4px] border-t border-border-10 bg-white shadow-elevation-40",
                   MOBILE_BOTTOM_SHEET_PAD_CLASS,
                   mobileBottomSheetMaxHeightClassName,
                 )}

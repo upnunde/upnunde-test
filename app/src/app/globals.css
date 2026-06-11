@@ -291,35 +291,48 @@
   }
   html,
   body {
-    @apply bg-white text-foreground m-0 p-0 w-full;
-    height: 100dvh;
-    min-height: 100dvh;
-    max-height: 100dvh;
-    overflow: hidden;
+    @apply bg-surface-20 text-foreground m-0 p-0 w-full;
     overscroll-behavior: none;
   }
 
-  /* 모바일: visualViewport 동기화 시 문서를 1px 스크롤 가능하게 해 Safari URL 바 접힘 유도 */
-  @media (max-width: 1023px) {
-    html.app-mobile-vv-sync,
-    html.app-mobile-vv-sync body {
-      height: auto;
-      min-height: calc(var(--app-vv-height, 100dvh) + 1px);
-      max-height: none;
-      overflow-x: hidden;
-      overflow-y: auto;
-      overscroll-behavior: none;
-      scrollbar-width: none;
+  /* 데스크톱: 고정 뷰포트 셸 */
+  @media (min-width: 1024px) {
+    html,
+    body {
+      height: 100dvh;
+      min-height: 100dvh;
+      max-height: 100dvh;
+      overflow: hidden;
     }
+  }
 
-    html.app-mobile-vv-sync body::-webkit-scrollbar {
-      display: none;
+  /* 모바일: 문서 스크롤 — overflow는 layer 밖 mobile-sticky-scroll-fix 참고 */
+  @media (max-width: 1023px) {
+    html,
+    body {
+      height: auto;
+      min-height: 100%;
+      max-height: none;
     }
   }
   button:not(:disabled),
   [role="button"]:not([aria-disabled="true"]),
   a[href] {
     cursor: pointer;
+  }
+}
+
+/*
+ * 모바일 sticky + 문서 스크롤
+ * - html/body 둘 다 overflow-y:auto 이면 sticky 전면 무효
+ * - overflow-x:hidden + overflow-y:visible 조합도 visible→auto 승격
+ * → 양쪽 모두 overflow:visible, 스크롤은 뷰포트(visual viewport)에 위임
+ */
+@media (max-width: 1023px) {
+  html,
+  body {
+    overflow: visible;
+    overscroll-behavior: none;
   }
 }
 
