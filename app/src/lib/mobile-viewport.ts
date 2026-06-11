@@ -43,8 +43,11 @@ export const MOBILE_FIXED_BOTTOM_OFFSET_CLASS =
 export const APP_VIEWPORT_SHELL_CLASS =
   "flex w-full min-h-dvh flex-col box-border lg:h-dvh lg:max-h-dvh lg:overflow-hidden";
 
-/** 브라우저·페이지 셸 배경 — design-system surface-20 (#F8F8FC) */
-export const APP_BROWSER_BG_CLASS = "bg-surface-20";
+/** 브라우저·페이지 셸 배경 — design-system background-20 (#F8F8FC) */
+export const APP_BROWSER_BG_CLASS = "bg-background-20";
+
+/** 기본 앱 theme-color — background-20 (#F8F8FC) */
+export const APP_BROWSER_BG_BACKGROUND_20_THEME_COLOR = "#F8F8FC";
 
 /** 글로벌 헤더 — 모바일 fixed (문서 스크롤 시 상단 고정) */
 export const APP_HEADER_FIXED_CLASS =

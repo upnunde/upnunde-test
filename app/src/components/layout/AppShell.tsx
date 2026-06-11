@@ -25,7 +25,7 @@ export function AppShell({ sidebarActiveId, children, className }: AppShellProps
         onProfileImageChange={setProfileImageUrl}
         onMenuClick={() => setSidebarOpen(true)}
       />
-      <div className={cn(APP_SHELL_BODY_ROW_CLASS, "bg-surface-20")}>
+      <div className={cn(APP_SHELL_BODY_ROW_CLASS, APP_BROWSER_BG_CLASS)}>
         {sidebarOpen ? (
           <button
             type="button"

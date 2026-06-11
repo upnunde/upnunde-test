@@ -11,6 +11,7 @@ import {
   RESOURCE_THUMBNAIL_FLUID_SIZE_CLASS,
   THUMBNAIL_DIM_OVERLAY_CLASS,
 } from "@/lib/thumbnail-styles";
+import { isDummyResourceUrl } from "@/lib/dummy-asset-path";
 import { cn } from "@/lib/utils";
 
 /** [정책 6, 7] 배경/연출장면/갤러리용 이미지 카드. 클릭 시 상세 페이지, 삭제 시 확인 팝업. */
@@ -126,6 +127,7 @@ export function ImageCard({
               src={item.imageUrl}
               alt=""
               fill
+              unoptimized={isDummyResourceUrl(item.imageUrl)}
               sizes={imageSizes}
               className={cn(imgClass, imageClassName)}
             />

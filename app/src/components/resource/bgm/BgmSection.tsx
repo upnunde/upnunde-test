@@ -137,7 +137,7 @@ export function BgmSection({
           PAGE_CARD_SHELL_MOBILE_FLUSH_CLASS,
         )}
       >
-        <div className="w-full self-stretch border-b border-border-10 px-my-16 pb-my-12 pt-my-20 lg:px-my-20">
+        <div className="w-full self-stretch border-b border-border-10 px-my-20 pb-my-12 pt-my-20">
           <Title2
             text={title}
             asSectionHeader
@@ -172,7 +172,7 @@ export function BgmSection({
             </Button>
           </div>
         ) : (
-          <div className="self-stretch px-my-16 lg:px-my-20 pb-my-8 pt-my-8 rounded-[4px] flex flex-col justify-start items-start gap-my-12">
+          <div className="self-stretch px-my-20 pb-my-8 pt-my-8 rounded-[4px] flex flex-col justify-start items-start gap-my-12">
             <div className="mb-1 mt-0 w-full pt-0 pb-0">
               <div
                 className={cn(

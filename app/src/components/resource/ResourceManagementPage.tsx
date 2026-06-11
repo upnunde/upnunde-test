@@ -32,6 +32,7 @@ import {
   initialCharacters,
 } from "@/lib/resourceMockData";
 import { deterministicBgmDuration } from "@/lib/bgm-duration";
+import { resetResourceManagementPageStorageIfNeeded } from "@/lib/resource-page-storage";
 import { PreviewScreen } from "@/components/editor/PreviewScreen";
 import { Title2 } from "@/components/ui/title2";
 import type { ScriptBlock } from "@/types/editor";
@@ -95,6 +96,10 @@ export function ResourceManagementPage() {
     return segments[1] ?? "";
   }, [pathname]);
   const [showPreview, setShowPreview] = useState(false);
+
+  useEffect(() => {
+    resetResourceManagementPageStorageIfNeeded();
+  }, []);
 
   useEffect(() => {
     const updatePreviewFlag = () => {

@@ -4,7 +4,11 @@ import "./globals.css";
 import { MobileViewportSync } from "@/components/MobileViewportSync";
 import { Toaster } from "@/components/ui/toaster";
 import DevConsoleFilter from "@/components/DevConsoleFilter";
-import { APP_BROWSER_BG_CLASS, APP_VIEWPORT_SHELL_CLASS } from "@/lib/mobile-viewport";
+import {
+  APP_BROWSER_BG_BACKGROUND_20_THEME_COLOR,
+  APP_BROWSER_BG_CLASS,
+  APP_VIEWPORT_SHELL_CLASS,
+} from "@/lib/mobile-viewport";
 import { cn } from "@/lib/utils";
 
 const geistSans = Geist({
@@ -26,7 +30,7 @@ export const viewport: Viewport = {
   width: "device-width",
   initialScale: 1,
   viewportFit: "cover",
-  themeColor: "#F8F8FC",
+  themeColor: APP_BROWSER_BG_BACKGROUND_20_THEME_COLOR,
   /** 키보드가 visual viewport만 줄여 화면이 눌리는 동작 완화 (Chrome 등) */
   interactiveWidget: "resizes-content",
 };
@@ -37,13 +41,18 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en" className="overscroll-none lg:h-dvh lg:overflow-hidden">
+    <html lang="en" className={cn("overscroll-none lg:h-dvh lg:overflow-hidden", APP_BROWSER_BG_CLASS)}>
       <body
         className={`${geistSans.variable} ${geistMono.variable} antialiased m-0 w-full overscroll-none p-0 lg:flex lg:h-dvh lg:flex-col lg:overflow-hidden`}
       >
         <DevConsoleFilter />
         <MobileViewportSync />
-        <div className={cn(APP_VIEWPORT_SHELL_CLASS, APP_BROWSER_BG_CLASS)}>{children}</div>
+        <div
+          data-app-viewport-shell
+          className={cn(APP_VIEWPORT_SHELL_CLASS, APP_BROWSER_BG_CLASS)}
+        >
+          {children}
+        </div>
         <Toaster />
       </body>
     </html>

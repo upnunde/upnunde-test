@@ -9,6 +9,7 @@ import { HeaderBackButton } from "@/components/ui/header-back-button";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import { AddResourceSlot } from "@/components/resource/cards/AddResourceSlot";
+import { createOptimizedImageObjectUrl } from "@/lib/image-upload-compress";
 import { THUMBNAIL_SLOT_ARIA } from "@/lib/thumbnail-styles";
 import { Title1 } from "@/components/ui/title1";
 import { Title2 } from "@/components/ui/title2";
@@ -170,17 +171,23 @@ export function ImageResourceDetailPage({ kind, initialData }: ImageResourceDeta
       e.target.value = "";
       if (!file || !file.type.startsWith("image/")) return;
 
-      const objectUrl = URL.createObjectURL(file);
-      setPendingThumbnailUrl((prev) => {
-        if (prev && prev.startsWith("blob:")) {
-          URL.revokeObjectURL(prev);
+      void (async () => {
+        try {
+          const objectUrl = await createOptimizedImageObjectUrl(file);
+          setPendingThumbnailUrl((prev) => {
+            if (prev && prev.startsWith("blob:")) {
+              URL.revokeObjectURL(prev);
+            }
+            return objectUrl;
+          });
+          setThumbnailModalInitialSlots([
+            { id: "image-thumbnail", expressionLabel: "", imageUrl: objectUrl },
+          ]);
+          setThumbnailModalOpen(true);
+        } catch (err) {
+          console.error("Thumbnail prepare failed:", err);
         }
-        return objectUrl;
-      });
-      setThumbnailModalInitialSlots([
-        { id: "image-thumbnail", expressionLabel: "", imageUrl: objectUrl },
-      ]);
-      setThumbnailModalOpen(true);
+      })();
     },
     [],
   );

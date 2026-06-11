@@ -11,6 +11,7 @@ import {
   RESOURCE_THUMBNAIL_FLUID_SIZE_CLASS,
   THUMBNAIL_DIM_OVERLAY_CLASS,
 } from "@/lib/thumbnail-styles";
+import { isDummyResourceUrl } from "@/lib/dummy-asset-path";
 import { cn } from "@/lib/utils";
 
 /** [정책 2] 등장인물 전용 카드. 3인 버튼 형태(호버 시 편집/삭제 버튼). [정책 3] 클릭 시 상세 페이지 이동. */
@@ -74,6 +75,7 @@ export function CharacterCard({
           src={character.imageUrl}
           alt=""
           fill
+          unoptimized={isDummyResourceUrl(character.imageUrl)}
           sizes={fluid ? RESOURCE_THUMBNAIL_FLUID_IMAGE_SIZES : RESOURCE_THUMBNAIL_FIXED_IMAGE_SIZES}
           className="object-cover object-top"
         />

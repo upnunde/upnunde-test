@@ -172,7 +172,7 @@ function SettlementSummaryCard({
   amount: number;
 }) {
   return (
-    <div className="flex h-[80px] w-full min-w-0 flex-col justify-center gap-my-4 rounded-[4px] border border-border-10 bg-surface-10 px-my-16 lg:px-my-20 max-lg:py-0 lg:min-h-0 lg:h-auto lg:flex-1 lg:flex-row lg:items-center lg:justify-between lg:gap-my-16 lg:py-my-20">
+    <div className="flex h-[80px] w-full min-w-0 flex-col justify-center gap-my-4 rounded-[4px] border border-border-10 bg-surface-10 px-my-20 max-lg:py-0 lg:min-h-0 lg:h-auto lg:flex-1 lg:flex-row lg:items-center lg:justify-between lg:gap-my-16 lg:py-my-20">
       <p className="min-w-0 text-body3_500 text-on-surface-20 lg:shrink">{title}</p>
       <div className="inline-flex min-w-0 flex-wrap items-baseline gap-x-my-4 gap-y-0 tabular-nums">
         <p className="text-heading4_700 text-on-surface-10 lg:text-2xl">{formatAmount(amount)}</p>
@@ -586,7 +586,7 @@ export default function MonetizationSettlementsPage() {
                 </AnalyticsPanel>
 
                 <AnalyticsPanel>
-                  <div className="border-b border-border-10 px-my-16 lg:px-my-20 py-my-16">
+                  <div className="border-b border-border-10 px-my-20 py-my-16">
                     <div className="flex flex-wrap items-center justify-between gap-my-12">
                       <h3 className="text-heading5_700 text-on-surface-10">정산 내역</h3>
                     </div>
@@ -677,13 +677,13 @@ export default function MonetizationSettlementsPage() {
                   </div>
                   <div className="w-full min-w-0">
                     {pagedSettlementItems.length === 0 ? (
-                      <div className="px-my-16 lg:px-my-20 py-my-40 text-center text-body3_400 text-on-surface-30">
+                      <div className="px-my-20 py-my-40 text-center text-body3_400 text-on-surface-30">
                         조건에 맞는 정산 내역이 없어요. 기간을 다시 선택해 주세요.
                       </div>
                     ) : (
                       <>
                         {/* xl 미만·사이드바 포함 폭에서는 표 대신 카드로 가로 스크롤 없이 표시 */}
-                        <div className="space-y-my-12 p-my-12 sm:p-my-16 xl:hidden">
+                        <div className="space-y-my-12 p-my-20 sm:p-my-16 xl:hidden">
                           {pagedSettlementItems.map((item) => (
                             <SettlementRowMobile
                               key={item.id}
@@ -820,18 +820,18 @@ export default function MonetizationSettlementsPage() {
       </Dialog>
       <Dialog open={!!rejectionReasonTarget} onOpenChange={(open) => !open && setRejectionReasonTarget(null)}>
         <DialogContent presentation="center" className="w-[420px] max-w-[calc(100vw-2rem)] rounded-[4px] border border-border-10 bg-white p-0">
-          <div className="border-b border-divider-10 px-my-16 lg:px-my-20 py-my-12">
+          <div className="border-b border-divider-10 px-my-20 py-my-12">
             <DialogTitle className="text-body1_700 text-on-surface-10">반려 사유</DialogTitle>
           </div>
           {rejectionReasonTarget ? (
             <>
-              <div className="px-my-16 lg:px-my-20 py-my-16">
+              <div className="px-my-20 py-my-16">
                 <p className="text-body3_400 text-on-surface-20">{rejectionReasonTarget.rejectionReason}</p>
                 <p className="mt-2 text-caption1_400 text-on-surface-30">
                   신청일 {rejectionReasonTarget.requestedAt} · 상태 {getSettlementStatusLabel(rejectionReasonTarget.status)}
                 </p>
               </div>
-              <div className="flex items-center justify-end border-t border-divider-10 px-my-16 lg:px-my-20 py-my-12">
+              <div className="flex items-center justify-end border-t border-divider-10 px-my-20 py-my-12">
                 <Button type="button" size="sm" onClick={() => setRejectionReasonTarget(null)}>
                   확인
                 </Button>
@@ -842,11 +842,11 @@ export default function MonetizationSettlementsPage() {
       </Dialog>
       <Dialog open={datePickerOpen} onOpenChange={setDatePickerOpen}>
         <DialogContent className="w-full max-lg:max-w-none lg:w-[420px] lg:max-w-[calc(100vw-2rem)] rounded-[4px] border border-border-10 bg-white p-0">
-          <div className="border-b border-divider-10 px-my-16 lg:px-my-20 py-my-12">
+          <div className="border-b border-divider-10 px-my-20 py-my-12">
             <DialogTitle className="text-body1_700 text-on-surface-10">기간 선택</DialogTitle>
             <p className="mt-1 text-body3_400 text-on-surface-30">조회할 신청일 기간을 설정해 주세요.</p>
           </div>
-          <div className="px-my-16 lg:px-my-20 py-my-16">
+          <div className="px-my-20 py-my-16">
             <div className="flex items-center gap-my-8">
               <input
                 type="date"
@@ -863,7 +863,7 @@ export default function MonetizationSettlementsPage() {
               />
             </div>
           </div>
-          <div className="flex items-center justify-end gap-my-8 border-t border-divider-10 px-my-16 lg:px-my-20 py-my-12">
+          <div className="flex items-center justify-end gap-my-8 border-t border-divider-10 px-my-20 py-my-12">
             <Button
               type="button"
               variant="outline"

@@ -187,13 +187,25 @@ const CHARACTER_LIST: CharacterResource[] = MOCK_HAS_RESOURCES
         name: "등장인물8",
         imageUrl: dummyAsset("character-8.png"),
         summary: "도시적인 이미지의 프로페셔널 커리어우먼",
-        tags: "커리어우먼, 냉철, 프로",
+        tags: "커리어우먼, 냉첈, 프로",
         greeting: "반가워요. 오늘 협의할 안건부터 정리해 볼까요?",
         expressions: [
           { id: "char-8-exp-1", expressionLabel: "기본", imageUrl: dummyAsset("character-8.png") },
           { id: "char-8-exp-2", expressionLabel: "미소", imageUrl: dummyAsset("character-8.png") },
           { id: "char-8-exp-3", expressionLabel: "곤란", imageUrl: dummyAsset("character-8.png") },
           { id: "char-8-exp-4", expressionLabel: "집중", imageUrl: dummyAsset("character-8.png") },
+        ],
+      },
+      {
+        id: "9",
+        name: "등장인물9",
+        imageUrl: dummyAsset("character-9.png"),
+        summary: "쿨한 스트릿 무드의 또래",
+        tags: "스트릿, 쿨함, 데님",
+        greeting: "뭐, 볼 일 있어?",
+        expressions: [
+          { id: "char-9-exp-1", expressionLabel: "기본", imageUrl: dummyAsset("character-9.png") },
+          { id: "char-9-exp-2", expressionLabel: "무심", imageUrl: dummyAsset("character-9.png") },
         ],
       },
     ]

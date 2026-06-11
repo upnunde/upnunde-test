@@ -25,7 +25,7 @@ export function StandaloneHeaderPage({
   return (
     <div className={cn(APP_PAGE_ROOT_CLASS, APP_BROWSER_BG_CLASS, className)}>
       <Header profileImageUrl={profileImageUrl} onProfileImageChange={onProfileImageChange} />
-      <main className={cn(APP_MAIN_CLASS, "bg-surface-20")}>
+      <main className={APP_MAIN_CLASS}>
         <div className={APP_MAIN_PANEL_CLASS}>{children}</div>
       </main>
     </div>

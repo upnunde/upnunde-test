@@ -10,6 +10,7 @@ import {
   type SeriesFormField,
   type SeriesFormTab,
 } from "@/lib/seriesForm";
+import { createOptimizedImageObjectUrl } from "@/lib/image-upload-compress";
 import { parseTagList } from "@/lib/parse-tag-list";
 import { useEditorStore } from "@/store/useEditorStore";
 
@@ -280,21 +281,35 @@ export function useSeriesFormController({
   }, []);
 
   const handleCoverFileSelected = useCallback((file: File) => {
-    setPendingCoverUrl((prev) => {
-      if (prev) URL.revokeObjectURL(prev);
-      return URL.createObjectURL(file);
-    });
-    setExpressionModalMode("cover");
-    setExpressionModalOpen(true);
+    void (async () => {
+      try {
+        const url = await createOptimizedImageObjectUrl(file);
+        setPendingCoverUrl((prev) => {
+          if (prev) URL.revokeObjectURL(prev);
+          return url;
+        });
+        setExpressionModalMode("cover");
+        setExpressionModalOpen(true);
+      } catch (err) {
+        console.error("Cover image prepare failed:", err);
+      }
+    })();
   }, []);
 
   const handleLogoFileSelected = useCallback((file: File) => {
-    setPendingLogoUrl((prev) => {
-      if (prev) URL.revokeObjectURL(prev);
-      return URL.createObjectURL(file);
-    });
-    setExpressionModalMode("logo");
-    setExpressionModalOpen(true);
+    void (async () => {
+      try {
+        const url = await createOptimizedImageObjectUrl(file);
+        setPendingLogoUrl((prev) => {
+          if (prev) URL.revokeObjectURL(prev);
+          return url;
+        });
+        setExpressionModalMode("logo");
+        setExpressionModalOpen(true);
+      } catch (err) {
+        console.error("Logo image prepare failed:", err);
+      }
+    })();
   }, []);
 
   const handleSubmit = useCallback(() => {

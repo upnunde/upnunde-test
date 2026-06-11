@@ -35,7 +35,7 @@ export const formDialogSheetScrollBodyClassName =
 
 /** 바텀 시트·폼 모달 하단 고정 버튼 영역 — 모바일 safe-area·브라우저 하단 크롬 포함 */
 export const formDialogSheetStickyFooterClassName = cn(
-  "mt-auto shrink-0 border-t border-border-10 bg-white px-my-16 lg:px-my-20 pt-my-16 pb-my-16",
+  "mt-auto shrink-0 border-t border-border-10 bg-white px-my-20 pt-my-16 pb-my-16",
   "max-lg:pb-[calc(var(--spacing-my-16)+env(safe-area-inset-bottom,0px))]",
 );
 

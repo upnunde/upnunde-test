@@ -34,7 +34,7 @@ export function InquiryForm({
   onSubmit = defaultSubmit,
   onSuccess,
   onCancel,
-  className = "mt-4 flex flex-col gap-my-40 px-my-16 lg:px-my-20",
+  className = "mt-4 flex flex-col gap-my-40 px-my-20",
   rootClassName,
 }: InquiryFormProps) {
   const prefix = idPrefix ? `${idPrefix}-` : "";
@@ -181,13 +181,13 @@ export function InquiryForm({
       </form>
 
       {/* form과 동일 레벨 — 모달 하단 고정 */}
-      <div className="mx-0 mt-0 w-full shrink-0 bg-white px-my-16 lg:px-my-20 pt-my-20 pb-my-20">
+      <div className="mx-0 mt-0 w-full shrink-0 bg-white px-my-20 pt-my-20 pb-my-20">
         <div className="flex items-center justify-end gap-my-12">
           <Button
             type="button"
             variant="outline"
             size="sm"
-            className="px-my-16 lg:px-my-20"
+            className="px-my-20"
             onClick={handleCancel}
           >
             취소
@@ -196,7 +196,7 @@ export function InquiryForm({
             type="submit"
             form={formDomId}
             size="sm"
-            className="px-my-16 lg:px-my-20"
+            className="px-my-20"
             disabled={!title || !content}
           >
             제출

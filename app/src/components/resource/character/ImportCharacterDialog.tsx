@@ -144,13 +144,13 @@ export function ImportCharacterDialog({
   return (
     <Dialog open={open} onOpenChange={handleDialogOpenChange}>
       <DialogContent className="flex w-full max-h-[90vh] min-h-0 max-lg:max-w-none flex-col gap-0 overflow-hidden rounded-[4px] border border-border-10 bg-white p-0 lg:max-w-2xl">
-        <div className="border-b border-border-10/5 px-my-16 lg:px-my-20 py-my-12">
+        <div className="border-b border-border-10/5 px-my-20 py-my-12">
           <DialogTitle className="text-body1_700 text-on-surface-10">{title}</DialogTitle>
           <p className="mt-1 text-body3_400 text-on-surface-30">{description}</p>
         </div>
 
         {showSeriesFilter && (
-          <div className="border-b border-border-10/5 px-my-16 lg:px-my-20 pb-my-12 pt-0">
+          <div className="border-b border-border-10/5 px-my-20 pb-my-12 pt-0">
             <div
               className={cn(
                 "inline-flex w-full min-w-0 flex-wrap items-center overflow-x-auto",
@@ -180,7 +180,7 @@ export function ImportCharacterDialog({
           </div>
         )}
 
-        <div className="min-h-0 flex-1 overflow-y-auto px-my-16 lg:px-my-20 py-my-16">
+        <div className="min-h-0 flex-1 overflow-y-auto px-my-20 py-my-16">
           {visibleCharacters.length === 0 ? (
             <p className="py-my-32 text-center text-body3_400 text-on-surface-30">
               {showSeriesFilter
@@ -223,7 +223,7 @@ export function ImportCharacterDialog({
           )}
         </div>
 
-        <div className="flex items-center justify-end gap-my-8 border-t border-border-10/5 px-my-16 lg:px-my-20 py-my-12">
+        <div className="flex items-center justify-end gap-my-8 border-t border-border-10/5 px-my-20 py-my-12">
           <Button
             type="button"
             variant="outline"

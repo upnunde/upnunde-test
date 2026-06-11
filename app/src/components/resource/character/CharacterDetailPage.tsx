@@ -9,6 +9,7 @@ import { HeaderBackButton } from "@/components/ui/header-back-button";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import { AddResourceSlot } from "@/components/resource/cards/AddResourceSlot";
+import { createOptimizedImageObjectUrl } from "@/lib/image-upload-compress";
 import { THUMBNAIL_SLOT_ARIA } from "@/lib/thumbnail-styles";
 import {
   CharacterExpressionMultiModal,
@@ -173,20 +174,25 @@ export function CharacterDetailPage({ isNew = true, initialData }: CharacterDeta
     e.target.value = "";
     if (!file || !file.type.startsWith("image/")) return;
 
-    const objectUrl = URL.createObjectURL(file);
-    // 최초 선택한 파일 URL은 "원본"으로 계속 유지한다.
-    setThumbnailOriginalUrl((prev) => {
-      if (prev && prev.startsWith("blob:")) URL.revokeObjectURL(prev);
-      return objectUrl;
-    });
-    setPendingThumbnailUrl((prev) => {
-      if (prev && prev.startsWith("blob:")) URL.revokeObjectURL(prev);
-      return objectUrl;
-    });
-    setThumbnailModalInitialSlots([
-      { id: "character-thumbnail", expressionLabel: "", imageUrl: objectUrl },
-    ]);
-    setThumbnailModalOpen(true);
+    void (async () => {
+      try {
+        const objectUrl = await createOptimizedImageObjectUrl(file);
+        setThumbnailOriginalUrl((prev) => {
+          if (prev && prev.startsWith("blob:")) URL.revokeObjectURL(prev);
+          return objectUrl;
+        });
+        setPendingThumbnailUrl((prev) => {
+          if (prev && prev.startsWith("blob:")) URL.revokeObjectURL(prev);
+          return objectUrl;
+        });
+        setThumbnailModalInitialSlots([
+          { id: "character-thumbnail", expressionLabel: "", imageUrl: objectUrl },
+        ]);
+        setThumbnailModalOpen(true);
+      } catch (err) {
+        console.error("Thumbnail prepare failed:", err);
+      }
+    })();
   }, []);
 
   const [isComposingTag, setIsComposingTag] = useState(false);
@@ -214,23 +220,35 @@ export function CharacterDetailPage({ isNew = true, initialData }: CharacterDeta
   }, []);
 
   const handleExpressionFilesChange = useCallback((e: React.ChangeEvent<HTMLInputElement>) => {
-    const files = Array.from(e.target.files ?? []).filter((f) => f.type.startsWith("image/")).slice(0, 10);
+    const files = Array.from(e.target.files ?? [])
+      .filter((f) => f.type.startsWith("image/"))
+      .slice(0, 10);
     e.target.value = "";
     if (files.length === 0) return;
-    const newSlots: CharacterExpressionSlot[] = files.map((file, i) => ({
-      id: `expr-${i}-${Date.now()}`,
-      expressionLabel: "",
-      imageUrl: URL.createObjectURL(file),
-    }));
-    while (newSlots.length < 10) {
-      newSlots.push({
-        id: `expr-${newSlots.length}-${Date.now()}`,
-        expressionLabel: "",
-        imageUrl: undefined,
-      });
-    }
-    setModalInitialSlots(newSlots);
-    setExpressionModalOpen(true);
+
+    void (async () => {
+      try {
+        const imageUrls = await Promise.all(
+          files.map((file) => createOptimizedImageObjectUrl(file)),
+        );
+        const newSlots: CharacterExpressionSlot[] = imageUrls.map((imageUrl, i) => ({
+          id: `expr-${i}-${Date.now()}`,
+          expressionLabel: "",
+          imageUrl,
+        }));
+        while (newSlots.length < 10) {
+          newSlots.push({
+            id: `expr-${newSlots.length}-${Date.now()}`,
+            expressionLabel: "",
+            imageUrl: undefined,
+          });
+        }
+        setModalInitialSlots(newSlots);
+        setExpressionModalOpen(true);
+      } catch (err) {
+        console.error("Expression prepare failed:", err);
+      }
+    })();
   }, []);
 
   return (

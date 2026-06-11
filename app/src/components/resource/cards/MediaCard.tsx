@@ -11,6 +11,7 @@ import {
   RESOURCE_THUMBNAIL_FLUID_SIZE_CLASS,
   THUMBNAIL_DIM_OVERLAY_CLASS,
 } from "@/lib/thumbnail-styles";
+import { isDummyResourceUrl } from "@/lib/dummy-asset-path";
 import { cn } from "@/lib/utils";
 
 /** [정책 7] 미디어 카드. 썸네일 + 재생시간 표시. 클릭 시 상세 페이지, 삭제 시 확인 팝업. */
@@ -74,6 +75,7 @@ export function MediaCard({
           src={item.thumbnailUrl}
           alt=""
           fill
+          unoptimized={isDummyResourceUrl(item.thumbnailUrl)}
           sizes={fluid ? RESOURCE_THUMBNAIL_FLUID_IMAGE_SIZES : RESOURCE_THUMBNAIL_FIXED_IMAGE_SIZES}
           className="object-cover"
         />

@@ -14,15 +14,16 @@
 
 | 뷰포트 | 토큰 | 값 |
 |--------|------|-----|
-| 모바일 (`< lg`) | `px-my-16` | **16px** |
-| 데스크톱 (`lg+`) | `px-my-20` | 20px |
+| 모바일·데스크톱 공통 | `px-my-20` | **20px** |
+
+본문에 좌우 여백이 있는 화면(스크롤 루트·서브헤더·카드 본문·목록 행 등)은 **뷰포트와 관계없이 20px**을 기본으로 한다. 모바일만 16px로 줄이지 않는다.
 
 ### 코드
 
 ```ts
 import { PAGE_GUTTER_X_CLASS } from "@/lib/page-layout";
 
-// PAGE_GUTTER_X_CLASS === "px-my-16 lg:px-my-20"
+// PAGE_GUTTER_X_CLASS === "px-my-20"
 ```
 
 파생 상수(`PAGE_SCROLL_GUTTER_CLASS`, `PAGE_CONTENT_PAD_X_CLASS`, `PAGE_SUBHEADER_CLASS` 등)는 모두 `PAGE_GUTTER_X_CLASS`를 사용한다.
@@ -144,5 +145,5 @@ import { PAGE_SCROLL_BOTTOM_CLASS, PAGE_SCROLL_ROOT_CLASS } from "@/lib/page-lay
 2. 본문 세로 스택에 `PAGE_STACK_CLASS` 또는 `PAGE_GUTTER_GAP_CLASS` 사용
 3. 스크롤 루트 하단에 `PAGE_SCROLL_BOTTOM_CLASS` 또는 `PAGE_SCROLL_ROOT_CLASS` 사용
 4. 서브헤더에 `PAGE_SUBHEADER_CLASS` 사용
-5. 인라인 `px-my-20`·`gap-my-20` 단독 사용 금지 — 가로는 `PAGE_GUTTER_X_CLASS` 또는 `*-my-16 lg:*-my-20`, gap은 `PAGE_GUTTER_GAP_CLASS` 또는 `*-my-12 lg:*-my-20`
+5. 인라인 `gap-my-20` 단독 사용 금지 — 가로는 `PAGE_GUTTER_X_CLASS` 또는 `px-my-20`, gap은 `PAGE_GUTTER_GAP_CLASS` 또는 `*-my-12 lg:*-my-20`
 6. `npm run check:routes` (라우트 변경 시)

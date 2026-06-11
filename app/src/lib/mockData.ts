@@ -66,6 +66,7 @@ export const CHARACTERS: CharacterItem[] = [
   { id: "char-6", name: "등장인물6", url: dummyAsset("character-6.png") },
   { id: "char-7", name: "등장인물7", url: dummyAsset("character-7.png") },
   { id: "char-8", name: "등장인물8", url: dummyAsset("character-8.png") },
+  { id: "char-9", name: "등장인물9", url: dummyAsset("character-9.png") },
 ];
 
 export const BGMS: AudioItem[] = [

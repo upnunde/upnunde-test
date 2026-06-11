@@ -23,6 +23,11 @@ import {
   MODAL_CROP_STAGE_SIZE_PX,
   THUMBNAIL_SLOT_ARIA,
 } from "@/lib/thumbnail-styles";
+import {
+  createOptimizedImageObjectUrl,
+  encodeCroppedCanvas,
+  scaleCropOutputDimensions,
+} from "@/lib/image-upload-compress";
 import { cn } from "@/lib/utils";
 import { useIsLgUp } from "@/hooks/useMediaQuery";
 import type { CharacterExpressionSlot } from "@/types/resource";
@@ -169,21 +174,17 @@ async function cropImageToBlobUrl(
   const sw = Math.max(1, Math.min(nw - sx, srcW));
   const sh = Math.max(1, Math.min(nh - sy, srcH));
 
+  const { width: outW, height: outH } = scaleCropOutputDimensions(viewportW, viewportH);
   const canvas = document.createElement("canvas");
-  canvas.width = viewportW;
-  canvas.height = viewportH;
+  canvas.width = outW;
+  canvas.height = outH;
   const ctx = canvas.getContext("2d");
   if (!ctx) {
     throw new Error("Canvas 2d context not available");
   }
-  ctx.drawImage(img, sx, sy, sw, sh, 0, 0, viewportW, viewportH);
+  ctx.drawImage(img, sx, sy, sw, sh, 0, 0, outW, outH);
 
-  const blob = await new Promise<Blob | null>((resolve) => {
-    canvas.toBlob(resolve, "image/png", 0.95);
-  });
-  if (!blob) {
-    throw new Error("toBlob failed");
-  }
+  const blob = await encodeCroppedCanvas(canvas);
   return URL.createObjectURL(blob);
 }
 
@@ -589,40 +590,50 @@ export function CharacterExpressionModal({
   }, [filledSlotIndices, selectedIndex, handleSelectSlot]);
 
   const handleFilesSelected = useCallback((e: React.ChangeEvent<HTMLInputElement>) => {
-    const files = Array.from(e.target.files ?? []);
+    const files = Array.from(e.target.files ?? []).filter((f) => f.type.startsWith("image/"));
+    e.target.value = "";
     if (files.length === 0) return;
 
-    setSlots((prev) => {
-      const currentImageCount = prev.filter((s) => Boolean(s.imageUrl)).length;
-      const remaining = Math.max(0, MAX_SLOTS - currentImageCount);
-      if (remaining === 0) return prev;
+    void (async () => {
+      try {
+        const objectUrls = await Promise.all(
+          files.slice(0, MAX_SLOTS).map((file) => createOptimizedImageObjectUrl(file)),
+        );
 
-      const filesToAdd = files.slice(0, remaining);
-      const next = [...prev];
-      let firstAddedIndex: number | null = null;
+        setSlots((prev) => {
+          const remaining = Math.max(
+            0,
+            MAX_SLOTS - prev.filter((s) => Boolean(s.imageUrl)).length,
+          );
+          const urlsToAdd = objectUrls.slice(0, remaining);
+          objectUrls.slice(remaining).forEach((url) => URL.revokeObjectURL(url));
+          if (urlsToAdd.length === 0) return prev;
 
-      for (const file of filesToAdd) {
-        const objectUrl = URL.createObjectURL(file);
-        next.push({
-          ...createEmptySlot(next.length),
-          imageUrl: objectUrl,
-          expressionLabel: "",
+          const next = [...prev];
+          let firstAddedIndex: number | null = null;
+
+          urlsToAdd.forEach((objectUrl) => {
+            next.push({
+              ...createEmptySlot(next.length),
+              imageUrl: objectUrl,
+              expressionLabel: "",
+            });
+            if (firstAddedIndex === null) firstAddedIndex = next.length - 1;
+          });
+
+          if (firstAddedIndex !== null) {
+            const firstSlot = next[firstAddedIndex];
+            setSelectedIndex(firstAddedIndex);
+            setExpressionInput(firstSlot?.expressionLabel ?? "");
+            setZoom(1);
+          }
+
+          return next.slice(0, MAX_SLOTS);
         });
-        if (firstAddedIndex === null) firstAddedIndex = next.length - 1;
+      } catch (err) {
+        console.error("Image prepare failed:", err);
       }
-
-      if (firstAddedIndex !== null) {
-        const firstSlot = next[firstAddedIndex];
-        setSelectedIndex(firstAddedIndex);
-        setExpressionInput(firstSlot?.expressionLabel ?? "");
-        setZoom(1);
-      }
-
-      return next.slice(0, MAX_SLOTS);
-    });
-
-    // 같은 파일을 다시 선택할 수 있게 리셋
-    e.target.value = "";
+    })();
   }, []);
 
   /** 저장 버튼 활성화: 등록된(이미지 있는) 슬롯만 검사. 표정 섹션 있을 때는 라벨 필수 */

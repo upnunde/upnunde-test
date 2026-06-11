@@ -42,7 +42,7 @@ export function ResourceSection({
     >
       {headerAction ? (
         <div
-          className="w-full h-fit px-my-16 lg:px-my-20 py-my-12 border-b border-border-10/5 flex items-center justify-between gap-my-12"
+          className="w-full h-fit px-my-20 py-my-12 border-b border-border-10/5 flex items-center justify-between gap-my-12"
           style={{ borderBottomColor: "rgba(0, 0, 0, 0.07)" }}
         >
           <div className="min-w-0 flex-1">

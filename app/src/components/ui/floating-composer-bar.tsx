@@ -161,7 +161,7 @@ export function FloatingComposerBar({
   return (
     <div
       className={cn(
-        "z-30 flex w-full justify-center px-my-16 lg:px-my-20 pb-my-20 pt-my-12",
+        "z-30 flex w-full justify-center px-my-20 pb-my-20 pt-my-12",
         placement === "fixed" &&
           "pointer-events-none fixed inset-x-0 max-lg:bottom-[var(--app-vv-bottom,0px)] lg:bottom-0",
         placement === "sticky" &&

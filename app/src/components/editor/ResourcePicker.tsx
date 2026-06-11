@@ -174,7 +174,7 @@ function ResourcePickerOptions({
               "grid",
               isSheet
                 ? cn("w-full px-my-12 pb-my-16 pt-my-8", sheetImageGridClass)
-                : "w-fit grid-cols-3 gap-my-16 px-my-16 lg:px-my-20 pb-my-20 pt-0",
+                : "w-fit grid-cols-3 gap-my-16 px-my-20 pb-my-20 pt-0",
             )
           : cn(
               "flex flex-col",

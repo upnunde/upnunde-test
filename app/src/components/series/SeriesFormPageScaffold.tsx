@@ -70,7 +70,7 @@ export function SeriesFormPageScaffold({
       <div className={cn(previewChromeHidden)}>
         <Header profileImageUrl={profileImageUrl} onProfileImageChange={onProfileImageChange} />
       </div>
-      <main className={cn(APP_MAIN_CLASS, "bg-surface-20")}>
+      <main className={APP_MAIN_CLASS}>
             <header className={cn(PAGE_SUBHEADER_WITH_STICKY_CLASS, previewChromeHidden)}>
               <div className="flex w-full max-w-[1200px] items-center justify-between gap-my-16">
                 <div className="flex items-center justify-start gap-my-12">

@@ -103,7 +103,7 @@ export function EditorMobilePreviewPlayer({ isActive }: EditorMobilePreviewPlaye
       </button>
 
       {blocks.length === 0 ? (
-        <div className="flex flex-1 items-center justify-center px-my-16 lg:px-my-20 text-center text-body3_400 text-on-surface-30">
+        <div className="flex flex-1 items-center justify-center px-my-20 text-center text-body3_400 text-on-surface-30">
           원고를 작성하면 미리볼 수 있어요
         </div>
       ) : (

@@ -1,10 +1,10 @@
 /**
  * 페이지·카드 본문 인셋 — design-system spacing
- * 모바일 가로 16px · lg+ 20px → `docs/mobile-layout.md`
+ * 본문 여백형 페이지 가로 20px(모바일·데스크톱 공통) → `docs/mobile-layout.md`
  */
 
-/** 페이지·카드 좌우 인셋 — 모바일 16px · lg+ 20px */
-export const PAGE_GUTTER_X_CLASS = "px-my-16 lg:px-my-20";
+/** 페이지·카드 좌우 인셋 — 20px (모바일·lg+ 공통) */
+export const PAGE_GUTTER_X_CLASS = "px-my-20";
 
 /** 페이지·섹션 스택 간격 — 모바일 12px · lg+ 20px */
 export const PAGE_GUTTER_GAP_CLASS = "gap-my-12 lg:gap-my-20";
@@ -40,14 +40,14 @@ const PAGE_SCROLL_LG_TRAP_CLASS = "lg:min-h-0 lg:flex-1 lg:overflow-y-auto";
  * 모바일: 콘텐츠 높이만큼 확장(문서 스크롤·sticky) / lg: flex-1 내부 스크롤
  */
 export const APP_MAIN_CLASS =
-  "flex min-w-0 w-full flex-col bg-surface-20 max-lg:overflow-visible lg:min-h-0 lg:flex-1 lg:overflow-hidden";
+  "flex min-w-0 w-full flex-col bg-background-20 max-lg:overflow-visible lg:min-h-0 lg:flex-1 lg:overflow-hidden";
 
 /** AppShell·시리즈 페이지 본문 패널 */
 export const APP_MAIN_PANEL_CLASS =
   "flex w-full flex-col lg:min-h-0 lg:flex-1 lg:overflow-hidden";
 
 /** 서브헤더 + 스크롤 본문을 한 덩어리로 묶는 페이지 셸(리소스 상세·관리 등) */
-export const PAGE_SUBHEADER_PAGE_SHELL_CLASS = `${APP_MAIN_PANEL_CLASS} bg-surface-20`;
+export const PAGE_SUBHEADER_PAGE_SHELL_CLASS = `${APP_MAIN_PANEL_CLASS} bg-background-20`;
 
 /**
  * AppShell 사이드바+본문 행

@@ -4,6 +4,7 @@ import { useState, useCallback, useRef, useEffect } from "react";
 import { Button } from "@/components/ui/button";
 import { PageCard } from "@/components/layout/PageCard";
 import { AddResourceSlot } from "@/components/resource/cards/AddResourceSlot";
+import { createOptimizedImageObjectUrl } from "@/lib/image-upload-compress";
 import { THUMBNAIL_SLOT_ARIA } from "@/lib/thumbnail-styles";
 import { ImageCard } from "@/components/resource/cards/ImageCard";
 import { Title1 } from "@/components/ui/title1";
@@ -113,17 +114,23 @@ export function EpisodeForm({
       e.target.value = "";
       if (!file || !file.type.startsWith("image/")) return;
 
-      const objectUrl = URL.createObjectURL(file);
-      setPendingThumbnailUrl((prev) => {
-        if (prev && prev.startsWith("blob:")) {
-          URL.revokeObjectURL(prev);
+      void (async () => {
+        try {
+          const objectUrl = await createOptimizedImageObjectUrl(file);
+          setPendingThumbnailUrl((prev) => {
+            if (prev && prev.startsWith("blob:")) {
+              URL.revokeObjectURL(prev);
+            }
+            return objectUrl;
+          });
+          setThumbnailModalInitialSlots([
+            { id: "episode-thumbnail", expressionLabel: "", imageUrl: objectUrl },
+          ]);
+          setThumbnailModalOpen(true);
+        } catch (err) {
+          console.error("Thumbnail prepare failed:", err);
         }
-        return objectUrl;
-      });
-      setThumbnailModalInitialSlots([
-        { id: "episode-thumbnail", expressionLabel: "", imageUrl: objectUrl },
-      ]);
-      setThumbnailModalOpen(true);
+      })();
     },
     [],
   );
@@ -260,7 +267,7 @@ export function EpisodeForm({
             {formFields}
           </div>
         ) : (
-          <PageCard className="mx-0 max-w-none min-w-0 border-0 rounded-none px-my-16 lg:px-my-20 pt-my-20 pb-my-20 shadow-none">
+          <PageCard className="mx-0 max-w-none min-w-0 border-0 rounded-none px-my-20 pt-my-20 pb-my-20 shadow-none">
             {formFields}
             {footer}
           </PageCard>
