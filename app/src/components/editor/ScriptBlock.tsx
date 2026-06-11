@@ -961,97 +961,72 @@ export function ScriptBlock({
     const sceneInputClass =
       block.type === "scene" ? EDITOR_SCENE_TITLE_INPUT_CLASS : EDITOR_TOP_DESC_INPUT_CLASS;
 
-    const sceneContent = (
-      <div
-        className={cn(COMPACT_BLOCK_ROOT_CLASSES, rootClassName)}
-        tabIndex={0}
-        onFocus={onFocusBlock}
-        onKeyDown={(e) => {
-          if (e.target === e.currentTarget && e.key === "Delete") {
-            handleDeleteBlock(e);
-            return;
-          }
-          // Only handle arrow keys if input is not focused (prevent double handling)
-          if (e.target === e.currentTarget && (e.key === "ArrowUp" || e.key === "ArrowDown")) {
-            const currentIdx = index - 1;
-            if (e.key === "ArrowUp" && currentIdx > 0) {
-              e.preventDefault();
-              focusBlock(blocks[currentIdx - 1].id);
-            } else if (e.key === "ArrowDown" && currentIdx < blocks.length - 1) {
-              e.preventDefault();
-              focusBlock(blocks[currentIdx + 1].id);
-            }
-          }
-        }}
-      >
+    return (
+      <>
         {!hideIndex && (
           <span className="shrink-0 text-caption1_500 text-on-surface-30 tabular-nums">
             {indexLabel}
           </span>
         )}
-        <div className="flex min-w-0 flex-1 w-full items-center gap-0">
+        <span
+          className={cn(
+            "flex h-8 shrink-0 items-center justify-start text-body4_500",
+            EDITOR_BLOCK_LABEL_COLUMN_CLASS,
+            labelColorClass,
+          )}
+        >
+          {labelText}
+        </span>
+        {showSceneValueAsSpan ? (
           <span
             className={cn(
-              "flex h-8 items-center justify-start text-body4_500",
-              EDITOR_BLOCK_LABEL_COLUMN_CLASS,
-              labelColorClass
+              sceneDisplayClass,
+              "block min-h-8 py-0",
+              rootClassName,
+              !block.content?.trim() && "text-on-surface-30",
             )}
+            onPointerDown={(e) => {
+              e.preventDefault();
+              promptMobileBlockContentEdit(block.id, null);
+            }}
           >
-            {labelText}
+            {block.content?.trim() || placeholder}
           </span>
-          {showSceneValueAsSpan ? (
-            <span
-              className={cn(
-                sceneDisplayClass,
-                "flex min-h-8 items-center",
-                !block.content?.trim() && "text-on-surface-30",
-              )}
-              onPointerDown={(e) => {
-                e.preventDefault();
-                promptMobileBlockContentEdit(block.id, null);
-              }}
-            >
-              {block.content?.trim() || placeholder}
-            </span>
-          ) : (
-            <input
-              ref={sceneInputRef}
-              type="text"
-              value={block.content}
-              onChange={(e) => updateBlock(block.id, e.target.value)}
-              onFocus={sceneMobileEdit.onContentFocus}
-              onPointerDown={sceneMobileEdit.onContentPointerDown}
-              readOnly={sceneMobileEdit.readOnly}
-              onKeyDown={handleSceneKeyDown}
-              placeholder={placeholder}
-              className={sceneInputClass}
-            />
-          )}
-          {!isSeedDefault ? (
-            <Button
-              type="button"
-              variant="ghost"
-              size="icon"
-              className={cn(
-              "ml-auto h-8 w-8 shrink-0 text-on-surface-30 lg:hover:bg-red-50 lg:hover:text-red-500",
+        ) : (
+          <input
+            ref={sceneInputRef}
+            type="text"
+            value={block.content}
+            onChange={(e) => updateBlock(block.id, e.target.value)}
+            onFocus={sceneMobileEdit.onContentFocus}
+            onPointerDown={sceneMobileEdit.onContentPointerDown}
+            readOnly={sceneMobileEdit.readOnly}
+            onKeyDown={handleSceneKeyDown}
+            placeholder={placeholder}
+            className={cn(sceneInputClass, rootClassName)}
+          />
+        )}
+        {!isSeedDefault ? (
+          <Button
+            type="button"
+            variant="ghost"
+            size="icon"
+            className={cn(
+              "ml-auto h-8 w-8 shrink-0 self-start text-on-surface-30 lg:hover:bg-red-50 lg:hover:text-red-500",
               editorBlockTrailingActionClass(),
             )}
-              aria-label="Delete block"
-              onClick={(e) => {
-                e.preventDefault();
-                e.stopPropagation();
-                removeBlock(block.id);
-              }}
-            >
-              <Trash2 className={DELETE_ICON_CLASS} />
-            </Button>
-          ) : null}
-        </div>
-      </div>
+            aria-label="Delete block"
+            onClick={(e) => {
+              e.preventDefault();
+              e.stopPropagation();
+              removeBlock(block.id);
+            }}
+          >
+            <Trash2 className={DELETE_ICON_CLASS} />
+          </Button>
+        ) : null}
+      </>
     );
-
-    // 장면 블록 포함, 배경/텍스트 등과 동일한 한 줄(32px) 구조
-    return sceneContent;
   }
 
   // Direction: 안내문구만 노출 (상세 기능 추후 추가)

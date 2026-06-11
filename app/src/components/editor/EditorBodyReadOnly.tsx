@@ -263,7 +263,7 @@ export function EditorBodyReadOnly() {
                 tabIndex={0}
                 onClick={() => focusBlock(block.id)}
                 className={cn(
-                  "group/preview w-full rounded bg-white inline-flex items-start justify-start gap-0 px-my-12 py-my-4 text-left outline-none transition-colors hover:bg-surface-20/50"
+                  "group/preview w-full rounded bg-white inline-flex items-start justify-start gap-0 px-0 lg:px-my-20 py-my-4 text-left outline-none transition-colors hover:bg-surface-20/50"
                 )}
               >
                 <ReadOnlyBlockRow

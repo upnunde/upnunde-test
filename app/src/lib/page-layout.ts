@@ -135,4 +135,4 @@ export const PAGE_MODAL_WIDE_CLASS = "w-[min(92vw,760px)] max-w-[760px] min-w-0"
 
 /** 에디터·에피소드 상세 본문 — 모바일 문서 스크롤 / lg 내부 스크롤 */
 export const EDITOR_PAGE_SCROLL_CLASS =
-  "relative z-0 flex flex-col overscroll-none max-lg:overflow-visible lg:min-h-0 lg:flex-1 lg:overflow-y-auto";
+  "relative z-0 flex min-w-0 flex-col overscroll-none max-lg:overflow-x-hidden max-lg:overflow-y-visible lg:min-h-0 lg:flex-1 lg:overflow-y-auto";

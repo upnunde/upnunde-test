@@ -3,6 +3,12 @@
 import React, { useCallback, useEffect, useState } from "react";
 import Image from "next/image";
 import { ChevronLeft, ChevronRight, X } from "lucide-react";
+import { isDummyResourceUrl } from "@/lib/dummy-asset-path";
+import {
+  IMAGE_LIGHTBOX_CHECKERBOARD_STYLE,
+  IMAGE_LIGHTBOX_FRAME_CLASS,
+  IMAGE_LIGHTBOX_IMAGE_SIZES,
+} from "@/lib/thumbnail-styles";
 import { cn } from "@/lib/utils";
 
 export interface ImageLightboxItem {
@@ -18,6 +24,9 @@ export interface ImageLightboxProps {
   initialIndex?: number;
   className?: string;
 }
+
+const IMAGE_LIGHTBOX_CONTROL_BUTTON_CLASS =
+  "inline-flex h-10 w-10 cursor-pointer items-center justify-center overflow-hidden rounded-full sm:h-14 sm:w-14 bg-surface-10 shadow-elevation-20 hover:bg-surface-20 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-2";
 
 export function ImageLightbox({
   open,
@@ -67,7 +76,7 @@ export function ImageLightbox({
   return (
     <div
       className={cn(
-        "fixed inset-0 z-50 flex items-center justify-center p-my-16",
+        "fixed inset-0 z-50 flex items-start justify-center px-my-16 pb-my-16 pt-my-20",
         "bg-black/50 data-[state=open]:animate-in data-[state=closed]:animate-out data-[state=closed]:fade-out-0 data-[state=open]:fade-in-0",
         className
       )}
@@ -80,28 +89,15 @@ export function ImageLightbox({
         className="flex w-full max-w-[512px] max-h-[min(92dvh,716px)] flex-col items-center gap-my-16"
         onClick={(e) => e.stopPropagation()}
       >
-        <div className="relative flex w-full min-h-0 flex-1 items-center justify-center px-my-12 sm:px-14">
-          {/* 이미지 프레임 — 9:16, 뷰포트에 맞춰 축소 (최대 384×640) */}
-          <div
-            className={cn(
-              "relative aspect-[9/16] w-[min(384px,calc(100vw-4rem),calc((100dvh-12rem)*9/16))]",
-              "shrink-0 overflow-hidden rounded-[4px]",
-              "outline outline-4 outline-offset-[-4px] outline-white shadow-elevation-50",
-            )}
-            style={{
-              backgroundColor: "#f8fafc",
-              backgroundImage:
-                "linear-gradient(45deg, #e5e7eb 25%, transparent 25%), linear-gradient(-45deg, #e5e7eb 25%, transparent 25%), linear-gradient(45deg, transparent 75%, #e5e7eb 75%), linear-gradient(-45deg, transparent 75%, #e5e7eb 75%)",
-              backgroundSize: "16px 16px",
-              backgroundPosition: "0 0, 0 8px, 8px -8px, -8px 0",
-            }}
-          >
+        <div className="relative flex w-full items-center justify-center px-my-12 sm:px-14">
+          <div className={IMAGE_LIGHTBOX_FRAME_CLASS} style={IMAGE_LIGHTBOX_CHECKERBOARD_STYLE}>
             {item && (
               <Image
                 src={item.imageUrl}
                 alt={item.name ?? "미리보기"}
                 fill
-                sizes="(max-width: 512px) 90vw, 384px"
+                unoptimized={isDummyResourceUrl(item.imageUrl)}
+                sizes={IMAGE_LIGHTBOX_IMAGE_SIZES}
                 className="object-cover object-center"
               />
             )}
@@ -115,9 +111,7 @@ export function ImageLightbox({
               disabled={!canPrev}
               className={cn(
                 "absolute left-0 top-1/2 z-10 -translate-y-1/2",
-                "inline-flex h-10 w-10 cursor-pointer items-center justify-center overflow-hidden rounded-full sm:h-14 sm:w-14",
-                "bg-surface-10 shadow-elevation-20",
-                "hover:bg-surface-20 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-2",
+                IMAGE_LIGHTBOX_CONTROL_BUTTON_CLASS,
                 "disabled:pointer-events-none disabled:opacity-40",
               )}
               aria-label="이전 이미지"
@@ -134,9 +128,7 @@ export function ImageLightbox({
               disabled={!canNext}
               className={cn(
                 "absolute right-0 top-1/2 z-10 -translate-y-1/2",
-                "inline-flex h-10 w-10 cursor-pointer items-center justify-center overflow-hidden rounded-full sm:h-14 sm:w-14",
-                "bg-surface-10 shadow-elevation-20",
-                "hover:bg-surface-20 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-2",
+                IMAGE_LIGHTBOX_CONTROL_BUTTON_CLASS,
                 "disabled:pointer-events-none disabled:opacity-40",
               )}
               aria-label="다음 이미지"
@@ -150,14 +142,10 @@ export function ImageLightbox({
         <button
           type="button"
           onClick={onClose}
-          className={cn(
-            "inline-flex h-12 w-12 shrink-0 cursor-pointer items-center justify-center overflow-hidden rounded-full sm:h-14 sm:w-14",
-            "bg-black/30 hover:bg-black/40",
-            "focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-white focus-visible:ring-offset-2",
-          )}
+          className={cn("shrink-0", IMAGE_LIGHTBOX_CONTROL_BUTTON_CLASS)}
           aria-label="닫기"
         >
-          <X className="h-6 w-6 text-white sm:h-7 sm:w-7" strokeWidth={2} />
+          <X className="h-5 w-5 text-on-surface-10 sm:h-6 sm:w-6" strokeWidth={2} />
         </button>
       </div>
     </div>

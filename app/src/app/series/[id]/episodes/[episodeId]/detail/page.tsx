@@ -78,7 +78,7 @@ export default function EpisodeDetailPage() {
 
   const scrollClassName = cn(
     EDITOR_PAGE_SCROLL_CLASS,
-    isDesktop ? "px-0 py-my-40" : "pb-my-8 pl-my-16 pr-my-12 pt-0",
+    isDesktop ? "px-0 py-my-40" : "pb-my-8 pl-my-12 pr-my-12 pt-0",
   );
 
   const previewChromeHidden = editorMobilePreviewChromeHiddenClass(isDesktop, mobilePanel);

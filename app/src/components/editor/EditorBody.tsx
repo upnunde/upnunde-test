@@ -40,12 +40,23 @@ const WRAPPER_CLASS_CHOICE = cn(
 );
 const ROOT_CLASS_CHOICE = "min-h-8 min-w-0 flex-1 h-fit";
 
-/** 한 줄 블록 (장면/캐릭터/연출/배경 등): 고정 높이 32px(h-8), px-0 py-1 */
+/** 한 줄 블록 (캐릭터/연출/배경 등): 고정 높이 32px(h-8), px-0 py-1 */
 const WRAPPER_CLASS_COMPACT = cn(
   "group flex h-fit min-h-9 items-center justify-start gap-0 rounded-lg py-my-4",
   editorRowHoverClass(),
 );
 const ROOT_CLASS_COMPACT = "min-w-0 flex-1 min-h-8 h-8";
+
+/** 장면·장면정보 — 긴 제목 줄바꿈 허용 */
+const WRAPPER_CLASS_WRAP = cn(
+  "group flex h-fit min-h-9 items-start justify-start gap-0 rounded-lg py-my-4 outline-none focus-within:bg-white",
+  editorRowHoverClass(),
+);
+const ROOT_CLASS_WRAP = "min-w-0 flex-1 min-h-8 h-auto self-start";
+
+function isWrapCompactBlock(type: import("@/types/editor").BlockType) {
+  return type === "scene" || type === "top_desc";
+}
 
 function SortableBlockWrapper({
   block,
@@ -75,6 +86,7 @@ function SortableBlockWrapper({
   const isFocused = focusBlockId === block.id;
   const isSeedDefault = block.data?.isSeedDefault === true;
   const isTextLikeRow = block.type === "text" || block.type === "choice";
+  const isWrapRow = isWrapCompactBlock(block.type);
 
   const {
     attributes,
@@ -142,11 +154,13 @@ function SortableBlockWrapper({
           ? WRAPPER_CLASS_TEXT
           : block.type === "choice"
             ? WRAPPER_CLASS_CHOICE
-            : WRAPPER_CLASS_COMPACT,
+            : isWrapRow
+              ? WRAPPER_CLASS_WRAP
+              : WRAPPER_CLASS_COMPACT,
         isDragging && "opacity-50",
       )}
     >
-      <div className={editorLeadingControlsClass()}>
+      <div className={cn(editorLeadingControlsClass(), isWrapRow && "self-start")}>
         <Button
           type="button"
           variant="ghost"
@@ -186,7 +200,9 @@ function SortableBlockWrapper({
           EDITOR_BLOCK_INDEX_COLUMN_CLASS,
           isTextLikeRow
             ? "min-h-8 items-center text-caption1_500"
-            : "h-8 items-center text-body4_500",
+            : isWrapRow
+              ? "h-8 shrink-0 self-start items-center py-0 text-body4_500"
+              : "h-8 items-center py-0 text-body4_500",
           isFocused
             ? "text-primary"
             : hasIssue
@@ -213,7 +229,9 @@ function SortableBlockWrapper({
             ? ROOT_CLASS_TEXT
             : block.type === "choice"
               ? ROOT_CLASS_CHOICE
-              : ROOT_CLASS_COMPACT
+              : isWrapRow
+                ? ROOT_CLASS_WRAP
+                : ROOT_CLASS_COMPACT
         }
       />
       {insertMenuPosition ? (
@@ -423,7 +441,7 @@ export default function EditorBody() {
   }, [blocks]);
 
   return (
-    <div className="min-h-full w-full cursor-text">
+    <div className="min-h-full w-full min-w-0 cursor-text">
       <DndContext
         sensors={sensors}
         collisionDetection={closestCenter}
@@ -434,7 +452,7 @@ export default function EditorBody() {
           strategy={verticalListSortingStrategy}
         >
           <div
-            className="mx-auto flex min-h-full w-full flex-col gap-my-4 px-my-8"
+            className="mx-auto flex min-h-full w-full min-w-0 flex-col gap-my-4 px-my-8"
             onClick={handleBackgroundClick}
           >
             {blocks.map((block, i) => {

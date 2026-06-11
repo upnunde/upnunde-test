@@ -39,3 +39,17 @@ export const RESOURCE_THUMBNAIL_FLUID_SIZE_CLASS = "aspect-[9/16] h-auto w-full 
 
 export const RESOURCE_THUMBNAIL_FLUID_IMAGE_SIZES = "(max-width: 1023px) 25vw, 90px";
 export const RESOURCE_THUMBNAIL_FIXED_IMAGE_SIZES = "90px";
+
+/** 리소스 썸네일 라이트박스 — 9:16, 최대 384×640, 모바일 뷰포트 축소 */
+export const IMAGE_LIGHTBOX_FRAME_CLASS =
+  "relative aspect-[9/16] w-[min(384px,calc(100vw-4rem),calc((100dvh-12rem)*9/16))] shrink-0 overflow-hidden rounded-[4px] outline outline-4 outline-offset-[-4px] outline-white shadow-elevation-50";
+
+export const IMAGE_LIGHTBOX_IMAGE_SIZES = "(max-width: 512px) 90vw, 384px";
+
+export const IMAGE_LIGHTBOX_CHECKERBOARD_STYLE = {
+  backgroundColor: "#f8fafc",
+  backgroundImage:
+    "linear-gradient(45deg, #e5e7eb 25%, transparent 25%), linear-gradient(-45deg, #e5e7eb 25%, transparent 25%), linear-gradient(45deg, transparent 75%, #e5e7eb 75%), linear-gradient(-45deg, transparent 75%, #e5e7eb 75%)",
+  backgroundSize: "16px 16px",
+  backgroundPosition: "0 0, 0 8px, 8px -8px, -8px 0",
+} as const;

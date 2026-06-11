@@ -77,7 +77,7 @@ export function CharacterCard({
           fill
           unoptimized={isDummyResourceUrl(character.imageUrl)}
           sizes={fluid ? RESOURCE_THUMBNAIL_FLUID_IMAGE_SIZES : RESOURCE_THUMBNAIL_FIXED_IMAGE_SIZES}
-          className="object-cover object-top"
+          className="object-cover object-center"
         />
         <div className={THUMBNAIL_DIM_OVERLAY_CLASS} aria-hidden />
         <ResourceThumbnailActions
