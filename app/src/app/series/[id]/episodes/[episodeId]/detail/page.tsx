@@ -32,7 +32,7 @@ import {
   editorMobileSubHeaderShellClass,
 } from "@/lib/editor-scroll";
 import { APP_BROWSER_BG_CLASS, APP_PAGE_ROOT_CLASS } from "@/lib/mobile-viewport";
-import { APP_MAIN_PANEL_CLASS, EDITOR_PAGE_SCROLL_CLASS } from "@/lib/page-layout";
+import { APP_MAIN_PANEL_CLASS, APP_SHELL_BODY_ROW_CLASS, EDITOR_PAGE_SCROLL_CLASS } from "@/lib/page-layout";
 import { INITIAL_SCRIPT } from "@/lib/initialScript";
 import { cn } from "@/lib/utils";
 
@@ -88,13 +88,13 @@ export default function EpisodeDetailPage() {
       <div className={cn(previewChromeHidden)}>
         <Header profileImageUrl={profileImageUrl} onProfileImageChange={setProfileImageUrl} />
       </div>
-      <div className={cn("relative flex", APP_MAIN_PANEL_CLASS)}>
+      <div className={APP_SHELL_BODY_ROW_CLASS}>
         {isDesktop ? (
           <aside
             className={
               isSceneSidebarCollapsed
                 ? "w-fit shrink-0 overflow-y-auto border-r border-border-10 bg-white px-my-8"
-                : "w-[240px] shrink-0 overflow-y-auto border-r border-border-10 bg-white"
+                : "w-[240px] shrink-0 self-stretch min-h-0 overflow-y-auto border-r border-border-10 bg-white"
             }
           >
             <SceneNavigation

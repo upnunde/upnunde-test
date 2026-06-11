@@ -37,7 +37,11 @@ import {
   editorMobileSubHeaderShellClass,
 } from "@/lib/editor-scroll";
 import { APP_BROWSER_BG_CLASS, APP_PAGE_ROOT_CLASS } from "@/lib/mobile-viewport";
-import { APP_MAIN_PANEL_CLASS, EDITOR_PAGE_SCROLL_CLASS } from "@/lib/page-layout";
+import {
+  APP_MAIN_PANEL_CLASS,
+  APP_SHELL_BODY_ROW_CLASS,
+  EDITOR_PAGE_SCROLL_CLASS,
+} from "@/lib/page-layout";
 import { useVisualKeyboardInset } from "@/hooks/useVisualKeyboardInset";
 import { useClientMounted } from "@/hooks/useClientMounted";
 import { useEditorStore } from "@/store/useEditorStore";
@@ -223,13 +227,13 @@ function EditorInner() {
         <Header profileImageUrl={profileImageUrl} onProfileImageChange={setProfileImageUrl} />
       </div>
 
-      <div className={cn("relative flex", APP_MAIN_PANEL_CLASS)}>
+      <div className={APP_SHELL_BODY_ROW_CLASS}>
         {isDesktop ? (
           <aside
             className={
               isSceneSidebarCollapsed
                 ? "relative z-20 w-fit shrink-0 overflow-visible border-r border-border-10 bg-white px-my-8"
-                : "w-[240px] shrink-0 overflow-y-auto overscroll-none border-r border-border-10 bg-white"
+                : "w-[240px] shrink-0 self-stretch min-h-0 overflow-y-auto overscroll-none border-r border-border-10 bg-white"
             }
           >
             <SceneNavigation
