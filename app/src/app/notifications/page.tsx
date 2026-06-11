@@ -3,11 +3,12 @@
 import React, { useState, useMemo, useCallback } from "react";
 import { useRouter } from "next/navigation";
 import { AppShell } from "@/components/layout/AppShell";
+import { PageCard } from "@/components/layout/PageCard";
 import {
   PAGE_CONTAINER_CLASS,
-  PAGE_INLINE_TAB_STRIP_SHELL_CLASS,
-  PAGE_SCROLL_ROOT_CLASS,
-  PAGE_SCROLL_ROOT_MOBILE_FLUSH_CLASS,
+  PAGE_GUTTER_X_CLASS,
+  PAGE_SCROLL_BOTTOM_CLASS,
+  PAGE_SCROLL_TOP_CLASS,
   PAGE_SUBHEADER_WITH_FILTER_CLASS,
 } from "@/lib/page-layout";
 import { cn } from "@/lib/utils";
@@ -345,9 +346,15 @@ function buildMockNotifications(): NotificationData[] {
     "2025.12.20",
   ] as const;
 
+  /** index 기반 결정적 의사난수 — SSR/CSR 동일 결과 보장 */
+  const deterministicUnit = (index: number, salt: number) => {
+    const x = Math.sin(index * 12.9898 + salt * 78.233) * 43758.5453;
+    return x - Math.floor(x);
+  };
+
   return Array.from({ length: MOCK_NOTIFICATION_COUNT }, (_, index) => {
-    const item = titles[Math.floor(Math.random() * titles.length)];
-    const date = dateFormats[Math.floor(Math.random() * dateFormats.length)];
+    const item = titles[Math.floor(deterministicUnit(index, 1) * titles.length)];
+    const date = dateFormats[Math.floor(deterministicUnit(index, 2) * dateFormats.length)];
 
     return {
       id: index + 1,
@@ -355,7 +362,7 @@ function buildMockNotifications(): NotificationData[] {
       title: item.title,
       content: item.content,
       date,
-      isRead: Math.random() >= 0.35,
+      isRead: deterministicUnit(index, 3) >= 0.35,
     };
   });
 }
@@ -394,40 +401,46 @@ export default function NotificationsPage() {
           </div>
         </div>
 
-        <div className={PAGE_INLINE_TAB_STRIP_SHELL_CLASS}>
-          <div className={PAGE_CONTAINER_CLASS}>
-            <NotificationTabStrip
-              activeTab={activeTab}
-              onTabChange={(tab) => {
-                setActiveTab(tab);
-                setCurrentPage(1);
-              }}
-            />
-          </div>
-        </div>
-
         <div
           className={cn(
-            PAGE_SCROLL_ROOT_CLASS,
-            PAGE_SCROLL_ROOT_MOBILE_FLUSH_CLASS,
-            "items-center gap-my-12 max-lg:gap-0",
+            "flex flex-col items-center max-lg:overflow-visible lg:min-h-0 lg:flex-1 lg:overflow-y-auto",
+            PAGE_SCROLL_TOP_CLASS,
+            PAGE_SCROLL_BOTTOM_CLASS,
+            PAGE_GUTTER_X_CLASS,
+            "max-lg:px-0 max-lg:pt-0",
           )}
         >
-          <div className={PAGE_CONTAINER_CLASS}>
-            <NotificationList
-              notifications={paginatedNotifications}
-              onContactClick={handleContactClick}
-              footer={
-                showPagination ? (
-                  <Pagination
-                    currentPage={currentPage}
-                    totalItems={totalItems}
-                    onPageChange={setCurrentPage}
-                    pageSize={PAGE_SIZE}
+          <div className="mx-auto flex w-full max-w-[1200px]">
+            <div className="min-w-0 flex-1">
+              <PageCard
+                fullWidth
+                className="flex h-fit shrink-0 flex-col gap-my-20 overflow-hidden rounded-[4px] px-0 lg:px-0 pt-my-8 pb-my-20 max-lg:rounded-none max-lg:border-0"
+              >
+                <NotificationTabStrip
+                  activeTab={activeTab}
+                  onTabChange={(tab) => {
+                    setActiveTab(tab);
+                    setCurrentPage(1);
+                  }}
+                />
+                <div className="self-stretch px-my-20 pt-0 pb-0">
+                  <NotificationList
+                    notifications={paginatedNotifications}
+                    onContactClick={handleContactClick}
+                    footer={
+                      showPagination ? (
+                        <Pagination
+                          currentPage={currentPage}
+                          totalItems={totalItems}
+                          onPageChange={setCurrentPage}
+                          pageSize={PAGE_SIZE}
+                        />
+                      ) : undefined
+                    }
                   />
-                ) : undefined
-              }
-            />
+                </div>
+              </PageCard>
+            </div>
           </div>
         </div>
     </AppShell>

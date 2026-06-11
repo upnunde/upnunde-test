@@ -2,7 +2,7 @@
 
 import Header from "@/components/Header/Header";
 import { APP_BROWSER_BG_CLASS, APP_PAGE_ROOT_CLASS } from "@/lib/mobile-viewport";
-import { APP_MAIN_CLASS } from "@/lib/page-layout";
+import { APP_MAIN_CLASS, APP_MAIN_PANEL_CLASS } from "@/lib/page-layout";
 import { cn } from "@/lib/utils";
 
 export interface StandaloneHeaderPageProps {
@@ -25,7 +25,9 @@ export function StandaloneHeaderPage({
   return (
     <div className={cn(APP_PAGE_ROOT_CLASS, APP_BROWSER_BG_CLASS, className)}>
       <Header profileImageUrl={profileImageUrl} onProfileImageChange={onProfileImageChange} />
-      <main className={cn(APP_MAIN_CLASS, "bg-surface-20")}>{children}</main>
+      <main className={cn(APP_MAIN_CLASS, "bg-surface-20")}>
+        <div className={APP_MAIN_PANEL_CLASS}>{children}</div>
+      </main>
     </div>
   );
 }

@@ -37,7 +37,7 @@ export function NotificationItem({
       <button
         type="button"
         onClick={() => onToggle?.()}
-        className="mx-5 w-[calc(100%-40px)] cursor-pointer self-stretch h-[80px] rounded-lg inline-flex justify-start items-center gap-my-12 lg:gap-my-20 transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-inset"
+        className="w-full cursor-pointer self-stretch h-[80px] rounded-lg inline-flex justify-start items-center gap-my-12 lg:gap-my-20 transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-inset"
         aria-expanded={isOpen}
         aria-controls={`notification-content-${id}`}
         id={`notification-trigger-${id}`}

@@ -124,10 +124,10 @@ export function SeriesFormPageScaffold({
                     <div className="min-w-0 flex-1">
                       <PageCard
                         fullWidth
-                        className="flex h-fit shrink-0 flex-col overflow-hidden rounded-[4px] px-0 pt-0 pb-0 max-lg:rounded-none max-lg:border-0"
+                        className="flex h-fit shrink-0 flex-col gap-my-20 overflow-hidden rounded-[4px] px-0 lg:px-0 pt-my-8 pb-my-20 max-lg:rounded-none max-lg:border-0"
                       >
                         <SeriesFormTabs activeTab={activeTab} onChange={onTabChange} />
-                        <div className={cn("self-stretch pt-my-8", PAGE_SCROLL_BOTTOM_CLASS, PAGE_GUTTER_X_CLASS)}>{children}</div>
+                        <div className="self-stretch px-my-20 pt-0 pb-0">{children}</div>
                       </PageCard>
                     </div>
 

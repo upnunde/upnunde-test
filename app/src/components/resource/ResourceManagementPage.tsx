@@ -13,7 +13,7 @@ import { MediaCard } from "./cards/MediaCard";
 import { AddResourceSlot } from "./cards/AddResourceSlot";
 import { BgmSection } from "./bgm/BgmSection";
 import { ConfirmDeleteModal } from "./modals/ConfirmDeleteModal";
-import { PAGE_CARD_SHELL_MOBILE_FLUSH_CLASS, PAGE_GUTTER_GAP_CLASS, PAGE_SCROLL_COLUMN_CLASS, PAGE_SUBHEADER_WITH_STICKY_CLASS } from "@/lib/page-layout";
+import { PAGE_CARD_SHELL_MOBILE_FLUSH_CLASS, PAGE_GUTTER_GAP_CLASS, PAGE_SCROLL_COLUMN_CLASS, PAGE_SUBHEADER_PAGE_SHELL_CLASS, PAGE_SUBHEADER_WITH_STICKY_CLASS } from "@/lib/page-layout";
 import { RESOURCE_THUMBNAIL_FLUID_SIZE_CLASS, RESOURCE_THUMBNAIL_GRID_CLASS } from "@/lib/thumbnail-styles";
 import { cn } from "@/lib/utils";
 import type { ImageLightboxItem } from "./ImageLightbox";
@@ -180,7 +180,7 @@ export function ResourceManagementPage() {
 
   return (
     <>
-      <div className="flex flex-col bg-surface-20">
+      <div className={PAGE_SUBHEADER_PAGE_SHELL_CLASS}>
         {/* [정책 1] 헤더 (레이아웃 가이드: margin 40, max-width 1200, min-width 640) */}
         <header className={PAGE_SUBHEADER_WITH_STICKY_CLASS}>
           <div className="flex w-full min-w-0 max-w-[1200px] mx-auto items-center justify-between gap-my-16">

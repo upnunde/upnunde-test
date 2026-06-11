@@ -3,7 +3,7 @@
 import React, { useState } from "react";
 import { NotificationItem } from "@/components/notification/NotificationItem";
 import type { NotificationData } from "@/types/notification";
-import { PAGE_CARD_SHELL_MOBILE_FLUSH_CLASS } from "@/lib/page-layout";
+import { SegmentedTextTabs } from "@/components/ui/segmented-text-tabs";
 import { cn } from "@/lib/utils";
 
 export type NotificationTab = "all" | "NOTICE" | "WORK_ALERT";
@@ -13,40 +13,25 @@ export interface NotificationTabStripProps {
   onTabChange: (tab: NotificationTab) => void;
 }
 
-/** 알림 목록 상단 탭(전체/공지/작품알림) — 페이지 레벨 sticky 셸 안에 배치 */
+const TAB_ITEMS = [
+  { id: "all" as const, label: "전체" },
+  { id: "NOTICE" as const, label: "공지" },
+  { id: "WORK_ALERT" as const, label: "작품알림" },
+] as const;
+
+/** 알림 목록 상단 탭(전체/공지/작품알림) — PageCard 내부에 배치 */
 export function NotificationTabStrip({ activeTab, onTabChange }: NotificationTabStripProps) {
   return (
-    <div className="inline-flex w-full flex-col items-start justify-start gap-my-8 pt-0 pb-0 mt-2 mb-0">
-      <div
-        data-size="L"
-        data-underline="true"
-        className="inline-flex w-full items-center justify-start gap-my-16 overflow-hidden"
-      >
-        {(
-          [
-            { id: "all" as const, label: "전체" },
-            { id: "NOTICE" as const, label: "공지" },
-            { id: "WORK_ALERT" as const, label: "작품알림" },
-          ] as const
-        ).map(({ id, label }) => (
-          <button
-            key={id}
-            type="button"
-            data-height="h40"
-            data-selectline="true"
-            className={cn(
-              "flex h-9 min-w-0 cursor-pointer items-center justify-center gap-my-8 font-['Pretendard_JP'] text-body1_700",
-              activeTab === id
-                ? "border-b-2 border-slate-800 text-on-surface-10"
-                : "text-on-surface-disabled",
-            )}
-            onClick={() => onTabChange(id)}
-            data-activated={activeTab === id}
-          >
-            <span className="justify-start">{label}</span>
-          </button>
-        ))}
-      </div>
+    <div className="inline-flex flex-col items-start justify-start gap-my-8 self-stretch border-b border-border-10 px-my-20 pb-0 pt-0">
+      <SegmentedTextTabs
+        aria-label="알림 필터"
+        items={TAB_ITEMS}
+        activeId={activeTab}
+        onSelect={(id) => onTabChange(id as NotificationTab)}
+        underline
+        size="l"
+        tabListClassName="mb-0 self-stretch border-b-0"
+      />
     </div>
   );
 }
@@ -61,7 +46,7 @@ export interface NotificationListProps {
   className?: string;
 }
 
-/** 알림 목록 카드 — 탭은 `NotificationTabStrip` + `PAGE_INLINE_TAB_STRIP_SHELL_CLASS`로 페이지에서 분리 */
+/** 알림 목록 본문 — 카드 셸은 페이지 `PageCard`가 담당 */
 export function NotificationList({
   notifications,
   onContactClick,
@@ -71,20 +56,14 @@ export function NotificationList({
   const [expandedId, setExpandedId] = useState<NotificationData["id"] | null>(null);
 
   return (
-    <div
-      className={cn(
-        "flex h-fit w-full shrink-0 flex-col rounded-[4px] border border-border-10 bg-white max-lg:overflow-visible lg:overflow-hidden",
-        PAGE_CARD_SHELL_MOBILE_FLUSH_CLASS,
-        className,
-      )}
-    >
+    <div className={cn("flex h-fit w-full shrink-0 flex-col", className)}>
       <div className="pt-0 pb-0">
         <ul className="flex flex-col" role="list">
           {notifications.map((notification, index) => (
             <React.Fragment key={notification.id}>
               {index > 0 ? (
                 <li aria-hidden className="list-none">
-                  <div className="mx-5 my-0 h-px bg-surface-20" role="separator" />
+                  <div className="my-0 h-px w-full bg-surface-20" role="separator" />
                 </li>
               ) : null}
               <li>

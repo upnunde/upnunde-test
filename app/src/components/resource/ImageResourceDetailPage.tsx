@@ -16,6 +16,7 @@ import {
   PAGE_CONTENT_BODY_CLASS,
   PAGE_CONTENT_FOOTER_CLASS,
   PAGE_SCROLL_COLUMN_CLASS,
+  PAGE_SUBHEADER_PAGE_SHELL_CLASS,
   PAGE_SUBHEADER_WITH_STICKY_CLASS,
 } from "@/lib/page-layout";
 import { ImageCropPosterModal } from "@/components/resource/character/CharacterExpressionModal";
@@ -185,7 +186,7 @@ export function ImageResourceDetailPage({ kind, initialData }: ImageResourceDeta
   );
 
   return (
-    <div className="flex flex-col bg-surface-20">
+    <div className={PAGE_SUBHEADER_PAGE_SHELL_CLASS}>
       {/* 상단 서브 헤더 */}
       <header className={PAGE_SUBHEADER_WITH_STICKY_CLASS}>
         <div className="flex w-full min-w-0 max-w-[1200px] mx-auto items-center justify-between gap-my-16">

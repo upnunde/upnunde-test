@@ -4,7 +4,7 @@ import { useState } from "react";
 import Header from "@/components/Header/Header";
 import AppSidebar, { type SidebarItemId } from "@/components/AppSidebar/AppSidebar";
 import { APP_BROWSER_BG_CLASS, APP_PAGE_ROOT_CLASS } from "@/lib/mobile-viewport";
-import { APP_MAIN_CLASS, APP_SHELL_BODY_ROW_CLASS } from "@/lib/page-layout";
+import { APP_MAIN_CLASS, APP_MAIN_PANEL_CLASS, APP_SHELL_BODY_ROW_CLASS } from "@/lib/page-layout";
 import { cn } from "@/lib/utils";
 
 export interface AppShellProps {
@@ -39,7 +39,9 @@ export function AppShell({ sidebarActiveId, children, className }: AppShellProps
           mobileOpen={sidebarOpen}
           onNavigate={() => setSidebarOpen(false)}
         />
-        <main className={APP_MAIN_CLASS}>{children}</main>
+        <main className={APP_MAIN_CLASS}>
+          <div className={APP_MAIN_PANEL_CLASS}>{children}</div>
+        </main>
       </div>
     </div>
   );

@@ -21,7 +21,7 @@ export function SeriesFormStepNav({
         "max-lg:border-t max-lg:border-border-10 max-lg:bg-white",
         "max-lg:px-my-16 max-lg:py-my-12",
         "max-lg:pb-[calc(var(--spacing-my-12)+env(safe-area-inset-bottom,0px))]",
-        "lg:mt-4",
+        "lg:pt-my-20",
         className,
       )}
     >
