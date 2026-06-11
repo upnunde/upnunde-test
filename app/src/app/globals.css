@@ -281,6 +281,8 @@
 :root {
   --app-vv-top: 0px;
   --app-vv-bottom: 0px;
+  --app-vv-height: 100dvh;
+  --app-vv-offset-top: 0px;
 }
 
 @layer base {
@@ -295,6 +297,24 @@
     max-height: 100dvh;
     overflow: hidden;
     overscroll-behavior: none;
+  }
+
+  /* 모바일: visualViewport 동기화 시 문서를 1px 스크롤 가능하게 해 Safari URL 바 접힘 유도 */
+  @media (max-width: 1023px) {
+    html.app-mobile-vv-sync,
+    html.app-mobile-vv-sync body {
+      height: auto;
+      min-height: calc(var(--app-vv-height, 100dvh) + 1px);
+      max-height: none;
+      overflow-x: hidden;
+      overflow-y: auto;
+      overscroll-behavior: none;
+      scrollbar-width: none;
+    }
+
+    html.app-mobile-vv-sync body::-webkit-scrollbar {
+      display: none;
+    }
   }
   button:not(:disabled),
   [role="button"]:not([aria-disabled="true"]),
