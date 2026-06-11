@@ -77,81 +77,87 @@ export function ImageLightbox({
       onClick={(e) => e.target === e.currentTarget && onClose()}
     >
       <div
-        className="w-full max-w-[512px] h-[716px] relative flex items-center justify-center"
+        className="flex w-full max-w-[512px] max-h-[min(92dvh,716px)] flex-col items-center gap-my-16"
         onClick={(e) => e.stopPropagation()}
       >
-        {/* 이미지 프레임 */}
-        <div
-          className="w-96 h-[640px] relative rounded-[4px] outline outline-4 outline-offset-[-4px] outline-white overflow-hidden shadow-elevation-50"
-          style={{
-            backgroundColor: "#f8fafc",
-            backgroundImage:
-              "linear-gradient(45deg, #e5e7eb 25%, transparent 25%), linear-gradient(-45deg, #e5e7eb 25%, transparent 25%), linear-gradient(45deg, transparent 75%, #e5e7eb 75%), linear-gradient(-45deg, transparent 75%, #e5e7eb 75%)",
-            backgroundSize: "16px 16px",
-            backgroundPosition: "0 0, 0 8px, 8px -8px, -8px 0",
-          }}
-        >
-          {item && (
-            <Image
-              src={item.imageUrl}
-              alt={item.name ?? "미리보기"}
-              fill
-              sizes="384px"
-              className="object-cover object-center"
-            />
+        <div className="relative flex w-full min-h-0 flex-1 items-center justify-center px-my-12 sm:px-14">
+          {/* 이미지 프레임 — 9:16, 뷰포트에 맞춰 축소 (최대 384×640) */}
+          <div
+            className={cn(
+              "relative aspect-[9/16] w-[min(384px,calc(100vw-4rem),calc((100dvh-12rem)*9/16))]",
+              "shrink-0 overflow-hidden rounded-[4px]",
+              "outline outline-4 outline-offset-[-4px] outline-white shadow-elevation-50",
+            )}
+            style={{
+              backgroundColor: "#f8fafc",
+              backgroundImage:
+                "linear-gradient(45deg, #e5e7eb 25%, transparent 25%), linear-gradient(-45deg, #e5e7eb 25%, transparent 25%), linear-gradient(45deg, transparent 75%, #e5e7eb 75%), linear-gradient(-45deg, transparent 75%, #e5e7eb 75%)",
+              backgroundSize: "16px 16px",
+              backgroundPosition: "0 0, 0 8px, 8px -8px, -8px 0",
+            }}
+          >
+            {item && (
+              <Image
+                src={item.imageUrl}
+                alt={item.name ?? "미리보기"}
+                fill
+                sizes="(max-width: 512px) 90vw, 384px"
+                className="object-cover object-center"
+              />
+            )}
+          </div>
+
+          {/* 왼쪽 이전 버튼 */}
+          {hasMultiple && (
+            <button
+              type="button"
+              onClick={goPrev}
+              disabled={!canPrev}
+              className={cn(
+                "absolute left-0 top-1/2 z-10 -translate-y-1/2",
+                "inline-flex h-10 w-10 cursor-pointer items-center justify-center overflow-hidden rounded-full sm:h-14 sm:w-14",
+                "bg-surface-10 shadow-elevation-20",
+                "hover:bg-surface-20 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-2",
+                "disabled:pointer-events-none disabled:opacity-40",
+              )}
+              aria-label="이전 이미지"
+            >
+              <ChevronLeft className="h-5 w-5 text-on-surface-10 sm:h-6 sm:w-6" strokeWidth={2} />
+            </button>
+          )}
+
+          {/* 오른쪽 다음 버튼 */}
+          {hasMultiple && (
+            <button
+              type="button"
+              onClick={goNext}
+              disabled={!canNext}
+              className={cn(
+                "absolute right-0 top-1/2 z-10 -translate-y-1/2",
+                "inline-flex h-10 w-10 cursor-pointer items-center justify-center overflow-hidden rounded-full sm:h-14 sm:w-14",
+                "bg-surface-10 shadow-elevation-20",
+                "hover:bg-surface-20 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-2",
+                "disabled:pointer-events-none disabled:opacity-40",
+              )}
+              aria-label="다음 이미지"
+            >
+              <ChevronRight className="h-5 w-5 text-on-surface-10 sm:h-6 sm:w-6" strokeWidth={2} />
+            </button>
           )}
         </div>
-
-        {/* 왼쪽 이전 버튼 */}
-        {hasMultiple && (
-          <button
-            type="button"
-            onClick={goPrev}
-            disabled={!canPrev}
-            className={cn(
-              "absolute left-0 top-1/2 -translate-y-1/2 w-14 h-14 rounded-full",
-              "inline-flex justify-center items-center overflow-hidden cursor-pointer",
-              "bg-surface-10 shadow-elevation-20",
-              "hover:bg-surface-20 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-2",
-              "disabled:opacity-40 disabled:pointer-events-none"
-            )}
-            aria-label="이전 이미지"
-          >
-            <ChevronLeft className="w-6 h-6 text-on-surface-10" strokeWidth={2} />
-          </button>
-        )}
-
-        {/* 오른쪽 다음 버튼 */}
-        {hasMultiple && (
-          <button
-            type="button"
-            onClick={goNext}
-            disabled={!canNext}
-            className={cn(
-              "absolute right-0 top-1/2 -translate-y-1/2 w-14 h-14 rounded-full",
-              "inline-flex justify-center items-center overflow-hidden cursor-pointer",
-              "bg-surface-10 shadow-elevation-20",
-              "hover:bg-surface-20 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-2",
-              "disabled:opacity-40 disabled:pointer-events-none"
-            )}
-            aria-label="다음 이미지"
-          >
-            <ChevronRight className="w-6 h-6 text-on-surface-10" strokeWidth={2} />
-          </button>
-        )}
 
         {/* 닫기 버튼 (하단 중앙) */}
         <button
           type="button"
           onClick={onClose}
           className={cn(
-            "absolute left-1/2 -translate-x-1/2 top-[660px] mt-6 w-14 h-14 rounded-full",
-            "bg-black/30 inline-flex justify-center items-center overflow-hidden cursor-pointer",
-            "hover:bg-black/40 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-white focus-visible:ring-offset-2"
+            "inline-flex h-12 w-12 shrink-0 cursor-pointer items-center justify-center overflow-hidden rounded-full sm:h-14 sm:w-14",
+            "bg-black/30 hover:bg-black/40",
+            "focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-white focus-visible:ring-offset-2",
           )}
           aria-label="닫기"
         >
-          <X className="w-7 h-7 text-white" strokeWidth={2} />
+          <X className="h-6 w-6 text-white sm:h-7 sm:w-7" strokeWidth={2} />
         </button>
       </div>
     </div>

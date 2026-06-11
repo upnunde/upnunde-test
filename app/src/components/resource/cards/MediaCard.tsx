@@ -4,7 +4,7 @@ import React from "react";
 import Image from "next/image";
 import type { MediaResource } from "@/types/resource";
 import { ResourceThumbnailActions } from "@/components/resource/cards/ResourceThumbnailActions";
-import { THUMBNAIL_DIM_OVERLAY_CLASS } from "@/lib/thumbnail-styles";
+import { RESOURCE_THUMBNAIL_FLUID_SIZE_CLASS, THUMBNAIL_DIM_OVERLAY_CLASS } from "@/lib/thumbnail-styles";
 import { cn } from "@/lib/utils";
 
 /** [정책 7] 미디어 카드. 썸네일 + 재생시간 표시. 클릭 시 상세 페이지, 삭제 시 확인 팝업. */
@@ -46,22 +46,23 @@ export function MediaCard({
       tabIndex={0}
       onClick={handleCardClick}
       onKeyDown={(e) => e.key === "Enter" && (onPreviewClick ? onPreviewClick(item) : onDetailClick(item))}
-      className="group inline-flex w-[90px] flex-col justify-start items-start gap-my-4 cursor-pointer"
+      className="group flex w-full min-w-0 cursor-pointer flex-col items-start justify-start gap-my-4"
       aria-label={`${item.name} 상세 보기`}
     >
       <div
         className={cn(
-          "w-[90px] h-[160px] relative rounded-lg outline outline-1 outline-offset-[-1px] flex flex-col justify-center items-center gap-my-8 overflow-hidden",
+          "relative flex flex-col items-center justify-center gap-my-8 overflow-hidden rounded-lg outline outline-1 outline-offset-[-1px]",
+          RESOURCE_THUMBNAIL_FLUID_SIZE_CLASS,
           error
             ? "bg-error-error-container outline-error-on-error-container"
-            : "bg-surface-disabled/0 outline-border-20"
+            : "bg-surface-disabled/0 outline-border-20",
         )}
       >
         <Image
           src={item.thumbnailUrl}
           alt=""
           fill
-          sizes="90px"
+          sizes="(max-width: 1023px) 25vw, 90px"
           className="object-cover"
         />
         <div className={THUMBNAIL_DIM_OVERLAY_CLASS} aria-hidden />

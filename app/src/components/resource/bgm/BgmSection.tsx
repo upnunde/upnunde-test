@@ -133,7 +133,7 @@ export function BgmSection({
     <>
       <div
         className={cn(
-          "mx-auto flex w-full min-w-0 max-w-[1200px] flex-col items-start justify-start rounded-[4px] border border-border-10 bg-surface-10",
+          "flex w-full min-w-0 flex-col items-stretch justify-start rounded-[4px] border border-border-10 bg-surface-10",
           PAGE_CARD_SHELL_MOBILE_FLUSH_CLASS,
         )}
       >

@@ -26,3 +26,10 @@ export const MODAL_CROP_STAGE_SIZE_PX = 400;
 
 export const MODAL_CROP_STAGE_CLASS =
   "relative aspect-square w-[min(400px,calc(100vw-48px),calc(100dvh-240px))] shrink-0 self-center overflow-hidden rounded-lg bg-neutral-900";
+
+/** 리소스 섹션 썸네일 그리드 — 셀 min 90px · 1fr fill · 가로 8/16 · 세로 20 */
+export const RESOURCE_THUMBNAIL_GRID_CLASS =
+  "grid w-full grid-cols-[repeat(auto-fill,minmax(90px,1fr))] gap-x-my-8 gap-y-my-20 self-stretch rounded-[4px] p-0 lg:gap-x-my-16";
+
+/** 9:16 그리드 셀 — 셀 너비에 맞춰 확장 (비율 유지) */
+export const RESOURCE_THUMBNAIL_FLUID_SIZE_CLASS = "aspect-[9/16] h-auto w-full min-h-0";

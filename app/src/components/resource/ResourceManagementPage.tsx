@@ -14,6 +14,7 @@ import { AddResourceSlot } from "./cards/AddResourceSlot";
 import { BgmSection } from "./bgm/BgmSection";
 import { ConfirmDeleteModal } from "./modals/ConfirmDeleteModal";
 import { PAGE_CARD_SHELL_MOBILE_FLUSH_CLASS, PAGE_GUTTER_GAP_CLASS, PAGE_SCROLL_COLUMN_CLASS, PAGE_SUBHEADER_WITH_STICKY_CLASS } from "@/lib/page-layout";
+import { RESOURCE_THUMBNAIL_FLUID_SIZE_CLASS, RESOURCE_THUMBNAIL_GRID_CLASS } from "@/lib/thumbnail-styles";
 import { cn } from "@/lib/utils";
 import type { ImageLightboxItem } from "./ImageLightbox";
 import type {
@@ -194,10 +195,10 @@ export function ResourceManagementPage() {
           <div className={cn("mx-auto flex w-full min-w-0 max-w-[1200px] flex-col", PAGE_GUTTER_GAP_CLASS)}>
             <ResourceBanner seriesId={seriesId} />
 
-            <div className="flex w-full flex-col items-start gap-my-24 lg:flex-row">
+            <div className="flex w-full min-w-0 flex-col items-stretch gap-my-24 lg:flex-row lg:items-start">
               {showPreview && (
-                <aside className="w-full lg:w-[380px] lg:shrink-0 lg:sticky lg:top-6">
-                  <div className="w-full bg-surface-10 rounded-[4px] border border-border-10 p-my-20">
+                <aside className="w-full min-w-0 lg:w-[380px] lg:shrink-0 lg:sticky lg:top-6">
+                  <div className="w-full min-w-0 rounded-[4px] border border-border-10 bg-surface-10 p-my-20 max-lg:rounded-none max-lg:border-0">
                     <Title2
                       text="미리보기"
                       asSectionHeader
@@ -206,14 +207,14 @@ export function ResourceManagementPage() {
                       className="!p-0 !border-0 mb-4"
                     />
 
-                    <div className="mx-auto h-[652px] w-[300px]">
+                    <div className="relative mx-auto aspect-[9/16] w-full max-w-[300px]">
                       <PreviewScreen blocks={previewBlocks} focusedBlockId="pv-text" />
                     </div>
                   </div>
                 </aside>
               )}
 
-              <div className="flex min-w-0 flex-1 flex-col gap-my-16">
+              <div className="flex w-full min-w-0 flex-1 flex-col gap-my-16">
 
             {/* 등장인물 [정책 2, 3, 5] */}
             <ResourceSection
@@ -225,7 +226,7 @@ export function ResourceManagementPage() {
               descriptionColorClassName="text-on-surface-30"
               onAddClick={() => navigateTo(ROUTES.character.new(seriesId))}
             >
-              <div className="self-stretch p-0 rounded-[4px] inline-flex justify-start items-start gap-my-16 flex-wrap content-start">
+              <div className={RESOURCE_THUMBNAIL_GRID_CLASS}>
                 {characters.map((c) => (
                   <CharacterCard
                     key={c.id}
@@ -249,6 +250,7 @@ export function ResourceManagementPage() {
                 ))}
                 <AddResourceSlot
                   variant="character"
+                  sizeClassName={RESOURCE_THUMBNAIL_FLUID_SIZE_CLASS}
                   onClick={() => navigateTo(ROUTES.character.new(seriesId))}
                 />
               </div>
@@ -264,7 +266,7 @@ export function ResourceManagementPage() {
               descriptionColorClassName="text-on-surface-30"
               onAddClick={() => navigateTo(ROUTES.background.new(seriesId))}
             >
-              <div className="self-stretch p-0 rounded-[4px] inline-flex justify-start items-start gap-my-16 flex-wrap content-start">
+              <div className={RESOURCE_THUMBNAIL_GRID_CLASS}>
                 {backgrounds.map((bg) => (
                   <ImageCard
                     key={bg.id}
@@ -289,7 +291,7 @@ export function ResourceManagementPage() {
                     }}
                   />
                 ))}
-                <AddResourceSlot variant="img9:16" onClick={() => navigateTo(ROUTES.background.new(seriesId))} />
+                <AddResourceSlot variant="img9:16" sizeClassName={RESOURCE_THUMBNAIL_FLUID_SIZE_CLASS} onClick={() => navigateTo(ROUTES.background.new(seriesId))} />
               </div>
             </ResourceSection>
 
@@ -303,7 +305,7 @@ export function ResourceManagementPage() {
               descriptionColorClassName="text-on-surface-30"
               onAddClick={() => navigateTo(ROUTES.scene.new(seriesId))}
             >
-              <div className="self-stretch p-0 rounded-[4px] inline-flex justify-start items-start gap-my-16 flex-wrap content-start">
+              <div className={RESOURCE_THUMBNAIL_GRID_CLASS}>
                 {visibleScenes.map((s) => (
                   <ImageCard
                     key={s.id}
@@ -326,7 +328,7 @@ export function ResourceManagementPage() {
                     }}
                   />
                 ))}
-                <AddResourceSlot variant="img9:16" onClick={() => navigateTo(ROUTES.scene.new(seriesId))} />
+                <AddResourceSlot variant="img9:16" sizeClassName={RESOURCE_THUMBNAIL_FLUID_SIZE_CLASS} onClick={() => navigateTo(ROUTES.scene.new(seriesId))} />
               </div>
             </ResourceSection>
 
@@ -340,7 +342,7 @@ export function ResourceManagementPage() {
               descriptionColorClassName="text-on-surface-30"
               onAddClick={() => navigateTo(ROUTES.media.new(seriesId))}
             >
-              <div className="self-stretch p-0 rounded-[4px] inline-flex justify-start items-start gap-my-16 flex-wrap content-start">
+              <div className={RESOURCE_THUMBNAIL_GRID_CLASS}>
                 {media.map((m) => (
                   <MediaCard
                     key={m.id}
@@ -362,7 +364,7 @@ export function ResourceManagementPage() {
                     }}
                   />
                 ))}
-                <AddResourceSlot variant="mov" onClick={() => navigateTo(ROUTES.media.new(seriesId))} />
+                <AddResourceSlot variant="mov" sizeClassName={RESOURCE_THUMBNAIL_FLUID_SIZE_CLASS} onClick={() => navigateTo(ROUTES.media.new(seriesId))} />
               </div>
             </ResourceSection>
 
@@ -376,7 +378,7 @@ export function ResourceManagementPage() {
               descriptionColorClassName="text-on-surface-30"
               onAddClick={() => navigateTo(ROUTES.gallery.new(seriesId))}
             >
-              <div className="self-stretch p-0 rounded-[4px] inline-flex justify-start items-start gap-my-16 flex-wrap content-start">
+              <div className={RESOURCE_THUMBNAIL_GRID_CLASS}>
                 {visibleGallery.map((g) => (
                   <ImageCard
                     key={g.id}
@@ -401,7 +403,7 @@ export function ResourceManagementPage() {
                     }}
                   />
                 ))}
-                <AddResourceSlot variant="img9:16" onClick={() => navigateTo(ROUTES.gallery.new(seriesId))} />
+                <AddResourceSlot variant="img9:16" sizeClassName={RESOURCE_THUMBNAIL_FLUID_SIZE_CLASS} onClick={() => navigateTo(ROUTES.gallery.new(seriesId))} />
               </div>
             </ResourceSection>
 

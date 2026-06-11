@@ -4,7 +4,7 @@ import React from "react";
 import Image from "next/image";
 import type { ImageResource, MediaSlotType } from "@/types/resource";
 import { ResourceThumbnailActions } from "@/components/resource/cards/ResourceThumbnailActions";
-import { THUMBNAIL_DIM_OVERLAY_CLASS } from "@/lib/thumbnail-styles";
+import { RESOURCE_THUMBNAIL_FLUID_SIZE_CLASS, THUMBNAIL_DIM_OVERLAY_CLASS } from "@/lib/thumbnail-styles";
 import { cn } from "@/lib/utils";
 
 /** [정책 6, 7] 배경/연출장면/갤러리용 이미지 카드. 클릭 시 상세 페이지, 삭제 시 확인 팝업. */
@@ -39,13 +39,13 @@ export interface ImageCardProps {
 const IMAGE_CARD_SIZE: Record<"img1:1" | "img16:9" | "img9:16", string> = {
   "img1:1": "w-24 h-24",
   "img16:9": "w-24 aspect-[16/9] min-h-0",
-  "img9:16": "w-[90px] h-[160px]",
+  "img9:16": RESOURCE_THUMBNAIL_FLUID_SIZE_CLASS,
 };
 
 const IMAGE_CARD_WIDTH: Record<"img1:1" | "img16:9" | "img9:16", string> = {
   "img1:1": "w-24",
   "img16:9": "w-24",
-  "img9:16": "w-[90px]",
+  "img9:16": "w-full min-w-0",
 };
 
 export function ImageCard({
@@ -83,7 +83,7 @@ export function ImageCard({
       onClick={handleCardClick}
       onKeyDown={(e) => e.key === "Enter" && (onPreviewClick ? onPreviewClick(item) : onDetailClick(item))}
       className={cn(
-        "group inline-flex flex-col justify-start items-start gap-my-4 cursor-pointer",
+        "group flex cursor-pointer flex-col items-start justify-start gap-my-4",
         widthClass,
         hoveredProp !== undefined && "pointer-events-auto",
         containerClassName
@@ -107,7 +107,7 @@ export function ImageCard({
               src={item.imageUrl}
               alt=""
               fill
-              sizes="96px"
+              sizes={slotType === "img9:16" ? "(max-width: 1023px) 25vw, 90px" : "96px"}
               className={cn(imgClass, imageClassName)}
             />
             <div className={THUMBNAIL_DIM_OVERLAY_CLASS} aria-hidden />

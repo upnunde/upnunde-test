@@ -64,7 +64,7 @@ export function AddResourceSlot({
   );
 
   return (
-    <div className="inline-flex flex-col justify-start items-start gap-my-4">
+    <div className="flex w-full min-w-0 flex-col items-start justify-start gap-my-4">
       {fileInputId ? (
         <label htmlFor={fileInputId} className={slotClassName} aria-label={resolvedAriaLabel}>
           {plusIcon}
