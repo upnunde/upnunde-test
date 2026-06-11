@@ -981,7 +981,8 @@ export function ScriptBlock({
           <span
             className={cn(
               sceneDisplayClass,
-              "block min-h-8 py-0",
+              "block min-h-8",
+              block.type === "scene" && "py-0",
               rootClassName,
               !block.content?.trim() && "text-on-surface-30",
             )}

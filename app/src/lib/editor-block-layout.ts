@@ -22,8 +22,8 @@ export const EDITOR_SCENE_TITLE_INPUT_CLASS =
 
 /** 장면정보 값 표시 */
 export const EDITOR_TOP_DESC_DISPLAY_CLASS =
-  "min-w-0 flex-1 whitespace-pre-wrap break-words [overflow-wrap:anywhere] text-body1_500 text-on-surface-10";
+  "min-w-0 flex-1 whitespace-pre-wrap break-words [overflow-wrap:anywhere] text-body1_500 text-on-surface-10 pt-my-4 pb-0";
 
 /** 장면정보 입력 */
 export const EDITOR_TOP_DESC_INPUT_CLASS =
-  "min-w-0 flex-1 h-8 min-h-8 max-w-full rounded-md border-0 bg-transparent px-0 py-0 text-body1_500 text-on-surface-10 placeholder:text-on-surface-30 outline-none transition-colors focus:outline-none focus:ring-0";
+  "min-w-0 flex-1 h-8 min-h-8 max-w-full rounded-md border-0 bg-transparent px-0 pt-my-4 pb-0 text-body1_500 text-on-surface-10 placeholder:text-on-surface-30 outline-none transition-colors focus:outline-none focus:ring-0";
