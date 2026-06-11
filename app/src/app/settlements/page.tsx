@@ -93,6 +93,14 @@ function formatCompactDate(date: Date): string {
   return `${y}. ${m}. ${d}`;
 }
 
+/** 모바일 정산 카드 — `26.06.01` */
+function formatSettlementMobileDate(date: Date): string {
+  const y = String(date.getFullYear()).slice(2);
+  const m = String(date.getMonth() + 1).padStart(2, "0");
+  const d = String(date.getDate()).padStart(2, "0");
+  return `${y}.${m}.${d}`;
+}
+
 function toInputDateValue(date: Date): string {
   const y = date.getFullYear();
   const m = String(date.getMonth() + 1).padStart(2, "0");
@@ -100,11 +108,16 @@ function toInputDateValue(date: Date): string {
   return `${y}-${m}-${d}`;
 }
 
-function formatRangeLabel(startDate: string, endDate: string): string {
+function formatRangeLabel(startDate: string, endDate: string, compact = false): string {
   if (!startDate || !endDate) return "날짜 선택";
-  const start = startDate.replaceAll("-", ".");
-  const end = endDate.replaceAll("-", ".");
-  return `${start} ~ ${end}`;
+  const formatPart = (iso: string) => {
+    const dotted = iso.replaceAll("-", ".");
+    if (!compact) return dotted;
+    const [year, month, day] = iso.split("-");
+    if (!year || !month || !day) return dotted;
+    return `${year.slice(2)}.${month}.${day}`;
+  };
+  return `${formatPart(startDate)} ~ ${formatPart(endDate)}`;
 }
 
 function formatAmount(value: number): string {
@@ -173,7 +186,7 @@ function SettlementSummaryCard({
 }) {
   return (
     <div className="flex h-[80px] w-full min-w-0 flex-col justify-center gap-my-4 rounded-[4px] border border-border-10 bg-surface-10 px-my-20 max-lg:py-0 lg:min-h-0 lg:h-auto lg:flex-1 lg:flex-row lg:items-center lg:justify-between lg:gap-my-16 lg:py-my-20">
-      <p className="min-w-0 text-body3_500 text-on-surface-20 lg:shrink">{title}</p>
+      <p className="min-w-0 text-body3_400 text-on-surface-20 lg:shrink">{title}</p>
       <div className="inline-flex min-w-0 flex-wrap items-baseline gap-x-my-4 gap-y-0 tabular-nums">
         <p className="text-heading4_700 text-on-surface-10 lg:text-2xl">{formatAmount(amount)}</p>
         <p className="text-heading4_700 text-on-surface-10 lg:text-2xl">원</p>
@@ -261,6 +274,32 @@ function SettlementRowDesktop({
   );
 }
 
+function SettlementMobileFieldRow({
+  label,
+  value,
+  variant = "secondary",
+}: {
+  label: string;
+  value: string;
+  variant?: "revenue" | "secondary";
+}) {
+  const labelClassName =
+    variant === "revenue"
+      ? "text-body1_700 text-on-surface-20"
+      : "text-body3_400 text-on-surface-20";
+  const valueClassName =
+    variant === "revenue"
+      ? "text-body1_700 text-on-surface-10"
+      : "text-body3_500 text-on-surface-20";
+
+  return (
+    <div className="flex items-center justify-between gap-my-12 self-stretch">
+      <span className={cn("shrink-0", labelClassName)}>{label}</span>
+      <span className={cn("min-w-0 truncate text-right tabular-nums", valueClassName)}>{value}</span>
+    </div>
+  );
+}
+
 function SettlementRowMobile({
   item,
   onTaxDetail,
@@ -312,27 +351,24 @@ function SettlementRowMobile({
           </Button>
         ) : null}
       </div>
-      <div className="mt-3 grid grid-cols-2 gap-x-my-16 gap-y-my-16 text-body1_400">
-        <div>
-          <p className="text-caption1_400 text-on-surface-30">수익금</p>
-          <p className="font-bold text-on-surface-10">{item.revenueAmount}원</p>
-        </div>
-        <div>
-          <p className="text-caption1_400 text-on-surface-30">실지급액</p>
-          <p className="text-on-surface-20">{item.settlementAmount}원</p>
-        </div>
-        <div>
-          <p className="text-caption1_400 text-on-surface-30">신청일</p>
-          <p className="text-on-surface-20">{item.requestedAt}</p>
-        </div>
-        <div>
-          <p className="text-caption1_400 text-on-surface-30">지급 예정일</p>
-          <p className="text-on-surface-20">{item.payoutDueAt}</p>
-        </div>
-        <div className="col-span-2">
-          <p className="text-caption1_400 text-on-surface-30">부가세</p>
-          <p className="text-on-surface-20">{item.vatAmount}원</p>
-        </div>
+
+      <div className="mt-my-16 flex flex-col gap-my-12 self-stretch">
+        <SettlementMobileFieldRow
+          label="수익금"
+          value={`${item.revenueAmount}원`}
+          variant="revenue"
+        />
+        <SettlementMobileFieldRow label="부가세" value={`${item.vatAmount}원`} />
+        <SettlementMobileFieldRow label="실지급액" value={`${item.settlementAmount}원`} />
+        <div className="h-px w-full bg-divider-10" aria-hidden />
+        <SettlementMobileFieldRow
+          label="신청일"
+          value={formatSettlementMobileDate(item.requestedDate)}
+        />
+        <SettlementMobileFieldRow
+          label="지급 예정일"
+          value={formatSettlementMobileDate(item.payoutDueDate)}
+        />
       </div>
     </div>
   );
@@ -353,10 +389,18 @@ export default function MonetizationSettlementsPage() {
   const [pendingEndDate, setPendingEndDate] = useState(initialEndDate);
 
   const rangeLabel = useMemo(() => formatRangeLabel(startDate, endDate), [startDate, endDate]);
+  const rangeLabelCompact = useMemo(
+    () => formatRangeLabel(startDate, endDate, true),
+    [startDate, endDate],
+  );
   const rangePresetLabel = useMemo(() => {
     if (rangePreset === "custom") return rangeLabel;
     return RANGE_PRESET_OPTIONS.find((option) => option.value === rangePreset)?.label ?? "전체 기간";
   }, [rangeLabel, rangePreset]);
+  const rangePresetLabelCompact = useMemo(() => {
+    if (rangePreset === "custom") return rangeLabelCompact;
+    return RANGE_PRESET_OPTIONS.find((option) => option.value === rangePreset)?.label ?? "전체 기간";
+  }, [rangeLabelCompact, rangePreset]);
 
   const applyPresetRange = useCallback((preset: RangePreset) => {
     const end = new Date(2026, 4, 29);
@@ -609,7 +653,7 @@ export default function MonetizationSettlementsPage() {
                               )}
                               aria-label={`정산 내역 조회 기간 — ${rangePresetLabel}`}
                             >
-                              <span className="truncate">{rangePresetLabel}</span>
+                              <span className="truncate">{rangePresetLabelCompact}</span>
                               <ChevronDown className="h-4 w-4 shrink-0 text-on-surface-30" aria-hidden />
                             </Button>
                           </DropdownMenuTrigger>
@@ -659,7 +703,8 @@ export default function MonetizationSettlementsPage() {
                           )}
                           onClick={() => setDatePickerOpen(true)}
                         >
-                          <span className="truncate">{rangeLabel}</span>
+                          <span className="truncate max-lg:inline lg:hidden">{rangeLabelCompact}</span>
+                          <span className="hidden truncate lg:inline">{rangeLabel}</span>
                           <CalendarDays className="h-4 w-4 shrink-0 text-on-surface-30" aria-hidden />
                         </Button>
                       </div>

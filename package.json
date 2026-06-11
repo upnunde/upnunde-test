@@ -9,6 +9,7 @@
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "dev": "cd app && npm run dev",
+    "dev:reset": "cd app && npm run dev:reset",
     "clean": "cd app && npm run clean",
     "n8n:up": "docker compose --env-file n8n/.env -f n8n/docker-compose.yml up -d",
     "n8n:down": "docker compose --env-file n8n/.env -f n8n/docker-compose.yml down",

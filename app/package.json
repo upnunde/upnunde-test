@@ -4,6 +4,7 @@
   "private": true,
   "scripts": {
     "dev": "next dev",
+    "dev:reset": "sh scripts/kill-dev-ports.sh && next dev",
     "dev:webpack": "next dev --webpack",
     "dev:turbo": "next dev --turbopack",
     "setup:dev-host": "sh scripts/setup-dev-host.sh",
