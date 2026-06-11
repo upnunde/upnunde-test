@@ -4,7 +4,13 @@ import React from "react";
 import Image from "next/image";
 import type { ImageResource, MediaSlotType } from "@/types/resource";
 import { ResourceThumbnailActions } from "@/components/resource/cards/ResourceThumbnailActions";
-import { RESOURCE_THUMBNAIL_FLUID_SIZE_CLASS, THUMBNAIL_DIM_OVERLAY_CLASS } from "@/lib/thumbnail-styles";
+import {
+  RESOURCE_THUMBNAIL_FIXED_9_16_CLASS,
+  RESOURCE_THUMBNAIL_FIXED_IMAGE_SIZES,
+  RESOURCE_THUMBNAIL_FLUID_IMAGE_SIZES,
+  RESOURCE_THUMBNAIL_FLUID_SIZE_CLASS,
+  THUMBNAIL_DIM_OVERLAY_CLASS,
+} from "@/lib/thumbnail-styles";
 import { cn } from "@/lib/utils";
 
 /** [정책 6, 7] 배경/연출장면/갤러리용 이미지 카드. 클릭 시 상세 페이지, 삭제 시 확인 팝업. */
@@ -34,18 +40,20 @@ export interface ImageCardProps {
   onDeleteClick: (item: ImageResource) => void;
   /** 썸네일 클릭 시 크게 보기(라이트박스). 있으면 카드 클릭 시 이걸 호출하고, 없으면 onDetailClick 호출 */
   onPreviewClick?: (item: ImageResource) => void;
+  /** 리소스 관리 그리드에서만 true — 셀 너비에 맞춰 9:16 확장 */
+  fluid?: boolean;
 }
 
 const IMAGE_CARD_SIZE: Record<"img1:1" | "img16:9" | "img9:16", string> = {
   "img1:1": "w-24 h-24",
   "img16:9": "w-24 aspect-[16/9] min-h-0",
-  "img9:16": RESOURCE_THUMBNAIL_FLUID_SIZE_CLASS,
+  "img9:16": RESOURCE_THUMBNAIL_FIXED_9_16_CLASS,
 };
 
 const IMAGE_CARD_WIDTH: Record<"img1:1" | "img16:9" | "img9:16", string> = {
   "img1:1": "w-24",
   "img16:9": "w-24",
-  "img9:16": "w-full min-w-0",
+  "img9:16": "w-[90px]",
 };
 
 export function ImageCard({
@@ -63,6 +71,7 @@ export function ImageCard({
   onDetailClick,
   onDeleteClick,
   onPreviewClick,
+  fluid = false,
 }: ImageCardProps) {
   const handleCardClick = (e: React.MouseEvent) => {
     const target = e.target as HTMLElement;
@@ -71,8 +80,18 @@ export function ImageCard({
     else onDetailClick(item);
   };
 
-  const sizeClass = IMAGE_CARD_SIZE[slotType];
-  const widthClass = IMAGE_CARD_WIDTH[slotType];
+  const sizeClass =
+    fluid && slotType === "img9:16"
+      ? RESOURCE_THUMBNAIL_FLUID_SIZE_CLASS
+      : IMAGE_CARD_SIZE[slotType];
+  const widthClass =
+    fluid && slotType === "img9:16" ? "w-full min-w-0" : IMAGE_CARD_WIDTH[slotType];
+  const imageSizes =
+    slotType === "img9:16"
+      ? fluid
+        ? RESOURCE_THUMBNAIL_FLUID_IMAGE_SIZES
+        : RESOURCE_THUMBNAIL_FIXED_IMAGE_SIZES
+      : "96px";
   const imgClass = "w-full h-full object-cover";
   const showControls = showActions && hoveredProp === true;
 
@@ -107,7 +126,7 @@ export function ImageCard({
               src={item.imageUrl}
               alt=""
               fill
-              sizes={slotType === "img9:16" ? "(max-width: 1023px) 25vw, 90px" : "96px"}
+              sizes={imageSizes}
               className={cn(imgClass, imageClassName)}
             />
             <div className={THUMBNAIL_DIM_OVERLAY_CLASS} aria-hidden />

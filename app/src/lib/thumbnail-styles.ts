@@ -31,5 +31,11 @@ export const MODAL_CROP_STAGE_CLASS =
 export const RESOURCE_THUMBNAIL_GRID_CLASS =
   "grid w-full grid-cols-[repeat(auto-fill,minmax(90px,1fr))] gap-x-my-8 gap-y-my-20 self-stretch rounded-[4px] p-0 lg:gap-x-my-16";
 
-/** 9:16 그리드 셀 — 셀 너비에 맞춰 확장 (비율 유지) */
+/** 9:16 고정 썸네일 — 에피소드 폼·상세 등 리소스 그리드 외 화면 */
+export const RESOURCE_THUMBNAIL_FIXED_9_16_CLASS = "w-[90px] h-[160px]";
+
+/** 9:16 그리드 셀 — 리소스 관리 페이지 그리드에서만 셀 너비에 맞춰 확장 */
 export const RESOURCE_THUMBNAIL_FLUID_SIZE_CLASS = "aspect-[9/16] h-auto w-full min-h-0";
+
+export const RESOURCE_THUMBNAIL_FLUID_IMAGE_SIZES = "(max-width: 1023px) 25vw, 90px";
+export const RESOURCE_THUMBNAIL_FIXED_IMAGE_SIZES = "90px";

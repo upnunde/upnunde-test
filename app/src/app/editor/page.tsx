@@ -82,7 +82,7 @@ function EditorWorkspace({
     isDesktop
       ? "py-my-40 px-0"
       : cn(
-          "px-my-12 pt-0",
+          "px-my-12 pt-my-12",
           mobileToolbarVisible
             ? EDITOR_MOBILE_SCROLL_BOTTOM_PAD_WITH_TOOLBAR_CLASS
             : EDITOR_MOBILE_SCROLL_BOTTOM_PAD_FAB_ONLY_CLASS,

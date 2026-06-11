@@ -1,8 +1,9 @@
 "use client";
 
-import { History, MoreVertical, Pencil } from "lucide-react";
+import { History, MoreVertical, Pencil, X } from "lucide-react";
 import { useRouter } from "next/navigation";
-import { useLayoutEffect, useMemo, useRef, useState } from "react";
+import { createPortal } from "react-dom";
+import { useCallback, useEffect, useLayoutEffect, useMemo, useRef, useState } from "react";
 import { createDefaultSeedBlocks, useEditorStore } from "@/store/useEditorStore";
 import { Button } from "@/components/ui/button";
 import { HeaderBackButton } from "@/components/ui/header-back-button";
@@ -10,8 +11,8 @@ import { Snackbar } from "@/components/episode/Snackbar";
 import { EditorUnsavedConfirmModal } from "@/components/editor/EditorUnsavedConfirmModal";
 import {
   Popover,
-  PopoverAnchor,
   PopoverContent,
+  PopoverTrigger,
 } from "@/components/ui/popover";
 import {
   DropdownMenu,
@@ -19,6 +20,9 @@ import {
   DropdownMenuItem,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
+import { mobileBottomSheetMaxHeightClassName, MOBILE_BOTTOM_SHEET_PAD_CLASS } from "@/components/ui/modal/modal-styles";
+import { useClientMounted } from "@/hooks/useClientMounted";
+import { useIsLgUp } from "@/hooks/useMediaQuery";
 import { cn } from "@/lib/utils";
 import type { ScriptBlock } from "@/types/editor";
 
@@ -66,6 +70,8 @@ export function EditorSubHeader({
   onRecreate,
 }: EditorSubHeaderProps) {
   const router = useRouter();
+  const isDesktop = useIsLgUp();
+  const mounted = useClientMounted();
   const blocks = useEditorStore((s) => s.blocks);
   const scriptHistory = useEditorStore((s) => s.scriptHistory);
   const addScriptHistoryEntry = useEditorStore((s) => s.addScriptHistoryEntry);
@@ -87,6 +93,9 @@ export function EditorSubHeader({
   const [newHistoryEntryId, setNewHistoryEntryId] = useState<string | null>(null);
   /** 블록이 비었다가 다시 생길 때까지 한 번만 진입 기준선을 잡기 위함 */
   const snapshotBaselineInitRef = useRef(false);
+  /** 더보기 메뉴 클릭 직후 같은 포인터 이벤트가 백드롭에 전달되는 것 방지 */
+  const [historySheetBackdropActive, setHistorySheetBackdropActive] = useState(false);
+  const [moreMenuOpen, setMoreMenuOpen] = useState(false);
 
   const blocksSnapshot = useMemo(() => JSON.stringify(blocks), [blocks]);
 
@@ -228,6 +237,7 @@ export function EditorSubHeader({
   const handleHistoryLoadClick = (historyId: string) => {
     if (hasChangesSinceSave) {
       setPendingLoadHistoryId(historyId);
+      setHistoryOpen(false);
       setIsLoadConfirmOpen(true);
       return;
     }
@@ -279,6 +289,173 @@ export function EditorSubHeader({
     [scriptHistory],
   );
 
+  const handleHistoryOpenChange = useCallback(
+    (open: boolean) => {
+      if (!isHistoryEnabled) return;
+      setHistoryOpen(open);
+      if (!open) {
+        setNewHistoryEntryId(null);
+        setHistorySheetBackdropActive(false);
+      }
+    },
+    [isHistoryEnabled],
+  );
+
+  /** 모바일 더보기 → 히스토리: 메뉴 닫힌 뒤 시트 오픈(같은 클릭이 백드롭으로 전달되지 않도록 지연) */
+  const scheduleOpenHistoryPanel = useCallback(() => {
+    if (!isHistoryEnabled) return;
+    setMoreMenuOpen(false);
+    window.requestAnimationFrame(() => {
+      window.requestAnimationFrame(() => setHistoryOpen(true));
+    });
+  }, [isHistoryEnabled]);
+
+  useEffect(() => {
+    if (isDesktop || !historyOpen) {
+      setHistorySheetBackdropActive(false);
+      return;
+    }
+    setHistorySheetBackdropActive(false);
+    const timer = window.setTimeout(() => setHistorySheetBackdropActive(true), 400);
+    return () => window.clearTimeout(timer);
+  }, [historyOpen, isDesktop]);
+
+  useEffect(() => {
+    if (isDesktop || !historyOpen) return;
+    const onKeyDown = (event: KeyboardEvent) => {
+      if (event.key === "Escape") {
+        event.preventDefault();
+        handleHistoryOpenChange(false);
+      }
+    };
+    window.addEventListener("keydown", onKeyDown);
+    return () => window.removeEventListener("keydown", onKeyDown);
+  }, [handleHistoryOpenChange, historyOpen, isDesktop]);
+
+  const renderHistoryPanelList = (mobile: boolean) => (
+    <>
+      <div
+        className={cn(
+          mobile ? "px-my-8 pb-my-4" : "max-h-[min(40vh,280px)] overflow-y-auto px-my-8 pb-my-4",
+        )}
+      >
+        <ul className={cn("flex flex-col", mobile ? "gap-my-4" : "gap-my-2")}>
+          {historyListItems.map((entry) => (
+            <li key={entry.id}>
+              <div
+                className={cn(
+                  "relative flex min-h-9 items-center justify-between gap-my-8 rounded-md",
+                  mobile
+                    ? "min-h-11 gap-my-12 px-my-12 py-my-12"
+                    : "group px-my-8 py-my-8 hover:bg-surface-20",
+                )}
+              >
+                {historyOpen && newHistoryEntryId === entry.id ? (
+                  <HistoryNewDot className={mobile ? "top-2 left-2" : "top-1.5 left-1.5"} />
+                ) : null}
+                <div className="flex min-w-0 flex-1 items-center gap-my-8 text-body3_500">
+                  <div className="text-on-surface-10">
+                    {formatScriptHistoryTimestamp(entry.savedAt)}
+                  </div>
+                  <div className="text-on-surface-03">
+                    {entry.source === "created" ? "신규생성" : "임시저장"}
+                  </div>
+                </div>
+                <Button
+                  type="button"
+                  variant="outline"
+                  size="sm"
+                  title="이 시점의 원고 불러오기"
+                  onClick={() => handleHistoryLoadClick(entry.id)}
+                  className={cn(
+                    "shrink-0 bg-white px-my-12 text-caption1_500 text-on-surface-10 shadow-none disabled:border-border-20",
+                    mobile
+                      ? "h-8"
+                      : cn(
+                          "h-7 px-my-8 opacity-0 pointer-events-none transition-opacity",
+                          "group-hover:opacity-100 group-hover:pointer-events-auto",
+                          "[@media(hover:none)]:opacity-100 [@media(hover:none)]:pointer-events-auto",
+                        ),
+                  )}
+                >
+                  불러오기
+                </Button>
+              </div>
+            </li>
+          ))}
+        </ul>
+      </div>
+      <div className="border-t border-border-10 px-my-8 py-my-8">
+        <Button
+          type="button"
+          variant="ghost"
+          size="sm"
+          className={cn(
+            "h-8 px-my-12 text-body3_500 text-primary",
+            mobile ? "active:bg-accent active:text-primary" : "hover:bg-accent hover:text-primary",
+          )}
+          onClick={handleRecreate}
+        >
+          다시 만들기
+        </Button>
+      </div>
+    </>
+  );
+
+  const desktopHistoryPopoverContent = (
+    <>
+      <div className="px-my-12 pt-my-16 pb-my-4">
+        <p className="text-body3_500 text-on-surface-30">히스토리</p>
+      </div>
+      {renderHistoryPanelList(false)}
+    </>
+  );
+
+  const mobileHistorySheet =
+    mounted && !isDesktop && historyOpen
+      ? createPortal(
+          <>
+            <div
+              className={cn(
+                "fixed inset-0 z-40 bg-black/30",
+                !historySheetBackdropActive && "pointer-events-none",
+              )}
+              aria-hidden
+              onClick={() => {
+                if (historySheetBackdropActive) handleHistoryOpenChange(false);
+              }}
+            />
+            <div
+              className={cn(
+                "fixed inset-x-0 z-50 flex min-h-0 flex-col rounded-t-[4px] border-t border-border-10 bg-white shadow-elevation-40",
+                MOBILE_BOTTOM_SHEET_PAD_CLASS,
+                mobileBottomSheetMaxHeightClassName,
+              )}
+              role="dialog"
+              aria-modal="true"
+              aria-label="히스토리"
+            >
+              <div className="flex w-full shrink-0 items-center justify-between border-b border-border-10 px-my-16 py-my-16">
+                <div className="text-body1_700 text-on-surface-10">히스토리</div>
+                <button
+                  type="button"
+                  aria-label="닫기"
+                  onClick={() => handleHistoryOpenChange(false)}
+                  className="flex h-8 w-8 cursor-pointer items-center justify-center rounded-full text-on-surface-30 transition-colors hover:bg-surface-20/60 hover:text-on-surface-10 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-inset focus-visible:ring-primary"
+                  style={{ marginRight: -8 }}
+                >
+                  <X className="h-5 w-5" aria-hidden />
+                </button>
+              </div>
+              <div className="min-h-0 flex-1 overflow-y-auto px-my-8 py-my-8">
+                {renderHistoryPanelList(true)}
+              </div>
+            </div>
+          </>,
+          document.body,
+        )
+      : null;
+
   const titleHeading = (
     <h1 className="min-w-0 truncate text-body1_700 text-on-surface-10 lg:text-heading2_700">
       {title}
@@ -315,7 +492,7 @@ export function EditorSubHeader({
           >
             등록
           </Button>
-          <DropdownMenu>
+          <DropdownMenu open={moreMenuOpen} onOpenChange={setMoreMenuOpen}>
             <DropdownMenuTrigger asChild>
               <Button
                 type="button"
@@ -349,7 +526,7 @@ export function EditorSubHeader({
               <DropdownMenuItem
                 disabled={!isHistoryEnabled}
                 className={MORE_MENU_ITEM_CLASS}
-                onSelect={() => setHistoryOpen(true)}
+                onSelect={scheduleOpenHistoryPanel}
               >
                 히스토리
               </DropdownMenuItem>
@@ -367,20 +544,36 @@ export function EditorSubHeader({
             </div>
           </div>
           <div className="flex shrink-0 items-center gap-my-8">
-            <Button
-              type="button"
-              variant="outline"
-              size="icon-lg"
-              className="relative shrink-0 bg-white shadow-none text-on-surface-30 hover:text-on-surface-10 disabled:border-border-20"
-              aria-label="히스토리"
-              disabled={!isHistoryEnabled}
-              onClick={() => isHistoryEnabled && setHistoryOpen(true)}
+            <Popover
+              open={isDesktop && historyOpen}
+              onOpenChange={(open) => {
+                if (!isDesktop) return;
+                handleHistoryOpenChange(open);
+              }}
             >
-              <History />
-              {newHistoryEntryId ? (
-                <HistoryNewDot className="top-0 right-0" />
-              ) : null}
-            </Button>
+              <PopoverTrigger asChild>
+                <Button
+                  type="button"
+                  variant="outline"
+                  size="icon-lg"
+                  className="relative shrink-0 bg-white shadow-none text-on-surface-30 hover:text-on-surface-10 disabled:border-border-20"
+                  aria-label="히스토리"
+                  disabled={!isHistoryEnabled}
+                >
+                  <History />
+                  {newHistoryEntryId ? (
+                    <HistoryNewDot className="top-0 right-0" />
+                  ) : null}
+                </Button>
+              </PopoverTrigger>
+              <PopoverContent
+                align="end"
+                sideOffset={8}
+                className="w-[min(100vw-2rem,280px)] max-w-[280px] rounded-lg border border-border-10 p-0 shadow-elevation-40"
+              >
+                {desktopHistoryPopoverContent}
+              </PopoverContent>
+            </Popover>
             <Button
               type="button"
               variant="outline"
@@ -402,79 +595,8 @@ export function EditorSubHeader({
             </Button>
           </div>
         </div>
-
-        <Popover
-          open={historyOpen}
-          onOpenChange={(open) => {
-            if (!isHistoryEnabled) return;
-            setHistoryOpen(open);
-            if (!open) setNewHistoryEntryId(null);
-          }}
-        >
-          <PopoverAnchor className="absolute right-4 top-1/2 h-px w-px -translate-y-1/2 lg:right-8" />
-          <PopoverContent
-            align="end"
-            sideOffset={8}
-            className="w-[min(100vw-2rem,280px)] max-w-[280px] rounded-lg border border-border-10 p-0 shadow-elevation-40"
-          >
-            <div className="px-my-12 pt-my-16 pb-my-4">
-              <p className="text-body3_500 text-on-surface-30">히스토리</p>
-            </div>
-            <div className="max-h-[min(40vh,280px)] overflow-y-auto px-my-8 pb-my-4">
-              <ul className="flex flex-col gap-my-2">
-                {historyListItems.map((entry) => (
-                  <li key={entry.id}>
-                    <div
-                      className={cn(
-                        "group relative flex min-h-9 items-center justify-between gap-my-8 rounded-md px-my-8 py-my-8",
-                        "hover:bg-surface-20",
-                      )}
-                    >
-                      {historyOpen && newHistoryEntryId === entry.id ? (
-                        <HistoryNewDot className="top-1.5 left-1.5" />
-                      ) : null}
-                      <div className="flex min-w-0 items-center gap-my-8 text-body3_500">
-                        <div className="text-on-surface-10">
-                          {formatScriptHistoryTimestamp(entry.savedAt)}
-                        </div>
-                        <div className="text-on-surface-03">
-                          {entry.source === "created" ? "신규생성" : "임시저장"}
-                        </div>
-                      </div>
-                      <Button
-                        type="button"
-                        variant="outline"
-                        size="sm"
-                        title="이 시점의 원고 불러오기"
-                        onClick={() => handleHistoryLoadClick(entry.id)}
-                        className={cn(
-                          "h-7 shrink-0 bg-white px-my-8 text-caption1_500 text-on-surface-10 shadow-none disabled:border-border-20",
-                          "opacity-0 pointer-events-none transition-opacity",
-                          "group-hover:opacity-100 group-hover:pointer-events-auto",
-                          "[@media(hover:none)]:opacity-100 [@media(hover:none)]:pointer-events-auto",
-                        )}
-                      >
-                        불러오기
-                      </Button>
-                    </div>
-                  </li>
-                ))}
-              </ul>
-            </div>
-            <div className="border-t border-border-10 px-my-8 py-my-8">
-              <Button
-                type="button"
-                variant="ghost"
-                size="sm"
-                className="h-8 px-my-12 text-body3_500 text-primary hover:bg-accent hover:text-primary"
-                onClick={handleRecreate}
-              >
-                다시 만들기
-              </Button>
-            </div>
-          </PopoverContent>
-        </Popover>
       </header>
+      {mobileHistorySheet}
       <Snackbar
         open={snackbar.open}
         message={snackbar.message}

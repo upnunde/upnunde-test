@@ -230,6 +230,7 @@ export function ResourceManagementPage() {
                 {characters.map((c) => (
                   <CharacterCard
                     key={c.id}
+                    fluid
                     character={c}
                     onDetailClick={(char) => navigateTo(ROUTES.character.detail(seriesId, char.id))}
                     onDeleteClick={(char) =>
@@ -270,6 +271,7 @@ export function ResourceManagementPage() {
                 {backgrounds.map((bg) => (
                   <ImageCard
                     key={bg.id}
+                    fluid
                     item={bg}
                     slotType="img9:16"
                     onDetailClick={(item) =>
@@ -309,6 +311,7 @@ export function ResourceManagementPage() {
                 {visibleScenes.map((s) => (
                   <ImageCard
                     key={s.id}
+                    fluid
                     item={s}
                     slotType="img9:16"
                     onDetailClick={(item) => navigateTo(ROUTES.scene.detail(seriesId, item.id))}
@@ -346,6 +349,7 @@ export function ResourceManagementPage() {
                 {media.map((m) => (
                   <MediaCard
                     key={m.id}
+                    fluid
                     item={m}
                     onDetailClick={(item) => navigateTo(ROUTES.media.detail(seriesId, item.id))}
                     onDeleteClick={(item) =>
@@ -382,6 +386,7 @@ export function ResourceManagementPage() {
                 {visibleGallery.map((g) => (
                   <ImageCard
                     key={g.id}
+                    fluid
                     item={g}
                     slotType="img9:16"
                     onDetailClick={(item) =>

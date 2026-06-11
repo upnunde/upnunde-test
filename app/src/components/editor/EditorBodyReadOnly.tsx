@@ -7,6 +7,8 @@ import type { ScriptBlock } from "@/types/editor";
 import {
   EDITOR_BLOCK_INDEX_COLUMN_CLASS,
   EDITOR_BLOCK_LABEL_COLUMN_CLASS,
+  EDITOR_SCENE_TITLE_DISPLAY_CLASS,
+  EDITOR_TOP_DESC_DISPLAY_CLASS,
 } from "@/lib/editor-block-layout";
 import { cn } from "@/lib/utils";
 import { scrollEditorBlockIntoView } from "@/lib/editor-scroll";
@@ -134,12 +136,7 @@ function ReadOnlyBlockRow({
           {`#장면 ${String(sceneOrdinal).padStart(2, "0")}`}
         </div>
         <div className={READONLY_ROW_CONTENT_CELL_CLASS}>
-          <span
-            className={cn(
-              "min-w-0 flex-1 whitespace-pre-wrap break-words",
-              "text-heading2_700 text-on-surface-10"
-            )}
-          >
+          <span className={EDITOR_SCENE_TITLE_DISPLAY_CLASS}>
             {block.content || "—"}
           </span>
         </div>
@@ -155,7 +152,7 @@ function ReadOnlyBlockRow({
           #장면정보
         </div>
         <div className={READONLY_ROW_CONTENT_CELL_CLASS}>
-          <span className="min-w-0 flex-1 h-6 text-body1_500 text-on-surface-10 whitespace-pre-wrap break-words">
+          <span className={cn(EDITOR_TOP_DESC_DISPLAY_CLASS, "h-6")}>
             {renderInlineTagHighlightedText(block.content || "—")}
           </span>
         </div>

@@ -17,9 +17,9 @@ export {
   MOBILE_FIXED_BOTTOM_SAFE_PAD_CLASS,
 } from "@/lib/mobile-viewport";
 
-/** 넓은 폼 Dialog 셸 — 모바일 full-width 바텀 시트 / 데스크톱 중앙 */
+/** 넓은 폼 Dialog 셸 — 모바일 full-width 바텀 시트 / 데스크톱 중앙(콘텐츠 높이, 길면 max-h에서 스크롤) */
 export const formDialogShellClassName =
-  "flex min-w-0 flex-col overflow-hidden border-0 bg-transparent p-0 shadow-none max-lg:h-[min(92dvh,900px)] max-lg:max-w-none max-lg:w-full max-lg:bg-white max-lg:shadow-elevation-50 max-lg:pb-0 lg:h-[min(90vh,calc(100dvh-80px))] lg:w-[min(92vw,760px)] lg:max-w-[760px]";
+  "flex min-w-0 flex-col overflow-hidden border-0 bg-transparent p-0 shadow-none max-lg:h-[min(92dvh,900px)] max-lg:max-w-none max-lg:w-full max-lg:bg-white max-lg:shadow-elevation-50 max-lg:pb-0 lg:h-auto lg:max-h-[min(90vh,calc(100dvh-80px))] lg:w-[min(92vw,760px)] lg:max-w-[760px] lg:gap-0 lg:overflow-hidden lg:p-0";
 
 /** 바텀 시트 안 폼 본문 — EpisodeForm 등 */
 export const formDialogSheetEpisodeFormClassName =

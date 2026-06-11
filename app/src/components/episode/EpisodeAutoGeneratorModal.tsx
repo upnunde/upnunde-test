@@ -164,12 +164,18 @@ export function EpisodeAutoGeneratorModal({
         )
       : null;
   const dimPortal =
-    open && typeof document !== "undefined"
+    EPISODE_AUTO_GENERATOR_AI_COMPOSER_ENABLED &&
+    open &&
+    typeof document !== "undefined"
       ? createPortal(<div className="fixed inset-0 z-[49] bg-black/50" aria-hidden />, document.body)
       : null;
 
   return (
-    <Dialog open={open} onOpenChange={onOpenChange} modal={false}>
+    <Dialog
+      open={open}
+      onOpenChange={onOpenChange}
+      modal={EPISODE_AUTO_GENERATOR_AI_COMPOSER_ENABLED ? false : undefined}
+    >
       <DialogContent
         className={cn(formDialogShellClassName, "!z-[60]")}
         aria-describedby={undefined}
@@ -185,13 +191,13 @@ export function EpisodeAutoGeneratorModal({
         <DialogHeader className="sr-only">
           <DialogTitle>에피소드 생성기 입력</DialogTitle>
         </DialogHeader>
-        <div className={formDialogSheetBodyWrapperClassName}>
-          <div
-            className={cn(
-              formDialogSheetEpisodeFormClassName,
-              "flex min-h-0 flex-1 flex-col",
-            )}
-          >
+        <div
+          className={cn(
+            formDialogSheetBodyWrapperClassName,
+            formDialogSheetEpisodeFormClassName,
+            "flex min-h-0 w-full flex-1 flex-col",
+          )}
+        >
             <Title2 text="에피소드 생성기" asSectionHeader className="shrink-0" />
             <div
               className={cn(
@@ -284,7 +290,8 @@ export function EpisodeAutoGeneratorModal({
                 <EpisodeScriptTextarea
                   value={script}
                   onChange={setScript}
-                  textareaClassName="h-[280px] min-h-[120px] max-h-[280px] resize-y"
+                  rows={6}
+                  textareaClassName="h-auto min-h-[160px] max-h-[280px] resize-y"
                 />
               </div>
             </div>
@@ -307,7 +314,6 @@ export function EpisodeAutoGeneratorModal({
                 </Button>
               </div>
             </div>
-          </div>
         </div>
       </DialogContent>
       {dimPortal}

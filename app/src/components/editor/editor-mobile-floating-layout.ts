@@ -79,7 +79,7 @@ export const EDITOR_MOBILE_KEYBOARD_TOOLBAR_SHELL_CLASS = [
 
 /** 모바일 편집 스크롤 하단 여백 — FAB만 (툴바 숨김) */
 export const EDITOR_MOBILE_SCROLL_BOTTOM_PAD_FAB_ONLY_CLASS =
-  "max-lg:pb-[calc(3rem+var(--spacing-my-16)+var(--spacing-my-8)+env(safe-area-inset-bottom,0px)+var(--app-vv-bottom,0px))]";
+  "max-lg:pb-[calc(2rem+var(--spacing-my-8)+env(safe-area-inset-bottom,0px)+var(--app-vv-bottom,0px))]";
 
 /** 모바일 편집 스크롤 하단 여백 — 도킹 툴바 + FAB */
 export const EDITOR_MOBILE_SCROLL_BOTTOM_PAD_WITH_TOOLBAR_CLASS =
