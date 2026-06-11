@@ -554,14 +554,14 @@ UI에서 **실제로 사용하는 역할 기반 토큰**. 값은 프리미티브
 | `spacing-36` | `my-36` | 36px | - | - | - |
 
 #### 페이지·카드 본문 인셋 (공통)
-- **가로 인셋**: 모바일·lg+ 공통 **`my-20`(20px)** → Tailwind **`px-my-20`** (`PAGE_GUTTER_X_CLASS`)
+- **가로 인셋**: 모바일·lg+ 공통 **`my-12`(12px)** → Tailwind **`px-my-12`** (`PAGE_GUTTER_X_CLASS`)
 - **스크롤 하단 여백**: **`my-80`(80px)** → `pb-my-80` (`PAGE_SCROLL_BOTTOM_CLASS`) — 페이지·바텀 시트 **스크롤 본문** 공통. 고정 푸터는 제외 → `docs/mobile-layout.md`
 - **스택 간격(gap)**: 모바일 **`my-12`** · lg+ **`my-20`** → **`gap-my-12 lg:gap-my-20`** (`PAGE_GUTTER_GAP_CLASS`)
 - **세로 인셋**: 기본 **`my-20`(20px)** → `py-my-20` / `p-my-20` (세로 패딩은 뷰포트별 분기 없음)
 - 상세·체크리스트: **`docs/mobile-layout.md`**
 - 코드 단일 소스: `app/src/lib/page-layout.ts` (`PAGE_GUTTER_X_CLASS`, `PAGE_CONTENT_PAD_X_CLASS`, `PAGE_SCROLL_GUTTER_CLASS` 등)
 - `Title2` `asSectionHeader`·`PageCard`·`SeriesFormPageScaffold` 본문·정산/분석 스크롤 열은 **`PAGE_GUTTER_X_CLASS`** 와 동일하게 맞춘다.
-- 페이지 스택 gap에 **`gap-my-20` 단독 사용 금지** — `PAGE_GUTTER_GAP_CLASS` 또는 `*-my-12 lg:*-my-20`. 가로 인셋은 `PAGE_GUTTER_X_CLASS`(`px-my-20`) 우선.
+- 페이지 스택 gap에 **`gap-my-20` 단독 사용 금지** — `PAGE_GUTTER_GAP_CLASS` 또는 `*-my-12 lg:*-my-20`. 가로 인셋은 `PAGE_GUTTER_X_CLASS`(`px-my-12`) 우선.
 
 ---
 

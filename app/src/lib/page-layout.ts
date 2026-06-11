@@ -1,10 +1,10 @@
 /**
  * 페이지·카드 본문 인셋 — design-system spacing
- * 본문 여백형 페이지 가로 20px(모바일·데스크톱 공통) → `docs/mobile-layout.md`
+ * 본문 여백형 페이지 가로·상단 12px(모바일·데스크톱 공통) → `docs/mobile-layout.md`
  */
 
-/** 페이지·카드 좌우 인셋 — 20px (모바일·lg+ 공통) */
-export const PAGE_GUTTER_X_CLASS = "px-my-20";
+/** 페이지·카드 좌우 인셋 — 12px (모바일·lg+ 공통) */
+export const PAGE_GUTTER_X_CLASS = "px-my-12";
 
 /** 페이지·섹션 스택 간격 — 모바일 12px · lg+ 20px */
 export const PAGE_GUTTER_GAP_CLASS = "gap-my-12 lg:gap-my-20";
@@ -24,8 +24,8 @@ export const PAGE_SCROLL_GUTTER_CLASS = PAGE_GUTTER_X_CLASS;
 /** 스크롤 영역 마지막 콘텐츠 하단 여백 — 80px (모든 뷰포트 공통) */
 export const PAGE_SCROLL_BOTTOM_CLASS = "pb-my-80";
 
-/** 스크롤 영역 상단 여백 — 20px (모든 뷰포트 공통) */
-export const PAGE_SCROLL_TOP_CLASS = "pt-my-20";
+/** 스크롤 영역 상단 여백 — 12px (모든 뷰포트 공통) */
+export const PAGE_SCROLL_TOP_CLASS = "pt-my-12";
 
 /**
  * 모바일: 문서(body) 스크롤 — 콘텐츠 높이만큼 부모가 늘어나야 sticky containing block이 유효함.
@@ -57,9 +57,9 @@ export const PAGE_SUBHEADER_PAGE_SHELL_CLASS = `${APP_MAIN_PANEL_CLASS} bg-backg
 export const APP_SHELL_BODY_ROW_CLASS =
   "relative flex w-full min-w-0 flex-col max-lg:overflow-visible lg:min-h-0 lg:flex-1 lg:flex-row lg:overflow-hidden";
 
-/** AppShell main 스크롤 루트 — 상단 20px · 가로 인셋 · 하단 80px */
+/** AppShell main 스크롤 루트 — 상단·가로 인셋 · 하단 80px */
 export const PAGE_SCROLL_ROOT_CLASS =
-  `flex flex-col max-lg:overflow-visible ${PAGE_SCROLL_MOBILE_FILL_CLASS} ${PAGE_SCROLL_LG_TRAP_CLASS} pt-my-20 ${PAGE_SCROLL_GUTTER_CLASS} ${PAGE_SCROLL_BOTTOM_CLASS}`;
+  `flex flex-col max-lg:overflow-visible ${PAGE_SCROLL_MOBILE_FILL_CLASS} ${PAGE_SCROLL_LG_TRAP_CLASS} ${PAGE_SCROLL_TOP_CLASS} ${PAGE_SCROLL_GUTTER_CLASS} ${PAGE_SCROLL_BOTTOM_CLASS}`;
 
 /** 모바일 풀블리드 스크롤 루트 — 외곽 패딩만 제거(콘텐츠 gap은 페이지에서 유지) */
 export const PAGE_SCROLL_ROOT_MOBILE_FLUSH_CLASS = "max-lg:pt-0 max-lg:px-0 max-lg:pb-0";
