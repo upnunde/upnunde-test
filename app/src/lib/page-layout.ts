@@ -44,7 +44,7 @@ export const APP_MAIN_CLASS =
 
 /** AppShell·시리즈 페이지 본문 패널 */
 export const APP_MAIN_PANEL_CLASS =
-  "flex w-full flex-col lg:min-h-0 lg:flex-1 lg:overflow-hidden";
+  "flex w-full flex-col max-lg:overflow-visible lg:min-h-0 lg:flex-1 lg:overflow-hidden";
 
 /** 서브헤더 + 스크롤 본문을 한 덩어리로 묶는 페이지 셸(리소스 상세·관리 등) */
 export const PAGE_SUBHEADER_PAGE_SHELL_CLASS = `${APP_MAIN_PANEL_CLASS} bg-background-20`;
@@ -135,4 +135,4 @@ export const PAGE_MODAL_WIDE_CLASS = "w-[min(92vw,760px)] max-w-[760px] min-w-0"
 
 /** 에디터·에피소드 상세 본문 — 모바일 문서 스크롤 / lg 내부 스크롤 */
 export const EDITOR_PAGE_SCROLL_CLASS =
-  "relative z-0 flex min-w-0 flex-col overscroll-none max-lg:overflow-x-hidden max-lg:overflow-y-visible lg:min-h-0 lg:flex-1 lg:overflow-y-auto";
+  "relative z-0 flex min-w-0 flex-col overscroll-none max-lg:overflow-visible lg:min-h-0 lg:flex-1 lg:overflow-y-auto";

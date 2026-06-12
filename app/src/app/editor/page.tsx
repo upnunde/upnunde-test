@@ -112,15 +112,13 @@ function EditorWorkspace({
     <div className={cn("flex flex-col bg-white", APP_MAIN_PANEL_CLASS)}>
       <div
         className={cn(
-          "relative flex flex-col",
+          "flex flex-col",
           APP_MAIN_PANEL_CLASS,
           mobilePanel !== "edit" && "hidden",
         )}
       >
-        <div className={cn("relative flex min-w-0 flex-col", APP_MAIN_PANEL_CLASS)}>
-          <div className={editorScrollClass} {...{ [EDITOR_SCROLL_ROOT_ATTR]: "" }}>
-            <EditorBody />
-          </div>
+        <div className={editorScrollClass} {...{ [EDITOR_SCROLL_ROOT_ATTR]: "" }}>
+          <EditorBody />
         </div>
         {!isDesktop && mobilePanel === "edit" ? <EditorMobileBlockToolbar /> : null}
       </div>

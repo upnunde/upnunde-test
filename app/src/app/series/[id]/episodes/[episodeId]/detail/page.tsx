@@ -7,12 +7,15 @@ import Header from "@/components/Header/Header";
 import { Button } from "@/components/ui/button";
 import { HeaderBackButton } from "@/components/ui/header-back-button";
 import { EditorBodyReadOnly } from "@/components/editor/EditorBodyReadOnly";
+import { PreviewScreen } from "@/components/editor/PreviewScreen";
 import { SceneNavigation } from "@/components/editor/SceneNavigation";
+import { IPhone15ProFrame } from "@/components/preview/IPhone15ProFrame";
 import { EditorSceneTabStrip } from "@/components/editor/EditorSceneTabStrip";
 import { EditorMobilePreviewPlayer } from "@/components/editor/EditorMobilePreviewPlayer";
 import { EditorMobileFloatingActions } from "@/components/editor/EditorMobileFloatingActions";
 import {
   EDITOR_MOBILE_PREVIEW_SHELL_CLASS,
+  EDITOR_MOBILE_SCROLL_BOTTOM_PAD_FAB_ONLY_CLASS,
   editorMobilePreviewChromeHiddenClass,
   type EditorMobilePanel,
 } from "@/components/editor/editor-mobile-floating-layout";
@@ -36,6 +39,59 @@ import { APP_BROWSER_BG_CLASS, APP_PAGE_ROOT_CLASS } from "@/lib/mobile-viewport
 import { APP_MAIN_PANEL_CLASS, APP_SHELL_BODY_ROW_CLASS, EDITOR_PAGE_SCROLL_CLASS } from "@/lib/page-layout";
 import { INITIAL_SCRIPT } from "@/lib/initialScript";
 import { cn } from "@/lib/utils";
+
+function EpisodeReadOnlyWorkspace({
+  isDesktop,
+  mobilePanel,
+  scrollClassName,
+}: {
+  isDesktop: boolean;
+  mobilePanel: EditorMobilePanel;
+  scrollClassName: string;
+}) {
+  if (isDesktop) {
+    return (
+      <div className="flex min-h-0 w-full flex-1 items-start justify-center overflow-hidden bg-white">
+        <div className="relative flex h-full min-h-0 w-full flex-1 flex-col overflow-hidden border-r border-border-10">
+          <div className={scrollClassName} {...{ [EDITOR_SCROLL_ROOT_ATTR]: "" }}>
+            <EditorBodyReadOnly />
+          </div>
+        </div>
+        <div className="sticky top-10 ml-auto flex h-full shrink-0 flex-col items-center justify-start p-my-40">
+          <IPhone15ProFrame>
+            <PreviewScreen />
+          </IPhone15ProFrame>
+        </div>
+      </div>
+    );
+  }
+
+  return (
+    <div className={cn("flex flex-col bg-white max-lg:shrink-0", APP_MAIN_PANEL_CLASS)}>
+      <div
+        className={cn(
+          "flex flex-col max-lg:shrink-0",
+          APP_MAIN_PANEL_CLASS,
+          mobilePanel !== "edit" && "hidden",
+        )}
+      >
+        <div className={scrollClassName} {...{ [EDITOR_SCROLL_ROOT_ATTR]: "" }}>
+          <EditorBodyReadOnly />
+        </div>
+      </div>
+
+      <div
+        className={cn(
+          EDITOR_MOBILE_PREVIEW_SHELL_CLASS,
+          APP_MAIN_PANEL_CLASS,
+          mobilePanel !== "preview" && "hidden",
+        )}
+      >
+        <EditorMobilePreviewPlayer isActive={mobilePanel === "preview"} />
+      </div>
+    </div>
+  );
+}
 
 /** 에피소드 상세(수정 불가 잉크 에디터 미리보기) */
 export default function EpisodeDetailPage() {
@@ -80,7 +136,9 @@ export default function EpisodeDetailPage() {
 
   const scrollClassName = cn(
     EDITOR_PAGE_SCROLL_CLASS,
-    isDesktop ? "px-0 py-my-40" : "pb-my-8 pl-my-12 pr-my-12 pt-0",
+    isDesktop
+      ? "px-0 py-my-40"
+      : cn("px-my-12 pt-my-12", EDITOR_MOBILE_SCROLL_BOTTOM_PAD_FAB_ONLY_CLASS),
   );
 
   const previewChromeHidden = editorMobilePreviewChromeHiddenClass(isDesktop, mobilePanel);
@@ -109,7 +167,7 @@ export default function EpisodeDetailPage() {
         ) : null}
 
         <main
-          className={cn("flex min-w-0 flex-col", APP_MAIN_PANEL_CLASS)}
+          className={cn("flex min-w-0 flex-col max-lg:shrink-0", APP_MAIN_PANEL_CLASS)}
           style={
             !isDesktop && mobilePanel === "edit"
               ? editorMobileSubHeaderHideVarStyle(mobileSubHeaderHide.hiddenPx)
@@ -159,37 +217,11 @@ export default function EpisodeDetailPage() {
             </div>
           ) : null}
 
-          {isDesktop ? (
-            <div className="flex min-h-0 w-full flex-1 flex-col overflow-hidden bg-white">
-              <div className={scrollClassName} {...{ [EDITOR_SCROLL_ROOT_ATTR]: "" }}>
-                <EditorBodyReadOnly />
-              </div>
-            </div>
-          ) : (
-            <>
-              <div
-                className={cn(
-                  "flex flex-col bg-white",
-                  APP_MAIN_PANEL_CLASS,
-                  mobilePanel !== "edit" && "hidden",
-                )}
-              >
-                <div className={scrollClassName} {...{ [EDITOR_SCROLL_ROOT_ATTR]: "" }}>
-                  <EditorBodyReadOnly />
-                </div>
-              </div>
-
-              <div
-                className={cn(
-                  EDITOR_MOBILE_PREVIEW_SHELL_CLASS,
-                  APP_MAIN_PANEL_CLASS,
-                  mobilePanel !== "preview" && "hidden",
-                )}
-              >
-                <EditorMobilePreviewPlayer isActive={mobilePanel === "preview"} />
-              </div>
-            </>
-          )}
+          <EpisodeReadOnlyWorkspace
+            isDesktop={isDesktop}
+            mobilePanel={mobilePanel}
+            scrollClassName={scrollClassName}
+          />
 
           {!isDesktop ? (
             <EditorMobileFloatingActions
