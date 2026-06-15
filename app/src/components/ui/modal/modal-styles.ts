@@ -32,9 +32,9 @@ export const mobileBottomSheetLargeMaxHeightClassName = "max-h-[min(92dvh,900px)
 export const mobileBottomSheetMaxHeightClassName = mobileBottomSheetLargeMaxHeightClassName;
 
 /**
- * M3 Medium detent — 상단 50% peek · 피커·짧은 액션 목록·블록 추가.
+ * M3 Medium detent — 상단 20% peek · 피커·짧은 액션 목록·블록 추가.
  */
-export const mobileBottomSheetMediumMaxHeightClassName = "max-h-[50dvh]";
+export const mobileBottomSheetMediumMaxHeightClassName = "max-h-[80dvh]";
 
 /** @deprecated `mobileBottomSheetMediumMaxHeightClassName` 별칭 */
 export const mobileResourcePickerSheetMaxHeightClassName = mobileBottomSheetMediumMaxHeightClassName;
