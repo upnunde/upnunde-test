@@ -3,7 +3,7 @@
 import React from "react";
 import Image from "next/image";
 import { Title1 } from "@/components/ui/title1";
-import { THUMBNAIL_SLOT_ARIA } from "@/lib/thumbnail-styles";
+import { THUMBNAIL_SLOT_ARIA, THUMBNAIL_DIM_OVERLAY_CLASS } from "@/lib/thumbnail-styles";
 import { cn } from "@/lib/utils";
 
 interface SeriesImageUploadFieldProps {
@@ -73,6 +73,7 @@ export function SeriesImageUploadField({
               unoptimized
               className="object-cover"
             />
+            <div className={THUMBNAIL_DIM_OVERLAY_CLASS} aria-hidden />
             <button
               type="button"
               aria-label={deleteAriaLabel}

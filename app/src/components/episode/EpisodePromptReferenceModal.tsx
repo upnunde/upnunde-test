@@ -5,6 +5,7 @@ import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/u
 import { Button } from "@/components/ui/button";
 import { Title1 } from "@/components/ui/title1";
 import { Title2 } from "@/components/ui/title2";
+import { THUMBNAIL_DIM_OVERLAY_CLASS } from "@/lib/thumbnail-styles";
 import { DUMMY_DEFAULT_THUMBNAIL } from "@/lib/dummy-thumbnail-images";
 
 interface EpisodePromptReferenceModalProps {
@@ -100,6 +101,7 @@ export function EpisodePromptReferenceModal({
                     sizes="60px"
                     className="object-cover"
                   />
+                  <div className={THUMBNAIL_DIM_OVERLAY_CLASS} aria-hidden />
                 </div>
               </div>
 

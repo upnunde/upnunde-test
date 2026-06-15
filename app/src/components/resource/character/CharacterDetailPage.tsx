@@ -10,7 +10,7 @@ import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import { AddResourceSlot } from "@/components/resource/cards/AddResourceSlot";
 import { createOptimizedImageObjectUrl } from "@/lib/image-upload-compress";
-import { THUMBNAIL_SLOT_ARIA } from "@/lib/thumbnail-styles";
+import { THUMBNAIL_SLOT_ARIA, THUMBNAIL_DIM_OVERLAY_CLASS } from "@/lib/thumbnail-styles";
 import {
   CharacterExpressionMultiModal,
   CharacterExpressionSingleModal,
@@ -402,6 +402,7 @@ export function CharacterDetailPage({
                               unoptimized
                               className="object-cover object-center pointer-events-none"
                             />
+                            <div className={THUMBNAIL_DIM_OVERLAY_CLASS} aria-hidden />
                           </button>
                           <div className="absolute inset-0 z-[1] bg-black/10 opacity-0 group-hover:opacity-100 transition-opacity pointer-events-none" />
                           <div className="absolute right-1 top-1 z-[2] flex flex-col justify-center items-start gap-my-4 opacity-0 group-hover:opacity-100 transition-opacity pointer-events-none group-hover:pointer-events-auto">
@@ -461,6 +462,7 @@ export function CharacterDetailPage({
                               unoptimized
                               className="object-cover object-top"
                             />
+                            <div className={THUMBNAIL_DIM_OVERLAY_CLASS} aria-hidden />
                             {/* 어두운 오버레이 */}
                             <div className="absolute inset-0 w-full h-full bg-black/10 opacity-0 group-hover:opacity-100 transition-opacity pointer-events-none" />
                             {/* 편집 / 삭제 아이콘 버튼 (9:16 썸네일과 동일 스타일) */}

@@ -1,6 +1,6 @@
 "use client";
 
-import { useCallback, useEffect, useMemo, useRef } from "react";
+import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import { createPortal } from "react-dom";
 import Image from "next/image";
 import { X } from "lucide-react";
@@ -13,6 +13,13 @@ import { useIsLgUp } from "@/hooks/useMediaQuery";
 import { MenuList, MenuListItem, MenuListSeparator } from "@/components/ui/menu-list";
 import { MOBILE_BOTTOM_SHEET_SCRIM_CLASS, MOBILE_BOTTOM_SHEET_SHELL_BASE_CLASS, mobileBottomSheetMediumMaxHeightClassName } from "@/components/ui/modal/modal-styles";
 import { BACKGROUNDS, CHARACTERS, BGMS, SFX, GALLERIES, VIDEOS } from "@/lib/mockData";
+import {
+  RESOURCE_PICKER_SHEET_GRID_CLASS,
+  RESOURCE_THUMBNAIL_FLUID_IMAGE_SIZES,
+  RESOURCE_THUMBNAIL_FLUID_SIZE_CLASS,
+  THUMBNAIL_DIM_OVERLAY_CLASS,
+  estimateResourceThumbnailGridColumns,
+} from "@/lib/thumbnail-styles";
 import type { BlockType } from "@/types/editor";
 import { cn } from "@/lib/utils";
 
@@ -63,11 +70,9 @@ function isImageType(type: BlockType): boolean {
 
 /** Inset ring layer above image (z-10) so it is not covered by the resource */
 function ThumbnailFrameOverlay({
-  isCharacter,
   isActive,
   className,
 }: {
-  isCharacter: boolean;
   /** Strong ring when selected */
   isActive: boolean;
   className?: string;
@@ -76,8 +81,7 @@ function ThumbnailFrameOverlay({
     <span
       aria-hidden
       className={cn(
-        "pointer-events-none absolute inset-0 z-10",
-        isCharacter ? "rounded-[999px]" : "rounded-lg",
+        "pointer-events-none absolute inset-0 z-10 rounded-lg",
         isActive
           ? "ring-2 ring-inset ring-primary"
           : "ring-1 ring-inset ring-border-20/10",
@@ -87,6 +91,10 @@ function ThumbnailFrameOverlay({
     />
   );
 }
+
+/** PC 팝오버 — 배경·갤러리·캐릭터 공통 9:16 고정 썸네일 */
+const DESKTOP_PICKER_THUMB_CLASS =
+  "relative h-44 w-24 overflow-hidden rounded-lg bg-surface-disabled-10/0";
 
 const PICKER_TITLE: Record<BlockType, string> = {
   character: "캐릭터",
@@ -124,56 +132,41 @@ function ResourcePickerOptions({
   onOptionKeyDown,
 }: ResourcePickerOptionsProps) {
   const imageMode = isImageType(type);
-  const isCharacter = type === "character";
 
-  const imageThumbClass = (selected?: boolean) =>
-    cn(
-      isSheet
-        ? isCharacter
-          ? "relative aspect-square w-full overflow-hidden rounded-[999px] bg-surface-disabled-10/0"
-          : "relative aspect-[2/3] w-full overflow-hidden rounded-lg bg-surface-disabled-10/0"
-        : isCharacter
-          ? cn(
-              "relative overflow-hidden rounded-[999px] bg-surface-disabled-10/0",
-              selected === undefined ? "h-24 w-24" : "h-[100px] w-[100px] border border-[rgba(0,0,0,0.07)]",
-            )
-          : "relative h-44 w-24 overflow-hidden rounded-lg bg-surface-disabled-10/0",
-    );
+  const imageThumbClass = (selected?: boolean) => {
+    if (isSheet) {
+      return cn(
+        "relative overflow-hidden rounded-lg bg-surface-disabled/0 outline outline-1 outline-offset-[-1px]",
+        RESOURCE_THUMBNAIL_FLUID_SIZE_CLASS,
+        selected
+          ? "outline-2 outline-offset-[-2px] outline-primary"
+          : "outline-border-20",
+      );
+    }
+
+    return DESKTOP_PICKER_THUMB_CLASS;
+  };
 
   const imageCellClass = cn(
-    "group flex min-w-0 cursor-pointer flex-col rounded-lg focus:outline-none focus:ring-0",
+    "group flex min-w-0 cursor-pointer flex-col focus:outline-none focus:ring-0",
     isSheet
-      ? cn(
-          "w-full items-center active:bg-surface-20/60",
-          isCharacter ? "gap-my-4 px-my-2 py-my-8" : "gap-my-4 px-my-4 py-my-4",
-        )
-      : cn(
-          "inline-flex items-center justify-start gap-my-8 hover:bg-surface-10/40",
-          isCharacter ? "items-center" : "items-start",
-        ),
+      ? "w-full items-start justify-start gap-my-4"
+      : "inline-flex items-start justify-start gap-my-8 hover:bg-surface-10/40",
   );
 
   const imageLabelClass = cn(
-    "w-full min-w-0 text-body4_400",
-    isSheet
-      ? "line-clamp-2 min-h-[2lh] px-my-2 text-center leading-snug"
-      : cn("truncate", isCharacter ? "text-center" : "text-left"),
+    "w-full min-w-0 truncate text-left text-body4_400 font-['Pretendard_JP']",
+    isSheet && "self-stretch",
   );
 
   const isSceneTransition = type === "event";
-
-  const sheetImageGridClass = isCharacter
-    ? "grid-cols-4 gap-x-my-8 gap-y-my-12"
-    : "grid-cols-3 gap-x-my-12 gap-y-my-16";
 
   if (imageMode) {
     return (
       <div
         className={cn(
           "grid",
-          isSheet
-            ? cn("w-full px-my-12 pb-my-16 pt-my-8", sheetImageGridClass)
-            : "w-fit grid-cols-3 gap-my-16 px-my-20 pb-my-20 pt-my-20",
+          isSheet ? RESOURCE_PICKER_SHEET_GRID_CLASS : "w-fit grid-cols-3 gap-my-16 px-my-20 pb-my-20 pt-my-20",
         )}
       >
         <button
@@ -185,7 +178,7 @@ function ResourcePickerOptions({
           onKeyDown={(e) => onOptionKeyDown(0, e)}
           className={cn(imageCellClass, !isSheet && "col-span-1")}
         >
-          <div className={imageThumbClass()}>
+          <div className={imageThumbClass(selectedName === "")}>
             <div className="absolute inset-0 z-0 bg-surface-disabled/30">
               <div className="absolute inset-0" aria-hidden>
                 <svg
@@ -198,7 +191,9 @@ function ResourcePickerOptions({
                 </svg>
               </div>
             </div>
-            <ThumbnailFrameOverlay isCharacter={isCharacter} isActive={selectedName === ""} />
+            {!isSheet && (
+              <ThumbnailFrameOverlay isActive={selectedName === ""} />
+            )}
           </div>
           <span className={cn(imageLabelClass, "text-on-surface-10")}>선택 안 함</span>
         </button>
@@ -213,24 +208,26 @@ function ResourcePickerOptions({
             onKeyDown={(e) => onOptionKeyDown(idx + 1, e)}
             className={imageCellClass}
           >
-            <div className={imageThumbClass(true)}>
+            <div className={imageThumbClass(selectedName === item.name)}>
               {"url" in item && item.url ? (
-                <Image
-                  src={item.url}
-                  alt={item.name}
-                  fill
-                  sizes={isSheet ? "(max-width: 1024px) 28vw, 100px" : isCharacter ? "100px" : "96px"}
-                  className="object-cover"
-                />
+                <>
+                  <Image
+                    src={item.url}
+                    alt={item.name}
+                    fill
+                    sizes={isSheet ? RESOURCE_THUMBNAIL_FLUID_IMAGE_SIZES : "96px"}
+                    className="object-cover object-center"
+                  />
+                  <div className={THUMBNAIL_DIM_OVERLAY_CLASS} aria-hidden />
+                </>
               ) : (
                 <div className="relative z-0 flex h-full w-full items-center justify-center text-caption1_400 text-on-surface-30">
                   —
                 </div>
               )}
-              <ThumbnailFrameOverlay
-                isCharacter={isCharacter}
-                isActive={selectedName === item.name}
-              />
+              {!isSheet && (
+                <ThumbnailFrameOverlay isActive={selectedName === item.name} />
+              )}
             </div>
             <span
               className={cn(
@@ -371,8 +368,23 @@ export function ResourcePicker({
   const isPickerType = PICKER_TYPES.includes(type);
   const imageMode = isImageType(type);
   const title = PICKER_TITLE[type] ?? "리소스";
-  const gridColumns = type === "character" && !isDesktop ? 4 : 3;
+  const [mobileGridColumns, setMobileGridColumns] = useState(3);
   const optionCount = imageMode ? 1 + items.length : items.length + 1;
+
+  useEffect(() => {
+    if (isDesktop || !imageMode) return;
+
+    const updateColumns = () => {
+      const contentWidth = window.innerWidth - 40;
+      setMobileGridColumns(estimateResourceThumbnailGridColumns(contentWidth));
+    };
+
+    updateColumns();
+    window.addEventListener("resize", updateColumns);
+    return () => window.removeEventListener("resize", updateColumns);
+  }, [imageMode, isDesktop]);
+
+  const gridColumns = isDesktop ? 3 : mobileGridColumns;
 
   const focusFirstOption = useCallback(() => {
     requestAnimationFrame(() => {
@@ -500,7 +512,7 @@ export function ResourcePicker({
       <PopoverAnchor asChild>{children}</PopoverAnchor>
       <PopoverContent
         align="start"
-        className="flex max-h-[420px] min-h-0 w-fit flex-col overflow-hidden rounded-[4px] border border-[rgba(0,0,0,0.07)] bg-surface-10 p-0 outline outline-1 outline-offset-[-1px] outline-border-20/10"
+        className="flex max-h-[480px] min-h-0 w-fit flex-col overflow-hidden rounded-[4px] border border-[rgba(0,0,0,0.07)] bg-surface-10 p-0 outline outline-1 outline-offset-[-1px] outline-border-20/10"
         onCloseAutoFocus={(e) => e.preventDefault()}
         onOpenAutoFocus={(e) => {
           e.preventDefault();

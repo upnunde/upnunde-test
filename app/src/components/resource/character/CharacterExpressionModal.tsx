@@ -22,6 +22,7 @@ import {
   MODAL_CROP_STAGE_CLASS,
   MODAL_CROP_STAGE_SIZE_PX,
   THUMBNAIL_SLOT_ARIA,
+  THUMBNAIL_DIM_OVERLAY_CLASS,
 } from "@/lib/thumbnail-styles";
 import {
   createOptimizedImageObjectUrl,
@@ -542,6 +543,7 @@ export function CharacterExpressionModal({
                 unoptimized
                 className={cn("object-cover object-top", thumbClass)}
               />
+              <div className={THUMBNAIL_DIM_OVERLAY_CLASS} aria-hidden />
             </button>
             <button
               type="button"

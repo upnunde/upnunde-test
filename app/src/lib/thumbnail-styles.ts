@@ -31,6 +31,19 @@ export const MODAL_CROP_STAGE_CLASS =
 export const RESOURCE_THUMBNAIL_GRID_CLASS =
   "grid w-full grid-cols-[repeat(auto-fill,minmax(90px,1fr))] gap-x-my-8 gap-y-my-20 self-stretch rounded-[4px] p-0 lg:gap-x-my-16";
 
+/** 에디터 리소스 피커(모바일 바텀시트) — ResourceSection 본문과 동일 그리드·인셋 */
+export const RESOURCE_PICKER_SHEET_GRID_CLASS = cn(
+  RESOURCE_THUMBNAIL_GRID_CLASS,
+  "px-my-20 py-my-20",
+);
+
+/** `RESOURCE_THUMBNAIL_GRID_CLASS` 열 수 추정 — 피커 키보드 그리드 이동용 */
+export function estimateResourceThumbnailGridColumns(contentWidthPx: number): number {
+  const gap = 8;
+  const minCell = 90;
+  return Math.max(1, Math.floor((contentWidthPx + gap) / (minCell + gap)));
+}
+
 /** 9:16 고정 썸네일 — 에피소드 폼·상세 등 리소스 그리드 외 화면 */
 export const RESOURCE_THUMBNAIL_FIXED_9_16_CLASS = "w-[90px] h-[160px]";
 
