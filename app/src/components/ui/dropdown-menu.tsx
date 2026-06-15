@@ -85,9 +85,12 @@ function DropdownMenuItem({
       data-variant={variant}
       className={cn(
         menuListItemCompactClassName,
-        "data-[variant=destructive]:text-destructive data-[variant=destructive]:*:[svg]:!text-destructive",
+        "data-[variant=destructive]:text-destructive",
         variant === "destructive" && menuListItemDestructiveClassName,
-        "[&_svg:not([class*='text-'])]:text-muted-foreground data-[inset]:pl-my-32 [&_svg]:pointer-events-none [&_svg]:shrink-0 [&_svg:not([class*='size-'])]:size-4",
+        "[&_svg:not([class*='text-'])]:text-muted-foreground",
+        "[&.text-destructive]:[&_svg:not([class*='text-'])]:text-current",
+        "[&.text-error-error]:[&_svg:not([class*='text-'])]:text-current",
+        "data-[inset]:pl-my-32 [&_svg]:pointer-events-none [&_svg]:shrink-0 [&_svg:not([class*='size-'])]:size-4",
         className
       )}
       {...props}

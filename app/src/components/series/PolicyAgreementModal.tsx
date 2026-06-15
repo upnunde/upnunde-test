@@ -3,13 +3,12 @@
 import React, { useState } from "react";
 import Link from "next/link";
 import { Check } from "lucide-react";
+import { Dialog, DialogContent } from "@/components/ui/dialog";
 import {
-  Dialog,
-  DialogContent,
-  DialogHeader,
-  DialogTitle,
-} from "@/components/ui/dialog";
-import { Button } from "@/components/ui/button";
+  ModalFooterButtons,
+  ModalHeader,
+  modalDialogContentClassName,
+} from "@/components/ui/modal";
 import { cn } from "@/lib/utils";
 
 export interface PolicyAgreementModalProps {
@@ -48,79 +47,69 @@ export function PolicyAgreementModal({
     <Dialog open={open} onOpenChange={(isOpen) => !isOpen && handleClose()}>
       <DialogContent
         presentation="center"
-        className="flex w-[480px] max-w-[calc(100vw-2rem)] flex-col items-center gap-my-20 max-lg:rounded-[16px] lg:rounded-[4px] border border-border-10 bg-white p-my-24 pt-my-24 shadow-elevation-40 lg:pt-my-40"
+        className={modalDialogContentClassName}
         aria-describedby="policy-agreement-description"
       >
-        <DialogHeader className="text-center">
-          <DialogTitle className="text-heading2_700 text-on-surface-10 text-center">
-            잠깐! 시작하기 전 체크
-          </DialogTitle>
-        </DialogHeader>
-        <p
+        <ModalHeader
+          title="잠깐! 시작하기 전 체크"
+          subtitle="즐거운 콘텐츠 창작 전, 아래 내용을 꼭 확인해 주세요!"
+        />
+
+        <div
           id="policy-agreement-description"
-          className="text-body1_400 text-on-surface-30 text-center mt-0"
+          className="w-full px-my-24 pb-my-16"
         >
-          즐거운 콘텐츠 창작 전, 아래 내용을 꼭 확인해 주세요!
-        </p>
-
-        {/* 정책 목록 (회색 박스) */}
-        <div className="rounded-lg bg-surface-20 px-my-16 py-my-12 w-full mt-0">
-          <ol className="list-decimal list-inside space-y-my-8 text-body3_400 text-on-surface-20">
-            {POLICIES.map((text, i) => (
-              <li key={i}>{text}</li>
-            ))}
-          </ol>
+          <div className="w-full rounded-lg bg-surface-20 px-my-16 py-my-12">
+            <ol className="list-decimal list-inside space-y-my-8 text-body3_400 text-on-surface-20">
+              {POLICIES.map((text, i) => (
+                <li key={i}>{text}</li>
+              ))}
+            </ol>
+          </div>
         </div>
 
-        {/* 리노벨 운영정책 동의 + 보기 링크 */}
-        <div className="flex items-center justify-between gap-my-8 w-full mt-0">
-          <button
-            type="button"
-            onClick={() => setAgreed((prev) => !prev)}
-            className="flex items-center gap-my-8 text-body3_400 text-on-surface-20 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-2 rounded"
-            aria-pressed={agreed}
-            aria-label={agreed ? "리노벨 운영정책 동의함" : "리노벨 운영정책 동의"}
-          >
-            <span
-              className={cn(
-                "flex h-5 w-5 shrink-0 items-center justify-center rounded-full border-2 transition-colors",
-                agreed
-                  ? "border-primary bg-primary text-white"
-                  : "border-border-20 bg-white"
-              )}
-              aria-hidden
-            >
-              {agreed && <Check className="h-3 w-3" strokeWidth={3} />}
-            </span>
-            <span>리노벨 운영정책 동의</span>
-          </button>
-          <Link
-            href="/guide"
-            className="text-body3_400 text-on-surface-10 underline hover:underline focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-2 rounded"
-          >
-            보기
-          </Link>
-        </div>
-
-        {/* 취소 / 동의하고 계속하기 */}
-        <div className="flex justify-end gap-my-8 mt-my-24 w-full">
-          <Button
-            type="button"
-            variant="outline"
-            onClick={handleClose}
-            className="disabled:border-border-20"
-          >
-            취소
-          </Button>
-          <Button
-            type="button"
-            onClick={handleConfirm}
-            disabled={!agreed}
-            className="bg-primary text-primary-foreground hover:bg-primary/90"
-          >
-            동의하고 계속하기
-          </Button>
-        </div>
+        <ModalFooterButtons
+          layout="end"
+          body={
+            <div className="flex w-full items-center justify-between gap-my-8 bg-surface-10 px-my-24 py-my-8">
+              <button
+                type="button"
+                onClick={() => setAgreed((prev) => !prev)}
+                className="flex items-center gap-my-8 rounded text-body3_400 text-on-surface-20 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-2"
+                aria-pressed={agreed}
+                aria-label={agreed ? "리노벨 운영정책 동의함" : "리노벨 운영정책 동의"}
+              >
+                <span
+                  className={cn(
+                    "flex h-5 w-5 shrink-0 items-center justify-center rounded-full border-2 transition-colors",
+                    agreed
+                      ? "border-primary bg-primary text-white"
+                      : "border-border-20 bg-white",
+                  )}
+                  aria-hidden
+                >
+                  {agreed && <Check className="h-3 w-3" strokeWidth={3} />}
+                </span>
+                <span>리노벨 운영정책 동의</span>
+              </button>
+              <Link
+                href="/guide"
+                className="rounded text-body3_400 text-on-surface-10 underline hover:underline focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-2"
+              >
+                보기
+              </Link>
+            </div>
+          }
+          trailingButtons={[
+            { label: "취소", closeOnSelect: true },
+            {
+              label: "동의하고 계속하기",
+              tone: "primary",
+              onClick: handleConfirm,
+              disabled: !agreed,
+            },
+          ]}
+        />
       </DialogContent>
     </Dialog>
   );

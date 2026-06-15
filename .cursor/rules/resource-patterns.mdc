@@ -22,8 +22,27 @@ alwaysApply: false
 ## 크롭 모달 레이아웃
 
 - 크롭 스테이지 크기: `MODAL_CROP_STAGE_CLASS` · `MODAL_CROP_STAGE_SIZE_PX` (`app/src/lib/thumbnail-styles.ts`).
-- 멀티 슬롯 우측 그리드 높이는 좌측 전체 `bodyHeight`와 분리 가능 — 과도한 동기화로 레이아웃 깨지지 않게 한다.
 - 비인터랙티브 surface 라운드 4px — `.cursor/rules/project-overview.mdc` 및 `ui-tokens-quickref.mdc` 참고.
+
+## 표정 등록 모달 (`CharacterExpressionMultiModal`) — PC 디폴트
+
+**정본:** `app/src/components/resource/character/CharacterExpressionModal.tsx` 상단 `EXPRESSION_MULTI_MODAL_DESKTOP_*` 상수.
+
+멀티 슬롯(`showSlotList`) PC(`lg+`) 레이아웃은 **뷰포트 vw/%·`w-full`·`flex-1`로 줄이지 않는다.** 창 크기와 무관하게 아래 고정 치수를 유지한다.
+
+| 영역 | PC 고정 치수 | 비고 |
+|------|-------------|------|
+| Dialog + 본문 래퍼 + 본문 row | **767px** (`w`/`min-w`/`max-w` 동일) | `EXPRESSION_MULTI_MODAL_DESKTOP_SHELL_CLASS` 등 |
+| 좌측 패널 | **441px** | 크롭·슬라이더·표정 입력·이전/다음 |
+| 우측 3열 그리드 | **326px** | 90×160 썸네일 · `w-fit` · `gap-x-my-8` |
+| 크롭 스테이지 | **400×400px** | `EXPRESSION_MULTI_MODAL_DESKTOP_CROP_STAGE_CLASS` — `100vw` 축소 금지 |
+
+- 배치: `lg:flex-row` (좌 \| 우), 본문 row·래퍼는 `lg:flex-none lg:shrink-0`.
+- 우측 그리드 높이: 좌측 패널 `ResizeObserver` → CSS 변수 `--expression-panel-h` → `lg:h-[var(--expression-panel-h)]` + `overflow-y-auto`.
+- 빈 슬롯 추가: `handleFilesSelected`는 **빈 placeholder 슬롯을 먼저 채운 뒤** `push` (상세 페이지 1차 추가 시 10칸 placeholder 때문).
+- 모바일(`max-lg`): 바텀 시트 · 가로 캐러셀 — PC 고정 치수 클래스 적용하지 않음.
+
+**변경 시 금지:** `lg:w-auto`, `92vw`, `calc(100vw-*)`, 본문 `w-full flex-1`(PC), 우측 `flex-1` 늘림 — 디폴트 레이아웃이 깨진다.
 
 ## 시리즈 폼 이미지
 

@@ -55,7 +55,7 @@ const dialogContentAutoClass = cn(
   dialogContentAnimationClass,
   "max-lg:inset-x-0 max-lg:bottom-[var(--app-vv-bottom,0px)] max-lg:top-auto max-lg:max-h-[min(92dvh,900px)] max-lg:translate-x-0 max-lg:translate-y-0 max-lg:gap-0 max-lg:overflow-hidden max-lg:rounded-b-none max-lg:border-t border-border-10 max-lg:p-0 max-lg:pb-[env(safe-area-inset-bottom,0px)] max-lg:data-[state=open]:slide-in-from-bottom max-lg:data-[state=closed]:slide-out-to-bottom",
   MOBILE_MODAL_TOP_RADIUS_CLASS,
-  "lg:left-1/2 lg:top-1/2 lg:max-w-lg lg:max-h-[calc(100dvh-160px)] lg:-translate-x-1/2 lg:-translate-y-1/2 lg:gap-my-16 lg:overflow-y-auto lg:border-t-0 lg:p-my-24 lg:shadow-elevation-50 lg:pb-my-24",
+  "lg:left-1/2 lg:top-1/2 lg:max-w-lg lg:max-h-[calc(100dvh-160px)] lg:-translate-x-1/2 lg:-translate-y-1/2 lg:gap-0 lg:overflow-y-auto lg:border-t-0 lg:p-0 lg:shadow-elevation-50 lg:pb-0",
   DESKTOP_MODAL_RADIUS_CLASS,
   "lg:data-[state=closed]:zoom-out-95 lg:data-[state=open]:zoom-in-95",
 );

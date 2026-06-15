@@ -49,8 +49,10 @@ export const menuListItemCompactClassName = cn(
   "rounded-sm px-my-8 py-my-8",
 );
 
-export const menuListItemDestructiveClassName =
-  "text-error-error focus-visible:bg-error-error/10 data-[highlighted]:bg-error-error/10 lg:hover:bg-error-error/10";
+export const menuListItemDestructiveClassName = cn(
+  "text-error-error focus-visible:bg-error-error/10 data-[highlighted]:bg-error-error/10 lg:hover:bg-error-error/10",
+  "[&_svg:not([class*='text-'])]:text-current",
+);
 
 /** 시트·드롭다운 스크롤 본문 래퍼 */
 export const menuListBodyClassName = "flex flex-col px-my-8 py-my-8";

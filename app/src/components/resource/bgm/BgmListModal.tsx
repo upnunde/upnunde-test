@@ -350,8 +350,8 @@ export function BgmListModal({ open, onClose, onAdd }: BgmListModalProps) {
 
   return (
     <Dialog open={open} onOpenChange={(o) => !o && onClose()}>
-      <DialogContent className="flex w-full min-h-0 max-lg:max-w-none flex-col gap-0 overflow-hidden bg-surface-10 max-lg:rounded-[16px] lg:rounded-[4px] border border-border-10 p-0 lg:w-[800px] lg:max-w-[calc(100vw-2rem)]">
-        <DialogHeader className="justify-center items-start h-9 px-my-20 pt-my-4 pb-0 border-b border-border-10">
+      <DialogContent className="flex w-full min-h-0 max-lg:max-w-none flex-col gap-0 overflow-hidden bg-surface-10 max-lg:rounded-[16px] lg:rounded-[4px] border border-border-10 p-0 lg:p-0 lg:pb-0 lg:w-[800px] lg:max-w-[calc(100vw-2rem)]">
+        <DialogHeader className="justify-center items-start h-9 px-my-20 pt-my-12 pb-0 lg:border-b lg:border-border-10 lg:pt-my-4">
           <div className="flex items-center justify-center gap-my-4">
             <DialogTitle className="text-on-surface-10 text-body1_700 font-['Pretendard_JP']">
               BGM
@@ -364,8 +364,7 @@ export function BgmListModal({ open, onClose, onAdd }: BgmListModalProps) {
 
         {/* 모바일 — 장르 칩 · 탭 전환 · 단일 패널 스크롤 */}
         <div className="flex min-h-0 flex-1 flex-col lg:hidden">
-          <div className="shrink-0 border-b border-border-10 px-my-16 py-my-12">
-            <div className="mb-my-8 text-caption1_500 text-on-surface-30">장르</div>
+          <div className="shrink-0 px-my-16 py-my-12">
             {genreChips}
           </div>
 

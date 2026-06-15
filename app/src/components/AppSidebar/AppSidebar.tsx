@@ -89,7 +89,7 @@ function AppSidebarMobileHeader({ onClose }: { onClose: () => void }) {
   const router = useRouter();
 
   return (
-    <div className="flex h-14 shrink-0 items-center justify-between border-b border-border-10 bg-white pl-my-12 pr-my-16 lg:hidden">
+    <div className="flex h-14 shrink-0 items-center justify-between border-b border-border-10 bg-white pl-my-20 pr-my-16 lg:hidden">
       <button
         type="button"
         onClick={() => router.push("/login")}

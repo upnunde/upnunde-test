@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState, useCallback, useEffect, useRef, useMemo } from "react";
+import React, { useState, useCallback, useEffect, useLayoutEffect, useRef, useMemo } from "react";
 import NextImage from "next/image";
 import {
   Dialog,
@@ -37,7 +37,27 @@ const EXPRESSION_MAX_LENGTH = 50;
 /** 모바일 표정 캐러셀 — 400px급 뷰포트에서 약 5개 동시 노출 */
 const MOBILE_EXPRESSION_CAROUSEL_THUMB_CLASS = "aspect-[9/16] h-auto w-[64px] min-h-0";
 const MOBILE_EXPRESSION_CAROUSEL_ITEM_CLASS = "w-[64px]";
+/** 데스크톱 표정 그리드 — 90×160 고정, 3열 fit-content */
+const DESKTOP_EXPRESSION_THUMB_CLASS = "h-[160px] w-[90px]";
+const DESKTOP_EXPRESSION_ITEM_CLASS = "w-[90px]";
 const CHARACTER_EXPRESSION_FILE_INPUT_ID = "character-expression-modal-file";
+const EXPRESSION_DESKTOP_BODY_HEIGHT_VAR = "--expression-panel-h";
+/**
+ * PC 멀티 표정 모달 디폴트 치수 — 변경 시 `.cursor/rules/resource-patterns.mdc` §표정 등록 모달 동기화.
+ * 본문 767px = 좌 441px + 우 326px. 뷰포트 축소와 무관하게 고정.
+ */
+const EXPRESSION_MULTI_MODAL_DESKTOP_SHELL_CLASS =
+  "lg:items-start lg:gap-0 lg:overflow-hidden lg:p-0 lg:pb-0 lg:!w-[767px] lg:!min-w-[767px] lg:!max-w-[767px] lg:shrink-0";
+const EXPRESSION_MULTI_MODAL_DESKTOP_BODY_WRAPPER_CLASS =
+  "lg:w-[767px] lg:min-w-[767px] lg:max-w-[767px] lg:flex-none lg:shrink-0";
+const EXPRESSION_MULTI_MODAL_DESKTOP_BODY_ROW_CLASS =
+  "max-lg:w-full max-lg:flex-1 lg:w-[767px] lg:min-w-[767px] lg:max-w-[767px] lg:flex-none lg:shrink-0";
+const EXPRESSION_MULTI_MODAL_DESKTOP_LEFT_PANEL_CLASS =
+  "lg:w-[441px] lg:min-w-[441px] lg:max-w-[441px] lg:shrink-0";
+const EXPRESSION_MULTI_MODAL_DESKTOP_RIGHT_GRID_CLASS =
+  "lg:w-[326px] lg:min-w-[326px] lg:max-w-[326px] lg:shrink-0";
+const EXPRESSION_MULTI_MODAL_DESKTOP_CROP_STAGE_CLASS =
+  "lg:!size-[400px] lg:!max-h-[400px] lg:!max-w-[400px]";
 
 export interface CharacterExpressionModalProps {
   open: boolean;
@@ -481,8 +501,8 @@ export function CharacterExpressionModal({
       const isSelected = selectedIndex === index;
       const label = slot.expressionLabel?.trim() || "untitle";
       const isCarousel = Boolean(options?.carouselItem);
-      const thumbClass = isCarousel ? MOBILE_EXPRESSION_CAROUSEL_THUMB_CLASS : "h-[160px] w-[90px]";
-      const itemWidthClass = isCarousel ? MOBILE_EXPRESSION_CAROUSEL_ITEM_CLASS : "w-[90px]";
+      const thumbClass = isCarousel ? MOBILE_EXPRESSION_CAROUSEL_THUMB_CLASS : DESKTOP_EXPRESSION_THUMB_CLASS;
+      const itemWidthClass = isCarousel ? MOBILE_EXPRESSION_CAROUSEL_ITEM_CLASS : DESKTOP_EXPRESSION_ITEM_CLASS;
       return (
         <div
           key={slot.id}
@@ -506,10 +526,10 @@ export function CharacterExpressionModal({
               className={cn(
                 "flex cursor-pointer flex-col items-center justify-center overflow-hidden rounded-lg bg-surface-disabled/0 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary",
                 thumbClass,
-                isCarousel ? "gap-0" : "gap-my-8",
+                isCarousel && "gap-0",
                 isSelected
                   ? "outline outline-2 outline-offset-[-2px] outline-primary"
-                  : "outline outline-1 outline-offset-[-1px] outline-border-10/5 hover:outline-border-20",
+                  : "outline outline-1 outline-offset-[-1px] outline-border-10 hover:outline-border-20",
               )}
               aria-label={`표정 ${index + 1}: ${label}`}
               aria-current={isSelected ? "true" : undefined}
@@ -537,13 +557,16 @@ export function CharacterExpressionModal({
               <Trash2 className={cn("pointer-events-none", isCarousel ? "h-3 w-3" : "h-4 w-4")} />
             </button>
           </div>
-          <div className={cn("inline-flex items-center justify-start overflow-hidden", itemWidthClass)}>
+          <div className={cn("inline-flex items-center justify-start overflow-hidden self-stretch", itemWidthClass)}>
             <div
               className={cn(
-                "truncate text-left font-['Pretendard_JP']",
-                itemWidthClass,
+                "flex-1 truncate text-left font-['Pretendard_JP']",
                 isCarousel ? "text-caption1_400" : "text-body3_400",
-                label === "untitle" ? "text-on-surface-disabled" : "text-on-surface-20",
+                label === "untitle"
+                  ? isCarousel
+                    ? "text-on-surface-disabled"
+                    : "text-on-surface-30"
+                  : "text-on-surface-20",
               )}
             >
               {label}
@@ -561,7 +584,9 @@ export function CharacterExpressionModal({
       <div
         className={cn(
           "shrink-0",
-          options?.carouselItem && cn(MOBILE_EXPRESSION_CAROUSEL_ITEM_CLASS, "snap-start"),
+          options?.carouselItem
+            ? cn(MOBILE_EXPRESSION_CAROUSEL_ITEM_CLASS, "snap-start")
+            : "inline-flex flex-col items-start gap-my-4",
         )}
       >
         <AddResourceSlot
@@ -601,25 +626,38 @@ export function CharacterExpressionModal({
         );
 
         setSlots((prev) => {
-          const remaining = Math.max(
-            0,
-            MAX_SLOTS - prev.filter((s) => Boolean(s.imageUrl)).length,
-          );
+          const filledCount = prev.filter((s) => Boolean(s.imageUrl)).length;
+          const remaining = Math.max(0, MAX_SLOTS - filledCount);
           const urlsToAdd = objectUrls.slice(0, remaining);
           objectUrls.slice(remaining).forEach((url) => URL.revokeObjectURL(url));
           if (urlsToAdd.length === 0) return prev;
 
           const next = [...prev];
           let firstAddedIndex: number | null = null;
+          let urlIndex = 0;
 
-          urlsToAdd.forEach((objectUrl) => {
+          // 상세 페이지 1차 추가 시 빈 placeholder 슬롯이 있으므로, push 전에 빈 칸부터 채운다.
+          for (let i = 0; i < next.length && urlIndex < urlsToAdd.length; i++) {
+            if (!next[i]?.imageUrl) {
+              next[i] = {
+                ...next[i]!,
+                imageUrl: urlsToAdd[urlIndex]!,
+                expressionLabel: next[i]?.expressionLabel ?? "",
+              };
+              if (firstAddedIndex === null) firstAddedIndex = i;
+              urlIndex += 1;
+            }
+          }
+
+          while (urlIndex < urlsToAdd.length && next.length < MAX_SLOTS) {
             next.push({
               ...createEmptySlot(next.length),
-              imageUrl: objectUrl,
+              imageUrl: urlsToAdd[urlIndex]!,
               expressionLabel: "",
             });
             if (firstAddedIndex === null) firstAddedIndex = next.length - 1;
-          });
+            urlIndex += 1;
+          }
 
           if (firstAddedIndex !== null) {
             const firstSlot = next[firstAddedIndex];
@@ -645,22 +683,39 @@ export function CharacterExpressionModal({
     : slots.some((s) => Boolean(s.imageUrl));
 
   /** 본문·우측 그리드 높이 = 좌측 편집 패널(content hug) 높이 — 데스크톱 멀티 모드만 */
-  useEffect(() => {
+  useLayoutEffect(() => {
     if (!open || !layoutShowSlotList || !isLgUp) {
       setBodyHeight(undefined);
       return;
     }
-    const el = leftPanelRef.current;
-    if (!el) return;
 
-    const syncHeight = () => {
-      setBodyHeight(el.getBoundingClientRect().height);
+    let observer: ResizeObserver | null = null;
+    let rafId = 0;
+
+    const attach = () => {
+      const el = leftPanelRef.current;
+      if (!el) return false;
+
+      const syncHeight = () => {
+        setBodyHeight(el.getBoundingClientRect().height);
+      };
+
+      syncHeight();
+      observer = new ResizeObserver(syncHeight);
+      observer.observe(el);
+      return true;
     };
 
-    syncHeight();
-    const observer = new ResizeObserver(syncHeight);
-    observer.observe(el);
-    return () => observer.disconnect();
+    if (!attach()) {
+      rafId = requestAnimationFrame(() => {
+        attach();
+      });
+    }
+
+    return () => {
+      if (rafId) cancelAnimationFrame(rafId);
+      observer?.disconnect();
+    };
   }, [open, layoutShowSlotList, showExpressionSection, slots.length, isLgUp]);
 
   return (
@@ -670,9 +725,8 @@ export function CharacterExpressionModal({
         className={cn(
           formDialogShellClassName,
           "gap-0 overflow-hidden border-0 bg-surface-10 p-0 shadow-elevation-50 outline outline-1 outline-offset-[-1px] outline-border-10",
-          layoutShowSlotList
-            ? "lg:w-auto lg:max-w-[calc(100vw-2rem)]"
-            : "lg:w-[432px] lg:max-w-[calc(100vw-2rem)]",
+          layoutShowSlotList && EXPRESSION_MULTI_MODAL_DESKTOP_SHELL_CLASS,
+          !layoutShowSlotList && "lg:!w-[432px] lg:!min-w-[432px] lg:!max-w-none",
         )}
         aria-describedby={undefined}
       >
@@ -687,15 +741,27 @@ export function CharacterExpressionModal({
           aria-label={THUMBNAIL_SLOT_ARIA.addExpression}
           onChange={handleFilesSelected}
         />
-        <div className={formDialogSheetBodyWrapperClassName}>
+        <div
+          className={cn(
+            formDialogSheetBodyWrapperClassName,
+            layoutShowSlotList && EXPRESSION_MULTI_MODAL_DESKTOP_BODY_WRAPPER_CLASS,
+          )}
+        >
         <div
           className={cn(
             layoutShowSlotList
-              ? "flex min-h-0 w-full flex-1 flex-col overflow-y-auto overflow-x-hidden overscroll-contain max-lg:gap-0 lg:inline-flex lg:shrink-0 lg:items-start lg:justify-start lg:overflow-hidden"
+              ? cn(
+                  "flex min-h-0 flex-col overflow-y-auto overflow-x-hidden overscroll-contain max-lg:gap-0 lg:h-fit lg:flex-row lg:items-start lg:justify-start lg:overflow-hidden",
+                  EXPRESSION_MULTI_MODAL_DESKTOP_BODY_ROW_CLASS,
+                )
               : "flex min-h-0 w-full min-w-0 flex-1 flex-col overflow-hidden",
           )}
           style={
-            layoutShowSlotList && isLgUp && bodyHeight != null ? { height: bodyHeight } : undefined
+            layoutShowSlotList && bodyHeight != null
+              ? ({
+                  [EXPRESSION_DESKTOP_BODY_HEIGHT_VAR]: `${bodyHeight}px`,
+                } as React.CSSProperties)
+              : undefined
           }
         >
           {/* 왼쪽: 이미지 크롭 에디터 + 슬라이더 + 표정 입력 — 멀티 모드 height hug */}
@@ -704,14 +770,20 @@ export function CharacterExpressionModal({
             className={cn(
               "flex flex-col items-center justify-start gap-my-20 p-my-16 sm:p-my-20",
               layoutShowSlotList
-                ? "w-full min-w-0 shrink-0 self-stretch max-lg:border-b max-lg:border-border-10 lg:h-fit lg:w-fit lg:self-start lg:border-r lg:border-border-10"
+                ? cn(
+                    "w-full min-w-0 shrink-0 self-stretch max-lg:border-b max-lg:border-border-10 lg:h-fit lg:self-start lg:border-r lg:border-border-10",
+                    EXPRESSION_MULTI_MODAL_DESKTOP_LEFT_PANEL_CLASS,
+                  )
                 : cn("w-full min-w-0 shrink-0 self-stretch", formDialogSheetScrollBodyClassName),
             )}
           >
             {/* 정사각 스테이지 + canvas + 좌우 딤 + 9:16 가이드 프레임 */}
             <div
               ref={cropStageRef}
-              className={MODAL_CROP_STAGE_CLASS}
+              className={cn(
+                MODAL_CROP_STAGE_CLASS,
+                layoutShowSlotList && EXPRESSION_MULTI_MODAL_DESKTOP_CROP_STAGE_CLASS,
+              )}
             >
               <canvas
                 ref={cropCanvasRef}
@@ -743,7 +815,7 @@ export function CharacterExpressionModal({
               )}
             </div>
             {/* 슬라이더: primary 트랙 + 서피스 썸 (참고: w-14 채움 + w-48 빈 트랙 + thumb) */}
-            <div className="h-6 inline-flex justify-start items-center w-full self-stretch gap-my-16">
+            <div className="h-6 inline-flex justify-start items-center w-full self-stretch gap-my-40">
               <div className="relative flex-1 h-6 inline-flex items-center gap-0">
                 <div className="flex-1 flex h-2 rounded-[999px] overflow-hidden bg-surface-disabled">
                   <div className="h-full bg-primary rounded-[999px] transition-[width]" style={{ width: `${((zoom - 0.5) / 1.5) * 100}%` }} />
@@ -872,7 +944,13 @@ export function CharacterExpressionModal({
                 </div>
               </div>
 
-              <div className="hidden w-fit min-w-fit shrink-0 auto-rows-max grid-cols-3 items-start justify-start gap-x-my-8 gap-y-my-16 overflow-x-hidden p-my-20 lg:grid lg:h-[678px] lg:max-h-[678px] lg:overflow-y-auto">
+              <div
+                data-expression-slot-grid
+                className={cn(
+                  "hidden w-fit min-w-fit shrink-0 auto-rows-max grid-cols-3 items-start justify-start gap-x-my-8 gap-y-my-16 overflow-x-hidden p-my-20 lg:grid lg:h-[var(--expression-panel-h)] lg:max-h-[var(--expression-panel-h)] lg:min-h-0 lg:overflow-y-auto",
+                  EXPRESSION_MULTI_MODAL_DESKTOP_RIGHT_GRID_CLASS,
+                )}
+              >
                 {filledImageSlots.map((slot) =>
                   renderExpressionSlotItem(slot, slots.indexOf(slot)),
                 )}

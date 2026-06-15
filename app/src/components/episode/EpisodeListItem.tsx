@@ -113,11 +113,11 @@ function EpisodeListItemActions({
                 </EditorMenuOption>
                 <EditorMenuOption
                   presentation={presentation}
+                  destructive
                   onSelect={() => {
                     onDelete?.(episode);
                     closeSheet();
                   }}
-                  className="text-destructive"
                 >
                   <Trash2 className="h-4 w-4 shrink-0" aria-hidden />
                   삭제
@@ -149,11 +149,11 @@ function EpisodeListItemActions({
                 </EditorMenuOption>
                 <EditorMenuOption
                   presentation={presentation}
+                  destructive
                   onSelect={() => {
                     onDelete?.(episode);
                     closeSheet();
                   }}
-                  className="text-destructive"
                 >
                   <Trash2 className="h-4 w-4 shrink-0" aria-hidden />
                   삭제

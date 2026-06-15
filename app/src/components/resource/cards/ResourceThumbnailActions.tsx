@@ -106,7 +106,8 @@ export function ResourceThumbnailActions({
               편집
             </DropdownMenuItem>
             <DropdownMenuItem
-              className="flex cursor-pointer items-center gap-my-8 rounded-md px-my-12 py-my-8 text-body3_400 text-destructive outline-none focus:bg-surface-20"
+              variant="destructive"
+              className="flex cursor-pointer items-center gap-my-8 rounded-md px-my-12 py-my-8 text-body3_400 outline-none focus:bg-surface-20"
               onSelect={() => onDelete()}
             >
               <Trash2 className="h-4 w-4 shrink-0" aria-hidden />

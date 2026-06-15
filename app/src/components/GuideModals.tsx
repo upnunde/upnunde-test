@@ -4,12 +4,12 @@ import React, { useState } from "react";
 import {
   Dialog,
   DialogContent,
-  DialogHeader,
-  DialogTitle,
-  DialogDescription,
-  DialogClose,
 } from "@/components/ui/dialog";
-import { Button } from "@/components/ui/button";
+import {
+  ModalFooterButtons,
+  ModalHeader,
+  modalDialogContentClassName,
+} from "@/components/ui/modal";
 
 /** 안내팝업 케이스 1: 잠깐! 시작하기 전 체크 (새 콘텐츠 제작 전) */
 export interface StartCheckModalProps {
@@ -42,48 +42,52 @@ export function StartCheckModal({
 
   return (
     <Dialog open={open} onOpenChange={handleOpenChange}>
-      <DialogContent presentation="center" className="sm:max-w-md">
-        <DialogHeader>
-          <DialogTitle>잠깐! 시작하기 전 체크</DialogTitle>
-          <DialogDescription asChild>
-            <div className="text-body3_400 text-slate-600 space-y-my-16 pt-my-8">
-              <p>새로운 콘텐츠 제작 전, 아래 내용을 꼭 확인해 주세요!</p>
-              <ol className="list-decimal list-inside space-y-my-8 text-slate-700">
-                <li>선정적·폭력적 콘텐츠를 다루지 마세요.</li>
-                <li>저작권이 있는 자료를 사용하지 마세요.</li>
-                <li>부적절한 콘텐츠는 삭제 또는 제재될 수 있습니다.</li>
-              </ol>
-              <div className="flex items-center gap-my-8 pt-my-8">
-                <input
-                  type="checkbox"
-                  id="policy-read"
-                  checked={policyChecked}
-                  onChange={(e) => setPolicyChecked(e.target.checked)}
-                  className="rounded border-slate-300 text-primary focus:ring-primary"
-                />
-                <label htmlFor="policy-read" className="cursor-pointer text-slate-700">
-                  직접 운영 정책 읽기
-                </label>
-                <a
-                  href={policyLink}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="text-primary underline text-body3_400"
-                >
-                  보기
-                </a>
-              </div>
-            </div>
-          </DialogDescription>
-        </DialogHeader>
-        <div className="flex justify-end gap-my-8 mt-6">
-          <DialogClose asChild>
-            <Button variant="outline">취소</Button>
-          </DialogClose>
-          <Button onClick={handleConfirm} disabled={!policyChecked}>
-            확인하고 계속하기
-          </Button>
+      <DialogContent presentation="center" className={modalDialogContentClassName}>
+        <ModalHeader
+          title="잠깐! 시작하기 전 체크"
+          subtitle="새로운 콘텐츠 제작 전, 아래 내용을 꼭 확인해 주세요!"
+        />
+        <div className="px-my-24 pb-my-16">
+          <ol className="list-decimal list-inside space-y-my-8 text-body3_400 text-on-surface-20">
+            <li>선정적·폭력적 콘텐츠를 다루지 마세요.</li>
+            <li>저작권이 있는 자료를 사용하지 마세요.</li>
+            <li>부적절한 콘텐츠는 삭제 또는 제재될 수 있습니다.</li>
+          </ol>
         </div>
+        <ModalFooterButtons
+          layout="end"
+          body={
+            <div className="flex items-center gap-my-8 bg-surface-10 px-my-24 py-my-8">
+              <input
+                type="checkbox"
+                id="policy-read"
+                checked={policyChecked}
+                onChange={(e) => setPolicyChecked(e.target.checked)}
+                className="rounded border-border-20 text-primary focus:ring-primary"
+              />
+              <label htmlFor="policy-read" className="cursor-pointer text-body3_400 text-on-surface-20">
+                직접 운영 정책 읽기
+              </label>
+              <a
+                href={policyLink}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="text-body3_400 text-primary underline"
+              >
+                보기
+              </a>
+            </div>
+          }
+          trailingButtons={[
+            { label: "취소", closeOnSelect: true },
+            {
+              label: "확인하고 계속하기",
+              tone: "primary",
+              onClick: handleConfirm,
+              disabled: !policyChecked,
+            },
+          ]}
+        />
       </DialogContent>
     </Dialog>
   );
@@ -104,23 +108,18 @@ export function LeaveConfirmModal({ open, onClose, onConfirm }: LeaveConfirmModa
 
   return (
     <Dialog open={open} onOpenChange={(o) => !o && onClose()}>
-      <DialogContent presentation="center" className="sm:max-w-md">
-        <DialogHeader>
-          <DialogTitle>작업을 중단하고 나가시겠습니까?</DialogTitle>
-          <DialogDescription asChild>
-            <p className="text-body3_400 text-slate-600 pt-my-8">
-              저장하지 않은 변경 사항은 사라집니다. 나가기 전에 임시저장해 두시는 것을 권장합니다.
-            </p>
-          </DialogDescription>
-        </DialogHeader>
-        <div className="flex justify-end gap-my-8 mt-6">
-          <DialogClose asChild>
-            <Button variant="outline">취소</Button>
-          </DialogClose>
-          <Button variant="destructive" onClick={handleConfirm}>
-            나가기
-          </Button>
-        </div>
+      <DialogContent presentation="center" className={modalDialogContentClassName}>
+        <ModalHeader
+          title="작업을 중단하고 나가시겠습니까?"
+          subtitle="저장하지 않은 변경 사항은 사라집니다. 나가기 전에 임시저장해 두시는 것을 권장합니다."
+        />
+        <ModalFooterButtons
+          layout="end"
+          trailingButtons={[
+            { label: "취소", closeOnSelect: true },
+            { label: "나가기", tone: "destructive", onClick: handleConfirm },
+          ]}
+        />
       </DialogContent>
     </Dialog>
   );
@@ -147,29 +146,23 @@ export function ResourceDeleteModal({
 
   return (
     <Dialog open={open} onOpenChange={(o) => !o && onClose()}>
-      <DialogContent presentation="center" className="sm:max-w-md">
-        <DialogHeader>
-          <DialogTitle className="text-center">리소스를 삭제하시겠어요?</DialogTitle>
-          <DialogDescription asChild>
-            <div className="text-body3_400 text-slate-600 pt-my-8">
-              <p>
-                선택한 리소스를 삭제하면 이 리소스를 사용 중인 모든 에피소드에서 표시 오류나
-                오류가 발생할 수 있습니다.
-              </p>
-              {resourceName && (
-                <span className="mt-2 block font-medium text-slate-700">「{resourceName}」</span>
-              )}
-            </div>
-          </DialogDescription>
-        </DialogHeader>
-        <div className="flex justify-end gap-my-8 mt-6">
-          <DialogClose asChild>
-            <Button variant="outline">취소</Button>
-          </DialogClose>
-          <Button variant="destructive" onClick={handleConfirm}>
-            삭제
-          </Button>
-        </div>
+      <DialogContent presentation="center" className={modalDialogContentClassName}>
+        <ModalHeader
+          title="리소스를 삭제하시겠어요?"
+          subtitle="선택한 리소스를 삭제하면 이 리소스를 사용 중인 모든 에피소드에서 표시 오류나 오류가 발생할 수 있습니다."
+        />
+        {resourceName ? (
+          <p className="-mt-3 px-my-24 pb-my-8 text-center text-body1_500 text-on-surface-10">
+            「{resourceName}」
+          </p>
+        ) : null}
+        <ModalFooterButtons
+          layout="end"
+          trailingButtons={[
+            { label: "취소", closeOnSelect: true },
+            { label: "삭제", tone: "destructive", onClick: handleConfirm },
+          ]}
+        />
       </DialogContent>
     </Dialog>
   );

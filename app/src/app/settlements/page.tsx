@@ -19,6 +19,11 @@ import { FilterChip } from "@/components/ui/chip";
 import { CHIP_COMPANION_CONTROL_CLASS, CHIP_GROUP_GAP_CLASS } from "@/lib/chip-styles";
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from "@/components/ui/dropdown-menu";
 import { Dialog, DialogContent, DialogTitle } from "@/components/ui/dialog";
+import {
+  ModalFooterButtons,
+  ModalHeader,
+  modalDialogContentClassName,
+} from "@/components/ui/modal";
 import { AnalyticsPanel } from "@/components/analytics/AnalyticsPanel";
 import { analyticsOutlineChipClassName } from "@/components/analytics/analytics-filter-chips";
 import { Title2 } from "@/components/ui/title2";
@@ -865,23 +870,26 @@ export default function MonetizationSettlementsPage() {
         </DialogContent>
       </Dialog>
       <Dialog open={!!rejectionReasonTarget} onOpenChange={(open) => !open && setRejectionReasonTarget(null)}>
-        <DialogContent presentation="center" className="w-[420px] max-w-[calc(100vw-2rem)] max-lg:rounded-[16px] lg:rounded-[4px] border border-border-10 bg-white p-0">
-          <div className="border-b border-divider-10 px-my-20 py-my-12">
-            <DialogTitle className="text-body1_700 text-on-surface-10">반려 사유</DialogTitle>
-          </div>
+        <DialogContent presentation="center" className={modalDialogContentClassName}>
+          <ModalHeader title="반려 사유" />
           {rejectionReasonTarget ? (
             <>
-              <div className="px-my-20 py-my-16">
+              <div className="px-my-24 pb-my-16">
                 <p className="text-body3_400 text-on-surface-20">{rejectionReasonTarget.rejectionReason}</p>
                 <p className="mt-2 text-caption1_400 text-on-surface-30">
                   신청일 {rejectionReasonTarget.requestedAt} · 상태 {getSettlementStatusLabel(rejectionReasonTarget.status)}
                 </p>
               </div>
-              <div className="flex items-center justify-end border-t border-divider-10 px-my-20 py-my-12">
-                <Button type="button" size="sm" onClick={() => setRejectionReasonTarget(null)}>
-                  확인
-                </Button>
-              </div>
+              <ModalFooterButtons
+                layout="end"
+                trailingButtons={[
+                  {
+                    label: "확인",
+                    tone: "primary",
+                    closeOnSelect: true,
+                  },
+                ]}
+              />
             </>
           ) : null}
         </DialogContent>
