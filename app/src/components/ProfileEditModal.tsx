@@ -7,7 +7,8 @@ import { X } from "lucide-react";
 import { useRouter } from "next/navigation";
 import { useIsLgUp } from "@/hooks/useMediaQuery";
 import { PAGE_GUTTER_X_CLASS } from "@/lib/page-layout";
-import { mobileBottomSheetMaxHeightClassName, MOBILE_BOTTOM_SHEET_PAD_CLASS } from "@/components/ui/modal/modal-styles";
+import { Button } from "@/components/ui/button";
+import { formDialogSheetStickyFooterClassName, mobileBottomSheetMaxHeightClassName, MOBILE_BOTTOM_SHEET_PAD_CLASS, MOBILE_BOTTOM_SHEET_PANEL_CLASS, MOBILE_BOTTOM_SHEET_SCRIM_CLASS } from "@/components/ui/modal/modal-styles";
 import { cn } from "@/lib/utils";
 
 const MODAL_WIDTH = 384;
@@ -140,37 +141,41 @@ function ProfileEditFooter({
   onLogout,
   onCancel,
   onSave,
+  mobile = false,
   className,
 }: {
   onLogout: () => void;
   onCancel: () => void;
   onSave: () => void;
+  mobile?: boolean;
   className?: string;
 }) {
   return (
-    <div className={cn("flex shrink-0 items-center justify-between gap-my-8 border-t border-border-10 pt-my-12 pb-my-12", className)}>
-      <button
+    <div
+      className={cn(
+        "flex shrink-0 items-center justify-between gap-my-8",
+        mobile
+          ? formDialogSheetStickyFooterClassName
+          : "border-t border-border-10 pt-my-12 pb-my-12",
+        className,
+      )}
+    >
+      <Button
         type="button"
+        variant="tertiary"
+        size="lg"
+        className="min-w-0 px-my-8 text-error-error hover:text-error-error"
         onClick={onLogout}
-        className="flex h-9 min-w-20 items-center justify-center rounded-lg bg-transparent transition-colors hover:bg-red-50"
       >
-        <span className="text-body1_500 text-red-600">로그아웃</span>
-      </button>
+        로그아웃
+      </Button>
       <div className="inline-flex items-center gap-my-8">
-        <button
-          type="button"
-          onClick={onCancel}
-          className="flex h-9 min-w-20 items-center justify-center rounded-md border border-slate-200 px-my-12 text-slate-700 transition-colors hover:bg-slate-50"
-        >
-          <span className="text-body1_500">취소</span>
-        </button>
-        <button
-          type="button"
-          onClick={onSave}
-          className="flex h-9 min-w-20 items-center justify-center rounded-md bg-slate-800 px-my-12 transition-colors hover:bg-slate-900"
-        >
-          <span className="text-body1_500 text-white">저장</span>
-        </button>
+        <Button type="button" variant="outline" size="lg" onClick={onCancel}>
+          취소
+        </Button>
+        <Button type="button" size="lg" onClick={onSave}>
+          저장
+        </Button>
       </div>
     </div>
   );
@@ -286,10 +291,11 @@ export function ProfileEditModal({ isOpen, onClose, anchorRef, onSave }: Profile
       typeof document !== "undefined"
         ? createPortal(
             <>
-              <div className="fixed inset-0 z-40 bg-black/50" aria-hidden onClick={handleClose} />
+              <div className={MOBILE_BOTTOM_SHEET_SCRIM_CLASS} aria-hidden onClick={handleClose} />
               <div
                 className={cn(
-                  "fixed inset-x-0 z-50 flex min-h-0 flex-col rounded-t-[4px] border-t border-border-10 bg-white shadow-elevation-40",
+                  MOBILE_BOTTOM_SHEET_PANEL_CLASS,
+                  "flex min-h-0 flex-col rounded-t-[4px] border-t border-border-10 bg-white shadow-elevation-40",
                   MOBILE_BOTTOM_SHEET_PAD_CLASS,
                   mobileBottomSheetMaxHeightClassName,
                 )}
@@ -318,7 +324,7 @@ export function ProfileEditModal({ isOpen, onClose, anchorRef, onSave }: Profile
                   {formFields}
                 </div>
                 <ProfileEditFooter
-                  className={PAGE_GUTTER_X_CLASS}
+                  mobile
                   onLogout={handleLogout}
                   onCancel={handleClose}
                   onSave={handleSave}

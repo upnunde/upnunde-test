@@ -14,7 +14,12 @@ import {
   MessageSquareText,
 } from "lucide-react";
 import type { BlockType } from "@/types/editor";
-import { MOBILE_BOTTOM_SHEET_PAD_CLASS } from "@/lib/mobile-viewport";
+import { MenuList, MenuListBody, MenuListItem } from "@/components/ui/menu-list";
+import {
+  MOBILE_BOTTOM_SHEET_PAD_CLASS,
+  MOBILE_BOTTOM_SHEET_PANEL_CLASS,
+  MOBILE_BOTTOM_SHEET_SCRIM_CLASS,
+} from "@/components/ui/modal/modal-styles";
 import { cn } from "@/lib/utils";
 import {
   BACKGROUNDS,
@@ -106,7 +111,7 @@ export function SlashCommandMenu({
   onClose,
   presentation = "popover",
 }: SlashCommandMenuProps) {
-  const buttonRefs = useRef<(HTMLButtonElement | null)[]>([]);
+  const buttonRefs = useRef<(HTMLDivElement | null)[]>([]);
   const OPTIONS = MENU_OPTIONS;
 
   // 기본 포커스: 메뉴 열리면 첫 항목에 포커스
@@ -127,7 +132,7 @@ export function SlashCommandMenu({
     return () => window.removeEventListener("keydown", onKeyDown);
   }, [onClose]);
 
-  const handleOptionKeyDown = (index: number, e: React.KeyboardEvent<HTMLButtonElement>) => {
+  const handleOptionKeyDown = (index: number, e: React.KeyboardEvent<HTMLDivElement>) => {
     if (e.key === "ArrowDown") {
       e.preventDefault();
       const next = Math.min(index + 1, OPTIONS.length - 1);
@@ -182,19 +187,15 @@ export function SlashCommandMenu({
   const renderOption = (option: SlashMenuOption, index: number, isSheet: boolean) => {
     const Icon = option.icon;
     return (
-      <button
+      <MenuListItem
         key={option.id}
         ref={(el) => {
           buttonRefs.current[index] = el;
         }}
-        type="button"
+        variant={isSheet ? "form" : "compact"}
         role="option"
         aria-selected={false}
-        className={cn(
-          "flex w-full cursor-pointer items-center gap-my-12 text-left text-body3_400",
-          isSheet ? "px-my-20 py-my-16" : "gap-my-8 px-my-12 py-my-8",
-          "hover:bg-surface-20 focus:bg-surface-20 focus:outline-none",
-        )}
+        className={isSheet ? undefined : "gap-my-8"}
         onClick={() => {
           if (option.id === "add_sentence") {
             onSelect({ action: "add_sentence" });
@@ -211,8 +212,8 @@ export function SlashCommandMenu({
         onKeyDown={(e) => handleOptionKeyDown(index, e)}
       >
         <Icon className={cn("shrink-0 text-on-surface-30", isSheet ? "h-5 w-5" : "h-4 w-4")} />
-        <span className="text-on-surface-10">{option.label}</span>
-      </button>
+        <span className={cn(isSheet ? undefined : "text-on-surface-10")}>{option.label}</span>
+      </MenuListItem>
     );
   };
 
@@ -220,26 +221,29 @@ export function SlashCommandMenu({
     return (
       <>
         <div
-          className="fixed inset-0 z-40 bg-black/30"
+          className={MOBILE_BOTTOM_SHEET_SCRIM_CLASS}
           aria-hidden
           onClick={onClose}
         />
         <div
           className={cn(
-            "fixed inset-x-0 z-50 max-h-[min(70vh,520px)] overflow-y-auto rounded-t-[4px] border-t border-border-10 bg-white shadow-elevation-40",
+            MOBILE_BOTTOM_SHEET_PANEL_CLASS,
+            "flex max-h-[min(70dvh,520px)] min-h-0 flex-col overflow-hidden rounded-t-[4px] border-t border-border-10 bg-white shadow-elevation-40",
             MOBILE_BOTTOM_SHEET_PAD_CLASS,
           )}
           role="listbox"
           aria-label="블록 추가"
         >
-          <div className="border-b border-border-10 px-my-20 py-my-16">
-            <p className="text-body1_500 text-on-surface-10">블록 추가</p>
+          <div className="shrink-0 border-b border-border-10 px-my-20 py-my-16">
+            <p className="text-body1_700 text-on-surface-10">블록 추가</p>
             <p className="mt-my-4 text-caption1_400 text-on-surface-30">
               아래에 추가할 블록을 선택해 주세요
             </p>
           </div>
-          <div className="py-my-8">
-            {OPTIONS.map((option, index) => renderOption(option, index, true))}
+          <div className="min-h-0 flex-1 overflow-y-auto">
+            <MenuListBody>
+              <MenuList>{OPTIONS.map((option, index) => renderOption(option, index, true))}</MenuList>
+            </MenuListBody>
           </div>
         </div>
       </>
@@ -253,13 +257,13 @@ export function SlashCommandMenu({
         aria-hidden
         onClick={onClose}
       />
-      <div
+      <MenuList
         className="fixed z-50 min-w-[200px] rounded-lg border border-border-10 bg-white py-my-4 shadow-elevation-40"
         style={{ top: adjustedPosition.top, left: adjustedPosition.left }}
         role="listbox"
       >
         {OPTIONS.map((option, index) => renderOption(option, index, false))}
-      </div>
+      </MenuList>
     </>
   );
 }

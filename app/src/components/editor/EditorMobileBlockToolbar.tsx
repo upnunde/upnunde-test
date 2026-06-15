@@ -53,11 +53,7 @@ export function EditorMobileBlockToolbar({ className }: { className?: string }) 
     focusedBlock != null && isMobileKeyboardEditableBlock(focusedBlock.type);
   const isEditingContent = mobileKeyboardEditBlockId === focusBlockId;
   const showContentEditButton =
-    !isKeyboardOpen &&
-    canEditContent &&
-    mobileContentEditPromptBlockId != null &&
-    mobileContentEditPromptBlockId === focusBlockId &&
-    !isEditingContent;
+    !isKeyboardOpen && canEditContent && focusBlockId != null && !isEditingContent;
   const showToolbar = isEditorMobileBlockToolbarVisible({
     focusBlockId,
     isKeyboardOpen,

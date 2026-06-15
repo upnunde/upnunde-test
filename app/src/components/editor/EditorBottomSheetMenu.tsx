@@ -10,7 +10,13 @@ import {
 } from "@/components/ui/dropdown-menu";
 import { useIsLgUp } from "@/hooks/useMediaQuery";
 import type { EditorMenuPresentation } from "@/components/editor/EditorMenuOption";
-import { mobileBottomSheetMaxHeightClassName, MOBILE_BOTTOM_SHEET_PAD_CLASS } from "@/components/ui/modal/modal-styles";
+import { MenuListBody } from "@/components/ui/menu-list";
+import {
+  MOBILE_BOTTOM_SHEET_PAD_CLASS,
+  MOBILE_BOTTOM_SHEET_PANEL_CLASS,
+  MOBILE_BOTTOM_SHEET_SCRIM_CLASS,
+  mobileBottomSheetMaxHeightClassName,
+} from "@/components/ui/modal/modal-styles";
 import { cn } from "@/lib/utils";
 
 export interface EditorBottomSheetMenuProps {
@@ -61,13 +67,14 @@ export function EditorBottomSheetMenu({
       ? createPortal(
           <>
             <div
-              className="fixed inset-0 z-40 bg-black/30"
+              className={MOBILE_BOTTOM_SHEET_SCRIM_CLASS}
               aria-hidden
               onClick={handleDismiss}
             />
             <div
               className={cn(
-                "fixed inset-x-0 z-50 flex min-h-0 flex-col rounded-t-[4px] border-t border-border-10 bg-white shadow-elevation-40",
+                MOBILE_BOTTOM_SHEET_PANEL_CLASS,
+                "flex min-h-0 flex-col rounded-t-[4px] border-t border-border-10 bg-white shadow-elevation-40",
                 MOBILE_BOTTOM_SHEET_PAD_CLASS,
                 mobileBottomSheetMaxHeightClassName,
               )}
@@ -87,8 +94,8 @@ export function EditorBottomSheetMenu({
                   <X className="h-5 w-5" aria-hidden />
                 </button>
               </div>
-              <div className="min-h-0 flex-1 overflow-y-auto px-my-8 py-my-8">
-                {children("sheet")}
+              <div className="min-h-0 flex-1 overflow-y-auto">
+                <MenuListBody>{children("sheet")}</MenuListBody>
               </div>
             </div>
           </>,

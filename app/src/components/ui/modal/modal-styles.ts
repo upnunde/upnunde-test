@@ -10,6 +10,18 @@ export const modalDialogContentClassName =
  */
 export const mobileBottomSheetMaxHeightClassName = "max-h-[min(92dvh,900px)]";
 
+/**
+ * 에디터 리소스 피커(배경·캐릭터 등) — 뷰포트 상단 30% peek, 시트는 하단 70%까지.
+ */
+export const mobileResourcePickerSheetMaxHeightClassName = "max-h-[70dvh]";
+
+/** 모바일 바텀 시트 스크림 — 레이아웃 뷰포트 전체(글로벌 헤더 fixed top-0 포함), 탭으로 닫기 */
+export const MOBILE_BOTTOM_SHEET_SCRIM_CLASS =
+  "fixed inset-0 z-[60] touch-none bg-black/30";
+
+/** 모바일 바텀 시트 패널 — 스크림 위 */
+export const MOBILE_BOTTOM_SHEET_PANEL_CLASS = "fixed inset-x-0 z-[61]";
+
 export {
   MOBILE_BOTTOM_SHEET_PAD_CLASS,
   MOBILE_FIXED_BOTTOM_ANCHOR_CLASS,

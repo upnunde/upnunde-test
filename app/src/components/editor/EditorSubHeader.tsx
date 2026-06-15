@@ -20,7 +20,8 @@ import {
   DropdownMenuItem,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
-import { mobileBottomSheetMaxHeightClassName, MOBILE_BOTTOM_SHEET_PAD_CLASS } from "@/components/ui/modal/modal-styles";
+import { mobileBottomSheetMaxHeightClassName, MOBILE_BOTTOM_SHEET_PAD_CLASS, MOBILE_BOTTOM_SHEET_PANEL_CLASS, MOBILE_BOTTOM_SHEET_SCRIM_CLASS } from "@/components/ui/modal/modal-styles";
+import { menuListItemFormClassName } from "@/components/ui/menu-list";
 import { useClientMounted } from "@/hooks/useClientMounted";
 import { useIsLgUp } from "@/hooks/useMediaQuery";
 import { cn } from "@/lib/utils";
@@ -29,8 +30,7 @@ import type { ScriptBlock } from "@/types/editor";
 /** 시리즈·에피소드 더보기 메뉴와 동일 스타일 */
 const MORE_MENU_CONTENT_CLASS =
   "w-48 rounded-lg border border-border-10 bg-white p-my-4 shadow-elevation-40";
-const MORE_MENU_ITEM_CLASS =
-  "flex cursor-pointer items-center gap-my-8 rounded-md px-my-12 py-my-8 text-body3_400 text-on-surface-20 outline-none hover:bg-surface-20 focus:bg-surface-20";
+const MORE_MENU_ITEM_CLASS = menuListItemFormClassName;
 
 /** 히스토리 목록: MM.DD, HH:mm (예: 04.07, 16:23) */
 function formatScriptHistoryTimestamp(savedAt: number): string {
@@ -417,7 +417,7 @@ export function EditorSubHeader({
           <>
             <div
               className={cn(
-                "fixed inset-0 z-40 bg-black/30",
+                MOBILE_BOTTOM_SHEET_SCRIM_CLASS,
                 !historySheetBackdropActive && "pointer-events-none",
               )}
               aria-hidden
@@ -427,7 +427,8 @@ export function EditorSubHeader({
             />
             <div
               className={cn(
-                "fixed inset-x-0 z-50 flex min-h-0 flex-col rounded-t-[4px] border-t border-border-10 bg-white shadow-elevation-40",
+                MOBILE_BOTTOM_SHEET_PANEL_CLASS,
+                "flex min-h-0 flex-col rounded-t-[4px] border-t border-border-10 bg-white shadow-elevation-40",
                 MOBILE_BOTTOM_SHEET_PAD_CLASS,
                 mobileBottomSheetMaxHeightClassName,
               )}

@@ -10,7 +10,8 @@ import {
   PopoverAnchor,
 } from "@/components/ui/popover";
 import { useIsLgUp } from "@/hooks/useMediaQuery";
-import { mobileBottomSheetMaxHeightClassName, MOBILE_BOTTOM_SHEET_PAD_CLASS } from "@/components/ui/modal/modal-styles";
+import { MenuList, MenuListItem, MenuListSeparator } from "@/components/ui/menu-list";
+import { MOBILE_BOTTOM_SHEET_PAD_CLASS, MOBILE_BOTTOM_SHEET_PANEL_CLASS, MOBILE_BOTTOM_SHEET_SCRIM_CLASS, mobileResourcePickerSheetMaxHeightClassName } from "@/components/ui/modal/modal-styles";
 import { BACKGROUNDS, CHARACTERS, BGMS, SFX, GALLERIES, VIDEOS } from "@/lib/mockData";
 import type { BlockType } from "@/types/editor";
 import { cn } from "@/lib/utils";
@@ -108,9 +109,9 @@ interface ResourcePickerOptionsProps {
   items: { id: string; name: string; url?: string; fileUrl?: string }[];
   selectedName?: string;
   isSheet: boolean;
-  optionButtonRefs: React.MutableRefObject<(HTMLButtonElement | null)[]>;
+  optionButtonRefs: React.MutableRefObject<(HTMLElement | null)[]>;
   onSelect: (name: string) => void;
-  onOptionKeyDown: (index: number, e: React.KeyboardEvent<HTMLButtonElement>) => void;
+  onOptionKeyDown: (index: number, e: React.KeyboardEvent<HTMLElement>) => void;
 }
 
 function ResourcePickerOptions({
@@ -165,158 +166,145 @@ function ResourcePickerOptions({
     ? "grid-cols-4 gap-x-my-8 gap-y-my-12"
     : "grid-cols-3 gap-x-my-12 gap-y-my-16";
 
+  if (imageMode) {
+    return (
+      <div
+        className={cn(
+          !isSheet && "max-h-full overflow-y-auto",
+          "grid",
+          isSheet
+            ? cn("w-full px-my-12 pb-my-16 pt-my-8", sheetImageGridClass)
+            : "w-fit grid-cols-3 gap-my-16 px-my-20 pb-my-20 pt-0",
+        )}
+      >
+        <button
+          type="button"
+          onClick={() => onSelect("")}
+          ref={(el) => {
+            optionButtonRefs.current[0] = el;
+          }}
+          onKeyDown={(e) => onOptionKeyDown(0, e)}
+          className={cn(imageCellClass, !isSheet && "col-span-1")}
+        >
+          <div className={imageThumbClass()}>
+            <div className="absolute inset-0 z-0 bg-surface-disabled/30">
+              <div className="absolute inset-0" aria-hidden>
+                <svg
+                  className="absolute inset-0 h-full w-full text-border-20/20"
+                  viewBox="0 0 100 100"
+                  preserveAspectRatio="none"
+                  aria-hidden
+                >
+                  <line x1="0" y1="100" x2="100" y2="0" stroke="currentColor" strokeWidth="2" />
+                </svg>
+              </div>
+            </div>
+            <ThumbnailFrameOverlay isCharacter={isCharacter} isActive={selectedName === ""} />
+          </div>
+          <span className={cn(imageLabelClass, "text-on-surface-10")}>선택 안 함</span>
+        </button>
+        {items.map((item, idx) => (
+          <button
+            key={item.id}
+            type="button"
+            onClick={() => onSelect(item.name)}
+            ref={(el) => {
+              optionButtonRefs.current[idx + 1] = el;
+            }}
+            onKeyDown={(e) => onOptionKeyDown(idx + 1, e)}
+            className={imageCellClass}
+          >
+            <div className={imageThumbClass(true)}>
+              {"url" in item && item.url ? (
+                <Image
+                  src={item.url}
+                  alt={item.name}
+                  fill
+                  sizes={isSheet ? "(max-width: 1024px) 28vw, 100px" : isCharacter ? "100px" : "96px"}
+                  className="object-cover"
+                />
+              ) : (
+                <div className="relative z-0 flex h-full w-full items-center justify-center text-caption1_400 text-on-surface-30">
+                  —
+                </div>
+              )}
+              <ThumbnailFrameOverlay
+                isCharacter={isCharacter}
+                isActive={selectedName === item.name}
+              />
+            </div>
+            <span
+              className={cn(
+                imageLabelClass,
+                selectedName === item.name ? "text-primary" : "text-on-surface-10",
+              )}
+            >
+              {item.name}
+            </span>
+          </button>
+        ))}
+      </div>
+    );
+  }
+
   return (
-    <div
+    <MenuList
       className={cn(
         !isSheet && "max-h-full overflow-y-auto",
-        imageMode
-          ? cn(
-              "grid",
-              isSheet
-                ? cn("w-full px-my-12 pb-my-16 pt-my-8", sheetImageGridClass)
-                : "w-fit grid-cols-3 gap-my-16 px-my-20 pb-my-20 pt-0",
-            )
-          : cn(
-              "flex flex-col",
-              isSheet
-                ? "w-full gap-my-4 px-my-12 pb-my-16 pt-my-8"
-                : "gap-my-2 px-my-8 pb-my-8 pt-0",
-            ),
+        isSheet ? "w-full px-my-8 pb-my-16 pt-my-8" : "gap-my-2 px-my-8 pb-my-8 pt-0",
       )}
     >
-      {imageMode ? (
-        <>
-          <button
-            type="button"
-            onClick={() => onSelect("")}
-            ref={(el) => {
-              optionButtonRefs.current[0] = el;
-            }}
-            onKeyDown={(e) => onOptionKeyDown(0, e)}
-            className={cn(imageCellClass, !isSheet && "col-span-1")}
-          >
-            <div className={imageThumbClass()}>
-              <div className="absolute inset-0 z-0 bg-surface-disabled/30">
-                <div className="absolute inset-0" aria-hidden>
-                  <svg
-                    className="absolute inset-0 h-full w-full text-border-20/20"
-                    viewBox="0 0 100 100"
-                    preserveAspectRatio="none"
-                    aria-hidden
-                  >
-                    <line x1="0" y1="100" x2="100" y2="0" stroke="currentColor" strokeWidth="2" />
-                  </svg>
-                </div>
-              </div>
-              <ThumbnailFrameOverlay isCharacter={isCharacter} isActive={selectedName === ""} />
-            </div>
-            <span className={cn(imageLabelClass, "text-on-surface-10")}>선택 안 함</span>
-          </button>
-          {items.map((item, idx) => (
-            <button
-              key={item.id}
-              type="button"
-              onClick={() => onSelect(item.name)}
-              ref={(el) => {
-                optionButtonRefs.current[idx + 1] = el;
-              }}
-              onKeyDown={(e) => onOptionKeyDown(idx + 1, e)}
-              className={imageCellClass}
-            >
-              <div className={imageThumbClass(true)}>
-                {"url" in item && item.url ? (
-                  <Image
-                    src={item.url}
-                    alt={item.name}
-                    fill
-                    sizes={isSheet ? "(max-width: 1024px) 28vw, 100px" : isCharacter ? "100px" : "96px"}
-                    className="object-cover"
-                  />
-                ) : (
-                  <div className="relative z-0 flex h-full w-full items-center justify-center text-caption1_400 text-on-surface-30">
-                    —
-                  </div>
-                )}
-                <ThumbnailFrameOverlay
-                  isCharacter={isCharacter}
-                  isActive={selectedName === item.name}
-                />
-              </div>
-              <span
-                className={cn(
-                  imageLabelClass,
-                  selectedName === item.name ? "text-primary" : "text-on-surface-10",
-                )}
-              >
-                {item.name}
-              </span>
-            </button>
-          ))}
-        </>
-      ) : (
-        <>
           {!isSceneTransition && (
-            <button
-              type="button"
+            <MenuListItem
+              variant={isSheet ? "form" : "compact"}
               onClick={() => onSelect("")}
               ref={(el) => {
                 optionButtonRefs.current[0] = el;
               }}
               onKeyDown={(e) => onOptionKeyDown(0, e)}
-              className={cn(
-                "flex cursor-pointer items-center gap-my-8 rounded px-my-8 py-my-8 text-left text-body3_400 hover:bg-surface-20 focus:outline-none focus:ring-0 focus-visible:ring-2 focus-visible:ring-inset focus-visible:ring-primary/40",
-                isSheet && "min-h-12",
-              )}
             >
               <span className="flex h-8 w-8 shrink-0 items-center justify-center rounded bg-surface-20 text-on-surface-disabled/60">
                 —
               </span>
-              <span className="truncate font-medium text-on-surface-10">선택 안 함</span>
-            </button>
+              <span className="truncate">선택 안 함</span>
+            </MenuListItem>
           )}
           {items.map((item, idx) => (
-            <button
+            <MenuListItem
               key={item.id}
-              type="button"
+              variant={isSheet ? "form" : "compact"}
               onClick={() => onSelect(item.name)}
               ref={(el) => {
                 optionButtonRefs.current[idx + (isSceneTransition ? 0 : 1)] = el;
               }}
               onKeyDown={(e) => onOptionKeyDown(idx + (isSceneTransition ? 0 : 1), e)}
-              className={cn(
-                "flex cursor-pointer items-center gap-my-8 rounded px-my-8 py-my-8 text-left text-body3_400 hover:bg-surface-20 focus:outline-none focus:ring-0 focus-visible:ring-2 focus-visible:ring-inset focus-visible:ring-primary/40",
-                isSheet && "min-h-12",
-              )}
             >
               {!isSceneTransition && (
                 <span className="flex h-8 w-8 shrink-0 items-center justify-center rounded bg-surface-20 text-on-surface-30">
                   ♪
                 </span>
               )}
-              <span className="truncate font-medium text-on-surface-10">{item.name}</span>
-            </button>
+              <span className={cn("truncate", selectedName === item.name && "text-primary")}>
+                {item.name}
+              </span>
+            </MenuListItem>
           ))}
           {isSceneTransition && (
-            <div className="mt-1 border-t border-border-10 pt-my-4">
-              <button
-                type="button"
+            <>
+              <MenuListSeparator />
+              <MenuListItem
+                variant={isSheet ? "form" : "compact"}
                 onClick={() => onSelect(EPISODE_END_LABEL)}
                 ref={(el) => {
                   optionButtonRefs.current[items.length] = el;
                 }}
                 onKeyDown={(e) => onOptionKeyDown(items.length, e)}
-                className={cn(
-                  "flex w-full cursor-pointer items-center gap-my-8 rounded px-my-8 py-my-8 text-left text-body3_400 hover:bg-surface-20 focus:outline-none focus:ring-0 focus-visible:ring-2 focus-visible:ring-inset focus-visible:ring-primary/40",
-                  isSheet && "min-h-12",
-                )}
               >
-                <span className="truncate font-medium text-on-surface-10">{EPISODE_END_LABEL}</span>
-              </button>
-            </div>
+                <span className="truncate">{EPISODE_END_LABEL}</span>
+              </MenuListItem>
+            </>
           )}
-        </>
-      )}
-    </div>
+        </MenuList>
   );
 }
 
@@ -354,7 +342,7 @@ export function ResourcePicker({
   children,
 }: ResourcePickerProps) {
   const isDesktop = useIsLgUp();
-  const optionButtonRefs = useRef<(HTMLButtonElement | null)[]>([]);
+  const optionButtonRefs = useRef<(HTMLElement | null)[]>([]);
   const items = useMemo(() => {
     const base = itemsOverride ?? getItemsForType(type);
     if (itemsOverride) return [...base];
@@ -412,6 +400,16 @@ export function ResourcePicker({
     return () => window.removeEventListener("keydown", onKeyDown);
   }, [handleDismiss, isDesktop, isOpen, isPickerType]);
 
+  useEffect(() => {
+    if (isDesktop || !isOpen || !isPickerType) return;
+    const { body } = document;
+    const prevOverflow = body.style.overflow;
+    body.style.overflow = "hidden";
+    return () => {
+      body.style.overflow = prevOverflow;
+    };
+  }, [isDesktop, isOpen, isPickerType]);
+
   if (!isPickerType) return <>{children}</>;
 
   const focusOption = (index: number) => {
@@ -419,7 +417,7 @@ export function ResourcePicker({
     optionButtonRefs.current[clamped]?.focus();
   };
 
-  const handleOptionKeyDown = (index: number, e: React.KeyboardEvent<HTMLButtonElement>) => {
+  const handleOptionKeyDown = (index: number, e: React.KeyboardEvent<HTMLElement>) => {
     if (e.key === "Escape") {
       e.preventDefault();
       handleDismiss();
@@ -466,15 +464,16 @@ export function ResourcePicker({
       ? createPortal(
           <>
             <div
-              className="fixed inset-0 z-40 bg-black/30"
+              className={MOBILE_BOTTOM_SHEET_SCRIM_CLASS}
               aria-hidden
               onClick={handleDismiss}
             />
             <div
               className={cn(
-                "fixed inset-x-0 z-50 flex min-h-0 flex-col rounded-t-[4px] border-t border-border-10 bg-surface-10 shadow-elevation-40",
+                MOBILE_BOTTOM_SHEET_PANEL_CLASS,
+                "flex min-h-0 flex-col rounded-t-[4px] border-t border-border-10 bg-surface-10 shadow-elevation-40",
                 MOBILE_BOTTOM_SHEET_PAD_CLASS,
-                mobileBottomSheetMaxHeightClassName,
+                mobileResourcePickerSheetMaxHeightClassName,
               )}
               role="dialog"
               aria-modal="true"

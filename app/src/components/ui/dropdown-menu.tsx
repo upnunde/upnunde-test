@@ -4,6 +4,11 @@ import * as React from "react"
 import { CheckIcon, ChevronRightIcon, CircleIcon } from "lucide-react"
 import { DropdownMenu as DropdownMenuPrimitive } from "radix-ui"
 
+import {
+  menuListItemCompactClassName,
+  menuListItemDestructiveClassName,
+  menuListLabelClassName,
+} from "@/components/ui/menu-list-styles"
 import { cn } from "@/lib/utils"
 
 function DropdownMenu({
@@ -79,7 +84,10 @@ function DropdownMenuItem({
       data-inset={inset}
       data-variant={variant}
       className={cn(
-        "focus:bg-accent focus:text-accent-foreground data-[variant=destructive]:text-destructive data-[variant=destructive]:focus:bg-destructive/10 dark:data-[variant=destructive]:focus:bg-destructive/20 data-[variant=destructive]:focus:text-destructive data-[variant=destructive]:*:[svg]:!text-destructive [&_svg:not([class*='text-'])]:text-muted-foreground relative flex cursor-pointer items-center gap-my-8 rounded-sm px-my-8 py-my-8 text-body3_400 outline-hidden select-none data-[disabled]:pointer-events-none data-[disabled]:opacity-50 data-[inset]:pl-my-32 [&_svg]:pointer-events-none [&_svg]:shrink-0 [&_svg:not([class*='size-'])]:size-4",
+        menuListItemCompactClassName,
+        "data-[variant=destructive]:text-destructive data-[variant=destructive]:*:[svg]:!text-destructive",
+        variant === "destructive" && menuListItemDestructiveClassName,
+        "[&_svg:not([class*='text-'])]:text-muted-foreground data-[inset]:pl-my-32 [&_svg]:pointer-events-none [&_svg]:shrink-0 [&_svg:not([class*='size-'])]:size-4",
         className
       )}
       {...props}
@@ -160,7 +168,8 @@ function DropdownMenuLabel({
       data-slot="dropdown-menu-label"
       data-inset={inset}
       className={cn(
-        "px-my-8 py-my-8 text-body3_500 data-[inset]:pl-my-32",
+        menuListLabelClassName,
+        "text-body3_500 data-[inset]:pl-my-32",
         className
       )}
       {...props}

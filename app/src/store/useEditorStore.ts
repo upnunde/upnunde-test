@@ -125,6 +125,8 @@ interface EditorState {
 interface EditorActions {
   setBlocks: (blocks: ScriptBlock[]) => void;
   setFocusBlockId: (id: string | null) => void;
+  /** 모바일 「내용수정」 — 포커스·키보드 편집 모드를 한 번에 진입 */
+  beginMobileKeyboardContentEdit: (id: string) => void;
   setMobileKeyboardEditBlockId: (id: string | null) => void;
   setMobileContentEditPromptBlockId: (id: string | null) => void;
   setIssueFocus: (issue: EditorState["issueFocus"]) => void;
@@ -187,6 +189,13 @@ export const useEditorStore = create<EditorStore>((set) => ({
           ? state.mobileContentEditPromptBlockId
           : null,
     })),
+
+  beginMobileKeyboardContentEdit: (blockId) =>
+    set({
+      focusBlockId: blockId,
+      mobileKeyboardEditBlockId: blockId,
+      mobileContentEditPromptBlockId: null,
+    }),
 
   setMobileKeyboardEditBlockId: (mobileKeyboardEditBlockId) => set({ mobileKeyboardEditBlockId }),
 

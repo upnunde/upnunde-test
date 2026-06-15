@@ -90,11 +90,6 @@ export function promptMobileBlockContentEdit(
 export function requestMobileBlockContentEdit(blockId: string) {
   const preferred = pendingMobileContentEditInput;
   pendingMobileContentEditInput = null;
-  const {
-    setFocusBlockId,
-    setMobileKeyboardEditBlockId,
-    setMobileContentEditPromptBlockId,
-  } = useEditorStore.getState();
 
   const input = resolveTextInput(blockId, preferred);
 
@@ -104,17 +99,19 @@ export function requestMobileBlockContentEdit(blockId: string) {
   }
 
   flushSync(() => {
-    setFocusBlockId(blockId);
-    setMobileContentEditPromptBlockId(null);
-    setMobileKeyboardEditBlockId(blockId);
+    useEditorStore.getState().beginMobileKeyboardContentEdit(blockId);
   });
 
   if (input) {
+    input.readOnly = false;
     applyTextInputFocus(input);
     requestAnimationFrame(() => {
       requestAnimationFrame(() => scrollMobileEditorInputIntoView(input));
     });
-  } else if (!focusBlockTextInputSync(blockId, preferred)) {
+    return;
+  }
+
+  if (!focusBlockTextInputSync(blockId, preferred)) {
     requestAnimationFrame(() => focusBlockTextInput(blockId, preferred));
   }
 }
