@@ -43,6 +43,11 @@ export const WORKS_TAB_PATH: Record<WorksTabId, string> = {
 /** 내 작품 — 새 캐릭터 생성 (`CharacterDetailPage`와 동일 폼) */
 export const WORKS_CHARACTER_NEW_PATH = "/series/character/new";
 
+/** 내 작품 — 캐릭터 설정(편집) */
+export function getWorksCharacterEditPath(characterId: string): string {
+  return `/series/character/${encodeURIComponent(characterId)}`;
+}
+
 export function getWorksTabFromPathname(pathname: string | null): WorksTabId {
   if (!pathname) return "series";
   const normalized = pathname.replace(/\/$/, "") || "/";

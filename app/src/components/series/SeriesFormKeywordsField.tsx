@@ -39,7 +39,7 @@ export function SeriesFormKeywordsField({
 }: SeriesFormKeywordsFieldProps) {
   return (
     <div className="flex flex-col gap-my-4">
-      <Title1 text={title} variant="title-subtitle" subtitleText={subtitle} />
+      <Title1 text={title} variant="title-subtitle-dot" subtitleText={subtitle} />
       <div className="flex flex-col items-start justify-center gap-my-8">
         <Input
           ref={inputRef}

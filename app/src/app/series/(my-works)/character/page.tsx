@@ -14,8 +14,9 @@ import {
   collectImportedResourceKeys,
 } from "@/lib/importableCharactersMock";
 import { consumeMyWorksPendingCharacter } from "@/lib/myWorksCharacterCreate";
+import { stageMyWorksCharacterEdit } from "@/lib/myWorksCharacterDetail";
 import { MY_WORKS_CHARACTERS_MOCK } from "@/lib/myWorksCharactersMock";
-import { WORKS_CHARACTER_NEW_PATH } from "@/lib/worksArea";
+import { getWorksCharacterEditPath, WORKS_CHARACTER_NEW_PATH } from "@/lib/worksArea";
 import type { CharacterData } from "@/types/character";
 
 /**
@@ -63,8 +64,9 @@ export default function WorksCharacterListPage() {
     <>
       <CharacterList
         characters={characters}
-        onCharacterSettings={() => {
-          // TODO: 캐릭터 설정 화면 연결
+        onCharacterSettings={(character) => {
+          stageMyWorksCharacterEdit(character);
+          router.push(getWorksCharacterEditPath(character.id));
         }}
         onSetPrivate={handleSetPrivate}
         onSetPublic={handleSetPublic}
