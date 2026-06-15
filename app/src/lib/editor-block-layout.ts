@@ -16,9 +16,9 @@ export const EDITOR_SCENE_VALUE_FIELD_CLASS =
 export const EDITOR_SCENE_TITLE_DISPLAY_CLASS =
   "min-w-0 flex-1 whitespace-pre-wrap break-words [overflow-wrap:anywhere] text-heading2_700 text-on-surface-10";
 
-/** 장면 제목 입력 — ReadOnlyBlockRow span과 동일 타이포·높이(h-8, py-0) */
+/** 장면 제목 입력 — heading2 타이포, 행 높이는 콘텐츠에 맞게 가변 */
 export const EDITOR_SCENE_TITLE_INPUT_CLASS =
-  "min-w-0 flex-1 h-8 min-h-8 max-w-full rounded-md border-0 bg-transparent px-0 py-0 text-on-surface-10 placeholder:text-on-surface-30 outline-none transition-colors focus:outline-none focus:ring-0 text-heading2_700";
+  "min-w-0 flex-1 min-h-8 h-auto max-w-full rounded-md border-0 bg-transparent px-0 py-0 text-on-surface-10 placeholder:text-on-surface-30 outline-none transition-colors focus:outline-none focus:ring-0 text-heading2_700 whitespace-pre-wrap break-words [overflow-wrap:anywhere]";
 
 /** 장면정보 값 표시 */
 export const EDITOR_TOP_DESC_DISPLAY_CLASS =

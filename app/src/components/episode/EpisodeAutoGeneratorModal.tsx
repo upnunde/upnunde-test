@@ -177,7 +177,7 @@ export function EpisodeAutoGeneratorModal({
       modal={EPISODE_AUTO_GENERATOR_AI_COMPOSER_ENABLED ? false : undefined}
     >
       <DialogContent
-        className={cn(formDialogShellClassName, "!z-[60]")}
+        className={formDialogShellClassName}
         aria-describedby={undefined}
         onPointerDownOutside={(event) => {
           // 하단 자동 입력기 및 외부 클릭으로 모달이 자동 닫히지 않도록 유지

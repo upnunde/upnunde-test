@@ -34,7 +34,6 @@ import { Button } from "@/components/ui/button";
 import {
   Dialog,
   DialogContent,
-  DialogHeader,
   DialogTitle,
 } from "@/components/ui/dialog";
 import { Input } from "@/components/ui/input";
@@ -718,34 +717,45 @@ export function ScriptBlock({
           </EditorBottomSheetMenu>
 
           <Dialog open={speakerCustomModalOpen} onOpenChange={setSpeakerCustomModalOpen}>
-            <DialogContent className="sm:max-w-md">
-              <DialogHeader>
-                <DialogTitle className="text-heading5_700">화자 이름</DialogTitle>
-              </DialogHeader>
-              <Input
-                value={speakerDraft}
-                onChange={(e) => setSpeakerDraft(e.target.value)}
-                placeholder="이름을 입력하세요"
-                aria-label="화자 이름"
-                autoFocus
-                onKeyDown={(e) => {
-                  if (e.key === "Enter") {
-                    e.preventDefault();
-                    applyCustomSpeaker();
-                  }
-                }}
-              />
-              <div className="flex justify-end gap-my-8 pt-my-8">
-                <Button
-                  type="button"
-                  variant="outline"
-                  onClick={() => setSpeakerCustomModalOpen(false)}
-                >
-                  취소
-                </Button>
-                <Button type="button" onClick={applyCustomSpeaker}>
-                  적용
-                </Button>
+            <DialogContent className="gap-0 overflow-hidden border-0 p-0 max-lg:border-t-0 max-lg:pb-0 sm:max-w-md">
+              <div className="px-my-20 pt-my-16 pb-my-8 max-lg:rounded-t-[16px] lg:px-my-24 lg:pt-my-24">
+                <DialogTitle className="text-left text-heading5_700 text-on-surface-10">
+                  화자 이름
+                </DialogTitle>
+              </div>
+              <div className="px-my-20 pb-my-16 lg:px-my-24">
+                <Input
+                  value={speakerDraft}
+                  onChange={(e) => setSpeakerDraft(e.target.value)}
+                  placeholder="이름을 입력하세요"
+                  aria-label="화자 이름"
+                  autoFocus
+                  onKeyDown={(e) => {
+                    if (e.key === "Enter") {
+                      e.preventDefault();
+                      applyCustomSpeaker();
+                    }
+                  }}
+                />
+              </div>
+              <div
+                className={cn(
+                  "mt-auto shrink-0 bg-white px-my-20 pt-my-8 pb-my-16",
+                  "max-lg:pb-[calc(var(--spacing-my-16)+env(safe-area-inset-bottom,0px))]",
+                )}
+              >
+                <div className="flex justify-end gap-my-8">
+                  <Button
+                    type="button"
+                    variant="outline"
+                    onClick={() => setSpeakerCustomModalOpen(false)}
+                  >
+                    취소
+                  </Button>
+                  <Button type="button" onClick={applyCustomSpeaker}>
+                    적용
+                  </Button>
+                </div>
               </div>
             </DialogContent>
           </Dialog>

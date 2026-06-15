@@ -8,6 +8,8 @@ import {
   MOBILE_MODAL_RADIUS_CLASS,
   MOBILE_MODAL_TOP_RADIUS_CLASS,
   DESKTOP_MODAL_RADIUS_CLASS,
+  DIALOG_CONTENT_Z_CLASS,
+  DIALOG_OVERLAY_Z_CLASS,
 } from "@/components/ui/modal/modal-styles";
 
 const Dialog = DialogPrimitive.Root;
@@ -22,7 +24,8 @@ const DialogOverlay = React.forwardRef<
   <DialogPrimitive.Overlay
     ref={ref}
     className={cn(
-      "fixed inset-0 z-50 bg-black/50 data-[state=open]:animate-in data-[state=closed]:animate-out data-[state=closed]:fade-out-0 data-[state=open]:fade-in-0",
+      "fixed inset-0 bg-black/50 data-[state=open]:animate-in data-[state=closed]:animate-out data-[state=closed]:fade-out-0 data-[state=open]:fade-in-0",
+      DIALOG_OVERLAY_Z_CLASS,
       className,
     )}
     {...props}
@@ -35,7 +38,8 @@ const dialogContentAnimationClass =
 
 /** 알림·경고 — 항상 중앙 모달 */
 const dialogContentCenterClass = cn(
-  "fixed left-1/2 top-1/2 z-50 flex w-full max-w-lg max-h-[calc(100dvh-160px)] min-h-0 -translate-x-1/2 -translate-y-1/2 flex-col gap-my-16 overflow-y-auto bg-background p-my-24 shadow-elevation-50 outline-none focus:outline-none",
+  "fixed left-1/2 top-1/2 flex w-full max-w-lg max-h-[calc(100dvh-160px)] min-h-0 -translate-x-1/2 -translate-y-1/2 flex-col gap-my-16 overflow-y-auto bg-background p-my-24 shadow-elevation-50 outline-none focus:outline-none",
+  DIALOG_CONTENT_Z_CLASS,
   MOBILE_MODAL_RADIUS_CLASS,
   DESKTOP_MODAL_RADIUS_CLASS,
   dialogContentAnimationClass,
@@ -44,7 +48,8 @@ const dialogContentCenterClass = cn(
 
 /** 폼·상세 — 모바일 바텀 시트 / lg+ 중앙 모달 */
 const dialogContentAutoClass = cn(
-  "fixed z-50 flex w-full min-h-0 flex-col bg-background shadow-elevation-50 outline-none focus:outline-none",
+  "fixed flex w-full min-h-0 flex-col bg-background shadow-elevation-50 outline-none focus:outline-none",
+  DIALOG_CONTENT_Z_CLASS,
   dialogContentAnimationClass,
   "max-lg:inset-x-0 max-lg:bottom-[var(--app-vv-bottom,0px)] max-lg:top-auto max-lg:max-h-[min(92dvh,900px)] max-lg:translate-x-0 max-lg:translate-y-0 max-lg:gap-0 max-lg:overflow-hidden max-lg:rounded-b-none max-lg:border-t border-border-10 max-lg:p-0 max-lg:pb-[env(safe-area-inset-bottom,0px)] max-lg:data-[state=open]:slide-in-from-bottom max-lg:data-[state=closed]:slide-out-to-bottom",
   MOBILE_MODAL_TOP_RADIUS_CLASS,

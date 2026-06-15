@@ -6,6 +6,13 @@ import {
   MOBILE_FIXED_BOTTOM_SAFE_PAD_CLASS,
 } from "@/lib/mobile-viewport";
 
+/** z-index: 커스텀 포털 바텀시트 < Radix Dialog < 토스트 */
+export const MOBILE_BOTTOM_SHEET_SCRIM_Z_CLASS = "z-[60]";
+export const MOBILE_BOTTOM_SHEET_PANEL_Z_CLASS = "z-[61]";
+export const DIALOG_OVERLAY_Z_CLASS = "z-[70]";
+export const DIALOG_CONTENT_Z_CLASS = "z-[71]";
+export const TOAST_STACK_Z_CLASS = "z-[80]";
+
 /** radius-16 — 모바일 바텀 시트 상단 모서리 */
 export const MOBILE_MODAL_TOP_RADIUS_CLASS = "rounded-t-[16px]";
 
@@ -40,11 +47,16 @@ export const mobileBottomSheetMediumMaxHeightClassName = "max-h-[80dvh]";
 export const mobileResourcePickerSheetMaxHeightClassName = mobileBottomSheetMediumMaxHeightClassName;
 
 /** 모바일 바텀 시트 스크림 — 레이아웃 뷰포트 전체(글로벌 헤더 fixed top-0 포함), 탭으로 닫기 */
-export const MOBILE_BOTTOM_SHEET_SCRIM_CLASS =
-  "fixed inset-0 z-[60] touch-none bg-black/30";
+export const MOBILE_BOTTOM_SHEET_SCRIM_CLASS = cn(
+  "fixed inset-0 touch-none bg-black/30",
+  MOBILE_BOTTOM_SHEET_SCRIM_Z_CLASS,
+);
 
 /** 모바일 바텀 시트 패널 — 스크림 위 */
-export const MOBILE_BOTTOM_SHEET_PANEL_CLASS = "fixed inset-x-0 z-[61]";
+export const MOBILE_BOTTOM_SHEET_PANEL_CLASS = cn(
+  "fixed inset-x-0",
+  MOBILE_BOTTOM_SHEET_PANEL_Z_CLASS,
+);
 
 /** 모바일 바텀 시트 공통 셸 — radius-16 상단 · 패딩 · 보더 (max-height는 호출부에서 추가) */
 export const MOBILE_BOTTOM_SHEET_SHELL_BASE_CLASS = cn(
