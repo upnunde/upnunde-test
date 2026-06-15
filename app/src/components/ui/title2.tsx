@@ -3,7 +3,7 @@
 import React from "react";
 import type { ReactNode } from "react";
 import { Info } from "lucide-react";
-import { PAGE_GUTTER_X_CLASS } from "@/lib/page-layout";
+import { PAGE_CONTENT_PAD_X_CLASS } from "@/lib/page-layout";
 import { cn } from "@/lib/utils";
 import { Button } from "@/components/ui/button";
 
@@ -129,7 +129,7 @@ export function Title2({
       return (
         <div
           className={cn(
-            `w-full h-fit ${PAGE_GUTTER_X_CLASS} py-my-12 border-b border-border-10/5 flex items-center justify-between gap-my-12`,
+            `w-full h-fit ${PAGE_CONTENT_PAD_X_CLASS} py-my-12 border-b border-border-10/5 flex items-center justify-between gap-my-12`,
             className
           )}
           style={{ borderBottomColor: "rgba(0, 0, 0, 0.07)" }}
@@ -142,7 +142,7 @@ export function Title2({
     return (
       <div
         className={cn(
-          `w-full h-fit ${PAGE_GUTTER_X_CLASS} py-my-12 border-b border-border-10/5 flex flex-col justify-center items-start`,
+          `w-full h-fit ${PAGE_CONTENT_PAD_X_CLASS} py-my-12 border-b border-border-10/5 flex flex-col justify-center items-start`,
           className
         )}
         style={{ borderBottomColor: "rgba(0, 0, 0, 0.07)" }}

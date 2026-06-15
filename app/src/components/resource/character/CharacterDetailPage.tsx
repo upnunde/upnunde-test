@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useCallback, useState, useEffect, useRef } from "react";
+import React, { useCallback, useState, useEffect, useRef, useMemo } from "react";
 import Image from "next/image";
 import { useRouter, usePathname } from "next/navigation";
 import { Pencil, Trash2 } from "lucide-react";
@@ -27,27 +27,44 @@ import {
   PAGE_CARD_SHELL_MOBILE_FLUSH_CLASS,
   PAGE_CONTENT_BODY_CLASS,
   PAGE_CONTENT_FOOTER_CLASS,
+  PAGE_FOOTER_ACTION_BUTTON_CLASS,
   PAGE_SCROLL_COLUMN_CLASS,
   PAGE_SUBHEADER_PAGE_SHELL_CLASS,
   PAGE_SUBHEADER_WITH_STICKY_CLASS,
 } from "@/lib/page-layout";
 import { cn } from "@/lib/utils";
+import {
+  buildMyWorksCharacterFromForm,
+  stageMyWorksPendingCharacter,
+} from "@/lib/myWorksCharacterCreate";
+import { WORKS_TAB_PATH } from "@/lib/worksArea";
 import type { CharacterResource, CharacterExpressionSlot } from "@/types/resource";
+
+export type CharacterDetailPageContext = "series-resource" | "my-works";
 
 interface CharacterDetailPageProps {
   /** 신규 생성인지 여부 (지금은 true 만 사용) */
   isNew?: boolean;
   /** 편집 시 기존 등장인물 데이터 – 있으면 폼에 채움 */
   initialData?: CharacterResource | null;
+  /** 시리즈 리소스 등록 vs 내 작품 캐릭터 생성 */
+  context?: CharacterDetailPageContext;
 }
 
-export function CharacterDetailPage({ isNew = true, initialData }: CharacterDetailPageProps) {
+export function CharacterDetailPage({
+  isNew = true,
+  initialData,
+  context = "series-resource",
+}: CharacterDetailPageProps) {
   const router = useRouter();
   const pathname = usePathname();
   const seriesId = React.useMemo(() => {
+    if (context === "my-works") return "";
     const segments = pathname.split("/").filter(Boolean);
     return segments[1] ?? "";
-  }, [pathname]);
+  }, [context, pathname]);
+
+  const isMyWorks = context === "my-works";
 
   const parseInitialTagList = (raw: string | undefined): string[] => {
     if (!raw || !raw.trim()) return [];
@@ -109,13 +126,36 @@ export function CharacterDetailPage({ isNew = true, initialData }: CharacterDeta
   }, [thumbnailUrl, thumbnailOriginalUrl, pendingThumbnailUrl]);
 
   const handleBack = useCallback(() => {
+    if (isMyWorks) {
+      router.push(WORKS_TAB_PATH.character);
+      return;
+    }
     router.push(`/series/${seriesId}/resources`);
-  }, [router, seriesId]);
+  }, [isMyWorks, router, seriesId]);
+
+  const isFormComplete = useMemo(
+    () =>
+      name.trim().length > 0 &&
+      summary.trim().length > 0 &&
+      Boolean(thumbnailUrl) &&
+      expressionSlots.some((slot) => Boolean(slot.imageUrl)) &&
+      tagList.length > 0 &&
+      greeting.trim().length > 0,
+    [name, summary, thumbnailUrl, expressionSlots, tagList, greeting],
+  );
 
   const handleSave = useCallback(() => {
+    if (!isFormComplete) return;
+    if (isMyWorks) {
+      stageMyWorksPendingCharacter(
+        buildMyWorksCharacterFromForm({ name, summary, thumbnailUrl }),
+      );
+      router.push(WORKS_TAB_PATH.character);
+      return;
+    }
     // 실제 저장 로직은 추후 API 연동 시 구현
     router.push(`/series/${seriesId}/resources`);
-  }, [router, seriesId]);
+  }, [isFormComplete, isMyWorks, name, router, seriesId, summary, thumbnailUrl]);
 
   const handleApplyImportedCharacterToForm = useCallback((selected: ImportableCharacterPick) => {
     setName(selected.name);
@@ -257,8 +297,13 @@ export function CharacterDetailPage({ isNew = true, initialData }: CharacterDeta
       <header className={PAGE_SUBHEADER_WITH_STICKY_CLASS}>
         <div className="flex w-full min-w-0 max-w-[1200px] mx-auto items-center justify-between gap-my-16">
           <div className="flex items-center justify-start gap-my-12">
-            <HeaderBackButton onClick={handleBack} aria-label="리소스 목록으로" />
-            <h1 className="text-heading2_700 text-on-surface-10">등장인물 {isNew ? "등록" : "상세"}</h1>
+            <HeaderBackButton
+              onClick={handleBack}
+              aria-label={isMyWorks ? "캐릭터 목록으로" : "리소스 목록으로"}
+            />
+            <h1 className="text-heading2_700 text-on-surface-10">
+              {isMyWorks ? "캐릭터" : "등장인물"} {isNew ? "등록" : "상세"}
+            </h1>
           </div>
         </div>
       </header>
@@ -275,14 +320,16 @@ export function CharacterDetailPage({ isNew = true, initialData }: CharacterDeta
               text="인물정보"
               asSectionHeader
               sectionEnd={
-                <Button
-                  type="button"
-                  variant="outline"
-                  onClick={() => setImportCharacterModalOpen(true)}
-                  className="h-8 rounded-md bg-white px-my-12 text-body3_500 text-on-surface-10 hover:bg-surface-20 disabled:border-border-20"
-                >
-                  캐릭터 가져오기
-                </Button>
+                isMyWorks ? undefined : (
+                  <Button
+                    type="button"
+                    variant="outline"
+                    onClick={() => setImportCharacterModalOpen(true)}
+                    className="h-8 rounded-md bg-white px-my-12 text-body3_500 text-on-surface-10 hover:bg-surface-20 disabled:border-border-20"
+                  >
+                    캐릭터 가져오기
+                  </Button>
+                )
               }
             />
 
@@ -527,14 +574,22 @@ export function CharacterDetailPage({ isNew = true, initialData }: CharacterDeta
               <Button
                 type="button"
                 variant="outline"
-                className="min-w-[80px]"
+                size="form"
+                className={PAGE_FOOTER_ACTION_BUTTON_CLASS}
                 onClick={handleBack}
               >
                 취소
               </Button>
               <Button
                 type="button"
-                className="min-w-[88px]"
+                size="form"
+                className={PAGE_FOOTER_ACTION_BUTTON_CLASS}
+                disabled={!isFormComplete}
+                title={
+                  isFormComplete
+                    ? undefined
+                    : "이름, 인물 소개, 대표 썸네일, 표정, 해시태그, 인물 인사를 모두 입력해야 저장할 수 있어요"
+                }
                 onClick={handleSave}
               >
                 저장
@@ -637,11 +692,13 @@ export function CharacterDetailPage({ isNew = true, initialData }: CharacterDeta
         />
       )}
 
-      <ImportCharacterDialog
-        open={importCharacterModalOpen}
-        onOpenChange={setImportCharacterModalOpen}
-        onApply={handleApplyImportedCharacterToForm}
-      />
+      {!isMyWorks ? (
+        <ImportCharacterDialog
+          open={importCharacterModalOpen}
+          onOpenChange={setImportCharacterModalOpen}
+          onApply={handleApplyImportedCharacterToForm}
+        />
+      ) : null}
     </div>
   );
 }

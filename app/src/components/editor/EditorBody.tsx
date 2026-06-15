@@ -17,10 +17,10 @@ import {
 } from "@dnd-kit/sortable";
 import { CSS } from "@dnd-kit/utilities";
 import { useEditorStore, hydrateSeriesPersonaFromSession } from "@/store/useEditorStore";
-import { EDITOR_BLOCK_INDEX_COLUMN_CLASS } from "@/lib/editor-block-layout";
+import { EDITOR_BLOCK_INDEX_COLUMN_CLASS, EDITOR_MOBILE_GUTTER_X_CLASS } from "@/lib/editor-block-layout";
 import { scrollMobileEditorInputIntoView } from "@/lib/editor-scroll";
 import { isMobileDocumentScrollMode } from "@/lib/mobile-document-scroll";
-import { editorLeadingControlsClass, editorRowHoverClass } from "@/lib/editor-control-visibility";
+import { editorLeadingControlsClass, editorRowHoverClass, EDITOR_MOBILE_FOCUSED_ROW_CLASS } from "@/lib/editor-control-visibility";
 import { useIsLgUp } from "@/hooks/useMediaQuery";
 import { cn } from "@/lib/utils";
 import { Button } from "@/components/ui/button";
@@ -30,14 +30,14 @@ import { SlashCommandMenu, type SlashSelectPayload } from "./SlashCommandMenu";
 import type { BlockType, ScriptBlockData } from "@/types/editor";
 
 const WRAPPER_CLASS_TEXT = cn(
-  "group group/row relative flex h-fit w-full min-h-9 items-start justify-start gap-0 rounded bg-white py-my-4 outline-none focus-within:bg-white",
+  "group group/row relative flex h-fit w-full min-h-9 items-start justify-start gap-0 rounded bg-white py-my-4 outline-none",
   editorRowHoverClass(),
 );
 const ROOT_CLASS_TEXT = "min-h-8 min-w-0 flex-1 h-fit";
 
 /** 선택지 블록: 텍스트 행과 동일 래퍼( min-h-9·py-1·bg-white·rounded·group/row ) */
 const WRAPPER_CLASS_CHOICE = cn(
-  "group group/row relative flex h-fit w-full min-h-9 items-start justify-start gap-0 rounded bg-white py-my-4 outline-none focus-within:bg-white",
+  "group group/row relative flex h-fit w-full min-h-9 items-start justify-start gap-0 rounded bg-white py-my-4 outline-none",
   editorRowHoverClass(),
 );
 const ROOT_CLASS_CHOICE = "min-h-8 min-w-0 flex-1 h-fit";
@@ -51,10 +51,16 @@ const ROOT_CLASS_COMPACT = "min-w-0 flex-1 min-h-8 h-8";
 
 /** 장면·장면정보 — 긴 제목 줄바꿈 허용 */
 const WRAPPER_CLASS_WRAP = cn(
-  "group flex h-fit min-h-9 items-start justify-start gap-0 rounded-lg py-my-4 outline-none focus-within:bg-white",
+  "group flex h-fit min-h-9 items-start justify-start gap-0 rounded-lg py-my-4 outline-none",
+  editorRowHoverClass(),
+);
+/** 장면 — min-height 32px · 제목 줄 수에 따라 행 높이 확장 */
+const WRAPPER_CLASS_SCENE = cn(
+  "group flex h-fit min-h-8 items-start justify-start gap-0 rounded-lg py-my-4 outline-none",
   editorRowHoverClass(),
 );
 const ROOT_CLASS_WRAP = "min-w-0 flex-1 min-h-8 h-auto self-start";
+const ROOT_CLASS_SCENE = "min-w-0 w-full flex-1 self-start";
 
 function isWrapCompactBlock(type: import("@/types/editor").BlockType) {
   return type === "scene" || type === "top_desc";
@@ -145,21 +151,36 @@ function SortableBlockWrapper({
     [addBlock, focusBlock, index],
   );
 
+  const handleMobileRowPointerDown = useCallback(
+    (e: React.PointerEvent<HTMLDivElement>) => {
+      if (isDesktop) return;
+      const target = e.target as HTMLElement;
+      if (target.closest("textarea, input[type='text']")) return;
+      focusBlock(block.id);
+    },
+    [block.id, focusBlock, isDesktop],
+  );
+
   return (
     <div
       ref={setNodeRef}
       style={style}
       id={`block-${block.id}`}
       data-block-id={block.id}
+      onPointerDown={handleMobileRowPointerDown}
       className={cn(
         block.type === "text"
           ? WRAPPER_CLASS_TEXT
           : block.type === "choice"
             ? WRAPPER_CLASS_CHOICE
-            : isWrapRow
-              ? WRAPPER_CLASS_WRAP
-              : WRAPPER_CLASS_COMPACT,
+            : block.type === "scene"
+              ? WRAPPER_CLASS_SCENE
+              : isWrapRow
+                ? WRAPPER_CLASS_WRAP
+                : WRAPPER_CLASS_COMPACT,
         isDragging && "opacity-50",
+        isFocused && EDITOR_MOBILE_FOCUSED_ROW_CLASS,
+        EDITOR_MOBILE_GUTTER_X_CLASS,
       )}
     >
       <div className={cn(editorLeadingControlsClass(), isWrapRow && "self-start")}>
@@ -203,7 +224,9 @@ function SortableBlockWrapper({
           isTextLikeRow
             ? "min-h-8 items-center text-caption1_500"
             : isWrapRow
-              ? "h-8 shrink-0 self-start items-center py-0 text-body4_500"
+              ? block.type === "scene"
+                ? "min-h-8 shrink-0 self-start items-center py-0 text-body4_500"
+                : "h-8 shrink-0 self-start items-center py-0 text-body4_500"
               : "h-8 items-center py-0 text-body4_500",
           isFocused
             ? "text-primary"
@@ -232,7 +255,9 @@ function SortableBlockWrapper({
             : block.type === "choice"
               ? ROOT_CLASS_CHOICE
               : isWrapRow
-                ? ROOT_CLASS_WRAP
+                ? block.type === "scene"
+                  ? ROOT_CLASS_SCENE
+                  : ROOT_CLASS_WRAP
                 : ROOT_CLASS_COMPACT
         }
       />

@@ -7,6 +7,7 @@ import { useEditorStore } from "@/store/useEditorStore";
 import { useEditorScrollActiveSceneId } from "@/hooks/useEditorScrollActiveSceneId";
 import { FilterChip } from "@/components/ui/chip";
 import { EDITOR_SCENE_TAB_STRIP_ID, resolveEditorActiveSceneId } from "@/lib/editor-scroll";
+import { PAGE_FLUSH_CONTENT_PAD_X_CLASS } from "@/lib/page-layout";
 import { HORIZONTAL_SCROLLBAR_HIDE_CLASS } from "@/lib/tab-styles";
 import { cn } from "@/lib/utils";
 
@@ -99,6 +100,7 @@ export function EditorSceneTabStrip({
         id={EDITOR_SCENE_TAB_STRIP_ID}
         className={cn(
           "relative z-20 w-full shrink-0 bg-white py-my-8",
+          PAGE_FLUSH_CONTENT_PAD_X_CLASS,
           className,
         )}
       />
@@ -109,7 +111,11 @@ export function EditorSceneTabStrip({
     <div
       ref={stripRef}
       id={EDITOR_SCENE_TAB_STRIP_ID}
-      className={cn("relative z-20 w-full shrink-0 bg-white", className)}
+      className={cn(
+        "relative z-20 w-full shrink-0 bg-white",
+        PAGE_FLUSH_CONTENT_PAD_X_CLASS,
+        className,
+      )}
     >
       <div className="flex items-center gap-my-8 py-my-8">
         <div
@@ -177,7 +183,7 @@ export function EditorSceneTabStrip({
                 aria-modal="true"
                 aria-label="장면 목록"
               >
-                <div className="flex shrink-0 items-center justify-end px-my-12 py-my-8">
+                <div className={cn("flex shrink-0 items-center justify-end py-my-8", PAGE_FLUSH_CONTENT_PAD_X_CLASS)}>
                   <button
                     type="button"
                     aria-label="장면 목록 닫기"
@@ -201,7 +207,8 @@ export function EditorSceneTabStrip({
                           type="button"
                           onClick={() => handleSceneSelect(block.id)}
                           className={cn(
-                            "flex w-full cursor-pointer items-center gap-my-12 px-my-12 py-my-12 text-left transition-colors focus:bg-surface-20 lg:hover:bg-surface-20",
+                            "flex w-full cursor-pointer items-center gap-my-12 py-my-12 text-left transition-colors focus:bg-surface-20 lg:hover:bg-surface-20",
+                            PAGE_FLUSH_CONTENT_PAD_X_CLASS,
                             isActive && "bg-surface-20",
                           )}
                         >

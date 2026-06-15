@@ -7,6 +7,7 @@ import { AlertCircle, CalendarDays, ChevronDown, Download, FileText } from "luci
 import { AppShell } from "@/components/layout/AppShell";
 import {
   PAGE_CONTAINER_CLASS,
+  PAGE_FLUSH_CONTENT_PAD_X_CLASS,
   PAGE_GUTTER_GAP_CLASS,
   PAGE_SCROLL_ROOT_CLASS,
   PAGE_SCROLL_ROOT_MOBILE_FLUSH_CLASS,
@@ -728,7 +729,7 @@ export default function MonetizationSettlementsPage() {
                     ) : (
                       <>
                         {/* xl 미만·사이드바 포함 폭에서는 표 대신 카드로 가로 스크롤 없이 표시 */}
-                        <div className="space-y-my-12 p-my-20 sm:p-my-16 xl:hidden">
+                        <div className={cn("space-y-my-12 py-my-20 xl:hidden", PAGE_FLUSH_CONTENT_PAD_X_CLASS)}>
                           {pagedSettlementItems.map((item) => (
                             <SettlementRowMobile
                               key={item.id}

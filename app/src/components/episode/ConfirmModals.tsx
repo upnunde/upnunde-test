@@ -48,7 +48,7 @@ export function PublishConfirmModal({
         }
       }}
     >
-      <DialogContent presentation="center" className="w-[480px] max-w-[calc(100vw-2rem)] p-0 gap-0 bg-surface-10 shadow-elevation-50 border-0 outline-none focus:outline-none max-lg:rounded-[16px] lg:rounded-[4px]">
+      <DialogContent presentation="center" className={cn(modalDialogContentClassName, "outline-none focus:outline-none")}>
         {/* 상단: 제목 + 부제 (가이드 레이아웃) */}
         <div className="self-stretch px-my-24 pt-my-40 pb-my-16 bg-surface-10 max-lg:rounded-t-[16px] lg:rounded-t-[4px] flex flex-col justify-start items-center gap-my-20">
           <div className="self-stretch flex flex-col justify-center items-center gap-my-8">

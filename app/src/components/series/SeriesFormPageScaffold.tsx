@@ -16,6 +16,7 @@ import {
 import { SeriesPreviewPanel } from "@/components/series/SeriesPreviewPanel";
 import { useIsLgUp } from "@/hooks/useMediaQuery";
 import {
+  PAGE_FLUSH_CONTENT_PAD_X_CLASS,
   PAGE_GUTTER_X_CLASS,
   PAGE_SCROLL_BOTTOM_CLASS,
   PAGE_SCROLL_TOP_CLASS,
@@ -127,7 +128,7 @@ export function SeriesFormPageScaffold({
                         className="flex h-fit shrink-0 flex-col gap-my-20 overflow-hidden rounded-[4px] px-0 lg:px-0 pt-my-8 pb-my-20 max-lg:rounded-none max-lg:border-0"
                       >
                         <SeriesFormTabs activeTab={activeTab} onChange={onTabChange} />
-                        <div className="self-stretch px-my-20 pt-0 pb-0">{children}</div>
+                        <div className={cn("self-stretch pt-0 pb-0", PAGE_FLUSH_CONTENT_PAD_X_CLASS)}>{children}</div>
                       </PageCard>
                     </div>
 

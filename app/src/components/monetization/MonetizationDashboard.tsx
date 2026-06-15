@@ -16,8 +16,9 @@ import {
   ANALYTICS_TREND_LINE_FIXED_HEIGHT_CLASS,
   ANALYTICS_TREND_LINE_SHELL_CLASS,
 } from "@/components/analytics/analytics-trend-chart-shell";
+import { PAGE_FLUSH_CONTENT_PAD_X_CLASS } from "@/lib/page-layout";
 import { deltaClassName, getMonetizationDummy } from "@/components/analytics/analytics-dummy-by-scope";
-import { AnalyticsMonthlyRevenueSection } from "@/components/analytics/AnalyticsMonthlyRevenueSection";
+import { cn } from "@/lib/utils";
 import {
   AnalyticsMonthlyRevenueRangeFilter,
   DEFAULT_MONTHLY_REVENUE_RANGE_MONTHS,
@@ -28,7 +29,7 @@ import type { AnalyticsScopeCategoryId } from "@/components/analytics/analytics-
 import type { AnalyticsCharacterId } from "@/components/analytics/analytics-character-options";
 import type { AnalyticsScenarioId } from "@/components/analytics/analytics-scenario-options";
 import type { AnalyticsSeriesId } from "@/components/analytics/analytics-series-options";
-import { cn } from "@/lib/utils";
+import { AnalyticsMonthlyRevenueSection } from "@/components/analytics/AnalyticsMonthlyRevenueSection";
 
 const AnalyticsTrendLineChart = dynamic(
   () =>
@@ -120,7 +121,7 @@ export function MonetizationDashboard({
           </div>
 
           <div className="flex flex-col items-stretch gap-my-12 self-stretch px-0 py-my-40">
-            <p className="px-my-20 text-body3_500 text-on-surface-20">수익금 추이</p>
+            <p className={cn(PAGE_FLUSH_CONTENT_PAD_X_CLASS, "text-body3_500 text-on-surface-20")}>수익금 추이</p>
             <AnalyticsTrendLineChart
               metric="views"
               periodRange={periodRange}
@@ -136,7 +137,7 @@ export function MonetizationDashboard({
           </AnalyticsPanel>
         <AnalyticsPanel className="h-fit w-full min-w-0 flex-1 self-start lg:min-w-[260px]">
           <Title2 text="월별 수익" variant="title" asSectionHeader />
-          <div className="px-my-20 pt-my-12">
+          <div className={cn(PAGE_FLUSH_CONTENT_PAD_X_CLASS, "pt-my-12")}>
             <AnalyticsMonthlyRevenueRangeFilter
               value={monthlyRevenueRange}
               onChange={setMonthlyRevenueRange}

@@ -164,7 +164,7 @@ function pushUndo(state: EditorState): Partial<EditorState> {
   return { undoStack, redoStack: [] };
 }
 
-export const useEditorStore = create<EditorStore>((set) => ({
+export const useEditorStore = create<EditorStore>((set, get) => ({
   seriesPersona: "",
   blocks: [],
   focusBlockId: null,
@@ -181,7 +181,19 @@ export const useEditorStore = create<EditorStore>((set) => ({
 
   setBlocks: (blocks) => set({ blocks }),
 
-  setFocusBlockId: (focusBlockId) =>
+  setFocusBlockId: (focusBlockId) => {
+    const prevFocusBlockId = get().focusBlockId;
+    if (
+      typeof document !== "undefined" &&
+      prevFocusBlockId &&
+      focusBlockId !== prevFocusBlockId
+    ) {
+      const prevEl = document.getElementById(`block-${prevFocusBlockId}`);
+      const active = document.activeElement;
+      if (prevEl && active instanceof HTMLElement && prevEl.contains(active)) {
+        active.blur();
+      }
+    }
     set((state) => ({
       focusBlockId,
       mobileKeyboardEditBlockId:
@@ -192,7 +204,8 @@ export const useEditorStore = create<EditorStore>((set) => ({
         focusBlockId != null && focusBlockId === state.mobileContentEditPromptBlockId
           ? state.mobileContentEditPromptBlockId
           : null,
-    })),
+    }));
+  },
 
   beginMobileKeyboardContentEdit: (blockId) =>
     set({

@@ -4,6 +4,7 @@ import React, { useState } from "react";
 import { NotificationItem } from "@/components/notification/NotificationItem";
 import type { NotificationData } from "@/types/notification";
 import { SegmentedTextTabs } from "@/components/ui/segmented-text-tabs";
+import { PAGE_FLUSH_CONTENT_PAD_X_CLASS } from "@/lib/page-layout";
 import { cn } from "@/lib/utils";
 
 export type NotificationTab = "all" | "NOTICE" | "WORK_ALERT";
@@ -22,7 +23,7 @@ const TAB_ITEMS = [
 /** 알림 목록 상단 탭(전체/공지/작품알림) — PageCard 내부에 배치 */
 export function NotificationTabStrip({ activeTab, onTabChange }: NotificationTabStripProps) {
   return (
-    <div className="inline-flex flex-col items-start justify-start gap-my-8 self-stretch border-b border-border-10 px-my-20 pb-0 pt-0">
+    <div className={cn("inline-flex flex-col items-start justify-start gap-my-8 self-stretch border-b border-border-10 pb-0 pt-0", PAGE_FLUSH_CONTENT_PAD_X_CLASS)}>
       <SegmentedTextTabs
         aria-label="알림 필터"
         items={TAB_ITEMS}

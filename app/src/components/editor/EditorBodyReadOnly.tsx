@@ -8,6 +8,7 @@ import {
   EDITOR_BLOCK_INDEX_COLUMN_CLASS,
   EDITOR_BLOCK_LABEL_COLUMN_CLASS,
   EDITOR_SCENE_TITLE_DISPLAY_CLASS,
+  EDITOR_SCENE_TITLE_FIELD_SHELL_CLASS,
   EDITOR_TOP_DESC_DISPLAY_CLASS,
 } from "@/lib/editor-block-layout";
 import { cn } from "@/lib/utils";
@@ -135,7 +136,7 @@ function ReadOnlyBlockRow({
         <div className={cn(READONLY_ROW_LABEL_CELL_CLASS, "text-body4_500", labelColorClass)}>
           {`#장면 ${String(sceneOrdinal).padStart(2, "0")}`}
         </div>
-        <div className={READONLY_ROW_CONTENT_CELL_CLASS}>
+        <div className={cn(READONLY_ROW_CONTENT_CELL_CLASS, EDITOR_SCENE_TITLE_FIELD_SHELL_CLASS)}>
           <span className={EDITOR_SCENE_TITLE_DISPLAY_CLASS}>
             {block.content || "—"}
           </span>

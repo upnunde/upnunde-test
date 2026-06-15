@@ -4,6 +4,7 @@ import React, { useId, useState } from "react";
 import { ChevronDown, Plus } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Title1 } from "@/components/ui/title1";
+import { PAGE_FLUSH_CONTENT_PAD_X_CLASS } from "@/lib/page-layout";
 import { cn } from "@/lib/utils";
 
 export type InquiryCategory = "account" | "payment" | "bug" | "etc";
@@ -34,7 +35,7 @@ export function InquiryForm({
   onSubmit = defaultSubmit,
   onSuccess,
   onCancel,
-  className = "mt-4 flex flex-col gap-my-40 px-my-20",
+  className = `mt-4 flex flex-col gap-my-40 ${PAGE_FLUSH_CONTENT_PAD_X_CLASS}`,
   rootClassName,
 }: InquiryFormProps) {
   const prefix = idPrefix ? `${idPrefix}-` : "";
@@ -181,7 +182,7 @@ export function InquiryForm({
       </form>
 
       {/* form과 동일 레벨 — 모달 하단 고정 */}
-      <div className="mx-0 mt-0 w-full shrink-0 bg-white px-my-20 pt-my-20 pb-my-20">
+      <div className={cn("mx-0 mt-0 w-full shrink-0 bg-white pt-my-20 pb-my-20", PAGE_FLUSH_CONTENT_PAD_X_CLASS)}>
         <div className="flex items-center justify-end gap-my-12">
           <Button
             type="button"

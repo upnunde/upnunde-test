@@ -76,9 +76,9 @@ export function ImageLightbox({
   return (
     <div
       className={cn(
-        "fixed inset-0 z-50 flex items-start justify-center px-my-16 pb-my-16 pt-my-20",
+        "fixed inset-0 z-50 flex items-center justify-center overflow-y-auto p-my-16",
         "bg-black/50 data-[state=open]:animate-in data-[state=closed]:animate-out data-[state=closed]:fade-out-0 data-[state=open]:fade-in-0",
-        className
+        className,
       )}
       role="dialog"
       aria-modal="true"

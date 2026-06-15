@@ -1,6 +1,7 @@
 "use client";
 
-import React, { useCallback, useMemo, useState } from "react";
+import React, { useCallback, useEffect, useMemo, useState } from "react";
+import { useRouter } from "next/navigation";
 import { CharacterList } from "@/components/character/CharacterList";
 import { CharacterDeleteModal } from "@/components/character/CharacterDeleteModal";
 import {
@@ -12,16 +13,25 @@ import {
   characterResourceToCharacterData,
   collectImportedResourceKeys,
 } from "@/lib/importableCharactersMock";
+import { consumeMyWorksPendingCharacter } from "@/lib/myWorksCharacterCreate";
 import { MY_WORKS_CHARACTERS_MOCK } from "@/lib/myWorksCharactersMock";
+import { WORKS_CHARACTER_NEW_PATH } from "@/lib/worksArea";
 import type { CharacterData } from "@/types/character";
 
 /**
  * 내 작품 — 캐릭터 목록 (`/series/character`)
  */
 export default function WorksCharacterListPage() {
+  const router = useRouter();
   const [characters, setCharacters] = useState<CharacterData[]>(MY_WORKS_CHARACTERS_MOCK);
   const [characterToDelete, setCharacterToDelete] = useState<CharacterData | null>(null);
   const [importModalOpen, setImportModalOpen] = useState(false);
+
+  useEffect(() => {
+    const created = consumeMyWorksPendingCharacter();
+    if (!created) return;
+    setCharacters((prev) => (prev.some((c) => c.id === created.id) ? prev : [...prev, created]));
+  }, []);
 
   const handleDelete = useCallback((target: CharacterData) => {
     setCharacters((prev) => prev.filter((c) => c.id !== target.id));
@@ -59,9 +69,7 @@ export default function WorksCharacterListPage() {
         onSetPrivate={handleSetPrivate}
         onSetPublic={handleSetPublic}
         onDelete={(character) => setCharacterToDelete(character)}
-        onCreateCharacter={() => {
-          // TODO: 새 캐릭터 생성 플로우
-        }}
+        onCreateCharacter={() => router.push(WORKS_CHARACTER_NEW_PATH)}
         onImportCharacter={() => setImportModalOpen(true)}
       />
 

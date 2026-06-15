@@ -10,6 +10,7 @@ import {
   DESKTOP_MODAL_RADIUS_CLASS,
   DIALOG_CONTENT_Z_CLASS,
   DIALOG_OVERLAY_Z_CLASS,
+  CONFIRM_DIALOG_WIDTH_CLASS,
 } from "@/components/ui/modal/modal-styles";
 
 const Dialog = DialogPrimitive.Root;
@@ -38,7 +39,8 @@ const dialogContentAnimationClass =
 
 /** 알림·경고 — 항상 중앙 모달 */
 const dialogContentCenterClass = cn(
-  "fixed left-1/2 top-1/2 flex w-full max-w-lg max-h-[calc(100dvh-160px)] min-h-0 -translate-x-1/2 -translate-y-1/2 flex-col gap-my-16 overflow-y-auto bg-background p-my-24 shadow-elevation-50 outline-none focus:outline-none",
+  "fixed left-1/2 top-1/2 flex min-h-0 -translate-x-1/2 -translate-y-1/2 flex-col gap-my-16 overflow-y-auto bg-background p-my-24 shadow-elevation-50 outline-none focus:outline-none max-h-[calc(100dvh-160px)]",
+  CONFIRM_DIALOG_WIDTH_CLASS,
   DIALOG_CONTENT_Z_CLASS,
   MOBILE_MODAL_RADIUS_CLASS,
   DESKTOP_MODAL_RADIUS_CLASS,

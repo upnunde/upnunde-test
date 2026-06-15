@@ -13,6 +13,7 @@ import { Title2 } from "@/components/ui/title2";
 import { SegmentedTextTabs } from "@/components/ui/segmented-text-tabs";
 import { AnalyticsPanel } from "@/components/analytics/AnalyticsPanel";
 import { AnalyticsViewerHourlyActivityChart } from "@/components/analytics/AnalyticsViewerHourlyActivityChart";
+import { PAGE_FLUSH_CONTENT_PAD_X_CLASS } from "@/lib/page-layout";
 import { cn } from "@/lib/utils";
 import type { AnalyticsUserMetric } from "@/components/analytics/AnalyticsTrendLineChart";
 import { type AnalyticsPeriodRange } from "@/components/analytics/analytics-date";
@@ -159,7 +160,8 @@ export function AnalyticsUserTab({
                 onClick={() => setUserMetric(stat.id)}
                 aria-pressed={selected}
                 className={cn(
-                  "flex min-w-[140px] flex-1 flex-col items-center gap-my-4 border-b border-border-10 px-my-20 py-my-40 text-left outline-none transition-colors",
+                  "flex min-w-[140px] flex-1 flex-col items-center gap-my-4 border-b border-border-10 py-my-40 text-left outline-none transition-colors",
+                  PAGE_FLUSH_CONTENT_PAD_X_CLASS,
                   i < arr.length - 1 && "border-r border-border-10",
                   selected ? "bg-white" : "bg-surface-disabled-10 hover:bg-surface-10/80",
                 )}
@@ -176,7 +178,7 @@ export function AnalyticsUserTab({
           })}
         </div>
         <div className="flex flex-col items-stretch gap-my-12 self-stretch px-0 py-my-40">
-          <p className="px-my-20 text-body3_500 text-on-surface-20">
+          <p className={cn(PAGE_FLUSH_CONTENT_PAD_X_CLASS, "text-body3_500 text-on-surface-20")}>
             {USER_PRIMARY_LABELS[userMetric] ?? "이용자 수"} 추이
           </p>
           <AnalyticsTrendLineChart
@@ -189,7 +191,7 @@ export function AnalyticsUserTab({
 
       <AnalyticsPanel>
         <Title2 text="이용자 재방문률" variant="title" asSectionHeader />
-        <div className="mb-2 mt-2 inline-flex flex-col items-start justify-start gap-my-8 self-stretch px-my-20 pb-0 pt-0">
+        <div className={cn("mb-2 mt-2 inline-flex flex-col items-start justify-start gap-my-8 self-stretch pb-0 pt-0", PAGE_FLUSH_CONTENT_PAD_X_CLASS)}>
           <SegmentedTextTabs
             aria-label="재방문 횟수 구간"
             items={[
@@ -215,7 +217,7 @@ export function AnalyticsUserTab({
               noRevisitPercent={revisitRates.noRevisitPct}
             />
           </div>
-          <div className="inline-flex items-start justify-between self-stretch px-my-20">
+          <div className={cn("inline-flex items-start justify-between self-stretch", PAGE_FLUSH_CONTENT_PAD_X_CLASS)}>
             <div className="inline-flex flex-1 flex-col items-start justify-center gap-my-2">
               <div className="text-justify text-heading4_700 text-on-surface-10">
                 {revisitRates.revisitPct.toFixed(1)}%
@@ -236,7 +238,7 @@ export function AnalyticsUserTab({
         <div className="flex min-w-0 flex-1 flex-col gap-my-12 lg:gap-my-20">
           <AnalyticsPanel>
             <Title2 text="연령 및 성별" variant="title" asSectionHeader />
-            <div className="flex flex-col gap-my-12 px-my-20 pt-my-12">
+            <div className={cn("flex flex-col gap-my-12 pt-my-12", PAGE_FLUSH_CONTENT_PAD_X_CLASS)}>
               <div className="flex min-w-0 flex-nowrap items-center gap-my-16 overflow-x-auto overflow-y-hidden [scrollbar-width:none] [-ms-overflow-style:none] [&::-webkit-scrollbar]:hidden">
                 <SegmentedTextTabs
                   aria-label="연령 필터"
@@ -325,7 +327,7 @@ export function AnalyticsUserTab({
           />
           <AnalyticsPanel>
             <Title2 text="이용 시간대" variant="title" asSectionHeader />
-            <div className="px-my-20 pt-my-12">
+            <div className={cn(PAGE_FLUSH_CONTENT_PAD_X_CLASS, "pt-my-12")}>
               <SegmentedTextTabs
                 aria-label="이용 시간대 기준"
                 items={[
@@ -391,7 +393,7 @@ function AudienceBreakdownPanel({
   return (
     <AnalyticsPanel>
       <Title2 text={title} variant="title" asSectionHeader />
-      <div className="px-my-20 pt-my-12">
+      <div className={cn(PAGE_FLUSH_CONTENT_PAD_X_CLASS, "pt-my-12")}>
         <SegmentedTextTabs
           aria-label={`${title} 기준`}
           items={[
@@ -406,7 +408,7 @@ function AudienceBreakdownPanel({
       </div>
       <div className="flex flex-col gap-my-12 lg:gap-my-20 pb-my-20 pt-my-12">
         <AnalyticsDistributionStackedBarChart values={stackValues} />
-        <div className="flex flex-col gap-my-8 px-my-20">
+        <div className={cn("flex flex-col gap-my-8", PAGE_FLUSH_CONTENT_PAD_X_CLASS)}>
           {legend.map((row, i) => (
             <LegendRow
               key={`${row.label}-${row.value}`}
@@ -440,7 +442,7 @@ function SimpleDistributionPanel({
     <AnalyticsPanel>
       <Title2 text={title} variant="title" asSectionHeader />
       {audienceTab != null && onAudienceChange != null ? (
-        <div className="px-my-20 pt-my-12">
+        <div className={cn(PAGE_FLUSH_CONTENT_PAD_X_CLASS, "pt-my-12")}>
           <SegmentedTextTabs
             aria-label={`${title} 기준`}
             items={[
@@ -456,7 +458,7 @@ function SimpleDistributionPanel({
       ) : null}
       <div className="flex flex-col gap-my-12 lg:gap-my-20 pb-my-20 pt-my-12">
         <AnalyticsDistributionStackedBarChart values={stackValues} />
-        <div className="flex flex-col gap-my-8 px-my-20">
+        <div className={cn("flex flex-col gap-my-8", PAGE_FLUSH_CONTENT_PAD_X_CLASS)}>
           {legend.map((row, i) => (
             <LegendRow
               key={`${row.label}-${row.value}`}

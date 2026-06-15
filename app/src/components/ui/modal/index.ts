@@ -1,4 +1,5 @@
 export {
+  CONFIRM_DIALOG_WIDTH_CLASS,
   modalDialogContentClassName,
   formDialogShellClassName,
   formDialogSheetEpisodeFormClassName,

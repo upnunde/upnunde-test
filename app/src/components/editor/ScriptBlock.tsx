@@ -47,7 +47,10 @@ import {
   EDITOR_BLOCK_LABEL_COLUMN_CLASS,
   EDITOR_BLOCK_SPEAKER_COLUMN_CLASS,
   EDITOR_SCENE_TITLE_DISPLAY_CLASS,
+  EDITOR_SCENE_TITLE_FIELD_SHELL_CLASS,
   EDITOR_SCENE_TITLE_INPUT_CLASS,
+  EDITOR_SCENE_TITLE_TYPOGRAPHY_INPUT_ATTR,
+  EDITOR_SCENE_TITLE_TYPOGRAPHY_INPUT_VALUE,
   EDITOR_TOP_DESC_DISPLAY_CLASS,
   EDITOR_TOP_DESC_INPUT_CLASS,
 } from "@/lib/editor-block-layout";
@@ -139,7 +142,15 @@ function getCharacterExpressionOptions(characterName: string): string[] {
 
 /** 한 줄 블록 전용 (장면/캐릭터/연출/배경 등): 높이 32px(h-8), px-0 py-1, gap-4 */
 const COMPACT_BLOCK_ROOT_CLASSES =
-  "flex items-center justify-start rounded-lg border-0 outline-none focus-within:bg-white min-w-0 flex-1 min-h-8 h-8 px-0 py-my-4 gap-my-16 select-none";
+  "flex items-center justify-start rounded-lg border-0 outline-none min-w-0 flex-1 min-h-8 h-8 px-0 py-my-4 gap-my-16 select-none";
+
+/** 리소스 픽커 값 칩 — 행 하이라이트와 중첩되지 않도록 내부 surface 없음 */
+const PICKER_VALUE_CHIP_CLASS =
+  "flex h-8 min-w-0 w-fit cursor-pointer items-center gap-my-4 rounded-md border border-border-10 bg-transparent px-my-8 py-my-8 transition-colors duration-150 focus:outline-none focus:ring-0 active:scale-[0.98]";
+
+/** 오디오·동영상 등 썸네일 없는 리소스 아이콘 — surface 배경 없음 */
+const PICKER_FALLBACK_ICON_CLASS =
+  "flex h-5 w-5 shrink-0 items-center justify-center rounded-full border border-border-10 bg-transparent text-on-surface-30";
 
 /** 삭제 버튼 아이콘 공통 크기 20x20 */
 const DELETE_ICON_CLASS = "h-5 w-5";
@@ -176,7 +187,7 @@ export function ScriptBlock({
   const onFocusBlock = useCallback(() => setFocusBlockId(block.id), [block.id, setFocusBlockId]);
 
   const textareaRef = useRef<HTMLTextAreaElement | null>(null);
-  const sceneInputRef = useRef<HTMLInputElement | null>(null);
+  const sceneInputRef = useRef<HTMLTextAreaElement | HTMLInputElement | null>(null);
   const pendingSelectionRef = useRef<number | null>(null);
   const enterSplitLockRef = useRef(false);
   const toolbarRef = useRef<HTMLDivElement | null>(null);
@@ -542,29 +553,38 @@ export function ScriptBlock({
   }, [selection, effectMenuOpen, colorMenuOpen]);
 
   const handleSceneKeyDown = useCallback(
-    (e: React.KeyboardEvent<HTMLInputElement>) => {
+    (e: React.KeyboardEvent<HTMLTextAreaElement | HTMLInputElement>) => {
       const currentIdx = index - 1;
+      const field = e.currentTarget;
       if (e.key === "Delete") {
         handleDeleteBlock(e);
         return;
       }
-      if (e.key === "ArrowUp") {
-        if (currentIdx > 0) {
-          e.preventDefault();
-          e.stopPropagation(); // Prevent event from bubbling to parent div
-          focusBlock(blocks[currentIdx - 1].id);
+      if (e.key === "ArrowUp" || e.key === "ArrowDown") {
+        if (field instanceof HTMLTextAreaElement) {
+          const { selectionStart, selectionEnd, value } = field;
+          if (e.key === "ArrowUp" && (selectionStart !== 0 || selectionEnd !== 0)) return;
+          if (e.key === "ArrowDown" && (selectionStart !== value.length || selectionEnd !== value.length)) {
+            return;
+          }
+          updateBlock(block.id, value);
+        }
+        if (e.key === "ArrowUp") {
+          if (currentIdx > 0) {
+            e.preventDefault();
+            e.stopPropagation();
+            focusBlock(blocks[currentIdx - 1].id);
+          }
           return;
         }
-      } else if (e.key === "ArrowDown") {
         if (currentIdx < blocks.length - 1) {
           e.preventDefault();
-          e.stopPropagation(); // Prevent event from bubbling to parent div
+          e.stopPropagation();
           focusBlock(blocks[currentIdx + 1].id);
-          return;
         }
       }
     },
-    [addBlock, block.type, index, blocks, focusBlock, handleDeleteBlock]
+    [block.id, index, blocks, focusBlock, handleDeleteBlock, updateBlock],
   );
 
   // Clear isNew after opening picker so it doesn't auto-open again on re-mount
@@ -979,36 +999,61 @@ export function ScriptBlock({
         )}
         <span
           className={cn(
-            "flex h-8 shrink-0 items-center justify-start text-body4_500",
+            "flex shrink-0 items-center justify-start text-body4_500",
             EDITOR_BLOCK_LABEL_COLUMN_CLASS,
+            block.type === "scene" ? "min-h-8 self-start" : "h-8 items-center",
             labelColorClass,
           )}
         >
           {labelText}
         </span>
-        <input
-          ref={sceneInputRef}
-          type="text"
-          value={block.content}
-          onChange={(e) => updateBlock(block.id, e.target.value)}
-          onFocus={sceneMobileEdit.onContentFocus}
-          onPointerDown={sceneMobileEdit.onContentPointerDown}
-          readOnly={sceneMobileEdit.readOnly}
-          onKeyDown={handleSceneKeyDown}
-          placeholder={placeholder}
-          className={cn(
-            showSceneValueAsReadOnly
-              ? cn(
-                  sceneDisplayClass,
-                  "block min-h-8 h-auto cursor-text border-0 bg-transparent outline-none focus:outline-none focus:ring-0",
-                  block.type === "scene" && "py-0",
-                )
-              : sceneInputClass,
-            rootClassName,
-            showSceneValueAsReadOnly && !block.content?.trim() && "text-on-surface-30",
-          )}
-        />
-        {!isSeedDefault ? (
+        {block.type === "scene" ? (
+          <div className={EDITOR_SCENE_TITLE_FIELD_SHELL_CLASS}>
+            <TextareaAutosize
+              ref={sceneInputRef as React.RefObject<HTMLTextAreaElement>}
+              value={block.content}
+              onChange={(e) => updateBlock(block.id, e.target.value)}
+              onFocus={sceneMobileEdit.onContentFocus}
+              onPointerDown={sceneMobileEdit.onContentPointerDown}
+              readOnly={sceneMobileEdit.readOnly}
+              onKeyDown={handleSceneKeyDown}
+              placeholder={placeholder}
+              rows={1}
+              {...{
+                [EDITOR_SCENE_TITLE_TYPOGRAPHY_INPUT_ATTR]:
+                  EDITOR_SCENE_TITLE_TYPOGRAPHY_INPUT_VALUE,
+              }}
+              className={cn(
+                sceneInputClass,
+                showSceneValueAsReadOnly && "cursor-text",
+                showSceneValueAsReadOnly && !block.content?.trim() && "text-on-surface-30",
+              )}
+            />
+          </div>
+        ) : (
+          <input
+            ref={sceneInputRef as React.RefObject<HTMLInputElement>}
+            type="text"
+            value={block.content}
+            onChange={(e) => updateBlock(block.id, e.target.value)}
+            onFocus={sceneMobileEdit.onContentFocus}
+            onPointerDown={sceneMobileEdit.onContentPointerDown}
+            readOnly={sceneMobileEdit.readOnly}
+            onKeyDown={handleSceneKeyDown}
+            placeholder={placeholder}
+            className={cn(
+              showSceneValueAsReadOnly
+                ? cn(
+                    sceneDisplayClass,
+                    "block min-h-8 h-auto cursor-text border-0 bg-transparent outline-none focus:outline-none focus:ring-0",
+                  )
+                : sceneInputClass,
+              rootClassName,
+              showSceneValueAsReadOnly && !block.content?.trim() && "text-on-surface-30",
+            )}
+          />
+        )}
+        {!isSeedDefault && block.type !== "scene" ? (
           <Button
             type="button"
             variant="ghost"
@@ -1179,7 +1224,7 @@ export function ScriptBlock({
   if (resourceEditing) {
     return (
       <div
-        className={cn(COMPACT_BLOCK_ROOT_CLASSES, "bg-surface-20/50", rootClassName)}
+        className={cn(COMPACT_BLOCK_ROOT_CLASSES, rootClassName)}
         onFocus={onFocusBlock}
         tabIndex={0}
       >
@@ -1426,7 +1471,7 @@ export function ScriptBlock({
                   }
                 }
               }}
-              className="flex h-8 min-w-0 w-fit cursor-pointer items-center gap-my-4 rounded-md border border-border-10 bg-white px-my-8 py-my-8 transition-colors duration-150 lg:hover:bg-surface-20 focus:outline-none focus:ring-0 active:scale-[0.98]"
+              className={PICKER_VALUE_CHIP_CLASS}
             >
               {hasImageThumbnail ? (
                 <NextImage
@@ -1437,11 +1482,11 @@ export function ScriptBlock({
                   className="h-5 w-5 shrink-0 rounded-full object-cover"
                 />
               ) : block.type === "bgm" || block.type === "sfx" ? (
-                <span className="flex h-5 w-5 shrink-0 items-center justify-center rounded-full bg-surface-20 text-on-surface-30">
+                <span className={PICKER_FALLBACK_ICON_CLASS}>
                   <Music className="h-3 w-3" />
                 </span>
               ) : isVideo ? (
-                <span className="flex h-5 w-5 shrink-0 items-center justify-center rounded-full bg-surface-20 text-on-surface-30">
+                <span className={PICKER_FALLBACK_ICON_CLASS}>
                   <Film className="h-3 w-3" />
                 </span>
               ) : null}
@@ -1467,7 +1512,7 @@ export function ScriptBlock({
                   type="button"
                   onClick={(e) => e.stopPropagation()}
                   onFocus={onFocusBlock}
-                  className="ml-2 flex h-8 min-w-0 w-fit cursor-pointer items-center gap-my-4 rounded-md border border-border-10 bg-white px-my-8 py-my-8 transition-colors duration-150 lg:hover:bg-surface-20 focus:outline-none focus:ring-0 active:scale-[0.98]"
+                  className={cn(PICKER_VALUE_CHIP_CLASS, "ml-2")}
                 >
                   <span
                     className={cn(
@@ -1510,7 +1555,7 @@ export function ScriptBlock({
                   type="button"
                   onClick={(e) => e.stopPropagation()}
                   onFocus={onFocusBlock}
-                  className="ml-2 flex h-8 min-w-0 w-fit cursor-pointer items-center gap-my-4 rounded-md border border-border-10 bg-white px-my-8 py-my-8 transition-colors duration-150 lg:hover:bg-surface-20 focus:outline-none focus:ring-0 active:scale-[0.98]"
+                  className={cn(PICKER_VALUE_CHIP_CLASS, "ml-2")}
                 >
                   <span className="min-w-0 flex-1 truncate text-body4_500 text-on-surface-30">
                     {currentVideoPlaybackLabel}

@@ -689,11 +689,45 @@
         [type="button"],
         [type="submit"],
         [type="reset"],
-        [type="color"]
+        [type="color"],
+        [data-editor-typography-input]
       ),
-    textarea,
+    textarea:not([data-editor-typography-input]):not(.editor-scene-title-typography),
     select
   ) {
     font-size: 16px !important;
+  }
+}
+
+/* 에디터 #장면 제목 — 모바일 heading4 20/700 · 셸 min-height 32px(가변 확장) */
+@media (max-width: 1023px) {
+  .editor-scene-title-field-shell {
+    min-height: 32px !important;
+    height: auto !important;
+    max-height: none !important;
+  }
+
+  :where(
+    input.editor-scene-title-typography,
+    textarea.editor-scene-title-typography,
+    .editor-scene-title-typography
+  ) {
+    font-size: 20px !important;
+    line-height: 28px !important;
+    font-weight: 700 !important;
+    resize: none !important;
+  }
+}
+
+@media (min-width: 1024px) {
+  :where(
+    input.editor-scene-title-typography,
+    textarea.editor-scene-title-typography,
+    .editor-scene-title-typography
+  ) {
+    font-size: 24px !important;
+    line-height: 34px !important;
+    font-weight: 700 !important;
+    resize: none !important;
   }
 }

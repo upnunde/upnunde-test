@@ -3,7 +3,7 @@
 import React from "react";
 import { Button } from "@/components/ui/button";
 import { Title2 } from "@/components/ui/title2";
-import { PAGE_CARD_SHELL_MOBILE_FLUSH_CLASS, PAGE_GUTTER_X_CLASS } from "@/lib/page-layout";
+import { PAGE_CARD_SHELL_MOBILE_FLUSH_CLASS, PAGE_CONTENT_PAD_X_CLASS } from "@/lib/page-layout";
 import { cn } from "@/lib/utils";
 
 /** 시각 자원(등장인물, 배경, 연출장면, 미디어, 갤러리) 섹션 래퍼. 공통 그리드 레이아웃. */
@@ -42,7 +42,10 @@ export function ResourceSection({
     >
       {headerAction ? (
         <div
-          className="w-full h-fit px-my-20 py-my-12 border-b border-border-10/5 flex items-center justify-between gap-my-12"
+          className={cn(
+            "w-full h-fit py-my-12 border-b border-border-10/5 flex items-center justify-between gap-my-12",
+            PAGE_CONTENT_PAD_X_CLASS,
+          )}
           style={{ borderBottomColor: "rgba(0, 0, 0, 0.07)" }}
         >
           <div className="min-w-0 flex-1">
@@ -68,7 +71,7 @@ export function ResourceSection({
           </Button>
         </div>
       ) : (
-        <div className={cn("w-full min-w-0 self-stretch py-my-20", PAGE_GUTTER_X_CLASS)}>{children}</div>
+        <div className={cn("w-full min-w-0 self-stretch py-my-20", PAGE_CONTENT_PAD_X_CLASS)}>{children}</div>
       )}
     </div>
   );

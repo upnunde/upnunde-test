@@ -3,20 +3,30 @@
  * 본문 여백형 페이지 가로·상단 12px(모바일·데스크톱 공통) → `docs/mobile-layout.md`
  */
 
-/** 페이지·카드 좌우 인셋 — 12px (모바일·lg+ 공통) */
+/** 페이지·카드 좌우 인셋 — 12px (모바일·lg+ 공통) — 스크롤 루트 등 */
 export const PAGE_GUTTER_X_CLASS = "px-my-12";
+
+/**
+ * 풀블리드 카드·섹션 내부 좌우 인셋 — 20px (모바일·lg+ 공통).
+ * 에디터 본문(`EDITOR_PAGE_SCROLL_CLASS`) 제외.
+ */
+export const PAGE_FLUSH_CONTENT_PAD_X_CLASS = "px-my-20";
 
 /** 페이지·섹션 스택 간격 — 모바일 12px · lg+ 20px */
 export const PAGE_GUTTER_GAP_CLASS = "gap-my-12 lg:gap-my-20";
 
-/** 카드 섹션 헤더·본문·푸터 좌우 인셋 */
-export const PAGE_CONTENT_PAD_X_CLASS = PAGE_GUTTER_X_CLASS;
+/** 카드 섹션 헤더·본문·푸터 좌우 인셋 — 20px */
+export const PAGE_CONTENT_PAD_X_CLASS = PAGE_FLUSH_CONTENT_PAD_X_CLASS;
 
 /** 카드 본문(폼 필드 묶음) */
-export const PAGE_CONTENT_BODY_CLASS = `${PAGE_GUTTER_X_CLASS} py-my-20`;
+export const PAGE_CONTENT_BODY_CLASS = `${PAGE_CONTENT_PAD_X_CLASS} py-my-20`;
 
 /** 카드 하단 액션 바 */
-export const PAGE_CONTENT_FOOTER_CLASS = `${PAGE_GUTTER_X_CLASS} py-my-16`;
+export const PAGE_CONTENT_FOOTER_CLASS = `${PAGE_CONTENT_PAD_X_CLASS} py-my-16`;
+
+/** 카드 하단 취소·저장 등 — 모바일 form 42px · lg+ 36px */
+export const PAGE_FOOTER_ACTION_BUTTON_CLASS =
+  "lg:h-my-36 lg:min-h-my-36 lg:min-w-my-72 lg:px-my-12 lg:text-body2_500";
 
 /** 메인 스크롤 영역 — max-width 컨테이너 바깥 가로 여백 */
 export const PAGE_SCROLL_GUTTER_CLASS = PAGE_GUTTER_X_CLASS;
@@ -78,9 +88,9 @@ export const PAGE_SUBHEADER_STICKY_CLASS = "";
 export const PAGE_FILTER_HEADER_STICKY_CLASS =
   "max-lg:sticky max-lg:top-14 max-lg:z-30";
 
-/** 서브 페이지 상단 바(뒤로가기·제목) — 모바일 56px · lg+ 64px */
+/** 서브 페이지 상단 바(뒤로가기·제목) — 모바일 56px · lg+ 64px · 좌우 20px */
 export const PAGE_SUBHEADER_CLASS =
-  `flex h-my-56 w-full shrink-0 items-center justify-center border-b border-border-10 bg-white ${PAGE_GUTTER_X_CLASS} py-0 lg:h-my-64`;
+  `flex h-my-56 w-full shrink-0 items-center justify-center border-b border-border-10 bg-white ${PAGE_FLUSH_CONTENT_PAD_X_CLASS} py-0 lg:h-my-64`;
 
 /** 필터 띠와 함께 쓰는 서브헤더 */
 export const PAGE_SUBHEADER_WITH_FILTER_CLASS = PAGE_SUBHEADER_CLASS;
@@ -94,7 +104,7 @@ export const PAGE_SUBHEADER_WITH_STICKY_CLASS = PAGE_SUBHEADER_CLASS;
  */
 export const PAGE_FILTER_HEADER_SHELL_CLASS = [
   "flex w-full shrink-0 flex-col items-center border-b border-border-10 bg-surface-10",
-  PAGE_GUTTER_X_CLASS,
+  PAGE_FLUSH_CONTENT_PAD_X_CLASS,
   "py-my-12",
   PAGE_FILTER_HEADER_STICKY_CLASS,
 ].join(" ");

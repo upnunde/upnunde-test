@@ -5,7 +5,7 @@ import dynamic from "next/dynamic";
 import { Button } from "@/components/ui/button";
 import { FilterChip } from "@/components/ui/chip";
 import { CHIP_GROUP_GAP_CLASS } from "@/lib/chip-styles";
-import { PAGE_CARD_SHELL_MOBILE_FLUSH_CLASS } from "@/lib/page-layout";
+import { PAGE_CARD_SHELL_MOBILE_FLUSH_CLASS, PAGE_FLUSH_CONTENT_PAD_X_CLASS } from "@/lib/page-layout";
 import { cn } from "@/lib/utils";
 import { Title2 } from "@/components/ui/title2";
 import { BgmListItem } from "./BgmListItem";
@@ -137,7 +137,7 @@ export function BgmSection({
           PAGE_CARD_SHELL_MOBILE_FLUSH_CLASS,
         )}
       >
-        <div className="w-full self-stretch border-b border-border-10 px-my-20 pb-my-12 pt-my-20">
+        <div className={cn("w-full self-stretch border-b border-border-10 pb-my-12 pt-my-20", PAGE_FLUSH_CONTENT_PAD_X_CLASS)}>
           <Title2
             text={title}
             asSectionHeader
@@ -172,7 +172,7 @@ export function BgmSection({
             </Button>
           </div>
         ) : (
-          <div className="self-stretch px-my-20 pb-my-8 pt-my-8 rounded-[4px] flex flex-col justify-start items-start gap-my-12">
+          <div className={cn("self-stretch pb-my-8 pt-my-8 rounded-[4px] flex flex-col justify-start items-start gap-my-12", PAGE_FLUSH_CONTENT_PAD_X_CLASS)}>
             <div className="mb-1 mt-0 w-full pt-0 pb-0">
               <div
                 className={cn(

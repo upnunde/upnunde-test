@@ -53,6 +53,7 @@ import {
   editorMobilePreviewChromeHiddenClass,
   isEditorMobileBlockToolbarVisible,
 } from "@/components/editor/editor-mobile-floating-layout";
+import { EDITOR_MOBILE_GUTTER_X_CLASS } from "@/lib/editor-block-layout";
 import { cn } from "@/lib/utils";
 
 function EditorWorkspace({
@@ -83,7 +84,8 @@ function EditorWorkspace({
     isDesktop
       ? "py-my-40 px-0"
       : cn(
-          "px-my-12 pt-my-12",
+          EDITOR_MOBILE_GUTTER_X_CLASS,
+          "max-lg:pt-my-12",
           mobileToolbarVisible
             ? EDITOR_MOBILE_SCROLL_BOTTOM_PAD_WITH_TOOLBAR_CLASS
             : EDITOR_MOBILE_SCROLL_BOTTOM_PAD_FAB_ONLY_CLASS,
@@ -277,7 +279,7 @@ function EditorInner() {
             >
               <EditorSceneTabStrip
                 onSceneClick={handleSceneNavigate}
-                className="w-full px-my-12"
+                className="w-full"
               />
               <EditorAutoGeneratorFloatingButton
                 placement="below-tabs"

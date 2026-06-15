@@ -13,6 +13,7 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import { useEditorStore } from "@/store/useEditorStore";
+import { EDITOR_MOBILE_ACTIVE_SURFACE_CLASS } from "@/lib/editor-control-visibility";
 
 export interface SceneOption {
   value: string;
@@ -57,8 +58,8 @@ function choiceMobileFieldShellClass({
 }) {
   return cn(
     "rounded-[4px] border border-border-10 bg-white px-my-12 py-my-8 transition-colors",
-    "active:bg-surface-20/30 focus-within:bg-surface-20/30",
-    isTouched && "bg-surface-20/30",
+    "active:bg-surface-20/50 focus-within:bg-surface-20/50",
+    isTouched && EDITOR_MOBILE_ACTIVE_SURFACE_CLASS,
     isIssue && "border-destructive",
   );
 }

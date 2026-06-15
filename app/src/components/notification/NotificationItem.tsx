@@ -1,6 +1,5 @@
-"use client";
-
-import React from "react";
+import { PAGE_FLUSH_CONTENT_PAD_X_CLASS } from "@/lib/page-layout";
+import { cn } from "@/lib/utils";
 import { ChevronDown } from "lucide-react";
 import type { NotificationData } from "@/types/notification";
 
@@ -34,7 +33,7 @@ export function NotificationItem({
 
   return (
     <div
-      className={`px-my-16 transition-colors hover:bg-surface-20 lg:px-my-20 ${isOpen ? "bg-surface-20" : ""}`}
+      className={cn(PAGE_FLUSH_CONTENT_PAD_X_CLASS, "transition-colors hover:bg-surface-20", isOpen && "bg-surface-20")}
     >
       <button
         type="button"

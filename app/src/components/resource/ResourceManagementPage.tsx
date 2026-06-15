@@ -13,7 +13,7 @@ import { MediaCard } from "./cards/MediaCard";
 import { AddResourceSlot } from "./cards/AddResourceSlot";
 import { BgmSection } from "./bgm/BgmSection";
 import { ConfirmDeleteModal } from "./modals/ConfirmDeleteModal";
-import { PAGE_CARD_SHELL_MOBILE_FLUSH_CLASS, PAGE_GUTTER_GAP_CLASS, PAGE_SCROLL_COLUMN_CLASS, PAGE_SUBHEADER_PAGE_SHELL_CLASS, PAGE_SUBHEADER_WITH_STICKY_CLASS } from "@/lib/page-layout";
+import { PAGE_CARD_SHELL_MOBILE_FLUSH_CLASS, PAGE_FLUSH_CONTENT_PAD_X_CLASS, PAGE_GUTTER_GAP_CLASS, PAGE_SCROLL_COLUMN_CLASS, PAGE_SUBHEADER_PAGE_SHELL_CLASS, PAGE_SUBHEADER_WITH_STICKY_CLASS } from "@/lib/page-layout";
 import { RESOURCE_THUMBNAIL_FLUID_SIZE_CLASS, RESOURCE_THUMBNAIL_GRID_CLASS } from "@/lib/thumbnail-styles";
 import { cn } from "@/lib/utils";
 import type { ImageLightboxItem } from "./ImageLightbox";
@@ -203,7 +203,7 @@ export function ResourceManagementPage() {
             <div className="flex w-full min-w-0 flex-col items-stretch gap-my-24 lg:flex-row lg:items-start">
               {showPreview && (
                 <aside className="w-full min-w-0 lg:w-[380px] lg:shrink-0 lg:sticky lg:top-6">
-                  <div className="w-full min-w-0 rounded-[4px] border border-border-10 bg-surface-10 p-my-20 max-lg:rounded-none max-lg:border-0">
+                  <div className={cn("w-full min-w-0 rounded-[4px] border border-border-10 bg-surface-10 py-my-20 max-lg:rounded-none max-lg:border-0", PAGE_FLUSH_CONTENT_PAD_X_CLASS)}>
                     <Title2
                       text="미리보기"
                       asSectionHeader

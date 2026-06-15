@@ -12,6 +12,7 @@ import {
   ANALYTICS_KEY_STAT_VALUE_CLASS,
   ANALYTICS_KEY_STATS_ROW_CLASS,
 } from "@/components/analytics/analytics-key-stats-layout";
+import { PAGE_FLUSH_CONTENT_PAD_X_CLASS } from "@/lib/page-layout";
 import { cn } from "@/lib/utils";
 import type { AnalyticsPrimaryMetric } from "@/components/analytics/AnalyticsTrendLineChart";
 import { type AnalyticsPeriodRange } from "@/components/analytics/analytics-date";
@@ -136,7 +137,7 @@ export function AnalyticsContentTab({
         </div>
 
         <div className="flex flex-col items-stretch gap-my-12 self-stretch px-0 py-my-40">
-          <p className="px-my-20 text-body3_500 text-on-surface-20">
+          <p className={cn(PAGE_FLUSH_CONTENT_PAD_X_CLASS, "text-body3_500 text-on-surface-20")}>
             {PRIMARY_LABELS[primaryMetric] ?? "조회수"} 추이
           </p>
           <AnalyticsTrendLineChart
@@ -173,7 +174,7 @@ function PopularContentsCard({
         variant="title"
         asSectionHeader
       />
-      <div className="px-my-20 pt-my-12">
+      <div className={cn(PAGE_FLUSH_CONTENT_PAD_X_CLASS, "pt-my-12")}>
         <SegmentedTextTabs
           aria-label="인기 콘텐츠 기준"
           items={[
@@ -212,7 +213,7 @@ function AttentionContentsCard({
         variant="title"
         asSectionHeader
       />
-      <div className="px-my-20 pt-my-12">
+      <div className={cn(PAGE_FLUSH_CONTENT_PAD_X_CLASS, "pt-my-12")}>
         <SegmentedTextTabs
           aria-label="주의 콘텐츠 기준"
           items={[

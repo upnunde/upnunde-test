@@ -22,9 +22,14 @@ export const MOBILE_MODAL_RADIUS_CLASS = "max-lg:rounded-[16px]";
 /** 데스크톱 모달 컨테이너 — radius-4 */
 export const DESKTOP_MODAL_RADIUS_CLASS = "lg:rounded-[4px]";
 
-/** 가이드 modal 셸 — 480px, Header/Footer 분리 프레임 */
+/** 확인·삭제 alert — max 420px, 뷰포트 좌우 40px(my-40) inset */
+export const CONFIRM_DIALOG_WIDTH_CLASS =
+  "w-full max-w-[min(420px,calc(100vw-var(--spacing-my-40)*2))]";
+
+/** 가이드 modal 셸 — Header/Footer 분리 프레임 */
 export const modalDialogContentClassName = cn(
-  "flex w-[480px] max-w-[calc(100vw-2rem)] flex-col items-stretch gap-0 overflow-hidden border-0 bg-surface-10 p-0 shadow-elevation-50",
+  "flex flex-col items-stretch gap-0 overflow-hidden border-0 bg-surface-10 p-0 shadow-elevation-50",
+  CONFIRM_DIALOG_WIDTH_CLASS,
   MOBILE_MODAL_RADIUS_CLASS,
   DESKTOP_MODAL_RADIUS_CLASS,
 );

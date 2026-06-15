@@ -35,6 +35,7 @@ import {
   editorMobileSubHeaderHideVarStyle,
   editorMobileSubHeaderShellClass,
 } from "@/lib/editor-scroll";
+import { EDITOR_MOBILE_GUTTER_X_CLASS } from "@/lib/editor-block-layout";
 import { APP_BROWSER_BG_CLASS, APP_PAGE_ROOT_CLASS } from "@/lib/mobile-viewport";
 import { APP_MAIN_PANEL_CLASS, APP_SHELL_BODY_ROW_CLASS, EDITOR_PAGE_SCROLL_CLASS } from "@/lib/page-layout";
 import { INITIAL_SCRIPT } from "@/lib/initialScript";
@@ -138,7 +139,7 @@ export default function EpisodeDetailPage() {
     EDITOR_PAGE_SCROLL_CLASS,
     isDesktop
       ? "px-0 py-my-40"
-      : cn("px-my-12 pt-my-12", EDITOR_MOBILE_SCROLL_BOTTOM_PAD_FAB_ONLY_CLASS),
+      : cn(EDITOR_MOBILE_GUTTER_X_CLASS, "max-lg:pt-my-12", EDITOR_MOBILE_SCROLL_BOTTOM_PAD_FAB_ONLY_CLASS),
   );
 
   const previewChromeHidden = editorMobilePreviewChromeHiddenClass(isDesktop, mobilePanel);
@@ -212,7 +213,7 @@ export default function EpisodeDetailPage() {
             >
               <EditorSceneTabStrip
                 onSceneClick={handleSceneClick}
-                className="w-full pl-my-16 pr-my-12"
+                className="w-full"
               />
             </div>
           ) : null}
