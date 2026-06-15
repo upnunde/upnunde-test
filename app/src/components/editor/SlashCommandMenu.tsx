@@ -114,11 +114,13 @@ export function SlashCommandMenu({
   const buttonRefs = useRef<(HTMLDivElement | null)[]>([]);
   const OPTIONS = MENU_OPTIONS;
 
-  // 기본 포커스: 메뉴 열리면 첫 항목에 포커스
+  // 팝오버만 첫 항목 포커스 — 바텀 시트는 열릴 때 하이라이트 없음
   useEffect(() => {
     buttonRefs.current = buttonRefs.current.slice(0, OPTIONS.length);
-    buttonRefs.current[0]?.focus();
-  }, [OPTIONS.length]);
+    if (presentation === "popover") {
+      buttonRefs.current[0]?.focus();
+    }
+  }, [OPTIONS.length, presentation]);
 
   /** 백드롭이 투명이라 메뉴만 닫힌 뒤에도 레이어가 남으면 호버·클릭이 전부 막힌 것처럼 보임 — 포커스 위치와 관계없이 Escape로 닫기 */
   useEffect(() => {

@@ -4,7 +4,7 @@ import { cn } from "@/lib/utils";
 /** shadcn DropdownMenuItem / CommandItem 공통 — 포커스·호버·비활성 */
 export const menuListItemInteractiveClassName = cn(
   "outline-none select-none",
-  "focus:bg-surface-20 focus:text-on-surface-10",
+  "focus-visible:bg-surface-20 focus-visible:text-on-surface-10",
   "data-[highlighted]:bg-surface-20 data-[highlighted]:text-on-surface-10",
   "lg:hover:bg-surface-20 lg:hover:text-on-surface-10",
   "focus-visible:ring-2 focus-visible:ring-inset focus-visible:ring-primary/40",
@@ -50,7 +50,7 @@ export const menuListItemCompactClassName = cn(
 );
 
 export const menuListItemDestructiveClassName =
-  "text-error-error focus:bg-error-error/10 data-[highlighted]:bg-error-error/10 lg:hover:bg-error-error/10";
+  "text-error-error focus-visible:bg-error-error/10 data-[highlighted]:bg-error-error/10 lg:hover:bg-error-error/10";
 
 /** 시트·드롭다운 스크롤 본문 래퍼 */
 export const menuListBodyClassName = "flex flex-col px-my-8 py-my-8";

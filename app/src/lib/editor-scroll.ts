@@ -239,7 +239,13 @@ export function scrollMobileEditorInputIntoView(target: HTMLElement): void {
   }
 }
 
-export function scrollEditorBlockIntoView(blockId: string): HTMLElement | null {
+export type EditorBlockScrollAlign = "start" | "center";
+
+export function scrollEditorBlockIntoView(
+  blockId: string,
+  options?: { align?: EditorBlockScrollAlign },
+): HTMLElement | null {
+  const align = options?.align ?? "start";
   const el = document.getElementById(`block-${blockId}`);
   if (!el) return null;
 
@@ -247,6 +253,30 @@ export function scrollEditorBlockIntoView(blockId: string): HTMLElement | null {
   if (!(scrollRoot instanceof HTMLElement)) return el;
 
   const elementRect = el.getBoundingClientRect();
+
+  if (align === "center") {
+    if (isMobileDocumentScrollMode()) {
+      const vv = window.visualViewport;
+      const viewportTop = vv?.offsetTop ?? 0;
+      const viewportHeight = vv?.height ?? window.innerHeight;
+      const visibleCenterY = viewportTop + viewportHeight / 2;
+      const elementCenterY = elementRect.top + elementRect.height / 2;
+      window.scrollBy({
+        top: elementCenterY - visibleCenterY,
+        behavior: "smooth",
+      });
+      return el;
+    }
+
+    const rootRect = scrollRoot.getBoundingClientRect();
+    const visibleCenterY = rootRect.top + rootRect.height / 2;
+    const elementCenterY = elementRect.top + elementRect.height / 2;
+    scrollRoot.scrollBy({
+      top: elementCenterY - visibleCenterY,
+      behavior: "smooth",
+    });
+    return el;
+  }
 
   if (isMobileDocumentScrollMode()) {
     const anchorY = getEditorScrollAnchorViewportY();

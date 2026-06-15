@@ -385,8 +385,8 @@ export function ResourcePicker({
   useEffect(() => {
     if (!isPickerType || !isOpen) return;
     optionButtonRefs.current = optionButtonRefs.current.slice(0, optionCount);
-    focusFirstOption();
-  }, [focusFirstOption, isOpen, isPickerType, optionCount]);
+    if (isDesktop) focusFirstOption();
+  }, [focusFirstOption, isDesktop, isOpen, isPickerType, optionCount]);
 
   useEffect(() => {
     if (!isPickerType || !isOpen || isDesktop) return;

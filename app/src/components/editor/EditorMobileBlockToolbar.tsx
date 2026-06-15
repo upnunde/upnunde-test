@@ -52,6 +52,8 @@ export function EditorMobileBlockToolbar({ className }: { className?: string }) 
   const canEditContent =
     focusedBlock != null && isMobileKeyboardEditableBlock(focusedBlock.type);
   const isEditingContent = mobileKeyboardEditBlockId === focusBlockId;
+  const focusedBlockHasContent = (focusedBlock?.content?.trim().length ?? 0) > 0;
+  const contentEditButtonLabel = focusedBlockHasContent ? "내용수정" : "내용입력";
   const showContentEditButton =
     !isKeyboardOpen && canEditContent && focusBlockId != null && !isEditingContent;
   const showToolbar = isEditorMobileBlockToolbarVisible({
@@ -141,10 +143,10 @@ export function EditorMobileBlockToolbar({ className }: { className?: string }) 
           size="sm"
           className="h-10 flex-1 gap-my-8 bg-white shadow-none"
           onClick={handleContentEdit}
-          aria-label="내용 수정"
+          aria-label={contentEditButtonLabel}
         >
           <Pencil className="h-4 w-4 shrink-0" aria-hidden />
-          내용수정
+          {contentEditButtonLabel}
         </Button>
       ) : null}
       <Button

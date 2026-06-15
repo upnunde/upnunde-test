@@ -24,8 +24,12 @@ export function EditorMobileIssueFloatingButton({ className }: { className?: str
     (issue: ReturnType<typeof useEditorIssues>[number]) => {
       setIssueFocus(getIssueFocusTarget(issue));
       setFocusBlockId(issue.blockId);
-      scrollEditorBlockIntoView(issue.blockId);
       setOpen(false);
+      requestAnimationFrame(() => {
+        requestAnimationFrame(() => {
+          scrollEditorBlockIntoView(issue.blockId, { align: "center" });
+        });
+      });
     },
     [setFocusBlockId, setIssueFocus],
   );
