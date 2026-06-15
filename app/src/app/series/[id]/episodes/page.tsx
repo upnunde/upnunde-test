@@ -404,7 +404,7 @@ export default function EpisodeManagementPage() {
       <Dialog open={isCreateEpisodeModalOpen} onOpenChange={setIsCreateEpisodeModalOpen}>
         <DialogContent
           presentation="auto"
-          className={cn(formDialogShellClassName, "max-lg:rounded-t-[4px] lg:rounded-[16px]")}
+          className={formDialogShellClassName}
           aria-describedby={undefined}
         >
           <div className={formDialogSheetBodyWrapperClassName}>

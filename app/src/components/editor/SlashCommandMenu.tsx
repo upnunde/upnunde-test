@@ -16,9 +16,9 @@ import {
 import type { BlockType } from "@/types/editor";
 import { MenuList, MenuListBody, MenuListItem } from "@/components/ui/menu-list";
 import {
-  MOBILE_BOTTOM_SHEET_PAD_CLASS,
-  MOBILE_BOTTOM_SHEET_PANEL_CLASS,
   MOBILE_BOTTOM_SHEET_SCRIM_CLASS,
+  MOBILE_BOTTOM_SHEET_SHELL_BASE_CLASS,
+  mobileBottomSheetMediumMaxHeightClassName,
 } from "@/components/ui/modal/modal-styles";
 import { cn } from "@/lib/utils";
 import {
@@ -229,9 +229,9 @@ export function SlashCommandMenu({
         />
         <div
           className={cn(
-            MOBILE_BOTTOM_SHEET_PANEL_CLASS,
-            "flex max-h-[min(70dvh,520px)] min-h-0 flex-col overflow-hidden rounded-t-[4px] border-t border-border-10 bg-white shadow-elevation-40",
-            MOBILE_BOTTOM_SHEET_PAD_CLASS,
+            MOBILE_BOTTOM_SHEET_SHELL_BASE_CLASS,
+            mobileBottomSheetMediumMaxHeightClassName,
+            "overflow-hidden",
           )}
           role="listbox"
           aria-label="블록 추가"

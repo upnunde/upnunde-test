@@ -48,7 +48,7 @@ export function PolicyAgreementModal({
     <Dialog open={open} onOpenChange={(isOpen) => !isOpen && handleClose()}>
       <DialogContent
         presentation="center"
-        className="flex w-[480px] max-w-[calc(100vw-2rem)] flex-col items-center gap-my-20 rounded-[4px] border border-border-10 bg-white p-my-24 pt-my-24 shadow-elevation-40 lg:pt-my-40"
+        className="flex w-[480px] max-w-[calc(100vw-2rem)] flex-col items-center gap-my-20 max-lg:rounded-[16px] lg:rounded-[4px] border border-border-10 bg-white p-my-24 pt-my-24 shadow-elevation-40 lg:pt-my-40"
         aria-describedby="policy-agreement-description"
       >
         <DialogHeader className="text-center">

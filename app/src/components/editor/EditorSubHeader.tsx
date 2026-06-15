@@ -20,7 +20,7 @@ import {
   DropdownMenuItem,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
-import { mobileBottomSheetMaxHeightClassName, MOBILE_BOTTOM_SHEET_PAD_CLASS, MOBILE_BOTTOM_SHEET_PANEL_CLASS, MOBILE_BOTTOM_SHEET_SCRIM_CLASS } from "@/components/ui/modal/modal-styles";
+import { MOBILE_BOTTOM_SHEET_SCRIM_CLASS, MOBILE_BOTTOM_SHEET_SHELL_BASE_CLASS, mobileBottomSheetLargeMaxHeightClassName } from "@/components/ui/modal/modal-styles";
 import { menuListItemFormClassName } from "@/components/ui/menu-list";
 import { useClientMounted } from "@/hooks/useClientMounted";
 import { useIsLgUp } from "@/hooks/useMediaQuery";
@@ -182,6 +182,7 @@ export function EditorSubHeader({
       focusBlockId: null,
       mobileKeyboardEditBlockId: null,
       mobileContentEditPromptBlockId: null,
+      mobileFocusChoiceIndex: null,
     });
     setSavedSnapshot(JSON.stringify(nextBlocks));
     setIsHistoryEnabled(false);
@@ -427,10 +428,8 @@ export function EditorSubHeader({
             />
             <div
               className={cn(
-                MOBILE_BOTTOM_SHEET_PANEL_CLASS,
-                "flex min-h-0 flex-col rounded-t-[4px] border-t border-border-10 bg-white shadow-elevation-40",
-                MOBILE_BOTTOM_SHEET_PAD_CLASS,
-                mobileBottomSheetMaxHeightClassName,
+                MOBILE_BOTTOM_SHEET_SHELL_BASE_CLASS,
+                mobileBottomSheetLargeMaxHeightClassName,
               )}
               role="dialog"
               aria-modal="true"

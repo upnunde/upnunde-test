@@ -40,7 +40,7 @@ export function EpisodePromptReferenceModal({
 }: EpisodePromptReferenceModalProps) {
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
-      <DialogContent className="w-full max-lg:max-w-none max-lg:rounded-t-[4px] lg:max-w-[760px] min-w-0 border-0 bg-transparent p-0 shadow-none">
+      <DialogContent className="w-full max-lg:max-w-none max-lg:rounded-t-[16px] lg:max-w-[760px] min-w-0 border-0 bg-transparent p-0 shadow-none">
         <DialogHeader className="sr-only">
           <DialogTitle>에피소드 기준 프롬프트</DialogTitle>
         </DialogHeader>

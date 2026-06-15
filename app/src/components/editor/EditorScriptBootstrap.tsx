@@ -37,6 +37,7 @@ export function EditorScriptBootstrap({
       focusBlockId: null,
       mobileKeyboardEditBlockId: null,
       mobileContentEditPromptBlockId: null,
+      mobileFocusChoiceIndex: null,
       issueFocus: null,
     });
   }, [routeKey, startEmpty]);

@@ -143,7 +143,7 @@ export function ImportCharacterDialog({
 
   return (
     <Dialog open={open} onOpenChange={handleDialogOpenChange}>
-      <DialogContent className="flex w-full max-h-[90vh] min-h-0 max-lg:max-w-none flex-col gap-0 overflow-hidden rounded-[4px] border border-border-10 bg-white p-0 lg:max-w-2xl">
+      <DialogContent className="flex w-full max-h-[90vh] min-h-0 max-lg:max-w-none flex-col gap-0 overflow-hidden max-lg:rounded-[16px] lg:rounded-[4px] border border-border-10 bg-white p-0 lg:max-w-2xl">
         <div className="border-b border-border-10/5 px-my-20 py-my-12">
           <DialogTitle className="text-body1_700 text-on-surface-10">{title}</DialogTitle>
           <p className="mt-1 text-body3_400 text-on-surface-30">{description}</p>

@@ -107,6 +107,8 @@ interface EditorState {
   mobileKeyboardEditBlockId: string | null;
   /** 모바일: 텍스트 영역 탭 후 「내용수정」 버튼 노출 대상 블록 id */
   mobileContentEditPromptBlockId: string | null;
+  /** 모바일: 선택지 블록에서 편집 대상 choice 행 index */
+  mobileFocusChoiceIndex: number | null;
   issueFocus:
     | {
         blockId: string;
@@ -129,6 +131,7 @@ interface EditorActions {
   beginMobileKeyboardContentEdit: (id: string) => void;
   setMobileKeyboardEditBlockId: (id: string | null) => void;
   setMobileContentEditPromptBlockId: (id: string | null) => void;
+  setMobileFocusChoiceIndex: (index: number | null) => void;
   setIssueFocus: (issue: EditorState["issueFocus"]) => void;
   clearIssueFocus: () => void;
   setCurrentView: (view: CurrentView) => void;
@@ -167,6 +170,7 @@ export const useEditorStore = create<EditorStore>((set) => ({
   focusBlockId: null,
   mobileKeyboardEditBlockId: null,
   mobileContentEditPromptBlockId: null,
+  mobileFocusChoiceIndex: null,
   issueFocus: null,
   /** 기본은 원고 에디터; 에피소드 생성은 `/editor?view=form`으로만 전환 */
   currentView: "editor",
@@ -201,6 +205,8 @@ export const useEditorStore = create<EditorStore>((set) => ({
 
   setMobileContentEditPromptBlockId: (mobileContentEditPromptBlockId) =>
     set({ mobileContentEditPromptBlockId }),
+
+  setMobileFocusChoiceIndex: (mobileFocusChoiceIndex) => set({ mobileFocusChoiceIndex }),
 
   setIssueFocus: (issueFocus) => set({ issueFocus }),
 

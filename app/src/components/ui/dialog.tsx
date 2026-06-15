@@ -4,6 +4,11 @@ import * as React from "react";
 import { Dialog as DialogPrimitive } from "radix-ui";
 
 import { cn } from "@/lib/utils";
+import {
+  MOBILE_MODAL_RADIUS_CLASS,
+  MOBILE_MODAL_TOP_RADIUS_CLASS,
+  DESKTOP_MODAL_RADIUS_CLASS,
+} from "@/components/ui/modal/modal-styles";
 
 const Dialog = DialogPrimitive.Root;
 const DialogTrigger = DialogPrimitive.Trigger;
@@ -30,7 +35,9 @@ const dialogContentAnimationClass =
 
 /** 알림·경고 — 항상 중앙 모달 */
 const dialogContentCenterClass = cn(
-  "fixed left-1/2 top-1/2 z-50 flex w-full max-w-lg max-h-[calc(100dvh-160px)] min-h-0 -translate-x-1/2 -translate-y-1/2 flex-col gap-my-16 overflow-y-auto rounded-[4px] bg-background p-my-24 shadow-elevation-50 outline-none focus:outline-none",
+  "fixed left-1/2 top-1/2 z-50 flex w-full max-w-lg max-h-[calc(100dvh-160px)] min-h-0 -translate-x-1/2 -translate-y-1/2 flex-col gap-my-16 overflow-y-auto bg-background p-my-24 shadow-elevation-50 outline-none focus:outline-none",
+  MOBILE_MODAL_RADIUS_CLASS,
+  DESKTOP_MODAL_RADIUS_CLASS,
   dialogContentAnimationClass,
   "data-[state=closed]:zoom-out-95 data-[state=open]:zoom-in-95",
 );
@@ -39,8 +46,10 @@ const dialogContentCenterClass = cn(
 const dialogContentAutoClass = cn(
   "fixed z-50 flex w-full min-h-0 flex-col bg-background shadow-elevation-50 outline-none focus:outline-none",
   dialogContentAnimationClass,
-  "max-lg:inset-x-0 max-lg:bottom-[var(--app-vv-bottom,0px)] max-lg:top-auto max-lg:max-h-[min(92dvh,900px)] max-lg:translate-x-0 max-lg:translate-y-0 max-lg:gap-0 max-lg:overflow-hidden max-lg:rounded-t-[4px] max-lg:rounded-b-none max-lg:border-t border-border-10 max-lg:p-0 max-lg:pb-[env(safe-area-inset-bottom,0px)] max-lg:data-[state=open]:slide-in-from-bottom max-lg:data-[state=closed]:slide-out-to-bottom",
-  "lg:left-1/2 lg:top-1/2 lg:max-w-lg lg:max-h-[calc(100dvh-160px)] lg:-translate-x-1/2 lg:-translate-y-1/2 lg:gap-my-16 lg:overflow-y-auto lg:rounded-[4px] lg:border-t-0 lg:p-my-24 lg:shadow-elevation-50 lg:pb-my-24",
+  "max-lg:inset-x-0 max-lg:bottom-[var(--app-vv-bottom,0px)] max-lg:top-auto max-lg:max-h-[min(92dvh,900px)] max-lg:translate-x-0 max-lg:translate-y-0 max-lg:gap-0 max-lg:overflow-hidden max-lg:rounded-b-none max-lg:border-t border-border-10 max-lg:p-0 max-lg:pb-[env(safe-area-inset-bottom,0px)] max-lg:data-[state=open]:slide-in-from-bottom max-lg:data-[state=closed]:slide-out-to-bottom",
+  MOBILE_MODAL_TOP_RADIUS_CLASS,
+  "lg:left-1/2 lg:top-1/2 lg:max-w-lg lg:max-h-[calc(100dvh-160px)] lg:-translate-x-1/2 lg:-translate-y-1/2 lg:gap-my-16 lg:overflow-y-auto lg:border-t-0 lg:p-my-24 lg:shadow-elevation-50 lg:pb-my-24",
+  DESKTOP_MODAL_RADIUS_CLASS,
   "lg:data-[state=closed]:zoom-out-95 lg:data-[state=open]:zoom-in-95",
 );
 

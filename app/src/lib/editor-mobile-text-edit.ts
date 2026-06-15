@@ -17,6 +17,22 @@ export function isMobileKeyboardEditableBlock(type: BlockType): boolean {
   return (MOBILE_KEYBOARD_EDITABLE_BLOCK_TYPES as readonly BlockType[]).includes(type);
 }
 
+/** 모바일 「내용입력」/「내용수정」 라벨 — 선택지는 활성 행의 text 기준 */
+export function mobileEditableBlockHasContent(
+  block: { type: BlockType; content?: string; data?: { choices?: { text?: string; isAiMode?: boolean }[] } } | null | undefined,
+  choiceIndex: number | null,
+): boolean {
+  if (!block) return false;
+  if (block.type === "choice") {
+    const choices = block.data?.choices ?? [];
+    const idx = choiceIndex ?? 0;
+    const choice = choices[idx];
+    if (!choice || choice.isAiMode) return false;
+    return (choice.text?.trim().length ?? 0) > 0;
+  }
+  return (block.content?.trim().length ?? 0) > 0;
+}
+
 /** 「내용수정」 시 포커스할 입력란 (본문 탭 시 기억) */
 let pendingMobileContentEditInput: HTMLElement | null = null;
 

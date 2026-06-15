@@ -784,7 +784,7 @@ export default function MonetizationSettlementsPage() {
               </div>
             </div>
       <Dialog open={!!taxDetailTarget} onOpenChange={(open) => !open && setTaxDetailTarget(null)}>
-        <DialogContent className="w-full max-lg:max-w-none lg:w-[560px] lg:max-w-[calc(100vw-2rem)] rounded-[4px] border border-border-10 bg-white p-0">
+        <DialogContent className="w-full max-lg:max-w-none lg:w-[560px] lg:max-w-[calc(100vw-2rem)] max-lg:rounded-[16px] lg:rounded-[4px] border border-border-10 bg-white p-0">
           <div className="border-b border-divider-10 px-my-24 py-my-16">
             <DialogTitle className="text-heading5_700 text-on-surface-10">
               세금 계산 내역
@@ -864,7 +864,7 @@ export default function MonetizationSettlementsPage() {
         </DialogContent>
       </Dialog>
       <Dialog open={!!rejectionReasonTarget} onOpenChange={(open) => !open && setRejectionReasonTarget(null)}>
-        <DialogContent presentation="center" className="w-[420px] max-w-[calc(100vw-2rem)] rounded-[4px] border border-border-10 bg-white p-0">
+        <DialogContent presentation="center" className="w-[420px] max-w-[calc(100vw-2rem)] max-lg:rounded-[16px] lg:rounded-[4px] border border-border-10 bg-white p-0">
           <div className="border-b border-divider-10 px-my-20 py-my-12">
             <DialogTitle className="text-body1_700 text-on-surface-10">반려 사유</DialogTitle>
           </div>
@@ -886,7 +886,7 @@ export default function MonetizationSettlementsPage() {
         </DialogContent>
       </Dialog>
       <Dialog open={datePickerOpen} onOpenChange={setDatePickerOpen}>
-        <DialogContent className="w-full max-lg:max-w-none lg:w-[420px] lg:max-w-[calc(100vw-2rem)] rounded-[4px] border border-border-10 bg-white p-0">
+        <DialogContent className="w-full max-lg:max-w-none lg:w-[420px] lg:max-w-[calc(100vw-2rem)] max-lg:rounded-[16px] lg:rounded-[4px] border border-border-10 bg-white p-0">
           <div className="border-b border-divider-10 px-my-20 py-my-12">
             <DialogTitle className="text-body1_700 text-on-surface-10">기간 선택</DialogTitle>
             <p className="mt-1 text-body3_400 text-on-surface-30">조회할 신청일 기간을 설정해 주세요.</p>

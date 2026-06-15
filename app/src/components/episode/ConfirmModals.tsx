@@ -48,9 +48,9 @@ export function PublishConfirmModal({
         }
       }}
     >
-      <DialogContent presentation="center" className="w-[480px] max-w-[calc(100vw-2rem)] p-0 gap-0 bg-surface-10 rounded-[4px] shadow-elevation-50 border-0 outline-none focus:outline-none">
+      <DialogContent presentation="center" className="w-[480px] max-w-[calc(100vw-2rem)] p-0 gap-0 bg-surface-10 shadow-elevation-50 border-0 outline-none focus:outline-none max-lg:rounded-[16px] lg:rounded-[4px]">
         {/* 상단: 제목 + 부제 (가이드 레이아웃) */}
-        <div className="self-stretch px-my-24 pt-my-40 pb-my-16 bg-surface-10 rounded-t-[4px] flex flex-col justify-start items-center gap-my-20">
+        <div className="self-stretch px-my-24 pt-my-40 pb-my-16 bg-surface-10 max-lg:rounded-t-[16px] lg:rounded-t-[4px] flex flex-col justify-start items-center gap-my-20">
           <div className="self-stretch flex flex-col justify-center items-center gap-my-8">
             <DialogTitle asChild>
               <h2 className="text-center text-on-surface-10 text-heading2_700 font-['Pretendard_JP']">
@@ -96,7 +96,7 @@ export function PublishConfirmModal({
         </div>
 
         {/* 하단: 버튼 영역 (가이드 레이아웃) */}
-        <div className="self-stretch rounded-b-[4px] flex flex-col justify-start items-start overflow-hidden bg-surface-10">
+        <div className="self-stretch max-lg:rounded-b-[16px] lg:rounded-b-[4px] flex flex-col justify-start items-start overflow-hidden bg-surface-10">
           <div className="self-stretch px-my-24 pt-my-8 pb-my-20 bg-surface-10 inline-flex justify-end items-center gap-my-8">
             <DialogClose asChild>
               <Button variant="outline" size="lg" className="min-w-20">

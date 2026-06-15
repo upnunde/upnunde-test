@@ -1,7 +1,7 @@
 "use client";
 
-import { useCallback, useEffect, useRef } from "react";
-import { Trash2 } from "lucide-react";
+import { useCallback, useEffect, useRef, useState } from "react";
+import { ChevronDown, Trash2 } from "lucide-react";
 import type { ChoiceItem } from "@/types/editor";
 import { Button } from "@/components/ui/button";
 import { useMobileBlockTextEdit } from "@/hooks/useMobileBlockTextEdit";
@@ -47,6 +47,22 @@ function createAiChoice(): ChoiceItem {
   };
 }
 
+/** 모바일 선택지 내용 입력 영역 — 기본 흰색, 터치·선택 시 surface */
+function choiceMobileFieldShellClass({
+  isTouched,
+  isIssue,
+}: {
+  isTouched: boolean;
+  isIssue?: boolean;
+}) {
+  return cn(
+    "rounded-[4px] border border-border-10 bg-white px-my-12 py-my-8 transition-colors",
+    "active:bg-surface-20/30 focus-within:bg-surface-20/30",
+    isTouched && "bg-surface-20/30",
+    isIssue && "border-destructive",
+  );
+}
+
 /** 선택지 내용 전용 텍스트 필드. 영역 고정 확장이 아니라 텍스트 줄 수에 따라 높이만 가변 확장 */
 function ChoiceTextField({
   blockId,
@@ -54,17 +70,35 @@ function ChoiceTextField({
   onChange,
   placeholder,
   className,
+  onActivate,
 }: {
   blockId: string;
   value: string;
   onChange: (value: string) => void;
   placeholder: string;
   className?: string;
+  onActivate?: () => void;
 }) {
   const textareaRef = useRef<HTMLTextAreaElement>(null);
   const { readOnly, onContentFocus, onContentPointerDown } = useMobileBlockTextEdit(
     blockId,
     textareaRef,
+  );
+
+  const handlePointerDown = useCallback(
+    (e: React.PointerEvent<HTMLTextAreaElement>) => {
+      onActivate?.();
+      onContentPointerDown(e);
+    },
+    [onActivate, onContentPointerDown],
+  );
+
+  const handleFocus = useCallback(
+    (e: React.FocusEvent<HTMLTextAreaElement>) => {
+      onActivate?.();
+      onContentFocus(e);
+    },
+    [onActivate, onContentFocus],
   );
 
   const adjustHeight = useCallback(() => {
@@ -84,8 +118,8 @@ function ChoiceTextField({
       ref={textareaRef}
       value={value}
       onChange={(e) => onChange(e.target.value)}
-      onFocus={onContentFocus}
-      onPointerDown={onContentPointerDown}
+      onFocus={handleFocus}
+      onPointerDown={handlePointerDown}
       readOnly={readOnly}
       onInput={adjustHeight}
       placeholder={placeholder}
@@ -99,30 +133,47 @@ function ChoiceTextField({
   );
 }
 
-function ChoiceRow({
-  blockId,
-  index,
-  choice,
-  onUpdate,
-  onRemove,
-  sceneOptions = [],
-  showBottomBorder = true,
+function SwitchToggle({
+  checked,
+  onCheckedChange,
 }: {
-  blockId: string;
-  index: number;
-  choice: ChoiceItem;
-  onUpdate: (patch: Partial<ChoiceItem>) => void;
-  onRemove: () => void;
-  sceneOptions: SceneOption[];
-  showBottomBorder?: boolean;
+  checked: boolean;
+  onCheckedChange: (checked: boolean) => void;
 }) {
-  const isAiMode = choice.isAiMode === true;
+  return (
+    <button
+      type="button"
+      role="switch"
+      aria-checked={checked}
+      onClick={() => onCheckedChange(!checked)}
+      className={cn(
+        "inline-flex shrink-0 items-center rounded-full transition-colors focus:outline-none focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-2",
+        "h-my-32 w-[52px] p-my-4",
+        "lg:h-my-24 lg:w-[40px] lg:p-0.5",
+        checked ? "bg-primary" : "bg-surface-20",
+      )}
+    >
+      <span
+        className={cn(
+          "pointer-events-none rounded-full bg-white shadow-[0_1px_2px_rgba(0,0,0,0.16)] transition-transform",
+          "h-6 w-6",
+          "lg:h-5 lg:w-5",
+          checked ? "translate-x-5 lg:translate-x-4" : "translate-x-0",
+        )}
+      />
+    </button>
+  );
+}
+
+function useChoiceRowIssueState(
+  blockId: string,
+  index: number,
+  choice: ChoiceItem,
+) {
   const issueFocus = useEditorStore((s) => s.issueFocus);
   const clearIssueFocus = useEditorStore((s) => s.clearIssueFocus);
-  const selectedSceneLabel =
-    sceneOptions.find((opt) => opt.value === choice.nextScene)?.label ?? "장면 선택";
-  const isSceneUnselected = !choice.nextScene?.trim();
-  const isIssueFocusedChoice = issueFocus?.blockId === blockId && issueFocus?.choiceIndex === index;
+  const isIssueFocusedChoice =
+    issueFocus?.blockId === blockId && issueFocus?.choiceIndex === index;
   const isTextIssueFocused =
     isIssueFocusedChoice && issueFocus?.field === "text";
   const isNextSceneIssueFocused =
@@ -145,6 +196,219 @@ function ChoiceRow({
     clearIssueFocus,
   ]);
 
+  return {
+    clearIssueFocus,
+    isTextIssueFocused,
+    isNextSceneIssueFocused,
+  };
+}
+
+function ChoiceSceneSelect({
+  value,
+  onChange,
+  sceneOptions,
+  selectedSceneLabel,
+  isSceneUnselected,
+  isNextSceneIssueFocused,
+  className,
+  variant = "field",
+}: {
+  value: string;
+  onChange: (nextScene: string) => void;
+  sceneOptions: SceneOption[];
+  selectedSceneLabel: string;
+  isSceneUnselected: boolean;
+  isNextSceneIssueFocused: boolean;
+  className?: string;
+  variant?: "field" | "table";
+}) {
+  const isTable = variant === "table";
+
+  return (
+    <div className={cn("relative min-w-0", className)}>
+      <select
+        value={value}
+        onChange={(e) => onChange(e.target.value)}
+        title={selectedSceneLabel}
+        className={cn(
+          "w-full min-w-0 appearance-none text-body3_400 outline-none focus:outline-none focus:ring-0 focus:ring-offset-0",
+          "overflow-hidden text-ellipsis whitespace-nowrap",
+          isTable
+            ? "h-8 rounded-md border-0 bg-transparent px-0 py-my-4 pr-my-8"
+            : "h-9 rounded-[4px] border border-border-10 bg-white py-0 pl-my-12 pr-my-32",
+          isSceneUnselected ? "text-on-surface-30" : "text-on-surface-10",
+          isNextSceneIssueFocused &&
+            (isTable ? "text-destructive" : "border-destructive text-destructive")
+        )}
+      >
+        <option value="">장면 선택</option>
+        {sceneOptions.map((opt) => (
+          <option key={opt.value} value={opt.value}>
+            {opt.label}
+          </option>
+        ))}
+      </select>
+      {!isTable ? (
+        <ChevronDown
+          aria-hidden
+          className="pointer-events-none absolute right-my-12 top-1/2 h-4 w-4 -translate-y-1/2 text-on-surface-30"
+        />
+      ) : null}
+    </div>
+  );
+}
+
+function ChoiceRowMobile({
+  blockId,
+  index,
+  choice,
+  onUpdate,
+  onRemove,
+  sceneOptions = [],
+  showBottomBorder = true,
+  canRemove,
+  isContentTouched,
+  onSelectContent,
+}: {
+  blockId: string;
+  index: number;
+  choice: ChoiceItem;
+  onUpdate: (patch: Partial<ChoiceItem>) => void;
+  onRemove: () => void;
+  sceneOptions: SceneOption[];
+  showBottomBorder?: boolean;
+  canRemove: boolean;
+  isContentTouched: boolean;
+  onSelectContent: () => void;
+}) {
+  const isAiMode = choice.isAiMode === true;
+  const selectedSceneLabel =
+    sceneOptions.find((opt) => opt.value === choice.nextScene)?.label ?? "장면 선택";
+  const isSceneUnselected = !choice.nextScene?.trim();
+  const { clearIssueFocus, isTextIssueFocused, isNextSceneIssueFocused } =
+    useChoiceRowIssueState(blockId, index, choice);
+
+  return (
+    <div
+      className={cn(
+        "flex flex-col gap-my-12 px-my-12 py-my-12",
+        showBottomBorder && "border-b border-border-10",
+      )}
+      data-choice-id={choice.id}
+    >
+      <div className="flex items-center justify-between gap-my-8">
+        <span
+          className={cn(
+            "text-caption1_500",
+            isContentTouched ? "text-primary" : "text-on-surface-30",
+          )}
+        >
+          선택 {index + 1}
+        </span>
+        <div className="flex items-center gap-my-8">
+          {choice.isPaid ? (
+            <span className="inline-flex h-5 items-center rounded bg-primary/12 px-my-8 text-caption2_500 text-primary">
+              유료
+            </span>
+          ) : null}
+          {canRemove ? (
+            <Button
+              type="button"
+              variant="ghost"
+              size="icon"
+              onClick={onRemove}
+              className="shrink-0 text-on-surface-30 hover:bg-red-50 hover:text-red-600"
+              aria-label="선택지 삭제"
+            >
+              <Trash2 className="h-4 w-4" aria-hidden />
+            </Button>
+          ) : null}
+        </div>
+      </div>
+
+      <div className="flex flex-col gap-my-4">
+        <span className="text-caption1_400 text-on-surface-30">내용</span>
+        {isAiMode ? (
+          <div className="rounded-[4px] border border-primary/20 bg-primary/5 px-my-12 py-my-8">
+            <span className="text-body3_500 text-primary">✨ AI 모드로 직접 대화</span>
+          </div>
+        ) : (
+          <div
+            className={choiceMobileFieldShellClass({
+              isTouched: isContentTouched,
+              isIssue: isTextIssueFocused,
+            })}
+            onPointerDown={onSelectContent}
+          >
+            <ChoiceTextField
+              blockId={blockId}
+              value={choice.text}
+              onChange={(text) => {
+                onUpdate({ text });
+                if (isTextIssueFocused && text.trim()) {
+                  clearIssueFocus();
+                }
+              }}
+              placeholder="선택지 내용"
+              onActivate={onSelectContent}
+              className={isTextIssueFocused ? "text-destructive placeholder:text-destructive/60" : ""}
+            />
+          </div>
+        )}
+      </div>
+
+      <div className="flex flex-col gap-my-4">
+        <span className="text-caption1_400 text-on-surface-30">장면 전환</span>
+        <ChoiceSceneSelect
+          value={choice.nextScene}
+          onChange={(nextScene) => {
+            onUpdate({ nextScene });
+            if (isNextSceneIssueFocused && nextScene.trim()) {
+              clearIssueFocus();
+            }
+          }}
+          sceneOptions={sceneOptions}
+          selectedSceneLabel={selectedSceneLabel}
+          isSceneUnselected={isSceneUnselected}
+          isNextSceneIssueFocused={isNextSceneIssueFocused}
+        />
+      </div>
+
+      <div className="flex items-center justify-between gap-my-12">
+        <span className="text-caption1_400 text-on-surface-30">유료 전환</span>
+        <SwitchToggle
+          checked={choice.isPaid}
+          onCheckedChange={(checked) => onUpdate({ isPaid: checked })}
+        />
+      </div>
+    </div>
+  );
+}
+
+function ChoiceRowDesktop({
+  blockId,
+  index,
+  choice,
+  onUpdate,
+  onRemove,
+  sceneOptions = [],
+  showBottomBorder = true,
+}: {
+  blockId: string;
+  index: number;
+  choice: ChoiceItem;
+  onUpdate: (patch: Partial<ChoiceItem>) => void;
+  onRemove: () => void;
+  sceneOptions: SceneOption[];
+  showBottomBorder?: boolean;
+}) {
+  const isAiMode = choice.isAiMode === true;
+  const selectedSceneLabel =
+    sceneOptions.find((opt) => opt.value === choice.nextScene)?.label ?? "장면 선택";
+  const isSceneUnselected = !choice.nextScene?.trim();
+  const { clearIssueFocus, isTextIssueFocused, isNextSceneIssueFocused } =
+    useChoiceRowIssueState(blockId, index, choice);
+
   return (
     <div
       className={cn(
@@ -153,16 +417,12 @@ function ChoiceRow({
       )}
       data-choice-id={choice.id}
     >
-      {/* Col 1: Label */}
       <div className="flex min-h-9 w-[80px] shrink-0 self-stretch items-center border-r border-border-10 px-my-12 py-0 text-body3_400 text-on-surface-30">
         선택 {index + 1}
       </div>
-      {/* Col 2: Content - 텍스트 필드 분리, 줄 길이에 따라 가변 확장 */}
       <div className="flex min-h-9 min-w-[200px] flex-1 self-stretch items-center border-r border-border-10 px-my-12 py-my-4">
         {isAiMode ? (
-          <span className="text-body3_500 text-primary">
-            ✨ AI 모드로 직접 대화
-          </span>
+          <span className="text-body3_500 text-primary">✨ AI 모드로 직접 대화</span>
         ) : (
           <ChoiceTextField
             blockId={blockId}
@@ -178,33 +438,23 @@ function ChoiceRow({
           />
         )}
       </div>
-      {/* Col 3: 장면 전환 드롭다운 */}
       <div className="flex min-h-9 w-[200px] min-w-[160px] max-w-[200px] shrink-0 self-stretch items-center border-r border-border-10 px-my-12 py-0">
-        <select
+        <ChoiceSceneSelect
           value={choice.nextScene}
-          onChange={(e) => {
-            const nextScene = e.target.value;
+          onChange={(nextScene) => {
             onUpdate({ nextScene });
             if (isNextSceneIssueFocused && nextScene.trim()) {
               clearIssueFocus();
             }
           }}
-          title={selectedSceneLabel}
-          className={cn(
-            "h-8 w-full min-w-0 rounded-md border-0 bg-transparent px-0 py-my-4 pr-my-8 text-body3_400 overflow-hidden text-ellipsis whitespace-nowrap outline-none focus:outline-none focus:ring-0 focus:ring-offset-0",
-            isSceneUnselected ? "text-on-surface-30" : "text-on-surface-10",
-            isNextSceneIssueFocused && "text-destructive"
-          )}
-        >
-          <option value="">장면 선택</option>
-          {sceneOptions.map((opt) => (
-            <option key={opt.value} value={opt.value}>
-              {opt.label}
-            </option>
-          ))}
-        </select>
+          sceneOptions={sceneOptions}
+          selectedSceneLabel={selectedSceneLabel}
+          isSceneUnselected={isSceneUnselected}
+          isNextSceneIssueFocused={isNextSceneIssueFocused}
+          variant="table"
+          className="w-full"
+        />
       </div>
-      {/* Col 4: Actions */}
       <div className="flex min-h-9 w-[120px] min-w-[100px] max-w-[120px] shrink-0 self-stretch items-center justify-between gap-my-8 px-my-12 py-0">
         <SwitchToggle
           checked={choice.isPaid}
@@ -213,41 +463,13 @@ function ChoiceRow({
         <button
           type="button"
           onClick={onRemove}
-          className="p-my-8 rounded text-on-surface-30 max-lg:hidden opacity-0 transition-opacity lg:group-hover/choice-row:opacity-100 lg:group-focus-within/choice-row:opacity-100 lg:hover:text-red-600 lg:hover:bg-red-50"
+          className="rounded p-my-8 text-on-surface-30 opacity-0 transition-opacity lg:group-hover/choice-row:opacity-100 lg:group-focus-within/choice-row:opacity-100 lg:hover:bg-red-50 lg:hover:text-red-600"
           aria-label="선택지 삭제"
         >
           <Trash2 className="h-4 w-4" />
         </button>
       </div>
     </div>
-  );
-}
-
-function SwitchToggle({
-  checked,
-  onCheckedChange,
-}: {
-  checked: boolean;
-  onCheckedChange: (checked: boolean) => void;
-}) {
-  return (
-    <button
-      type="button"
-      role="switch"
-      aria-checked={checked}
-      onClick={() => onCheckedChange(!checked)}
-      className={cn(
-        "relative inline-flex h-5 w-[34px] shrink-0 rounded-full transition-colors focus:outline-none focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-2",
-        checked ? "bg-primary" : "bg-surface-20"
-      )}
-    >
-      <span
-        className={cn(
-        "pointer-events-none inline-block h-4 w-4 rounded-full bg-white ring-0 transition-transform mt-0.5",
-          checked ? "translate-x-4" : "translate-x-0.5"
-        )}
-      />
-    </button>
   );
 }
 
@@ -284,7 +506,6 @@ export function ChoiceBlockTable({
     [choices, onChange]
   );
 
-  // Task 3: Insert new normal choice BEFORE AI mode if present (AI always last)
   const handleAddNormalChoice = useCallback(() => {
     const newChoice = createEmptyChoice();
     const aiIndex = choices.findIndex((c) => c.isAiMode);
@@ -297,7 +518,6 @@ export function ChoiceBlockTable({
     onChange(next);
   }, [choices, onChange]);
 
-  // Task 3: Add AI choice at the very end; only one AI mode allowed
   const handleAddAiChoice = useCallback(() => {
     const hasAi = choices.some((c) => c.isAiMode);
     if (hasAi) return;
@@ -307,42 +527,91 @@ export function ChoiceBlockTable({
 
   const hasAiChoice = choices.some((c) => c.isAiMode);
   const isAtMaxChoices = choices.length >= 4;
+  const canRemoveChoice = choices.length > 2;
+  const focusBlockId = useEditorStore((s) => s.focusBlockId);
+  const issueFocus = useEditorStore((s) => s.issueFocus);
+  const setMobileFocusChoiceIndex = useEditorStore((s) => s.setMobileFocusChoiceIndex);
+  const isBlockFocused = focusBlockId === blockId;
+  const [activeChoiceId, setActiveChoiceId] = useState<string | null>(null);
+
+  useEffect(() => {
+    if (!isBlockFocused) {
+      setActiveChoiceId(null);
+      setMobileFocusChoiceIndex(null);
+      return;
+    }
+    if (
+      issueFocus?.blockId === blockId &&
+      issueFocus.choiceIndex != null &&
+      choices[issueFocus.choiceIndex]
+    ) {
+      setActiveChoiceId(choices[issueFocus.choiceIndex].id);
+      setMobileFocusChoiceIndex(issueFocus.choiceIndex);
+    }
+  }, [isBlockFocused, issueFocus, blockId, choices, setMobileFocusChoiceIndex]);
 
   return (
     <div
       className={cn(
-        "border border-border-10 rounded-md bg-white overflow-hidden",
+        "overflow-hidden rounded-md border border-border-10 bg-white",
         className
       )}
       data-block-id={blockId}
     >
-      <div className="max-lg:overflow-x-auto max-lg:overscroll-x-contain">
-        <div className="max-lg:min-w-[600px]">
-          {/* Header */}
-          <div className="flex border-b border-border-10 bg-surface-20/80 text-on-surface-30 text-caption1_500 min-h-8">
-            <div className="w-20 shrink-0 px-my-12 flex items-center border-r border-border-10">선택</div>
-            <div className="flex-1 min-w-[200px] px-my-12 flex items-center border-r border-border-10">내용</div>
-            <div className="w-[200px] min-w-[160px] max-w-[200px] shrink-0 px-my-12 flex items-center border-r border-border-10">장면 전환</div>
-            <div className="w-[120px] min-w-[100px] max-w-[120px] shrink-0 px-my-12 flex items-center">유료 전환</div>
-          </div>
-          {/* Rows */}
-          {choices.map((choice, index) => (
-            <ChoiceRow
-              blockId={blockId}
-              key={choice.id}
-              index={index}
-              choice={choice}
-              onUpdate={(patch) => handleUpdate(index, patch)}
-              onRemove={() => handleRemove(index)}
-              sceneOptions={sceneOptions}
-              showBottomBorder={index < choices.length - 1 || !isAtMaxChoices}
-            />
-          ))}
-        </div>
+      {/* 모바일: 카드형 스택 */}
+      <div className="lg:hidden">
+        {choices.map((choice, index) => (
+          <ChoiceRowMobile
+            blockId={blockId}
+            key={choice.id}
+            index={index}
+            choice={choice}
+            onUpdate={(patch) => handleUpdate(index, patch)}
+            onRemove={() => handleRemove(index)}
+            sceneOptions={sceneOptions}
+            showBottomBorder={index < choices.length - 1}
+            canRemove={canRemoveChoice}
+            isContentTouched={isBlockFocused && activeChoiceId === choice.id}
+            onSelectContent={() => {
+              setActiveChoiceId(choice.id);
+              setMobileFocusChoiceIndex(index);
+            }}
+          />
+        ))}
       </div>
-      {/* Footer: Task 4 - Dropdown with "선택지 추가" and "✨ AI 모드로 직접 대화" */}
+
+      {/* 데스크톱: 테이블 */}
+      <div className="hidden lg:block">
+        <div className="flex min-h-8 border-b border-border-10 bg-surface-20/80 text-caption1_500 text-on-surface-30">
+          <div className="flex w-20 shrink-0 items-center border-r border-border-10 px-my-12">
+            선택
+          </div>
+          <div className="flex min-w-[200px] flex-1 items-center border-r border-border-10 px-my-12">
+            내용
+          </div>
+          <div className="flex w-[200px] min-w-[160px] max-w-[200px] shrink-0 items-center border-r border-border-10 px-my-12">
+            장면 전환
+          </div>
+          <div className="flex w-[120px] min-w-[100px] max-w-[120px] shrink-0 items-center px-my-12">
+            유료 전환
+          </div>
+        </div>
+        {choices.map((choice, index) => (
+          <ChoiceRowDesktop
+            blockId={blockId}
+            key={choice.id}
+            index={index}
+            choice={choice}
+            onUpdate={(patch) => handleUpdate(index, patch)}
+            onRemove={() => handleRemove(index)}
+            sceneOptions={sceneOptions}
+            showBottomBorder={index < choices.length - 1 || !isAtMaxChoices}
+          />
+        ))}
+      </div>
+
       {!isAtMaxChoices && (
-        <div className="flex h-9 items-center justify-start px-my-4 py-my-8">
+        <div className="flex h-9 items-center justify-start border-t border-border-10 px-my-4 py-my-8 lg:border-t-0">
           <DropdownMenu>
             <DropdownMenuTrigger asChild>
               <Button

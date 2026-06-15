@@ -669,7 +669,7 @@ export function CharacterExpressionModal({
         presentation="auto"
         className={cn(
           formDialogShellClassName,
-          "gap-0 overflow-hidden border-0 bg-surface-10 p-0 shadow-elevation-50 outline outline-1 outline-offset-[-1px] outline-border-10 lg:rounded-[4px]",
+          "gap-0 overflow-hidden border-0 bg-surface-10 p-0 shadow-elevation-50 outline outline-1 outline-offset-[-1px] outline-border-10",
           layoutShowSlotList
             ? "lg:w-auto lg:max-w-[calc(100vw-2rem)]"
             : "lg:w-[432px] lg:max-w-[calc(100vw-2rem)]",

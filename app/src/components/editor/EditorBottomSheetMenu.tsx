@@ -12,10 +12,9 @@ import { useIsLgUp } from "@/hooks/useMediaQuery";
 import type { EditorMenuPresentation } from "@/components/editor/EditorMenuOption";
 import { MenuListBody } from "@/components/ui/menu-list";
 import {
-  MOBILE_BOTTOM_SHEET_PAD_CLASS,
-  MOBILE_BOTTOM_SHEET_PANEL_CLASS,
   MOBILE_BOTTOM_SHEET_SCRIM_CLASS,
-  mobileBottomSheetMaxHeightClassName,
+  MOBILE_BOTTOM_SHEET_SHELL_BASE_CLASS,
+  mobileBottomSheetMediumMaxHeightClassName,
 } from "@/components/ui/modal/modal-styles";
 import { cn } from "@/lib/utils";
 
@@ -73,10 +72,8 @@ export function EditorBottomSheetMenu({
             />
             <div
               className={cn(
-                MOBILE_BOTTOM_SHEET_PANEL_CLASS,
-                "flex min-h-0 flex-col rounded-t-[4px] border-t border-border-10 bg-white shadow-elevation-40",
-                MOBILE_BOTTOM_SHEET_PAD_CLASS,
-                mobileBottomSheetMaxHeightClassName,
+                MOBILE_BOTTOM_SHEET_SHELL_BASE_CLASS,
+                mobileBottomSheetMediumMaxHeightClassName,
               )}
               role="dialog"
               aria-modal="true"

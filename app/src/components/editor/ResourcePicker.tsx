@@ -11,7 +11,7 @@ import {
 } from "@/components/ui/popover";
 import { useIsLgUp } from "@/hooks/useMediaQuery";
 import { MenuList, MenuListItem, MenuListSeparator } from "@/components/ui/menu-list";
-import { MOBILE_BOTTOM_SHEET_PAD_CLASS, MOBILE_BOTTOM_SHEET_PANEL_CLASS, MOBILE_BOTTOM_SHEET_SCRIM_CLASS, mobileResourcePickerSheetMaxHeightClassName } from "@/components/ui/modal/modal-styles";
+import { MOBILE_BOTTOM_SHEET_SCRIM_CLASS, MOBILE_BOTTOM_SHEET_SHELL_BASE_CLASS, mobileBottomSheetMediumMaxHeightClassName } from "@/components/ui/modal/modal-styles";
 import { BACKGROUNDS, CHARACTERS, BGMS, SFX, GALLERIES, VIDEOS } from "@/lib/mockData";
 import type { BlockType } from "@/types/editor";
 import { cn } from "@/lib/utils";
@@ -170,11 +170,10 @@ function ResourcePickerOptions({
     return (
       <div
         className={cn(
-          !isSheet && "max-h-full overflow-y-auto",
           "grid",
           isSheet
             ? cn("w-full px-my-12 pb-my-16 pt-my-8", sheetImageGridClass)
-            : "w-fit grid-cols-3 gap-my-16 px-my-20 pb-my-20 pt-0",
+            : "w-fit grid-cols-3 gap-my-16 px-my-20 pb-my-20 pt-my-20",
         )}
       >
         <button
@@ -250,7 +249,6 @@ function ResourcePickerOptions({
   return (
     <MenuList
       className={cn(
-        !isSheet && "max-h-full overflow-y-auto",
         isSheet ? "w-full px-my-8 pb-my-16 pt-my-8" : "gap-my-2 px-my-8 pb-my-8 pt-0",
       )}
     >
@@ -470,10 +468,9 @@ export function ResourcePicker({
             />
             <div
               className={cn(
-                MOBILE_BOTTOM_SHEET_PANEL_CLASS,
-                "flex min-h-0 flex-col rounded-t-[4px] border-t border-border-10 bg-surface-10 shadow-elevation-40",
-                MOBILE_BOTTOM_SHEET_PAD_CLASS,
-                mobileResourcePickerSheetMaxHeightClassName,
+                MOBILE_BOTTOM_SHEET_SHELL_BASE_CLASS,
+                "bg-surface-10",
+                mobileBottomSheetMediumMaxHeightClassName,
               )}
               role="dialog"
               aria-modal="true"
@@ -503,7 +500,7 @@ export function ResourcePicker({
       <PopoverAnchor asChild>{children}</PopoverAnchor>
       <PopoverContent
         align="start"
-        className="flex max-h-[420px] w-fit flex-col items-stretch justify-start overflow-hidden rounded-[4px] border border-[rgba(0,0,0,0.07)] bg-surface-10 p-0 outline outline-1 outline-offset-[-1px] outline-border-20/10"
+        className="flex max-h-[420px] min-h-0 w-fit flex-col overflow-hidden rounded-[4px] border border-[rgba(0,0,0,0.07)] bg-surface-10 p-0 outline outline-1 outline-offset-[-1px] outline-border-20/10"
         onCloseAutoFocus={(e) => e.preventDefault()}
         onOpenAutoFocus={(e) => {
           e.preventDefault();
@@ -511,7 +508,7 @@ export function ResourcePicker({
         }}
       >
         <ResourcePickerHeader title={title} onClose={() => onOpenChange(false)} />
-        <div className="flex-1 max-h-full overflow-hidden">
+        <div className="min-h-0 flex-1 overflow-y-auto overscroll-contain">
           <ResourcePickerOptions {...optionsProps} isSheet={false} />
         </div>
       </PopoverContent>

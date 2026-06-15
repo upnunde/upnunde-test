@@ -1,19 +1,43 @@
 import { cn } from "@/lib/utils";
+import {
+  MOBILE_BOTTOM_SHEET_PAD_CLASS,
+  MOBILE_FIXED_BOTTOM_ANCHOR_CLASS,
+  MOBILE_FIXED_BOTTOM_BAR_SHELL_CLASS,
+  MOBILE_FIXED_BOTTOM_SAFE_PAD_CLASS,
+} from "@/lib/mobile-viewport";
+
+/** radius-16 — 모바일 바텀 시트 상단 모서리 */
+export const MOBILE_MODAL_TOP_RADIUS_CLASS = "rounded-t-[16px]";
+
+/** radius-16 — 모바일 중앙·팝업 모달 전체 모서리 */
+export const MOBILE_MODAL_RADIUS_CLASS = "max-lg:rounded-[16px]";
+
+/** 데스크톱 모달 컨테이너 — radius-4 */
+export const DESKTOP_MODAL_RADIUS_CLASS = "lg:rounded-[4px]";
 
 /** 가이드 modal 셸 — 480px, Header/Footer 분리 프레임 */
-export const modalDialogContentClassName =
-  "flex w-[480px] max-w-[calc(100vw-2rem)] flex-col items-stretch gap-0 overflow-hidden border-0 bg-surface-10 p-0 shadow-elevation-50 rounded-[4px]";
+export const modalDialogContentClassName = cn(
+  "flex w-[480px] max-w-[calc(100vw-2rem)] flex-col items-stretch gap-0 overflow-hidden border-0 bg-surface-10 p-0 shadow-elevation-50",
+  MOBILE_MODAL_RADIUS_CLASS,
+  DESKTOP_MODAL_RADIUS_CLASS,
+);
 
 /**
- * M3 모달 바텀 시트 최대 높이 — `100dvh` 기준 92% detent(상단 스크림 ~8% peek), 대형 뷰 상한 900px.
+ * M3 Large detent — 상단 ~8% peek · 폼·긴 목록·히스토리.
  * `dialog.tsx` `presentation="auto"`, `formDialogShellClassName`과 동일.
  */
-export const mobileBottomSheetMaxHeightClassName = "max-h-[min(92dvh,900px)]";
+export const mobileBottomSheetLargeMaxHeightClassName = "max-h-[min(92dvh,900px)]";
+
+/** @deprecated `mobileBottomSheetLargeMaxHeightClassName` 별칭 */
+export const mobileBottomSheetMaxHeightClassName = mobileBottomSheetLargeMaxHeightClassName;
 
 /**
- * 에디터 리소스 피커(배경·캐릭터 등) — 뷰포트 상단 30% peek, 시트는 하단 70%까지.
+ * M3 Medium detent — 상단 50% peek · 피커·짧은 액션 목록·블록 추가.
  */
-export const mobileResourcePickerSheetMaxHeightClassName = "max-h-[70dvh]";
+export const mobileBottomSheetMediumMaxHeightClassName = "max-h-[50dvh]";
+
+/** @deprecated `mobileBottomSheetMediumMaxHeightClassName` 별칭 */
+export const mobileResourcePickerSheetMaxHeightClassName = mobileBottomSheetMediumMaxHeightClassName;
 
 /** 모바일 바텀 시트 스크림 — 레이아웃 뷰포트 전체(글로벌 헤더 fixed top-0 포함), 탭으로 닫기 */
 export const MOBILE_BOTTOM_SHEET_SCRIM_CLASS =
@@ -22,16 +46,28 @@ export const MOBILE_BOTTOM_SHEET_SCRIM_CLASS =
 /** 모바일 바텀 시트 패널 — 스크림 위 */
 export const MOBILE_BOTTOM_SHEET_PANEL_CLASS = "fixed inset-x-0 z-[61]";
 
+/** 모바일 바텀 시트 공통 셸 — radius-16 상단 · 패딩 · 보더 (max-height는 호출부에서 추가) */
+export const MOBILE_BOTTOM_SHEET_SHELL_BASE_CLASS = cn(
+  MOBILE_BOTTOM_SHEET_PANEL_CLASS,
+  "flex min-h-0 flex-col border-t border-border-10 bg-white shadow-elevation-40",
+  MOBILE_MODAL_TOP_RADIUS_CLASS,
+  MOBILE_BOTTOM_SHEET_PAD_CLASS,
+);
+
 export {
   MOBILE_BOTTOM_SHEET_PAD_CLASS,
   MOBILE_FIXED_BOTTOM_ANCHOR_CLASS,
   MOBILE_FIXED_BOTTOM_BAR_SHELL_CLASS,
   MOBILE_FIXED_BOTTOM_SAFE_PAD_CLASS,
-} from "@/lib/mobile-viewport";
+};
 
 /** 넓은 폼 Dialog 셸 — 모바일 full-width 바텀 시트 / 데스크톱 중앙(콘텐츠 높이, 길면 max-h에서 스크롤) */
-export const formDialogShellClassName =
-  "flex min-w-0 flex-col overflow-hidden border-0 bg-transparent p-0 shadow-none max-lg:h-[min(92dvh,900px)] max-lg:max-w-none max-lg:w-full max-lg:bg-white max-lg:shadow-elevation-50 max-lg:pb-0 lg:h-auto lg:max-h-[min(90vh,calc(100dvh-80px))] lg:w-[min(92vw,760px)] lg:max-w-[760px] lg:gap-0 lg:overflow-hidden lg:p-0";
+export const formDialogShellClassName = cn(
+  "flex min-w-0 flex-col overflow-hidden border-0 bg-transparent p-0 shadow-none",
+  "max-lg:h-[min(92dvh,900px)] max-lg:max-w-none max-lg:w-full max-lg:bg-white max-lg:shadow-elevation-50 max-lg:pb-0",
+  MOBILE_MODAL_TOP_RADIUS_CLASS,
+  "lg:h-auto lg:max-h-[min(90vh,calc(100dvh-80px))] lg:w-[min(92vw,760px)] lg:max-w-[760px] lg:gap-0 lg:overflow-hidden lg:p-0 lg:rounded-[4px]",
+);
 
 /** 바텀 시트 안 폼 본문 — EpisodeForm 등 */
 export const formDialogSheetEpisodeFormClassName =
@@ -51,11 +87,15 @@ export const formDialogSheetStickyFooterClassName = cn(
   "max-lg:pb-[calc(var(--spacing-my-16)+env(safe-area-inset-bottom,0px))]",
 );
 
-export const modalHeaderClassName =
-  "flex min-h-40 w-full flex-col items-center gap-my-20 self-stretch overflow-hidden rounded-tl-[4px] rounded-tr-[4px] bg-surface-10 px-my-24 pb-my-16 pt-my-24 lg:pt-my-40";
+export const modalHeaderClassName = cn(
+  "flex min-h-40 w-full flex-col items-center gap-my-20 self-stretch overflow-hidden bg-surface-10 px-my-24 pb-my-16 pt-my-24",
+  "max-lg:rounded-t-[16px] lg:rounded-tl-[4px] lg:rounded-tr-[4px] lg:pt-my-40",
+);
 
-export const modalFooterShellClassName =
-  "self-stretch overflow-hidden rounded-bl-[4px] rounded-br-[4px] bg-surface-10";
+export const modalFooterShellClassName = cn(
+  "self-stretch overflow-hidden bg-surface-10",
+  "max-lg:rounded-b-[16px] lg:rounded-bl-[4px] lg:rounded-br-[4px]",
+);
 
 export const modalFooterButtonRowClassName =
   "inline-flex h-my-64 min-h-my-64 w-full items-center gap-my-8 self-stretch bg-surface-10 px-my-24 pb-my-20 pt-my-8";

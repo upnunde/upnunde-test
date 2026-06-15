@@ -14,6 +14,7 @@ import { useVisualKeyboardInset } from "@/hooks/useVisualKeyboardInset";
 import { useClientMounted } from "@/hooks/useClientMounted";
 import {
   isMobileKeyboardEditableBlock,
+  mobileEditableBlockHasContent,
   requestMobileBlockContentEdit,
 } from "@/lib/editor-mobile-text-edit";
 import { useEditorStore } from "@/store/useEditorStore";
@@ -29,6 +30,7 @@ import { cn } from "@/lib/utils";
 export function EditorMobileBlockToolbar({ className }: { className?: string }) {
   const focusBlockId = useEditorStore((s) => s.focusBlockId);
   const mobileKeyboardEditBlockId = useEditorStore((s) => s.mobileKeyboardEditBlockId);
+  const mobileFocusChoiceIndex = useEditorStore((s) => s.mobileFocusChoiceIndex);
   const setMobileKeyboardEditBlockId = useEditorStore((s) => s.setMobileKeyboardEditBlockId);
   const mobileContentEditPromptBlockId = useEditorStore((s) => s.mobileContentEditPromptBlockId);
   const setMobileContentEditPromptBlockId = useEditorStore((s) => s.setMobileContentEditPromptBlockId);
@@ -52,7 +54,10 @@ export function EditorMobileBlockToolbar({ className }: { className?: string }) 
   const canEditContent =
     focusedBlock != null && isMobileKeyboardEditableBlock(focusedBlock.type);
   const isEditingContent = mobileKeyboardEditBlockId === focusBlockId;
-  const focusedBlockHasContent = (focusedBlock?.content?.trim().length ?? 0) > 0;
+  const focusedBlockHasContent = useMemo(
+    () => mobileEditableBlockHasContent(focusedBlock, mobileFocusChoiceIndex),
+    [focusedBlock, mobileFocusChoiceIndex],
+  );
   const contentEditButtonLabel = focusedBlockHasContent ? "내용수정" : "내용입력";
   const showContentEditButton =
     !isKeyboardOpen && canEditContent && focusBlockId != null && !isEditingContent;

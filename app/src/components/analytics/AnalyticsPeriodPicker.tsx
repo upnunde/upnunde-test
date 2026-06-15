@@ -18,7 +18,7 @@ import { Button } from "@/components/ui/button";
 import { analyticsPeriodInlineTriggerClassName } from "@/components/analytics/analytics-filter-chips";
 import { useIsLgUp } from "@/hooks/useMediaQuery";
 import { PAGE_GUTTER_X_CLASS } from "@/lib/page-layout";
-import { mobileBottomSheetMaxHeightClassName, MOBILE_BOTTOM_SHEET_PAD_CLASS } from "@/components/ui/modal/modal-styles";
+import { MOBILE_BOTTOM_SHEET_SCRIM_CLASS, MOBILE_BOTTOM_SHEET_SHELL_BASE_CLASS, MOBILE_MODAL_RADIUS_CLASS, mobileBottomSheetMediumMaxHeightClassName } from "@/components/ui/modal/modal-styles";
 import { cn } from "@/lib/utils";
 
 /**
@@ -48,8 +48,11 @@ const TRIGGER_BASE_CLASS = cn(
 
 const TRIGGER_INLINE_CLASS = analyticsPeriodInlineTriggerClassName;
 
-const PANEL_SHELL_CLASS =
-  "w-[320px] rounded-[4px] border border-border-10 bg-white p-0 shadow-elevation-40 max-lg:w-full max-lg:rounded-none max-lg:border-0 max-lg:shadow-none";
+const PANEL_SHELL_CLASS = cn(
+  "w-[320px] border border-border-10 bg-white p-0 shadow-elevation-40 max-lg:w-full max-lg:rounded-none max-lg:border-0 max-lg:shadow-none",
+  MOBILE_MODAL_RADIUS_CLASS,
+  "lg:rounded-[4px]",
+);
 
 interface PeriodPickerPanelProps {
   activePreset: AnalyticsPeriodPreset | null;
@@ -299,12 +302,11 @@ export function AnalyticsPeriodPicker({
       open && typeof document !== "undefined"
         ? createPortal(
             <>
-              <div className="fixed inset-0 z-40 bg-black/50" aria-hidden onClick={handleDismiss} />
+              <div className={MOBILE_BOTTOM_SHEET_SCRIM_CLASS} aria-hidden onClick={handleDismiss} />
               <div
                 className={cn(
-                  "fixed inset-x-0 z-50 flex min-h-0 flex-col rounded-t-[4px] border-t border-border-10 bg-white shadow-elevation-40",
-                  MOBILE_BOTTOM_SHEET_PAD_CLASS,
-                  mobileBottomSheetMaxHeightClassName,
+                  MOBILE_BOTTOM_SHEET_SHELL_BASE_CLASS,
+                  mobileBottomSheetMediumMaxHeightClassName,
                 )}
                 role="dialog"
                 aria-modal="true"
