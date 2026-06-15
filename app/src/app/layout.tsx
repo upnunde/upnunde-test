@@ -41,9 +41,16 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en" className={cn("overscroll-none lg:h-dvh lg:overflow-hidden", APP_BROWSER_BG_CLASS)}>
+    <html
+      lang="en"
+      className={cn(
+        "max-lg:overscroll-x-none lg:overscroll-none",
+        "lg:h-dvh lg:overflow-hidden",
+        APP_BROWSER_BG_CLASS,
+      )}
+    >
       <body
-        className={`${geistSans.variable} ${geistMono.variable} antialiased m-0 w-full overscroll-none p-0 lg:flex lg:h-dvh lg:flex-col lg:overflow-hidden`}
+        className={`${geistSans.variable} ${geistMono.variable} antialiased m-0 w-full max-lg:overscroll-x-none lg:overscroll-none p-0 lg:flex lg:h-dvh lg:flex-col lg:overflow-hidden`}
       >
         <DevConsoleFilter />
         <MobileViewportSync />
