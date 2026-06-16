@@ -322,7 +322,11 @@ export default function EpisodeManagementPage() {
             </header>
 
             <div
-              className={cn(PAGE_SCROLL_COLUMN_CLASS, PAGE_MOBILE_FIXED_ACTION_BAR_SCROLL_PAD_CLASS)}
+              className={cn(
+                PAGE_SCROLL_COLUMN_CLASS,
+                PAGE_MOBILE_FIXED_ACTION_BAR_SCROLL_PAD_CLASS,
+                "max-lg:pt-my-24 lg:pt-my-40",
+              )}
               {...{ [PAGE_SCROLL_COLUMN_ROOT_ATTR]: "" }}
             >
               <div className="w-full max-w-[1200px] mx-auto flex flex-col gap-my-12">

@@ -32,8 +32,8 @@ const STATUS_LABEL: Record<EpisodeStatus, string> = {
 };
 
 const STATUS_TEXT_CLASS: Record<EpisodeStatus, string> = {
-  DRAFT: "text-error-error",
-  PRIVATE: "text-error-error",
+  DRAFT: "text-on-surface-30",
+  PRIVATE: "text-on-surface-30",
   PUBLISHED: "text-blue-600",
 };
 
