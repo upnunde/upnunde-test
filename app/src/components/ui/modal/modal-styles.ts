@@ -16,6 +16,9 @@ export const TOAST_STACK_Z_CLASS = "z-[80]";
 /** radius-16 — 모바일 바텀 시트 상단 모서리 */
 export const MOBILE_MODAL_TOP_RADIUS_CLASS = "rounded-t-[16px]";
 
+/** 모바일 바텀 시트 — 화면 하단에 붙으므로 하단 모서리 라운드 없음 */
+export const MOBILE_BOTTOM_SHEET_BOTTOM_RADIUS_CLASS = "rounded-b-none";
+
 /** radius-16 — 모바일 중앙·팝업 모달 전체 모서리 */
 export const MOBILE_MODAL_RADIUS_CLASS = "max-lg:rounded-[16px]";
 
@@ -68,6 +71,7 @@ export const MOBILE_BOTTOM_SHEET_SHELL_BASE_CLASS = cn(
   MOBILE_BOTTOM_SHEET_PANEL_CLASS,
   "flex min-h-0 flex-col border-t border-border-10 bg-white shadow-elevation-40",
   MOBILE_MODAL_TOP_RADIUS_CLASS,
+  MOBILE_BOTTOM_SHEET_BOTTOM_RADIUS_CLASS,
   MOBILE_BOTTOM_SHEET_PAD_CLASS,
 );
 
@@ -83,6 +87,7 @@ export const formDialogShellClassName = cn(
   "flex min-w-0 flex-col overflow-hidden border-0 bg-transparent p-0 shadow-none",
   "max-lg:h-[min(92dvh,900px)] max-lg:max-w-none max-lg:w-full max-lg:bg-white max-lg:shadow-elevation-50 max-lg:pb-0",
   MOBILE_MODAL_TOP_RADIUS_CLASS,
+  MOBILE_BOTTOM_SHEET_BOTTOM_RADIUS_CLASS,
   "lg:h-auto lg:max-h-[min(90vh,calc(100dvh-80px))] lg:w-[min(92vw,760px)] lg:max-w-[760px] lg:gap-0 lg:overflow-hidden lg:p-0 lg:rounded-[4px]",
 );
 
@@ -111,7 +116,8 @@ export const modalHeaderClassName = cn(
 
 export const modalFooterShellClassName = cn(
   "self-stretch overflow-hidden bg-surface-10",
-  "max-lg:rounded-b-[16px] lg:rounded-bl-[4px] lg:rounded-br-[4px]",
+  MOBILE_BOTTOM_SHEET_BOTTOM_RADIUS_CLASS,
+  "lg:rounded-bl-[4px] lg:rounded-br-[4px]",
 );
 
 export const modalFooterButtonRowClassName =
