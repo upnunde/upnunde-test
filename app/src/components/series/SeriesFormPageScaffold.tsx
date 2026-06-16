@@ -9,6 +9,8 @@ import { Button } from "@/components/ui/button";
 import { HeaderBackButton } from "@/components/ui/header-back-button";
 import { SeriesFormTabs } from "@/components/series/SeriesFormTabs";
 import { EditorMobileFloatingActions } from "@/components/editor/EditorMobileFloatingActions";
+import { FloatingAiComposerPortal } from "@/components/ui/FloatingAiComposerPortal";
+import { FLOATING_COMPOSER_SCROLL_PAD_CLASS } from "@/components/ui/floating-composer-bar";
 import {
   editorMobilePreviewChromeHiddenClass,
   type EditorMobilePanel,
@@ -24,6 +26,16 @@ import {
 } from "@/lib/page-layout";
 import { cn } from "@/lib/utils";
 import type { SeriesFormTab } from "@/lib/seriesForm";
+
+export interface SeriesFormAiComposerConfig {
+  briefPrompt: string;
+  onBriefChange: (value: string) => void;
+  onSubmit: () => void;
+  isGenerating: boolean;
+  placeholder?: string;
+  loadingMessage?: string;
+  ariaLabel?: string;
+}
 
 interface SeriesFormPageScaffoldProps {
   profileImageUrl: string | null;
@@ -41,6 +53,7 @@ interface SeriesFormPageScaffoldProps {
   onDraftClick?: () => void;
   contentPaddingClassName?: string;
   contentGapClassName?: string;
+  aiComposer?: SeriesFormAiComposerConfig;
 }
 
 export function SeriesFormPageScaffold({
@@ -59,6 +72,7 @@ export function SeriesFormPageScaffold({
   onDraftClick,
   contentPaddingClassName = PAGE_GUTTER_X_CLASS,
   contentGapClassName = "gap-my-40",
+  aiComposer,
 }: SeriesFormPageScaffoldProps) {
   const isLgUp = useIsLgUp();
   const [mobilePanel, setMobilePanel] = useState<EditorMobilePanel>("edit");
@@ -112,6 +126,7 @@ export function SeriesFormPageScaffold({
                     "flex flex-col items-center max-lg:overflow-visible lg:min-h-0 lg:flex-1 lg:overflow-y-auto",
                     PAGE_SCROLL_TOP_CLASS,
                     isLgUp && PAGE_SCROLL_BOTTOM_CLASS,
+                    aiComposer && FLOATING_COMPOSER_SCROLL_PAD_CLASS,
                     contentPaddingClassName,
                     "max-lg:px-0 max-lg:pt-0",
                   )}
@@ -163,6 +178,20 @@ export function SeriesFormPageScaffold({
               ) : null}
             </div>
       </main>
+      {aiComposer ? (
+        <FloatingAiComposerPortal
+          value={aiComposer.briefPrompt}
+          onChange={aiComposer.onBriefChange}
+          onSubmit={aiComposer.onSubmit}
+          placeholder={aiComposer.placeholder ?? "시리즈 컨셉·세계관·분위기를 서술형으로 입력해 주세요."}
+          isLoading={aiComposer.isGenerating}
+          submitDisabled={
+            aiComposer.isGenerating || aiComposer.briefPrompt.trim().length === 0
+          }
+          loadingMessage={aiComposer.loadingMessage ?? "시리즈 정보를 생성하고 있어요"}
+          ariaLabel={aiComposer.ariaLabel ?? "시리즈 AI 초안 입력"}
+        />
+      ) : null}
     </div>
   );
 }

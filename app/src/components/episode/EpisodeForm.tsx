@@ -22,6 +22,7 @@ import type { ImageResource } from "@/types/resource";
 
 const MAX_TITLE = 50;
 const MAX_SUMMARY = 100;
+const EPISODE_FORM_THUMBNAIL_FILE_INPUT_ID = "episode-form-thumbnail-file";
 
 export interface EpisodeFormSubmitPayload {
   title: string;
@@ -62,7 +63,6 @@ export function EpisodeForm({
   const [thumbnailModalInitialSlots, setThumbnailModalInitialSlots] =
     useState<{ id: string; expressionLabel: string; imageUrl?: string }[] | null>(null);
   const [pendingThumbnailUrl, setPendingThumbnailUrl] = useState<string | null>(null);
-  const thumbnailFileInputRef = useRef<HTMLInputElement | null>(null);
   const isAiFilling = false;
 
   useEffect(() => {
@@ -83,14 +83,11 @@ export function EpisodeForm({
   }, [thumbnailUrl, pendingThumbnailUrl]);
 
   const handleThumbnailClick = useCallback(() => {
-    if (thumbnailUrl) {
-      setThumbnailModalInitialSlots([
-        { id: "episode-thumbnail", expressionLabel: "", imageUrl: thumbnailUrl },
-      ]);
-      setThumbnailModalOpen(true);
-      return;
-    }
-    thumbnailFileInputRef.current?.click();
+    if (!thumbnailUrl) return;
+    setThumbnailModalInitialSlots([
+      { id: "episode-thumbnail", expressionLabel: "", imageUrl: thumbnailUrl },
+    ]);
+    setThumbnailModalOpen(true);
   }, [thumbnailUrl]);
 
   const handleThumbnailRemove = useCallback(() => {
@@ -235,7 +232,11 @@ export function EpisodeForm({
             variant="img9:16"
             slotKind="thumbnail"
             ariaLabel={THUMBNAIL_SLOT_ARIA.addRepresentativeImage}
-            onClick={handleThumbnailClick}
+            fileInput={{
+              id: EPISODE_FORM_THUMBNAIL_FILE_INPUT_ID,
+              accept: "image/*",
+              onChange: handleThumbnailFileChange,
+            }}
           />
         )}
       </div>
@@ -274,14 +275,6 @@ export function EpisodeForm({
         )}
 
         {stickyFooter && footer}
-        <input
-          ref={thumbnailFileInputRef}
-          type="file"
-          accept="image/*"
-          className="sr-only"
-          aria-label={THUMBNAIL_SLOT_ARIA.addRepresentativeImage}
-          onChange={handleThumbnailFileChange}
-        />
         <ImageCropPosterModal
           open={thumbnailModalOpen}
           onClose={() => {

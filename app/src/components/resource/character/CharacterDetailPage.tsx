@@ -1,7 +1,6 @@
 "use client";
 
 import React, { useCallback, useState, useEffect, useRef, useMemo } from "react";
-import { createPortal } from "react-dom";
 import Image from "next/image";
 import { useRouter, usePathname } from "next/navigation";
 import { Pencil, Trash2 } from "lucide-react";
@@ -24,8 +23,8 @@ import {
 import { Tag } from "@/components/ui/tag";
 import {
   FLOATING_COMPOSER_SCROLL_PAD_CLASS,
-  FloatingComposerBar,
 } from "@/components/ui/floating-composer-bar";
+import { FloatingAiComposerPortal } from "@/components/ui/FloatingAiComposerPortal";
 import { Title1 } from "@/components/ui/title1";
 import { Title2 } from "@/components/ui/title2";
 import {
@@ -39,16 +38,20 @@ import {
 } from "@/lib/page-layout";
 import { cn } from "@/lib/utils";
 import { generateCharacterDraftFromBrief } from "@/lib/character-ai-draft";
-import { useClientMounted } from "@/hooks/useClientMounted";
+import type { CharacterAiDraft } from "@/lib/character-ai-draft";
+import { useFormAiDraftComposer } from "@/hooks/useFormAiDraftComposer";
 import {
   buildMyWorksCharacterFromForm,
   stageMyWorksPendingCharacter,
 } from "@/lib/myWorksCharacterCreate";
 import { WORKS_TAB_PATH } from "@/lib/worksArea";
 import type { CharacterResource, CharacterExpressionSlot } from "@/types/resource";
-import { useToast } from "@/store/useToastStore";
 
 export type CharacterDetailPageContext = "series-resource" | "my-works";
+
+/** OS 파일 선택창 — label htmlFor 연결용 (ref.click() 대신) */
+const CHARACTER_DETAIL_THUMBNAIL_FILE_INPUT_ID = "character-detail-thumbnail-file";
+const CHARACTER_DETAIL_EXPRESSION_FILE_INPUT_ID = "character-detail-expression-file";
 
 interface CharacterDetailPageProps {
   /** 신규 생성인지 여부 (지금은 true 만 사용) */
@@ -100,12 +103,22 @@ export function CharacterDetailPage({
   const [modalInitialSlots, setModalInitialSlots] = useState<CharacterExpressionSlot[] | null>(null);
   const [editingExpressionSlotId, setEditingExpressionSlotId] = useState<string | null>(null);
   const [importCharacterModalOpen, setImportCharacterModalOpen] = useState(false);
-  const expressionFileInputRef = useRef<HTMLInputElement>(null);
-  const thumbnailFileInputRef = useRef<HTMLInputElement>(null);
-  const mounted = useClientMounted();
-  const { toast } = useToast();
-  const [briefPrompt, setBriefPrompt] = useState("");
-  const [isGenerating, setIsGenerating] = useState(false);
+
+  const applyCharacterDraft = useCallback((draft: CharacterAiDraft) => {
+    setName(draft.name);
+    setSummary(draft.summary);
+    setTagList(draft.tags);
+    setTags("");
+    setGreeting(draft.greeting);
+  }, []);
+
+  const aiComposer = useFormAiDraftComposer({
+    generate: generateCharacterDraftFromBrief,
+    onApply: applyCharacterDraft,
+    successMessage: "캐릭터 정보 초안을 채웠어요.",
+    fallbackMessage: "AI 설정이 없어 임시 규칙으로 채웠어요.",
+    errorMessage: "캐릭터 초안 생성에 실패했어요.",
+  });
 
   /** initialData 참조 변경 시 폼 값 재동기화 — render 중 setState 패턴 */
   const [initialDataSnapshot, setInitialDataSnapshot] = useState(initialData);
@@ -169,35 +182,6 @@ export function CharacterDetailPage({
     router.push(`/series/${seriesId}/resources`);
   }, [isFormComplete, isMyWorks, name, router, seriesId, summary, thumbnailUrl]);
 
-  const handleGenerateFromBrief = useCallback(async () => {
-    const prompt = briefPrompt.trim();
-    if (!prompt || isGenerating) return;
-    setIsGenerating(true);
-    try {
-      const { draft, usedFallback } = await generateCharacterDraftFromBrief(prompt);
-      setName(draft.name);
-      setSummary(draft.summary);
-      setTagList(draft.tags);
-      setTags("");
-      setGreeting(draft.greeting);
-      setBriefPrompt("");
-      toast({
-        message: usedFallback
-          ? "AI 설정이 없어 임시 규칙으로 채웠어요."
-          : "캐릭터 정보 초안을 채웠어요.",
-        variant: "default",
-      });
-    } catch (error) {
-      toast({
-        message:
-          error instanceof Error ? error.message : "캐릭터 초안 생성에 실패했어요.",
-        variant: "withClose",
-      });
-    } finally {
-      setIsGenerating(false);
-    }
-  }, [briefPrompt, isGenerating, toast]);
-
   const handleApplyImportedCharacterToForm = useCallback((selected: ImportableCharacterPick) => {
     setName(selected.name);
     setSummary(selected.summary ?? "");
@@ -208,12 +192,7 @@ export function CharacterDetailPage({
     setThumbnailOriginalUrl(selected.imageUrl);
   }, []);
 
-  /** 추가하기 클릭 → OS 파일 선택 (최대 10장) → 선택한 수만큼 슬롯 채워서 모달 오픈 */
-  const handleExpressionAddClick = useCallback(() => {
-    setEditingExpressionSlotId(null);
-    expressionFileInputRef.current?.click();
-  }, []);
-
+  /** 추가하기 — label htmlFor로 OS 파일 선택 (ref.click()은 Safari 등에서 차단됨) */
   const handleExpressionEditClick = useCallback((slot: CharacterExpressionSlot) => {
     setEditingExpressionSlotId(slot.id);
     setModalInitialSlots([slot]);
@@ -223,14 +202,11 @@ export function CharacterDetailPage({
   const handleThumbnailAddClick = useCallback(() => {
     // 이미 한 번 등록했다면, 크롭 기준은 항상 "원본"을 사용한다.
     const baseUrl = thumbnailOriginalUrl ?? thumbnailUrl;
-    if (baseUrl) {
-      setThumbnailModalInitialSlots([
-        { id: "character-thumbnail", expressionLabel: "", imageUrl: baseUrl },
-      ]);
-      setThumbnailModalOpen(true);
-      return;
-    }
-    thumbnailFileInputRef.current?.click();
+    if (!baseUrl) return;
+    setThumbnailModalInitialSlots([
+      { id: "character-thumbnail", expressionLabel: "", imageUrl: baseUrl },
+    ]);
+    setThumbnailModalOpen(true);
   }, [thumbnailUrl, thumbnailOriginalUrl]);
 
   const handleThumbnailRemove = useCallback(() => {
@@ -301,6 +277,7 @@ export function CharacterDetailPage({
   }, []);
 
   const handleExpressionFilesChange = useCallback((e: React.ChangeEvent<HTMLInputElement>) => {
+    setEditingExpressionSlotId(null);
     const files = Array.from(e.target.files ?? [])
       .filter((f) => f.type.startsWith("image/"))
       .slice(0, 10);
@@ -483,7 +460,11 @@ export function CharacterDetailPage({
                         variant="img9:16"
                         slotKind="thumbnail"
                         ariaLabel={THUMBNAIL_SLOT_ARIA.addRepresentativeThumbnail}
-                        onClick={handleThumbnailAddClick}
+                        fileInput={{
+                          id: CHARACTER_DETAIL_THUMBNAIL_FILE_INPUT_ID,
+                          accept: "image/*",
+                          onChange: handleThumbnailFileChange,
+                        }}
                       />
                     )}
                   </div>
@@ -494,11 +475,11 @@ export function CharacterDetailPage({
                       variant="title-subtitle"
                       subtitleText="다양한 감정을 표현할 수 있는 표정을 여러 장까지 등록해 둘 수 있어요. (최대 10개)"
                     />
-                    <div className="flex flex-wrap gap-my-12 items-start">
+                    <div className="flex flex-wrap items-start gap-my-12">
                       {expressionSlots.filter((s) => s.imageUrl).map((slot) => (
                         <div
                           key={slot.id}
-                          className="inline-flex flex-col justify-start items-start gap-my-4 w-[90px] group"
+                          className="inline-flex shrink-0 flex-col justify-start items-start gap-my-4 w-[90px] group"
                         >
                           <div className="w-[90px] h-[160px] rounded-lg overflow-hidden border border-border-10 bg-surface-20 relative">
                             <Image
@@ -545,7 +526,13 @@ export function CharacterDetailPage({
                         variant="img9:16"
                         slotKind="thumbnail"
                         ariaLabel={THUMBNAIL_SLOT_ARIA.addExpression}
-                        onClick={handleExpressionAddClick}
+                        showCaptionSpacer
+                        fileInput={{
+                          id: CHARACTER_DETAIL_EXPRESSION_FILE_INPUT_ID,
+                          accept: "image/*",
+                          multiple: true,
+                          onChange: handleExpressionFilesChange,
+                        }}
                       />
                     </div>
                   </div>
@@ -648,23 +635,6 @@ export function CharacterDetailPage({
         </div>
       </div>
 
-      <input
-        ref={expressionFileInputRef}
-        type="file"
-        accept="image/*"
-        multiple
-        className="hidden"
-        aria-label={`${THUMBNAIL_SLOT_ARIA.addExpression} (최대 10장)`}
-        onChange={handleExpressionFilesChange}
-      />
-      <input
-        ref={thumbnailFileInputRef}
-        type="file"
-        accept="image/*"
-        className="sr-only"
-        aria-label={THUMBNAIL_SLOT_ARIA.addRepresentativeThumbnail}
-        onChange={handleThumbnailFileChange}
-      />
       <ImageCropOnlyModal
         open={thumbnailModalOpen}
         onClose={() => {
@@ -749,23 +719,16 @@ export function CharacterDetailPage({
         />
       ) : null}
 
-      {mounted
-        ? createPortal(
-            <FloatingComposerBar
-              value={briefPrompt}
-              onChange={setBriefPrompt}
-              onSubmit={() => void handleGenerateFromBrief()}
-              placeholder="캐릭터 특징을 서술형으로 입력해 주세요."
-              isLoading={isGenerating}
-              submitDisabled={isGenerating || briefPrompt.trim().length === 0}
-              loadingMessage="캐릭터 정보를 생성하고 있어요"
-              placement="fixed"
-              className="!z-[60] !pointer-events-auto"
-              ariaLabel="캐릭터 AI 초안 입력"
-            />,
-            document.body,
-          )
-        : null}
+      <FloatingAiComposerPortal
+        value={aiComposer.briefPrompt}
+        onChange={aiComposer.setBriefPrompt}
+        onSubmit={() => void aiComposer.handleGenerate()}
+        placeholder="캐릭터 특징을 서술형으로 입력해 주세요."
+        isLoading={aiComposer.isGenerating}
+        submitDisabled={aiComposer.isGenerating || aiComposer.briefPrompt.trim().length === 0}
+        loadingMessage="캐릭터 정보를 생성하고 있어요"
+        ariaLabel="캐릭터 AI 초안 입력"
+      />
     </div>
   );
 }

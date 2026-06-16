@@ -11,6 +11,9 @@ export type ResourceCategory =
   | "gallery"
   | "bgm";
 
+/** 이미지형 리소스 등록·상세 폼 종류 */
+export type ImageResourceKind = "background" | "scene" | "media" | "gallery";
+
 /** 표정 슬롯 1개: 이미지(크롭) + 사용자 지정 표정 라벨, 최대 10개 */
 export interface CharacterExpressionSlot {
   id: string;

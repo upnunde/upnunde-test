@@ -12,6 +12,9 @@ import { SeriesFormTextareaField } from "@/components/series/SeriesFormTextareaF
 import { SeriesFormPageScaffold } from "@/components/series/SeriesFormPageScaffold";
 import { SeriesFormStepNav } from "@/components/series/SeriesFormStepNav";
 import { useSeriesFormController } from "@/hooks/useSeriesFormController";
+import { useFormAiDraftComposer } from "@/hooks/useFormAiDraftComposer";
+import { generateSeriesDraftFromBrief } from "@/lib/series-ai-draft";
+import type { SeriesAiDraft } from "@/lib/series-ai-draft";
 
 export default function SeriesEditPage() {
   const router = useRouter();
@@ -35,6 +38,7 @@ export default function SeriesEditPage() {
     setKeywordInput,
     handleAddKeyword,
     handleRemoveKeyword,
+    initKeywordsFromString,
     worldviewDescription,
     setWorldviewDescription,
     worldviewPrompt,
@@ -81,6 +85,33 @@ export default function SeriesEditPage() {
     },
   });
 
+  const applySeriesDraft = useCallback(
+    (draft: SeriesAiDraft) => {
+      setSeriesTitle(draft.title);
+      setSeriesSummary(draft.summary);
+      initKeywordsFromString(draft.keywords.join(", "));
+      setWorldviewDescription(draft.worldview);
+      setWorldviewPrompt(draft.prompt);
+      setPersona(draft.persona);
+    },
+    [
+      initKeywordsFromString,
+      setPersona,
+      setSeriesSummary,
+      setSeriesTitle,
+      setWorldviewDescription,
+      setWorldviewPrompt,
+    ],
+  );
+
+  const seriesAiComposer = useFormAiDraftComposer({
+    generate: generateSeriesDraftFromBrief,
+    onApply: applySeriesDraft,
+    successMessage: "시리즈 정보 초안을 채웠어요.",
+    fallbackMessage: "AI 설정이 없어 임시 규칙으로 채웠어요.",
+    errorMessage: "시리즈 초안 생성에 실패했어요.",
+  });
+
   return (
     <SeriesFormPageScaffold
       profileImageUrl={profileImageUrl}
@@ -93,6 +124,12 @@ export default function SeriesEditPage() {
       submitDisabled={!isFormValid}
       coverPreviewUrl={coverPreviewUrl}
       logoPreviewUrl={logoPreviewUrl}
+      aiComposer={{
+        briefPrompt: seriesAiComposer.briefPrompt,
+        onBriefChange: seriesAiComposer.setBriefPrompt,
+        onSubmit: () => void seriesAiComposer.handleGenerate(),
+        isGenerating: seriesAiComposer.isGenerating,
+      }}
     >
       {activeTab === "image" && (
                         <div className="flex flex-col gap-my-40">

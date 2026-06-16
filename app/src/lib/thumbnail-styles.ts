@@ -1,5 +1,9 @@
 import { cn } from "@/lib/utils";
 
+/** label 내부 file input — `hidden`/`display:none` 대신 투명 오버레이 (OS 파일 선택창 안정 동작) */
+export const RESOURCE_FILE_INPUT_OVERLAY_CLASS =
+  "absolute inset-0 z-10 h-full w-full cursor-pointer opacity-0";
+
 /** 썸네일 슬롯(AddResourceSlot·SeriesImageUploadField 등) 접근성 라벨 — 일반 파일 첨부와 구분 */
 export const THUMBNAIL_SLOT_ARIA = {
   addImage: "이미지 추가",

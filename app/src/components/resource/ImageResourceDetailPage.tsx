@@ -8,6 +8,8 @@ import { Button } from "@/components/ui/button";
 import { HeaderBackButton } from "@/components/ui/header-back-button";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
+import { FloatingAiComposerPortal } from "@/components/ui/FloatingAiComposerPortal";
+import { FLOATING_COMPOSER_SCROLL_PAD_CLASS } from "@/components/ui/floating-composer-bar";
 import { AddResourceSlot } from "@/components/resource/cards/AddResourceSlot";
 import { createOptimizedImageObjectUrl } from "@/lib/image-upload-compress";
 import { THUMBNAIL_SLOT_ARIA, THUMBNAIL_DIM_OVERLAY_CLASS } from "@/lib/thumbnail-styles";
@@ -23,10 +25,15 @@ import {
   PAGE_SUBHEADER_WITH_STICKY_CLASS,
 } from "@/lib/page-layout";
 import { cn } from "@/lib/utils";
+import { generateResourceDraftFromBrief } from "@/lib/resource-ai-draft";
+import { useFormAiDraftComposer } from "@/hooks/useFormAiDraftComposer";
 import { ImageCropPosterModal } from "@/components/resource/character/CharacterExpressionModal";
-import type { ImageResource, MediaResource } from "@/types/resource";
+import type { ImageResource, ImageResourceKind, MediaResource } from "@/types/resource";
 
-export type ImageResourceKind = "background" | "scene" | "media" | "gallery";
+export type { ImageResourceKind };
+
+/** OS 파일 선택창 — label htmlFor 연결용 */
+const IMAGE_RESOURCE_THUMBNAIL_FILE_INPUT_ID = "image-resource-thumbnail-file";
 
 /** 편집 시 기존 데이터. 배경/연출/갤러리는 imageUrl, 미디어는 thumbnailUrl 사용 */
 export type ImageResourceInitialData = ImageResource | MediaResource;
@@ -88,6 +95,13 @@ function getLabels(kind: ImageResourceKind) {
   }
 }
 
+const RESOURCE_COMPOSER_PLACEHOLDER: Record<ImageResourceKind, string> = {
+  background: "배경의 분위기·장면·시각적 특징을 서술형으로 입력해 주세요.",
+  scene: "연출 장면의 의도·구도·감정을 서술형으로 입력해 주세요.",
+  media: "미디어의 용도·장면·느낌을 서술형으로 입력해 주세요.",
+  gallery: "CG 장면의 스토리·분위기·인물 관계를 서술형으로 입력해 주세요.",
+};
+
 function getThumbnailUrl(data: ImageResourceInitialData): string {
   return "thumbnailUrl" in data ? data.thumbnailUrl : data.imageUrl;
 }
@@ -112,7 +126,6 @@ export function ImageResourceDetailPage({ kind, initialData }: ImageResourceDeta
     useState<{ id: string; expressionLabel: string; imageUrl?: string }[] | null>(null);
   const [pendingThumbnailUrl, setPendingThumbnailUrl] = useState<string | null>(null);
   const [sceneAiMode, setSceneAiMode] = useState<"apply" | "none">("apply");
-  const thumbnailFileInputRef = useRef<HTMLInputElement | null>(null);
 
   /** initialData 참조 변경 시 폼 값 재동기화 — render 중 setState 패턴 */
   const [initialDataSnapshot, setInitialDataSnapshot] = useState(initialData);
@@ -144,15 +157,30 @@ export function ImageResourceDetailPage({ kind, initialData }: ImageResourceDeta
     router.push(`/series/${seriesId}/resources`);
   }, [router, seriesId]);
 
+  const applyResourceDraft = useCallback((draft: { name: string; description: string }) => {
+    setName(draft.name);
+    setDescription(draft.description);
+  }, []);
+
+  const generateResourceDraft = useCallback(
+    (brief: string) => generateResourceDraftFromBrief(brief, kind),
+    [kind],
+  );
+
+  const aiComposer = useFormAiDraftComposer({
+    generate: generateResourceDraft,
+    onApply: applyResourceDraft,
+    successMessage: `${labels.sectionTitle} 초안을 채웠어요.`,
+    fallbackMessage: "AI 설정이 없어 임시 규칙으로 채웠어요.",
+    errorMessage: "리소스 초안 생성에 실패했어요.",
+  });
+
   const handleThumbnailClick = useCallback(() => {
-    if (thumbnailUrl) {
-      setThumbnailModalInitialSlots([
-        { id: "image-thumbnail", expressionLabel: "", imageUrl: thumbnailUrl },
-      ]);
-      setThumbnailModalOpen(true);
-      return;
-    }
-    thumbnailFileInputRef.current?.click();
+    if (!thumbnailUrl) return;
+    setThumbnailModalInitialSlots([
+      { id: "image-thumbnail", expressionLabel: "", imageUrl: thumbnailUrl },
+    ]);
+    setThumbnailModalOpen(true);
   }, [thumbnailUrl]);
 
   const handleThumbnailRemove = useCallback(() => {
@@ -207,7 +235,13 @@ export function ImageResourceDetailPage({ kind, initialData }: ImageResourceDeta
         </div>
       </header>
 
-      <div className={cn(PAGE_SCROLL_COLUMN_CLASS, "max-lg:px-0 max-lg:pt-0 max-lg:gap-0")}>
+      <div
+        className={cn(
+          PAGE_SCROLL_COLUMN_CLASS,
+          FLOATING_COMPOSER_SCROLL_PAD_CLASS,
+          "max-lg:px-0 max-lg:pt-0 max-lg:gap-0",
+        )}
+      >
         <div className="w-full min-w-0 max-w-[1200px] mx-auto mx-auto">
           <div
             className={cn(
@@ -314,7 +348,11 @@ export function ImageResourceDetailPage({ kind, initialData }: ImageResourceDeta
                     variant="img9:16"
                     slotKind="thumbnail"
                     ariaLabel={THUMBNAIL_SLOT_ARIA.addRepresentativeThumbnail}
-                    onClick={handleThumbnailClick}
+                    fileInput={{
+                      id: IMAGE_RESOURCE_THUMBNAIL_FILE_INPUT_ID,
+                      accept: "image/*",
+                      onChange: handleThumbnailFileChange,
+                    }}
                   />
                 )}
               </section>
@@ -391,14 +429,6 @@ export function ImageResourceDetailPage({ kind, initialData }: ImageResourceDeta
           </div>
         </div>
       </div>
-      <input
-        ref={thumbnailFileInputRef}
-        type="file"
-        accept="image/*"
-        className="sr-only"
-        aria-label={THUMBNAIL_SLOT_ARIA.addRepresentativeThumbnail}
-        onChange={handleThumbnailFileChange}
-      />
       <ImageCropPosterModal
         open={thumbnailModalOpen}
         onClose={() => {
@@ -431,6 +461,16 @@ export function ImageResourceDetailPage({ kind, initialData }: ImageResourceDeta
             return null;
           });
         }}
+      />
+      <FloatingAiComposerPortal
+        value={aiComposer.briefPrompt}
+        onChange={aiComposer.setBriefPrompt}
+        onSubmit={() => void aiComposer.handleGenerate()}
+        placeholder={RESOURCE_COMPOSER_PLACEHOLDER[kind]}
+        isLoading={aiComposer.isGenerating}
+        submitDisabled={aiComposer.isGenerating || aiComposer.briefPrompt.trim().length === 0}
+        loadingMessage={`${labels.sectionTitle} 초안을 생성하고 있어요`}
+        ariaLabel={`${labels.sectionTitle} AI 초안 입력`}
       />
     </div>
   );

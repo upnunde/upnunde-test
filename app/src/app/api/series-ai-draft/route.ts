@@ -1,11 +1,11 @@
 import { NextResponse } from "next/server";
-import { generateCharacterDraftWithLlm } from "@/lib/ai/generate-character-draft-server";
+import { generateSeriesDraftWithLlm } from "@/lib/ai/generate-series-draft-server";
 import { assertBriefLength, parseBriefFromBody } from "@/lib/ai/validate-brief";
 import {
   FORM_AI_DRAFT_ERROR_CODES,
   FormAiDraftServerError,
 } from "@/lib/ai/openai-json";
-import { CHARACTER_BRIEF_MAX } from "@/lib/character-form-limits";
+import { SERIES_BRIEF_MAX } from "@/lib/series-ai-draft-types";
 
 export const runtime = "nodejs";
 
@@ -23,8 +23,8 @@ export async function POST(request: Request) {
   const brief = parseBriefFromBody(body);
 
   try {
-    assertBriefLength(brief, CHARACTER_BRIEF_MAX);
-    const draft = await generateCharacterDraftWithLlm(brief);
+    assertBriefLength(brief, SERIES_BRIEF_MAX);
+    const draft = await generateSeriesDraftWithLlm(brief);
     return NextResponse.json(draft);
   } catch (error) {
     if (error instanceof FormAiDraftServerError) {
@@ -34,7 +34,7 @@ export async function POST(request: Request) {
       );
     }
 
-    console.error("[character-ai-draft]", error);
+    console.error("[series-ai-draft]", error);
     return NextResponse.json(
       {
         code: FORM_AI_DRAFT_ERROR_CODES.GENERATION_FAILED,

@@ -1,13 +1,24 @@
 import { NextResponse } from "next/server";
-import { generateCharacterDraftWithLlm } from "@/lib/ai/generate-character-draft-server";
+import { generateResourceDraftWithLlm } from "@/lib/ai/generate-resource-draft-server";
 import { assertBriefLength, parseBriefFromBody } from "@/lib/ai/validate-brief";
 import {
   FORM_AI_DRAFT_ERROR_CODES,
   FormAiDraftServerError,
 } from "@/lib/ai/openai-json";
-import { CHARACTER_BRIEF_MAX } from "@/lib/character-form-limits";
+import type { ImageResourceKind } from "@/types/resource";
+import { RESOURCE_BRIEF_MAX } from "@/lib/resource-ai-draft-types";
 
 export const runtime = "nodejs";
+
+const RESOURCE_KINDS: ImageResourceKind[] = ["background", "scene", "media", "gallery"];
+
+function parseKind(body: unknown): ImageResourceKind {
+  if (!body || typeof body !== "object" || !("kind" in body)) return "background";
+  const kind = body.kind;
+  return RESOURCE_KINDS.includes(kind as ImageResourceKind)
+    ? (kind as ImageResourceKind)
+    : "background";
+}
 
 export async function POST(request: Request) {
   let body: unknown;
@@ -21,10 +32,11 @@ export async function POST(request: Request) {
   }
 
   const brief = parseBriefFromBody(body);
+  const kind = parseKind(body);
 
   try {
-    assertBriefLength(brief, CHARACTER_BRIEF_MAX);
-    const draft = await generateCharacterDraftWithLlm(brief);
+    assertBriefLength(brief, RESOURCE_BRIEF_MAX);
+    const draft = await generateResourceDraftWithLlm(brief, kind);
     return NextResponse.json(draft);
   } catch (error) {
     if (error instanceof FormAiDraftServerError) {
@@ -34,7 +46,7 @@ export async function POST(request: Request) {
       );
     }
 
-    console.error("[character-ai-draft]", error);
+    console.error("[resource-ai-draft]", error);
     return NextResponse.json(
       {
         code: FORM_AI_DRAFT_ERROR_CODES.GENERATION_FAILED,

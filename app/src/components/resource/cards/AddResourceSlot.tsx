@@ -3,13 +3,28 @@
 import React from "react";
 import { Plus } from "lucide-react";
 import type { MediaSlotType } from "@/types/resource";
-import { THUMBNAIL_SLOT_ARIA } from "@/lib/thumbnail-styles";
+import {
+  RESOURCE_FILE_INPUT_OVERLAY_CLASS,
+  THUMBNAIL_SLOT_ARIA,
+} from "@/lib/thumbnail-styles";
 import { cn } from "@/lib/utils";
+
+export interface AddResourceSlotFileInputProps {
+  id?: string;
+  accept?: string;
+  multiple?: boolean;
+  onChange: (event: React.ChangeEvent<HTMLInputElement>) => void;
+}
 
 /** [정책 5] 리소스 그리드 마지막 요소(신규 등록) 또는 썸네일·이미지 추가 슬롯 */
 export interface AddResourceSlotProps {
   onClick?: () => void;
-  /** 지정 시 label+htmlFor로 숨김 file input과 직접 연결 (모달 등에서 OS 이미지 선택창 안정 동작) */
+  /**
+   * label 내부에 투명 file input 배치 — OS 이미지 선택창 안정 동작.
+   * `fileInputId`보다 이 방식을 우선 사용한다.
+   */
+  fileInput?: AddResourceSlotFileInputProps;
+  /** @deprecated `fileInput` 사용 */
   fileInputId?: string;
   /** 등장인물: 9:16(90×160) / img1:1: 120×120 정사각형 / img16:9: 가로 / img9:16: 세로 / mov: 세로+재생시간 */
   variant?: "character" | MediaSlotType;
@@ -26,6 +41,8 @@ export interface AddResourceSlotProps {
   ariaLabel?: string;
   /** variant 기본 크기 대신 사용 (모바일 캐러셀 등) */
   sizeClassName?: string;
+  /** 표정·썸네일 행 — 하단 캡션 높이 맞춤 */
+  showCaptionSpacer?: boolean;
 }
 
 const SLOT_SIZE_CLASS: Record<"character" | MediaSlotType, string> = {
@@ -38,6 +55,7 @@ const SLOT_SIZE_CLASS: Record<"character" | MediaSlotType, string> = {
 
 export function AddResourceSlot({
   onClick,
+  fileInput,
   fileInputId,
   variant = "mov",
   error = false,
@@ -45,27 +63,56 @@ export function AddResourceSlot({
   slotKind = "new-resource",
   ariaLabel,
   sizeClassName,
+  showCaptionSpacer = false,
 }: AddResourceSlotProps) {
   const resolvedAriaLabel =
     ariaLabel ??
     (slotKind === "thumbnail" ? THUMBNAIL_SLOT_ARIA.addImage : "새로 추가");
+  const isInlineThumbnail = slotKind === "thumbnail" && !showName;
   const sizeClass = sizeClassName ?? SLOT_SIZE_CLASS[variant === "character" ? "character" : variant];
   const slotClassName = cn(
     "rounded-lg flex flex-col justify-center items-center gap-my-8 overflow-hidden transition-colors cursor-pointer focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary",
     sizeClass,
+    (fileInput || fileInputId) && "relative",
     error
       ? "bg-error-error-container text-error-on-error-container hover:bg-error-error-container/90"
       : "border border-dashed border-border-20 bg-white text-muted-foreground hover:border-border-10 hover:bg-surface-20",
   );
   const plusIcon = (
-    <span className={cn("flex items-center justify-center shrink-0", sizeClassName ? "h-4 w-4" : "h-5 w-5")}>
+    <span
+      className={cn(
+        "pointer-events-none relative z-0 flex items-center justify-center shrink-0",
+        sizeClassName ? "h-4 w-4" : "h-5 w-5",
+      )}
+    >
       <Plus className={cn("shrink-0", sizeClassName ? "h-4 w-4" : "h-5 w-5")} aria-hidden />
     </span>
   );
 
   return (
-    <div className="flex w-full min-w-0 flex-col items-start justify-start gap-my-4">
-      {fileInputId ? (
+    <div
+      className={cn(
+        "flex flex-col items-start justify-start gap-my-4",
+        isInlineThumbnail
+          ? cn("inline-flex shrink-0", sizeClassName ? "w-[64px]" : "w-[90px]")
+          : "w-full min-w-0",
+      )}
+    >
+      {fileInput ? (
+        <label className={slotClassName} aria-label={resolvedAriaLabel}>
+          <input
+            type="file"
+            id={fileInput.id}
+            accept={fileInput.accept ?? "image/*"}
+            multiple={fileInput.multiple}
+            onChange={fileInput.onChange}
+            className={RESOURCE_FILE_INPUT_OVERLAY_CLASS}
+            aria-label={resolvedAriaLabel}
+            tabIndex={-1}
+          />
+          {plusIcon}
+        </label>
+      ) : fileInputId ? (
         <label htmlFor={fileInputId} className={slotClassName} aria-label={resolvedAriaLabel}>
           {plusIcon}
         </label>
@@ -74,6 +121,14 @@ export function AddResourceSlot({
           {plusIcon}
         </button>
       )}
+      {showCaptionSpacer && isInlineThumbnail ? (
+        <span
+          className="w-full text-caption1_400 leading-4 text-transparent select-none pointer-events-none"
+          aria-hidden
+        >
+          &#8203;
+        </span>
+      ) : null}
       {showName && (
         <div className="self-stretch inline-flex justify-start items-center gap-my-8 overflow-hidden">
           <span

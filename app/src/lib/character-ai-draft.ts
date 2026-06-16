@@ -1,12 +1,13 @@
 import { AI_DRAFT_DELAY_MS } from "@/lib/episode-ai-draft";
-import type { CharacterAiDraft } from "@/lib/character-ai-draft-types";
-import { CHARACTER_AI_DRAFT_ERROR_CODES } from "@/lib/character-ai-draft-types";
+import { FORM_AI_DRAFT_ERROR_CODES } from "@/lib/ai/openai-json";
 import {
   isCharacterAiDraftUsable,
   normalizeCharacterAiDraft,
 } from "@/lib/normalize-character-ai-draft";
 
-export type { CharacterAiDraft } from "@/lib/character-ai-draft-types";
+import type { CharacterAiDraft } from "@/lib/character-ai-draft-types";
+
+export type { CharacterAiDraft };
 
 export class CharacterAiDraftError extends Error {
   constructor(
@@ -111,7 +112,7 @@ async function fetchCharacterDraftFromApi(brief: string): Promise<CharacterAiDra
     greeting?: string;
   };
 
-  if (response.status === 503 && payload.code === CHARACTER_AI_DRAFT_ERROR_CODES.AI_NOT_CONFIGURED) {
+  if (response.status === 503 && payload.code === FORM_AI_DRAFT_ERROR_CODES.AI_NOT_CONFIGURED) {
     throw new CharacterAiDraftError(
       payload.message ?? "AI 초안 생성이 설정되지 않았어요.",
       payload.code,
@@ -154,7 +155,7 @@ export async function generateCharacterDraftFromBrief(
   } catch (error) {
     if (
       error instanceof CharacterAiDraftError &&
-      error.code === CHARACTER_AI_DRAFT_ERROR_CODES.AI_NOT_CONFIGURED
+      error.code === FORM_AI_DRAFT_ERROR_CODES.AI_NOT_CONFIGURED
     ) {
       const draft = await generateCharacterDraftFallback(normalized);
       return { draft, usedFallback: true };

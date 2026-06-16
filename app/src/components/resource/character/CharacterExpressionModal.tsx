@@ -21,6 +21,7 @@ import { AddResourceSlot } from "@/components/resource/cards/AddResourceSlot";
 import {
   MODAL_CROP_STAGE_CLASS,
   MODAL_CROP_STAGE_SIZE_PX,
+  RESOURCE_FILE_INPUT_OVERLAY_CLASS,
   THUMBNAIL_SLOT_ARIA,
   THUMBNAIL_DIM_OVERLAY_CLASS,
 } from "@/lib/thumbnail-styles";
@@ -41,7 +42,6 @@ const MOBILE_EXPRESSION_CAROUSEL_ITEM_CLASS = "w-[64px]";
 /** 데스크톱 표정 그리드 — 90×160 고정, 3열 fit-content */
 const DESKTOP_EXPRESSION_THUMB_CLASS = "h-[160px] w-[90px]";
 const DESKTOP_EXPRESSION_ITEM_CLASS = "w-[90px]";
-const CHARACTER_EXPRESSION_FILE_INPUT_ID = "character-expression-modal-file";
 const EXPRESSION_DESKTOP_BODY_HEIGHT_VAR = "--expression-panel-h";
 /**
  * PC 멀티 표정 모달 디폴트 치수 — 변경 시 `.cursor/rules/resource-patterns.mdc` §표정 등록 모달 동기화.
@@ -231,7 +231,6 @@ export function CharacterExpressionModal({
   const [expressionInput, setExpressionInput] = useState("");
   const [_suggestionOpen, setSuggestionOpen] = useState(false);
   const [saving, setSaving] = useState(false);
-  const fileInputRef = useRef<HTMLInputElement | null>(null);
   const [panBySlotId, setPanBySlotId] = useState<Record<string, { x: number; y: number }>>({});
   const [isDragging, setIsDragging] = useState(false);
   const cropStageRef = useRef<HTMLDivElement | null>(null);
@@ -595,7 +594,11 @@ export function CharacterExpressionModal({
           variant="img9:16"
           slotKind="thumbnail"
           ariaLabel={THUMBNAIL_SLOT_ARIA.addExpression}
-          fileInputId={CHARACTER_EXPRESSION_FILE_INPUT_ID}
+          fileInput={{
+            accept: "image/*",
+            multiple: true,
+            onChange: handleFilesSelected,
+          }}
           sizeClassName={options?.carouselItem ? MOBILE_EXPRESSION_CAROUSEL_THUMB_CLASS : undefined}
         />
       </div>
@@ -733,16 +736,6 @@ export function CharacterExpressionModal({
         aria-describedby={undefined}
       >
         <DialogTitle className="sr-only">이미지 편집</DialogTitle>
-        <input
-          id={CHARACTER_EXPRESSION_FILE_INPUT_ID}
-          ref={fileInputRef}
-          type="file"
-          accept="image/*"
-          multiple
-          className="hidden"
-          aria-label={THUMBNAIL_SLOT_ARIA.addExpression}
-          onChange={handleFilesSelected}
-        />
         <div
           className={cn(
             formDialogSheetBodyWrapperClassName,
@@ -799,13 +792,21 @@ export function CharacterExpressionModal({
                 onWheel={handleCropWheel}
               />
               {!previewImageUrl && (
-                <label
-                  htmlFor={CHARACTER_EXPRESSION_FILE_INPUT_ID}
-                  className="absolute inset-0 z-[2] flex cursor-pointer items-center justify-center px-my-8 text-center text-on-surface-30 text-body3_400"
-                >
-                  {layoutShowSlotList && slots.some((s) => s.imageUrl)
-                    ? "썸네일을 클릭하여 선택하세요"
-                    : "클릭하여 이미지를 추가하세요"}
+                <label className="absolute inset-0 z-[2] flex cursor-pointer items-center justify-center px-my-8 text-center text-on-surface-30 text-body3_400">
+                  <input
+                    type="file"
+                    accept="image/*"
+                    multiple
+                    onChange={handleFilesSelected}
+                    className={RESOURCE_FILE_INPUT_OVERLAY_CLASS}
+                    aria-label={THUMBNAIL_SLOT_ARIA.addExpression}
+                    tabIndex={-1}
+                  />
+                  <span className="pointer-events-none">
+                    {layoutShowSlotList && slots.some((s) => s.imageUrl)
+                      ? "썸네일을 클릭하여 선택하세요"
+                      : "클릭하여 이미지를 추가하세요"}
+                  </span>
                 </label>
               )}
               {cropAspect === "9/16" && (
