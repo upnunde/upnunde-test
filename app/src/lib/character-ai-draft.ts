@@ -1,10 +1,27 @@
 import { AI_DRAFT_DELAY_MS } from "@/lib/episode-ai-draft";
+import type { CharacterAiDraft } from "@/lib/character-ai-draft-types";
+import { CHARACTER_AI_DRAFT_ERROR_CODES } from "@/lib/character-ai-draft-types";
+import {
+  isCharacterAiDraftUsable,
+  normalizeCharacterAiDraft,
+} from "@/lib/normalize-character-ai-draft";
 
-export interface CharacterAiDraft {
-  name: string;
-  summary: string;
-  tags: string[];
-  greeting: string;
+export type { CharacterAiDraft } from "@/lib/character-ai-draft-types";
+
+export class CharacterAiDraftError extends Error {
+  constructor(
+    message: string,
+    readonly code?: string,
+  ) {
+    super(message);
+    this.name = "CharacterAiDraftError";
+  }
+}
+
+export interface GenerateCharacterDraftResult {
+  draft: CharacterAiDraft;
+  /** API 키 미설정 등으로 규칙 기반 폴백을 사용했는지 */
+  usedFallback: boolean;
 }
 
 function delay(ms: number): Promise<void> {
@@ -56,16 +73,12 @@ function buildGreeting(brief: string, name: string, maxLen: number): string {
   if (!lead) return "";
 
   const subject = name || "나";
-  const base = lead.includes(subject)
-    ? lead
-    : `${subject}입니다. ${lead}`;
+  const base = lead.includes(subject) ? lead : `${subject}입니다. ${lead}`;
   return base.length > maxLen ? `${base.slice(0, maxLen - 1)}…` : base;
 }
 
-/** API 연동 전 프로토타입 — 간략 입력으로 캐릭터 텍스트 필드 초안 생성 */
-export async function generateCharacterDraftFromBrief(
-  brief: string,
-): Promise<CharacterAiDraft> {
+/** API 미연동·오프라인 시 규칙 기반 폴백 */
+async function generateCharacterDraftFallback(brief: string): Promise<CharacterAiDraft> {
   const normalized = brief.trim();
   await delay(AI_DRAFT_DELAY_MS);
 
@@ -79,5 +92,73 @@ export async function generateCharacterDraftFromBrief(
   const tags = extractTags(normalized);
   const greeting = buildGreeting(normalized, name, 300);
 
-  return { name, summary, tags, greeting };
+  return normalizeCharacterAiDraft({ name, summary, tags, greeting });
+}
+
+async function fetchCharacterDraftFromApi(brief: string): Promise<CharacterAiDraft> {
+  const response = await fetch("/api/character-ai-draft", {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({ brief }),
+  });
+
+  const payload = (await response.json().catch(() => ({}))) as {
+    code?: string;
+    message?: string;
+    name?: string;
+    summary?: string;
+    tags?: string[];
+    greeting?: string;
+  };
+
+  if (response.status === 503 && payload.code === CHARACTER_AI_DRAFT_ERROR_CODES.AI_NOT_CONFIGURED) {
+    throw new CharacterAiDraftError(
+      payload.message ?? "AI 초안 생성이 설정되지 않았어요.",
+      payload.code,
+    );
+  }
+
+  if (!response.ok) {
+    throw new CharacterAiDraftError(
+      payload.message ?? "AI 초안 생성에 실패했어요.",
+      payload.code,
+    );
+  }
+
+  const draft = normalizeCharacterAiDraft(payload);
+  if (!isCharacterAiDraftUsable(draft)) {
+    throw new CharacterAiDraftError("생성된 초안이 충분하지 않아요.");
+  }
+
+  return draft;
+}
+
+/**
+ * 서술형 입력 → 인물정보 텍스트 필드 초안.
+ * LLM API 우선, 미설정 시 규칙 기반 폴백.
+ */
+export async function generateCharacterDraftFromBrief(
+  brief: string,
+): Promise<GenerateCharacterDraftResult> {
+  const normalized = brief.trim();
+  if (!normalized) {
+    return {
+      draft: { name: "", summary: "", tags: [], greeting: "" },
+      usedFallback: false,
+    };
+  }
+
+  try {
+    const draft = await fetchCharacterDraftFromApi(normalized);
+    return { draft, usedFallback: false };
+  } catch (error) {
+    if (
+      error instanceof CharacterAiDraftError &&
+      error.code === CHARACTER_AI_DRAFT_ERROR_CODES.AI_NOT_CONFIGURED
+    ) {
+      const draft = await generateCharacterDraftFallback(normalized);
+      return { draft, usedFallback: true };
+    }
+    throw error;
+  }
 }

@@ -39,13 +39,14 @@ import {
 } from "@/lib/page-layout";
 import { cn } from "@/lib/utils";
 import { generateCharacterDraftFromBrief } from "@/lib/character-ai-draft";
+import { useClientMounted } from "@/hooks/useClientMounted";
 import {
   buildMyWorksCharacterFromForm,
   stageMyWorksPendingCharacter,
 } from "@/lib/myWorksCharacterCreate";
 import { WORKS_TAB_PATH } from "@/lib/worksArea";
 import type { CharacterResource, CharacterExpressionSlot } from "@/types/resource";
-import { useClientMounted } from "@/hooks/useClientMounted";
+import { useToast } from "@/store/useToastStore";
 
 export type CharacterDetailPageContext = "series-resource" | "my-works";
 
@@ -102,6 +103,7 @@ export function CharacterDetailPage({
   const expressionFileInputRef = useRef<HTMLInputElement>(null);
   const thumbnailFileInputRef = useRef<HTMLInputElement>(null);
   const mounted = useClientMounted();
+  const { toast } = useToast();
   const [briefPrompt, setBriefPrompt] = useState("");
   const [isGenerating, setIsGenerating] = useState(false);
 
@@ -172,17 +174,29 @@ export function CharacterDetailPage({
     if (!prompt || isGenerating) return;
     setIsGenerating(true);
     try {
-      const draft = await generateCharacterDraftFromBrief(prompt);
+      const { draft, usedFallback } = await generateCharacterDraftFromBrief(prompt);
       setName(draft.name);
       setSummary(draft.summary);
       setTagList(draft.tags);
       setTags("");
       setGreeting(draft.greeting);
       setBriefPrompt("");
+      toast({
+        message: usedFallback
+          ? "AI 설정이 없어 임시 규칙으로 채웠어요."
+          : "캐릭터 정보 초안을 채웠어요.",
+        variant: "default",
+      });
+    } catch (error) {
+      toast({
+        message:
+          error instanceof Error ? error.message : "캐릭터 초안 생성에 실패했어요.",
+        variant: "withClose",
+      });
     } finally {
       setIsGenerating(false);
     }
-  }, [briefPrompt, isGenerating]);
+  }, [briefPrompt, isGenerating, toast]);
 
   const handleApplyImportedCharacterToForm = useCallback((selected: ImportableCharacterPick) => {
     setName(selected.name);

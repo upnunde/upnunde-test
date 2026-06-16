@@ -1,6 +1,6 @@
 "use client";
 
-import { useCallback, useLayoutEffect, useRef, useState } from "react";
+import { useCallback, useEffect, useLayoutEffect, useRef, useState } from "react";
 import { ArrowUp } from "lucide-react";
 import { AiFieldLoadingMessage } from "@/components/episode/EpisodeAiFieldLoading";
 import { EPISODE_FORM_FIELD_COPY } from "@/lib/episode-form-copy";
@@ -67,6 +67,7 @@ export function FloatingComposerBar({
   ariaLabel = "에피소드 AI 초안 입력",
 }: FloatingComposerBarProps) {
   const textareaRef = useRef<HTMLTextAreaElement>(null);
+  const wasFocusedRef = useRef(false);
   const [isFocused, setIsFocused] = useState(false);
   const [isMultiline, setIsMultiline] = useState(false);
 
@@ -123,25 +124,60 @@ export function FloatingComposerBar({
       scrollHeight > COMPOSER_TEXTAREA_MAX_HEIGHT_PX ? "auto" : "hidden";
   }, [value, isLoading]);
 
+  const restoreFocusIfNeeded = useCallback(() => {
+    const el = textareaRef.current;
+    if (!wasFocusedRef.current || !el || document.activeElement === el) return;
+    el.focus({ preventScroll: true });
+  }, []);
+
+  const resetLayoutStyles = useCallback(() => {
+    setIsMultiline(false);
+    const el = textareaRef.current;
+    if (!el) return;
+    el.style.height = "";
+    el.style.overflowY = "hidden";
+  }, []);
+
+  const resetToDefaultLayout = useCallback(
+    (options?: { blur?: boolean }) => {
+      resetLayoutStyles();
+      if (!options?.blur) return;
+      wasFocusedRef.current = false;
+      setIsFocused(false);
+      textareaRef.current?.blur();
+    },
+    [resetLayoutStyles],
+  );
+
   useLayoutEffect(() => {
     syncComposerLayout();
-  }, [syncComposerLayout]);
+    restoreFocusIfNeeded();
+  }, [syncComposerLayout, restoreFocusIfNeeded]);
 
   /** 단일 줄 레이아웃으로 바뀐 뒤 한 번 더 측정해 pill 형태로 복원 */
   useLayoutEffect(() => {
     if (isMultiline) return;
     syncComposerLayout();
-  }, [isMultiline, syncComposerLayout]);
+    restoreFocusIfNeeded();
+  }, [isMultiline, syncComposerLayout, restoreFocusIfNeeded]);
 
-  const resetToDefaultLayout = useCallback(() => {
-    setIsFocused(false);
-    setIsMultiline(false);
-    const el = textareaRef.current;
-    if (!el) return;
-    el.blur();
-    el.style.height = "";
-    el.style.overflowY = "hidden";
-  }, []);
+  /** 모바일 키보드·브라우저 크롬 변화 시 fixed 재배치로 포커스가 풀리는 경우 복원 */
+  useEffect(() => {
+    if (!isFocused) return;
+    const vv = window.visualViewport;
+    if (!vv) return;
+
+    const keepFocus = () => {
+      restoreFocusIfNeeded();
+    };
+
+    vv.addEventListener("resize", keepFocus);
+    vv.addEventListener("scroll", keepFocus);
+    return () => {
+      vv.removeEventListener("resize", keepFocus);
+      vv.removeEventListener("scroll", keepFocus);
+    };
+  }, [isFocused, restoreFocusIfNeeded]);
 
   const handleSubmit = useCallback(() => {
     if (!canSubmit) return;
@@ -151,15 +187,14 @@ export function FloatingComposerBar({
   /** 생성 시작 시 확장 레이아웃을 pill 기본 크기로 접음 */
   useLayoutEffect(() => {
     if (!isLoading) return;
-    resetToDefaultLayout();
+    resetToDefaultLayout({ blur: true });
   }, [isLoading, resetToDefaultLayout]);
 
-  /** 생성 완료 후 부모가 value를 비우면 pill 기본 레이아웃으로 복원 */
+  /** 생성 완료 후 부모가 value를 비우면 pill 기본 레이아웃으로 복원 (포커스는 유지) */
   useLayoutEffect(() => {
-    if (!isLoading && !value) {
-      resetToDefaultLayout();
-    }
-  }, [isLoading, resetToDefaultLayout, value]);
+    if (isLoading || value) return;
+    resetLayoutStyles();
+  }, [isLoading, resetLayoutStyles, value]);
 
   const handleKeyDown = (e: React.KeyboardEvent<HTMLTextAreaElement>) => {
     if (e.key === "Enter" && !e.shiftKey) {
@@ -203,8 +238,7 @@ export function FloatingComposerBar({
           placement === "sticky" && "mb-my-20",
           shellRadiusClass,
           shellShadow,
-          "grid pl-my-16",
-          showSendButton ? "grid-cols-[1fr_auto] pr-my-8" : "grid-cols-1 pr-my-16",
+          "grid pl-my-16 grid-cols-[1fr_auto] pr-my-8",
           showExpandedLayout
             ? "gap-x-my-8 gap-y-my-8 py-my-8"
             : `${COMPOSER_BAR_HEIGHT_CLASS} items-center gap-my-8 py-0`,
@@ -226,8 +260,14 @@ export function FloatingComposerBar({
             rows={1}
             value={value}
             onChange={(e) => onChange(e.target.value)}
-            onFocus={() => setIsFocused(true)}
-            onBlur={() => setIsFocused(false)}
+            onFocus={() => {
+              wasFocusedRef.current = true;
+              setIsFocused(true);
+            }}
+            onBlur={() => {
+              wasFocusedRef.current = false;
+              setIsFocused(false);
+            }}
             onKeyDown={handleKeyDown}
             readOnly={isLoading}
             disabled={disabled}
@@ -248,18 +288,17 @@ export function FloatingComposerBar({
             </div>
           ) : null}
         </div>
-        {showSendButton ? (
-          <div
-            className={cn(
-              "flex shrink-0 items-center justify-center",
-              showExpandedLayout
-                ? "col-span-full row-start-2 w-full justify-end pt-my-2"
-                : "col-start-2 row-start-1 self-center",
-            )}
-          >
-            {sendButton}
-          </div>
-        ) : null}
+        <div
+          className={cn(
+            "col-start-2 flex shrink-0 items-center justify-center",
+            showExpandedLayout
+              ? "col-span-full row-start-2 w-full justify-end pt-my-2"
+              : "row-start-1 self-center",
+            !showSendButton && !showExpandedLayout && "invisible pointer-events-none",
+          )}
+        >
+          {sendButton}
+        </div>
       </div>
     </div>
   );
