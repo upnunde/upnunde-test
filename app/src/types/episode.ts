@@ -1,5 +1,5 @@
 /** 에피소드 공개 상태 */
-export type EpisodeStatus = "DRAFT" | "PRIVATE" | "PUBLISHED";
+export type EpisodeStatus = "DRAFT" | "PRIVATE" | "SCHEDULED" | "PUBLISHED";
 
 /** 에피소드 목록 아이템 */
 export interface Episode {
@@ -10,6 +10,8 @@ export interface Episode {
   date: string;
   views: number;
   status: EpisodeStatus;
+  /** 예약 공개 시각 (ISO 8601) */
+  scheduledPublishAt?: string | null;
 }
 
 /** 정렬 기준 */

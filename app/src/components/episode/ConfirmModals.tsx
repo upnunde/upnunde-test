@@ -1,118 +1,323 @@
 "use client";
 
-import React, { useState } from "react";
-import { Dialog, DialogContent, DialogTitle, DialogClose } from "@/components/ui/dialog";
-import { Button } from "@/components/ui/button";
+import React, { useEffect, useState } from "react";
+import { Dialog, DialogContent, DialogTitle } from "@/components/ui/dialog";
 import {
+  ModalConfirmPhraseField,
   ModalFooterButtons,
   ModalHeader,
   modalDialogContentClassName,
 } from "@/components/ui/modal";
 import { formTextFieldSmClassName } from "@/lib/form-field-styles";
-import { CONFIRM_INPUT_GUIDE_TEXT, CONFIRM_INPUT_PHRASE } from "@/lib/deleteConfirmPhrase";
+import { CONFIRM_INPUT_PHRASE } from "@/lib/deleteConfirmPhrase";
+import { formatScheduledPublishSummary } from "@/lib/formatEpisode";
+import {
+  buildScheduledPublishIso,
+  getDefaultScheduleInputValues,
+  isScheduledPublishValid,
+  toInputDateValue,
+  toInputTimeValue,
+} from "@/lib/scheduled-publish";
 import { cn } from "@/lib/utils";
 import type { Episode } from "@/types/episode";
 
-/** 안내팝업: 공개 전 유의사항 (정책 6) */
+export type PublishMode = "immediate" | "scheduled";
+
+export interface PublishConfirmPayload {
+  episode: Episode;
+  mode: PublishMode;
+  scheduledPublishAt?: string;
+}
+
+/** 안내팝업: 공개 전 유의사항 (정책 6) — 1단계 설정 → 2단계 최종 확인 */
 export interface PublishConfirmModalProps {
   open: boolean;
   episode: Episode | null;
   onClose: () => void;
-  onConfirm: (episode: Episode) => void;
+  onConfirm: (payload: PublishConfirmPayload) => void;
+  onCancelSchedule?: (episode: Episode) => void;
 }
+
+type PublishFlowStep = "setup" | "confirm";
+type PublishModeSelection = PublishMode | null;
+
+function resetPublishFormState() {
+  return {
+    step: "setup" as PublishFlowStep,
+    publishMode: null as PublishModeSelection,
+    confirmationText: "",
+    scheduledDate: "",
+    scheduledTime: "",
+  };
+}
+
+const publishModeToggleClassName = cn(
+  "flex-1 h-10 rounded-md border text-body3_500 transition-colors",
+  "focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-2",
+);
 
 export function PublishConfirmModal({
   open,
   episode,
   onClose,
   onConfirm,
+  onCancelSchedule,
 }: PublishConfirmModalProps) {
+  const [step, setStep] = useState<PublishFlowStep>("setup");
+  const [publishMode, setPublishMode] = useState<PublishModeSelection>(null);
   const [confirmationText, setConfirmationText] = useState("");
+  const [scheduledDate, setScheduledDate] = useState("");
+  const [scheduledTime, setScheduledTime] = useState("");
+
   const isConfirmKeywordMatched = confirmationText.trim() === CONFIRM_INPUT_PHRASE;
+  const isScheduledInputValid =
+    publishMode !== "scheduled" ||
+    isScheduledPublishValid(scheduledDate, scheduledTime);
+
+  const canProceedFromSetup =
+    !!episode && publishMode !== null && isScheduledInputValid;
+
+  const canSubmit =
+    !!episode && publishMode !== null && isConfirmKeywordMatched && isScheduledInputValid;
+
+  const submitLabel = publishMode === "scheduled" ? "예약하기" : "공개";
+
+  const isEditingSchedule = episode?.status === "SCHEDULED";
+
+  const scheduledSummary =
+    publishMode === "scheduled" && scheduledDate && scheduledTime
+      ? formatScheduledPublishSummary(buildScheduledPublishIso(scheduledDate, scheduledTime))
+      : null;
+
+  useEffect(() => {
+    if (!open) return;
+
+    if (episode?.status === "SCHEDULED" && episode.scheduledPublishAt) {
+      const scheduledAt = new Date(episode.scheduledPublishAt);
+      setStep("setup");
+      setPublishMode("scheduled");
+      setConfirmationText("");
+      setScheduledDate(toInputDateValue(scheduledAt));
+      setScheduledTime(toInputTimeValue(scheduledAt));
+      return;
+    }
+
+    const defaults = resetPublishFormState();
+    setStep(defaults.step);
+    setPublishMode(defaults.publishMode);
+    setConfirmationText(defaults.confirmationText);
+    setScheduledDate(defaults.scheduledDate);
+    setScheduledTime(defaults.scheduledTime);
+  }, [open, episode]);
+
+  const resetState = () => {
+    const defaults = resetPublishFormState();
+    setStep(defaults.step);
+    setPublishMode(defaults.publishMode);
+    setConfirmationText(defaults.confirmationText);
+    setScheduledDate(defaults.scheduledDate);
+    setScheduledTime(defaults.scheduledTime);
+  };
+
+  const handleClose = () => {
+    resetState();
+    onClose();
+  };
+
+  const handleModeSelect = (mode: PublishMode) => {
+    setPublishMode(mode);
+    if (mode === "scheduled" && !scheduledDate) {
+      const defaults = getDefaultScheduleInputValues();
+      setScheduledDate(defaults.date);
+      setScheduledTime(defaults.time);
+    }
+  };
+
+  const handleSetupNext = () => {
+    if (!canProceedFromSetup) return;
+    setConfirmationText("");
+    setStep("confirm");
+  };
+
+  const handleBackToSetup = () => {
+    setConfirmationText("");
+    setStep("setup");
+  };
+
+  const handleCancelScheduleClick = () => {
+    if (!episode || !onCancelSchedule) return;
+    onCancelSchedule(episode);
+    resetState();
+    onClose();
+  };
 
   const handleConfirm = () => {
-    if (episode && isConfirmKeywordMatched) {
-      setConfirmationText("");
-      onConfirm(episode);
-      onClose();
+    if (!episode || !canSubmit || publishMode === null) return;
+
+    const payload: PublishConfirmPayload = {
+      episode,
+      mode: publishMode,
+    };
+
+    if (publishMode === "scheduled") {
+      payload.scheduledPublishAt = buildScheduledPublishIso(scheduledDate, scheduledTime);
     }
+
+    resetState();
+    onConfirm(payload);
+    onClose();
   };
 
   return (
     <Dialog
       open={open}
-      onOpenChange={(o) => {
-        if (!o) {
-          setConfirmationText("");
-          onClose();
-        }
+      onOpenChange={(isOpen) => {
+        if (!isOpen) handleClose();
       }}
     >
-      <DialogContent presentation="center" className={cn(modalDialogContentClassName, "outline-none focus:outline-none")}>
-        {/* 상단: 제목 + 부제 (가이드 레이아웃) */}
-        <div className="self-stretch px-my-24 pt-my-40 pb-my-16 bg-surface-10 max-lg:rounded-t-[16px] lg:rounded-t-[4px] flex flex-col justify-start items-center gap-my-20">
-          <div className="self-stretch flex flex-col justify-center items-center gap-my-8">
-            <DialogTitle asChild>
-              <h2 className="text-center text-on-surface-10 text-heading2_700 font-['Pretendard_JP']">
-                공개 전 유의사항
-              </h2>
-            </DialogTitle>
-          </div>
-          <div className="self-stretch text-on-surface-20 text-body1_500 font-['Pretendard_JP'] space-y-my-12">
-            <p className="text-center">
-              에피소드를 공개하기 전, 아래 내용을 꼭 확인해 주세요!
-            </p>
-            <div className="self-stretch p-my-20 bg-surface-20 rounded-lg inline-flex flex-col justify-center items-center gap-my-8">
-              <div className="self-stretch inline-flex justify-start items-start gap-my-8">
-                <div className="w-4 justify-center text-on-surface-20 text-body1_500 font-['Pretendard_JP']">
-                  1
-                </div>
-                <div className="flex-1 justify-center text-on-surface-20 text-body1_400 font-['Pretendard_JP']">
-                  결제 보안 및 데이터 신뢰성 보호를 위해 공개 이후에는 창작자가 직접 에피소드를 수정하거나
-                  삭제할 수 없습니다.
-                </div>
+      <DialogContent
+        presentation="center"
+        className={cn(modalDialogContentClassName, "outline-none focus:outline-none")}
+      >
+        {step === "setup" ? (
+          <>
+            <ModalHeader
+              title="공개 방식"
+              subtitle="에피소드를 언제 공개할지 선택해 주세요."
+            />
+            <div className="self-stretch px-my-20 pb-my-20 space-y-my-8">
+              <div className="flex w-full gap-my-8" role="group" aria-label="공개 방식">
+                <button
+                  type="button"
+                  onClick={() => handleModeSelect("immediate")}
+                  aria-pressed={publishMode === "immediate"}
+                  className={cn(
+                    publishModeToggleClassName,
+                    publishMode === "immediate"
+                      ? "border-primary bg-primary/10 text-primary"
+                      : "border-border-10 bg-white text-on-surface-20 hover:bg-surface-20",
+                  )}
+                >
+                  즉시 공개
+                </button>
+                <button
+                  type="button"
+                  onClick={() => handleModeSelect("scheduled")}
+                  aria-pressed={publishMode === "scheduled"}
+                  className={cn(
+                    publishModeToggleClassName,
+                    publishMode === "scheduled"
+                      ? "border-primary bg-primary/10 text-primary"
+                      : "border-border-10 bg-white text-on-surface-20 hover:bg-surface-20",
+                  )}
+                >
+                  예약 공개
+                </button>
               </div>
-              <div className="self-stretch inline-flex justify-start items-start gap-my-8">
-                <div className="w-4 justify-center text-on-surface-20 text-body1_500 font-['Pretendard_JP']">
-                  2
-                </div>
-                <div className="flex-1 justify-center text-on-surface-20 text-body1_400 font-['Pretendard_JP']">
-                  내용의 변경 또는 삭제가 반드시 필요한 경우, 고객센터 이메일을 통한 별도의 요청 및 승인
-                  절차를 거쳐야 합니다.
-                </div>
-              </div>
-            </div>
-            <div className="self-stretch space-y-my-8">
-              <p className="text-body3_500 text-on-surface-20">{CONFIRM_INPUT_GUIDE_TEXT}</p>
-              <input
-                type="text"
-                value={confirmationText}
-                onChange={(e) => setConfirmationText(e.target.value)}
-                placeholder={CONFIRM_INPUT_PHRASE}
-                className={cn(formTextFieldSmClassName, "w-full")}
-              />
-            </div>
-          </div>
-        </div>
 
-        {/* 하단: 버튼 영역 (가이드 레이아웃) */}
-        <div className="self-stretch max-lg:rounded-b-[16px] lg:rounded-b-[4px] flex flex-col justify-start items-start overflow-hidden bg-surface-10">
-          <div className="self-stretch px-my-24 pt-my-8 pb-my-20 bg-surface-10 inline-flex justify-end items-center gap-my-8">
-            <DialogClose asChild>
-              <Button variant="outline" size="lg" className="min-w-20">
-                취소
-              </Button>
-            </DialogClose>
-            <Button
-              size="lg"
-              className="min-w-20"
-              onClick={handleConfirm}
-              disabled={!isConfirmKeywordMatched || !episode}
-            >
-              공개
-            </Button>
-          </div>
-        </div>
+              {publishMode === "scheduled" ? (
+                <div className="flex gap-my-8">
+                  <input
+                    type="date"
+                    value={scheduledDate}
+                    onChange={(e) => setScheduledDate(e.target.value)}
+                    className={cn(formTextFieldSmClassName, "min-w-0 flex-1")}
+                    aria-label="공개 날짜"
+                  />
+                  <input
+                    type="time"
+                    value={scheduledTime}
+                    onChange={(e) => setScheduledTime(e.target.value)}
+                    className={cn(formTextFieldSmClassName, "w-[8.75rem] shrink-0")}
+                    aria-label="공개 시간"
+                  />
+                </div>
+              ) : null}
+            </div>
+
+            <ModalFooterButtons
+              layout={isEditingSchedule ? "split" : "end"}
+              leadingButton={
+                isEditingSchedule
+                  ? { label: "예약 취소", tone: "ghost", onClick: handleCancelScheduleClick }
+                  : undefined
+              }
+              trailingButtons={[
+                { label: "취소", closeOnSelect: true },
+                {
+                  label: "다음",
+                  tone: "primary",
+                  onClick: handleSetupNext,
+                  disabled: !canProceedFromSetup,
+                },
+              ]}
+            />
+          </>
+        ) : (
+          <>
+            <div className="self-stretch px-my-20 pt-my-40 pb-my-16 bg-surface-10 max-lg:rounded-t-[16px] lg:rounded-t-[4px] flex flex-col justify-start items-center gap-my-20">
+              <div className="self-stretch flex flex-col justify-center items-center gap-my-8">
+                <DialogTitle asChild>
+                  <h2 className="text-center text-on-surface-10 text-heading2_700 font-['Pretendard_JP']">
+                    공개 전 유의사항
+                  </h2>
+                </DialogTitle>
+              </div>
+              <div className="self-stretch text-on-surface-20 text-body1_500 font-['Pretendard_JP'] space-y-my-12">
+                <p className="text-center">
+                  에피소드를 공개하기 전, 아래 내용을 꼭 확인해 주세요!
+                </p>
+                {publishMode === "scheduled" && scheduledSummary ? (
+                  <p className="text-center text-body3_500 text-primary">
+                    {scheduledSummary} 예약
+                  </p>
+                ) : (
+                  <p className="text-center text-body3_500 text-primary">즉시 공개</p>
+                )}
+                <div className="self-stretch p-my-20 bg-surface-20 rounded-lg inline-flex flex-col justify-center items-center gap-my-8">
+                  <div className="self-stretch inline-flex justify-start items-start gap-my-8">
+                    <div className="w-4 justify-center text-on-surface-20 text-body3_500 font-['Pretendard_JP']">
+                      1
+                    </div>
+                    <div className="flex-1 justify-center text-on-surface-20 text-body3_400 font-['Pretendard_JP']">
+                      결제 보안 및 데이터 신뢰성 보호를 위해 공개 이후에는 창작자가 직접 에피소드를 수정하거나
+                      삭제할 수 없습니다.
+                    </div>
+                  </div>
+                  <div className="self-stretch inline-flex justify-start items-start gap-my-8">
+                    <div className="w-4 justify-center text-on-surface-20 text-body3_500 font-['Pretendard_JP']">
+                      2
+                    </div>
+                    <div className="flex-1 justify-center text-on-surface-20 text-body3_400 font-['Pretendard_JP']">
+                      내용의 변경 또는 삭제가 반드시 필요한 경우, 고객센터 이메일을 통한 별도의 요청 및 승인
+                      절차를 거쳐야 합니다.
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <ModalFooterButtons
+              layout="split"
+              leadingButton={{ label: "이전", onClick: handleBackToSetup }}
+              body={
+                <ModalConfirmPhraseField
+                  inputId="episode-publish-confirm-input"
+                  value={confirmationText}
+                  onChange={setConfirmationText}
+                />
+              }
+              trailingButtons={[
+                {
+                  label: submitLabel,
+                  tone: "primary",
+                  onClick: handleConfirm,
+                  disabled: !canSubmit,
+                },
+              ]}
+            />
+          </>
+        )}
       </DialogContent>
     </Dialog>
   );

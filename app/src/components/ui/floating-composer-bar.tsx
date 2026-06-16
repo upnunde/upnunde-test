@@ -11,6 +11,10 @@ export type FloatingComposerBarPlacement = "fixed" | "sticky";
 /** 플로팅 AI 입력 바 전용 최대 너비 (에피소드 폼 카드 너비와 무관) */
 export const FLOATING_COMPOSER_MAX_WIDTH_CLASS = "max-w-[560px] w-full";
 
+/** fixed 배치 가로 폭·정렬 — safe-area·20px 양쪽 여백, 가로 화면(landscape) 대응 */
+const FLOATING_COMPOSER_FIXED_WIDTH_CLASS =
+  "left-1/2 -translate-x-1/2 w-[min(560px,calc(100dvw-env(safe-area-inset-left,0px)-env(safe-area-inset-right,0px)-2*var(--spacing-my-20)))]";
+
 const COMPOSER_TEXTAREA_MAX_HEIGHT_PX = 120;
 /** text-sm leading-5 한 줄 line-height */
 const COMPOSER_LINE_HEIGHT_PX = 20;
@@ -34,6 +38,15 @@ export interface FloatingComposerBarProps {
 
 const shellShadow =
   "shadow-[0_-2px_12px_rgba(15,23,42,0.06),0_8px_24px_rgba(15,23,42,0.08)]";
+
+/** 플로팅 컴포저 pill 한 줄 높이 */
+const COMPOSER_BAR_HEIGHT_CLASS = "h-[48px]";
+
+/**
+ * fixed 배치 하단 앵커 — 모바일: 20px + safe-area + 브라우저/키보드 크롬 · 데스크톱: 20px
+ */
+const FLOATING_COMPOSER_FIXED_BOTTOM_CLASS =
+  "max-lg:bottom-[calc(var(--spacing-my-20)+env(safe-area-inset-bottom,0px)+var(--app-keyboard-inset,var(--app-vv-bottom,0px)))] lg:bottom-my-20";
 
 /**
  * 플로팅 AI 프롬프트 바 — 기본: 첨부 pill(한 줄 + 우측 전송).
@@ -59,7 +72,8 @@ export function FloatingComposerBar({
 
   const isEmpty = value.trim().length === 0;
   const canSubmit = !isEmpty && !submitDisabled && !disabled && !isLoading;
-  const showExpandedLayout = isMultiline;
+  const showSendButton = !isEmpty && !isLoading;
+  const showExpandedLayout = isMultiline && !isLoading;
 
   const shellRadiusClass = showExpandedLayout ? "rounded-[22px]" : "rounded-full";
 
@@ -71,6 +85,13 @@ export function FloatingComposerBar({
   const syncComposerLayout = useCallback(() => {
     const el = textareaRef.current;
     if (!el) return;
+
+    if (isLoading) {
+      setIsMultiline(false);
+      el.style.height = "";
+      el.style.overflowY = "hidden";
+      return;
+    }
 
     if (!value) {
       setIsMultiline(false);
@@ -100,7 +121,7 @@ export function FloatingComposerBar({
     el.style.height = `${nextHeight}px`;
     el.style.overflowY =
       scrollHeight > COMPOSER_TEXTAREA_MAX_HEIGHT_PX ? "auto" : "hidden";
-  }, [value]);
+  }, [value, isLoading]);
 
   useLayoutEffect(() => {
     syncComposerLayout();
@@ -126,6 +147,12 @@ export function FloatingComposerBar({
     if (!canSubmit) return;
     onSubmit();
   }, [canSubmit, onSubmit]);
+
+  /** 생성 시작 시 확장 레이아웃을 pill 기본 크기로 접음 */
+  useLayoutEffect(() => {
+    if (!isLoading) return;
+    resetToDefaultLayout();
+  }, [isLoading, resetToDefaultLayout]);
 
   /** 생성 완료 후 부모가 value를 비우면 pill 기본 레이아웃으로 복원 */
   useLayoutEffect(() => {
@@ -161,79 +188,83 @@ export function FloatingComposerBar({
   return (
     <div
       className={cn(
-        "z-30 flex w-full justify-center px-my-20 pb-my-20 pt-my-12",
-        placement === "fixed" &&
-          "pointer-events-none fixed inset-x-0 max-lg:bottom-[var(--app-vv-bottom,0px)] lg:bottom-0",
+        "z-30 pointer-events-auto",
+        placement === "fixed"
+          ? `fixed ${FLOATING_COMPOSER_FIXED_WIDTH_CLASS} ${FLOATING_COMPOSER_FIXED_BOTTOM_CLASS}`
+          : maxWidthClassName,
         placement === "sticky" &&
-          "pointer-events-auto sticky bottom-0 shrink-0 bg-gradient-to-t from-surface-20 from-40% via-surface-20/95 to-transparent pt-my-24",
+          "sticky bottom-0 w-full shrink-0 bg-gradient-to-t from-surface-20 from-40% via-surface-20/95 to-transparent py-my-24",
         className,
       )}
     >
-      <div className={cn("pointer-events-auto", maxWidthClassName)}>
+      <div
+        className={cn(
+          "composer-bar-gradient-inner",
+          placement === "sticky" && "mb-my-20",
+          shellRadiusClass,
+          shellShadow,
+          "grid pl-my-16",
+          showSendButton ? "grid-cols-[1fr_auto] pr-my-8" : "grid-cols-1 pr-my-16",
+          showExpandedLayout
+            ? "gap-x-my-8 gap-y-my-8 py-my-8"
+            : `${COMPOSER_BAR_HEIGHT_CLASS} items-center gap-my-8 py-0`,
+          isFocused && "ring-0",
+          disabled && "opacity-70",
+        )}
+        role="group"
+        aria-label={ariaLabel}
+        aria-busy={isLoading}
+      >
         <div
           className={cn(
-            "composer-bar-gradient-inner",
-            shellRadiusClass,
-            shellShadow,
-            "grid grid-cols-[1fr_auto] pl-my-16 pr-my-8",
-            showExpandedLayout
-              ? "gap-x-my-8 gap-y-my-8 py-my-8"
-              : "h-[42px] items-center gap-my-8 py-0",
-            isFocused && "ring-0",
-            disabled && "opacity-70",
+            "relative col-start-1 row-start-1 min-w-0",
+            showExpandedLayout ? "col-span-full" : "flex items-center self-stretch",
           )}
-          role="group"
-          aria-label={ariaLabel}
-          aria-busy={isLoading}
         >
-          <div
+          <textarea
+            ref={textareaRef}
+            rows={1}
+            value={value}
+            onChange={(e) => onChange(e.target.value)}
+            onFocus={() => setIsFocused(true)}
+            onBlur={() => setIsFocused(false)}
+            onKeyDown={handleKeyDown}
+            readOnly={isLoading}
+            disabled={disabled}
+            placeholder={`✨${placeholder}`}
+            aria-label={ariaLabel}
             className={cn(
-              "relative col-start-1 row-start-1 min-w-0 self-center",
-              showExpandedLayout && "col-span-full",
-            )}
-          >
-            <textarea
-              ref={textareaRef}
-              rows={1}
-              value={value}
-              onChange={(e) => onChange(e.target.value)}
-              onFocus={() => setIsFocused(true)}
-              onBlur={() => setIsFocused(false)}
-              onKeyDown={handleKeyDown}
-              readOnly={isLoading}
-              disabled={disabled}
-              placeholder={`✨${placeholder}`}
-              aria-label={ariaLabel}
-              className={cn(
-                "block min-w-0 w-full resize-none border-0 bg-transparent text-body3_400 caret-primary",
-                "text-on-surface-10 placeholder:text-on-surface-30 focus:outline-none focus:ring-0",
-                showExpandedLayout
+              "block min-w-0 w-full resize-none border-0 bg-transparent text-body3_400 caret-primary",
+              "text-on-surface-10 placeholder:text-on-surface-30 focus:outline-none focus:ring-0",
+              showExpandedLayout
                 ? "max-h-[120px] py-my-2"
-                : "min-h-5 py-0",
-                isLoading && "pointer-events-none text-transparent placeholder:text-transparent",
-              )}
-            />
-            {isLoading ? (
-              <div className="pointer-events-none absolute inset-0 flex items-center">
-                <AiFieldLoadingMessage message={loadingMessage} />
-              </div>
-            ) : null}
-          </div>
+                : "min-h-5 py-0 leading-5",
+              isLoading && "pointer-events-none text-transparent placeholder:text-transparent",
+            )}
+          />
+          {isLoading ? (
+            <div className="pointer-events-none absolute inset-0 flex items-center">
+              <AiFieldLoadingMessage message={loadingMessage} />
+            </div>
+          ) : null}
+        </div>
+        {showSendButton ? (
           <div
             className={cn(
               "flex shrink-0 items-center justify-center",
               showExpandedLayout
                 ? "col-span-full row-start-2 w-full justify-end pt-my-2"
-                : "col-start-2 row-start-1 h-[42px]",
+                : "col-start-2 row-start-1 self-center",
             )}
           >
             {sendButton}
           </div>
-        </div>
+        ) : null}
       </div>
     </div>
   );
 }
 
-/** 플로팅 컴포저가 열린 모달 스크롤 영역 하단 여백 */
-export const FLOATING_COMPOSER_SCROLL_PAD_CLASS = "pb-my-20";
+/** 플로팅 컴포저가 열린 페이지 스크롤 영역 하단 여백 */
+export const FLOATING_COMPOSER_SCROLL_PAD_CLASS =
+  "max-lg:pb-[calc(var(--spacing-my-20)+3rem+env(safe-area-inset-bottom,0px)+var(--app-keyboard-inset,var(--app-vv-bottom,0px)))] lg:pb-[calc(var(--spacing-my-20)+3rem)]";

@@ -13,6 +13,7 @@ export interface EpisodeListProps {
   onLinkEditor: (episode: Episode) => void;
   onStats: (episode: Episode) => void;
   onInquiry?: (episode: Episode) => void;
+  onCancelSchedule?: (episode: Episode) => void;
   /** 정책 13: 페이지네이션을 테이블 하단에 렌더링할 때 전달 */
   footer?: React.ReactNode;
   className?: string;
@@ -30,6 +31,7 @@ export function EpisodeList({
   onLinkEditor,
   onStats,
   onInquiry,
+  onCancelSchedule,
   footer,
   className,
 }: EpisodeListProps) {
@@ -44,7 +46,7 @@ export function EpisodeList({
       <div className="hidden h-[42px] shrink-0 items-center rounded-t-[4px] border-b border-divider-10 bg-white px-my-20 lg:flex">
         <div className="w-20 text-caption1_400 text-on-surface-30">회차</div>
         <div className="flex-1 px-0 text-caption1_400 text-on-surface-30">제목</div>
-        <div className="w-32 px-0 text-caption1_400 text-on-surface-30">개시일</div>
+        <div className="w-40 px-0 text-caption1_400 text-on-surface-30">개시일</div>
         <div className="w-24 px-0 text-caption1_400 text-on-surface-30">조회수</div>
         <div className="w-24 px-0 text-caption1_400 text-on-surface-30">공개여부</div>
         <div className="w-48 px-0 text-right text-caption1_400 text-on-surface-30">작업</div>
@@ -63,6 +65,7 @@ export function EpisodeList({
             onLinkEditor={onLinkEditor}
             onStats={onStats}
             onInquiry={onInquiry}
+            onCancelSchedule={onCancelSchedule}
           />
         ))}
       </div>

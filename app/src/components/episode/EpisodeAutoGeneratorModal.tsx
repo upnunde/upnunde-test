@@ -33,8 +33,8 @@ import { cn } from "@/lib/utils";
 
 const MAX_HISTORY = 5000;
 
-/** AI 제작 버튼·플로팅 입력 바 — 임시 비활성 (재노출 시 true) */
-const EPISODE_AUTO_GENERATOR_AI_COMPOSER_ENABLED = false;
+/** AI 제작 버튼·플로팅 입력 바 */
+const EPISODE_AUTO_GENERATOR_AI_COMPOSER_ENABLED = true;
 
 export interface EpisodeAutoGeneratorPayload {
   history: string;
@@ -63,14 +63,12 @@ export function EpisodeAutoGeneratorModal({
   const [isGenerating, setIsGenerating] = useState(false);
   const [isApplying, setIsApplying] = useState(false);
   const [isHistoryAutoFilling, setIsHistoryAutoFilling] = useState(false);
-  const [isComposerOpen, setIsComposerOpen] = useState(false);
   const [snackbar, setSnackbar] = useState({ open: false, message: "" });
 
   const canAutoFillPreviousHistory = canLoadPreviousEpisodeHistory(episodeNo);
 
   useEffect(() => {
     if (!open) {
-      setIsComposerOpen(false);
       setBriefPrompt("");
       return;
     }
@@ -143,7 +141,6 @@ export function EpisodeAutoGeneratorModal({
   const composerPortal =
     EPISODE_AUTO_GENERATOR_AI_COMPOSER_ENABLED &&
     open &&
-    isComposerOpen &&
     typeof document !== "undefined" &&
     !isApplying
       ? createPortal(
@@ -262,31 +259,11 @@ export function EpisodeAutoGeneratorModal({
               </div>
 
               <div className="flex flex-col gap-my-12">
-                <div className="flex items-start justify-between gap-my-12">
-                  <Title1
-                    text="에피소드 대본"
-                    variant="title-subtitle-dot"
-                    subtitleText={EPISODE_FORM_FIELD_COPY.script.subtitle}
-                    className="min-w-0 flex-1"
-                  />
-                  {EPISODE_AUTO_GENERATOR_AI_COMPOSER_ENABLED ? (
-                    <Button
-                      type="button"
-                      variant="outline"
-                      size="sm"
-                      className="h-8 shrink-0 gap-my-8 shadow-none bg-white px-my-12"
-                      disabled={
-                        isComposerOpen ||
-                        isGenerating ||
-                        isApplying ||
-                        isHistoryAutoFilling
-                      }
-                      onClick={() => setIsComposerOpen(true)}
-                    >
-                      {EPISODE_FORM_FIELD_COPY.script.aiProduce}
-                    </Button>
-                  ) : null}
-                </div>
+                <Title1
+                  text="에피소드 대본"
+                  variant="title-subtitle-dot"
+                  subtitleText={EPISODE_FORM_FIELD_COPY.script.subtitle}
+                />
                 <EpisodeScriptTextarea
                   value={script}
                   onChange={setScript}

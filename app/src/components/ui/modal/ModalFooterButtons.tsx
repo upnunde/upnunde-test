@@ -37,10 +37,18 @@ export interface ModalFooterButtonsProps {
 
 function FooterActionButton({ config }: { config: ModalFooterButtonConfig }) {
   const tone = config.tone ?? "secondary";
+  const buttonVariant =
+    tone === "primary"
+      ? "default"
+      : tone === "destructive"
+        ? "destructive"
+        : tone === "ghost"
+          ? "ghost"
+          : "outline";
   const button = (
     <Button
       type="button"
-      variant={tone === "primary" ? "default" : tone === "destructive" ? "destructive" : "outline"}
+      variant={buttonVariant}
       className={modalFooterButtonToneClassName[tone]}
       onClick={config.onClick}
       disabled={config.disabled}

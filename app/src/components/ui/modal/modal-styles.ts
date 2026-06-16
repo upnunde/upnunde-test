@@ -124,4 +124,6 @@ export const modalFooterButtonToneClassName = {
     "h-my-36 min-w-my-80 rounded-md bg-primary px-my-12 font-['Pretendard_JP'] text-body1_500 text-primary-foreground shadow-none hover:bg-primary/90",
   destructive:
     "h-my-36 min-w-my-80 rounded-md bg-error-error px-my-12 font-['Pretendard_JP'] text-body1_500 text-white shadow-none hover:bg-error-error/90 disabled:opacity-50",
+  ghost:
+    "h-my-36 min-w-0 rounded-md border-0 bg-transparent px-my-12 font-['Pretendard_JP'] text-body1_500 text-on-surface-30 shadow-none hover:bg-surface-20 hover:text-on-surface-10",
 } as const;

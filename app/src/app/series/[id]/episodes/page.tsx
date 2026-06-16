@@ -6,7 +6,7 @@ import { StandaloneHeaderPage } from "@/components/layout/StandaloneHeaderPage";
 import { EpisodeList } from "@/components/episode/EpisodeList";
 import { EmptyStateBanner } from "@/components/episode/EmptyStateBanner";
 import { Pagination } from "@/components/episode/Pagination";
-import { PublishConfirmModal, DeleteConfirmModal } from "@/components/episode/ConfirmModals";
+import { PublishConfirmModal, DeleteConfirmModal, type PublishConfirmPayload } from "@/components/episode/ConfirmModals";
 import { Snackbar } from "@/components/episode/Snackbar";
 import { EpisodeForm } from "@/components/episode/EpisodeForm";
 import { Button } from "@/components/ui/button";
@@ -26,6 +26,7 @@ import { applyInitialScriptToEditor } from "@/lib/apply-initial-script-to-editor
 import { createDefaultSeedBlocks, useEditorStore } from "@/store/useEditorStore";
 import type { Episode, SortOptions, SnackbarState, SeriesType } from "@/types/episode";
 import { DUMMY_BACKGROUND_GALLERY_THUMBNAILS } from "@/lib/dummy-thumbnail-images";
+import { formatScheduledPublishSummary } from "@/lib/formatEpisode";
 
 const PAGE_SIZE = 10;
 
@@ -113,12 +114,21 @@ function buildMockEpisodes(): Episode[] {
     {
       episodeNumber: 119,
       title: "운명의 갈림길에서",
-      date: "2026-01-15",
+      date: "2026-06-19",
       views: 0,
-      status: "PRIVATE",
+      status: "SCHEDULED",
+      scheduledPublishAt: "2026-06-19T15:00:00",
     },
     {
       episodeNumber: 120,
+      title: "새벽의 문턱에서",
+      date: "2026-01-15",
+      views: 0,
+      status: "PRIVATE",
+      scheduledPublishAt: null,
+    },
+    {
+      episodeNumber: 121,
       title: "빛과 그림자",
       date: "",
       views: 0,
@@ -130,6 +140,21 @@ function buildMockEpisodes(): Episode[] {
     const idx = episodes.findIndex((e) => e.episodeNumber === o.episodeNumber);
     if (idx !== -1) {
       episodes[idx] = { ...episodes[idx], ...o };
+    } else {
+      const base = episodes[0];
+      if (!base) continue;
+      episodes.push({
+        ...base,
+        id: o.episodeNumber ?? episodes.length + 1,
+        episodeNumber: o.episodeNumber ?? episodes.length + 1,
+        title: `에피소드 ${o.episodeNumber}화`,
+        thumbnail: deterministicThumbnail(o.episodeNumber ?? episodes.length + 1),
+        date: new Date().toISOString().slice(0, 10),
+        views: 0,
+        status: "PUBLISHED",
+        scheduledPublishAt: null,
+        ...o,
+      });
     }
   }
 
@@ -241,12 +266,55 @@ export default function EpisodeManagementPage() {
     setIsPublishModalOpen(true);
   }, []);
 
-  const handlePublishConfirm = useCallback((episode: Episode) => {
-    setEpisodes((prev) =>
-      prev.map((e) => (e.id === episode.id ? { ...e, status: "PUBLISHED" as const } : e))
-    );
+  const handlePublishConfirm = useCallback((payload: PublishConfirmPayload) => {
+    const { episode, mode, scheduledPublishAt } = payload;
+
+    if (mode === "immediate") {
+      setEpisodes((prev) =>
+        prev.map((e) =>
+          e.id === episode.id
+            ? { ...e, status: "PUBLISHED" as const, scheduledPublishAt: null }
+            : e,
+        ),
+      );
+      setSnackbarState({
+        open: true,
+        message: "에피소드가 공개되었어요.",
+      });
+    } else if (scheduledPublishAt) {
+      setEpisodes((prev) =>
+        prev.map((e) =>
+          e.id === episode.id
+            ? {
+                ...e,
+                status: "SCHEDULED" as const,
+                scheduledPublishAt,
+              }
+            : e,
+        ),
+      );
+      setSnackbarState({
+        open: true,
+        message: `예약 공개가 설정되었어요. ${formatScheduledPublishSummary(scheduledPublishAt)}에 자동으로 공개됩니다.`,
+      });
+    }
+
     setEpisodeToPublish(null);
     setIsPublishModalOpen(false);
+  }, []);
+
+  const handleCancelSchedule = useCallback((episode: Episode) => {
+    setEpisodes((prev) =>
+      prev.map((e) =>
+        e.id === episode.id
+          ? { ...e, status: "PRIVATE" as const, scheduledPublishAt: null }
+          : e,
+      ),
+    );
+    setSnackbarState({
+      open: true,
+      message: "예약 공개가 취소되었어요.",
+    });
   }, []);
 
   /** 정책 8: 삭제 클릭 → 확인 팝업 */
@@ -358,6 +426,7 @@ export default function EpisodeManagementPage() {
                   onLinkEditor={handleLinkEditor}
                   onStats={handleStats}
                   onInquiry={handleInquiry}
+                  onCancelSchedule={handleCancelSchedule}
                   footer={
                     showPagination ? (
                       <Pagination
@@ -390,6 +459,7 @@ export default function EpisodeManagementPage() {
           setEpisodeToPublish(null);
         }}
         onConfirm={handlePublishConfirm}
+        onCancelSchedule={handleCancelSchedule}
       />
       <DeleteConfirmModal
         open={isDeleteModalOpen}

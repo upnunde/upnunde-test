@@ -1,6 +1,7 @@
 "use client";
 
 import React, { useCallback, useState, useEffect, useRef, useMemo } from "react";
+import { createPortal } from "react-dom";
 import Image from "next/image";
 import { useRouter, usePathname } from "next/navigation";
 import { Pencil, Trash2 } from "lucide-react";
@@ -21,6 +22,10 @@ import {
   type ImportableCharacterPick,
 } from "@/components/resource/character/ImportCharacterDialog";
 import { Tag } from "@/components/ui/tag";
+import {
+  FLOATING_COMPOSER_SCROLL_PAD_CLASS,
+  FloatingComposerBar,
+} from "@/components/ui/floating-composer-bar";
 import { Title1 } from "@/components/ui/title1";
 import { Title2 } from "@/components/ui/title2";
 import {
@@ -33,12 +38,14 @@ import {
   PAGE_SUBHEADER_WITH_STICKY_CLASS,
 } from "@/lib/page-layout";
 import { cn } from "@/lib/utils";
+import { generateCharacterDraftFromBrief } from "@/lib/character-ai-draft";
 import {
   buildMyWorksCharacterFromForm,
   stageMyWorksPendingCharacter,
 } from "@/lib/myWorksCharacterCreate";
 import { WORKS_TAB_PATH } from "@/lib/worksArea";
 import type { CharacterResource, CharacterExpressionSlot } from "@/types/resource";
+import { useClientMounted } from "@/hooks/useClientMounted";
 
 export type CharacterDetailPageContext = "series-resource" | "my-works";
 
@@ -94,6 +101,9 @@ export function CharacterDetailPage({
   const [importCharacterModalOpen, setImportCharacterModalOpen] = useState(false);
   const expressionFileInputRef = useRef<HTMLInputElement>(null);
   const thumbnailFileInputRef = useRef<HTMLInputElement>(null);
+  const mounted = useClientMounted();
+  const [briefPrompt, setBriefPrompt] = useState("");
+  const [isGenerating, setIsGenerating] = useState(false);
 
   /** initialData 참조 변경 시 폼 값 재동기화 — render 중 setState 패턴 */
   const [initialDataSnapshot, setInitialDataSnapshot] = useState(initialData);
@@ -156,6 +166,23 @@ export function CharacterDetailPage({
     // 실제 저장 로직은 추후 API 연동 시 구현
     router.push(`/series/${seriesId}/resources`);
   }, [isFormComplete, isMyWorks, name, router, seriesId, summary, thumbnailUrl]);
+
+  const handleGenerateFromBrief = useCallback(async () => {
+    const prompt = briefPrompt.trim();
+    if (!prompt || isGenerating) return;
+    setIsGenerating(true);
+    try {
+      const draft = await generateCharacterDraftFromBrief(prompt);
+      setName(draft.name);
+      setSummary(draft.summary);
+      setTagList(draft.tags);
+      setTags("");
+      setGreeting(draft.greeting);
+      setBriefPrompt("");
+    } finally {
+      setIsGenerating(false);
+    }
+  }, [briefPrompt, isGenerating]);
 
   const handleApplyImportedCharacterToForm = useCallback((selected: ImportableCharacterPick) => {
     setName(selected.name);
@@ -308,7 +335,13 @@ export function CharacterDetailPage({
         </div>
       </header>
 
-      <div className={cn(PAGE_SCROLL_COLUMN_CLASS, "max-lg:px-0 max-lg:pt-0 max-lg:gap-0")}>
+      <div
+        className={cn(
+          PAGE_SCROLL_COLUMN_CLASS,
+          FLOATING_COMPOSER_SCROLL_PAD_CLASS,
+          "max-lg:px-0 max-lg:pt-0 max-lg:gap-0",
+        )}
+      >
         <div className="w-full min-w-0 max-w-[1200px] mx-auto mx-auto">
           <div
             className={cn(
@@ -701,6 +734,24 @@ export function CharacterDetailPage({
           onApply={handleApplyImportedCharacterToForm}
         />
       ) : null}
+
+      {mounted
+        ? createPortal(
+            <FloatingComposerBar
+              value={briefPrompt}
+              onChange={setBriefPrompt}
+              onSubmit={() => void handleGenerateFromBrief()}
+              placeholder="캐릭터 특징을 서술형으로 입력해 주세요."
+              isLoading={isGenerating}
+              submitDisabled={isGenerating || briefPrompt.trim().length === 0}
+              loadingMessage="캐릭터 정보를 생성하고 있어요"
+              placement="fixed"
+              className="!z-[60] !pointer-events-auto"
+              ariaLabel="캐릭터 AI 초안 입력"
+            />,
+            document.body,
+          )
+        : null}
     </div>
   );
 }

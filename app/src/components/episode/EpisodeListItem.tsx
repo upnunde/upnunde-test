@@ -2,7 +2,7 @@
 
 import React, { useState } from "react";
 import Image from "next/image";
-import { Pencil, Trash2, MoreVertical, FileText, Mail, Eye } from "lucide-react";
+import { Pencil, Trash2, MoreVertical, FileText, Mail, Eye, X, Calendar } from "lucide-react";
 import {
   DropdownMenu,
   DropdownMenuTrigger,
@@ -12,7 +12,7 @@ import {
 import { EditorBottomSheetMenu } from "@/components/editor/EditorBottomSheetMenu";
 import { EditorMenuOption } from "@/components/editor/EditorMenuOption";
 import type { Episode, EpisodeStatus } from "@/types/episode";
-import { formatViews, formatDateOrRelative } from "@/lib/formatEpisode";
+import { formatViews, formatDateOrRelative, formatScheduledPublishAtParts } from "@/lib/formatEpisode";
 import { THUMBNAIL_DIM_OVERLAY_CLASS } from "@/lib/thumbnail-styles";
 import { cn } from "@/lib/utils";
 
@@ -28,14 +28,46 @@ const ACTION_ICON_BUTTON_MORE_HOVER =
 const STATUS_LABEL: Record<EpisodeStatus, string> = {
   DRAFT: "임시저장",
   PRIVATE: "비공개",
+  SCHEDULED: "예약 공개",
   PUBLISHED: "공개 중",
 };
 
 const STATUS_TEXT_CLASS: Record<EpisodeStatus, string> = {
   DRAFT: "text-on-surface-30",
   PRIVATE: "text-on-surface-30",
+  SCHEDULED: "text-primary",
   PUBLISHED: "text-blue-600",
 };
+
+function EpisodeDateDisplay({
+  isDraft,
+  isScheduled,
+  scheduledPublishAt,
+  date,
+  className,
+}: {
+  isDraft: boolean;
+  isScheduled: boolean;
+  scheduledPublishAt?: string | null;
+  date: string;
+  className?: string;
+}) {
+  if (isDraft) {
+    return <span className={className}>-</span>;
+  }
+
+  if (isScheduled && scheduledPublishAt) {
+    const { date: datePart, time } = formatScheduledPublishAtParts(scheduledPublishAt);
+    return (
+      <div className={cn("flex items-center gap-my-8", className)}>
+        <span>{datePart}</span>
+        <span>{time}</span>
+      </div>
+    );
+  }
+
+  return <span className={className}>{formatDateOrRelative(date)}</span>;
+}
 
 export interface EpisodeListItemProps {
   episode: Episode;
@@ -51,6 +83,8 @@ export interface EpisodeListItemProps {
   onStats?: (episode: Episode) => void;
   /** 문의하기 클릭 시 (문의 페이지/모달 등) */
   onInquiry?: (episode: Episode) => void;
+  /** 예약 공개 취소 */
+  onCancelSchedule?: (episode: Episode) => void;
 }
 
 function EpisodeListItemActions({
@@ -61,6 +95,7 @@ function EpisodeListItemActions({
   onDelete,
   onLinkEditor,
   onInquiry,
+  onCancelSchedule,
   mobile = false,
   className,
 }: {
@@ -71,6 +106,7 @@ function EpisodeListItemActions({
   onDelete?: (episode: Episode) => void;
   onLinkEditor?: (episode: Episode) => void;
   onInquiry?: (episode: Episode) => void;
+  onCancelSchedule?: (episode: Episode) => void;
   mobile?: boolean;
   className?: string;
 }) {
@@ -160,6 +196,41 @@ function EpisodeListItemActions({
                 </EditorMenuOption>
               </>
             )}
+            {status === "SCHEDULED" && (
+              <>
+                <EditorMenuOption
+                  presentation={presentation}
+                  onSelect={() => {
+                    onPublish?.(episode);
+                    closeSheet();
+                  }}
+                  className="text-primary"
+                >
+                  <Eye className="h-4 w-4 shrink-0" aria-hidden />
+                  예약 변경
+                </EditorMenuOption>
+                <EditorMenuOption
+                  presentation={presentation}
+                  onSelect={() => {
+                    onLinkEditor?.(episode);
+                    closeSheet();
+                  }}
+                >
+                  <FileText className="h-4 w-4 shrink-0 text-on-surface-30" aria-hidden />
+                  에피소드 상세
+                </EditorMenuOption>
+                <EditorMenuOption
+                  presentation={presentation}
+                  onSelect={() => {
+                    onCancelSchedule?.(episode);
+                    closeSheet();
+                  }}
+                >
+                  <X className="h-4 w-4 shrink-0 text-on-surface-30" aria-hidden />
+                  예약취소
+                </EditorMenuOption>
+              </>
+            )}
             {status === "PUBLISHED" && (
               <>
                 <EditorMenuOption
@@ -241,6 +312,46 @@ function EpisodeListItemActions({
         </>
       )}
 
+      {status === "SCHEDULED" && (
+        <>
+          <button
+            type="button"
+            onClick={() => onPublish?.(episode)}
+            className="h-8 shrink-0 cursor-pointer rounded-md border border-primary px-my-8 text-body3_500 text-primary transition-colors hover:bg-primary/10 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-2 sm:px-my-12"
+          >
+            예약 변경
+          </button>
+          <DropdownMenu>
+            <DropdownMenuTrigger
+              type="button"
+              className={`${ACTION_ICON_BUTTON_BASE} ${ACTION_ICON_BUTTON_MORE_HOVER}`}
+              aria-label="더보기"
+            >
+              <MoreVertical className="h-4 w-4" aria-hidden />
+            </DropdownMenuTrigger>
+            <DropdownMenuContent
+              align="end"
+              className="w-48 rounded-lg border border-border-10 bg-white p-my-4"
+            >
+              <DropdownMenuItem
+                className="flex cursor-pointer items-center gap-my-8 rounded-md px-my-12 py-my-8 text-body3_400 text-on-surface-20 outline-none hover:bg-surface-20"
+                onSelect={() => onLinkEditor?.(episode)}
+              >
+                <FileText className="h-4 w-4 shrink-0 text-on-surface-30" aria-hidden />
+                에피소드 상세
+              </DropdownMenuItem>
+              <DropdownMenuItem
+                className="flex cursor-pointer items-center gap-my-8 rounded-md px-my-12 py-my-8 text-body3_400 text-on-surface-20 outline-none hover:bg-surface-20"
+                onSelect={() => onCancelSchedule?.(episode)}
+              >
+                <X className="h-4 w-4 shrink-0 text-on-surface-30" aria-hidden />
+                예약취소
+              </DropdownMenuItem>
+            </DropdownMenuContent>
+          </DropdownMenu>
+        </>
+      )}
+
       {status === "PUBLISHED" && (
         <DropdownMenu>
           <DropdownMenuTrigger
@@ -284,10 +395,11 @@ export function EpisodeListItem({
   onLinkEditor,
   onStats: _onStats,
   onInquiry,
+  onCancelSchedule,
 }: EpisodeListItemProps) {
-  const { status, date, views } = episode;
+  const { status, date, views, scheduledPublishAt } = episode;
   const isDraft = status === "DRAFT";
-  const dateDisplay = isDraft ? "-" : formatDateOrRelative(date);
+  const isScheduled = status === "SCHEDULED";
   const viewsDisplay = isDraft ? "-" : formatViews(views);
 
   const handleRowClick = (e: React.MouseEvent) => {
@@ -323,7 +435,7 @@ export function EpisodeListItem({
           <div className={THUMBNAIL_DIM_OVERLAY_CLASS} aria-hidden />
         </div>
 
-        <div className="flex min-w-0 flex-1 flex-col gap-my-4">
+        <div className="flex min-w-0 flex-1 flex-col gap-0">
           <div className="flex items-center justify-between gap-my-4">
             <p className="min-w-0 text-caption1_400 text-on-surface-30">
               {episode.episodeNumber}화
@@ -337,6 +449,7 @@ export function EpisodeListItem({
                 onDelete={onDelete}
                 onLinkEditor={onLinkEditor}
                 onInquiry={onInquiry}
+                onCancelSchedule={onCancelSchedule}
                 mobile
               />
             </div>
@@ -345,9 +458,22 @@ export function EpisodeListItem({
           <span className={cn("text-caption1_400", STATUS_TEXT_CLASS[status])}>
             {STATUS_LABEL[status]}
           </span>
-          <div className="flex items-center gap-x-my-12 text-caption1_400 text-on-surface-30">
-            <span>{dateDisplay}</span>
-            {!isDraft ? <span>{viewsDisplay}</span> : null}
+          <div className="mt-my-16 flex items-center gap-x-my-12 text-caption1_400 text-on-surface-30">
+            <div className="flex items-center gap-my-8">
+              <Calendar className="h-4 w-4 shrink-0" aria-hidden />
+              <EpisodeDateDisplay
+                isDraft={isDraft}
+                isScheduled={isScheduled}
+                scheduledPublishAt={scheduledPublishAt}
+                date={date}
+              />
+            </div>
+            {!isDraft ? (
+              <div className="flex items-center gap-my-8">
+                <Eye className="h-4 w-4 shrink-0" aria-hidden />
+                <span>{viewsDisplay}</span>
+              </div>
+            ) : null}
           </div>
         </div>
       </div>
@@ -374,7 +500,13 @@ export function EpisodeListItem({
           </span>
         </div>
 
-        <div className="w-32 shrink-0 px-0 text-body3_400 text-on-surface-20">{dateDisplay}</div>
+        <EpisodeDateDisplay
+          isDraft={isDraft}
+          isScheduled={isScheduled}
+          scheduledPublishAt={scheduledPublishAt}
+          date={date}
+          className="w-40 shrink-0 px-0 text-body3_400 text-on-surface-20"
+        />
         <div className="w-24 shrink-0 px-0 text-body3_400 text-on-surface-30">{viewsDisplay}</div>
         <div className={cn("w-24 shrink-0 px-0 text-body3_400", STATUS_TEXT_CLASS[status])}>
           {STATUS_LABEL[status]}
@@ -389,6 +521,7 @@ export function EpisodeListItem({
             onDelete={onDelete}
             onLinkEditor={onLinkEditor}
             onInquiry={onInquiry}
+            onCancelSchedule={onCancelSchedule}
           />
         </div>
       </div>

@@ -57,6 +57,33 @@ export function formatDateOrRelative(dateStr: string): string {
  * - 1분 이상 1시간 미만: "MM분 남음"
  * - 1분 미만 또는 만료: "기간 만료"
  */
+/** 예약 공개 시각 요약 (모달·스낵바) — 예: 6월 20일 오후 8:00 */
+export function formatScheduledPublishSummary(isoString: string): string {
+  const d = new Date(isoString);
+  if (Number.isNaN(d.getTime())) return isoString;
+  return d.toLocaleString("ko-KR", {
+    month: "long",
+    day: "numeric",
+    hour: "numeric",
+    minute: "2-digit",
+    hour12: true,
+  });
+}
+
+/** 예약 공개 시각 짧은 표기 (목록 개시일 컬럼) — 예: 2025.06.19 15:00 */
+export function formatScheduledPublishAtParts(isoString: string): { date: string; time: string } {
+  const d = new Date(isoString);
+  if (Number.isNaN(d.getTime())) return { date: isoString, time: "" };
+  const hours = String(d.getHours()).padStart(2, "0");
+  const minutes = String(d.getMinutes()).padStart(2, "0");
+  return { date: formatDate(isoString), time: `${hours}:${minutes}` };
+}
+
+export function formatScheduledPublishAtShort(isoString: string): string {
+  const { date, time } = formatScheduledPublishAtParts(isoString);
+  return time ? `${date} ${time}` : date;
+}
+
 export function formatExpiration(expiresAt: Date | string): string {
   const end = typeof expiresAt === "string" ? new Date(expiresAt) : expiresAt;
   if (Number.isNaN(end.getTime())) return "기간 만료";
