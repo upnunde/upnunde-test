@@ -143,7 +143,7 @@ export function ImportCharacterDialog({
 
   return (
     <Dialog open={open} onOpenChange={handleDialogOpenChange}>
-      <DialogContent className="flex w-full max-h-[90vh] min-h-0 max-lg:max-w-none flex-col gap-0 overflow-hidden max-lg:rounded-[16px] lg:rounded-[4px] border border-border-10 bg-white p-0 lg:max-w-2xl">
+      <DialogContent className="flex w-full max-h-[90vh] min-h-0 max-lg:max-w-none flex-col gap-0 overflow-hidden lg:rounded-[4px] border border-border-10 bg-white p-0 lg:max-w-2xl">
         <div className="border-b border-border-10/5 px-my-20 py-my-12">
           <DialogTitle className="text-body1_700 text-on-surface-10">{title}</DialogTitle>
           <p className="mt-1 text-body3_400 text-on-surface-30">{description}</p>
@@ -227,14 +227,14 @@ export function ImportCharacterDialog({
           <Button
             type="button"
             variant="outline"
-            className="h-8 rounded-md bg-white px-my-12 text-body3_400 text-on-surface-10 hover:bg-surface-20 disabled:border-border-20"
+            className="h-my-36 min-h-my-36 rounded-md bg-white px-my-12 text-body3_400 text-on-surface-10 hover:bg-surface-20 disabled:border-border-20 lg:h-8 lg:min-h-8"
             onClick={() => handleDialogOpenChange(false)}
           >
             취소
           </Button>
           <Button
             type="button"
-            className="h-8 rounded-md bg-slate-800 px-my-12 text-body3_400 text-white hover:bg-slate-700"
+            className="h-my-36 min-h-my-36 rounded-md bg-slate-800 px-my-12 text-body3_400 text-white hover:bg-slate-700 lg:h-8 lg:min-h-8"
             onClick={handleApply}
             disabled={!resolvedId}
           >
