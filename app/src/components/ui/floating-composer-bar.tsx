@@ -4,6 +4,10 @@ import { useCallback, useEffect, useLayoutEffect, useRef, useState } from "react
 import { ArrowUp } from "lucide-react";
 import { AiFieldLoadingMessage } from "@/components/episode/EpisodeAiFieldLoading";
 import { EPISODE_FORM_FIELD_COPY } from "@/lib/episode-form-copy";
+import {
+  SERIES_FORM_MOBILE_COMPOSER_FIXED_INSET_CLASS,
+  SERIES_FORM_MOBILE_FLOATING_ROW_BOTTOM_CLASS,
+} from "@/lib/series-form-mobile-layout";
 import { cn } from "@/lib/utils";
 
 export type FloatingComposerBarPlacement = "fixed" | "sticky";
@@ -14,6 +18,10 @@ export const FLOATING_COMPOSER_MAX_WIDTH_CLASS = "max-w-[560px] w-full";
 /** fixed 배치 가로 폭·정렬 — safe-area·20px 양쪽 여백, 가로 화면(landscape) 대응 */
 const FLOATING_COMPOSER_FIXED_WIDTH_CLASS =
   "left-1/2 -translate-x-1/2 w-[min(560px,calc(100dvw-env(safe-area-inset-left,0px)-env(safe-area-inset-right,0px)-2*var(--spacing-my-20)))]";
+
+/** 미리보기 FAB와 겹치지 않도록 우측 inset 확보 */
+const FLOATING_COMPOSER_FIXED_WIDTH_WITH_MOBILE_FAB_LANE_CLASS =
+  "left-[max(var(--spacing-my-20),env(safe-area-inset-left,0px))] right-[calc(var(--spacing-my-16)+3rem+var(--spacing-my-8)+env(safe-area-inset-right,0px))] w-auto max-w-[560px] translate-x-0";
 
 const COMPOSER_TEXTAREA_MAX_HEIGHT_PX = 120;
 /** text-sm leading-5 한 줄 line-height */
@@ -31,6 +39,10 @@ export interface FloatingComposerBarProps {
   isLoading?: boolean;
   loadingMessage?: string;
   placement?: FloatingComposerBarPlacement;
+  /** 모바일 고정 제출 바 위에 쌓을 때 */
+  stackAboveMobileSubmitBar?: boolean;
+  /** 모바일 미리보기 FAB와 겹치지 않도록 우측 inset 확보 */
+  reserveMobileFabLane?: boolean;
   maxWidthClassName?: string;
   className?: string;
   ariaLabel?: string;
@@ -48,6 +60,9 @@ const COMPOSER_BAR_HEIGHT_CLASS = "h-[48px]";
 const FLOATING_COMPOSER_FIXED_BOTTOM_CLASS =
   "max-lg:bottom-[calc(var(--spacing-my-20)+env(safe-area-inset-bottom,0px)+var(--app-keyboard-inset,var(--app-vv-bottom,0px)))] lg:bottom-my-20";
 
+const FLOATING_COMPOSER_FIXED_ABOVE_SUBMIT_BAR_BOTTOM_CLASS =
+  `${SERIES_FORM_MOBILE_FLOATING_ROW_BOTTOM_CLASS} lg:bottom-my-20`;
+
 /**
  * 플로팅 AI 프롬프트 바 — 기본: 첨부 pill(한 줄 + 우측 전송).
  * 줄바꿈(2줄 이상) 시에만 Gemini형 확장 레이아웃(max 120px).
@@ -62,10 +77,21 @@ export function FloatingComposerBar({
   isLoading = false,
   loadingMessage = EPISODE_FORM_FIELD_COPY.aiComposer.fieldLoading.composer,
   placement = "fixed",
+  stackAboveMobileSubmitBar = false,
+  reserveMobileFabLane = false,
   maxWidthClassName = FLOATING_COMPOSER_MAX_WIDTH_CLASS,
   className,
   ariaLabel = "에피소드 AI 초안 입력",
 }: FloatingComposerBarProps) {
+  const fixedBottomClass = stackAboveMobileSubmitBar
+    ? FLOATING_COMPOSER_FIXED_ABOVE_SUBMIT_BAR_BOTTOM_CLASS
+    : FLOATING_COMPOSER_FIXED_BOTTOM_CLASS;
+  const fixedWidthClass =
+    stackAboveMobileSubmitBar && reserveMobileFabLane
+      ? SERIES_FORM_MOBILE_COMPOSER_FIXED_INSET_CLASS
+      : reserveMobileFabLane
+        ? FLOATING_COMPOSER_FIXED_WIDTH_WITH_MOBILE_FAB_LANE_CLASS
+        : FLOATING_COMPOSER_FIXED_WIDTH_CLASS;
   const textareaRef = useRef<HTMLTextAreaElement>(null);
   const wasFocusedRef = useRef(false);
   const [isFocused, setIsFocused] = useState(false);
@@ -225,7 +251,7 @@ export function FloatingComposerBar({
       className={cn(
         "z-30 pointer-events-auto",
         placement === "fixed"
-          ? `fixed ${FLOATING_COMPOSER_FIXED_WIDTH_CLASS} ${FLOATING_COMPOSER_FIXED_BOTTOM_CLASS}`
+          ? `fixed ${fixedWidthClass} ${fixedBottomClass}`
           : maxWidthClassName,
         placement === "sticky" &&
           "sticky bottom-0 w-full shrink-0 bg-gradient-to-t from-surface-20 from-40% via-surface-20/95 to-transparent py-my-24",

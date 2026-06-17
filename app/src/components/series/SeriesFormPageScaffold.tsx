@@ -10,7 +10,13 @@ import { HeaderBackButton } from "@/components/ui/header-back-button";
 import { SeriesFormTabs } from "@/components/series/SeriesFormTabs";
 import { EditorMobileFloatingActions } from "@/components/editor/EditorMobileFloatingActions";
 import { FloatingAiComposerPortal } from "@/components/ui/FloatingAiComposerPortal";
-import { FLOATING_COMPOSER_SCROLL_PAD_CLASS } from "@/components/ui/floating-composer-bar";
+import { SeriesFormMobileChromeProvider } from "@/components/series/SeriesFormMobileChromeContext";
+import { SeriesFormMobileSubmitBar } from "@/components/series/SeriesFormMobileSubmitBar";
+import {
+  SERIES_FORM_MOBILE_FLOATING_ROW_BOTTOM_CLASS,
+  SERIES_FORM_MOBILE_SCROLL_PAD_CLASS,
+  SERIES_FORM_MOBILE_SCROLL_PAD_WITH_COMPOSER_CLASS,
+} from "@/lib/series-form-mobile-layout";
 import {
   editorMobilePreviewChromeHiddenClass,
   type EditorMobilePanel,
@@ -18,10 +24,9 @@ import {
 import { SeriesPreviewPanel } from "@/components/series/SeriesPreviewPanel";
 import { useIsLgUp } from "@/hooks/useMediaQuery";
 import {
+  PAGE_CARD_SHELL_MOBILE_FLUSH_CLASS,
   PAGE_FLUSH_CONTENT_PAD_X_CLASS,
-  PAGE_GUTTER_X_CLASS,
-  PAGE_SCROLL_BOTTOM_CLASS,
-  PAGE_SCROLL_TOP_CLASS,
+  PAGE_SCROLL_COLUMN_CLASS,
   PAGE_SUBHEADER_WITH_STICKY_CLASS,
 } from "@/lib/page-layout";
 import { cn } from "@/lib/utils";
@@ -51,7 +56,6 @@ interface SeriesFormPageScaffoldProps {
   children: ReactNode;
   showDraftButton?: boolean;
   onDraftClick?: () => void;
-  contentPaddingClassName?: string;
   contentGapClassName?: string;
   aiComposer?: SeriesFormAiComposerConfig;
 }
@@ -70,7 +74,6 @@ export function SeriesFormPageScaffold({
   children,
   showDraftButton = false,
   onDraftClick,
-  contentPaddingClassName = PAGE_GUTTER_X_CLASS,
   contentGapClassName = "gap-my-40",
   aiComposer,
 }: SeriesFormPageScaffoldProps) {
@@ -79,119 +82,143 @@ export function SeriesFormPageScaffold({
   const showFormPanel = isLgUp || mobilePanel === "edit";
   const showPreviewPanel = !isLgUp && mobilePanel === "preview";
   const previewChromeHidden = editorMobilePreviewChromeHiddenClass(isLgUp, mobilePanel);
+  const showMobileSubmitBar = showFormPanel && !isLgUp;
+  const mobileScrollPadClass = aiComposer
+    ? SERIES_FORM_MOBILE_SCROLL_PAD_WITH_COMPOSER_CLASS
+    : SERIES_FORM_MOBILE_SCROLL_PAD_CLASS;
 
   return (
-    <div className={cn(APP_PAGE_ROOT_CLASS, APP_BROWSER_BG_CLASS)}>
-      <div className={cn(previewChromeHidden)}>
-        <Header profileImageUrl={profileImageUrl} onProfileImageChange={onProfileImageChange} />
-      </div>
-      <main className={APP_MAIN_CLASS}>
-            <header className={cn(PAGE_SUBHEADER_WITH_STICKY_CLASS, previewChromeHidden)}>
-              <div className="flex w-full max-w-[1200px] items-center justify-between gap-my-16">
-                <div className="flex items-center justify-start gap-my-12">
-                  <HeaderBackButton onClick={onBack} aria-label="시리즈 목록으로" />
-                  <h1 className="text-heading2_700 text-on-surface-10">{title}</h1>
-                </div>
-                <div className="flex items-center gap-my-12">
-                  {showDraftButton ? (
-                    <Button
-                      type="button"
-                      variant="outline"
-                      size="lg"
-                      onClick={onDraftClick}
-                      className="bg-white text-on-surface-20 hover:bg-surface-20 disabled:border-border-20"
-                    >
-                      임시저장
-                    </Button>
-                  ) : null}
+    <SeriesFormMobileChromeProvider enabled={showMobileSubmitBar}>
+      <div className={cn(APP_PAGE_ROOT_CLASS, APP_BROWSER_BG_CLASS)}>
+        <div className={cn(previewChromeHidden)}>
+          <Header profileImageUrl={profileImageUrl} onProfileImageChange={onProfileImageChange} />
+        </div>
+        <main className={APP_MAIN_CLASS}>
+          <header className={cn(PAGE_SUBHEADER_WITH_STICKY_CLASS, previewChromeHidden)}>
+            <div className="flex w-full max-w-[1200px] items-center justify-between gap-my-16">
+              <div className="flex items-center justify-start gap-my-12">
+                <HeaderBackButton onClick={onBack} aria-label="시리즈 목록으로" />
+                <h1 className="text-heading2_700 text-on-surface-10">{title}</h1>
+              </div>
+              <div className="hidden items-center gap-my-12 lg:flex">
+                {showDraftButton ? (
                   <Button
                     type="button"
+                    variant="outline"
                     size="lg"
-                    onClick={onSubmit}
-                    className={cn(
-                      "bg-primary text-primary-foreground hover:bg-primary/90",
-                      submitDisabled && "bg-primary/40 hover:bg-primary/40 cursor-not-allowed"
-                    )}
+                    onClick={onDraftClick}
+                    className="bg-white text-on-surface-20 hover:bg-surface-20 disabled:border-border-20"
                   >
-                    등록하기
+                    임시저장
                   </Button>
-                </div>
-              </div>
-            </header>
-
-            <div className={APP_MAIN_PANEL_CLASS}>
-              {showFormPanel ? (
-                <div
+                ) : null}
+                <Button
+                  type="button"
+                  size="lg"
+                  onClick={onSubmit}
                   className={cn(
-                    "flex flex-col items-center max-lg:overflow-visible lg:min-h-0 lg:flex-1 lg:overflow-y-auto",
-                    PAGE_SCROLL_TOP_CLASS,
-                    isLgUp && PAGE_SCROLL_BOTTOM_CLASS,
-                    aiComposer && FLOATING_COMPOSER_SCROLL_PAD_CLASS,
-                    contentPaddingClassName,
-                    "max-lg:px-0 max-lg:pt-0",
+                    "bg-primary text-primary-foreground hover:bg-primary/90",
+                    submitDisabled && "bg-primary/40 hover:bg-primary/40 cursor-not-allowed",
                   )}
                 >
-                  <div
-                    className={cn(
-                      "mx-auto flex w-full max-w-[1200px]",
-                      isLgUp ? contentGapClassName : "",
-                    )}
-                  >
-                    <div className="min-w-0 flex-1">
-                      <PageCard
-                        fullWidth
-                        className="flex h-fit shrink-0 flex-col gap-my-20 overflow-hidden rounded-[4px] px-0 lg:px-0 pt-my-8 pb-my-20 max-lg:rounded-none max-lg:border-0"
-                      >
-                        <SeriesFormTabs activeTab={activeTab} onChange={onTabChange} />
-                        <div className={cn("self-stretch pt-0 pb-0", PAGE_FLUSH_CONTENT_PAD_X_CLASS)}>{children}</div>
-                      </PageCard>
-                    </div>
-
-                    {isLgUp ? (
-                      <SeriesPreviewPanel
-                        coverPreviewUrl={coverPreviewUrl}
-                        logoPreviewUrl={logoPreviewUrl}
-                        layout="sidebar"
-                      />
-                    ) : null}
-                  </div>
-                </div>
-              ) : null}
-
-              {showPreviewPanel ? (
-                <div className={cn("flex flex-col bg-black max-lg:min-h-dvh", APP_MAIN_PANEL_CLASS)}>
-                  <SeriesPreviewPanel
-                    coverPreviewUrl={coverPreviewUrl}
-                    logoPreviewUrl={logoPreviewUrl}
-                    layout="centered"
-                  />
-                </div>
-              ) : null}
-
-              {!isLgUp ? (
-                <EditorMobileFloatingActions
-                  active={mobilePanel}
-                  onChange={setMobilePanel}
-                  editTargetLabel="입력"
-                  hasBlockToolbar={false}
-                />
-              ) : null}
+                  등록하기
+                </Button>
+              </div>
             </div>
-      </main>
-      {aiComposer ? (
-        <FloatingAiComposerPortal
-          value={aiComposer.briefPrompt}
-          onChange={aiComposer.onBriefChange}
-          onSubmit={aiComposer.onSubmit}
-          placeholder={aiComposer.placeholder ?? "시리즈 컨셉·세계관·분위기를 서술형으로 입력해 주세요."}
-          isLoading={aiComposer.isGenerating}
-          submitDisabled={
-            aiComposer.isGenerating || aiComposer.briefPrompt.trim().length === 0
-          }
-          loadingMessage={aiComposer.loadingMessage ?? "시리즈 정보를 생성하고 있어요"}
-          ariaLabel={aiComposer.ariaLabel ?? "시리즈 AI 초안 입력"}
-        />
-      ) : null}
-    </div>
+          </header>
+
+          <div className={APP_MAIN_PANEL_CLASS}>
+            {showFormPanel ? (
+              <div
+                className={cn(
+                  PAGE_SCROLL_COLUMN_CLASS,
+                  showMobileSubmitBar && mobileScrollPadClass,
+                  "max-lg:px-0 max-lg:pt-0 max-lg:gap-0",
+                )}
+              >
+                <div
+                  className={cn(
+                    "mx-auto flex w-full min-w-0 max-w-[1200px]",
+                    isLgUp ? contentGapClassName : "",
+                  )}
+                >
+                  <div className="min-w-0 flex-1">
+                    <PageCard
+                      fullWidth
+                      className={cn(
+                        "flex h-fit shrink-0 flex-col gap-my-20 overflow-hidden rounded-[4px] px-0 shadow-none",
+                        PAGE_CARD_SHELL_MOBILE_FLUSH_CLASS,
+                        "max-lg:rounded-none max-lg:border-0",
+                      )}
+                    >
+                      <SeriesFormTabs activeTab={activeTab} onChange={onTabChange} />
+                      <div className={cn("self-stretch pt-0 pb-0", PAGE_FLUSH_CONTENT_PAD_X_CLASS)}>
+                        {children}
+                      </div>
+                    </PageCard>
+                  </div>
+
+                  {isLgUp ? (
+                    <SeriesPreviewPanel
+                      coverPreviewUrl={coverPreviewUrl}
+                      logoPreviewUrl={logoPreviewUrl}
+                      layout="sidebar"
+                    />
+                  ) : null}
+                </div>
+              </div>
+            ) : null}
+
+            {showPreviewPanel ? (
+              <div className={cn("flex flex-col bg-black max-lg:min-h-dvh", APP_MAIN_PANEL_CLASS)}>
+                <SeriesPreviewPanel
+                  coverPreviewUrl={coverPreviewUrl}
+                  logoPreviewUrl={logoPreviewUrl}
+                  layout="centered"
+                />
+              </div>
+            ) : null}
+
+            {!isLgUp ? (
+              <EditorMobileFloatingActions
+                active={mobilePanel}
+                onChange={setMobilePanel}
+                editTargetLabel="입력"
+                hasBlockToolbar={false}
+                fabBottomClassName={
+                  showMobileSubmitBar ? SERIES_FORM_MOBILE_FLOATING_ROW_BOTTOM_CLASS : undefined
+                }
+              />
+            ) : null}
+          </div>
+        </main>
+        {showMobileSubmitBar ? (
+          <SeriesFormMobileSubmitBar
+            showDraftButton={showDraftButton}
+            onDraftClick={onDraftClick}
+            onSubmit={onSubmit}
+            submitDisabled={submitDisabled}
+          />
+        ) : null}
+        {aiComposer ? (
+          <FloatingAiComposerPortal
+            stackAboveMobileSubmitBar={showMobileSubmitBar}
+            reserveMobileFabLane={showMobileSubmitBar}
+            value={aiComposer.briefPrompt}
+            onChange={aiComposer.onBriefChange}
+            onSubmit={aiComposer.onSubmit}
+            placeholder={
+              aiComposer.placeholder ?? "시리즈 컨셉·세계관·분위기를 서술형으로 입력해 주세요."
+            }
+            isLoading={aiComposer.isGenerating}
+            submitDisabled={
+              aiComposer.isGenerating || aiComposer.briefPrompt.trim().length === 0
+            }
+            loadingMessage={aiComposer.loadingMessage ?? "시리즈 정보를 생성하고 있어요"}
+            ariaLabel={aiComposer.ariaLabel ?? "시리즈 AI 초안 입력"}
+          />
+        ) : null}
+      </div>
+    </SeriesFormMobileChromeProvider>
   );
 }

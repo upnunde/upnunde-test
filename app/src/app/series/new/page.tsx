@@ -11,6 +11,7 @@ import { SeriesFormKeywordsField } from "@/components/series/SeriesFormKeywordsF
 import { SeriesFormTextareaField } from "@/components/series/SeriesFormTextareaField";
 import { SeriesFormPageScaffold } from "@/components/series/SeriesFormPageScaffold";
 import { SeriesFormStepNav } from "@/components/series/SeriesFormStepNav";
+import { PAGE_FOOTER_ACTION_BUTTON_CLASS } from "@/lib/page-layout";
 import { useSeriesFormController } from "@/hooks/useSeriesFormController";
 import { useFormAiDraftComposer } from "@/hooks/useFormAiDraftComposer";
 import { generateSeriesDraftFromBrief } from "@/lib/series-ai-draft";
@@ -175,6 +176,8 @@ export default function SeriesNewPage() {
                             <Button
                               type="button"
                               variant="secondary"
+                              size="form"
+                              className={PAGE_FOOTER_ACTION_BUTTON_CLASS}
                               onClick={() => setActiveTab("info")}
                             >
                               다음
@@ -246,6 +249,8 @@ export default function SeriesNewPage() {
                             <Button
                               type="button"
                               variant="secondary"
+                              size="form"
+                              className={PAGE_FOOTER_ACTION_BUTTON_CLASS}
                               onClick={() => setActiveTab("image")}
                             >
                               이전
@@ -253,6 +258,8 @@ export default function SeriesNewPage() {
                             <Button
                               type="button"
                               variant="secondary"
+                              size="form"
+                              className={PAGE_FOOTER_ACTION_BUTTON_CLASS}
                               onClick={() => setActiveTab("worldview")}
                             >
                               다음
@@ -294,6 +301,8 @@ export default function SeriesNewPage() {
                             <Button
                               type="button"
                               variant="secondary"
+                              size="form"
+                              className={PAGE_FOOTER_ACTION_BUTTON_CLASS}
                               onClick={() => setActiveTab("info")}
                             >
                               이전

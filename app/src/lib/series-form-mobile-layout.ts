@@ -1,0 +1,19 @@
+/** 모바일 고정 제출 바(임시저장·등록하기) — py-12 + 버튼 36 + pb-12 + safe-area */
+export const SERIES_FORM_SUBMIT_BAR_MOBILE_STACK_HEIGHT =
+  "calc(var(--spacing-my-12)+var(--spacing-my-36)+var(--spacing-my-12)+env(safe-area-inset-bottom,0px))";
+
+/** AI 컴포저·미리보기 FAB — 제출 바 위 플로팅 행 */
+export const SERIES_FORM_MOBILE_FLOATING_ROW_BOTTOM_CLASS =
+  "max-lg:bottom-[calc(var(--spacing-my-12)+var(--spacing-my-36)+var(--spacing-my-12)+env(safe-area-inset-bottom,0px)+var(--spacing-my-20)+var(--app-keyboard-inset,var(--app-vv-bottom,0px)))]";
+
+/** AI 컴포저 — 우측 FAB(48px)·간격·inset 확보 */
+export const SERIES_FORM_MOBILE_COMPOSER_FIXED_INSET_CLASS =
+  "left-[max(var(--spacing-my-20),env(safe-area-inset-left,0px))] right-[calc(var(--spacing-my-16)+3rem+var(--spacing-my-8)+env(safe-area-inset-right,0px))] w-auto max-w-[560px] translate-x-0";
+
+/** 모바일 고정 제출 바만큼 스크롤 여백 */
+export const SERIES_FORM_MOBILE_SCROLL_PAD_CLASS =
+  "max-lg:pb-[calc(var(--spacing-my-12)+var(--spacing-my-36)+var(--spacing-my-12)+env(safe-area-inset-bottom,0px))]";
+
+/** 모바일 고정 제출 바 + 플로팅 AI 컴포저 */
+export const SERIES_FORM_MOBILE_SCROLL_PAD_WITH_COMPOSER_CLASS =
+  "max-lg:pb-[calc(var(--spacing-my-20)+3rem+var(--spacing-my-12)+var(--spacing-my-36)+var(--spacing-my-12)+env(safe-area-inset-bottom,0px)+var(--app-keyboard-inset,var(--app-vv-bottom,0px)))]";

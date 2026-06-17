@@ -235,18 +235,7 @@ export default function EpisodeManagementPage() {
     router.push(`/series/${seriesId}/resources`);
   }, [router, seriesId]);
 
-  /** 정책 7: 기존 에피소드 행 클릭은 상세 화면으로 진입 (기존 플로우 복구) */
-  const handleRowClick = useCallback(
-    (episode: Episode) => {
-      const titleParam = encodeURIComponent(episode.title || "에피소드 제목");
-      router.push(
-        `/series/${seriesId}/episodes/${episode.id}/detail?episodeNo=${episode.episodeNumber}&episodeTitle=${titleParam}`,
-      );
-    },
-    [router, seriesId]
-  );
-
-  /** 임시저장·비공개 회차 수정 — 편집 가능한 원고 에디터(샘플 대본 전체) */
+  /** 에피소드 행 클릭 → 편집 가능한 원고 에디터 */
   const handleEdit = useCallback(
     (episode: Episode) => {
       setCurrentView("editor");
@@ -422,7 +411,7 @@ export default function EpisodeManagementPage() {
                 <div className="flex w-full flex-col max-lg:gap-my-12 lg:overflow-hidden lg:rounded-[4px] lg:border lg:border-border-10 lg:bg-white">
                   <EpisodeList
                     episodes={paginatedEpisodes}
-                    onRowClick={handleRowClick}
+                    onRowClick={handleEdit}
                     onPublish={handlePublishClick}
                     onEdit={handleEdit}
                     onDelete={handleDeleteClick}
