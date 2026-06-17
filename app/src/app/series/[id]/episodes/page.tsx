@@ -334,7 +334,21 @@ export default function EpisodeManagementPage() {
         `/series/${seriesId}/episodes/${episode.id}/detail?episodeNo=${episode.episodeNumber}&episodeTitle=${titleParam}`,
       );
     },
-    [router, seriesId]
+    [router, seriesId],
+  );
+
+  /**
+   * 에피소드 행 클릭 — 공개·예약: 뷰어(읽기 전용) / 비공개·임시저장: 편집 에디터
+   */
+  const handleRowClick = useCallback(
+    (episode: Episode) => {
+      if (episode.status === "DRAFT" || episode.status === "PRIVATE") {
+        handleEdit(episode);
+        return;
+      }
+      handleLinkEditor(episode);
+    },
+    [handleEdit, handleLinkEditor],
   );
 
   /** 정책 11: 통계 화면 진입 */
@@ -411,7 +425,7 @@ export default function EpisodeManagementPage() {
                 <div className="flex w-full flex-col max-lg:gap-my-12 lg:overflow-hidden lg:rounded-[4px] lg:border lg:border-border-10 lg:bg-white">
                   <EpisodeList
                     episodes={paginatedEpisodes}
-                    onRowClick={handleEdit}
+                    onRowClick={handleRowClick}
                     onPublish={handlePublishClick}
                     onEdit={handleEdit}
                     onDelete={handleDeleteClick}
