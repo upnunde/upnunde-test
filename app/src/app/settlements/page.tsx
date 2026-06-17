@@ -217,7 +217,7 @@ function SettlementRowDesktop({
   onRejectionReason: () => void;
 }) {
   return (
-    <div className={cn(SETTLEMENT_TABLE_GRID_CLASS, "min-h-16 items-center px-my-12 py-my-8 sm:min-h-20 sm:px-my-16")}>
+    <div className={cn(SETTLEMENT_TABLE_GRID_CLASS, "min-h-16 items-center px-my-20 py-my-8 sm:min-h-20")}>
       <div className="flex min-w-0 items-center">
         {item.status === "rejected" && item.rejectionReason ? (
           <button
@@ -316,7 +316,7 @@ function SettlementRowMobile({
   onRejectionReason: () => void;
 }) {
   return (
-    <div className="rounded-[4px] border border-border-10 bg-white p-my-16">
+    <div className="rounded-[8px] bg-white p-my-16 shadow-elevation-30">
       <div className="flex items-start justify-between gap-my-12">
         <div className="min-w-0 flex-1">
           {item.status === "rejected" && item.rejectionReason ? (
@@ -358,7 +358,7 @@ function SettlementRowMobile({
         ) : null}
       </div>
 
-      <div className="mt-my-16 flex flex-col gap-my-12 self-stretch">
+      <div className="mt-my-12 flex flex-col gap-my-8 self-stretch">
         <SettlementMobileFieldRow
           label="수익금"
           value={`${item.revenueAmount}원`}
@@ -366,7 +366,7 @@ function SettlementRowMobile({
         />
         <SettlementMobileFieldRow label="부가세" value={`${item.vatAmount}원`} />
         <SettlementMobileFieldRow label="실지급액" value={`${item.settlementAmount}원`} />
-        <div className="h-px w-full bg-divider-10" aria-hidden />
+        <div className="my-my-8 h-px w-full bg-divider-10" aria-hidden />
         <SettlementMobileFieldRow
           label="신청일"
           value={formatSettlementMobileDate(item.requestedDate)}
@@ -636,7 +636,7 @@ export default function MonetizationSettlementsPage() {
                 </AnalyticsPanel>
 
                 <AnalyticsPanel>
-                  <div className="border-b border-border-10 px-my-20 py-my-16">
+                  <div className="px-my-20 py-my-16">
                     <div className="flex flex-wrap items-center justify-between gap-my-12">
                       <h3 className="text-heading5_700 text-on-surface-10">정산 내역</h3>
                     </div>
@@ -734,7 +734,7 @@ export default function MonetizationSettlementsPage() {
                     ) : (
                       <>
                         {/* xl 미만·사이드바 포함 폭에서는 표 대신 카드로 가로 스크롤 없이 표시 */}
-                        <div className={cn("space-y-my-12 py-my-20 xl:hidden", PAGE_FLUSH_CONTENT_PAD_X_CLASS)}>
+                        <div className="mb-my-20 flex flex-col gap-my-16 bg-surface-10 px-my-20 py-0 xl:hidden">
                           {pagedSettlementItems.map((item) => (
                             <SettlementRowMobile
                               key={item.id}
@@ -749,7 +749,7 @@ export default function MonetizationSettlementsPage() {
                           <div
                             className={cn(
                               SETTLEMENT_TABLE_GRID_CLASS,
-                              "items-center border-b border-divider-10 bg-surface-10 px-my-12 py-my-12 sm:px-my-16",
+                              "items-center border-b border-divider-10 bg-surface-10 px-my-20 py-my-12",
                             )}
                           >
                             <div className="min-w-0 truncate text-caption1_400 text-on-surface-30">상태</div>
@@ -769,7 +769,7 @@ export default function MonetizationSettlementsPage() {
                                 onRejectionReason={() => setRejectionReasonTarget(item)}
                               />
                               {idx < pagedSettlementItems.length - 1 ? (
-                                <div className="px-my-12 sm:px-my-16">
+                                <div className="px-my-20">
                                   <div className="h-px w-full bg-divider-10" />
                                 </div>
                               ) : null}

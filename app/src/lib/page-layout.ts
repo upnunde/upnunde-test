@@ -77,6 +77,13 @@ export const PAGE_SCROLL_ROOT_MOBILE_FLUSH_CLASS = "max-lg:pt-0 max-lg:px-0 max-
 /** 모바일 풀블리드 카드 셸 — 테두리·모서리 라운드 제거 */
 export const PAGE_CARD_SHELL_MOBILE_FLUSH_CLASS = "max-lg:rounded-none max-lg:border-0";
 
+/** 모바일 카드형 목록 행 — 정산·내 작품·에피소드 공통 */
+export const PAGE_MOBILE_LIST_ITEM_CARD_CLASS =
+  "max-lg:rounded-[8px] max-lg:border-0 max-lg:bg-white max-lg:p-my-16 max-lg:shadow-elevation-30";
+
+/** 모바일 카드형 목록 컨테이너 간격 */
+export const PAGE_MOBILE_LIST_STACK_GAP_CLASS = "max-lg:gap-my-12";
+
 /** AppShell main 스크롤 루트 — 상단 여백 · 가로 인셋 · 하단 80px */
 export const PAGE_SCROLL_ROOT_TOP_CLASS =
   `flex flex-col max-lg:overflow-visible ${PAGE_SCROLL_LG_TRAP_CLASS} ${PAGE_SCROLL_TOP_CLASS} ${PAGE_SCROLL_GUTTER_CLASS} ${PAGE_SCROLL_BOTTOM_CLASS}`;

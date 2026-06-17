@@ -89,9 +89,18 @@ export const CONTROL_SIZE_OVERRIDES = {
 };
 
 export const SHADOW_REPLACEMENTS = {
+  "shadow-[0px_1px_2px_1px_rgba(0,0,0,0.1)]": "shadow-elevation-10",
+  "shadow-[0px_2px_4px_2px_rgba(0,0,0,0.1)]": "shadow-elevation-20",
+  "shadow-[0px_4px_8px_3px_rgba(0,0,0,0.1)]": "shadow-elevation-30",
+  "shadow-[0px_8px_12px_4px_rgba(0,0,0,0.1)]": "shadow-elevation-40",
+  "shadow-[0px_8px_16px_6px_rgba(0,0,0,0.1)]": "shadow-elevation-50",
+  "shadow-[0px_12px_24px_8px_rgba(0,0,0,0.1)]": "shadow-elevation-60",
   "shadow-[0px_1px_2px_1px_rgba(0,0,0,0.16)]": "shadow-elevation-10",
   "shadow-[0px_2px_4px_2px_rgba(0,0,0,0.16)]": "shadow-elevation-20",
+  "shadow-[0px_4px_8px_4px_rgba(0,0,0,0.16)]": "shadow-elevation-30",
+  "shadow-[0px_6px_12px_6px_rgba(0,0,0,0.16)]": "shadow-elevation-40",
   "shadow-[0px_8px_16px_8px_rgba(0,0,0,0.16)]": "shadow-elevation-50",
+  "shadow-[0px_12px_24px_12px_rgba(0,0,0,0.16)]": "shadow-elevation-60",
   "shadow-sm": "shadow-elevation-10",
   "shadow-md": "shadow-elevation-30",
   "shadow-lg": "shadow-elevation-40",

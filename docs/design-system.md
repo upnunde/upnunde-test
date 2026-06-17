@@ -161,9 +161,9 @@ Tailwind 숫자 스케일 `n` (기본 4n px) → `my-<px>`:
 
 | 레거시 | 치환 |
 |--------|------|
-| `shadow-[0px_1px_2px_1px_rgba(0,0,0,0.16)]` | `shadow-elevation-10` |
-| `shadow-[0px_2px_4px_2px_rgba(0,0,0,0.16)]` | `shadow-elevation-20` |
-| `shadow-[0px_8px_16px_8px_rgba(0,0,0,0.16)]` | `shadow-elevation-50` |
+| `shadow-[0px_1px_2px_1px_rgba(0,0,0,0.1)]` | `shadow-elevation-10` |
+| `shadow-[0px_2px_4px_2px_rgba(0,0,0,0.1)]` | `shadow-elevation-20` |
+| `shadow-[0px_8px_16px_6px_rgba(0,0,0,0.1)]` | `shadow-elevation-50` |
 | `shadow-sm` | `shadow-elevation-10` |
 | `shadow-md` / `shadow-lg` | `shadow-elevation-30` / `shadow-elevation-40` (근사) |
 | `shadow-xl` | `shadow-elevation-50` |
@@ -567,16 +567,16 @@ UI에서 **실제로 사용하는 역할 기반 토큰**. 값은 프리미티브
 
 ### 5. Elevation (그림자)
 
-Tailwind 기본 `shadow-md` 등의 사용을 금지하고, 디자인 시안에 정의된 정밀한 Box Shadow 토큰만 사용한다. 모든 그림자의 색상은 `#000000 16%` (`rgba(0,0,0,0.16)`) 로 고정된다.
+Tailwind 기본 `shadow-md` 등의 사용을 금지하고, 디자인 시안에 정의된 정밀한 Box Shadow 토큰만 사용한다. 모든 그림자의 색상은 `#000000 6%` (`rgba(0,0,0,0.06)`) 로 고정된다.
 
 | 토큰명 | CSS Box Shadow 값 (X Y Blur Spread Color) | 사용처 예시 |
 |--------|-------------------------------------------|-------------|
-| `shadow-elevation-10` | `0px 1px 2px 1px rgba(0, 0, 0, 0.16)` | 컴팩트 컨트롤, 칩, 태그 부각 |
-| `shadow-elevation-20` | `0px 2px 4px 2px rgba(0, 0, 0, 0.16)` | 버튼, 카드 컴포넌트 기본 부유 |
-| `shadow-elevation-30` | `0px 4px 8px 4px rgba(0, 0, 0, 0.16)` | 드롭다운 메뉴, 툴팁 |
-| `shadow-elevation-40` | `0px 6px 12px 6px rgba(0, 0, 0, 0.16)` | 팝오버, 바텀 시트 |
-| `shadow-elevation-50` | `0px 8px 16px 8px rgba(0, 0, 0, 0.16)` | 주요 다이얼로그, 작은 모달 |
-| `shadow-elevation-60` | `0px 12px 24px 12px rgba(0, 0, 0, 0.16)`| 대형 중앙 모달, 최상단 알림 팝업 |
+| `shadow-elevation-10` | `0px 1px 2px 1px rgba(0, 0, 0, 0.06)` | 컴팩트 컨트롤, 칩, 태그 부각 |
+| `shadow-elevation-20` | `0px 2px 4px 2px rgba(0, 0, 0, 0.06)` | 버튼, 카드 컴포넌트 기본 부유 |
+| `shadow-elevation-30` | `0px 4px 8px 3px rgba(0, 0, 0, 0.06)` | 드롭다운 메뉴, 툴팁 |
+| `shadow-elevation-40` | `0px 8px 12px 4px rgba(0, 0, 0, 0.06)` | 팝오버, 바텀 시트 |
+| `shadow-elevation-50` | `0px 8px 16px 6px rgba(0, 0, 0, 0.06)` | 주요 다이얼로그, 작은 모달 |
+| `shadow-elevation-60` | `0px 12px 24px 8px rgba(0, 0, 0, 0.06)`| 대형 중앙 모달, 최상단 알림 팝업 |
 
 ---
 
@@ -821,12 +821,12 @@ AI는 컴포넌트를 작성할 때 아래에 선언된 매핑 규격을 반드�
   --color-border-10: var(--border-10);
   
   /* 3. Elevation (Shadow) 매핑 */
-  --shadow-elevation-10: 0px 1px 2px 1px rgba(0, 0, 0, 0.16);
-  --shadow-elevation-20: 0px 2px 4px 2px rgba(0, 0, 0, 0.16);
-  --shadow-elevation-30: 0px 4px 8px 4px rgba(0, 0, 0, 0.16);
-  --shadow-elevation-40: 0px 6px 12px 6px rgba(0, 0, 0, 0.16);
-  --shadow-elevation-50: 0px 8px 16px 8px rgba(0, 0, 0, 0.16);
-  --shadow-elevation-60: 0px 12px 24px 12px rgba(0, 0, 0, 0.16);
+  --shadow-elevation-10: 0px 1px 2px 1px rgba(0, 0, 0, 0.06);
+  --shadow-elevation-20: 0px 2px 4px 2px rgba(0, 0, 0, 0.06);
+  --shadow-elevation-30: 0px 4px 8px 3px rgba(0, 0, 0, 0.06);
+  --shadow-elevation-40: 0px 8px 12px 4px rgba(0, 0, 0, 0.06);
+  --shadow-elevation-50: 0px 8px 16px 6px rgba(0, 0, 0, 0.06);
+  --shadow-elevation-60: 0px 12px 24px 8px rgba(0, 0, 0, 0.06);
 
   /* 4. Z-index는 v4에서 @theme 네임스페이스로 유틸이 생성되지 않으므로
         아래 @utility 블록으로 직접 선언한다(이 블록 밖). */
