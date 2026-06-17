@@ -14,6 +14,7 @@ import { EditorMenuOption } from "@/components/editor/EditorMenuOption";
 import type { Episode, EpisodeStatus } from "@/types/episode";
 import { formatViews, formatDateOrRelative, formatScheduledPublishAtParts } from "@/lib/formatEpisode";
 import { THUMBNAIL_DIM_OVERLAY_CLASS } from "@/lib/thumbnail-styles";
+import { PAGE_MOBILE_LIST_ITEM_CARD_CLASS } from "@/lib/page-layout";
 import { cn } from "@/lib/utils";
 
 const ACTION_ICON_BUTTON_BASE =
@@ -419,7 +420,12 @@ export function EpisodeListItem({
           onRowClick?.(episode);
         }
       }}
-      className="cursor-pointer border-b border-divider-10 px-my-12 py-my-16 transition-colors last:border-b-0 hover:bg-surface-20 lg:px-my-20 lg:py-my-12"
+      className={cn(
+        "cursor-pointer transition-colors",
+        PAGE_MOBILE_LIST_ITEM_CARD_CLASS,
+        "max-lg:hover:bg-white",
+        "lg:border-b lg:border-divider-10 lg:px-my-20 lg:py-my-12 lg:last:border-b-0 lg:hover:bg-surface-20",
+      )}
       aria-label={`${episode.episodeNumber}화 ${episode.title}`}
     >
       {/* 모바일: 썸네일 + 제목·상태·메타 / 우상단 ⋮ 메뉴 */}

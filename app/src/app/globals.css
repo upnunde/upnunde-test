@@ -117,12 +117,12 @@
   --spacing-my-72: 72px;
   --spacing-my-80: 80px;
 
-  --shadow-elevation-10: 0px 1px 2px 1px rgba(0, 0, 0, 0.16);
-  --shadow-elevation-20: 0px 2px 4px 2px rgba(0, 0, 0, 0.16);
-  --shadow-elevation-30: 0px 4px 8px 4px rgba(0, 0, 0, 0.16);
-  --shadow-elevation-40: 0px 6px 12px 6px rgba(0, 0, 0, 0.16);
-  --shadow-elevation-50: 0px 8px 16px 8px rgba(0, 0, 0, 0.16);
-  --shadow-elevation-60: 0px 12px 24px 12px rgba(0, 0, 0, 0.16);
+  --shadow-elevation-10: 0px 1px 2px 1px rgba(0, 0, 0, 0.06);
+  --shadow-elevation-20: 0px 2px 4px 2px rgba(0, 0, 0, 0.06);
+  --shadow-elevation-30: 0px 4px 8px 3px rgba(0, 0, 0, 0.06);
+  --shadow-elevation-40: 0px 8px 12px 4px rgba(0, 0, 0, 0.06);
+  --shadow-elevation-50: 0px 8px 16px 6px rgba(0, 0, 0, 0.06);
+  --shadow-elevation-60: 0px 12px 24px 8px rgba(0, 0, 0, 0.06);
 }
 
 /* ========== Design System: Z-Index 레이어 토큰 ==========

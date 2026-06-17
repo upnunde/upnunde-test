@@ -381,6 +381,7 @@ export default function EpisodeManagementPage() {
     <StandaloneHeaderPage
       profileImageUrl={profileImageUrl}
       onProfileImageChange={setProfileImageUrl}
+      className="max-lg:bg-surface-10"
     >
       <header className={PAGE_SUBHEADER_WITH_STICKY_CLASS}>
               <div className="flex w-full max-w-[1200px] items-center justify-start gap-my-12">
@@ -393,6 +394,7 @@ export default function EpisodeManagementPage() {
               className={cn(
                 PAGE_SCROLL_COLUMN_CLASS,
                 PAGE_MOBILE_FIXED_ACTION_BAR_SCROLL_PAD_CLASS,
+                "max-lg:bg-surface-10 max-lg:px-my-20",
                 "max-lg:pt-my-24 lg:pt-my-40",
               )}
               {...{ [PAGE_SCROLL_COLUMN_ROOT_ATTR]: "" }}
@@ -417,27 +419,28 @@ export default function EpisodeManagementPage() {
                   <EmptyStateBanner />
                 </div>
               ) : (
-                <EpisodeList
-                  episodes={paginatedEpisodes}
-                  onRowClick={handleRowClick}
-                  onPublish={handlePublishClick}
-                  onEdit={handleEdit}
-                  onDelete={handleDeleteClick}
-                  onLinkEditor={handleLinkEditor}
-                  onStats={handleStats}
-                  onInquiry={handleInquiry}
-                  onCancelSchedule={handleCancelSchedule}
-                  footer={
-                    showPagination ? (
-                      <Pagination
-                        currentPage={currentPage}
-                        totalItems={totalItems}
-                        onPageChange={setCurrentPage}
-                        pageSize={PAGE_SIZE}
-                      />
-                    ) : undefined
-                  }
-                />
+                <div className="flex w-full flex-col max-lg:gap-my-12 lg:overflow-hidden lg:rounded-[4px] lg:border lg:border-border-10 lg:bg-white">
+                  <EpisodeList
+                    episodes={paginatedEpisodes}
+                    onRowClick={handleRowClick}
+                    onPublish={handlePublishClick}
+                    onEdit={handleEdit}
+                    onDelete={handleDeleteClick}
+                    onLinkEditor={handleLinkEditor}
+                    onStats={handleStats}
+                    onInquiry={handleInquiry}
+                    onCancelSchedule={handleCancelSchedule}
+                  />
+                  {showPagination ? (
+                    <Pagination
+                      currentPage={currentPage}
+                      totalItems={totalItems}
+                      onPageChange={setCurrentPage}
+                      pageSize={PAGE_SIZE}
+                      className="max-lg:border-0 max-lg:bg-transparent lg:rounded-b-[4px] lg:border-t lg:border-divider-10"
+                    />
+                  ) : null}
+                </div>
               )}
               </div>
             </div>

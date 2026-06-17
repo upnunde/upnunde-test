@@ -3,6 +3,10 @@
 import React from "react";
 import { EpisodeListItem } from "@/components/episode/EpisodeListItem";
 import type { Episode } from "@/types/episode";
+import {
+  PAGE_MOBILE_LIST_STACK_GAP_CLASS,
+} from "@/lib/page-layout";
+import { cn } from "@/lib/utils";
 
 export interface EpisodeListProps {
   episodes: Episode[];
@@ -14,8 +18,6 @@ export interface EpisodeListProps {
   onStats: (episode: Episode) => void;
   onInquiry?: (episode: Episode) => void;
   onCancelSchedule?: (episode: Episode) => void;
-  /** 정책 13: 페이지네이션을 테이블 하단에 렌더링할 때 전달 */
-  footer?: React.ReactNode;
   className?: string;
 }
 
@@ -32,16 +34,10 @@ export function EpisodeList({
   onStats,
   onInquiry,
   onCancelSchedule,
-  footer,
   className,
 }: EpisodeListProps) {
   return (
-    <div
-      className={
-        "w-full bg-white rounded-[4px] border border-border-10 flex flex-col shrink-0 overflow-hidden " +
-        (className ?? "")
-      }
-    >
+    <div className={cn("flex w-full shrink-0 flex-col", className)}>
       {/* Table Header — 모바일은 카드형 행만 표시 */}
       <div className="hidden h-[42px] shrink-0 items-center rounded-t-[4px] border-b border-divider-10 bg-white px-my-20 lg:flex">
         <div className="w-20 text-caption1_400 text-on-surface-30">회차</div>
@@ -53,7 +49,7 @@ export function EpisodeList({
       </div>
 
       {/* Table Body */}
-      <div className="flex flex-col min-h-0">
+      <div className={cn("flex min-h-0 flex-col", PAGE_MOBILE_LIST_STACK_GAP_CLASS)}>
         {episodes.map((episode) => (
           <EpisodeListItem
             key={episode.id}
@@ -69,8 +65,6 @@ export function EpisodeList({
           />
         ))}
       </div>
-
-      {footer != null ? footer : null}
     </div>
   );
 }
