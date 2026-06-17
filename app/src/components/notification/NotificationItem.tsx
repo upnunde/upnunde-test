@@ -55,7 +55,7 @@ export function NotificationItem({
           </div>
         </div>
         <div className="min-w-0 flex-1 flex flex-col justify-center items-start gap-my-4">
-          <div className="w-full min-w-0 text-left text-body1_700 text-on-surface-10 lg:text-body2_700">
+          <div className="w-full min-w-0 text-left text-body1_700 text-on-surface-10 lg:text-body2_500">
             {title}
           </div>
           <div className="justify-start text-body4_400 text-on-surface-30 lg:text-caption1_400">

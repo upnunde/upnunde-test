@@ -33,7 +33,7 @@ export function InquiryFaqItem({ item, isOpen = false, onToggle }: InquiryFaqIte
           <span className="text-body4_500 text-on-surface-30 lg:text-caption1_500">
             {getInquiryFaqCategoryLabel(category)}
           </span>
-          <span className="w-full min-w-0 text-left text-body1_700 text-on-surface-10 lg:text-body2_700">
+          <span className="w-full min-w-0 text-left text-body1_700 text-on-surface-10 lg:text-body2_500">
             {question}
           </span>
         </div>
