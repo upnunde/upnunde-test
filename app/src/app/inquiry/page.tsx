@@ -11,6 +11,7 @@ import {
   PAGE_SUBHEADER_WITH_FILTER_CLASS,
 } from "@/lib/page-layout";
 import { cn } from "@/lib/utils";
+import { InquiryFaqList } from "@/components/inquiry/InquiryFaqList";
 import { InquiryForm } from "@/components/inquiry/InquiryForm";
 import { InquiryHistoryList } from "@/components/inquiry/InquiryHistoryList";
 import { InquiryTabStrip, type InquiryTab } from "@/components/inquiry/InquiryTabStrip";
@@ -43,7 +44,7 @@ const MOCK_INQUIRY_HISTORY: InquiryHistoryItem[] = [
 ];
 
 export default function InquiryPage() {
-  const [activeTab, setActiveTab] = useState<InquiryTab>("inquiry");
+  const [activeTab, setActiveTab] = useState<InquiryTab>("faq");
   const [snackbar, setSnackbar] = useState({ open: false, message: "" });
   const [inquiryHistory] = useState<InquiryHistoryItem[]>(MOCK_INQUIRY_HISTORY);
 
@@ -71,7 +72,12 @@ export default function InquiryPage() {
                 className="flex h-fit shrink-0 flex-col gap-0 overflow-hidden rounded-[4px] px-0 pt-my-8 pb-my-20 max-lg:rounded-none max-lg:border-0 lg:px-0"
               >
                 <InquiryTabStrip activeTab={activeTab} onTabChange={setActiveTab} />
-                {activeTab === "inquiry" ? (
+                {activeTab === "faq" ? (
+                  <InquiryFaqList
+                    className="self-stretch"
+                    onGoToInquiry={() => setActiveTab("inquiry")}
+                  />
+                ) : activeTab === "inquiry" ? (
                   <InquiryForm
                     onSubmit={(e) => {
                       e.preventDefault();

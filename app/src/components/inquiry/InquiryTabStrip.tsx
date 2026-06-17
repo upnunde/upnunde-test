@@ -4,7 +4,7 @@ import { SegmentedTextTabs } from "@/components/ui/segmented-text-tabs";
 import { PAGE_FLUSH_CONTENT_PAD_X_CLASS } from "@/lib/page-layout";
 import { cn } from "@/lib/utils";
 
-export type InquiryTab = "inquiry" | "history";
+export type InquiryTab = "faq" | "inquiry" | "history";
 
 export interface InquiryTabStripProps {
   activeTab: InquiryTab;
@@ -12,6 +12,7 @@ export interface InquiryTabStripProps {
 }
 
 const TAB_ITEMS = [
+  { id: "faq" as const, label: "많이받는 질문" },
   { id: "inquiry" as const, label: "문의" },
   { id: "history" as const, label: "문의내역" },
 ] as const;
