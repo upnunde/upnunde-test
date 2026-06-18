@@ -9,6 +9,9 @@ import { cn } from "@/lib/utils";
  * 2. `title-dot` — 타이틀 + 필수(빨간 점)
  * 3. `title-subtitle` — 타이틀 + 서브문구
  * 4. `title-subtitle-dot` — 타이틀 + 서브문구 + 필수(빨간 점)
+ *
+ * 필수 표시: `title-*-dot` variant 또는 `required` prop. `text` 끝 `*`는 UI에서 제거 후 점만 표시.
+ * 가이드: `.cursor/rules/ui-tokens-quickref.mdc` · `title1RequiredText()`
  */
 export type Title1Variant =
   | "title"
@@ -19,10 +22,21 @@ export type Title1Variant =
 export interface Title1Props {
   text: string;
   variant: Title1Variant;
+  /** `title-subtitle-dot`·`title-dot` 없이도 필수 점을 켤 때. `text` 끝 `*`는 UI에서 제거됨. */
+  required?: boolean;
   /** `title-subtitle`, `title-subtitle-dot`에서 사용 (기본 플레이스홀더 문구) */
   subtitleText?: string;
   className?: string;
 }
+
+/** Title1 필수 라벨 — `text`에 붙이면 `title-*-dot` variant와 함께 빨간 점만 노출 */
+export function title1RequiredText(label: string): string {
+  const base = label.replace(/\*+$/, "").trimEnd();
+  return `${base}*`;
+}
+
+/** 필수 + 부제목 필드용 variant */
+export const TITLE1_VARIANT_REQUIRED_WITH_SUBTITLE: Title1Variant = "title-subtitle-dot";
 
 function variantShowsSubtitle(v: Title1Variant): boolean {
   return v === "title-subtitle" || v === "title-subtitle-dot";
@@ -38,13 +52,14 @@ function variantShowsDot(v: Title1Variant): boolean {
 export function Title1({
   text,
   variant,
+  required = false,
   subtitleText = "필요 없는 보조문구는 삭제",
   className,
 }: Title1Props) {
-  const showDot = variantShowsDot(variant);
+  const showDot = variantShowsDot(variant) || required;
   const subtitle = variantShowsSubtitle(variant);
 
-  const displayText = showDot && text.endsWith("*") ? text.slice(0, -1) : text;
+  const displayText = showDot && text.endsWith("*") ? text.slice(0, -1).trimEnd() : text;
   const titleRow = (
     <div className="inline-flex justify-start items-start gap-my-2">
       <div className="justify-center text-on-surface-10 text-body2_700 font-['Pretendard_JP']">

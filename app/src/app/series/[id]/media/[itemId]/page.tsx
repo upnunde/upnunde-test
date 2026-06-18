@@ -3,7 +3,7 @@
 import React, { useState, useEffect, useMemo } from "react";
 import { StandaloneHeaderPage } from "@/components/layout/StandaloneHeaderPage";
 import { useRouter, usePathname } from "next/navigation";
-import { ImageResourceDetailPage } from "@/components/resource/ImageResourceDetailPage";
+import { MediaResourceDetailPage } from "@/components/resource/MediaResourceDetailPage";
 import { getMediaById } from "@/lib/resourceMockData";
 
 export default function SeriesMediaEditPage() {
@@ -35,7 +35,7 @@ export default function SeriesMediaEditPage() {
       profileImageUrl={profileImageUrl}
       onProfileImageChange={setProfileImageUrl}
     >
-          <ImageResourceDetailPage kind="media" initialData={initialData ?? undefined} />
+          <MediaResourceDetailPage initialData={initialData ?? undefined} />
     </StandaloneHeaderPage>
   );
 }

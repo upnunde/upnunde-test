@@ -4,7 +4,7 @@ import React from "react";
 import { CharacterItem } from "@/components/character/CharacterItem";
 import { WorksEmptyCreateButton } from "@/components/works/WorksEmptyCreateButton";
 import type { CharacterData } from "@/types/character";
-import { WORKS_LIST_GRID_CLASS } from "@/lib/worksArea";
+import { WORKS_LIST_CREATE_SLOT_CLASS, WORKS_LIST_GRID_CLASS } from "@/lib/worksArea";
 
 export interface CharacterListProps {
   characters: CharacterData[];
@@ -39,7 +39,7 @@ export function CharacterList({
           onDelete={onDelete}
         />
       ))}
-      <div className="min-w-0">
+      <div className={WORKS_LIST_CREATE_SLOT_CLASS}>
         <WorksEmptyCreateButton
           hint="새로운 캐릭터를 등록하세요"
           actionLabel="새 캐릭터 생성"

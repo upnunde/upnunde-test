@@ -94,7 +94,7 @@ export const formDialogShellClassName = cn(
 
 /** 바텀 시트 안 폼 본문 — EpisodeForm 등 */
 export const formDialogSheetEpisodeFormClassName =
-  "mx-0 max-w-none min-w-0 flex-1 min-h-0 rounded-none border-0 bg-white shadow-none lg:mx-auto lg:max-w-[760px] lg:rounded-[16px] lg:border lg:border-border-10";
+  "w-full mx-0 max-w-none min-w-0 flex-1 min-h-0 rounded-none border-0 bg-white shadow-none lg:rounded-[4px] lg:border lg:border-border-10";
 
 /** 바텀 시트 내부 래퍼 — 헤더·푸터 사이 flex 체인 */
 export const formDialogSheetBodyWrapperClassName =

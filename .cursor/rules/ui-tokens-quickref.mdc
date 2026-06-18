@@ -41,7 +41,28 @@ cd app && npm run migrate:tokens -- --write
 
 ## 1차 소스 (여기 먼저 맞춤)
 
-`ui/button`, `chip-styles.ts`, `modal-styles.ts`, `page-layout.ts`, `form-field-styles.ts`, `thumbnail-styles.ts`
+`ui/button`, `ui/title1`, `chip-styles.ts`, `modal-styles.ts`, `page-layout.ts`, `form-field-styles.ts`, `thumbnail-styles.ts`
+
+## Title1 필수 필드 표시
+
+정본: `app/src/components/ui/title1.tsx`
+
+- **필수는 텍스트 `*`가 아니라 빨간 점** (`bg-error-error`, 4×4px)으로 표시한다.
+- **필수 + 부제목**(폼 라벨 기본): `variant="title-subtitle-dot"` + `text={title1RequiredText("라벨")}`  
+  - `text` 끝 `*`는 Title1이 제거한 뒤 점만 렌더한다. 화면에 `*` 문자를 직접 노출하지 않는다.
+- **필수만**(부제 없음): `variant="title-dot"` + `text="라벨*"`
+- **선택 + 부제목**: `variant="title-subtitle"` · `*`·`required` 없음
+- 대안: `variant="title-subtitle"` + `required` prop (동일하게 점 표시)
+
+```tsx
+import { Title1, title1RequiredText, TITLE1_VARIANT_REQUIRED_WITH_SUBTITLE } from "@/components/ui/title1";
+
+<Title1
+  text={title1RequiredText("캐릭터 이미지")}
+  variant={TITLE1_VARIANT_REQUIRED_WITH_SUBTITLE}
+  subtitleText="…"
+/>
+```
 
 ## 피드백·카피
 

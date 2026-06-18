@@ -7,8 +7,16 @@ export const RESOURCE_FILE_INPUT_OVERLAY_CLASS =
 /** 썸네일 슬롯(AddResourceSlot·SeriesImageUploadField 등) 접근성 라벨 — 일반 파일 첨부와 구분 */
 export const THUMBNAIL_SLOT_ARIA = {
   addImage: "이미지 추가",
-  addRepresentativeThumbnail: "대표 썸네일 추가",
+  /** @deprecated 리소스 종류별 `… 이미지 추가` 라벨 사용 */
+  addRepresentativeThumbnail: "이미지 추가",
   addRepresentativeImage: "대표 이미지 추가",
+  addBackgroundImage: "배경 이미지 추가",
+  addSceneImage: "연출 이미지 추가",
+  addMediaImage: "미디어 이미지 추가",
+  addMediaFile: "미디어 파일 추가",
+  addPreviewImage: "미리보기 이미지 추가",
+  addGalleryImage: "갤러리 이미지 추가",
+  addCharacterImage: "캐릭터 이미지 추가",
   addLogo: "로고 이미지 추가",
   addExpression: "표정 추가",
 } as const;

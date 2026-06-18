@@ -4,7 +4,7 @@ import React from "react";
 import { SeriesItem } from "@/components/series/SeriesItem";
 import { WorksEmptyCreateButton } from "@/components/works/WorksEmptyCreateButton";
 import type { SeriesData } from "@/types/series";
-import { WORKS_LIST_GRID_CLASS } from "@/lib/worksArea";
+import { WORKS_LIST_CREATE_SLOT_CLASS, WORKS_LIST_GRID_CLASS } from "@/lib/worksArea";
 
 export interface SeriesListProps {
   seriesList: SeriesData[];
@@ -44,7 +44,7 @@ export function SeriesList({
           onDelete={onDelete}
         />
       ))}
-      <div className="min-w-0">
+      <div className={WORKS_LIST_CREATE_SLOT_CLASS}>
         <WorksEmptyCreateButton
           hint="새로운 작품을 등록하세요"
           actionLabel="새 시리즈 생성"

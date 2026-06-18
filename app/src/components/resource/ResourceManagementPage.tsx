@@ -33,6 +33,10 @@ import {
 } from "@/lib/resourceMockData";
 import { deterministicBgmDuration } from "@/lib/bgm-duration";
 import { resetResourceManagementPageStorageIfNeeded } from "@/lib/resource-page-storage";
+import {
+  RESOURCE_BGM_SECTION_DESCRIPTION,
+  RESOURCE_BGM_SECTION_EMPTY_MESSAGE,
+} from "@/lib/episode-resource-copy";
 import { PreviewScreen } from "@/components/editor/PreviewScreen";
 import { Title2 } from "@/components/ui/title2";
 import type { ScriptBlock } from "@/types/editor";
@@ -63,7 +67,7 @@ const ROUTES = {
 
 const MOCK_HAS_RESOURCES = true;
 
-const initialBgm: BgmResource[] = MOCK_HAS_RESOURCES
+const DEMO_BGM: BgmResource[] = MOCK_HAS_RESOURCES
   ? [
       // 판타지
       { id: "1", title: "빛의 성가", duration: deterministicBgmDuration("bgm-1") },
@@ -82,6 +86,38 @@ const initialBgm: BgmResource[] = MOCK_HAS_RESOURCES
       { id: "12", title: "별빛 약속", duration: deterministicBgmDuration("bgm-12") },
     ]
   : [];
+
+interface SeriesResourceSeed {
+  characters: CharacterResource[];
+  backgrounds: ImageResource[];
+  scenes: ImageResource[];
+  media: MediaResource[];
+  gallery: ImageResource[];
+  bgm: BgmResource[];
+}
+
+/** 데모 시리즈 1번만 시드 리소스 — 신규·기타 시리즈는 빈 상태 */
+function getSeedResourcesForSeries(seriesId: string): SeriesResourceSeed {
+  if (seriesId === "1") {
+    return {
+      characters: initialCharacters,
+      backgrounds: initialBackgrounds,
+      scenes: initialScenes,
+      media: initialMedia,
+      gallery: initialGallery,
+      bgm: DEMO_BGM,
+    };
+  }
+
+  return {
+    characters: [],
+    backgrounds: [],
+    scenes: [],
+    media: [],
+    gallery: [],
+    bgm: [],
+  };
+}
 
 const ImageLightbox = dynamic(
   () => import("./ImageLightbox").then((mod) => mod.ImageLightbox),
@@ -102,6 +138,16 @@ export function ResourceManagementPage() {
   }, []);
 
   useEffect(() => {
+    const seed = getSeedResourcesForSeries(seriesId);
+    setCharacters(seed.characters);
+    setBackgrounds(seed.backgrounds);
+    setScenes(seed.scenes);
+    setMedia(seed.media);
+    setGallery(seed.gallery);
+    setBgm(seed.bgm);
+  }, [seriesId]);
+
+  useEffect(() => {
     const updatePreviewFlag = () => {
       if (typeof window === "undefined") return;
       setShowPreview(new URLSearchParams(window.location.search).get("preview") === "1");
@@ -111,12 +157,22 @@ export function ResourceManagementPage() {
     return () => window.removeEventListener("popstate", updatePreviewFlag);
   }, []);
 
-  const [characters, setCharacters] = useState<CharacterResource[]>(initialCharacters);
-  const [backgrounds, setBackgrounds] = useState<ImageResource[]>(initialBackgrounds);
-  const [scenes, setScenes] = useState<ImageResource[]>(initialScenes);
-  const [media, setMedia] = useState<MediaResource[]>(initialMedia);
-  const [gallery, setGallery] = useState<ImageResource[]>(initialGallery);
-  const [bgm, setBgm] = useState<BgmResource[]>(initialBgm);
+  const [characters, setCharacters] = useState<CharacterResource[]>(
+    () => getSeedResourcesForSeries(seriesId).characters,
+  );
+  const [backgrounds, setBackgrounds] = useState<ImageResource[]>(
+    () => getSeedResourcesForSeries(seriesId).backgrounds,
+  );
+  const [scenes, setScenes] = useState<ImageResource[]>(
+    () => getSeedResourcesForSeries(seriesId).scenes,
+  );
+  const [media, setMedia] = useState<MediaResource[]>(
+    () => getSeedResourcesForSeries(seriesId).media,
+  );
+  const [gallery, setGallery] = useState<ImageResource[]>(
+    () => getSeedResourcesForSeries(seriesId).gallery,
+  );
+  const [bgm, setBgm] = useState<BgmResource[]>(() => getSeedResourcesForSeries(seriesId).bgm);
   const [showAllScenes, _setShowAllScenes] = useState(false);
   const [showAllGallery, _setShowAllGallery] = useState(false);
   const [deleteModal, setDeleteModal] = useState<{
@@ -420,8 +476,8 @@ export function ResourceManagementPage() {
             {/* BGM [정책 8, 9, 10] */}
             <BgmSection
               title="BGM"
-              description="이야기에 삽입될 배경 음악을 관리합니다."
-              emptyMessage="등록된 배경음악 없습니다"
+              description={RESOURCE_BGM_SECTION_DESCRIPTION}
+              emptyMessage={RESOURCE_BGM_SECTION_EMPTY_MESSAGE}
               addButtonLabel="BGM 선택"
               items={bgm}
               onDelete={(item) =>

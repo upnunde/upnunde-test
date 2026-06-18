@@ -12,9 +12,8 @@ import { EpisodeForm } from "@/components/episode/EpisodeForm";
 import { Button } from "@/components/ui/button";
 import { HeaderBackButton } from "@/components/ui/header-back-button";
 import { Dialog, DialogContent, DialogTitle } from "@/components/ui/dialog";
-import { formDialogShellClassName, formDialogSheetBodyWrapperClassName, formDialogSheetEpisodeFormClassName } from "@/components/ui/modal";
+import { formDialogShellClassName, formDialogSheetBodyWrapperClassName } from "@/components/ui/modal";
 import {
-  PAGE_GUTTER_X_CLASS,
   PAGE_MOBILE_FIXED_ACTION_BAR_SCROLL_PAD_CLASS,
   PAGE_SCROLL_COLUMN_CLASS,
   PAGE_SCROLL_COLUMN_ROOT_ATTR,
@@ -27,6 +26,7 @@ import { createDefaultSeedBlocks, useEditorStore } from "@/store/useEditorStore"
 import type { Episode, SortOptions, SnackbarState, SeriesType } from "@/types/episode";
 import { DUMMY_BACKGROUND_GALLERY_THUMBNAILS } from "@/lib/dummy-thumbnail-images";
 import { formatScheduledPublishSummary } from "@/lib/formatEpisode";
+import { useSeriesCatalogStore } from "@/store/useSeriesCatalogStore";
 
 const PAGE_SIZE = 10;
 
@@ -39,7 +39,7 @@ const DEFAULT_SORT: SortOptions = {
 /** 에피소드 썸네일용 더미 이미지
  *  - 리소스 관리에서 사용하는 더미 리소스 중
  *    등장인물·연출장면을 제외한 배경/갤러리 썸네일만 사용
- *  - 실제 서비스 연동 시에는 에피소드별 대표 썸네일 리소스로 교체 예정
+ *  - 실제 서비스 연동 시에는 에피소드별 대표 이미지 리소스로 교체 예정
  */
 const RESOURCE_THUMBNAIL_IMAGES = DUMMY_BACKGROUND_GALLERY_THUMBNAILS;
 
@@ -161,7 +161,10 @@ function buildMockEpisodes(): Episode[] {
   return episodes;
 }
 
-const MOCK_EPISODES: Episode[] = buildMockEpisodes();
+function getSeedEpisodesForSeries(seriesId: string): Episode[] {
+  if (seriesId === "1") return buildMockEpisodes();
+  return [];
+}
 
 export default function EpisodeManagementPage() {
   const router = useRouter();
@@ -174,8 +177,20 @@ export default function EpisodeManagementPage() {
     return segments[1] ?? "1";
   }, [pathname]);
 
+  const ensureDemoSeries = useSeriesCatalogStore((s) => s.ensureDemoSeries);
+  const seriesRecord = useSeriesCatalogStore((s) => s.seriesById[seriesId]);
+
+  React.useEffect(() => {
+    ensureDemoSeries();
+  }, [ensureDemoSeries]);
+
+  React.useEffect(() => {
+    setEpisodes(getSeedEpisodesForSeries(seriesId));
+    setCurrentPage(1);
+  }, [seriesId]);
+
   const [profileImageUrl, setProfileImageUrl] = useState<string | null>(null);
-  const [episodes, setEpisodes] = useState<Episode[]>(MOCK_EPISODES);
+  const [episodes, setEpisodes] = useState<Episode[]>(() => getSeedEpisodesForSeries(seriesId));
   const [sortOptions] = useState<SortOptions>(DEFAULT_SORT);
   const [currentPage, setCurrentPage] = useState(1);
   const [isPublishModalOpen, setIsPublishModalOpen] = useState(false);
@@ -189,7 +204,7 @@ export default function EpisodeManagementPage() {
   });
 
   /** 정책 2: 시리즈 제목 텍스트만 노출 (페이지 내 수정 불가) */
-  const seriesTitle = "꽃에게는 독이 필요하다";
+  const seriesTitle = seriesRecord?.title ?? "시리즈";
   /** 정책 15: 단품이 아닐 때만 빈 화면 배너 노출 */
   const seriesType: SeriesType = "series";
 
@@ -243,7 +258,7 @@ export default function EpisodeManagementPage() {
       const titleParam = encodeURIComponent(episode.title || "에피소드 제목");
       const thumbnailParam = encodeURIComponent(episode.thumbnail || "");
       router.push(
-        `/editor?episodeNo=${episode.episodeNumber}&episodeTitle=${titleParam}&episodeThumbnail=${thumbnailParam}`,
+        `/editor?seriesId=${encodeURIComponent(seriesId)}&episodeNo=${episode.episodeNumber}&episodeTitle=${titleParam}&episodeThumbnail=${thumbnailParam}`,
       );
     },
     [router, setCurrentView],
@@ -374,10 +389,10 @@ export default function EpisodeManagementPage() {
       const summaryParam = encodeURIComponent(payload.summary || "");
       const thumbnailParam = encodeURIComponent(payload.thumbnailUrl || "");
       router.push(
-        `/editor?episodeNo=${nextEpisodeNumber}&startEmpty=1&episodeTitle=${titleParam}&episodeSummary=${summaryParam}&episodeThumbnail=${thumbnailParam}`,
+        `/editor?seriesId=${encodeURIComponent(seriesId)}&episodeNo=${nextEpisodeNumber}&startEmpty=1&episodeTitle=${titleParam}&episodeSummary=${summaryParam}&episodeThumbnail=${thumbnailParam}`,
       );
     },
-    [nextEpisodeNumber, router, setBlocks, setCurrentView, setRawScript],
+    [nextEpisodeNumber, router, seriesId, setBlocks, setCurrentView, setRawScript],
   );
 
   return (
@@ -396,7 +411,7 @@ export default function EpisodeManagementPage() {
             <div
               className={cn(
                 PAGE_SCROLL_COLUMN_CLASS,
-                PAGE_MOBILE_FIXED_ACTION_BAR_SCROLL_PAD_CLASS,
+                !showEmptyBanner && PAGE_MOBILE_FIXED_ACTION_BAR_SCROLL_PAD_CLASS,
                 "max-lg:bg-surface-10",
                 "max-lg:pt-my-24 lg:pt-my-40",
               )}
@@ -406,20 +421,25 @@ export default function EpisodeManagementPage() {
               {/* Title & Actions - 정책 2, 3, 16 */}
               <div className="flex w-full shrink-0 flex-col gap-my-12 px-0 lg:flex-row lg:items-center lg:justify-between">
                 <h2 className="min-w-0 text-heading4_700 text-on-surface-10">{seriesTitle}</h2>
-                <div className="hidden items-center gap-my-12 lg:flex">
-                  <Button type="button" variant="outline" onClick={handleResourceManagement}>
-                    리소스 관리
-                  </Button>
-                  <Button type="button" onClick={handleAddEpisode}>
-                    새 에피소드
-                  </Button>
-                </div>
+                {!showEmptyBanner ? (
+                  <div className="hidden items-center gap-my-12 lg:flex">
+                    <Button type="button" variant="outline" onClick={handleResourceManagement}>
+                      리소스 관리
+                    </Button>
+                    <Button type="button" onClick={handleAddEpisode}>
+                      새 에피소드
+                    </Button>
+                  </div>
+                ) : null}
               </div>
 
               {/* 정책 14, 15: 빈 화면 배너 또는 리스트/페이지네이션 */}
               {showEmptyBanner ? (
-                <div className={`w-full ${PAGE_GUTTER_X_CLASS}`}>
-                  <EmptyStateBanner />
+                <div className="w-full">
+                  <EmptyStateBanner
+                    onAddEpisode={handleAddEpisode}
+                    onRegisterResources={handleResourceManagement}
+                  />
                 </div>
               ) : (
                 <div className="flex w-full flex-col max-lg:gap-my-12 lg:overflow-hidden lg:rounded-[4px] lg:border lg:border-border-10 lg:bg-white">
@@ -448,14 +468,16 @@ export default function EpisodeManagementPage() {
               </div>
             </div>
 
-            <SeriesFormStepNav className="lg:hidden">
-              <Button type="button" variant="outline" onClick={handleResourceManagement}>
-                리소스 관리
-              </Button>
-              <Button type="button" onClick={handleAddEpisode}>
-                새 에피소드
-              </Button>
-            </SeriesFormStepNav>
+            {!showEmptyBanner ? (
+              <SeriesFormStepNav className="lg:hidden">
+                <Button type="button" variant="outline" onClick={handleResourceManagement}>
+                  리소스 관리
+                </Button>
+                <Button type="button" onClick={handleAddEpisode}>
+                  새 에피소드
+                </Button>
+              </SeriesFormStepNav>
+            ) : null}
 
       <PublishConfirmModal
         open={isPublishModalOpen}
@@ -487,16 +509,11 @@ export default function EpisodeManagementPage() {
           className={formDialogShellClassName}
           aria-describedby={undefined}
         >
+          <DialogTitle className="sr-only">새 에피소드 생성</DialogTitle>
           <div className={formDialogSheetBodyWrapperClassName}>
-            <header className="shrink-0 border-b border-border-10 px-my-12 py-my-16 lg:sr-only lg:border-0 lg:p-0">
-              <DialogTitle className="text-body1_700 text-on-surface-10">
-                새 에피소드 생성
-              </DialogTitle>
-            </header>
             <EpisodeForm
               onConverted={handleCreateComplete}
               onCancel={() => setIsCreateEpisodeModalOpen(false)}
-              containerClassName={formDialogSheetEpisodeFormClassName}
               stickyFooter
               sectionTitle={`${nextEpisodeNumber}화 에피소드`}
             />

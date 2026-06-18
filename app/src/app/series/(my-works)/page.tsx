@@ -6,60 +6,38 @@ import { SeriesList } from "@/components/series/SeriesList";
 import { SeriesDeleteModal } from "@/components/series/SeriesDeleteModal";
 import { PolicyAgreementModal } from "@/components/series/PolicyAgreementModal";
 import type { SeriesData } from "@/types/series";
-import { DUMMY_BACKGROUND_GALLERY_THUMBNAILS } from "@/lib/dummy-thumbnail-images";
-
-const SERIES_THUMBNAIL_IMAGES = DUMMY_BACKGROUND_GALLERY_THUMBNAILS;
-
-function deterministicSeriesThumbnail(seriesId: string): string {
-  let hash = 0;
-  for (const ch of seriesId) {
-    hash = (hash * 31 + ch.charCodeAt(0)) >>> 0;
-  }
-  const index = hash % SERIES_THUMBNAIL_IMAGES.length;
-  return SERIES_THUMBNAIL_IMAGES[index]!;
-}
-
-const MOCK_SERIES: SeriesData[] = [
-  {
-    id: "1",
-    title: "꽃에게는 독이 필요하다",
-    thumbnailUrl: deterministicSeriesThumbnail("1"),
-    status: "PUBLIC",
-    createdAt: "2025-12-01T09:00:00.000Z",
-    episodeCount: 120,
-    viewCount: 125000,
-    commentCount: 4211,
-  },
-  {
-    id: "2",
-    title: "달빛 아래 그대",
-    thumbnailUrl: deterministicSeriesThumbnail("2"),
-    status: "PRIVATE",
-    createdAt: "2025-11-15T14:30:00.000Z",
-    episodeCount: 50,
-    viewCount: 8900,
-    commentCount: 128,
-  },
-  {
-    id: "4",
-    title: "가이드 위반 작품",
-    thumbnailUrl: deterministicSeriesThumbnail("4"),
-    status: "BANNED",
-    createdAt: "2025-10-01T00:00:00.000Z",
-    episodeCount: 10,
-    viewCount: 3200,
-    commentCount: 42,
-  },
-];
+import { useSeriesCatalogStore } from "@/store/useSeriesCatalogStore";
 
 /**
  * 내 작품 — 시리즈 목록 (`/series`)
  */
 export default function SeriesListPage() {
   const router = useRouter();
-  const [seriesList, setSeriesList] = useState<SeriesData[]>(MOCK_SERIES);
+  const ensureDemoSeries = useSeriesCatalogStore((s) => s.ensureDemoSeries);
+  const listSeries = useSeriesCatalogStore((s) => s.listSeries);
+  const deleteSeries = useSeriesCatalogStore((s) => s.deleteSeries);
+  const setSeriesStatus = useSeriesCatalogStore((s) => s.setSeriesStatus);
+
+  const [seriesList, setSeriesList] = useState<SeriesData[]>([]);
   const [seriesToDelete, setSeriesToDelete] = useState<SeriesData | null>(null);
   const [policyModalOpen, setPolicyModalOpen] = useState(false);
+
+  useEffect(() => {
+    const syncList = () => {
+      ensureDemoSeries();
+      setSeriesList(listSeries());
+    };
+
+    syncList();
+
+    const unsubHydrate = useSeriesCatalogStore.persist.onFinishHydration(syncList);
+    const unsubStore = useSeriesCatalogStore.subscribe(syncList);
+
+    return () => {
+      unsubHydrate();
+      unsubStore();
+    };
+  }, [ensureDemoSeries, listSeries]);
 
   useEffect(() => {
     for (const series of seriesList) {
@@ -73,21 +51,21 @@ export default function SeriesListPage() {
     (series: SeriesData) => {
       router.push(`/series/${series.id}/episodes`);
     },
-    [router]
+    [router],
   );
 
   const handleResourceManage = useCallback(
     (series: SeriesData) => {
       router.push(`/series/${series.id}/resources`);
     },
-    [router]
+    [router],
   );
 
   const handleSeriesManage = useCallback(
     (series: SeriesData) => {
       router.push(`/series/${series.id}/edit`);
     },
-    [router]
+    [router],
   );
 
   const handleCreateSeries = useCallback(() => {
@@ -98,21 +76,26 @@ export default function SeriesListPage() {
     setPolicyModalOpen(true);
   }, []);
 
-  const handleDeleteSeries = useCallback((target: SeriesData) => {
-    setSeriesList((prev) => prev.filter((series) => series.id !== target.id));
-  }, []);
+  const handleDeleteSeries = useCallback(
+    (target: SeriesData) => {
+      deleteSeries(target.id);
+    },
+    [deleteSeries],
+  );
 
-  const handleSetPrivate = useCallback((target: SeriesData) => {
-    setSeriesList((prev) =>
-      prev.map((s) => (s.id === target.id ? { ...s, status: "PRIVATE" as const } : s))
-    );
-  }, []);
+  const handleSetPrivate = useCallback(
+    (target: SeriesData) => {
+      setSeriesStatus(target.id, "PRIVATE");
+    },
+    [setSeriesStatus],
+  );
 
-  const handleSetPublic = useCallback((target: SeriesData) => {
-    setSeriesList((prev) =>
-      prev.map((s) => (s.id === target.id ? { ...s, status: "PUBLIC" as const } : s))
-    );
-  }, []);
+  const handleSetPublic = useCallback(
+    (target: SeriesData) => {
+      setSeriesStatus(target.id, "PUBLIC");
+    },
+    [setSeriesStatus],
+  );
 
   return (
     <>

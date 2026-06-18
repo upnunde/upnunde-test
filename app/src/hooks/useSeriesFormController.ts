@@ -8,21 +8,26 @@ import {
   getSeriesFormErrors,
   isSeriesFormValid,
   type SeriesFormField,
+  type SeriesFormInitialSnapshot,
+  type SeriesFormSubmitPayload,
   type SeriesFormTab,
 } from "@/lib/seriesForm";
 import { createOptimizedImageObjectUrl } from "@/lib/image-upload-compress";
+import { persistableImageUrl, revokePreviewUrlIfBlob } from "@/lib/persistable-image-url";
 import { parseTagList } from "@/lib/parse-tag-list";
 import { useEditorStore } from "@/store/useEditorStore";
 
 interface UseSeriesFormControllerOptions {
   coverSlotId: string;
   logoSlotId: string;
-  onValidSubmit?: () => void;
+  initialSnapshot?: SeriesFormInitialSnapshot | null;
+  onValidSubmit?: (payload: SeriesFormSubmitPayload) => void | Promise<void>;
 }
 
 export function useSeriesFormController({
   coverSlotId,
   logoSlotId,
+  initialSnapshot,
   onValidSubmit,
 }: UseSeriesFormControllerOptions) {
   const [activeTab, setActiveTab] = useState<SeriesFormTab>("image");
@@ -70,18 +75,10 @@ export function useSeriesFormController({
 
   useEffect(() => {
     return () => {
-      if (coverPreviewUrl) {
-        URL.revokeObjectURL(coverPreviewUrl);
-      }
-      if (logoPreviewUrl) {
-        URL.revokeObjectURL(logoPreviewUrl);
-      }
-      if (pendingCoverUrl) {
-        URL.revokeObjectURL(pendingCoverUrl);
-      }
-      if (pendingLogoUrl) {
-        URL.revokeObjectURL(pendingLogoUrl);
-      }
+      revokePreviewUrlIfBlob(coverPreviewUrl);
+      revokePreviewUrlIfBlob(logoPreviewUrl);
+      revokePreviewUrlIfBlob(pendingCoverUrl);
+      revokePreviewUrlIfBlob(pendingLogoUrl);
     };
   }, [coverPreviewUrl, logoPreviewUrl, pendingCoverUrl, pendingLogoUrl]);
 
@@ -117,6 +114,23 @@ export function useSeriesFormController({
       setFieldErrors((prev) => ({ ...prev, keywords: false }));
     }
   }, []);
+
+  useEffect(() => {
+    if (!initialSnapshot) return;
+
+    setSeriesTitle(initialSnapshot.seriesTitle);
+    setSeriesSummary(initialSnapshot.seriesSummary);
+    setKeywordInput("");
+    applyKeywordList([...initialSnapshot.keywordList]);
+    setWorldviewDescription(initialSnapshot.worldviewDescription);
+    setWorldviewPrompt(initialSnapshot.worldviewPrompt);
+    setPersona(initialSnapshot.persona);
+    setHasCoverImage(initialSnapshot.hasCoverImage);
+    setHasLogoImage(initialSnapshot.hasLogoImage);
+    setCoverPreviewUrl(initialSnapshot.coverPreviewUrl);
+    setLogoPreviewUrl(initialSnapshot.logoPreviewUrl);
+    setFieldErrors(EMPTY_SERIES_FORM_ERRORS);
+  }, [initialSnapshot, applyKeywordList]);
 
   const handleAddKeyword = useCallback(() => {
     const cleaned = keywordInput.trim().replace(/,$/, "");
@@ -213,7 +227,7 @@ export function useSeriesFormController({
       const applyUrl = (url: string) => {
         if (isCover) {
           setCoverPreviewUrl((prev) => {
-            if (prev && prev !== url) URL.revokeObjectURL(prev);
+            revokePreviewUrlIfBlob(prev);
             return url;
           });
           setPendingCoverUrl(null);
@@ -221,7 +235,7 @@ export function useSeriesFormController({
           setFieldErrors((prev) => ({ ...prev, cover: false }));
         } else {
           setLogoPreviewUrl((prev) => {
-            if (prev && prev !== url) URL.revokeObjectURL(prev);
+            revokePreviewUrlIfBlob(prev);
             return url;
           });
           setPendingLogoUrl(null);
@@ -231,40 +245,24 @@ export function useSeriesFormController({
         setExpressionModalOpen(false);
       };
 
-      if (sourceUrl.startsWith("blob:")) {
-        fetch(sourceUrl)
-          .then((res) => res.blob())
-          .then((blob) => {
-            const ownedUrl = URL.createObjectURL(blob);
-            applyUrl(ownedUrl);
-          })
-          .catch(() => {
-            applyUrl(sourceUrl);
-          });
-      } else {
-        applyUrl(sourceUrl);
-      }
+      void persistableImageUrl(sourceUrl).then((dataUrl) => {
+        applyUrl(dataUrl || sourceUrl);
+      });
     },
     [expressionModalMode]
   );
 
   const handleExpressionModalClose = useCallback(() => {
-    if (pendingCoverUrl) {
-      URL.revokeObjectURL(pendingCoverUrl);
-      setPendingCoverUrl(null);
-    }
-    if (pendingLogoUrl) {
-      URL.revokeObjectURL(pendingLogoUrl);
-      setPendingLogoUrl(null);
-    }
+    revokePreviewUrlIfBlob(pendingCoverUrl);
+    setPendingCoverUrl(null);
+    revokePreviewUrlIfBlob(pendingLogoUrl);
+    setPendingLogoUrl(null);
     setExpressionModalOpen(false);
   }, [pendingCoverUrl, pendingLogoUrl]);
 
   const handleClearCoverPreview = useCallback(() => {
     setCoverPreviewUrl((prev) => {
-      if (prev && prev.startsWith("blob:")) {
-        URL.revokeObjectURL(prev);
-      }
+      revokePreviewUrlIfBlob(prev);
       return null;
     });
     setHasCoverImage(false);
@@ -272,9 +270,7 @@ export function useSeriesFormController({
 
   const handleClearLogoPreview = useCallback(() => {
     setLogoPreviewUrl((prev) => {
-      if (prev && prev.startsWith("blob:")) {
-        URL.revokeObjectURL(prev);
-      }
+      revokePreviewUrlIfBlob(prev);
       return null;
     });
     setHasLogoImage(false);
@@ -327,7 +323,18 @@ export function useSeriesFormController({
     setFieldErrors(errors);
 
     if (isSeriesFormValid(errors)) {
-      onValidSubmit?.();
+      const payload: SeriesFormSubmitPayload = {
+        seriesTitle,
+        seriesSummary,
+        seriesKeywords,
+        keywordList,
+        worldviewDescription,
+        worldviewPrompt,
+        persona,
+        coverPreviewUrl,
+        logoPreviewUrl,
+      };
+      void Promise.resolve(onValidSubmit?.(payload));
       return;
     }
 
@@ -357,6 +364,9 @@ export function useSeriesFormController({
     worldviewPrompt,
     persona,
     onValidSubmit,
+    keywordList,
+    coverPreviewUrl,
+    logoPreviewUrl,
   ]);
 
   return {

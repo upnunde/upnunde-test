@@ -68,10 +68,13 @@ export function SeriesItem({
   const isDraft = status === "DRAFT";
   const isBanned = status === "BANNED";
   const isPrivate = status === "PRIVATE";
+  const hasNoEpisodes = episodeCount === 0;
 
   const dateStr = formatSeriesDateOrRelative(createdAt);
-  const viewStr = formatSeriesViewCount(viewCount);
-  const commentStr = formatSeriesViewCount(commentCount);
+  const viewStr = hasNoEpisodes && viewCount === 0 ? "-" : formatSeriesViewCount(viewCount);
+  const episodeStr = hasNoEpisodes ? "에피소드 없음" : `${episodeCount}회`;
+  const commentStr = hasNoEpisodes && commentCount === 0 ? "-" : formatSeriesViewCount(commentCount);
+  const emptyMetaClass = hasNoEpisodes ? "text-on-surface-30" : "text-on-surface-20";
 
   const handleResource = () => {
     if (isDraft) return;
@@ -95,7 +98,7 @@ export function SeriesItem({
         className="flex h-9 min-w-0 flex-1 cursor-pointer items-center rounded-md border border-border-20 bg-white px-my-12 text-body3_500 text-on-surface-20 transition-colors hover:bg-surface-20 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-2 disabled:border-border-20"
       >
         <span className="block w-full overflow-hidden text-ellipsis whitespace-nowrap text-center">
-          시리즈 관리
+          시리즈
         </span>
       </button>
       <button
@@ -110,7 +113,7 @@ export function SeriesItem({
         }`}
       >
         <span className="block w-full overflow-hidden text-ellipsis whitespace-nowrap text-center">
-          리소스 관리
+          리소스
         </span>
       </button>
       <button
@@ -125,7 +128,7 @@ export function SeriesItem({
         }`}
       >
         <span className="block w-full overflow-hidden text-ellipsis whitespace-nowrap text-center">
-          에피소드 관리
+          에피소드
         </span>
       </button>
     </>
@@ -133,26 +136,27 @@ export function SeriesItem({
 
   return (
     <div className={WORKS_ITEM_CARD_CLASS}>
-      {/* 모바일: 썸네일+정보 가로 / 데스크톱: contents로 썸네일·우측열을 flex-row 자식으로 */}
+      {/* max-lg: 썸네일+정보 가로 / lg+: contents로 썸네일·우측열을 flex-row 자식으로 */}
       <div className={WORKS_ITEM_CARD_INNER_CLASS}>
         {/* 썸네일 영역 (정책 6, 8, 9, 10) */}
         <div className={WORKS_ITEM_THUMBNAIL_CLASS}>
-        {status === "DRAFT" ? (
-          <div className="w-full h-full flex items-center justify-center bg-slate-200" aria-hidden>
+        {isDraft || !thumbnailUrl ? (
+          <div className="flex h-full w-full items-center justify-center bg-slate-200" aria-hidden>
             <span className="text-on-surface-30 text-caption1_400">썸네일 없음</span>
           </div>
         ) : (
           <>
-            {thumbnailUrl && (
-              <Image
-                src={thumbnailUrl}
-                alt=""
-                fill
-                sizes="112px"
-                className="object-cover"
-              />
-            )}
-            {thumbnailUrl && <div className={THUMBNAIL_DIM_OVERLAY_CLASS} aria-hidden />}
+            <Image
+              src={thumbnailUrl}
+              alt=""
+              fill
+              sizes="112px"
+              className="object-cover"
+              unoptimized={
+                thumbnailUrl.startsWith("data:") || thumbnailUrl.startsWith("blob:")
+              }
+            />
+            <div className={THUMBNAIL_DIM_OVERLAY_CLASS} aria-hidden />
             {(isPrivate || isBanned) && (
               <div className="absolute inset-0 flex items-center justify-center bg-black/50">
                 <span className="text-white text-body2_700">
@@ -260,34 +264,34 @@ export function SeriesItem({
         </div>
 
         {/* 데스크톱: 버튼을 열 하단으로 정렬 */}
-        <div className="hidden w-full flex-1 min-[480px]:block" aria-hidden />
+        <div className="hidden w-full flex-1 lg:block" aria-hidden />
 
         {/* 메타: 날짜, 회차 수, 조회수 (정책 2, 3, 4, 11 - 툴팁) */}
         <div className={WORKS_ITEM_META_ROW_CLASS}>
-          <div className="flex min-w-0 flex-1 flex-col items-start justify-center gap-my-8 text-on-surface-20">
-            <div className="flex items-center gap-my-8 text-on-surface-20">
+          <div className={`flex min-w-0 flex-1 flex-col items-start justify-center gap-my-8 ${emptyMetaClass}`}>
+            <div className={`flex items-center gap-my-8 ${emptyMetaClass}`}>
               <Calendar className="h-[18px] w-[18px]" aria-hidden />
-              <span className="text-on-surface-20" title="생성한 날짜">
+              <span title="생성한 날짜">
                 {dateStr}
               </span>
             </div>
-            <div className="flex items-center gap-my-8 text-on-surface-20">
+            <div className={`flex items-center gap-my-8 ${emptyMetaClass}`}>
               <Eye className="h-[18px] w-[18px]" aria-hidden />
-              <span className="text-on-surface-20" title="작품 누적 조회수">
+              <span title="작품 누적 조회수">
                 {viewStr}
               </span>
             </div>
           </div>
-          <div className="flex min-w-0 flex-1 flex-col items-start justify-start gap-my-8 text-on-surface-20">
-            <div className="flex items-center gap-my-8 text-on-surface-20">
+          <div className={`flex min-w-0 flex-1 flex-col items-start justify-start gap-my-8 ${emptyMetaClass}`}>
+            <div className={`flex items-center gap-my-8 ${emptyMetaClass}`}>
               <Layers className="h-[18px] w-[18px]" aria-hidden />
-              <span className="text-on-surface-20" title="에피소드 등록 수">
-                {episodeCount}회
+              <span title="에피소드 등록 수">
+                {episodeStr}
               </span>
             </div>
-            <div className="flex items-center gap-my-8 text-on-surface-20">
+            <div className={`flex items-center gap-my-8 ${emptyMetaClass}`}>
               <MessageCircle className="h-[18px] w-[18px]" aria-hidden />
-              <span className="text-on-surface-20" title="댓글 수">
+              <span title="댓글 수">
                 {commentStr}
               </span>
             </div>
@@ -295,14 +299,14 @@ export function SeriesItem({
         </div>
 
         {/* 데스크톱: 우측열 하단 버튼 */}
-        <div className="hidden w-full items-start justify-start gap-my-8 min-[480px]:flex">
+        <div className="hidden w-full items-start justify-start gap-my-8 lg:flex">
           {manageButtons}
         </div>
         </div>
       </div>
 
       {/* 모바일: 카드 하단 버튼 */}
-      <div className="flex w-full items-start justify-start gap-my-8 min-[480px]:hidden">
+      <div className="flex w-full items-start justify-start gap-my-8 lg:hidden">
         {manageButtons}
       </div>
     </div>

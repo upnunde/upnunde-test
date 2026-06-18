@@ -3,6 +3,7 @@
 import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import { createPortal } from "react-dom";
 import Image from "next/image";
+import { useRouter } from "next/navigation";
 import { X } from "lucide-react";
 import {
   Popover,
@@ -21,6 +22,7 @@ import {
   estimateResourceThumbnailGridColumns,
 } from "@/lib/thumbnail-styles";
 import type { BlockType } from "@/types/editor";
+import { getResourceCreateLink } from "@/lib/resource-create-path";
 import { cn } from "@/lib/utils";
 
 const PICKER_TYPES: BlockType[] = ["background", "character", "bgm", "sfx", "gallery", "video", "event"];
@@ -38,6 +40,8 @@ export interface ResourcePickerProps {
   itemsOverride?: { id: string; name: string; url?: string; fileUrl?: string }[];
   /** Anchor element - picker positions relative to this */
   children: React.ReactNode;
+  /** 시리즈 ID — 있으면 피커 하단에 리소스 등록 링크 노출 */
+  seriesId?: string | null;
 }
 
 function getItemsForType(type: BlockType): {
@@ -120,6 +124,40 @@ interface ResourcePickerOptionsProps {
   optionButtonRefs: React.MutableRefObject<(HTMLElement | null)[]>;
   onSelect: (name: string) => void;
   onOptionKeyDown: (index: number, e: React.KeyboardEvent<HTMLElement>) => void;
+  registerLink?: { href: string; label: string } | null;
+  onRegisterNavigate?: () => void;
+}
+
+function ResourcePickerRegisterFooter({
+  registerLink,
+  isSheet,
+  onNavigate,
+}: {
+  registerLink: { href: string; label: string };
+  isSheet: boolean;
+  onNavigate: () => void;
+}) {
+  const router = useRouter();
+
+  return (
+    <div
+      className={cn(
+        "shrink-0 border-t border-border-10",
+        isSheet ? "px-my-12 pb-my-16 pt-my-12" : "px-my-12 pb-my-12 pt-my-8",
+      )}
+    >
+      <button
+        type="button"
+        className="w-full text-left text-body4_500 text-primary hover:underline focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-inset focus-visible:ring-primary"
+        onClick={() => {
+          onNavigate();
+          router.push(registerLink.href);
+        }}
+      >
+        {registerLink.label}
+      </button>
+    </div>
+  );
 }
 
 function ResourcePickerOptions({
@@ -130,6 +168,8 @@ function ResourcePickerOptions({
   optionButtonRefs,
   onSelect,
   onOptionKeyDown,
+  registerLink,
+  onRegisterNavigate,
 }: ResourcePickerOptionsProps) {
   const imageMode = isImageType(type);
 
@@ -163,12 +203,13 @@ function ResourcePickerOptions({
 
   if (imageMode) {
     return (
-      <div
-        className={cn(
-          "grid",
-          isSheet ? RESOURCE_PICKER_SHEET_GRID_CLASS : "w-fit grid-cols-3 gap-my-16 px-my-20 pb-my-20 pt-my-20",
-        )}
-      >
+      <>
+        <div
+          className={cn(
+            "grid",
+            isSheet ? RESOURCE_PICKER_SHEET_GRID_CLASS : "w-fit grid-cols-3 gap-my-16 px-my-20 pb-my-20 pt-my-20",
+          )}
+        >
         <button
           type="button"
           onClick={() => onSelect("")}
@@ -239,12 +280,21 @@ function ResourcePickerOptions({
             </span>
           </button>
         ))}
-      </div>
+        </div>
+        {registerLink && onRegisterNavigate ? (
+          <ResourcePickerRegisterFooter
+            registerLink={registerLink}
+            isSheet={isSheet}
+            onNavigate={onRegisterNavigate}
+          />
+        ) : null}
+      </>
     );
   }
 
   return (
-    <MenuList
+    <>
+        <MenuList
       className={cn(
         isSheet ? "w-full px-my-8 pb-my-16 pt-my-8" : "gap-my-2 px-my-8 pb-my-8 pt-0",
       )}
@@ -300,6 +350,14 @@ function ResourcePickerOptions({
             </>
           )}
         </MenuList>
+        {registerLink && onRegisterNavigate ? (
+          <ResourcePickerRegisterFooter
+            registerLink={registerLink}
+            isSheet={isSheet}
+            onNavigate={onRegisterNavigate}
+          />
+        ) : null}
+    </>
   );
 }
 
@@ -335,9 +393,11 @@ export function ResourcePicker({
   selectedName,
   itemsOverride,
   children,
+  seriesId,
 }: ResourcePickerProps) {
   const isDesktop = useIsLgUp();
   const optionButtonRefs = useRef<(HTMLElement | null)[]>([]);
+  const registerLink = useMemo(() => getResourceCreateLink(seriesId, type), [seriesId, type]);
   const items = useMemo(() => {
     const base = itemsOverride ?? getItemsForType(type);
     if (itemsOverride) return [...base];
@@ -467,6 +527,8 @@ export function ResourcePicker({
     optionButtonRefs,
     onSelect: handleSelect,
     onOptionKeyDown: handleOptionKeyDown,
+    registerLink,
+    onRegisterNavigate: handleDismiss,
   };
 
   const mobileSheet =

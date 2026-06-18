@@ -15,7 +15,6 @@ import {
   formDialogSheetScrollBodyClassName,
   formDialogSheetStickyFooterClassName,
 } from "@/components/ui/modal";
-import { PAGE_GUTTER_X_CLASS } from "@/lib/page-layout";
 import { cn } from "@/lib/utils";
 import { EPISODE_FORM_FIELD_COPY } from "@/lib/episode-form-copy";
 import type { ImageResource } from "@/types/resource";
@@ -248,7 +247,7 @@ export function EpisodeForm({
       <div
         className={cn(
           stickyFooter
-            ? cn(formDialogSheetEpisodeFormClassName, "flex min-h-0 flex-1 flex-col", containerClassName)
+            ? cn(formDialogSheetEpisodeFormClassName, "flex min-h-0 w-full flex-1 flex-col", containerClassName)
             : cn(
                 "mx-auto w-full min-w-0 max-w-[1200px] rounded-[4px] border border-border-10 bg-white shadow-none",
                 containerClassName,
@@ -261,8 +260,7 @@ export function EpisodeForm({
           <div
             className={cn(
               formDialogSheetScrollBodyClassName,
-              PAGE_GUTTER_X_CLASS,
-              "pt-my-20",
+              "px-my-16 pt-my-20",
             )}
           >
             {formFields}

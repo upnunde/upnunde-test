@@ -80,11 +80,17 @@ const GALLERY_LIST: ImageResource[] = MOCK_HAS_RESOURCES
 
 const MEDIA_LIST: MediaResource[] = MOCK_HAS_RESOURCES
   ? [
-      { id: "1", name: "베란다_노을", thumbnailUrl: dummyAsset("media-veranda-evening.png"), duration: "00:00" },
-      { id: "2", name: "베란다_비오는날", thumbnailUrl: dummyAsset("media-veranda-rain.png"), duration: "00:00" },
-      { id: "3", name: "베란다_밤하늘", thumbnailUrl: dummyAsset("media-veranda-night.png"), duration: "00:00" },
-      { id: "4", name: "베란다_맑은낮", thumbnailUrl: dummyAsset("media-veranda-day.png"), duration: "00:00" },
-      { id: "5", name: "비오는_골목길", thumbnailUrl: dummyAsset("media-street-rain.png"), duration: "00:00" },
+      {
+        id: "1",
+        name: "베란다_노을",
+        thumbnailUrl: dummyAsset("media-veranda-evening.png"),
+        duration: "00:42",
+        videoUrl: "/video/video-1.mp4",
+      },
+      { id: "2", name: "베란다_비오는날", thumbnailUrl: dummyAsset("media-veranda-rain.png"), duration: "01:15" },
+      { id: "3", name: "베란다_밤하늘", thumbnailUrl: dummyAsset("media-veranda-night.png"), duration: "00:58" },
+      { id: "4", name: "베란다_맑은낮", thumbnailUrl: dummyAsset("media-veranda-day.png"), duration: "02:03" },
+      { id: "5", name: "비오는_골목길", thumbnailUrl: dummyAsset("media-street-rain.png"), duration: "01:30" },
     ]
   : [];
 

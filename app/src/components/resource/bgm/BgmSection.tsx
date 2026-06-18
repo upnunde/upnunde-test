@@ -145,15 +145,17 @@ export function BgmSection({
             subtitleText={description}
             className="!p-0 !px-0 !border-0 !border-b-0 w-full"
             sectionEnd={
-              <Button
-                type="button"
-                variant="outline"
-                size="sm"
-                className="h-8 shrink-0 border-border-20 text-on-surface-10"
-                onClick={() => setModalOpen(true)}
-              >
-                추가하기
-              </Button>
+              items.length > 0 ? (
+                <Button
+                  type="button"
+                  variant="outline"
+                  size="sm"
+                  className="h-8 shrink-0 border-border-20 text-on-surface-10"
+                  onClick={() => setModalOpen(true)}
+                >
+                  추가하기
+                </Button>
+              ) : undefined
             }
           />
         </div>

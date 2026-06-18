@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useCallback } from "react";
+import React, { useCallback, useState } from "react";
 import { useRouter } from "next/navigation";
 import { Button } from "@/components/ui/button";
 import { ImageCropOnlyModal } from "@/components/resource/character/CharacterExpressionModal";
@@ -16,14 +16,30 @@ import { useSeriesFormController } from "@/hooks/useSeriesFormController";
 import { useFormAiDraftComposer } from "@/hooks/useFormAiDraftComposer";
 import { generateSeriesDraftFromBrief } from "@/lib/series-ai-draft";
 import type { SeriesAiDraft } from "@/lib/series-ai-draft";
+import { useSeriesCatalogStore } from "@/store/useSeriesCatalogStore";
 
 export default function SeriesNewPage() {
   const router = useRouter();
+  const addSeries = useSeriesCatalogStore((s) => s.addSeries);
   const [profileImageUrl, setProfileImageUrl] = React.useState<string | null>(null);
+  const [isSubmitting, setIsSubmitting] = useState(false);
 
   const handleBack = useCallback(() => {
     router.push("/series");
   }, [router]);
+
+  const handleCreateSeries = useCallback(
+    async (payload: Parameters<typeof addSeries>[0]) => {
+      setIsSubmitting(true);
+      try {
+        await addSeries(payload);
+        router.push("/series");
+      } finally {
+        setIsSubmitting(false);
+      }
+    },
+    [addSeries, router],
+  );
 
   const {
     activeTab,
@@ -81,9 +97,7 @@ export default function SeriesNewPage() {
   } = useSeriesFormController({
     coverSlotId: "series-cover-new",
     logoSlotId: "series-logo-new",
-    onValidSubmit: () => {
-      // TODO: 실제 생성 로직 연결
-    },
+    onValidSubmit: handleCreateSeries,
   });
 
   const applySeriesDraft = useCallback(
@@ -122,7 +136,7 @@ export default function SeriesNewPage() {
       onTabChange={setActiveTab}
       onBack={handleBack}
       onSubmit={handleSubmit}
-      submitDisabled={!isFormValid}
+      submitDisabled={!isFormValid || isSubmitting}
       showDraftButton
       coverPreviewUrl={coverPreviewUrl}
       logoPreviewUrl={logoPreviewUrl}
@@ -136,7 +150,6 @@ export default function SeriesNewPage() {
     >
       {activeTab === "image" && (
                         <div className="flex flex-col gap-my-40">
-                          {/* 대표이미지 */}
                           <SeriesImageUploadField
                             label="대표이미지*"
                             subtitle="시리즈를 대표하는 공식 이미지입니다. 부적절한 이미지는 사용이 제한됩니다."
@@ -154,7 +167,6 @@ export default function SeriesNewPage() {
                             onFileSelected={handleCoverFileSelected}
                           />
 
-                          {/* 로고 */}
                           <SeriesImageUploadField
                             label="로고*"
                             subtitle="배경이 투명한 png파일을 사용하세요."

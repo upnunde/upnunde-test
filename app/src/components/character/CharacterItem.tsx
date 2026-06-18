@@ -197,7 +197,7 @@ export function CharacterItem({
             <span className="min-w-0 flex-1 truncate text-on-surface-30">{tagline}</span>
           </div>
 
-          <div className="hidden w-full flex-1 min-[480px]:block" aria-hidden />
+          <div className="hidden w-full flex-1 lg:block" aria-hidden />
 
           <div className={WORKS_ITEM_META_ROW_CLASS}>
             <div className="flex min-w-0 flex-1 flex-col items-start justify-center gap-my-8 text-on-surface-20">
@@ -230,13 +230,13 @@ export function CharacterItem({
             </div>
           </div>
 
-          <div className="hidden w-full items-start justify-start gap-my-8 min-[480px]:flex">
+          <div className="hidden w-full items-start justify-start gap-my-8 lg:flex">
             {settingsButton}
           </div>
         </div>
       </div>
 
-      <div className="flex w-full items-start justify-start gap-my-8 min-[480px]:hidden">
+      <div className="flex w-full items-start justify-start gap-my-8 lg:hidden">
         {settingsButton}
       </div>
     </div>

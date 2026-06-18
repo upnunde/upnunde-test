@@ -1,7 +1,7 @@
 "use client";
 
 const containerClassName =
-  "flex flex-col items-center justify-center gap-my-12 w-full min-h-[241px] rounded-[4px] border-2 border-dashed border-border-10";
+  "flex h-full min-h-[241px] w-full flex-col items-center justify-center gap-my-12 rounded-[4px] border-2 border-dashed border-border-10";
 
 const primaryActionClassName =
   "inline-flex items-center gap-my-8 rounded-md bg-slate-800 px-my-16 py-my-8 text-body3_500 text-white hover:bg-slate-700 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-2";

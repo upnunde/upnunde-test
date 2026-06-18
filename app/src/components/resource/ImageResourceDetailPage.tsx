@@ -12,7 +12,7 @@ import { FloatingAiComposerPortal } from "@/components/ui/FloatingAiComposerPort
 import { FLOATING_COMPOSER_SCROLL_PAD_CLASS } from "@/components/ui/floating-composer-bar";
 import { AddResourceSlot } from "@/components/resource/cards/AddResourceSlot";
 import { createOptimizedImageObjectUrl } from "@/lib/image-upload-compress";
-import { THUMBNAIL_SLOT_ARIA, THUMBNAIL_DIM_OVERLAY_CLASS } from "@/lib/thumbnail-styles";
+import { THUMBNAIL_DIM_OVERLAY_CLASS } from "@/lib/thumbnail-styles";
 import { Title1 } from "@/components/ui/title1";
 import { Title2 } from "@/components/ui/title2";
 import {
@@ -45,6 +45,8 @@ export interface ImageResourceDetailPageProps {
 }
 
 function getLabels(kind: ImageResourceKind) {
+  const listThumbNote = "등록한 이미지는 목록 썸네일 등에도 함께 쓰입니다.";
+
   switch (kind) {
     case "background":
       return {
@@ -55,8 +57,9 @@ function getLabels(kind: ImageResourceKind) {
         descriptionLabel: "배경 설명*",
         descriptionSubtitle:
           "화면 상의 분위기나 시각적 특성을 한 줄로 요약해 주세요. 장면 묘시에 대한 간단한 설명입니다.",
-        thumbnailLabel: "대표 썸네일",
-        thumbnailSubtitle: "부가정보에 표시되는 썸네일입니다.",
+        thumbnailLabel: "배경 이미지*",
+        thumbnailSubtitle: `장면에 사용할 배경 이미지입니다. ${listThumbNote}`,
+        thumbnailAddAriaLabel: "배경 이미지 추가",
       };
     case "scene":
       return {
@@ -66,8 +69,9 @@ function getLabels(kind: ImageResourceKind) {
         nameSubtitle: "연출 컷을 직관적으로 구분할 수 있는 이름을 입력해 주세요.",
         descriptionLabel: "연출 설명*",
         descriptionSubtitle: "장면의 핵심 연출 의도를 한 줄로 요약해 주세요.",
-        thumbnailLabel: "대표 썸네일",
-        thumbnailSubtitle: "연출이 대표적으로 드러나는 이미지를 등록해 주세요.",
+        thumbnailLabel: "연출 이미지*",
+        thumbnailSubtitle: `장면에 사용할 연출 이미지입니다. ${listThumbNote}`,
+        thumbnailAddAriaLabel: "연출 이미지 추가",
       };
     case "media":
       return {
@@ -77,8 +81,9 @@ function getLabels(kind: ImageResourceKind) {
         nameSubtitle: "영상·이미지 등을 구분할 수 있는 이름을 입력해 주세요.",
         descriptionLabel: "미디어 설명*",
         descriptionSubtitle: "어떤 장면에서 사용되는 미디어인지 간단히 설명해 주세요.",
-        thumbnailLabel: "대표 썸네일",
-        thumbnailSubtitle: "리스트와 미리보기에서 사용될 대표 이미지를 등록해 주세요.",
+        thumbnailLabel: "미디어 이미지*",
+        thumbnailSubtitle: `에피소드에 사용할 미디어 이미지입니다. ${listThumbNote}`,
+        thumbnailAddAriaLabel: "미디어 이미지 추가",
       };
     case "gallery":
     default:
@@ -89,8 +94,9 @@ function getLabels(kind: ImageResourceKind) {
         nameSubtitle: "CG/삽화 장면을 구분할 수 있는 이름을 입력해 주세요.",
         descriptionLabel: "갤러리 설명*",
         descriptionSubtitle: "장면의 스토리적 의미를 한 줄로 요약해 주세요.",
-        thumbnailLabel: "대표 썸네일",
-        thumbnailSubtitle: "갤러리 목록에서 먼저 보여질 이미지를 등록해 주세요.",
+        thumbnailLabel: "갤러리 이미지*",
+        thumbnailSubtitle: `갤러리에 등록할 CG·삽화 이미지입니다. ${listThumbNote}`,
+        thumbnailAddAriaLabel: "갤러리 이미지 추가",
       };
   }
 }
@@ -290,7 +296,7 @@ export function ImageResourceDetailPage({ kind, initialData }: ImageResourceDeta
                 </div>
               </section>
 
-              {/* 대표 썸네일 */}
+              {/* 이미지 업로드 */}
               <section className="flex flex-col gap-my-12">
                 <Title1
                   text={labels.thumbnailLabel}
@@ -304,7 +310,7 @@ export function ImageResourceDetailPage({ kind, initialData }: ImageResourceDeta
                         type="button"
                         onClick={handleThumbnailClick}
                         className="absolute inset-0 z-0 flex h-full w-full cursor-pointer focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-0"
-                        aria-label="대표 썸네일 변경"
+                        aria-label={`${labels.thumbnailLabel.replace("*", "")} 변경`}
                       >
                         <Image
                           src={thumbnailUrl}
@@ -321,7 +327,7 @@ export function ImageResourceDetailPage({ kind, initialData }: ImageResourceDeta
                         <button
                           type="button"
                           className="w-8 h-8 rounded-full cursor-pointer bg-surface-10 inline-flex justify-center items-center text-on-surface-10 hover:bg-surface-20"
-                          aria-label="대표 썸네일 편집"
+                          aria-label={`${labels.thumbnailLabel.replace("*", "")} 편집`}
                           onClick={(e) => {
                             e.stopPropagation();
                             handleThumbnailClick();
@@ -332,7 +338,7 @@ export function ImageResourceDetailPage({ kind, initialData }: ImageResourceDeta
                         <button
                           type="button"
                           className="w-8 h-8 rounded-full cursor-pointer bg-surface-10 inline-flex justify-center items-center text-on-surface-10 hover:bg-surface-20"
-                          aria-label="대표 썸네일 삭제"
+                          aria-label={`${labels.thumbnailLabel.replace("*", "")} 삭제`}
                           onClick={(e) => {
                             e.stopPropagation();
                             handleThumbnailRemove();
@@ -347,7 +353,7 @@ export function ImageResourceDetailPage({ kind, initialData }: ImageResourceDeta
                   <AddResourceSlot
                     variant="img9:16"
                     slotKind="thumbnail"
-                    ariaLabel={THUMBNAIL_SLOT_ARIA.addRepresentativeThumbnail}
+                    ariaLabel={labels.thumbnailAddAriaLabel}
                     fileInput={{
                       id: IMAGE_RESOURCE_THUMBNAIL_FILE_INPUT_ID,
                       accept: "image/*",

@@ -400,14 +400,14 @@ export function CharacterDetailPage({
                 </div>
               </section>
 
-              {/* 대표 썸네일 / 표정 */}
+              {/* 캐릭터 이미지 / 표정 */}
               <section className="flex flex-col gap-my-16">
                 <div className="grid grid-cols-[auto,1fr] gap-my-32 items-start">
                   <div className="flex flex-col gap-my-12">
                     <Title1
-                      text="대표 썸네일"
-                      variant="title-subtitle"
-                      subtitleText="독자에게 가장 먼저 보여질 캐릭터 이미지를 등록해 주세요."
+                      text="캐릭터 이미지*"
+                      variant="title-subtitle-dot"
+                      subtitleText="대화·연출에 쓰일 캐릭터 이미지입니다. 등록한 이미지는 목록 썸네일 등에도 함께 쓰입니다."
                     />
                     {thumbnailUrl ? (
                       <div className="inline-flex flex-col justify-start items-start gap-my-4 w-[90px] group">
@@ -416,7 +416,7 @@ export function CharacterDetailPage({
                             type="button"
                             onClick={handleThumbnailAddClick}
                             className="absolute inset-0 z-0 flex h-full w-full cursor-pointer focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-0"
-                            aria-label="대표 썸네일 변경"
+                            aria-label="캐릭터 이미지 변경"
                           >
                             <Image
                               src={thumbnailUrl}
@@ -433,7 +433,7 @@ export function CharacterDetailPage({
                             <button
                               type="button"
                               className="w-8 h-8 rounded-full cursor-pointer bg-surface-10 inline-flex justify-center items-center text-on-surface-10 hover:bg-surface-20"
-                              aria-label="대표 썸네일 편집"
+                              aria-label="캐릭터 이미지 편집"
                               onClick={(e) => {
                                 e.stopPropagation();
                                 handleThumbnailAddClick();
@@ -444,7 +444,7 @@ export function CharacterDetailPage({
                             <button
                               type="button"
                               className="w-8 h-8 rounded-full cursor-pointer bg-surface-10 inline-flex justify-center items-center text-on-surface-10 hover:bg-surface-20"
-                              aria-label="대표 썸네일 삭제"
+                              aria-label="캐릭터 이미지 삭제"
                               onClick={(e) => {
                                 e.stopPropagation();
                                 handleThumbnailRemove();
@@ -459,7 +459,7 @@ export function CharacterDetailPage({
                       <AddResourceSlot
                         variant="img9:16"
                         slotKind="thumbnail"
-                        ariaLabel={THUMBNAIL_SLOT_ARIA.addRepresentativeThumbnail}
+                        ariaLabel={THUMBNAIL_SLOT_ARIA.addCharacterImage}
                         fileInput={{
                           id: CHARACTER_DETAIL_THUMBNAIL_FILE_INPUT_ID,
                           accept: "image/*",
@@ -471,8 +471,8 @@ export function CharacterDetailPage({
 
                   <div className="flex flex-col gap-my-12">
                     <Title1
-                      text="표정"
-                      variant="title-subtitle"
+                      text="표정*"
+                      variant="title-subtitle-dot"
                       subtitleText="다양한 감정을 표현할 수 있는 표정을 여러 장까지 등록해 둘 수 있어요. (최대 10개)"
                     />
                     <div className="flex flex-wrap items-start gap-my-12">
@@ -542,8 +542,8 @@ export function CharacterDetailPage({
               {/* 해시태그 */}
               <section className="flex flex-col gap-my-8">
                 <Title1
-                  text="해시태그"
-                  variant="title-subtitle"
+                  text="해시태그*"
+                  variant="title-subtitle-dot"
                   subtitleText="캐릭터를 한눈에 파악할 수 있는 키워드를 입력해 주세요. 쉼표로 구분됩니다."
                 />
                 <div className="flex flex-col justify-center items-start gap-my-8">
@@ -586,8 +586,8 @@ export function CharacterDetailPage({
               {/* 인물 인사 */}
               <section className="flex flex-col gap-my-8">
                 <Title1
-                  text="인물 인사"
-                  variant="title-subtitle"
+                  text="인물 인사*"
+                  variant="title-subtitle-dot"
                   subtitleText="캐릭터의 말투와 성격이 드러나는 짧은 소개 멘트를 작성해 주세요."
                 />
                 <div className="flex flex-col justify-start items-start gap-my-8">
@@ -624,7 +624,7 @@ export function CharacterDetailPage({
                 title={
                   isFormComplete
                     ? undefined
-                    : "이름, 인물 소개, 대표 썸네일, 표정, 해시태그, 인물 인사를 모두 입력해야 저장할 수 있어요"
+                    : "이름, 인물 소개, 캐릭터 이미지, 표정, 해시태그, 인물 인사를 모두 입력해야 저장할 수 있어요"
                 }
                 onClick={handleSave}
               >

@@ -1,6 +1,40 @@
 import { parseTagList } from "@/lib/parse-tag-list";
+import type { SeriesFormRecord } from "@/types/series";
 
 export type SeriesFormTab = "image" | "info" | "worldview";
+
+export interface SeriesFormSubmitPayload {
+  seriesTitle: string;
+  seriesSummary: string;
+  seriesKeywords: string;
+  keywordList: string[];
+  worldviewDescription: string;
+  worldviewPrompt: string;
+  persona: string;
+  coverPreviewUrl: string | null;
+  logoPreviewUrl: string | null;
+}
+
+export interface SeriesFormInitialSnapshot extends SeriesFormSubmitPayload {
+  hasCoverImage: boolean;
+  hasLogoImage: boolean;
+}
+
+export function seriesRecordToFormSnapshot(record: SeriesFormRecord): SeriesFormInitialSnapshot {
+  return {
+    seriesTitle: record.title,
+    seriesSummary: record.summary,
+    seriesKeywords: record.keywords.join(", "),
+    keywordList: [...record.keywords],
+    worldviewDescription: record.worldviewDescription,
+    worldviewPrompt: record.worldviewPrompt,
+    persona: record.persona,
+    coverPreviewUrl: record.coverImageUrl || null,
+    logoPreviewUrl: record.logoImageUrl || null,
+    hasCoverImage: Boolean(record.coverImageUrl),
+    hasLogoImage: Boolean(record.logoImageUrl),
+  };
+}
 
 export type SeriesFormField =
   | "cover"

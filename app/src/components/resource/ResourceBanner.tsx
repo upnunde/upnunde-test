@@ -4,6 +4,9 @@ import React, { useState, useSyncExternalStore } from "react";
 import { Info } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { PAGE_CARD_SHELL_MOBILE_FLUSH_CLASS } from "@/lib/page-layout";
+import {
+  RESOURCE_MGMT_BANNER_BODY,
+} from "@/lib/episode-resource-copy";
 import { cn } from "@/lib/utils";
 
 const STORAGE_KEY_PREFIX = "resource-mgmt-banner-dismissed";
@@ -67,7 +70,7 @@ export function ResourceBanner({ seriesId }: ResourceBannerProps) {
             </div>
           </div>
           <p className="flex-1 text-on-surface-20 text-body1_500 font-['Pretendard_JP']">
-            등록된 리소스는 앞으로 제작할 모든 에피소드를 구성하는 근간이 되는 핵심 데이터입니다.
+            {RESOURCE_MGMT_BANNER_BODY}
           </p>
         </div>
         <div className="flex justify-start items-center gap-my-8">

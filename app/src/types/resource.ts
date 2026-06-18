@@ -48,6 +48,8 @@ export interface MediaResource {
   name: string;
   thumbnailUrl: string;
   duration: string;
+  /** 미디어 본 파일 URL (영상 등) */
+  videoUrl?: string;
 }
 
 export interface BgmResource {

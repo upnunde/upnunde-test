@@ -40,6 +40,7 @@ import { Input } from "@/components/ui/input";
 import { getCaretCoordinates } from "@/lib/caretPosition";
 import { SlashCommandMenu, type SlashSelectPayload } from "./SlashCommandMenu";
 import { ResourcePicker } from "./ResourcePicker";
+import { useEditorSeriesId } from "./EditorSeriesContext";
 import { EditorBottomSheetMenu } from "./EditorBottomSheetMenu";
 import { EditorMenuOption, EditorMenuSectionLabel } from "./EditorMenuOption";
 import { ChoiceBlockTable } from "./ChoiceBlockTable";
@@ -179,6 +180,7 @@ export function ScriptBlock({
   rootClassName,
 }: ScriptBlockProps) {
   const isDesktop = useIsLgUp();
+  const seriesId = useEditorSeriesId();
   const isSeedDefault = block.data?.isSeedDefault === true;
   const blocks = useEditorStore((s) => s.blocks);
   const seriesPersona = useEditorStore((s) => s.seriesPersona);
@@ -1410,6 +1412,7 @@ export function ScriptBlock({
             isOpen={isPickerOpen}
             onOpenChange={setPickerOpen}
             itemsOverride={sceneItems}
+            seriesId={seriesId}
             onSelect={(value) => {
               if (block.type === "character") {
                 if (!value.trim()) {

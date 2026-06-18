@@ -1,7 +1,7 @@
 "use client";
 
-import React, { useCallback } from "react";
-import { useRouter } from "next/navigation";
+import React, { useCallback, useMemo, useState } from "react";
+import { useRouter, usePathname } from "next/navigation";
 import { Button } from "@/components/ui/button";
 import { ImageCropOnlyModal } from "@/components/resource/character/CharacterExpressionModal";
 import { SeriesImageUploadField } from "@/components/series/SeriesImageUploadField";
@@ -16,14 +16,50 @@ import { useSeriesFormController } from "@/hooks/useSeriesFormController";
 import { useFormAiDraftComposer } from "@/hooks/useFormAiDraftComposer";
 import { generateSeriesDraftFromBrief } from "@/lib/series-ai-draft";
 import type { SeriesAiDraft } from "@/lib/series-ai-draft";
+import { seriesRecordToFormSnapshot } from "@/lib/seriesForm";
+import { useSeriesCatalogStore } from "@/store/useSeriesCatalogStore";
 
 export default function SeriesEditPage() {
   const router = useRouter();
+  const pathname = usePathname();
+  const seriesId = useMemo(() => {
+    const segments = pathname.split("/").filter(Boolean);
+    return segments[1] ?? "";
+  }, [pathname]);
+
+  const ensureDemoSeries = useSeriesCatalogStore((s) => s.ensureDemoSeries);
+  const record = useSeriesCatalogStore((s) => s.seriesById[seriesId]);
+  const updateSeries = useSeriesCatalogStore((s) => s.updateSeries);
+
+  React.useEffect(() => {
+    ensureDemoSeries();
+  }, [ensureDemoSeries]);
+
+  const initialSnapshot = useMemo(
+    () => (record ? seriesRecordToFormSnapshot(record) : null),
+    [record],
+  );
+
   const [profileImageUrl, setProfileImageUrl] = React.useState<string | null>(null);
+  const [isSubmitting, setIsSubmitting] = useState(false);
 
   const handleBack = useCallback(() => {
     router.push("/series");
   }, [router]);
+
+  const handleSaveSeries = useCallback(
+    async (payload: Parameters<typeof updateSeries>[1]) => {
+      if (!seriesId) return;
+      setIsSubmitting(true);
+      try {
+        await updateSeries(seriesId, payload);
+        router.push("/series");
+      } finally {
+        setIsSubmitting(false);
+      }
+    },
+    [router, seriesId, updateSeries],
+  );
 
   const {
     activeTab,
@@ -81,9 +117,8 @@ export default function SeriesEditPage() {
   } = useSeriesFormController({
     coverSlotId: "series-cover",
     logoSlotId: "series-logo",
-    onValidSubmit: () => {
-      // TODO: 실제 저장 로직 연결
-    },
+    initialSnapshot,
+    onValidSubmit: handleSaveSeries,
   });
 
   const applySeriesDraft = useCallback(
@@ -122,7 +157,7 @@ export default function SeriesEditPage() {
       onTabChange={setActiveTab}
       onBack={handleBack}
       onSubmit={handleSubmit}
-      submitDisabled={!isFormValid}
+      submitDisabled={!isFormValid || isSubmitting || !record}
       coverPreviewUrl={coverPreviewUrl}
       logoPreviewUrl={logoPreviewUrl}
       aiComposer={{

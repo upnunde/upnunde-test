@@ -23,3 +23,34 @@ export interface SeriesData {
   /** 누적 댓글 수 */
   commentCount: number;
 }
+
+/** 시리즈 폼 전체 스냅샷 (목록 + 상세 편집) */
+export interface SeriesFormRecord {
+  id: string;
+  title: string;
+  summary: string;
+  keywords: string[];
+  worldviewDescription: string;
+  worldviewPrompt: string;
+  persona: string;
+  coverImageUrl: string;
+  logoImageUrl: string;
+  status: SeriesStatus;
+  createdAt: string;
+  episodeCount: number;
+  viewCount: number;
+  commentCount: number;
+}
+
+export function seriesFormRecordToListItem(record: SeriesFormRecord): SeriesData {
+  return {
+    id: record.id,
+    title: record.title,
+    thumbnailUrl: record.coverImageUrl || undefined,
+    status: record.status,
+    createdAt: record.createdAt,
+    episodeCount: record.episodeCount,
+    viewCount: record.viewCount,
+    commentCount: record.commentCount,
+  };
+}

@@ -25,9 +25,10 @@ import { useSceneClickHandler } from "@/hooks/useSceneClickHandler";
 import { useIsLgUp } from "@/hooks/useMediaQuery";
 import { useEditorMobileKeyboardScrollIntoView } from "@/hooks/useEditorMobileKeyboardScrollIntoView";
 import { useEditorMobileSceneHeaderCollapse } from "@/hooks/useEditorMobileSceneHeaderCollapse";
+import { EditorSeriesProvider } from "@/components/editor/EditorSeriesContext";
 import { EditorAutoGeneratorFloatingButton } from "@/components/editor/EditorAutoGeneratorFloatingButton";
 import { Dialog, DialogContent, DialogTitle } from "@/components/ui/dialog";
-import { formDialogShellClassName, formDialogSheetBodyWrapperClassName, formDialogSheetEpisodeFormClassName } from "@/components/ui/modal";
+import { formDialogShellClassName, formDialogSheetBodyWrapperClassName } from "@/components/ui/modal";
 import {
   EDITOR_MOBILE_SUB_HEADER_INNER_CLASS,
   EDITOR_SCENE_HEADER_ID,
@@ -180,6 +181,10 @@ function EditorInner() {
       ? `${episodeNo}화 ${episodeFormValues.title || "에피소드 제목"}`
       : "에피소드 에디터";
   const shouldStartEmpty = searchParams.get("startEmpty") === "1";
+  const seriesId = useMemo(() => {
+    const raw = searchParams.get("seriesId");
+    return raw?.trim() || null;
+  }, [searchParams]);
   const episodeHeaderSubtitle = episodeNo ? `${episodeNo}화 에피소드` : undefined;
 
   useEffect(() => {
@@ -224,6 +229,7 @@ function EditorInner() {
   const previewChromeHidden = editorMobilePreviewChromeHiddenClass(isDesktop, mobilePanel);
 
   return (
+    <EditorSeriesProvider seriesId={seriesId}>
     <div className={cn(APP_PAGE_ROOT_CLASS, APP_BROWSER_BG_CLASS)}>
       <div className={cn(previewChromeHidden)}>
         <Header profileImageUrl={profileImageUrl} onProfileImageChange={setProfileImageUrl} />
@@ -317,16 +323,11 @@ function EditorInner() {
           className={formDialogShellClassName}
           aria-describedby={undefined}
         >
+          <DialogTitle className="sr-only">에피소드 정보 수정</DialogTitle>
           <div className={formDialogSheetBodyWrapperClassName}>
-            <header className="shrink-0 border-b border-border-10 px-my-12 py-my-16 lg:sr-only lg:border-0 lg:p-0">
-              <DialogTitle className="text-body1_700 text-on-surface-10">
-                에피소드 정보 수정
-              </DialogTitle>
-            </header>
             <EpisodeForm
               onConverted={handleEpisodeInfoUpdate}
               onCancel={() => setIsEpisodeInfoModalOpen(false)}
-              containerClassName={formDialogSheetEpisodeFormClassName}
               stickyFooter
               sectionTitle={episodeHeaderSubtitle ?? "에피소드"}
               submitLabel="수정하기"
@@ -344,6 +345,7 @@ function EditorInner() {
         onSave={handleAutoGeneratorSave}
       />
     </div>
+    </EditorSeriesProvider>
   );
 }
 
