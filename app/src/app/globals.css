@@ -283,6 +283,8 @@
   --app-vv-bottom: 0px;
   --app-vv-height: 100dvh;
   --app-vv-offset-top: 0px;
+  --app-vv-live-top: 0px;
+  --app-vv-live-height: 100dvh;
 }
 
 @layer base {

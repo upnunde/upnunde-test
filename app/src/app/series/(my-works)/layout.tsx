@@ -60,7 +60,7 @@ export default function MyWorksLayout({ children }: { children: React.ReactNode 
         className={cn(
           PAGE_SCROLL_ROOT_CLASS,
           PAGE_CONTAINER_CLASS,
-          "mx-0 items-center gap-0 max-lg:gap-my-16 max-lg:bg-surface-10 max-lg:pt-my-20 max-lg:px-my-20",
+          "mx-0 items-center gap-0 max-lg:gap-my-16 max-lg:bg-surface-10 max-lg:pt-my-20",
         )}
       >
         {children}

@@ -164,7 +164,13 @@ export function EpisodeAutoGeneratorModal({
     EPISODE_AUTO_GENERATOR_AI_COMPOSER_ENABLED &&
     open &&
     typeof document !== "undefined"
-      ? createPortal(<div className="fixed inset-0 z-[49] bg-black/50" aria-hidden />, document.body)
+      ? createPortal(
+          <div
+            className="fixed inset-x-0 bottom-0 top-0 z-[49] bg-black/50 max-lg:bottom-auto max-lg:top-[var(--app-vv-live-top,0px)] max-lg:h-[var(--app-vv-live-height,100dvh)]"
+            aria-hidden
+          />,
+          document.body,
+        )
       : null;
 
   return (

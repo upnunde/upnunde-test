@@ -54,9 +54,10 @@ export const mobileBottomSheetMediumMaxHeightClassName = "max-h-[80dvh]";
 /** @deprecated `mobileBottomSheetMediumMaxHeightClassName` 별칭 */
 export const mobileResourcePickerSheetMaxHeightClassName = mobileBottomSheetMediumMaxHeightClassName;
 
-/** 모바일 바텀 시트 스크림 — 레이아웃 뷰포트 전체(글로벌 헤더 fixed top-0 포함), 탭으로 닫기 */
+/** 모바일 바텀 시트 스크림 — 키보드 포함 현재 visual viewport를 덮어 딤 밀림 방지, 탭으로 닫기 */
 export const MOBILE_BOTTOM_SHEET_SCRIM_CLASS = cn(
-  "fixed inset-0 touch-none bg-black/30",
+  "fixed inset-x-0 bottom-0 top-0 touch-none bg-black/30",
+  "max-lg:bottom-auto max-lg:top-[var(--app-vv-live-top,0px)] max-lg:h-[var(--app-vv-live-height,100dvh)]",
   MOBILE_BOTTOM_SHEET_SCRIM_Z_CLASS,
 );
 

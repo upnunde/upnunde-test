@@ -29,7 +29,7 @@ export function AppShell({ sidebarActiveId, children, className }: AppShellProps
         {sidebarOpen ? (
           <button
             type="button"
-            className="fixed inset-0 z-40 bg-black/50 lg:hidden"
+            className="fixed inset-x-0 bottom-0 top-0 z-40 bg-black/50 lg:hidden max-lg:bottom-auto max-lg:top-[var(--app-vv-live-top,0px)] max-lg:h-[var(--app-vv-live-height,100dvh)]"
             aria-label="메뉴 닫기"
             onClick={() => setSidebarOpen(false)}
           />

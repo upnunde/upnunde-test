@@ -25,7 +25,9 @@ const DialogOverlay = React.forwardRef<
   <DialogPrimitive.Overlay
     ref={ref}
     className={cn(
-      "fixed inset-0 bg-black/50 data-[state=open]:animate-in data-[state=closed]:animate-out data-[state=closed]:fade-out-0 data-[state=open]:fade-in-0",
+      "fixed inset-x-0 bottom-0 top-0 bg-black/50 data-[state=open]:animate-in data-[state=closed]:animate-out data-[state=closed]:fade-out-0 data-[state=open]:fade-in-0",
+      // 모바일: 키보드로 줄어든 visual viewport를 추적해 딤이 밀려 배경이 보이는 문제 방지
+      "max-lg:bottom-auto max-lg:top-[var(--app-vv-live-top,0px)] max-lg:h-[var(--app-vv-live-height,100dvh)]",
       DIALOG_OVERLAY_Z_CLASS,
       className,
     )}
@@ -40,6 +42,8 @@ const dialogContentAnimationClass =
 /** 알림·경고 — 항상 중앙 모달 */
 const dialogContentCenterClass = cn(
   "fixed left-1/2 top-1/2 flex min-h-0 -translate-x-1/2 -translate-y-1/2 flex-col gap-my-16 overflow-y-auto bg-background p-my-24 shadow-elevation-50 outline-none focus:outline-none max-h-[calc(100dvh-160px)]",
+  // 모바일: 키보드 포함 visual viewport 중앙 정렬 + 보이는 영역 높이로 제한
+  "max-lg:top-[calc(var(--app-vv-live-top,0px)+var(--app-vv-live-height,100dvh)/2)] max-lg:max-h-[calc(var(--app-vv-live-height,100dvh)-var(--spacing-my-40))]",
   CONFIRM_DIALOG_WIDTH_CLASS,
   DIALOG_CONTENT_Z_CLASS,
   MOBILE_MODAL_RADIUS_CLASS,
@@ -53,7 +57,7 @@ const dialogContentAutoClass = cn(
   "fixed flex w-full min-h-0 flex-col bg-background shadow-elevation-50 outline-none focus:outline-none",
   DIALOG_CONTENT_Z_CLASS,
   dialogContentAnimationClass,
-  "max-lg:inset-x-0 max-lg:bottom-[var(--app-vv-bottom,0px)] max-lg:top-auto max-lg:max-h-[min(92dvh,900px)] max-lg:translate-x-0 max-lg:translate-y-0 max-lg:gap-0 max-lg:overflow-hidden max-lg:rounded-b-none max-lg:border-t border-border-10 max-lg:p-0 max-lg:pb-[env(safe-area-inset-bottom,0px)] max-lg:data-[state=open]:slide-in-from-bottom max-lg:data-[state=closed]:slide-out-to-bottom",
+  "max-lg:inset-x-0 max-lg:bottom-[var(--app-keyboard-inset,var(--app-vv-bottom,0px))] max-lg:top-auto max-lg:max-h-[min(92dvh,900px,var(--app-vv-live-height,92dvh))] max-lg:translate-x-0 max-lg:translate-y-0 max-lg:gap-0 max-lg:overflow-hidden max-lg:rounded-b-none max-lg:border-t border-border-10 max-lg:p-0 max-lg:pb-[env(safe-area-inset-bottom,0px)] max-lg:data-[state=open]:slide-in-from-bottom max-lg:data-[state=closed]:slide-out-to-bottom",
   MOBILE_MODAL_TOP_RADIUS_CLASS,
   "lg:left-1/2 lg:top-1/2 lg:max-w-lg lg:max-h-[calc(100dvh-160px)] lg:-translate-x-1/2 lg:-translate-y-1/2 lg:gap-0 lg:overflow-y-auto lg:border-t-0 lg:p-0 lg:shadow-elevation-50 lg:pb-0",
   DESKTOP_MODAL_RADIUS_CLASS,

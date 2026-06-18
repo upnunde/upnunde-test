@@ -13,6 +13,8 @@ const VIEWPORT_CSS_VARS = [
   "--app-vv-height",
   "--app-vv-offset-top",
   "--app-keyboard-inset",
+  "--app-vv-live-top",
+  "--app-vv-live-height",
 ] as const;
 
 function clearViewportCssVars(root: HTMLElement) {
@@ -58,6 +60,18 @@ export function MobileViewportSync() {
       root.style.setProperty("--app-vv-bottom", `${lastChrome.bottom}px`);
       root.style.setProperty("--app-vv-height", `${lastChrome.height}px`);
       root.style.setProperty("--app-vv-offset-top", `${lastChrome.offsetTop}px`);
+
+      /**
+       * live 변수 — 키보드 포함 현재 visualViewport 실측치.
+       * 오버레이·모달이 항상 "지금 보이는 영역"을 덮도록 추적한다(딤 밀림 방지).
+       */
+      const viewport = window.visualViewport;
+      const liveTop = viewport ? Math.max(0, Math.round(viewport.offsetTop)) : 0;
+      const liveHeight = viewport
+        ? Math.max(0, Math.round(viewport.height))
+        : Math.max(0, Math.round(window.innerHeight));
+      root.style.setProperty("--app-vv-live-top", `${liveTop}px`);
+      root.style.setProperty("--app-vv-live-height", `${liveHeight}px`);
     };
 
     const scheduleApply = () => {

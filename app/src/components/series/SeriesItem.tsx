@@ -17,6 +17,7 @@ import {
   WORKS_ITEM_CARD_INNER_CLASS,
   WORKS_ITEM_META_ROW_CLASS,
   WORKS_ITEM_THUMBNAIL_CLASS,
+  WORKS_ITEM_TITLE_GROUP_CLASS,
 } from "@/lib/worksArea";
 
 export interface SeriesItemProps {
@@ -167,7 +168,7 @@ export function SeriesItem({
         <div className="flex min-w-0 flex-1 flex-col items-start justify-start">
         {/* 제목 + 더보기 (정책 5, 6) — 상태 뱃지는 제목 앞 */}
         <div className="flex w-full items-start justify-between gap-my-8">
-          <div className="flex min-w-0 flex-1 items-center gap-my-8">
+          <div className={WORKS_ITEM_TITLE_GROUP_CLASS}>
             {isPrivate && (
               <span className="inline-flex h-fit shrink-0 rounded px-my-8 py-my-4 text-body3_500 bg-primary/10 text-primary">
                 비공개
@@ -179,7 +180,7 @@ export function SeriesItem({
               </span>
             )}
             {isBanned && (
-              <div className="inline-flex h-7 max-w-[45%] shrink-0 items-center gap-my-4 overflow-hidden rounded border border-destructive px-my-8 py-my-4">
+              <div className="inline-flex h-7 max-w-full shrink-0 items-center gap-my-4 overflow-hidden rounded border border-destructive px-my-8 py-my-4 lg:max-w-[45%]">
                 <ViolationIcon className="h-5 w-5 shrink-0 text-destructive" aria-hidden />
                 <span className="truncate text-body3_500 text-destructive">가이드 정책을 위반, 이용 금지</span>
               </div>

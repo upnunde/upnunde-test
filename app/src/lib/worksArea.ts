@@ -16,7 +16,11 @@ export const WORKS_ITEM_CARD_INNER_CLASS =
   "flex min-w-0 w-full flex-row gap-my-12 lg:gap-my-20 min-[480px]:contents";
 
 export const WORKS_ITEM_THUMBNAIL_CLASS =
-  "relative aspect-[9/16] w-28 shrink-0 overflow-hidden rounded bg-slate-200";
+  "relative aspect-[9/16] w-[calc(7rem*0.8)] lg:w-28 shrink-0 overflow-hidden rounded bg-slate-200";
+
+/** 내 작품 카드 — 상태 뱃지·제목: 모바일 세로 · lg+ 가로 */
+export const WORKS_ITEM_TITLE_GROUP_CLASS =
+  "flex min-w-0 flex-1 flex-col items-start gap-my-8 lg:flex-row lg:items-center";
 
 /** 내 작품 카드 메타(날짜·조회수 등) — 모바일 상단 20px · 480px+ mt-0 */
 export const WORKS_ITEM_META_ROW_CLASS =
