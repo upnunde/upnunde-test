@@ -5,7 +5,7 @@ import Image from "next/image";
 import { Menu, User } from "lucide-react";
 import { ProfileEditModal } from "@/components/ProfileEditModal";
 import { useRouter } from "next/navigation";
-import { APP_HEADER_FIXED_CLASS, APP_HEADER_SPACER_CLASS } from "@/lib/mobile-viewport";
+import { APP_HEADER_STICKY_CLASS } from "@/lib/mobile-viewport";
 import { dummyAsset } from "@/lib/dummy-asset-path";
 import { cn } from "@/lib/utils";
 
@@ -28,11 +28,10 @@ export default function Header({ profileImageUrl, onProfileImageChange, onMenuCl
   const profileButtonRef = useRef<HTMLButtonElement>(null);
 
   return (
-    <>
     <header
       className={cn(
         "flex h-14 shrink-0 items-center justify-between border-b border-border-10 bg-white pl-0 pr-my-16",
-        APP_HEADER_FIXED_CLASS,
+        APP_HEADER_STICKY_CLASS,
         className,
       )}
     >
@@ -95,7 +94,5 @@ export default function Header({ profileImageUrl, onProfileImageChange, onMenuCl
         }}
       />
     </header>
-    <div className={APP_HEADER_SPACER_CLASS} aria-hidden />
-    </>
   );
 }

@@ -3,6 +3,10 @@
 import * as React from "react"
 import { Popover as PopoverPrimitive } from "radix-ui"
 
+import {
+  POINTER_TAP_TRIGGER_TOUCH_ACTION_CLASS,
+  usePointerTapGestureTracker,
+} from "@/lib/pointer-tap-gesture"
 import { cn } from "@/lib/utils"
 
 function Popover({
@@ -11,11 +15,59 @@ function Popover({
   return <PopoverPrimitive.Root data-slot="popover" {...props} />
 }
 
-function PopoverTrigger({
-  ...props
-}: React.ComponentProps<typeof PopoverPrimitive.Trigger>) {
-  return <PopoverPrimitive.Trigger data-slot="popover-trigger" {...props} />
-}
+const PopoverTrigger = React.forwardRef<
+  React.ComponentRef<typeof PopoverPrimitive.Trigger>,
+  React.ComponentPropsWithoutRef<typeof PopoverPrimitive.Trigger>
+>(
+  (
+    {
+      className,
+      onPointerDown,
+      onPointerMove,
+      onPointerUp,
+      onPointerCancel,
+      onClick,
+      ...props
+    },
+    ref,
+  ) => {
+    const gesture = usePointerTapGestureTracker()
+
+    return (
+      <PopoverPrimitive.Trigger
+        ref={ref}
+        data-slot="popover-trigger"
+        className={cn(POINTER_TAP_TRIGGER_TOUCH_ACTION_CLASS, className)}
+        onPointerDown={(event) => {
+          gesture.onPointerDown(event)
+          onPointerDown?.(event)
+        }}
+        onPointerMove={(event) => {
+          gesture.onPointerMove(event)
+          onPointerMove?.(event)
+        }}
+        onPointerUp={(event) => {
+          gesture.onPointerUp(event)
+          onPointerUp?.(event)
+        }}
+        onPointerCancel={(event) => {
+          gesture.onPointerCancel(event)
+          onPointerCancel?.(event)
+        }}
+        onClick={(event) => {
+          onClick?.(event)
+          if (gesture.shouldSuppressActivation()) {
+            event.preventDefault()
+            event.stopPropagation()
+          }
+          gesture.reset()
+        }}
+        {...props}
+      />
+    )
+  },
+)
+PopoverTrigger.displayName = PopoverPrimitive.Trigger.displayName
 
 function PopoverContent({
   className,

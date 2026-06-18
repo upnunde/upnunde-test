@@ -49,12 +49,12 @@ export const APP_BROWSER_BG_CLASS = "bg-background-20";
 /** 기본 앱 theme-color — background-20 (#F8F8FC) */
 export const APP_BROWSER_BG_BACKGROUND_20_THEME_COLOR = "#F8F8FC";
 
-/** 글로벌 헤더 — 모바일 fixed (문서 스크롤 시 상단 고정) */
-export const APP_HEADER_FIXED_CLASS =
-  "max-lg:fixed max-lg:inset-x-0 max-lg:top-0 max-lg:z-50 max-lg:bg-white";
+/** 글로벌 헤더 — 모바일 sticky (문서 스크롤·당겨서 새로고침 시 함께 이동) */
+export const APP_HEADER_STICKY_CLASS =
+  "max-lg:sticky max-lg:top-0 max-lg:z-50 max-lg:bg-white";
 
-/** fixed 헤더(h-14) 높이만큼 문서 flow에 여백 확보 — 모바일 전용 */
-export const APP_HEADER_SPACER_CLASS = "max-lg:h-14 shrink-0 lg:hidden";
+/** @deprecated `APP_HEADER_STICKY_CLASS` 사용 */
+export const APP_HEADER_FIXED_CLASS = APP_HEADER_STICKY_CLASS;
 
 /** layout 셸 직하위 페이지·AppShell 래퍼 — 모바일: min-h-dvh(최소 높이) + 콘텐츠만큼 확장 */
 export const APP_PAGE_ROOT_CLASS =

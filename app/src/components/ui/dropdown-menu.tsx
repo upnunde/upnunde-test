@@ -3,18 +3,42 @@
 import * as React from "react"
 import { CheckIcon, ChevronRightIcon, CircleIcon } from "lucide-react"
 import { DropdownMenu as DropdownMenuPrimitive } from "radix-ui"
+import { useControllableState } from "@radix-ui/react-use-controllable-state"
 
 import {
   menuListItemCompactClassName,
   menuListItemDestructiveClassName,
   menuListLabelClassName,
 } from "@/components/ui/menu-list-styles"
+import { DropdownMenuOpenContext } from "@/components/ui/dropdown-menu-open-context"
+import {
+  POINTER_TAP_TRIGGER_TOUCH_ACTION_CLASS,
+  usePointerTapGestureTracker,
+} from "@/lib/pointer-tap-gesture"
 import { cn } from "@/lib/utils"
 
 function DropdownMenu({
+  open: openProp,
+  defaultOpen,
+  onOpenChange,
   ...props
 }: React.ComponentProps<typeof DropdownMenuPrimitive.Root>) {
-  return <DropdownMenuPrimitive.Root data-slot="dropdown-menu" {...props} />
+  const [open, setOpen] = useControllableState({
+    prop: openProp,
+    defaultProp: defaultOpen,
+    onChange: onOpenChange,
+  })
+
+  return (
+    <DropdownMenuOpenContext.Provider value={{ setOpen }}>
+      <DropdownMenuPrimitive.Root
+        data-slot="dropdown-menu"
+        open={open}
+        onOpenChange={setOpen}
+        {...props}
+      />
+    </DropdownMenuOpenContext.Provider>
+  )
 }
 
 function DropdownMenuPortal({
@@ -25,16 +49,65 @@ function DropdownMenuPortal({
   )
 }
 
-function DropdownMenuTrigger({
-  ...props
-}: React.ComponentProps<typeof DropdownMenuPrimitive.Trigger>) {
-  return (
-    <DropdownMenuPrimitive.Trigger
-      data-slot="dropdown-menu-trigger"
-      {...props}
-    />
-  )
-}
+const DropdownMenuTrigger = React.forwardRef<
+  React.ComponentRef<typeof DropdownMenuPrimitive.Trigger>,
+  React.ComponentPropsWithoutRef<typeof DropdownMenuPrimitive.Trigger>
+>(
+  (
+    {
+      className,
+      onPointerDown,
+      onPointerMove,
+      onPointerUp,
+      onPointerCancel,
+      onClick,
+      ...props
+    },
+    ref,
+  ) => {
+    const menuOpen = React.useContext(DropdownMenuOpenContext)
+    const gesture = usePointerTapGestureTracker()
+
+    return (
+      <DropdownMenuPrimitive.Trigger
+        ref={ref}
+        data-slot="dropdown-menu-trigger"
+        className={cn(POINTER_TAP_TRIGGER_TOUCH_ACTION_CLASS, className)}
+        onPointerDown={(event) => {
+          gesture.onPointerDown(event)
+          // Radix는 pointerdown에 즉시 열림 — 스크롤 제스처와 충돌하므로 클릭(터치업)으로 연다.
+          event.preventDefault()
+          onPointerDown?.(event)
+        }}
+        onPointerMove={(event) => {
+          gesture.onPointerMove(event)
+          onPointerMove?.(event)
+        }}
+        onPointerUp={(event) => {
+          gesture.onPointerUp(event)
+          onPointerUp?.(event)
+        }}
+        onPointerCancel={(event) => {
+          gesture.onPointerCancel(event)
+          onPointerCancel?.(event)
+        }}
+        onClick={(event) => {
+          onClick?.(event)
+          if (gesture.shouldSuppressActivation()) {
+            event.preventDefault()
+            event.stopPropagation()
+            gesture.reset()
+            return
+          }
+          menuOpen?.setOpen((prev) => !prev)
+          gesture.reset()
+        }}
+        {...props}
+      />
+    )
+  },
+)
+DropdownMenuTrigger.displayName = DropdownMenuPrimitive.Trigger.displayName
 
 function DropdownMenuContent({
   className,

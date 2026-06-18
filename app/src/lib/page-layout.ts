@@ -91,7 +91,7 @@ export const PAGE_SCROLL_ROOT_TOP_CLASS =
 /** @deprecated 서브헤더 sticky 미사용 */
 export const PAGE_SUBHEADER_STICKY_CLASS = "";
 
-/** 모바일 fixed 글로벌 헤더(h-14) 바로 아래 sticky — 필터·탭 띠 전용 */
+/** 모바일 sticky 글로벌 헤더(h-14) 바로 아래 — 필터·탭 띠 전용 */
 export const PAGE_FILTER_HEADER_STICKY_CLASS =
   "max-lg:sticky max-lg:top-14 max-lg:z-30";
 
