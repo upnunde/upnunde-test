@@ -121,16 +121,23 @@ export const modalFooterShellClassName = cn(
   "lg:rounded-bl-[4px] lg:rounded-br-[4px]",
 );
 
-export const modalFooterButtonRowClassName =
-  "inline-flex h-my-64 min-h-my-64 w-full items-center gap-my-8 self-stretch bg-surface-10 px-my-24 pb-my-20 pt-my-8";
+export const modalFooterButtonRowClassName = cn(
+  "flex w-full flex-col items-stretch gap-my-8 self-stretch bg-surface-10 px-my-24 pb-my-20 pt-my-8",
+  "max-lg:py-my-16",
+  "lg:inline-flex lg:h-my-64 lg:min-h-my-64 lg:flex-row lg:items-center",
+);
+
+/** split 레이아웃 — 모바일 세로 스택 / 데스크톱 우측 버튼 그룹 */
+export const modalFooterTrailingGroupClassName =
+  "flex w-full flex-col items-stretch gap-my-8 lg:w-auto lg:flex-row lg:items-center lg:justify-start";
 
 export const modalFooterButtonToneClassName = {
   secondary:
-    "h-my-36 min-w-my-80 rounded-md border border-border-20 bg-surface-10 px-my-12 font-['Pretendard_JP'] text-body1_500 text-on-surface-10 shadow-none hover:bg-surface-20",
+    "h-my-36 w-full min-w-0 rounded-md border border-border-20 bg-surface-10 px-my-12 font-['Pretendard_JP'] text-body1_500 text-on-surface-10 shadow-none hover:bg-surface-20 lg:w-auto lg:min-w-my-80",
   primary:
-    "h-my-36 min-w-my-80 rounded-md bg-primary px-my-12 font-['Pretendard_JP'] text-body1_500 text-primary-foreground shadow-none hover:bg-primary/90",
+    "h-my-36 w-full min-w-0 rounded-md bg-primary px-my-12 font-['Pretendard_JP'] text-body1_500 text-primary-foreground shadow-none hover:bg-primary/90 lg:w-auto lg:min-w-my-80",
   destructive:
-    "h-my-36 min-w-my-80 rounded-md bg-error-error px-my-12 font-['Pretendard_JP'] text-body1_500 text-white shadow-none hover:bg-error-error/90 disabled:opacity-50",
+    "h-my-36 w-full min-w-0 rounded-md bg-error-error px-my-12 font-['Pretendard_JP'] text-body1_500 text-white shadow-none hover:bg-error-error/90 disabled:opacity-50 lg:w-auto lg:min-w-my-80",
   ghost:
-    "h-my-36 min-w-0 rounded-md border-0 bg-transparent px-my-12 font-['Pretendard_JP'] text-body1_500 text-on-surface-30 shadow-none hover:bg-surface-20 hover:text-on-surface-10",
+    "h-my-36 w-full min-w-0 rounded-md border-0 bg-transparent px-my-12 font-['Pretendard_JP'] text-body1_500 text-on-surface-30 shadow-none hover:bg-surface-20 hover:text-on-surface-10 lg:w-auto",
 } as const;

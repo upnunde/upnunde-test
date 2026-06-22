@@ -2,12 +2,13 @@
 
 import React, { useState } from "react";
 import Image from "next/image";
-import { MoreVertical, Eye, EyeOff, Trash2, Calendar, Layers, MessageCircle } from "lucide-react";
+import { MoreVertical, Eye, EyeOff, Trash2, Calendar, Layers, MessageCircle, Settings2 } from "lucide-react";
 import {
   DropdownMenu,
   DropdownMenuTrigger,
   DropdownMenuContent,
   DropdownMenuItem,
+  DropdownMenuSeparator,
 } from "@/components/ui/dropdown-menu";
 import type { SeriesData } from "@/types/series";
 import { formatSeriesDateOrRelative, formatSeriesViewCount } from "@/lib/formatSeries";
@@ -86,21 +87,8 @@ export function SeriesItem({
     onEpisodeManage?.(series);
   };
 
-  const handleSeriesManage = () => {
-    onSeriesManage?.(series);
-  };
-
   const manageButtons = (
     <>
-      <button
-        type="button"
-        onClick={handleSeriesManage}
-        className="flex h-9 min-w-0 flex-1 cursor-pointer items-center rounded-md border border-border-20 bg-white px-my-12 text-body3_500 text-on-surface-20 transition-colors hover:bg-surface-20 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-2 disabled:border-border-20"
-      >
-        <span className="block w-full overflow-hidden text-ellipsis whitespace-nowrap text-center">
-          시리즈
-        </span>
-      </button>
       <button
         type="button"
         disabled={isDraft}
@@ -202,6 +190,14 @@ export function SeriesItem({
               </button>
             </DropdownMenuTrigger>
           <DropdownMenuContent align="end" className="w-48 rounded-lg border border-border-10 bg-white p-my-4">
+              <DropdownMenuItem
+                className="flex cursor-pointer items-center gap-my-8 rounded-md px-my-12 py-my-8 text-body3_400 text-on-surface-20 outline-none hover:bg-surface-20"
+                onSelect={() => onSeriesManage?.(series)}
+              >
+                <Settings2 className="h-4 w-4 shrink-0 text-on-surface-30" aria-hidden />
+                시리즈
+              </DropdownMenuItem>
+              <DropdownMenuSeparator className="my-my-4 bg-border-10" />
               {status === "PUBLIC" && (
                 <>
                   <DropdownMenuItem

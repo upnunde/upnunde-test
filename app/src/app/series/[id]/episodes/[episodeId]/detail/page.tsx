@@ -27,6 +27,9 @@ import { useEditorMobileSceneHeaderCollapse } from "@/hooks/useEditorMobileScene
 import { useSceneClickHandler } from "@/hooks/useSceneClickHandler";
 import { useIsLgUp } from "@/hooks/useMediaQuery";
 import {
+  EDITOR_MOBILE_EDIT_SHELL_TRAP_CLASS,
+  EDITOR_MOBILE_PAGE_ROOT_TRAP_CLASS,
+  EDITOR_MOBILE_SCROLL_ROOT_TRAP_CLASS,
   EDITOR_MOBILE_SUB_HEADER_INNER_CLASS,
   EDITOR_SCENE_HEADER_ID,
   EDITOR_SCROLL_ROOT_ATTR,
@@ -68,10 +71,10 @@ function EpisodeReadOnlyWorkspace({
   }
 
   return (
-    <div className={cn("flex flex-col bg-white max-lg:shrink-0", APP_MAIN_PANEL_CLASS)}>
+    <div className={cn("flex min-h-0 flex-1 flex-col overflow-hidden bg-white", APP_MAIN_PANEL_CLASS)}>
       <div
         className={cn(
-          "flex flex-col max-lg:shrink-0",
+          "flex min-h-0 flex-1 flex-col overflow-hidden",
           APP_MAIN_PANEL_CLASS,
           mobilePanel !== "edit" && "hidden",
         )}
@@ -139,17 +142,33 @@ export default function EpisodeDetailPage() {
     EDITOR_PAGE_SCROLL_CLASS,
     isDesktop
       ? "px-0 py-my-40"
-      : cn(EDITOR_MOBILE_GUTTER_X_CLASS, "max-lg:pt-my-12", EDITOR_MOBILE_SCROLL_BOTTOM_PAD_FAB_ONLY_CLASS),
+      : cn(
+          EDITOR_MOBILE_GUTTER_X_CLASS,
+          EDITOR_MOBILE_SCROLL_ROOT_TRAP_CLASS,
+          "max-lg:pt-my-12",
+          EDITOR_MOBILE_SCROLL_BOTTOM_PAD_FAB_ONLY_CLASS,
+        ),
   );
 
   const previewChromeHidden = editorMobilePreviewChromeHiddenClass(isDesktop, mobilePanel);
 
   return (
-    <div className={cn(APP_PAGE_ROOT_CLASS, APP_BROWSER_BG_CLASS)}>
+    <div
+      className={cn(
+        APP_PAGE_ROOT_CLASS,
+        APP_BROWSER_BG_CLASS,
+        !isDesktop && mobilePanel === "edit" && EDITOR_MOBILE_PAGE_ROOT_TRAP_CLASS,
+      )}
+    >
       <div className={cn(previewChromeHidden)}>
         <Header profileImageUrl={profileImageUrl} onProfileImageChange={setProfileImageUrl} />
       </div>
-      <div className={APP_SHELL_BODY_ROW_CLASS}>
+      <div
+        className={cn(
+          APP_SHELL_BODY_ROW_CLASS,
+          !isDesktop && mobilePanel === "edit" && EDITOR_MOBILE_EDIT_SHELL_TRAP_CLASS,
+        )}
+      >
         {isDesktop ? (
           <aside
             className={
@@ -168,7 +187,11 @@ export default function EpisodeDetailPage() {
         ) : null}
 
         <main
-          className={cn("flex min-w-0 flex-col max-lg:shrink-0", APP_MAIN_PANEL_CLASS)}
+          className={cn(
+            "flex min-w-0 flex-col",
+            APP_MAIN_PANEL_CLASS,
+            !isDesktop && mobilePanel === "edit" && EDITOR_MOBILE_EDIT_SHELL_TRAP_CLASS,
+          )}
           style={
             !isDesktop && mobilePanel === "edit"
               ? editorMobileSubHeaderHideVarStyle(mobileSubHeaderHide.hiddenPx)

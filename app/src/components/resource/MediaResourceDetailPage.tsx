@@ -55,6 +55,7 @@ function revokeBlobUrl(url: string | null | undefined) {
 }
 
 export function MediaResourceDetailPage({ initialData }: MediaResourceDetailPageProps) {
+  const isNewPage = !initialData;
   const router = useRouter();
   const pathname = usePathname();
   const videoRef = useRef<HTMLVideoElement>(null);
@@ -251,7 +252,7 @@ export function MediaResourceDetailPage({ initialData }: MediaResourceDetailPage
       <div
         className={cn(
           PAGE_SCROLL_COLUMN_CLASS,
-          FLOATING_COMPOSER_SCROLL_PAD_CLASS,
+          isNewPage && FLOATING_COMPOSER_SCROLL_PAD_CLASS,
           "max-lg:px-0 max-lg:pt-0 max-lg:gap-0",
         )}
       >
@@ -501,16 +502,18 @@ export function MediaResourceDetailPage({ initialData }: MediaResourceDetailPage
         }}
       />
 
-      <FloatingAiComposerPortal
-        value={aiComposer.briefPrompt}
-        onChange={aiComposer.setBriefPrompt}
-        onSubmit={() => void aiComposer.handleGenerate()}
-        placeholder="미디어의 용도·장면·느낌을 서술형으로 입력해 주세요."
-        isLoading={aiComposer.isGenerating}
-        submitDisabled={aiComposer.isGenerating || aiComposer.briefPrompt.trim().length === 0}
-        loadingMessage="미디어 정보 초안을 생성하고 있어요"
-        ariaLabel="미디어 정보 AI 초안 입력"
-      />
+      {isNewPage ? (
+        <FloatingAiComposerPortal
+          value={aiComposer.briefPrompt}
+          onChange={aiComposer.setBriefPrompt}
+          onSubmit={() => void aiComposer.handleGenerate()}
+          placeholder="미디어의 용도·장면·느낌을 서술형으로 입력해 주세요."
+          isLoading={aiComposer.isGenerating}
+          submitDisabled={aiComposer.isGenerating || aiComposer.briefPrompt.trim().length === 0}
+          loadingMessage="미디어 정보 초안을 생성하고 있어요"
+          ariaLabel="미디어 정보 AI 초안 입력"
+        />
+      ) : null}
     </div>
   );
 }

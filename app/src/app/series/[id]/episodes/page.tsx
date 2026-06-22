@@ -399,7 +399,6 @@ export default function EpisodeManagementPage() {
     <StandaloneHeaderPage
       profileImageUrl={profileImageUrl}
       onProfileImageChange={setProfileImageUrl}
-      className="max-lg:bg-surface-10"
     >
       <header className={PAGE_SUBHEADER_WITH_STICKY_CLASS}>
               <div className="flex w-full max-w-[1200px] items-center justify-start gap-my-12">
@@ -412,7 +411,6 @@ export default function EpisodeManagementPage() {
               className={cn(
                 PAGE_SCROLL_COLUMN_CLASS,
                 !showEmptyBanner && PAGE_MOBILE_FIXED_ACTION_BAR_SCROLL_PAD_CLASS,
-                "max-lg:bg-surface-10",
                 "max-lg:pt-my-24 lg:pt-my-40",
               )}
               {...{ [PAGE_SCROLL_COLUMN_ROOT_ATTR]: "" }}

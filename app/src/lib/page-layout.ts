@@ -150,6 +150,6 @@ export const PAGE_STACK_CLASS =
 /** 넓은 폼·모달 (에피소드 폼 등) */
 export const PAGE_MODAL_WIDE_CLASS = "w-[min(92vw,760px)] max-w-[760px] min-w-0";
 
-/** 에디터·에피소드 상세 본문 — 모바일 문서 스크롤 / lg 내부 스크롤 */
+/** 에디터·에피소드 상세 본문 — 모바일: 헤더 아래 내부 스크롤 / lg: 패널 내부 스크롤 */
 export const EDITOR_PAGE_SCROLL_CLASS =
-  "relative z-0 flex min-w-0 flex-col overscroll-none max-lg:overflow-visible lg:min-h-0 lg:flex-1 lg:overflow-y-auto";
+  "flex min-w-0 flex-col overscroll-none lg:relative lg:z-0 lg:min-h-0 lg:flex-1 lg:overflow-y-auto";

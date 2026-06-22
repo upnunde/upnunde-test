@@ -113,6 +113,7 @@ function getThumbnailUrl(data: ImageResourceInitialData): string {
 }
 
 export function ImageResourceDetailPage({ kind, initialData }: ImageResourceDetailPageProps) {
+  const isNewPage = !initialData;
   const router = useRouter();
   const pathname = usePathname();
   const seriesId = React.useMemo(() => {
@@ -244,7 +245,7 @@ export function ImageResourceDetailPage({ kind, initialData }: ImageResourceDeta
       <div
         className={cn(
           PAGE_SCROLL_COLUMN_CLASS,
-          FLOATING_COMPOSER_SCROLL_PAD_CLASS,
+          isNewPage && FLOATING_COMPOSER_SCROLL_PAD_CLASS,
           "max-lg:px-0 max-lg:pt-0 max-lg:gap-0",
         )}
       >
@@ -468,16 +469,18 @@ export function ImageResourceDetailPage({ kind, initialData }: ImageResourceDeta
           });
         }}
       />
-      <FloatingAiComposerPortal
-        value={aiComposer.briefPrompt}
-        onChange={aiComposer.setBriefPrompt}
-        onSubmit={() => void aiComposer.handleGenerate()}
-        placeholder={RESOURCE_COMPOSER_PLACEHOLDER[kind]}
-        isLoading={aiComposer.isGenerating}
-        submitDisabled={aiComposer.isGenerating || aiComposer.briefPrompt.trim().length === 0}
-        loadingMessage={`${labels.sectionTitle} 초안을 생성하고 있어요`}
-        ariaLabel={`${labels.sectionTitle} AI 초안 입력`}
-      />
+      {isNewPage ? (
+        <FloatingAiComposerPortal
+          value={aiComposer.briefPrompt}
+          onChange={aiComposer.setBriefPrompt}
+          onSubmit={() => void aiComposer.handleGenerate()}
+          placeholder={RESOURCE_COMPOSER_PLACEHOLDER[kind]}
+          isLoading={aiComposer.isGenerating}
+          submitDisabled={aiComposer.isGenerating || aiComposer.briefPrompt.trim().length === 0}
+          loadingMessage={`${labels.sectionTitle} 초안을 생성하고 있어요`}
+          ariaLabel={`${labels.sectionTitle} AI 초안 입력`}
+        />
+      ) : null}
     </div>
   );
 }

@@ -329,7 +329,7 @@ export function CharacterDetailPage({
       <div
         className={cn(
           PAGE_SCROLL_COLUMN_CLASS,
-          FLOATING_COMPOSER_SCROLL_PAD_CLASS,
+          isNew && FLOATING_COMPOSER_SCROLL_PAD_CLASS,
           "max-lg:px-0 max-lg:pt-0 max-lg:gap-0",
         )}
       >
@@ -719,16 +719,18 @@ export function CharacterDetailPage({
         />
       ) : null}
 
-      <FloatingAiComposerPortal
-        value={aiComposer.briefPrompt}
-        onChange={aiComposer.setBriefPrompt}
-        onSubmit={() => void aiComposer.handleGenerate()}
-        placeholder="캐릭터 특징을 서술형으로 입력해 주세요."
-        isLoading={aiComposer.isGenerating}
-        submitDisabled={aiComposer.isGenerating || aiComposer.briefPrompt.trim().length === 0}
-        loadingMessage="캐릭터 정보를 생성하고 있어요"
-        ariaLabel="캐릭터 AI 초안 입력"
-      />
+      {isNew ? (
+        <FloatingAiComposerPortal
+          value={aiComposer.briefPrompt}
+          onChange={aiComposer.setBriefPrompt}
+          onSubmit={() => void aiComposer.handleGenerate()}
+          placeholder="캐릭터 특징을 서술형으로 입력해 주세요."
+          isLoading={aiComposer.isGenerating}
+          submitDisabled={aiComposer.isGenerating || aiComposer.briefPrompt.trim().length === 0}
+          loadingMessage="캐릭터 정보를 생성하고 있어요"
+          ariaLabel="캐릭터 AI 초안 입력"
+        />
+      ) : null}
     </div>
   );
 }

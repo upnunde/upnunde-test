@@ -72,7 +72,7 @@ export interface AppSidebarProps {
   onNavigate?: () => void;
 }
 
-function deriveActiveId(pathname: string | null, fallback: SidebarItemId): SidebarItemId {
+export function deriveSidebarActiveId(pathname: string | null, fallback: SidebarItemId): SidebarItemId {
   if (!pathname) return fallback;
   if (pathname.startsWith("/notifications")) return "notification";
   if (pathname.startsWith("/inquiry")) return "inquiry";
@@ -128,7 +128,7 @@ export default function AppSidebar({
   const router = useRouter();
   const pathname = usePathname();
   /** 라우트 경로에서 직접 파생 — 별도의 setState 동기화가 필요 없음 */
-  const activeId = deriveActiveId(pathname, defaultActiveId);
+  const activeId = deriveSidebarActiveId(pathname, defaultActiveId);
 
   const handleClick = (id: SidebarItemId, path?: string) => {
     onSelect?.(id);

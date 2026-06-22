@@ -3,16 +3,11 @@
 import { useEffect, useState } from "react";
 import {
   EDITOR_SCENE_TAB_STRIP_ID,
-  EDITOR_SCROLL_ROOT_ATTR,
   EDITOR_SUB_HEADER_SHELL_ID,
+  findEditorScrollRoot,
   resolveActiveSceneBlockIdFromScroll,
+  usesEditorDocumentScroll,
 } from "@/lib/editor-scroll";
-import { isMobileDocumentScrollMode } from "@/lib/mobile-document-scroll";
-
-function findEditorScrollRoot(): HTMLElement | null {
-  const root = document.querySelector(`[${EDITOR_SCROLL_ROOT_ATTR}]`);
-  return root instanceof HTMLElement ? root : null;
-}
 
 /**
  * 에디터 본문 스크롤 위치 기준 활성 장면 id.
@@ -51,7 +46,7 @@ export function useEditorScrollActiveSceneId(sceneIds: string[], enabled = true)
       update();
 
       const onLayoutChange = () => update();
-      const useDocumentScroll = isMobileDocumentScrollMode();
+      const useDocumentScroll = usesEditorDocumentScroll();
       if (useDocumentScroll) {
         window.addEventListener("scroll", onLayoutChange, { passive: true });
       } else {

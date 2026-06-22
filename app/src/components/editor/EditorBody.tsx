@@ -110,10 +110,14 @@ function SortableBlockWrapper({
   const desktopHandleDragProps =
     isDesktop && !isSeedDefault ? { ...attributes, ...listeners } : undefined;
 
-  const style = {
-    transform: CSS.Transform.toString(transform),
-    transition,
-  };
+  const transformString = CSS.Transform.toString(transform);
+  const style: React.CSSProperties | undefined =
+    transformString || transition
+      ? {
+          ...(transformString ? { transform: transformString } : {}),
+          ...(transition ? { transition } : {}),
+        }
+      : undefined;
 
   const [insertMenuPosition, setInsertMenuPosition] = useState<{
     top: number;
@@ -178,7 +182,7 @@ function SortableBlockWrapper({
               : isWrapRow
                 ? WRAPPER_CLASS_WRAP
                 : WRAPPER_CLASS_COMPACT,
-        isDragging && "opacity-50",
+        isDragging && "relative z-50 opacity-50",
         isFocused && EDITOR_MOBILE_FOCUSED_ROW_CLASS,
         EDITOR_MOBILE_GUTTER_X_CLASS,
       )}

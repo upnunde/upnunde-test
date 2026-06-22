@@ -3,6 +3,32 @@ import { isMobileDocumentScrollMode } from "@/lib/mobile-document-scroll";
 /** 에디터 본문 스크롤 루트 식별자 */
 export const EDITOR_SCROLL_ROOT_ATTR = "data-editor-scroll-root";
 
+export function findEditorScrollRoot(): HTMLElement | null {
+  const root = document.querySelector(`[${EDITOR_SCROLL_ROOT_ATTR}]`);
+  return root instanceof HTMLElement ? root : null;
+}
+
+/** 모바일 에디터 — 문서(body) 스크롤 대신 본문 루트 내부 스크롤 사용 여부 */
+export function usesEditorDocumentScroll(): boolean {
+  if (!isMobileDocumentScrollMode()) return false;
+  const root = findEditorScrollRoot();
+  if (!root) return true;
+  const { overflowY } = getComputedStyle(root);
+  return overflowY !== "auto" && overflowY !== "scroll";
+}
+
+/** 모바일 에디터 편집 셸 — 글로벌 헤더 아래 남은 높이 · 본문만 내부 스크롤 */
+export const EDITOR_MOBILE_EDIT_SHELL_TRAP_CLASS =
+  "max-lg:flex max-lg:min-h-0 max-lg:flex-1 max-lg:flex-col max-lg:overflow-hidden";
+
+/** 모바일 에디터 페이지 루트 — 뷰포트 높이 고정(문서 스크롤 차단) */
+export const EDITOR_MOBILE_PAGE_ROOT_TRAP_CLASS =
+  "max-lg:h-dvh max-lg:max-h-dvh max-lg:overflow-hidden";
+
+/** 모바일 에디터 본문 스크롤 루트 — 서브헤더·장면 탭 아래 overflow 트랩 */
+export const EDITOR_MOBILE_SCROLL_ROOT_TRAP_CLASS =
+  "max-lg:flex-1 max-lg:min-h-0 max-lg:overflow-y-auto max-lg:overscroll-contain";
+
 export const EDITOR_SCENE_TAB_STRIP_ID = "editor-scene-tab-strip";
 
 /** 모바일 — 장면 탭 + 생성기 버튼 등 스크롤 상단 고정 영역 */
@@ -14,9 +40,14 @@ export const EDITOR_SUB_HEADER_SHELL_ID = "editor-sub-header-shell";
 /** 모바일 에디터 서브헤더 높이(px) — h-14 */
 export const EDITOR_MOBILE_SUB_HEADER_HEIGHT_PX = 56;
 
-/** 모바일 에디터 서브헤더 — 글로벌 헤더(h-14) 바로 아래 sticky */
-export const EDITOR_SUB_HEADER_STICKY_CLASS =
-  "max-lg:sticky max-lg:top-14 max-lg:z-30";
+/** @deprecated 내부 스크롤 전환 후 미사용 — 하위 호환용 빈 문자열 */
+export const EDITOR_MOBILE_STICKY_CHROME_Z_CLASS = "";
+
+/** @deprecated `EDITOR_MOBILE_EDIT_SHELL_TRAP_CLASS` 사용 */
+export const EDITOR_MOBILE_WORKSPACE_PANEL_CLASS = "";
+
+/** @deprecated 모바일 에디터는 sticky 대신 셸 트랩 + 내부 스크롤 */
+export const EDITOR_SUB_HEADER_STICKY_CLASS = "max-lg:shrink-0";
 
 /** 스크롤 숨김 오프셋 CSS 변수 — 조상(main)에 설정 */
 export const EDITOR_SUB_HEADER_HIDE_VAR = "--editor-sub-header-hide";
@@ -37,18 +68,14 @@ export function editorMobileSubHeaderShellClass(isFullyHidden: boolean) {
     .join(" ");
 }
 
-/** 모바일 에디터 서브헤더 내부 — 숨김 오프셋만큼 위로 이동 */
+/** 모바일 에디터 서브헤더 내부 — 숨김 오프셋만큼 위로 이동 (transform은 sticky 스택을 깨므로 margin 사용) */
 export const EDITOR_MOBILE_SUB_HEADER_INNER_CLASS =
-  "max-lg:[transform:translateY(calc(-1*var(--editor-sub-header-hide,0px)))]";
+  "max-lg:-mt-[var(--editor-sub-header-hide,0px)]";
 
-/**
- * 모바일 장면 탭·생성기 버튼 셸 — 서브헤더 숨김량과 동일하게 sticky top 이동.
- * overflow-hidden 조상 없이 문서 스크롤 시 sticky 유지.
- */
+/** 모바일 장면 탭·생성기 버튼 셸 — 스크롤 루트 위 고정(shrink-0) */
 export function editorMobileSceneHeaderShellClass() {
   return [
     "relative hidden w-full shrink-0 overflow-visible border-b border-border-10 bg-white",
-    "max-lg:sticky max-lg:top-[calc(7rem-var(--editor-sub-header-hide,0px))] max-lg:z-30",
   ].join(" ");
 }
 
@@ -108,9 +135,9 @@ function getEditorScrollAnchorElement(): HTMLElement | null {
   return document.getElementById(EDITOR_SCENE_TAB_STRIP_ID);
 }
 
-/** 장면 탭·고정 헤더 하단 기준 뷰포트 Y(px) — 모바일 문서 스크롤 */
+/** 장면 탭·고정 헤더 하단 기준 뷰포트 Y(px) — 모바일 문서 스크롤(레거시) */
 export function getEditorScrollAnchorViewportY(): number {
-  if (isMobileDocumentScrollMode()) {
+  if (usesEditorDocumentScroll()) {
     return getEditorMobileStickyChromeAnchorViewportY();
   }
 
@@ -147,7 +174,7 @@ export function getEditorScrollTopInset(scrollRoot: Element): number {
 
 /** 활성 장면 판별·블록 스크롤용 앵커 Y(px) */
 function getEditorScrollAnchorY(scrollRoot: Element): number {
-  if (isMobileDocumentScrollMode()) {
+  if (usesEditorDocumentScroll()) {
     return getEditorScrollAnchorViewportY();
   }
   const rootRect = scrollRoot.getBoundingClientRect();
@@ -216,26 +243,43 @@ export function resolveActiveSceneBlockIdFromScroll(
 
 const MOBILE_KEYBOARD_INPUT_SCROLL_GAP_PX = 12;
 
-/** 모바일 키보드 편집 — sticky 크롬·키보드 사이에 입력란이 보이도록 문서 스크롤 보정 */
+/** 모바일 키보드 편집 — 크롬·키보드 사이에 입력란이 보이도록 스크롤 보정 */
 export function scrollMobileEditorInputIntoView(target: HTMLElement): void {
   if (!isMobileDocumentScrollMode()) return;
+
+  const scrollRoot = target.closest(`[${EDITOR_SCROLL_ROOT_ATTR}]`);
+  if (!(scrollRoot instanceof HTMLElement)) return;
 
   const vv = window.visualViewport;
   if (!vv) return;
 
   const rect = target.getBoundingClientRect();
-  const anchorTop = getEditorScrollAnchorViewportY();
   const visibleBottom = vv.offsetTop + vv.height - MOBILE_KEYBOARD_INPUT_SCROLL_GAP_PX;
 
+  if (usesEditorDocumentScroll()) {
+    const anchorTop = getEditorScrollAnchorViewportY();
+    let delta = 0;
+    if (rect.top < anchorTop) {
+      delta = rect.top - anchorTop;
+    } else if (rect.bottom > visibleBottom) {
+      delta = rect.bottom - visibleBottom;
+    }
+    if (delta !== 0) {
+      window.scrollBy({ top: delta, behavior: "auto" });
+    }
+    return;
+  }
+
+  const rootRect = scrollRoot.getBoundingClientRect();
+  const anchorTop = rootRect.top + getEditorScrollTopInset(scrollRoot);
   let delta = 0;
   if (rect.top < anchorTop) {
     delta = rect.top - anchorTop;
   } else if (rect.bottom > visibleBottom) {
     delta = rect.bottom - visibleBottom;
   }
-
   if (delta !== 0) {
-    window.scrollBy({ top: delta, behavior: "auto" });
+    scrollRoot.scrollBy({ top: delta, behavior: "auto" });
   }
 }
 
@@ -255,7 +299,7 @@ export function scrollEditorBlockIntoView(
   const elementRect = el.getBoundingClientRect();
 
   if (align === "center") {
-    if (isMobileDocumentScrollMode()) {
+    if (usesEditorDocumentScroll()) {
       const vv = window.visualViewport;
       const viewportTop = vv?.offsetTop ?? 0;
       const viewportHeight = vv?.height ?? window.innerHeight;
@@ -278,7 +322,7 @@ export function scrollEditorBlockIntoView(
     return el;
   }
 
-  if (isMobileDocumentScrollMode()) {
+  if (usesEditorDocumentScroll()) {
     const anchorY = getEditorScrollAnchorViewportY();
     window.scrollTo({
       top: Math.max(0, window.scrollY + elementRect.top - anchorY),

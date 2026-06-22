@@ -1,9 +1,14 @@
 "use client";
 
 import { useState, type ReactNode } from "react";
+import { usePathname } from "next/navigation";
 import { APP_BROWSER_BG_CLASS, APP_PAGE_ROOT_CLASS } from "@/lib/mobile-viewport";
 import { APP_MAIN_CLASS, APP_MAIN_PANEL_CLASS } from "@/lib/page-layout";
 import Header from "@/components/Header/Header";
+import {
+  deriveSidebarActiveId,
+  MobileAppSidebarDrawer,
+} from "@/components/layout/MobileAppSidebarDrawer";
 import { PageCard } from "@/components/layout/PageCard";
 import { Button } from "@/components/ui/button";
 import { HeaderBackButton } from "@/components/ui/header-back-button";
@@ -78,6 +83,8 @@ export function SeriesFormPageScaffold({
   aiComposer,
 }: SeriesFormPageScaffoldProps) {
   const isLgUp = useIsLgUp();
+  const pathname = usePathname();
+  const [sidebarOpen, setSidebarOpen] = useState(false);
   const [mobilePanel, setMobilePanel] = useState<EditorMobilePanel>("edit");
   const showFormPanel = isLgUp || mobilePanel === "edit";
   const showPreviewPanel = !isLgUp && mobilePanel === "preview";
@@ -91,7 +98,18 @@ export function SeriesFormPageScaffold({
     <SeriesFormMobileChromeProvider enabled={showMobileSubmitBar}>
       <div className={cn(APP_PAGE_ROOT_CLASS, APP_BROWSER_BG_CLASS)}>
         <div className={cn(previewChromeHidden)}>
-          <Header profileImageUrl={profileImageUrl} onProfileImageChange={onProfileImageChange} />
+          <Header
+            profileImageUrl={profileImageUrl}
+            onProfileImageChange={onProfileImageChange}
+            onMenuClick={() => setSidebarOpen(true)}
+          />
+        </div>
+        <div className={cn("lg:hidden", previewChromeHidden)}>
+          <MobileAppSidebarDrawer
+            open={sidebarOpen}
+            onClose={() => setSidebarOpen(false)}
+            defaultActiveId={deriveSidebarActiveId(pathname, "series")}
+          />
         </div>
         <main className={APP_MAIN_CLASS}>
           <header className={cn(PAGE_SUBHEADER_WITH_STICKY_CLASS, previewChromeHidden)}>

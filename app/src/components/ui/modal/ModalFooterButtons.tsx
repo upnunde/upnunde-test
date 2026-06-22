@@ -8,6 +8,7 @@ import {
   modalFooterButtonRowClassName,
   modalFooterButtonToneClassName,
   modalFooterShellClassName,
+  modalFooterTrailingGroupClassName,
 } from "@/components/ui/modal/modal-styles";
 
 /** end: 보조·주 버튼 우측 정렬 | split: 좌측 1버튼 + 우측 버튼 그룹 */
@@ -78,11 +79,11 @@ export function ModalFooterButtons({
       <div
         className={cn(
           modalFooterButtonRowClassName,
-          layout === "end" ? "justify-end" : "justify-between",
+          layout === "end" ? "lg:justify-end" : "lg:justify-between",
         )}
       >
         {layout === "split" && leadingButton ? <FooterActionButton config={leadingButton} /> : null}
-        <div className="flex items-center justify-start gap-my-8">
+        <div className={modalFooterTrailingGroupClassName}>
           {trailingButtons.map((config, index) => (
             <FooterActionButton key={`${config.label}-${index}`} config={config} />
           ))}

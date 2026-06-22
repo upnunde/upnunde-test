@@ -3,10 +3,11 @@
 import { useEffect, useLayoutEffect, useRef, useState } from "react";
 import {
   EDITOR_MOBILE_SUB_HEADER_HEIGHT_PX,
-  EDITOR_SCROLL_ROOT_ATTR,
+  findEditorScrollRoot,
+  usesEditorDocumentScroll,
 } from "@/lib/editor-scroll";
 import { useVisualKeyboardInset } from "@/hooks/useVisualKeyboardInset";
-import { getDocumentScrollTop, isMobileDocumentScrollMode } from "@/lib/mobile-document-scroll";
+import { getDocumentScrollTop } from "@/lib/mobile-document-scroll";
 
 export interface EditorMobileSubHeaderScrollHide {
   /** 서브헤더가 위로 숨겨진 픽셀 수 (0 ~ EDITOR_MOBILE_SUB_HEADER_HEIGHT_PX) */
@@ -17,6 +18,7 @@ export interface EditorMobileSubHeaderScrollHide {
 
 /**
  * 모바일 편집 본문 스크롤 — 이동한 픽셀만큼 서브헤더를 점진적으로 숨기거나 다시 노출.
+ * 본문은 `[data-editor-scroll-root]` 내부 스크롤(문서 스크롤 아님).
  */
 export function useEditorMobileSceneHeaderCollapse(enabled: boolean): EditorMobileSubHeaderScrollHide {
   const { isKeyboardOpen } = useVisualKeyboardInset();
@@ -27,20 +29,35 @@ export function useEditorMobileSceneHeaderCollapse(enabled: boolean): EditorMobi
   const preKeyboardHiddenRef = useRef(0);
   const wasKeyboardOpenRef = useRef(false);
   const isKeyboardOpenRef = useRef(isKeyboardOpen);
+  const prevHiddenPxRef = useRef(0);
 
   hiddenRef.current = hiddenPx;
   isKeyboardOpenRef.current = isKeyboardOpen;
 
-  // hidePx 변경 → 레이아웃 reflow → spurious scroll delta 방지
+  const getScrollTop = () => {
+    const root = findEditorScrollRoot();
+    if (root && !usesEditorDocumentScroll()) {
+      return root.scrollTop;
+    }
+    return getDocumentScrollTop();
+  };
+
+  // hidePx 변경 → 문서 스크롤(레거시)일 때만 layout shift 보정
   useLayoutEffect(() => {
     if (!enabled) return;
 
     suppressScrollRef.current = true;
 
+    const prevHidden = prevHiddenPxRef.current;
+    const hideDelta = hiddenPx - prevHidden;
+    prevHiddenPxRef.current = hiddenPx;
+
+    if (hideDelta !== 0 && usesEditorDocumentScroll()) {
+      window.scrollBy({ top: hideDelta, behavior: "auto" });
+    }
+
     const syncScrollBaseline = () => {
-      lastScrollTopRef.current = isMobileDocumentScrollMode()
-        ? getDocumentScrollTop()
-        : (document.querySelector(`[${EDITOR_SCROLL_ROOT_ATTR}]`) as HTMLElement | null)?.scrollTop ?? 0;
+      lastScrollTopRef.current = getScrollTop();
     };
 
     syncScrollBaseline();
@@ -55,7 +72,7 @@ export function useEditorMobileSceneHeaderCollapse(enabled: boolean): EditorMobi
     };
   }, [enabled, hiddenPx]);
 
-  // 키보드 열림: 서브헤더 완전 숨김(레이아웃 고정) · 닫힘: 이전 상태 복원
+  // 키보드 열림: 서브헤더 완전 숨김 · 닫힘: 이전 상태 복원
   useEffect(() => {
     if (!enabled) return;
 
@@ -72,54 +89,50 @@ export function useEditorMobileSceneHeaderCollapse(enabled: boolean): EditorMobi
     if (!isKeyboardOpen && wasOpen) {
       hiddenRef.current = preKeyboardHiddenRef.current;
       setHiddenPx(preKeyboardHiddenRef.current);
-      lastScrollTopRef.current = isMobileDocumentScrollMode()
-        ? getDocumentScrollTop()
-        : (document.querySelector(`[${EDITOR_SCROLL_ROOT_ATTR}]`) as HTMLElement | null)?.scrollTop ?? 0;
     }
   }, [enabled, isKeyboardOpen]);
 
   useEffect(() => {
     if (!enabled) {
       hiddenRef.current = 0;
+      prevHiddenPxRef.current = 0;
       setHiddenPx(0);
       return;
     }
 
     const maxHide = EDITOR_MOBILE_SUB_HEADER_HEIGHT_PX;
 
-    const getScrollTop = () =>
-      isMobileDocumentScrollMode()
-        ? getDocumentScrollTop()
-        : (document.querySelector(`[${EDITOR_SCROLL_ROOT_ATTR}]`) as HTMLElement | null)?.scrollTop ?? 0;
+    const bindScroll = (target: HTMLElement | Window) => {
+      lastScrollTopRef.current = getScrollTop();
 
-    lastScrollTopRef.current = getScrollTop();
+      const onScroll = () => {
+        if (suppressScrollRef.current || isKeyboardOpenRef.current) return;
 
-    const onScroll = () => {
-      if (suppressScrollRef.current || isKeyboardOpenRef.current) return;
+        const scrollTop = getScrollTop();
+        const delta = scrollTop - lastScrollTopRef.current;
 
-      const scrollTop = getScrollTop();
-      const delta = scrollTop - lastScrollTopRef.current;
+        if (scrollTop <= 0) {
+          hiddenRef.current = 0;
+        } else {
+          hiddenRef.current = Math.max(0, Math.min(maxHide, hiddenRef.current + delta));
+        }
 
-      if (scrollTop <= 0) {
-        hiddenRef.current = 0;
-      } else {
-        hiddenRef.current = Math.max(0, Math.min(maxHide, hiddenRef.current + delta));
-      }
+        setHiddenPx(hiddenRef.current);
+        lastScrollTopRef.current = scrollTop;
+      };
 
-      setHiddenPx(hiddenRef.current);
-      lastScrollTopRef.current = scrollTop;
+      target.addEventListener("scroll", onScroll, { passive: true });
+      return () => target.removeEventListener("scroll", onScroll);
     };
 
-    if (isMobileDocumentScrollMode()) {
-      window.addEventListener("scroll", onScroll, { passive: true });
-      return () => window.removeEventListener("scroll", onScroll);
+    if (usesEditorDocumentScroll()) {
+      return bindScroll(window);
     }
 
-    const scrollRoot = document.querySelector(`[${EDITOR_SCROLL_ROOT_ATTR}]`);
-    if (!(scrollRoot instanceof HTMLElement)) return;
+    const scrollRoot = findEditorScrollRoot();
+    if (!scrollRoot) return;
 
-    scrollRoot.addEventListener("scroll", onScroll, { passive: true });
-    return () => scrollRoot.removeEventListener("scroll", onScroll);
+    return bindScroll(scrollRoot);
   }, [enabled]);
 
   return {

@@ -5,7 +5,7 @@ export const EPISODE_EMPTY_GUIDE_LINE2 =
   "직접 리소스를 등록하시면 나만의 멋진 작품을 만들 수도 있습니다.";
 
 export const RESOURCE_MGMT_BANNER_BODY =
-  "등록한 리소스는 에피소드에서 바로 불러올 수 있어요. 권장이지만 필수는 아니며, 나중에 추가해도 됩니다.";
+  "리소스를 등록하시면 에피소드에서 사용할 수 있고, 나만의 작품을 만드는 데 활용됩니다.";
 
 export const RESOURCE_PICKER_REGISTER_LABEL = "+ 새 리소스 등록";
 

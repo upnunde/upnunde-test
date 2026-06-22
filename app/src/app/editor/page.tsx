@@ -30,6 +30,9 @@ import { EditorAutoGeneratorFloatingButton } from "@/components/editor/EditorAut
 import { Dialog, DialogContent, DialogTitle } from "@/components/ui/dialog";
 import { formDialogShellClassName, formDialogSheetBodyWrapperClassName } from "@/components/ui/modal";
 import {
+  EDITOR_MOBILE_EDIT_SHELL_TRAP_CLASS,
+  EDITOR_MOBILE_PAGE_ROOT_TRAP_CLASS,
+  EDITOR_MOBILE_SCROLL_ROOT_TRAP_CLASS,
   EDITOR_MOBILE_SUB_HEADER_INNER_CLASS,
   EDITOR_SCENE_HEADER_ID,
   EDITOR_SCROLL_ROOT_ATTR,
@@ -86,6 +89,7 @@ function EditorWorkspace({
       ? "py-my-40 px-0"
       : cn(
           EDITOR_MOBILE_GUTTER_X_CLASS,
+          EDITOR_MOBILE_SCROLL_ROOT_TRAP_CLASS,
           "max-lg:pt-my-12",
           mobileToolbarVisible
             ? EDITOR_MOBILE_SCROLL_BOTTOM_PAD_WITH_TOOLBAR_CLASS
@@ -112,10 +116,10 @@ function EditorWorkspace({
   }
 
   return (
-    <div className={cn("flex flex-col bg-white", APP_MAIN_PANEL_CLASS)}>
+    <div className={cn("flex min-h-0 flex-1 flex-col overflow-hidden bg-white", APP_MAIN_PANEL_CLASS)}>
       <div
         className={cn(
-          "flex flex-col",
+          "flex min-h-0 flex-1 flex-col overflow-hidden",
           APP_MAIN_PANEL_CLASS,
           mobilePanel !== "edit" && "hidden",
         )}
@@ -230,12 +234,23 @@ function EditorInner() {
 
   return (
     <EditorSeriesProvider seriesId={seriesId}>
-    <div className={cn(APP_PAGE_ROOT_CLASS, APP_BROWSER_BG_CLASS)}>
+    <div
+      className={cn(
+        APP_PAGE_ROOT_CLASS,
+        APP_BROWSER_BG_CLASS,
+        !isDesktop && mobilePanel === "edit" && EDITOR_MOBILE_PAGE_ROOT_TRAP_CLASS,
+      )}
+    >
       <div className={cn(previewChromeHidden)}>
         <Header profileImageUrl={profileImageUrl} onProfileImageChange={setProfileImageUrl} />
       </div>
 
-      <div className={APP_SHELL_BODY_ROW_CLASS}>
+      <div
+        className={cn(
+          APP_SHELL_BODY_ROW_CLASS,
+          !isDesktop && mobilePanel === "edit" && EDITOR_MOBILE_EDIT_SHELL_TRAP_CLASS,
+        )}
+      >
         {isDesktop ? (
           <aside
             className={
@@ -253,7 +268,11 @@ function EditorInner() {
         ) : null}
 
         <main
-          className={cn("flex min-w-0 flex-col", APP_MAIN_PANEL_CLASS)}
+          className={cn(
+            "flex min-w-0 flex-col",
+            APP_MAIN_PANEL_CLASS,
+            !isDesktop && mobilePanel === "edit" && EDITOR_MOBILE_EDIT_SHELL_TRAP_CLASS,
+          )}
           style={
             !isDesktop && mobilePanel === "edit"
               ? editorMobileSubHeaderHideVarStyle(mobileSubHeaderHide.hiddenPx)

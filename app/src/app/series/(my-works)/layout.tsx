@@ -29,7 +29,7 @@ export default function MyWorksLayout({ children }: { children: React.ReactNode 
   const activeWorksTab = getWorksTabFromPathname(pathname);
 
   return (
-    <AppShell sidebarActiveId="series" className="max-lg:bg-surface-10">
+    <AppShell sidebarActiveId="series">
       <div className={PAGE_SUBHEADER_WITH_FILTER_CLASS}>
         <div className={cn(PAGE_CONTAINER_CLASS, "flex items-center justify-start gap-my-16")}>
           <h1 className="text-heading2_700 text-on-surface-10">내 작품</h1>
@@ -60,7 +60,7 @@ export default function MyWorksLayout({ children }: { children: React.ReactNode 
         className={cn(
           PAGE_SCROLL_ROOT_CLASS,
           "w-full min-w-0 max-w-[1200px] mx-auto lg:max-w-none",
-          "items-center gap-0 lg:p-my-12 max-lg:gap-my-16 max-lg:bg-surface-10 max-lg:pt-my-20",
+          "items-center gap-0 lg:p-my-12 max-lg:gap-my-16 max-lg:pt-my-20",
         )}
       >
         {children}
