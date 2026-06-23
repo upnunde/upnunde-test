@@ -195,7 +195,7 @@ export function SeriesItem({
                 onSelect={() => onSeriesManage?.(series)}
               >
                 <Settings2 className="h-4 w-4 shrink-0 text-on-surface-30" aria-hidden />
-                시리즈
+                시리즈 수정
               </DropdownMenuItem>
               <DropdownMenuSeparator className="my-my-4 bg-border-10" />
               {status === "PUBLIC" && (
