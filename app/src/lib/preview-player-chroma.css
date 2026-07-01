@@ -1,0 +1,113 @@
+/**
+ * VN 미리보기 플레이어 chroma — 앱 테마(다크모드)와 분리된 고정 팔레트.
+ * 소비: `preview-overlay-styles.ts` · `IPhone15ProFrame` · `PreviewScreen`
+ *
+ * `.dark` 여부와 무관하게 동일한 플레이어 연출을 유지한다.
+ */
+.preview-player-root {
+  color-scheme: dark;
+
+  --preview-frame-bg: #f1f1f5;
+  --preview-frame-outline: #212124;
+  --preview-canvas: #212124;
+  --preview-canvas-50: rgb(33 33 36 / 50%);
+  --preview-text: #ffffff;
+  --preview-text-muted: rgb(255 255 255 / 70%);
+  --preview-text-subtle: rgb(255 255 255 / 85%);
+  --preview-placeholder: #959598;
+  --preview-speaker: #f59e0b;
+  --preview-dim-10: rgb(0 0 0 / 28%);
+  --preview-dim-20: rgb(0 0 0 / 53%);
+  --preview-dim-30: rgb(0 0 0 / 67%);
+  --preview-border: rgb(255 255 255 / 20%);
+  --preview-border-subtle: rgb(255 255 255 / 10%);
+}
+
+.dark .preview-player-root {
+  --preview-frame-bg: #f1f1f5;
+  --preview-frame-outline: #212124;
+  --preview-canvas: #212124;
+  --preview-canvas-50: rgb(33 33 36 / 50%);
+  --preview-text: #ffffff;
+  --preview-text-muted: rgb(255 255 255 / 70%);
+  --preview-text-subtle: rgb(255 255 255 / 85%);
+  --preview-placeholder: #959598;
+  --preview-speaker: #f59e0b;
+  --preview-dim-10: rgb(0 0 0 / 28%);
+  --preview-dim-20: rgb(0 0 0 / 53%);
+  --preview-dim-30: rgb(0 0 0 / 67%);
+  --preview-border: rgb(255 255 255 / 20%);
+  --preview-border-subtle: rgb(255 255 255 / 10%);
+}
+
+@layer utilities {
+  .preview-bg-frame {
+    background-color: var(--preview-frame-bg);
+  }
+
+  .preview-outline-frame {
+    outline-color: var(--preview-frame-outline);
+  }
+
+  .preview-bg-canvas {
+    background-color: var(--preview-canvas);
+  }
+
+  .preview-bg-canvas-50 {
+    background-color: var(--preview-canvas-50);
+  }
+
+  .preview-text-body {
+    color: var(--preview-text);
+  }
+
+  .preview-text-muted {
+    color: var(--preview-text-muted);
+  }
+
+  .preview-text-subtle {
+    color: var(--preview-text-subtle);
+  }
+
+  .preview-text-placeholder {
+    color: var(--preview-placeholder);
+  }
+
+  .preview-text-speaker {
+    color: var(--preview-speaker);
+  }
+
+  .preview-bg-dim-10 {
+    background-color: var(--preview-dim-10);
+  }
+
+  .preview-bg-dim-20 {
+    background-color: var(--preview-dim-20);
+  }
+
+  .preview-bg-dim-30 {
+    background-color: var(--preview-dim-30);
+  }
+
+  .preview-border-overlay {
+    border-color: var(--preview-border);
+  }
+
+  .preview-border-overlay-subtle {
+    border-color: var(--preview-border-subtle);
+  }
+
+  .preview-choice-interactive {
+    transition-property: color, background-color;
+    transition-duration: var(--motion-duration-short);
+    transition-timing-function: var(--motion-easing-standard);
+  }
+
+  .preview-choice-interactive:hover {
+    background-color: var(--preview-dim-10);
+  }
+
+  .preview-choice-interactive:active {
+    background-color: var(--preview-dim-20);
+  }
+}

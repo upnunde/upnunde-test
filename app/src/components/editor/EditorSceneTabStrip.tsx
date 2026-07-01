@@ -2,14 +2,14 @@
 
 import { useMemo, useEffect, useState, useCallback, useRef, useLayoutEffect } from "react";
 import { createPortal } from "react-dom";
-import { ChevronDown, X } from "lucide-react";
+import { ICONS } from "@/lib/icons";
 import { useEditorStore } from "@/store/useEditorStore";
 import { useEditorScrollActiveSceneId } from "@/hooks/useEditorScrollActiveSceneId";
 import { FilterChip } from "@/components/ui/chip";
 import { EDITOR_SCENE_TAB_STRIP_ID, resolveEditorActiveSceneId } from "@/lib/editor-scroll";
 import { PAGE_FLUSH_CONTENT_PAD_X_CLASS } from "@/lib/page-layout";
 import { HORIZONTAL_SCROLLBAR_HIDE_CLASS } from "@/lib/tab-styles";
-import { cn } from "@/lib/utils";
+import { cn } from "design-system/utils";
 
 export interface EditorSceneTabStripProps {
   onSceneClick: (blockId: string) => void;
@@ -99,7 +99,7 @@ export function EditorSceneTabStrip({
       <div
         id={EDITOR_SCENE_TAB_STRIP_ID}
         className={cn(
-          "relative z-20 w-full shrink-0 bg-white py-my-8",
+          "relative z-sticky w-full shrink-0 bg-background py-2",
           PAGE_FLUSH_CONTENT_PAD_X_CLASS,
           className,
         )}
@@ -112,15 +112,15 @@ export function EditorSceneTabStrip({
       ref={stripRef}
       id={EDITOR_SCENE_TAB_STRIP_ID}
       className={cn(
-        "relative z-20 w-full shrink-0 bg-white",
+        "relative z-sticky w-full shrink-0 bg-background",
         PAGE_FLUSH_CONTENT_PAD_X_CLASS,
         className,
       )}
     >
-      <div className="flex items-center gap-my-8 py-my-8">
+      <div className="flex items-center gap-2 py-2">
         <div
           className={cn(
-            "flex min-w-0 flex-1 items-center gap-my-8 overflow-x-auto overscroll-x-contain",
+            "flex min-w-0 flex-1 items-center gap-2 overflow-x-auto overscroll-x-contain",
             HORIZONTAL_SCROLLBAR_HIDE_CLASS,
           )}
           role="tablist"
@@ -154,13 +154,13 @@ export function EditorSceneTabStrip({
         <button
           type="button"
           onClick={() => setIsListExpanded((open) => !open)}
-          className="flex h-8 w-8 shrink-0 cursor-pointer items-center justify-center rounded-md border border-border-10 text-on-surface-30 transition-colors hover:bg-surface-20 hover:text-on-surface-20"
+          className="flex h-8 w-8 shrink-0 cursor-pointer items-center justify-center rounded-md border border-border text-foreground-placeholder transition-colors hover:bg-muted hover:text-foreground-muted"
           aria-label={isListExpanded ? "장면 목록 접기" : "장면 목록 펼치기"}
           aria-expanded={isListExpanded}
           aria-controls="editor-scene-list-panel"
         >
-          <ChevronDown
-            className={cn("h-4 w-4 transition-transform duration-200", isListExpanded && "rotate-180")}
+          <ICONS.chevronDown
+            className={cn("h-4 w-4 transition-transform duration-short", isListExpanded && "rotate-180")}
             aria-hidden
           />
         </button>
@@ -171,29 +171,29 @@ export function EditorSceneTabStrip({
             <>
               {/* 딤드 없이 바깥 탭으로만 닫히도록 투명 레이어 유지 */}
               <div
-                className="fixed inset-0 z-40"
+                className="fixed inset-0 z-modal"
                 aria-hidden
                 onClick={() => setIsListExpanded(false)}
               />
               <div
                 id="editor-scene-list-panel"
-                className="fixed inset-x-0 z-50 flex max-h-[min(48vh,360px)] min-h-0 flex-col border-b border-border-10 bg-white shadow-elevation-20"
+                className="fixed inset-x-0 z-sticky flex max-h-[min(48vh,360px)] min-h-0 flex-col border-b border-border bg-background shadow-elevation-20"
                 style={{ top: listAnchorTop }}
                 role="dialog"
                 aria-modal="true"
                 aria-label="장면 목록"
               >
-                <div className={cn("flex shrink-0 items-center justify-end py-my-8", PAGE_FLUSH_CONTENT_PAD_X_CLASS)}>
+                <div className={cn("flex shrink-0 items-center justify-end py-2", PAGE_FLUSH_CONTENT_PAD_X_CLASS)}>
                   <button
                     type="button"
                     aria-label="장면 목록 닫기"
                     onClick={() => setIsListExpanded(false)}
-                    className="flex h-8 w-8 cursor-pointer items-center justify-center rounded-full text-on-surface-30 transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-inset focus-visible:ring-primary lg:hover:bg-surface-20/60 lg:hover:text-on-surface-10"
+                    className="flex h-8 w-8 cursor-pointer items-center justify-center rounded-full text-foreground-placeholder transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-inset focus-visible:ring-primary lg:hover:bg-muted/60 lg:hover:text-foreground"
                   >
-                    <X className="h-5 w-5" aria-hidden />
+                    <ICONS.close className="h-5 w-5" aria-hidden />
                   </button>
                 </div>
-                <ul className="flex min-h-0 flex-col overflow-y-auto overscroll-contain pb-my-8">
+                <ul className="flex min-h-0 flex-col overflow-y-auto overscroll-contain pb-2">
                   {scenes.map(({ block, index }) => {
                     const sceneNumber =
                       blocks.slice(0, index).filter((b) => b.type === "scene").length + 1;
@@ -207,21 +207,21 @@ export function EditorSceneTabStrip({
                           type="button"
                           onClick={() => handleSceneSelect(block.id)}
                           className={cn(
-                            "flex w-full cursor-pointer items-center gap-my-12 py-my-12 text-left transition-colors focus:bg-surface-20 lg:hover:bg-surface-20",
+                            "flex w-full cursor-pointer items-center gap-3 py-3 text-left transition-colors focus:bg-muted lg:hover:bg-muted",
                             PAGE_FLUSH_CONTENT_PAD_X_CLASS,
-                            isActive && "bg-surface-20",
+                            isActive && "bg-muted",
                           )}
                         >
                           <span
                             className={cn(
                               "shrink-0 tabular-nums text-body3_500",
-                              isActive ? "text-primary" : "text-on-surface-20",
+                              isActive ? "text-primary" : "text-foreground-muted",
                             )}
                           >
                             {label}
                           </span>
                           {sceneTitle ? (
-                            <span className="min-w-0 truncate text-body3_400 text-on-surface-30">
+                            <span className="min-w-0 truncate text-body3_400 text-foreground-placeholder">
                               {sceneTitle}
                             </span>
                           ) : null}

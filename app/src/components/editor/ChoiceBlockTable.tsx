@@ -1,14 +1,16 @@
 "use client";
 
 import { useCallback, useEffect, useRef, useState } from "react";
-import { ChevronDown, Trash2 } from "lucide-react";
+import { ICONS, Icon } from "@/lib/icons";
 import type { ChoiceItem } from "@/types/editor";
 import { Button } from "@/components/ui/button";
 import { useMobileBlockTextEdit } from "@/hooks/useMobileBlockTextEdit";
-import { cn } from "@/lib/utils";
+import { Textarea } from "@/components/ui/textarea";
+import { cn } from "design-system/utils";
 import {
   DropdownMenu,
   DropdownMenuContent,
+  DropdownMenuGroup,
   DropdownMenuItem,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
@@ -57,8 +59,8 @@ function choiceMobileFieldShellClass({
   isIssue?: boolean;
 }) {
   return cn(
-    "rounded-[4px] border border-border-10 bg-white px-my-12 py-my-8 transition-colors",
-    "active:bg-surface-20/50 focus-within:bg-surface-20/50",
+    "rounded-sm border border-border bg-background px-3 py-2 transition-colors",
+    "active:bg-muted/50 focus-within:bg-muted/50",
     isTouched && EDITOR_MOBILE_ACTIVE_SURFACE_CLASS,
     isIssue && "border-destructive",
   );
@@ -115,7 +117,7 @@ function ChoiceTextField({
   }, [value, adjustHeight]);
 
   return (
-    <textarea
+    <Textarea
       ref={textareaRef}
       value={value}
       onChange={(e) => onChange(e.target.value)}
@@ -126,7 +128,7 @@ function ChoiceTextField({
       placeholder={placeholder}
       rows={1}
       className={cn(
-        "w-full rounded-md border-0 bg-transparent px-0 py-0 text-body3_400 outline-none focus:outline-none focus:ring-0 focus:ring-offset-0 align-middle overflow-hidden resize-none",
+        "w-full resize-none overflow-hidden border-0 bg-transparent px-0 py-0 shadow-none align-middle focus-visible:ring-0 focus-visible:ring-offset-0",
         className
       )}
       style={{ height: "fit-content" }}
@@ -149,14 +151,14 @@ function SwitchToggle({
       onClick={() => onCheckedChange(!checked)}
       className={cn(
         "inline-flex shrink-0 items-center rounded-full transition-colors focus:outline-none focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-2",
-        "h-my-32 w-[52px] p-my-4",
-        "lg:h-my-24 lg:w-[40px] lg:p-0.5",
-        checked ? "bg-primary" : "bg-surface-20",
+        "h-8 w-[52px] p-1",
+        "lg:h-6 lg:w-[40px] lg:p-0.5",
+        checked ? "bg-primary" : "bg-muted",
       )}
     >
       <span
         className={cn(
-          "pointer-events-none rounded-full bg-white shadow-[0_1px_2px_rgba(0,0,0,0.16)] transition-transform",
+          "pointer-events-none rounded-full bg-background shadow-elevation-10 transition-transform",
           "h-6 w-6",
           "lg:h-5 lg:w-5",
           checked ? "translate-x-5 lg:translate-x-4" : "translate-x-0",
@@ -235,9 +237,9 @@ function ChoiceSceneSelect({
           "w-full min-w-0 appearance-none text-body3_400 outline-none focus:outline-none focus:ring-0 focus:ring-offset-0",
           "overflow-hidden text-ellipsis whitespace-nowrap",
           isTable
-            ? "h-8 rounded-md border-0 bg-transparent px-0 py-my-4 pr-my-8"
-            : "h-9 rounded-[4px] border border-border-10 bg-white py-0 pl-my-12 pr-my-32",
-          isSceneUnselected ? "text-on-surface-30" : "text-on-surface-10",
+            ? "h-8 rounded-md border-0 bg-transparent px-0 py-1 pr-2"
+            : "h-9 rounded-sm border border-border bg-background py-0 pl-3 pr-8",
+          isSceneUnselected ? "text-foreground-placeholder" : "text-foreground",
           isNextSceneIssueFocused &&
             (isTable ? "text-destructive" : "border-destructive text-destructive")
         )}
@@ -250,9 +252,9 @@ function ChoiceSceneSelect({
         ))}
       </select>
       {!isTable ? (
-        <ChevronDown
+        <ICONS.chevronDown
           aria-hidden
-          className="pointer-events-none absolute right-my-12 top-1/2 h-4 w-4 -translate-y-1/2 text-on-surface-30"
+          className="pointer-events-none absolute right-3 top-1/2 h-4 w-4 -translate-y-1/2 text-foreground-placeholder"
         />
       ) : null}
     </div>
@@ -292,23 +294,23 @@ function ChoiceRowMobile({
   return (
     <div
       className={cn(
-        "flex flex-col gap-my-12 px-my-12 py-my-12",
-        showBottomBorder && "border-b border-border-10",
+        "flex flex-col gap-3 px-3 py-3",
+        showBottomBorder && "border-b border-border",
       )}
       data-choice-id={choice.id}
     >
-      <div className="flex items-center justify-between gap-my-8">
+      <div className="flex items-center justify-between gap-2">
         <span
           className={cn(
             "text-caption1_500",
-            isContentTouched ? "text-primary" : "text-on-surface-30",
+            isContentTouched ? "text-primary" : "text-foreground-placeholder",
           )}
         >
           선택 {index + 1}
         </span>
-        <div className="flex items-center gap-my-8">
+        <div className="flex items-center gap-2">
           {choice.isPaid ? (
-            <span className="inline-flex h-5 items-center rounded bg-primary/12 px-my-8 text-caption2_500 text-primary">
+            <span className="inline-flex h-5 items-center rounded bg-primary/12 px-2 text-caption2_500 text-primary">
               유료
             </span>
           ) : null}
@@ -318,19 +320,19 @@ function ChoiceRowMobile({
               variant="ghost"
               size="icon"
               onClick={onRemove}
-              className="shrink-0 text-on-surface-30 hover:bg-red-50 hover:text-red-600"
+              className="shrink-0 text-foreground-placeholder hover:bg-destructive-container hover:text-destructive"
               aria-label="선택지 삭제"
             >
-              <Trash2 className="h-4 w-4" aria-hidden />
+              <ICONS.trash2 className="h-4 w-4" aria-hidden />
             </Button>
           ) : null}
         </div>
       </div>
 
-      <div className="flex flex-col gap-my-4">
-        <span className="text-caption1_400 text-on-surface-30">내용</span>
+      <div className="flex flex-col gap-1">
+        <span className="text-caption1_400 text-foreground-placeholder">내용</span>
         {isAiMode ? (
-          <div className="rounded-[4px] border border-primary/20 bg-primary/5 px-my-12 py-my-8">
+          <div className="rounded-sm border border-primary/20 bg-primary/5 px-3 py-2">
             <span className="text-body3_500 text-primary">✨ AI 모드로 직접 대화</span>
           </div>
         ) : (
@@ -358,8 +360,8 @@ function ChoiceRowMobile({
         )}
       </div>
 
-      <div className="flex flex-col gap-my-4">
-        <span className="text-caption1_400 text-on-surface-30">장면 전환</span>
+      <div className="flex flex-col gap-1">
+        <span className="text-caption1_400 text-foreground-placeholder">장면 전환</span>
         <ChoiceSceneSelect
           value={choice.nextScene}
           onChange={(nextScene) => {
@@ -375,8 +377,8 @@ function ChoiceRowMobile({
         />
       </div>
 
-      <div className="flex items-center justify-between gap-my-12">
-        <span className="text-caption1_400 text-on-surface-30">유료 전환</span>
+      <div className="flex items-center justify-between gap-3">
+        <span className="text-caption1_400 text-foreground-placeholder">유료 전환</span>
         <SwitchToggle
           checked={choice.isPaid}
           onCheckedChange={(checked) => onUpdate({ isPaid: checked })}
@@ -414,14 +416,14 @@ function ChoiceRowDesktop({
     <div
       className={cn(
         "group/choice-row flex min-h-9 items-stretch",
-        showBottomBorder && "border-b border-border-10",
+        showBottomBorder && "border-b border-border",
       )}
       data-choice-id={choice.id}
     >
-      <div className="flex min-h-9 w-[80px] shrink-0 self-stretch items-center border-r border-border-10 px-my-12 py-0 text-body3_400 text-on-surface-30">
+      <div className="flex min-h-9 w-[80px] shrink-0 self-stretch items-center border-r border-border px-3 py-0 text-body3_400 text-foreground-placeholder">
         선택 {index + 1}
       </div>
-      <div className="flex min-h-9 min-w-[200px] flex-1 self-stretch items-center border-r border-border-10 px-my-12 py-my-4">
+      <div className="flex min-h-9 min-w-[200px] flex-1 self-stretch items-center border-r border-border px-3 py-1">
         {isAiMode ? (
           <span className="text-body3_500 text-primary">✨ AI 모드로 직접 대화</span>
         ) : (
@@ -439,7 +441,7 @@ function ChoiceRowDesktop({
           />
         )}
       </div>
-      <div className="flex min-h-9 w-[200px] min-w-[160px] max-w-[200px] shrink-0 self-stretch items-center border-r border-border-10 px-my-12 py-0">
+      <div className="flex min-h-9 w-[200px] min-w-[160px] max-w-[200px] shrink-0 self-stretch items-center border-r border-border px-3 py-0">
         <ChoiceSceneSelect
           value={choice.nextScene}
           onChange={(nextScene) => {
@@ -456,7 +458,7 @@ function ChoiceRowDesktop({
           className="w-full"
         />
       </div>
-      <div className="flex min-h-9 w-[120px] min-w-[100px] max-w-[120px] shrink-0 self-stretch items-center justify-between gap-my-8 px-my-12 py-0">
+      <div className="flex min-h-9 w-[120px] min-w-[100px] max-w-[120px] shrink-0 self-stretch items-center justify-between gap-2 px-3 py-0">
         <SwitchToggle
           checked={choice.isPaid}
           onCheckedChange={(checked) => onUpdate({ isPaid: checked })}
@@ -464,10 +466,10 @@ function ChoiceRowDesktop({
         <button
           type="button"
           onClick={onRemove}
-          className="rounded p-my-8 text-on-surface-30 opacity-0 transition-opacity lg:group-hover/choice-row:opacity-100 lg:group-focus-within/choice-row:opacity-100 lg:hover:bg-red-50 lg:hover:text-red-600"
+          className="rounded p-2 text-foreground-placeholder opacity-0 transition-opacity lg:group-hover/choice-row:opacity-100 lg:group-focus-within/choice-row:opacity-100 lg:hover:bg-destructive-container lg:hover:text-destructive"
           aria-label="선택지 삭제"
         >
-          <Trash2 className="h-4 w-4" />
+          <ICONS.trash2 className="h-4 w-4" />
         </button>
       </div>
     </div>
@@ -554,7 +556,7 @@ export function ChoiceBlockTable({
   return (
     <div
       className={cn(
-        "overflow-hidden rounded-md border border-border-10 bg-white",
+        "overflow-hidden rounded-md border border-border bg-background",
         className
       )}
       data-block-id={blockId}
@@ -583,17 +585,17 @@ export function ChoiceBlockTable({
 
       {/* 데스크톱: 테이블 */}
       <div className="hidden lg:block">
-        <div className="flex min-h-8 border-b border-border-10 bg-surface-20/80 text-caption1_500 text-on-surface-30">
-          <div className="flex w-20 shrink-0 items-center border-r border-border-10 px-my-12">
+        <div className="flex min-h-8 border-b border-border bg-muted/80 text-caption1_500 text-foreground-placeholder">
+          <div className="flex w-20 shrink-0 items-center border-r border-border px-3">
             선택
           </div>
-          <div className="flex min-w-[200px] flex-1 items-center border-r border-border-10 px-my-12">
+          <div className="flex min-w-[200px] flex-1 items-center border-r border-border px-3">
             내용
           </div>
-          <div className="flex w-[200px] min-w-[160px] max-w-[200px] shrink-0 items-center border-r border-border-10 px-my-12">
+          <div className="flex w-[200px] min-w-[160px] max-w-[200px] shrink-0 items-center border-r border-border px-3">
             장면 전환
           </div>
-          <div className="flex w-[120px] min-w-[100px] max-w-[120px] shrink-0 items-center px-my-12">
+          <div className="flex w-[120px] min-w-[100px] max-w-[120px] shrink-0 items-center px-3">
             유료 전환
           </div>
         </div>
@@ -612,29 +614,28 @@ export function ChoiceBlockTable({
       </div>
 
       {!isAtMaxChoices && (
-        <div className="flex h-9 items-center justify-start border-t border-border-10 px-my-4 py-my-8 lg:border-t-0">
+        <div className="flex h-9 items-center justify-start border-t border-border px-1 py-2 lg:border-t-0">
           <DropdownMenu>
             <DropdownMenuTrigger asChild>
-              <Button
-                type="button"
-                variant="ghost"
-                size="sm"
-                className="text-on-surface-30 hover:text-on-surface-10"
-              >
-                + 선택지 추가
+              <Button type="button" variant="outline" size="sm">
+                선택지 추가
+                <Icon icon={ICONS.chevronDown} size="md" position="inline-end" />
               </Button>
             </DropdownMenuTrigger>
             <DropdownMenuContent align="start">
-              <DropdownMenuItem onClick={handleAddNormalChoice}>
-                선택지 추가
-              </DropdownMenuItem>
-              <DropdownMenuItem
-                onClick={handleAddAiChoice}
-                disabled={hasAiChoice}
-                className={cn("text-primary", hasAiChoice && "opacity-50")}
-              >
-                ✨ AI 모드로 직접 대화
-              </DropdownMenuItem>
+              <DropdownMenuGroup>
+                <DropdownMenuItem onClick={handleAddNormalChoice}>
+                  선택지 추가
+                </DropdownMenuItem>
+                <DropdownMenuItem
+                  onClick={handleAddAiChoice}
+                  disabled={hasAiChoice}
+                  className={cn(!hasAiChoice && "text-primary")}
+                >
+                  <Icon icon={ICONS.sparkles} size="md" />
+                  AI 모드로 직접 대화
+                </DropdownMenuItem>
+              </DropdownMenuGroup>
             </DropdownMenuContent>
           </DropdownMenu>
         </div>

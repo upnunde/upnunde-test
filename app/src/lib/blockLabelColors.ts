@@ -1,21 +1,41 @@
 import type { BlockType } from "@/types/editor";
 
 /**
- * 블록 타입 라벨(#동영상 등) 색상.
- * 에러·검증 실패 UI(rose/red)와 혼동되지 않도록 rose·밝은 빨강 계열은 사용하지 않습니다.
+ * 에디터 블록 타입 라벨(`#장면`, `#장면정보`, `#배경` 등) 전용 chroma.
+ *
+ * **DS 예외 정책**
+ * - 일반 UI의 `text-{role}-foreground` 짝 규칙(bg-{role} 내부만)과 **별도**로 허용한다.
+ * - 색상 값은 `block-label-chroma.css`의 DS primitive 변수(`--warning-500` 등)만 사용.
+ * - 정의·변경은 **이 파일 + block-label-chroma.css**만. 소비처는 `LABEL_COLOR_BY_TYPE`만 참조.
+ *
+ * | 라벨 | 블록 타입 | chroma |
+ * |------|-----------|--------|
+ * | #장면N | scene | orange |
+ * | #장면정보 | top_desc | yellow |
+ * | #배경 | background | lime |
+ * | #배경음악 | bgm | teal |
+ * | #효과음 | sfx | sky |
+ * | #캐릭터 | character | royal blue |
+ * | #갤러리 | gallery | purple |
+ * | #동영상 | video | magenta |
+ * | #선택지 | choice | steel blue |
+ * | #장면 전환 | event | dusty rose |
+ * | 스피커 | text | gray |
+ *
+ * @see `.cursor/rules/editor-patterns.mdc` — 블록 라벨 chroma
  */
 export const LABEL_COLOR_BY_TYPE: Record<BlockType, string> = {
-  scene: "text-amber-600",
-  top_desc: "text-yellow-600",
-  text: "text-neutral-400",
-  background: "text-lime-500",
-  bgm: "text-emerald-400",
-  sfx: "text-cyan-600",
-  character: "text-blue-700",
-  gallery: "text-violet-600",
-  video: "text-fuchsia-600",
-  direction: "text-indigo-600",
-  choice: "text-slate-500",
-  event: "text-stone-500",
-  event_end: "text-stone-500",
+  scene: "text-block-label-scene",
+  top_desc: "text-block-label-top-desc",
+  text: "text-foreground-muted",
+  background: "text-block-label-background",
+  bgm: "text-block-label-bgm",
+  sfx: "text-block-label-sfx",
+  character: "text-block-label-character",
+  gallery: "text-block-label-gallery",
+  video: "text-block-label-video",
+  direction: "text-block-label-direction",
+  choice: "text-block-label-choice",
+  event: "text-block-label-event",
+  event_end: "text-block-label-event",
 };

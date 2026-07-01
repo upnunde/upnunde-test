@@ -2,12 +2,13 @@
 
 import { useState, useCallback, useRef, useEffect } from "react";
 import { Button } from "@/components/ui/button";
+import { Input, InputGroup, InputHypertext } from "@/components/ui/input";
 import { PageCard } from "@/components/layout/PageCard";
 import { AddResourceSlot } from "@/components/resource/cards/AddResourceSlot";
 import { createOptimizedImageObjectUrl } from "@/lib/image-upload-compress";
 import { THUMBNAIL_SLOT_ARIA } from "@/lib/thumbnail-styles";
 import { ImageCard } from "@/components/resource/cards/ImageCard";
-import { Title1 } from "@/components/ui/title1";
+import { FormFieldLabel, formFieldAriaDescribedBy } from "@/components/ui/field-label";
 import { Title2 } from "@/components/ui/title2";
 import { ImageCropPosterModal } from "@/components/resource/character/CharacterExpressionModal";
 import {
@@ -15,13 +16,15 @@ import {
   formDialogSheetScrollBodyClassName,
   formDialogSheetStickyFooterClassName,
 } from "@/components/ui/modal";
-import { cn } from "@/lib/utils";
+import { cn } from "design-system/utils";
 import { EPISODE_FORM_FIELD_COPY } from "@/lib/episode-form-copy";
 import type { ImageResource } from "@/types/resource";
 
 const MAX_TITLE = 50;
 const MAX_SUMMARY = 100;
 const EPISODE_FORM_THUMBNAIL_FILE_INPUT_ID = "episode-form-thumbnail-file";
+const EPISODE_FORM_TITLE_INPUT_ID = "episode-form-title";
+const EPISODE_FORM_SUMMARY_INPUT_ID = "episode-form-summary";
 
 export interface EpisodeFormSubmitPayload {
   title: string;
@@ -148,7 +151,7 @@ export function EpisodeForm({
   const footer = (
     <div
       className={cn(
-        "flex justify-end gap-my-8",
+        "flex justify-end gap-2",
         stickyFooter ? formDialogSheetStickyFooterClassName : "mt-8",
       )}
     >
@@ -171,52 +174,56 @@ export function EpisodeForm({
   );
 
   const formFields = (
-    <div className="mt-0 flex flex-col gap-my-24">
-      <div className="flex flex-col gap-my-12">
-        <Title1
-          text="에피소드 제목*"
-          variant="title-subtitle-dot"
-          subtitleText={EPISODE_FORM_FIELD_COPY.title.subtitle}
+    <div className="mt-0 flex flex-col gap-6">
+      <div className="flex flex-col gap-3">
+        <FormFieldLabel
+          title="에피소드 제목*"
+          subtitle={EPISODE_FORM_FIELD_COPY.title.subtitle}
+          inputId={EPISODE_FORM_TITLE_INPUT_ID}
         />
-        <input
-          type="text"
-          maxLength={MAX_TITLE}
-          value={title}
-          onChange={(e) => setTitle(e.target.value)}
-          disabled={isAiFilling}
-          placeholder={EPISODE_FORM_FIELD_COPY.title.placeholder}
-          className="h-[42px] w-full rounded-md border border-border-10 bg-white px-my-12 py-my-8 text-body3_400 text-on-surface-10 placeholder:text-on-surface-30 focus:outline-none focus:ring-2 focus:ring-primary disabled:cursor-not-allowed disabled:opacity-60"
-        />
-        <div className="flex justify-end text-caption1_400 text-on-surface-30">
-          {title.length}/{MAX_TITLE}
-        </div>
+        <InputGroup>
+          <Input
+            id={EPISODE_FORM_TITLE_INPUT_ID}
+            aria-describedby={formFieldAriaDescribedBy(EPISODE_FORM_TITLE_INPUT_ID)}
+            type="text"
+            size="lg"
+            maxLength={MAX_TITLE}
+            value={title}
+            onChange={(e) => setTitle(e.target.value)}
+            disabled={isAiFilling}
+            placeholder={EPISODE_FORM_FIELD_COPY.title.placeholder}
+          />
+          <InputHypertext count={title.length} max={MAX_TITLE} />
+        </InputGroup>
       </div>
 
-      <div className="flex flex-col gap-my-12">
-        <Title1
-          text="에피소드 요약*"
-          variant="title-subtitle-dot"
-          subtitleText={EPISODE_FORM_FIELD_COPY.summary.subtitle}
+      <div className="flex flex-col gap-3">
+        <FormFieldLabel
+          title="에피소드 요약*"
+          subtitle={EPISODE_FORM_FIELD_COPY.summary.subtitle}
+          inputId={EPISODE_FORM_SUMMARY_INPUT_ID}
         />
-        <input
-          type="text"
-          maxLength={MAX_SUMMARY}
-          value={summary}
-          onChange={(e) => setSummary(e.target.value)}
-          disabled={isAiFilling}
-          placeholder={EPISODE_FORM_FIELD_COPY.summary.placeholder}
-          className="h-[42px] w-full rounded-md border border-border-10 bg-white px-my-12 py-my-8 text-body3_400 text-on-surface-10 placeholder:text-on-surface-30 focus:outline-none focus:ring-2 focus:ring-primary disabled:cursor-not-allowed disabled:opacity-60"
-        />
-        <div className="flex justify-end text-caption1_400 text-on-surface-30">
-          {summary.length}/{MAX_SUMMARY}
-        </div>
+        <InputGroup>
+          <Input
+            id={EPISODE_FORM_SUMMARY_INPUT_ID}
+            aria-describedby={formFieldAriaDescribedBy(EPISODE_FORM_SUMMARY_INPUT_ID)}
+            type="text"
+            size="lg"
+            maxLength={MAX_SUMMARY}
+            value={summary}
+            onChange={(e) => setSummary(e.target.value)}
+            disabled={isAiFilling}
+            placeholder={EPISODE_FORM_FIELD_COPY.summary.placeholder}
+          />
+          <InputHypertext count={summary.length} max={MAX_SUMMARY} />
+        </InputGroup>
       </div>
 
-      <div className="flex flex-col gap-my-12">
-        <Title1
-          text="대표 이미지*"
-          variant="title-subtitle-dot"
-          subtitleText={EPISODE_FORM_FIELD_COPY.thumbnail.subtitle}
+      <div className="flex flex-col gap-3">
+        <FormFieldLabel
+          title="대표 이미지*"
+          subtitle={EPISODE_FORM_FIELD_COPY.thumbnail.subtitle}
+          inputId={EPISODE_FORM_THUMBNAIL_FILE_INPUT_ID}
         />
         {thumbnailUrl ? (
           <ImageCard
@@ -249,7 +256,7 @@ export function EpisodeForm({
           stickyFooter
             ? cn(formDialogSheetEpisodeFormClassName, "flex min-h-0 w-full flex-1 flex-col", containerClassName)
             : cn(
-                "mx-auto w-full min-w-0 max-w-[1200px] rounded-[4px] border border-border-10 bg-white shadow-none",
+                "mx-auto w-full min-w-0 max-w-[1200px] rounded-sm border border-border bg-background shadow-none",
                 containerClassName,
               ),
         )}
@@ -260,13 +267,13 @@ export function EpisodeForm({
           <div
             className={cn(
               formDialogSheetScrollBodyClassName,
-              "px-my-16 pt-my-20",
+              "px-4 pt-5",
             )}
           >
             {formFields}
           </div>
         ) : (
-          <PageCard className="mx-0 max-w-none min-w-0 border-0 rounded-none px-my-20 pt-my-20 pb-my-20 shadow-none">
+          <PageCard className="mx-0 max-w-none min-w-0 border-0 rounded-none px-5 pt-5 pb-5 shadow-none">
             {formFields}
             {footer}
           </PageCard>

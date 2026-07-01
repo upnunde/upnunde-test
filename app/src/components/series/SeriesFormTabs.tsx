@@ -3,7 +3,7 @@
 import type { SeriesFormTab } from "@/lib/seriesForm";
 import { SegmentedTextTabs } from "@/components/ui/segmented-text-tabs";
 import { PAGE_FLUSH_CONTENT_PAD_X_CLASS } from "@/lib/page-layout";
-import { cn } from "@/lib/utils";
+import { cn } from "design-system/utils";
 
 interface SeriesFormTabsProps {
   activeTab: SeriesFormTab;
@@ -18,7 +18,7 @@ const ITEMS: Array<{ id: SeriesFormTab; label: string }> = [
 
 export function SeriesFormTabs({ activeTab, onChange }: SeriesFormTabsProps) {
   return (
-    <div className={cn("inline-flex flex-col items-start justify-start gap-my-8 self-stretch border-b border-border-10 pb-0 pt-0", PAGE_FLUSH_CONTENT_PAD_X_CLASS)}>
+    <div className={cn("inline-flex flex-col items-start justify-start gap-2 self-stretch border-b border-border pb-0 pt-0", PAGE_FLUSH_CONTENT_PAD_X_CLASS)}>
       <SegmentedTextTabs
         aria-label="시리즈 폼 섹션"
         items={ITEMS}

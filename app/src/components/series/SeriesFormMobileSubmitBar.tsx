@@ -3,7 +3,7 @@
 import { Button } from "@/components/ui/button";
 import { MOBILE_FIXED_BOTTOM_BAR_SHELL_CLASS } from "@/lib/mobile-viewport";
 import { PAGE_FLUSH_CONTENT_PAD_X_CLASS } from "@/lib/page-layout";
-import { cn } from "@/lib/utils";
+import { cn } from "design-system/utils";
 
 interface SeriesFormMobileSubmitBarProps {
   showDraftButton?: boolean;
@@ -24,13 +24,13 @@ export function SeriesFormMobileSubmitBar({
   return (
     <div
       className={cn(
-        "flex gap-my-8 lg:hidden",
+        "flex gap-2 lg:hidden",
         MOBILE_FIXED_BOTTOM_BAR_SHELL_CLASS,
-        "border-t border-border-10 bg-white",
+        "border-t border-border bg-background",
         PAGE_FLUSH_CONTENT_PAD_X_CLASS,
-        "py-my-12",
-        "pb-[calc(var(--spacing-my-12)+env(safe-area-inset-bottom,0px))]",
-        "[&_button]:h-my-36 [&_button]:min-h-my-36 [&_button]:min-w-0 [&_button]:flex-1",
+        "py-3",
+        "pb-[calc(var(--space-3)+env(safe-area-inset-bottom,0px))]",
+        "[&_button]:h-9 [&_button]:min-h-9 [&_button]:min-w-0 [&_button]:flex-1",
         className,
       )}
       role="group"
@@ -42,7 +42,7 @@ export function SeriesFormMobileSubmitBar({
           variant="outline"
           size="lg"
           onClick={onDraftClick}
-          className="bg-white text-on-surface-20 hover:bg-surface-20 disabled:border-border-20"
+          className="bg-background text-foreground-muted hover:bg-muted disabled:border-border"
         >
           임시저장
         </Button>

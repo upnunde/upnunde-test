@@ -158,7 +158,7 @@ export const FrameThemeSelector = forwardRef<FrameThemeSelectorHandle, FrameThem
     };
 
     return (
-      <div className="mt-2 flex flex-col gap-my-8">
+      <div className="mt-2 flex flex-col gap-2">
         <div
           ref={viewportRef}
           className="overflow-hidden"
@@ -167,13 +167,13 @@ export const FrameThemeSelector = forwardRef<FrameThemeSelectorHandle, FrameThem
           onTouchEnd={handleTouchEnd}
         >
           <div
-            className="flex w-full transition-transform duration-300 ease-out"
+            className="flex w-full transition-transform duration-medium ease-emphasized-decelerate"
             style={{ transform: `translateX(-${clampedPage * 100}%)` }}
           >
             {themePages.map((page, pageIndex) => (
               <div key={`page-${pageIndex}`} className="w-full shrink-0">
                 <div
-                  className="grid gap-x-my-16 gap-y-my-12 justify-items-start"
+                  className="grid gap-x-4 gap-y-3 justify-items-start"
                   style={{ gridTemplateColumns: `repeat(${columnCount}, minmax(0, 1fr))` }}
                 >
                   {page.map((theme) => {
@@ -207,7 +207,7 @@ export const FrameThemeSelector = forwardRef<FrameThemeSelectorHandle, FrameThem
         </div>
 
         {needsPager ? (
-          <div className="flex justify-center gap-my-8 pt-my-2">
+          <div className="flex justify-center gap-2 pt-0.5">
             {themePages.map((_, idx) => (
               <button
                 key={`dot-${idx}`}
@@ -215,7 +215,7 @@ export const FrameThemeSelector = forwardRef<FrameThemeSelectorHandle, FrameThem
                 aria-label={`${idx + 1}페이지로 이동`}
                 onClick={() => setActivePage(idx)}
                 className={`h-1.5 rounded-full transition-all ${
-                  idx === clampedPage ? "w-5 bg-slate-700" : "w-1.5 bg-slate-300 hover:bg-slate-400"
+                  idx === clampedPage ? "w-5 bg-inverse" : "w-1.5 bg-disabled hover:bg-foreground-disabled"
                 }`}
               />
             ))}

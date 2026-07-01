@@ -1,6 +1,6 @@
 "use client";
 
-import { cn } from "@/lib/utils";
+import { cn } from "design-system/utils";
 
 export type MonthlyRevenueRow = {
   year: number;
@@ -26,28 +26,28 @@ export function AnalyticsMonthlyRevenueBars({
   const ordered = [...rows].reverse();
 
   return (
-    <ul className={cn("flex flex-col gap-my-16", className)}>
+    <ul className={cn("flex flex-col gap-4", className)}>
       {ordered.map((row) => {
         const pct = Math.max(4, Math.round((row.amount / max) * 100));
         return (
           <li
             key={`${row.year}-${row.month}`}
-            className="grid grid-cols-[minmax(56px,72px)_1fr_minmax(88px,auto)] items-center gap-my-12"
+            className="grid grid-cols-[minmax(56px,72px)_1fr_minmax(88px,auto)] items-center gap-3"
           >
-            <div className="min-w-0 text-body3_500 text-on-surface-20">
+            <div className="min-w-0 text-body3_500 text-foreground-muted">
               <span className="truncate">{row.label}</span>
               {row.inProgress ? (
-                <span className="ml-1 text-caption1_400 text-on-surface-30">(진행 중)</span>
+                <span className="ml-1 text-caption1_400 text-foreground-placeholder">(진행 중)</span>
               ) : null}
             </div>
-            <div className="h-3 min-w-0 rounded-[2px] bg-surface-20">
+            <div className="h-3 min-w-0 rounded-[2px] bg-muted">
               <div
                 className="h-full rounded-[2px] bg-primary transition-[width]"
                 style={{ width: `${pct}%` }}
                 role="presentation"
               />
             </div>
-            <p className="text-right text-body3_500 tabular-nums text-on-surface-10">
+            <p className="text-right text-body3_500 tabular-nums text-foreground">
               {formatWon(row.amount)}
             </p>
           </li>

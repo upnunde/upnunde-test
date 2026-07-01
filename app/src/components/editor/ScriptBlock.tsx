@@ -3,23 +3,7 @@
 import { useCallback, useEffect, useLayoutEffect, useRef, useState } from "react";
 import NextImage from "next/image";
 import TextareaAutosize from "react-textarea-autosize";
-import {
-  Image,
-  Music,
-  User,
-  Film,
-  Clapperboard,
-  ImagePlus,
-  Sliders,
-  ListChecks,
-  Type,
-  ChevronDown,
-  Trash2,
-  Bold,
-  Italic,
-  Underline,
-  Check,
-} from "lucide-react";
+import { ICONS, Icon as DsIcon } from "@/lib/icons";
 import type { ScriptBlock as ScriptBlockType, ScriptBlockData, BlockType } from "@/types/editor";
 import { useEditorStore } from "@/store/useEditorStore";
 import { CHARACTERS, BACKGROUNDS, BGMS, SFX, VIDEOS, GALLERIES } from "@/lib/mockData";
@@ -27,6 +11,7 @@ import { initialCharacters } from "@/lib/resourceMockData";
 import {
   DropdownMenu,
   DropdownMenuContent,
+  DropdownMenuGroup,
   DropdownMenuItem,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
@@ -43,6 +28,7 @@ import { ResourcePicker } from "./ResourcePicker";
 import { useEditorSeriesId } from "./EditorSeriesContext";
 import { EditorBottomSheetMenu } from "./EditorBottomSheetMenu";
 import { EditorMenuOption, EditorMenuSectionLabel } from "./EditorMenuOption";
+import { BlockAttributeTrigger } from "./BlockAttributeTrigger";
 import { ChoiceBlockTable } from "./ChoiceBlockTable";
 import {
   EDITOR_BLOCK_LABEL_COLUMN_CLASS,
@@ -61,7 +47,7 @@ import {
 } from "@/lib/editor-control-visibility";
 import { useIsLgUp } from "@/hooks/useMediaQuery";
 import { useMobileBlockTextEdit } from "@/hooks/useMobileBlockTextEdit";
-import { cn } from "@/lib/utils";
+import { cn } from "design-system/utils";
 import {
   SPEAKER_PERSONA_TOKEN,
   formatPersonaSpeakerLabel,
@@ -71,6 +57,13 @@ import {
 import { LABEL_COLOR_BY_TYPE } from "@/lib/blockLabelColors";
 import { BLOCK_LABEL_KO } from "@/lib/blockTypeLabels";
 import { resolveRegisteredResourceName } from "@/lib/resolveRegisteredResourceName";
+import {
+  EDITOR_TEXT_FORMAT_TOOLBAR_BUTTON_CLASS,
+  EDITOR_TEXT_FORMAT_TOOLBAR_DIVIDER_CLASS,
+  EDITOR_TEXT_FORMAT_TOOLBAR_MENU_CONTENT_CLASS,
+  EDITOR_TEXT_FORMAT_TOOLBAR_MENU_TRIGGER_CLASS,
+  EDITOR_TEXT_FORMAT_TOOLBAR_SHELL_CLASS,
+} from "@/lib/editor-control-styles";
 
 const RESOURCE_TYPES: BlockType[] = ["background", "bgm", "sfx", "character", "gallery", "video", "choice"];
 
@@ -97,19 +90,19 @@ const TYPE_LABELS: Record<BlockType, string> = {
 };
 
 const TYPE_ICONS: Record<BlockType, React.ElementType> = {
-  scene: Type,
-  top_desc: Clapperboard,
-  text: Type,
-  background: Image,
-  bgm: Music,
-  sfx: Music,
-  character: User,
-  gallery: ImagePlus,
-  video: Film,
-  direction: Sliders,
-  choice: ListChecks,
-  event: Type,
-  event_end: Type,
+  scene: ICONS.type,
+  top_desc: ICONS.clapperboard,
+  text: ICONS.type,
+  background: ICONS.image,
+  bgm: ICONS.music,
+  sfx: ICONS.music,
+  character: ICONS.user,
+  gallery: ICONS.imagePlus,
+  video: ICONS.film,
+  direction: ICONS.sliders,
+  choice: ICONS.listChecks,
+  event: ICONS.type,
+  event_end: ICONS.type,
 };
 
 function getRandomNameFromList<T extends { name: string }>(items: T[]): string {
@@ -143,15 +136,11 @@ function getCharacterExpressionOptions(characterName: string): string[] {
 
 /** 한 줄 블록 전용 (장면/캐릭터/연출/배경 등): 높이 32px(h-8), px-0 py-1, gap-4 */
 const COMPACT_BLOCK_ROOT_CLASSES =
-  "flex items-center justify-start rounded-lg border-0 outline-none min-w-0 flex-1 min-h-8 h-8 px-0 py-my-4 gap-my-16 select-none";
-
-/** 리소스 픽커 값 칩 — 행 하이라이트와 중첩되지 않도록 내부 surface 없음 */
-const PICKER_VALUE_CHIP_CLASS =
-  "flex h-8 min-w-0 w-fit cursor-pointer items-center gap-my-4 rounded-md border border-border-10 bg-transparent px-my-8 py-my-8 transition-colors duration-150 focus:outline-none focus:ring-0 active:scale-[0.98]";
+  "flex items-center justify-start rounded-lg border-0 outline-none min-w-0 flex-1 min-h-8 h-8 px-0 py-1 gap-4 select-none";
 
 /** 오디오·동영상 등 썸네일 없는 리소스 아이콘 — surface 배경 없음 */
 const PICKER_FALLBACK_ICON_CLASS =
-  "flex h-5 w-5 shrink-0 items-center justify-center rounded-full border border-border-10 bg-transparent text-on-surface-30";
+  "flex h-5 w-5 shrink-0 items-center justify-center rounded-full border border-border bg-transparent text-foreground-placeholder";
 
 /** 삭제 버튼 아이콘 공통 크기 20x20 */
 const DELETE_ICON_CLASS = "h-5 w-5";
@@ -656,12 +645,12 @@ export function ScriptBlock({
         {/* Left column: 화자 — 시안 w-[100px] min-w-14 min-h-8 */}
         <div
           className={cn(
-            "flex min-h-8 items-center justify-start gap-0 overflow-hidden pr-my-12",
+            "flex min-h-8 items-center justify-start gap-0 overflow-hidden pr-3",
             EDITOR_BLOCK_SPEAKER_COLUMN_CLASS,
           )}
         >
           {!hideIndex && (
-            <span className="text-body3_500 text-on-surface-30 w-5 text-right tabular-nums">
+            <span className="text-body3_500 text-foreground-placeholder w-5 text-right tabular-nums">
               {indexLabel}
             </span>
           )}
@@ -673,12 +662,12 @@ export function ScriptBlock({
             trigger={
               <button
                 type="button"
-                className="inline-flex h-8 min-h-8 w-full min-w-0 items-center justify-start gap-my-2 rounded-none border-0 py-0 pl-0 pr-my-8 text-left text-caption1_500 text-on-surface-30 shadow-none outline-none focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring/50 focus-visible:ring-offset-0 overflow-hidden"
+                className="inline-flex h-8 min-h-8 w-full min-w-0 items-center justify-start gap-0.5 rounded-none border-0 py-0 pl-0 pr-2 text-left text-caption1_500 text-foreground-placeholder shadow-none outline-none focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring/50 focus-visible:ring-offset-0 overflow-hidden"
               >
                 <span className="inline-block min-w-0 w-fit truncate text-left">
                   {speakerDisplay}
                 </span>
-                <ChevronDown className="h-4 w-4 shrink-0" />
+                <ICONS.chevronDown className="h-4 w-4 shrink-0" />
               </button>
             }
           >
@@ -722,14 +711,14 @@ export function ScriptBlock({
                       updateSpeaker(c.name);
                       setSpeakerMenuOpen(false);
                     }}
-                    className="flex items-center gap-my-8"
+                    className="flex items-center gap-2"
                   >
                     <NextImage
                       src={c.url}
                       alt=""
                       width={24}
                       height={24}
-                      className="size-6 shrink-0 rounded-full object-cover bg-surface-20"
+                      className="size-6 shrink-0 rounded-full object-cover bg-muted"
                     />
                     {c.name}
                   </EditorMenuOption>
@@ -740,13 +729,14 @@ export function ScriptBlock({
 
           <Dialog open={speakerCustomModalOpen} onOpenChange={setSpeakerCustomModalOpen}>
             <DialogContent className="gap-0 overflow-hidden border-0 p-0 max-lg:border-t-0 max-lg:pb-0 sm:max-w-md">
-              <div className="px-my-20 pt-my-16 pb-my-8 max-lg:rounded-t-[16px] lg:px-my-24 lg:pt-my-24">
-                <DialogTitle className="text-left text-heading5_700 text-on-surface-10">
+              <div className="px-5 pt-4 pb-2 max-lg:rounded-t-xl lg:px-6 lg:pt-6">
+                <DialogTitle className="text-left text-heading5_700 text-foreground">
                   화자 이름
                 </DialogTitle>
               </div>
-              <div className="px-my-20 pb-my-16 lg:px-my-24">
+              <div className="px-5 pb-4 lg:px-6">
                 <Input
+                  size="lg"
                   value={speakerDraft}
                   onChange={(e) => setSpeakerDraft(e.target.value)}
                   placeholder="이름을 입력하세요"
@@ -762,11 +752,11 @@ export function ScriptBlock({
               </div>
               <div
                 className={cn(
-                  "mt-auto shrink-0 bg-white px-my-20 pt-my-8 pb-my-16",
-                  "max-lg:pb-[calc(var(--spacing-my-16)+env(safe-area-inset-bottom,0px))]",
+                  "mt-auto shrink-0 bg-background px-5 pt-2 pb-4",
+                  "max-lg:pb-[calc(var(--space-4)+env(safe-area-inset-bottom,0px))]",
                 )}
               >
-                <div className="flex justify-end gap-my-8">
+                <div className="flex justify-end gap-2">
                   <Button
                     type="button"
                     variant="outline"
@@ -794,7 +784,7 @@ export function ScriptBlock({
           {hasInlineTagToken && (
             <div
               aria-hidden
-              className="pointer-events-none absolute inset-0 z-0 min-h-8 pt-my-4 pb-0 text-body1_500 whitespace-pre-wrap break-words text-on-surface-20"
+              className="pointer-events-none absolute inset-0 z-0 min-h-8 pt-1 pb-0 text-body1_500 whitespace-pre-wrap break-words text-foreground-muted"
             >
               {highlightedSegments.map((segment, idx) => {
                 const isTag = /^<[^>]+>$/.test(segment);
@@ -819,8 +809,8 @@ export function ScriptBlock({
               isDesktop ? TEXT_BLOCK_PLACEHOLDER_DESKTOP : TEXT_BLOCK_PLACEHOLDER_MOBILE
             }
             className={cn(
-              "relative z-10 min-h-8 h-fit min-w-0 w-full flex-1 resize-none overflow-hidden border-0 bg-transparent pt-my-4 pb-0 text-body1_500 outline-none placeholder:text-on-surface-30 focus:outline-none focus:ring-0",
-              hasInlineTagToken ? "text-transparent caret-on-surface-10" : "text-on-surface-20"
+              "relative z-dropdown min-h-8 h-fit min-w-0 w-full flex-1 resize-none overflow-hidden border-0 bg-transparent pt-1 pb-0 text-body1_500 outline-none placeholder:text-foreground-placeholder focus:outline-none focus:ring-0",
+              hasInlineTagToken ? "text-transparent caret-foreground" : "text-foreground-muted"
             )}
             rows={1}
           />
@@ -832,13 +822,13 @@ export function ScriptBlock({
             variant="ghost"
             size="icon"
             className={cn(
-              "ml-auto h-8 w-8 shrink-0 rounded-full p-0 text-on-surface-30 lg:hover:bg-red-50 lg:hover:text-red-500",
+              "ml-auto h-8 w-8 shrink-0 rounded-full p-0 text-foreground-placeholder lg:hover:bg-destructive-container lg:hover:text-destructive",
               editorRowTrailingActionClass(),
             )}
             aria-label="Delete block"
             onClick={handleDeleteBlock}
           >
-            <Trash2 className={DELETE_ICON_CLASS} />
+            <ICONS.trash2 className={DELETE_ICON_CLASS} />
           </Button>
         ) : null}
 
@@ -855,39 +845,39 @@ export function ScriptBlock({
         {selection && block.type === "text" && (
           <div
             ref={toolbarRef}
-            className="fixed z-[120] flex items-center bg-[#2d2d2d] rounded-md border border-[#3d3d3d] overflow-visible"
+            className={EDITOR_TEXT_FORMAT_TOOLBAR_SHELL_CLASS}
             style={{ top: selection.y, left: selection.x, transform: "translate(-50%, -100%)" }}
           >
             {/* Basic Icons */}
-            <div className="flex items-center px-my-4">
+            <div className="flex items-center px-1">
               <button
                 type="button"
                 onClick={() => applyTag("<b>", "</b>")}
-                className="rounded-sm p-my-8 text-[var(--on-surface-inverse)] transition-colors hover:bg-[var(--surface-inverse-20)] hover:text-[var(--on-surface-inverse)]"
-                title="Bold"
+                className={EDITOR_TEXT_FORMAT_TOOLBAR_BUTTON_CLASS}
+                title="ICONS.formatBold"
               >
-                <Bold className="w-4 h-4" />
+                <ICONS.formatBold className="w-4 h-4" />
               </button>
               <button
                 type="button"
                 onClick={() => applyTag("<i>", "</i>")}
-                className="rounded-sm p-my-8 text-[var(--on-surface-inverse)] transition-colors hover:bg-[var(--surface-inverse-20)] hover:text-[var(--on-surface-inverse)]"
-                title="Italic"
+                className={EDITOR_TEXT_FORMAT_TOOLBAR_BUTTON_CLASS}
+                title="ICONS.formatItalic"
               >
-                <Italic className="w-4 h-4" />
+                <ICONS.formatItalic className="w-4 h-4" />
               </button>
               <button
                 type="button"
                 onClick={() => applyTag("<u>", "</u>")}
-                className="rounded-sm p-my-8 text-[var(--on-surface-inverse)] transition-colors hover:bg-[var(--surface-inverse-20)] hover:text-[var(--on-surface-inverse)]"
-                title="Underline"
+                className={EDITOR_TEXT_FORMAT_TOOLBAR_BUTTON_CLASS}
+                title="ICONS.formatUnderlined"
               >
-                <Underline className="w-4 h-4" />
+                <ICONS.formatUnderlined className="w-4 h-4" />
               </button>
             </div>
 
             {/* Divider */}
-            <div className="w-px h-5 bg-[#4d4d4d] mx-1" />
+            <div className={EDITOR_TEXT_FORMAT_TOOLBAR_DIVIDER_CLASS} />
 
             {/* Effect Dropdown */}
             <DropdownMenu
@@ -898,32 +888,44 @@ export function ScriptBlock({
                 if (open) setColorMenuOpen(false);
               }}
             >
-              <DropdownMenuTrigger
-                className="flex items-center gap-my-4 rounded-sm px-my-12 py-my-8 text-body3_400 text-[var(--on-surface-inverse)] outline-none transition-colors hover:bg-[var(--surface-inverse-20)] hover:text-[var(--on-surface-inverse)]"
-              >
-                이펙트 <ChevronDown className="w-3.5 h-3.5" />
+              <DropdownMenuTrigger asChild>
+                <Button
+                  type="button"
+                  variant="ghost"
+                  size="sm"
+                  className={EDITOR_TEXT_FORMAT_TOOLBAR_MENU_TRIGGER_CLASS}
+                >
+                  이펙트
+                  <DsIcon icon={ICONS.chevronDown} size="sm" position="inline-end" />
+                </Button>
               </DropdownMenuTrigger>
               <DropdownMenuContent
                 align="start"
                 portalled={false}
-                className="z-[110] w-40 p-my-4 bg-white rounded-lg border border-border-10"
+                className={cn(EDITOR_TEXT_FORMAT_TOOLBAR_MENU_CONTENT_CLASS, "w-40")}
                 ref={dropdownRef}
               >
-                {EFFECT_OPTIONS.map((effect) => {
-                  const isSelected = selectedEffect === effect.key;
-                  return (
-                    <DropdownMenuItem
-                      key={effect.key}
-                      onClick={() => applyEffect(effect.key)}
-                      className="flex items-center px-my-12 py-my-8 cursor-pointer text-body3_400 text-on-surface-20 focus:bg-surface-20 lg:hover:bg-surface-20 rounded-md relative"
-                    >
-                      {isSelected ? (
-                        <Check className="w-4 h-4 mr-1 absolute left-2" />
-                      ) : null}
-                      <span className="ml-5">{effect.label}</span>
-                    </DropdownMenuItem>
-                  );
-                })}
+                <DropdownMenuGroup>
+                  {EFFECT_OPTIONS.map((effect) => {
+                    const isSelected = selectedEffect === effect.key;
+                    return (
+                      <DropdownMenuItem
+                        key={effect.key}
+                        onClick={() => applyEffect(effect.key)}
+                        className={cn("relative", isSelected && "pl-8")}
+                      >
+                        {isSelected ? (
+                          <DsIcon
+                            icon={ICONS.check}
+                            size="md"
+                            className="absolute left-2"
+                          />
+                        ) : null}
+                        {effect.label}
+                      </DropdownMenuItem>
+                    );
+                  })}
+                </DropdownMenuGroup>
               </DropdownMenuContent>
             </DropdownMenu>
 
@@ -936,35 +938,40 @@ export function ScriptBlock({
                 if (open) setEffectMenuOpen(false);
               }}
             >
-              <DropdownMenuTrigger
-                className="flex items-center gap-my-4 rounded-sm px-my-12 py-my-8 text-body3_400 text-[var(--on-surface-inverse)] outline-none transition-colors hover:bg-[var(--surface-inverse-20)] hover:text-[var(--on-surface-inverse)]"
-              >
-                컬러 <ChevronDown className="w-3.5 h-3.5" />
+              <DropdownMenuTrigger asChild>
+                <Button
+                  type="button"
+                  variant="ghost"
+                  size="sm"
+                  className={EDITOR_TEXT_FORMAT_TOOLBAR_MENU_TRIGGER_CLASS}
+                >
+                  컬러
+                  <DsIcon icon={ICONS.chevronDown} size="sm" position="inline-end" />
+                </Button>
               </DropdownMenuTrigger>
               <DropdownMenuContent
                 align="start"
                 portalled={false}
-                className="z-[110] w-44 p-my-4 bg-white rounded-lg border border-border-10"
+                className={cn(EDITOR_TEXT_FORMAT_TOOLBAR_MENU_CONTENT_CLASS, "w-44")}
                 ref={dropdownRef}
               >
-                {COLOR_OPTIONS.map((color) => {
-                  return (
-                    <DropdownMenuItem
-                      key={color.hex}
-                      onClick={() => applyColor(color.hex)}
-                      className="flex items-center px-my-12 py-my-8 cursor-pointer text-body3_400 text-on-surface-20 focus:bg-surface-20 lg:hover:bg-surface-20 rounded-md"
-                    >
-                      <span className="inline-flex items-center gap-my-8">
+                <DropdownMenuGroup>
+                  {COLOR_OPTIONS.map((color) => {
+                    return (
+                      <DropdownMenuItem
+                        key={color.hex}
+                        onClick={() => applyColor(color.hex)}
+                      >
                         <span
-                          className="h-5 w-5 rounded-full border border-border-10"
+                          className="h-5 w-5 shrink-0 rounded-full border border-border"
                           style={{ backgroundColor: color.hex }}
                           aria-hidden
                         />
-                        <span>{color.label}</span>
-                      </span>
-                    </DropdownMenuItem>
-                  );
-                })}
+                        {color.label}
+                      </DropdownMenuItem>
+                    );
+                  })}
+                </DropdownMenuGroup>
               </DropdownMenuContent>
             </DropdownMenu>
           </div>
@@ -995,7 +1002,7 @@ export function ScriptBlock({
     return (
       <>
         {!hideIndex && (
-          <span className="shrink-0 text-caption1_500 text-on-surface-30 tabular-nums">
+          <span className="shrink-0 text-caption1_500 text-foreground-placeholder tabular-nums">
             {indexLabel}
           </span>
         )}
@@ -1028,14 +1035,15 @@ export function ScriptBlock({
               className={cn(
                 sceneInputClass,
                 showSceneValueAsReadOnly && "cursor-text",
-                showSceneValueAsReadOnly && !block.content?.trim() && "text-on-surface-30",
+                showSceneValueAsReadOnly && !block.content?.trim() && "text-foreground-placeholder",
               )}
             />
           </div>
         ) : (
-          <input
+          <Input
             ref={sceneInputRef as React.RefObject<HTMLInputElement>}
             type="text"
+            size="default"
             value={block.content}
             onChange={(e) => updateBlock(block.id, e.target.value)}
             onFocus={sceneMobileEdit.onContentFocus}
@@ -1047,11 +1055,11 @@ export function ScriptBlock({
               showSceneValueAsReadOnly
                 ? cn(
                     sceneDisplayClass,
-                    "block min-h-8 h-auto cursor-text border-0 bg-transparent outline-none focus:outline-none focus:ring-0",
+                    "block h-auto min-h-8 cursor-text border-0 bg-transparent shadow-none focus-visible:ring-0",
                   )
                 : sceneInputClass,
               rootClassName,
-              showSceneValueAsReadOnly && !block.content?.trim() && "text-on-surface-30",
+              showSceneValueAsReadOnly && !block.content?.trim() && "text-foreground-placeholder",
             )}
           />
         )}
@@ -1061,7 +1069,7 @@ export function ScriptBlock({
             variant="ghost"
             size="icon"
             className={cn(
-              "ml-auto h-8 w-8 shrink-0 self-start text-on-surface-30 lg:hover:bg-red-50 lg:hover:text-red-500",
+              "ml-auto h-8 w-8 shrink-0 self-start text-foreground-placeholder lg:hover:bg-destructive-container lg:hover:text-destructive",
               editorBlockTrailingActionClass(),
             )}
             aria-label="Delete block"
@@ -1071,7 +1079,7 @@ export function ScriptBlock({
               removeBlock(block.id);
             }}
           >
-            <Trash2 className={DELETE_ICON_CLASS} />
+            <ICONS.trash2 className={DELETE_ICON_CLASS} />
           </Button>
         ) : null}
       </>
@@ -1105,7 +1113,7 @@ export function ScriptBlock({
         }}
       >
         {!hideIndex && (
-          <span className="shrink-0 text-caption1_500 text-on-surface-30 tabular-nums">
+          <span className="shrink-0 text-caption1_500 text-foreground-placeholder tabular-nums">
             {indexLabel}
           </span>
         )}
@@ -1124,7 +1132,7 @@ export function ScriptBlock({
             variant="ghost"
             size="icon"
             className={cn(
-              "ml-auto h-8 w-8 shrink-0 text-on-surface-30 lg:hover:bg-red-50 lg:hover:text-red-500",
+              "ml-auto h-8 w-8 shrink-0 text-foreground-placeholder lg:hover:bg-destructive-container lg:hover:text-destructive",
               editorBlockTrailingActionClass(),
             )}
             aria-label="Delete block"
@@ -1134,7 +1142,7 @@ export function ScriptBlock({
               removeBlock(block.id);
             }}
           >
-            <Trash2 className={DELETE_ICON_CLASS} />
+            <ICONS.trash2 className={DELETE_ICON_CLASS} />
           </Button>
         </div>
       </div>
@@ -1167,7 +1175,7 @@ export function ScriptBlock({
         }}
       >
         {!hideIndex && (
-          <span className="shrink-0 text-caption1_500 text-on-surface-30 tabular-nums">
+          <span className="shrink-0 text-caption1_500 text-foreground-placeholder tabular-nums">
             {indexLabel}
           </span>
         )}
@@ -1202,7 +1210,7 @@ export function ScriptBlock({
           variant="ghost"
           size="icon"
           className={cn(
-              "ml-auto h-8 w-8 shrink-0 rounded-full p-0 text-on-surface-30 lg:hover:bg-red-50 lg:hover:text-red-500",
+              "ml-auto h-8 w-8 shrink-0 rounded-full p-0 text-foreground-placeholder lg:hover:bg-destructive-container lg:hover:text-destructive",
               editorRowTrailingActionClass(),
             )}
           aria-label="Delete block"
@@ -1212,7 +1220,7 @@ export function ScriptBlock({
             removeBlock(block.id);
           }}
         >
-          <Trash2 className={DELETE_ICON_CLASS} />
+          <ICONS.trash2 className={DELETE_ICON_CLASS} />
         </Button>
       </div>
     );
@@ -1231,12 +1239,12 @@ export function ScriptBlock({
         tabIndex={0}
       >
         {!hideIndex && (
-          <span className="shrink-0 text-caption1_500 text-on-surface-30 tabular-nums">
+          <span className="shrink-0 text-caption1_500 text-foreground-placeholder tabular-nums">
             {indexLabel}
           </span>
         )}
-        <div className="flex flex-1 items-center gap-my-16">
-          <Icon className="h-4 w-4 shrink-0 text-on-surface-30" />
+        <div className="flex flex-1 items-center gap-4">
+          <Icon className="h-4 w-4 shrink-0 text-foreground-placeholder" />
           <span
             className={cn(
               "flex h-8 items-center justify-start text-body4_500",
@@ -1246,8 +1254,9 @@ export function ScriptBlock({
           >
             {label}
           </span>
-          <input
+          <Input
             type="text"
+            size="default"
             value={block.content === "none" ? "" : block.content}
             onChange={(e) => updateBlock(block.id, e.target.value || "none")}
             onFocus={onFocusBlock}
@@ -1282,7 +1291,7 @@ export function ScriptBlock({
               }
             }}
             placeholder="Value..."
-            className="min-w-[120px] flex-1 rounded border-0 bg-white px-my-8 py-my-8 text-body3_400 outline-none focus:outline-none focus:ring-0"
+            className="min-w-[120px] flex-1 rounded border-0 bg-background px-2 py-2 text-body3_400 outline-none focus:outline-none focus:ring-0"
             autoFocus
           />
           <Button
@@ -1290,7 +1299,7 @@ export function ScriptBlock({
             variant="ghost"
             size="icon"
             className={cn(
-              "ml-auto h-8 w-8 shrink-0 text-on-surface-30 lg:hover:bg-red-50 lg:hover:text-red-500",
+              "ml-auto h-8 w-8 shrink-0 text-foreground-placeholder lg:hover:bg-destructive-container lg:hover:text-destructive",
               editorBlockTrailingActionClass(),
             )}
             aria-label="Delete block"
@@ -1300,7 +1309,7 @@ export function ScriptBlock({
               removeBlock(block.id);
             }}
           >
-            <Trash2 className={DELETE_ICON_CLASS} />
+            <ICONS.trash2 className={DELETE_ICON_CLASS} />
           </Button>
         </div>
       </div>
@@ -1393,7 +1402,7 @@ export function ScriptBlock({
         }}
       >
         {!hideIndex && (
-          <span className="shrink-0 text-caption1_500 text-on-surface-30 tabular-nums">
+          <span className="shrink-0 text-caption1_500 text-foreground-placeholder tabular-nums">
             {indexLabel}
           </span>
         )}
@@ -1446,8 +1455,7 @@ export function ScriptBlock({
             onClose={() => setPickerOpen(false)}
             selectedName={displayName}
           >
-            <button
-              type="button"
+            <BlockAttributeTrigger
               onClick={(e) => {
                 e.stopPropagation();
                 onFocusBlock();
@@ -1474,7 +1482,6 @@ export function ScriptBlock({
                   }
                 }
               }}
-              className={PICKER_VALUE_CHIP_CLASS}
             >
               {hasImageThumbnail ? (
                 <NextImage
@@ -1486,46 +1493,45 @@ export function ScriptBlock({
                 />
               ) : block.type === "bgm" || block.type === "sfx" ? (
                 <span className={PICKER_FALLBACK_ICON_CLASS}>
-                  <Music className="h-3 w-3" />
+                  <ICONS.music className="h-3 w-3" />
                 </span>
               ) : isVideo ? (
                 <span className={PICKER_FALLBACK_ICON_CLASS}>
-                  <Film className="h-3 w-3" />
+                  <ICONS.film className="h-3 w-3" />
                 </span>
               ) : null}
               <span
                 className={cn(
                   "min-w-0 flex-1 truncate text-body4_500",
-                  isEmpty ? "text-on-surface-30" : "text-on-surface-30"
+                  isEmpty ? "text-foreground-placeholder" : "text-foreground-placeholder"
                 )}
               >
                 {isEmpty ? "선택 안됨" : displayName}
               </span>
-              <ChevronDown className="ml-1 h-4 w-4 shrink-0 text-on-surface-30" />
-            </button>
+              <ICONS.chevronDown className="ml-1 h-4 w-4 shrink-0 text-foreground-placeholder" />
+            </BlockAttributeTrigger>
           </ResourcePicker>
           {isCharacter && !isEmpty && (
             <EditorBottomSheetMenu
               open={expressionMenuOpen}
               onOpenChange={setExpressionMenuOpen}
               title="표정"
-              contentClassName="w-40 p-my-4 bg-white rounded-lg border border-border-10"
+              contentClassName="w-40 p-1 bg-background rounded-lg border border-border"
               trigger={
-                <button
-                  type="button"
+                <BlockAttributeTrigger
                   onClick={(e) => e.stopPropagation()}
                   onFocus={onFocusBlock}
-                  className={cn(PICKER_VALUE_CHIP_CLASS, "ml-2")}
+                  className="ml-2"
                 >
                   <span
                     className={cn(
-                      "min-w-0 flex-1 truncate text-body4_500 text-on-surface-30"
+                      "min-w-0 flex-1 truncate text-body4_500 text-foreground-placeholder"
                     )}
                   >
                     {currentExpression}
                   </span>
-                  <ChevronDown className="ml-1 h-4 w-4 shrink-0 text-on-surface-30" />
-                </button>
+                  <ICONS.chevronDown className="ml-1 h-4 w-4 shrink-0 text-foreground-placeholder" />
+                </BlockAttributeTrigger>
               }
             >
               {(presentation) =>
@@ -1552,19 +1558,18 @@ export function ScriptBlock({
               open={videoOptionMenuOpen}
               onOpenChange={setVideoOptionMenuOpen}
               title="재생"
-              contentClassName="w-40 p-my-4 bg-white rounded-lg border border-border-10"
+              contentClassName="w-40 p-1 bg-background rounded-lg border border-border"
               trigger={
-                <button
-                  type="button"
+                <BlockAttributeTrigger
                   onClick={(e) => e.stopPropagation()}
                   onFocus={onFocusBlock}
-                  className={cn(PICKER_VALUE_CHIP_CLASS, "ml-2")}
+                  className="ml-2"
                 >
-                  <span className="min-w-0 flex-1 truncate text-body4_500 text-on-surface-30">
+                  <span className="min-w-0 flex-1 truncate text-body4_500 text-foreground-placeholder">
                     {currentVideoPlaybackLabel}
                   </span>
-                  <ChevronDown className="ml-1 h-4 w-4 shrink-0 text-on-surface-30" />
-                </button>
+                  <ICONS.chevronDown className="ml-1 h-4 w-4 shrink-0 text-foreground-placeholder" />
+                </BlockAttributeTrigger>
               }
             >
               {(presentation) => (
@@ -1602,7 +1607,7 @@ export function ScriptBlock({
             variant="ghost"
             size="icon"
             className={cn(
-              "ml-auto h-8 w-8 shrink-0 text-on-surface-30 lg:hover:bg-red-50 lg:hover:text-red-500",
+              "ml-auto h-8 w-8 shrink-0 text-foreground-placeholder lg:hover:bg-destructive-container lg:hover:text-destructive",
               editorBlockTrailingActionClass(),
             )}
             aria-label="Delete block"
@@ -1612,7 +1617,7 @@ export function ScriptBlock({
               removeBlock(block.id);
             }}
           >
-            <Trash2 className={DELETE_ICON_CLASS} />
+            <ICONS.trash2 className={DELETE_ICON_CLASS} />
           </Button>
         </div>
       </div>
@@ -1631,12 +1636,12 @@ export function ScriptBlock({
       onKeyDown={handleResourceBlockKeyDown}
     >
       {!hideIndex && (
-        <span className="shrink-0 text-caption1_500 text-on-surface-30 tabular-nums">
+        <span className="shrink-0 text-caption1_500 text-foreground-placeholder tabular-nums">
           {indexLabel}
         </span>
       )}
       <div className="flex min-w-0 flex-1 items-center gap-0">
-        <Icon className="h-4 w-4 shrink-0 text-on-surface-30" />
+        <Icon className="h-4 w-4 shrink-0 text-foreground-placeholder" />
         <span
           className={cn(
             "flex h-8 items-center justify-start text-body4_500",
@@ -1649,7 +1654,7 @@ export function ScriptBlock({
         <span
           className={cn(
             "min-w-0 flex-1 truncate text-body3_400",
-            isNone ? "text-on-surface-30" : "text-on-surface-10"
+            isNone ? "text-foreground-placeholder" : "text-foreground"
           )}
         >
           {isNone ? "—" : block.content}
@@ -1659,7 +1664,7 @@ export function ScriptBlock({
           variant="ghost"
           size="icon"
           className={cn(
-              "ml-auto h-8 w-8 shrink-0 text-on-surface-30 lg:hover:bg-red-50 lg:hover:text-red-500",
+              "ml-auto h-8 w-8 shrink-0 text-foreground-placeholder lg:hover:bg-destructive-container lg:hover:text-destructive",
               editorBlockTrailingActionClass(),
             )}
           aria-label="Delete block"
@@ -1669,7 +1674,7 @@ export function ScriptBlock({
             removeBlock(block.id);
           }}
         >
-          <Trash2 className={DELETE_ICON_CLASS} />
+          <ICONS.trash2 className={DELETE_ICON_CLASS} />
         </Button>
       </div>
     </div>

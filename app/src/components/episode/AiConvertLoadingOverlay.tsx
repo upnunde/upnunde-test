@@ -2,7 +2,7 @@
 
 import { useEffect, useState } from "react";
 import { createPortal } from "react-dom";
-import { cn } from "@/lib/utils";
+import { cn } from "design-system/utils";
 
 export interface AiConvertLoadingOverlayProps {
   message?: string;
@@ -64,7 +64,7 @@ export function AiConvertLoadingOverlay({
   return createPortal(
     <div
       className={cn(
-        "ai-convert-overlay fixed inset-0 z-[200] flex flex-col items-center justify-center gap-my-24 backdrop-blur-[1.5px]",
+        "ai-convert-overlay fixed inset-0 z-toast flex flex-col items-center justify-center gap-6 backdrop-blur-[1.5px]",
         className,
       )}
       style={{ backgroundColor: "var(--dim-30)" }}

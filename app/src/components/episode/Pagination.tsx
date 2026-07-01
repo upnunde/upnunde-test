@@ -1,8 +1,10 @@
 "use client";
 
 import React, { useState, useEffect } from "react";
-import { ChevronLeft, ChevronRight } from "lucide-react";
-import { cn } from "@/lib/utils";
+import { ICONS } from "@/lib/icons";
+import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
+import { cn } from "design-system/utils";
 
 const PAGE_SIZE = 10;
 const MAX_VISIBLE_PAGES = 9;
@@ -28,13 +30,13 @@ function PageNavButton({
   disabled: boolean;
   onClick: () => void;
 }) {
-  const Icon = direction === "prev" ? ChevronLeft : ChevronRight;
+  const Icon = direction === "prev" ? ICONS.chevronLeft : ICONS.chevronRight;
   return (
     <button
       type="button"
       onClick={onClick}
       disabled={disabled}
-      className="flex h-8 w-8 shrink-0 cursor-pointer items-center justify-center text-on-surface-30 hover:text-on-surface-10 disabled:pointer-events-none disabled:opacity-50"
+      className="flex h-8 w-8 shrink-0 cursor-pointer items-center justify-center text-foreground-placeholder hover:text-foreground disabled:pointer-events-none disabled:opacity-50"
       aria-label={direction === "prev" ? "이전 페이지" : "다음 페이지"}
     >
       <Icon className="h-4 w-4" aria-hidden />
@@ -88,7 +90,7 @@ export function Pagination({
   };
 
   const shellClassName = cn(
-    "border-t border-divider-10 bg-white rounded-b-[4px]",
+    "border-t border-divider bg-background rounded-b-sm",
     className,
   );
 
@@ -98,22 +100,23 @@ export function Pagination({
       <div
         className={cn(
           shellClassName,
-          "flex h-14 items-center justify-between gap-my-12 px-my-12 sm:hidden",
+          "flex h-14 items-center justify-between gap-3 px-3 sm:hidden",
         )}
       >
         <PageNavButton direction="prev" disabled={!canPrev} onClick={handlePrev} />
-        <form onSubmit={handleGo} className="flex min-w-0 items-center justify-center gap-my-8">
-          <input
+        <form onSubmit={handleGo} className="flex min-w-0 items-center justify-center gap-2">
+          <Input
             type="number"
             name="page"
+            size="sm"
             min={1}
             max={totalPages}
             value={pageInputValue}
             onChange={(e) => setPageInputValue(e.target.value)}
-            className="h-8 w-12 rounded border border-border-10 text-center text-body3_400 outline-none focus:border-border-20"
+            className="w-12 text-center"
             aria-label="페이지 번호"
           />
-          <span className="shrink-0 text-body3_400 text-on-surface-30">/ {totalPages}</span>
+          <span className="shrink-0 text-body3_400 text-foreground-placeholder">/ {totalPages}</span>
         </form>
         <PageNavButton direction="next" disabled={!canNext} onClick={handleNext} />
       </div>
@@ -122,10 +125,10 @@ export function Pagination({
       <div
         className={cn(
           shellClassName,
-          "hidden h-16 items-center justify-center gap-my-32 sm:flex",
+          "hidden h-16 items-center justify-center gap-8 sm:flex",
         )}
       >
-        <div className="flex items-center gap-my-4">
+        <div className="flex items-center gap-1">
           <PageNavButton direction="prev" disabled={!canPrev} onClick={handlePrev} />
           {visiblePages.map((page) => (
             <button
@@ -135,8 +138,8 @@ export function Pagination({
               className={cn(
                 "h-8 w-8 cursor-pointer rounded-full text-body3_500 transition-colors",
                 page === currentPage
-                  ? "bg-slate-800 text-white"
-                  : "text-on-surface-30 hover:bg-surface-20",
+                  ? "bg-inverse text-inverse-foreground"
+                  : "text-foreground-placeholder hover:bg-muted",
               )}
               aria-label={`${page}페이지`}
               aria-current={page === currentPage ? "page" : undefined}
@@ -147,26 +150,29 @@ export function Pagination({
           <PageNavButton direction="next" disabled={!canNext} onClick={handleNext} />
         </div>
 
-        <form onSubmit={handleGo} className="flex items-center gap-my-12">
-          <div className="flex items-center gap-my-8">
-            <input
+        <form onSubmit={handleGo} className="flex items-center gap-3">
+          <div className="flex items-center gap-2">
+            <Input
               type="number"
               name="page"
+              size="sm"
               min={1}
               max={totalPages}
               value={pageInputValue}
               onChange={(e) => setPageInputValue(e.target.value)}
-              className="h-my-32 w-my-48 rounded border border-border-10 text-center text-body3_400 outline-none focus:border-border-20"
+              className="w-12 text-center"
               aria-label="페이지 번호"
             />
-            <span className="text-body3_400 text-on-surface-30">/ {totalPages}</span>
+            <span className="text-body3_400 text-foreground-placeholder">/ {totalPages}</span>
           </div>
-          <button
+          <Button
             type="submit"
-            className="h-8 cursor-pointer rounded border border-border-20 px-my-12 text-body3_500 text-on-surface-20 transition-colors hover:bg-surface-20 disabled:border-border-20"
+            variant="outline"
+            size="sm"
+            className="rounded text-foreground-muted"
           >
             Go
-          </button>
+          </Button>
         </form>
       </div>
     </>

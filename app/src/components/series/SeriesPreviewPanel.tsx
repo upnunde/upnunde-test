@@ -23,7 +23,7 @@ function SeriesPreviewContent({
 }) {
   if (!coverPreviewUrl && !logoPreviewUrl) {
     return (
-      <div className="flex h-full w-full items-center justify-center bg-slate-900 px-my-20 text-center text-body3_400 text-on-surface-30">
+      <div className="flex h-full w-full items-center justify-center preview-bg-canvas px-5 text-center text-body3_400 preview-text-placeholder">
         이미지를 등록하면 미리볼 수 있어요
       </div>
     );
@@ -38,7 +38,7 @@ function SeriesPreviewContent({
         fill
         sizes={imageSizes}
         unoptimized
-        className="object-cover object-center bg-slate-900/50"
+        className="object-cover object-center preview-bg-canvas-50"
       />
       {coverPreviewUrl && logoPreviewUrl ? (
         <Image
@@ -48,7 +48,7 @@ function SeriesPreviewContent({
           fill
           sizes={imageSizes}
           unoptimized
-          className="pointer-events-none z-10 object-cover"
+          className="pointer-events-none z-dropdown object-cover"
         />
       ) : null}
     </>
@@ -64,7 +64,7 @@ export function SeriesPreviewPanel({
 
   if (isFullscreen) {
     return (
-      <div className="relative flex min-h-0 w-full flex-1 bg-black">
+      <div className="relative flex min-h-0 w-full flex-1 bg-inverse">
         <SeriesPreviewContent
           coverPreviewUrl={coverPreviewUrl}
           logoPreviewUrl={logoPreviewUrl}
@@ -75,8 +75,8 @@ export function SeriesPreviewPanel({
   }
 
   return (
-    <div className="flex w-[300px] shrink-0 flex-col gap-my-12">
-      <p className="text-body1_500 text-on-surface-20">미리보기</p>
+    <div className="flex w-[300px] shrink-0 flex-col gap-3">
+      <p className="text-body1_500 text-foreground-muted">미리보기</p>
       <div className="flex w-full justify-center">
         <IPhone15ProFrame>
           <div className="relative h-full w-full">

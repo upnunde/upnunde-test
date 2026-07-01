@@ -1,22 +1,12 @@
 "use client";
 
 import React from "react";
-import Image from "next/image";
 import { useRouter, usePathname } from "next/navigation";
-import {
-  BarChart3,
-  Bell,
-  BookOpen,
-  LibraryBig,
-  Mail,
-  Receipt,
-  UserRoundCog,
-  X,
-} from "lucide-react";
+import { ICONS } from "@/lib/icons";
 import { SidebarList } from "./SidebarList";
 import { Button } from "@/components/ui/button";
-import { dummyAsset } from "@/lib/dummy-asset-path";
-import { cn } from "@/lib/utils";
+import { RenovelStudioLogo } from "@/components/brand/RenovelStudioLogo";
+import { cn } from "design-system/utils";
 
 const SIDEBAR_ITEMS = [
   { id: "series", label: "내 작품", path: "/series" },
@@ -43,19 +33,19 @@ const SIDEBAR_ICON_PROPS = {
 function sidebarIconFor(id: SidebarItemId): React.ReactNode {
   switch (id) {
     case "series":
-      return <LibraryBig {...SIDEBAR_ICON_PROPS} />;
+      return <ICONS.libraryBig {...SIDEBAR_ICON_PROPS} />;
     case "analytics":
-      return <BarChart3 {...SIDEBAR_ICON_PROPS} />;
+      return <ICONS.barChart3 {...SIDEBAR_ICON_PROPS} />;
     case "settlements":
-      return <Receipt {...SIDEBAR_ICON_PROPS} />;
+      return <ICONS.receipt {...SIDEBAR_ICON_PROPS} />;
     case "guide":
-      return <BookOpen {...SIDEBAR_ICON_PROPS} />;
+      return <ICONS.bookOpen {...SIDEBAR_ICON_PROPS} />;
     case "profile":
-      return <UserRoundCog {...SIDEBAR_ICON_PROPS} />;
+      return <ICONS.userRoundCog {...SIDEBAR_ICON_PROPS} />;
     case "notification":
-      return <Bell {...SIDEBAR_ICON_PROPS} />;
+      return <ICONS.bell {...SIDEBAR_ICON_PROPS} />;
     case "inquiry":
-      return <Mail {...SIDEBAR_ICON_PROPS} />;
+      return <ICONS.mail {...SIDEBAR_ICON_PROPS} />;
     default:
       return null;
   }
@@ -89,21 +79,14 @@ function AppSidebarMobileHeader({ onClose }: { onClose: () => void }) {
   const router = useRouter();
 
   return (
-    <div className="flex h-14 shrink-0 items-center justify-between border-b border-border-10 bg-white pl-my-20 pr-my-16 lg:hidden">
+    <div className="flex h-14 shrink-0 items-center justify-between border-b border-border bg-background pl-5 pr-4 lg:hidden">
       <button
         type="button"
         onClick={() => router.push("/login")}
         className="flex cursor-pointer items-center"
         aria-label="로그인 화면으로 이동"
       >
-        <Image
-          src={dummyAsset("renovel-studio-logo.png")}
-          alt="RE:NOVEL Studio"
-          width={94}
-          height={20}
-          priority
-          className="h-5 w-auto object-contain object-left max-lg:h-4"
-        />
+        <RenovelStudioLogo />
       </button>
       <Button
         type="button"
@@ -113,7 +96,7 @@ function AppSidebarMobileHeader({ onClose }: { onClose: () => void }) {
         onClick={onClose}
         aria-label="메뉴 닫기"
       >
-        <X className="h-4 w-4" aria-hidden />
+        <ICONS.close className="h-4 w-4" aria-hidden />
       </Button>
     </div>
   );
@@ -152,8 +135,8 @@ export default function AppSidebar({
   return (
     <nav
       className={cn(
-        "flex h-full w-[240px] shrink-0 flex-col border-r border-border-10 bg-white lg:py-my-16",
-        "max-lg:fixed max-lg:inset-0 max-lg:z-50 max-lg:w-full max-lg:max-w-none max-lg:overflow-hidden max-lg:border-r-0",
+        "flex h-full w-[240px] shrink-0 flex-col border-r border-border bg-background lg:py-4",
+        "max-lg:fixed max-lg:inset-0 max-lg:z-modal max-lg:w-full max-lg:max-w-none max-lg:overflow-hidden max-lg:border-r-0",
         !mobileOpen && "max-lg:hidden",
         "lg:relative",
       )}
@@ -161,7 +144,7 @@ export default function AppSidebar({
     >
       <AppSidebarMobileHeader onClose={() => onNavigate?.()} />
 
-      <div className="flex min-h-0 flex-1 flex-col max-lg:overflow-y-auto max-lg:py-my-16 lg:contents">
+      <div className="flex min-h-0 flex-1 flex-col max-lg:overflow-y-auto max-lg:py-4 lg:contents">
         <SidebarList
           items={sidebarListItems}
           activeId={activeId}
@@ -170,16 +153,16 @@ export default function AppSidebar({
             if (!item) return;
             handleClick(item.id, item.path);
           }}
-          listClassName="flex flex-col gap-0 px-my-8"
+          listClassName="flex flex-col gap-0 px-2"
         />
 
         {/* 모바일: 알림 아래 구분선 후 하단 메뉴 순서대로 노출 */}
         <div
-          className="mx-my-20 my-my-8 border-t border-border-10 lg:hidden"
+          className="mx-5 my-2 border-t border-border lg:hidden"
           role="separator"
           aria-hidden
         />
-        <div className="px-my-8 lg:hidden">
+        <div className="px-2 lg:hidden">
           <SidebarList
             items={sidebarBottomItems}
             activeId={activeId}
@@ -188,12 +171,12 @@ export default function AppSidebar({
               if (!item) return;
               handleClick(item.id, item.path);
             }}
-            listClassName="flex flex-col gap-my-4"
+            listClassName="flex flex-col gap-1"
           />
         </div>
 
         {/* 데스크톱: 하단 고정 */}
-        <div className="mt-auto hidden px-my-8 lg:block">
+        <div className="mt-auto hidden px-2 lg:block">
           <SidebarList
             items={sidebarBottomItems}
             activeId={activeId}

@@ -2,12 +2,14 @@
 
 import { cloneElement, isValidElement, useCallback, useEffect, type MouseEvent, type ReactElement } from "react";
 import { createPortal } from "react-dom";
-import { X } from "lucide-react";
+import { ICONS } from "@/lib/icons";
 import {
   DropdownMenu,
   DropdownMenuContent,
+  DropdownMenuGroup,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
+import { Button } from "@/components/ui/button";
 import { useIsLgUp } from "@/hooks/useMediaQuery";
 import type { EditorMenuPresentation } from "@/components/editor/EditorMenuOption";
 import { MenuListBody } from "@/components/ui/menu-list";
@@ -16,7 +18,7 @@ import {
   MOBILE_BOTTOM_SHEET_SHELL_BASE_CLASS,
   mobileBottomSheetMediumMaxHeightClassName,
 } from "@/components/ui/modal/modal-styles";
-import { cn } from "@/lib/utils";
+import { cn } from "design-system/utils";
 
 export interface EditorBottomSheetMenuProps {
   open: boolean;
@@ -79,17 +81,17 @@ export function EditorBottomSheetMenu({
               aria-modal="true"
               aria-label={title}
             >
-              <div className="flex w-full shrink-0 items-center justify-between border-b border-border-10 px-my-20 py-my-16">
-                <div className="text-body1_700 text-on-surface-10">{title}</div>
-                <button
-                  type="button"
+              <div className="flex w-full shrink-0 items-center justify-between border-b border-border px-5 py-4">
+                <div className="text-body1_700 text-foreground">{title}</div>
+                <Button
+                  variant="ghost"
+                  size="icon-sm"
                   aria-label="닫기"
                   onClick={handleDismiss}
-                  className="flex h-8 w-8 cursor-pointer items-center justify-center rounded-full text-on-surface-30 transition-colors hover:bg-surface-20/60 hover:text-on-surface-10 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-inset focus-visible:ring-primary"
-                  style={{ marginRight: -8 }}
+                  className="rounded-full text-foreground-placeholder -mr-2"
                 >
-                  <X className="h-5 w-5" aria-hidden />
-                </button>
+                  <ICONS.close className="h-5 w-5" aria-hidden />
+                </Button>
               </div>
               <div className="min-h-0 flex-1 overflow-y-auto">
                 <MenuListBody>{children("sheet")}</MenuListBody>
@@ -124,7 +126,7 @@ export function EditorBottomSheetMenu({
     <DropdownMenu open={open} onOpenChange={onOpenChange}>
       <DropdownMenuTrigger asChild>{trigger}</DropdownMenuTrigger>
       <DropdownMenuContent align={align} className={cn(contentClassName)}>
-        {children("dropdown")}
+        <DropdownMenuGroup>{children("dropdown")}</DropdownMenuGroup>
       </DropdownMenuContent>
     </DropdownMenu>
   );

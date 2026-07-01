@@ -1,13 +1,15 @@
 "use client";
 
 import { useState, useRef } from "react";
-import Image from "next/image";
-import { Menu, User } from "lucide-react";
+import { ICONS } from "@/lib/icons";
+import { ThemeToggleButton } from "@/components/ThemeToggleButton";
 import { ProfileEditModal } from "@/components/ProfileEditModal";
+import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
+import { Button } from "@/components/ui/button";
 import { useRouter } from "next/navigation";
 import { APP_HEADER_STICKY_CLASS } from "@/lib/mobile-viewport";
-import { dummyAsset } from "@/lib/dummy-asset-path";
-import { cn } from "@/lib/utils";
+import { RenovelStudioLogo } from "@/components/brand/RenovelStudioLogo";
+import { cn } from "design-system/utils";
 
 export interface HeaderProps {
   /** Reserved for future use */
@@ -21,7 +23,7 @@ export interface HeaderProps {
   className?: string;
 }
 
-/** Global top header: Logo + User avatar only. Full width. */
+/** Global top header: Logo + ICONS.user avatar only. Full width. */
 export default function Header({ profileImageUrl, onProfileImageChange, onMenuClick, className }: HeaderProps) {
   const router = useRouter();
   const [isProfileModalOpen, setIsProfileModalOpen] = useState(false);
@@ -30,21 +32,22 @@ export default function Header({ profileImageUrl, onProfileImageChange, onMenuCl
   return (
     <header
       className={cn(
-        "flex h-14 shrink-0 items-center justify-between border-b border-border-10 bg-white pl-0 pr-my-16",
+        "flex h-14 shrink-0 items-center justify-between border-b border-border bg-background pl-0 pr-4",
         APP_HEADER_STICKY_CLASS,
         className,
       )}
     >
-      <div className="flex items-center gap-my-8 self-stretch pl-my-12 lg:w-[240px] lg:pl-my-16">
+      <div className="flex items-center gap-2 self-stretch pl-3 lg:w-[240px] lg:pl-4">
         {onMenuClick ? (
-          <button
-            type="button"
+          <Button
+            variant="ghost"
+            size="icon-sm"
             onClick={onMenuClick}
-            className="flex h-8 w-8 shrink-0 cursor-pointer items-center justify-center rounded-md text-on-surface-20 hover:bg-surface-20 lg:hidden"
+            className="text-foreground-muted lg:hidden"
             aria-label="메뉴 열기"
           >
-            <Menu className="h-5 w-5" aria-hidden />
-          </button>
+            <ICONS.menu className="h-5 w-5" aria-hidden />
+          </Button>
         ) : null}
         <button
           type="button"
@@ -52,37 +55,25 @@ export default function Header({ profileImageUrl, onProfileImageChange, onMenuCl
           className="flex cursor-pointer items-center"
           aria-label="로그인 화면으로 이동"
         >
-          <Image
-            src={dummyAsset("renovel-studio-logo.png")}
-            alt="RE:NOVEL Studio"
-            width={94}
-            height={20}
-            priority
-            className="h-5 w-auto object-contain object-left max-lg:h-4"
-          />
+          <RenovelStudioLogo />
         </button>
       </div>
-      <div className="flex items-center">
+      <div className="flex items-center gap-2">
         <button
           ref={profileButtonRef}
           type="button"
           onClick={() => setIsProfileModalOpen(true)}
-          className="size-my-36 rounded-full bg-surface-20 border border-border-10 flex cursor-pointer items-center justify-center hover:bg-slate-200 transition-colors overflow-hidden"
+          className="cursor-pointer rounded-full focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2"
           aria-label="프로필 편집"
         >
-          {profileImageUrl ? (
-            <Image
-              src={profileImageUrl}
-              alt="프로필"
-              width={36}
-              height={36}
-              unoptimized
-              className="w-full h-full object-cover"
-            />
-          ) : (
-            <User className="h-5 w-5 text-on-surface-30" />
-          )}
+          <Avatar className="size-10 border border-border transition-opacity hover:opacity-90">
+            {profileImageUrl ? <AvatarImage src={profileImageUrl} alt="프로필" /> : null}
+            <AvatarFallback>
+              <ICONS.user className="h-5 w-5 text-foreground-placeholder" aria-hidden />
+            </AvatarFallback>
+          </Avatar>
         </button>
+        <ThemeToggleButton />
       </div>
       <ProfileEditModal
         isOpen={isProfileModalOpen}

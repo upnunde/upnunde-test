@@ -1,7 +1,9 @@
 "use client";
 
 import React, { useState } from "react";
-import { Play, Square, Trash2, Plus, Minus, Check } from "lucide-react";
+import { ICONS } from "@/lib/icons";
+import { IconButton } from "@/components/ui/icon-button";
+import { Slider } from "@/components/ui/slider";
 import type { BgmResource } from "@/types/resource";
 
 /** "00:00" 형식을 초( number )로 변환 */
@@ -91,7 +93,6 @@ export function BgmListItem({
   const [isHovered, setIsHovered] = useState(false);
 
   const totalSeconds = parseDurationToSeconds(item.duration);
-  const progress = totalSeconds > 0 ? Math.min(currentTime / totalSeconds, 1) : 0;
   /** 재생 중(또는 일시정지)일 때만 "현재 / 전체" + 진행률 바. 호버만으로는 타임 정보 1개(전체만) */
   const showExpandedTime = isActive;
   const timeLabel = showExpandedTime
@@ -127,28 +128,28 @@ export function BgmListItem({
   const actionsAlwaysVisible = alwaysShowActions || (showSelectedCheck && !isHovered);
   const actionsClass = hasActions
     ? actionsAlwaysVisible
-      ? "flex items-center gap-my-4 shrink-0"
-      : "flex items-center gap-my-4 shrink-0 opacity-0 transition-opacity group-hover:opacity-100 hover:opacity-100 max-lg:opacity-100"
+      ? "flex items-center gap-1 shrink-0"
+      : "flex items-center gap-1 shrink-0 opacity-0 transition-opacity group-hover:opacity-100 hover:opacity-100 max-lg:opacity-100"
     : "hidden";
 
   return (
     <div
-      className="group inline-flex h-fit w-full cursor-pointer flex-col items-center justify-center gap-my-4 self-stretch overflow-visible rounded-[4px] px-my-8 py-my-8 transition-colors hover:bg-surface-20 max-lg:px-my-4 lg:px-my-12"
+      className="group inline-flex h-fit w-full cursor-pointer flex-col items-center justify-center gap-1 self-stretch overflow-visible rounded-sm px-2 py-2 transition-colors hover:bg-muted max-lg:px-1 lg:px-3"
       onMouseEnter={() => setIsHovered(true)}
       onMouseLeave={() => setIsHovered(false)}
     >
       <div className="flex h-fit min-w-0 flex-col gap-0 self-stretch">
-        <div className="inline-flex min-h-9 flex-shrink-0 items-center justify-center gap-my-8 self-stretch max-lg:gap-my-4">
+        <div className="inline-flex min-h-9 flex-shrink-0 items-center justify-center gap-2 self-stretch max-lg:gap-1">
           {variant === "default" && index != null && (
-            <span className="w-8 shrink-0 tabular-nums text-body3_500 text-on-surface-10">
+            <span className="w-8 shrink-0 tabular-nums text-body3_500 text-foreground">
               {index}
             </span>
           )}
-          <div className="inline-flex min-w-0 flex-1 flex-col items-start justify-start gap-my-2">
-            <div className="w-full truncate text-body3_500 text-on-surface-10 max-lg:text-body2_500">
+          <div className="inline-flex min-w-0 flex-1 flex-col items-start justify-start gap-0.5">
+            <div className="w-full truncate text-body3_500 text-foreground max-lg:text-body2_500">
               {item.title}
             </div>
-            <div className="w-full text-body4_400 text-on-surface-30">
+            <div className="w-full text-body4_400 text-foreground-placeholder">
               {timeLabel}
             </div>
           </div>
@@ -158,28 +159,27 @@ export function BgmListItem({
                 /* selected + hovered: 재생 + 빼기(선택 해제) */
                 <>
                   {showPlayButton && (
-                    <button
+                    <IconButton
                       type="button"
+                      variant="outline"
+                      shape="circle"
+                      size="icon-sm"
+                      icon={isActive && isPlaying ? ICONS.square : ICONS.play}
+                      iconClassName="fill-current"
                       onClick={handlePlayPause}
-                      className="w-8 h-8 rounded-full cursor-pointer inline-flex justify-center items-center border border-border-20 bg-white text-on-surface-10 hover:bg-surface-20 hover:border-border-10"
                       aria-label={isActive && isPlaying ? "정지" : "미리듣기"}
-                    >
-                      {isActive && isPlaying ? (
-                        <Square className="w-4 h-4 fill-current" />
-                      ) : (
-                        <Play className="w-4 h-4 fill-current" />
-                      )}
-                    </button>
+                    />
                   )}
                   {onAdd && (
-                    <button
+                    <IconButton
                       type="button"
+                      variant="outline"
+                      shape="circle"
+                      size="icon-sm"
+                      icon={ICONS.minus}
                       onClick={onAdd}
-                      className="w-8 h-8 rounded-full cursor-pointer inline-flex justify-center items-center border border-border-20 bg-white text-on-surface-10 hover:bg-surface-20 hover:border-border-10"
                       aria-label="선택 해제"
-                    >
-                      <Minus className="w-4 h-4" />
-                    </button>
+                    />
                   )}
                 </>
               ) : (
@@ -187,109 +187,75 @@ export function BgmListItem({
                   className="flex h-8 w-8 shrink-0 items-center justify-center text-primary"
                   aria-label="선택됨"
                 >
-                  <Check className="h-5 w-5" strokeWidth={2.5} />
+                  <ICONS.check className="h-5 w-5" strokeWidth={2.5} />
                 </span>
               )
             ) : (
               <>
                 {showPlayButton && (
-                  <button
+                  <IconButton
                     type="button"
+                    variant="outline"
+                    shape="circle"
+                    size="icon-sm"
+                    icon={isActive && isPlaying ? ICONS.square : ICONS.play}
+                    iconClassName="fill-current"
                     onClick={handlePlayPause}
-                    className="w-8 h-8 rounded-full cursor-pointer inline-flex justify-center items-center border border-border-20 bg-white text-on-surface-10 hover:bg-surface-20 hover:border-border-10"
                     aria-label={isActive && isPlaying ? "정지" : "미리듣기"}
-                  >
-                    {isActive && isPlaying ? (
-                      <Square className="w-4 h-4 fill-current" />
-                    ) : (
-                      <Play className="w-4 h-4 fill-current" />
-                    )}
-                  </button>
+                  />
                 )}
                 {showAddButton && (
-                  <button
+                  <IconButton
                     type="button"
+                    variant="outline"
+                    shape="circle"
+                    size="icon-sm"
+                    icon={ICONS.plus}
                     onClick={onAdd}
-                    className="w-8 h-8 rounded-full cursor-pointer inline-flex justify-center items-center border border-border-20 bg-white text-on-surface-10 hover:bg-surface-20 hover:border-border-10"
                     aria-label="추가"
-                  >
-                    <Plus className="w-4 h-4" />
-                  </button>
+                  />
                 )}
               </>
             )}
             {showDelete && onDelete && (
-              <button
+              <IconButton
                 type="button"
+                variant="outline"
+                shape="circle"
+                size="icon-sm"
+                icon={ICONS.trash2}
                 onClick={() => onDelete(item)}
-                className="w-8 h-8 rounded-full cursor-pointer inline-flex justify-center items-center border border-border-20 bg-white text-on-surface-10 hover:bg-surface-20 hover:border-border-10 hover:text-destructive"
                 aria-label="삭제"
-              >
-                <Trash2 className="w-4 h-4" />
-              </button>
+              />
             )}
             {showRemove && onDelete && (
-              <button
+              <IconButton
                 type="button"
+                variant="outline"
+                shape="circle"
+                size="icon-sm"
+                icon={ICONS.minus}
                 onClick={() => onDelete(item)}
-                className="w-8 h-8 rounded-full cursor-pointer inline-flex justify-center items-center border border-border-20 bg-white text-on-surface-10 hover:bg-surface-20 hover:border-border-10"
                 aria-label="선택에서 제거"
-              >
-                <Minus className="w-4 h-4" />
-              </button>
+              />
             )}
           </div>
         </div>
-        {showProgressBar && showExpandedTime && (
-          <div
-            role={showExpandedTime ? "slider" : undefined}
-            aria-label={showExpandedTime ? "재생 위치" : undefined}
-            aria-valuemin={showExpandedTime ? 0 : undefined}
-            aria-valuemax={showExpandedTime ? totalSeconds : undefined}
-            aria-valuenow={showExpandedTime ? currentTime : undefined}
-            tabIndex={showExpandedTime && onSeek ? 0 : undefined}
-            className={`self-stretch flex-shrink-0 min-w-0 rounded-full overflow-hidden touch-none select-none relative h-fit py-my-8 ${
-              onSeek ? "cursor-pointer" : ""
-            }`}
-            onClick={
-              showExpandedTime && onSeek && totalSeconds > 0
-                ? (e) => {
-                    const el = e.currentTarget;
-                    const rect = el.getBoundingClientRect();
-                    const ratio = Math.max(0, Math.min(1, (e.clientX - rect.left) / rect.width));
-                    const seconds = Math.floor(ratio * totalSeconds);
-                    onSeek(seconds);
-                  }
-                : undefined
-            }
-            onKeyDown={
-              showExpandedTime && onSeek && totalSeconds > 0
-                ? (e) => {
-                    const step = e.shiftKey ? 10 : 1;
-                    if (e.key === "ArrowLeft" || e.key === "Home") {
-                      e.preventDefault();
-                      onSeek(Math.max(0, currentTime - (e.key === "Home" ? currentTime : step)));
-                    } else if (e.key === "ArrowRight" || e.key === "End") {
-                      e.preventDefault();
-                      onSeek(Math.min(totalSeconds, currentTime + (e.key === "End" ? totalSeconds - currentTime : step)));
-                    }
-                  }
-                : undefined
-            }
-          >
-            {/* 트랙 배경 */}
-            <div
-              className={`absolute inset-x-0 top-1/2 -translate-y-1/2 h-1.5 rounded-full pointer-events-none ${
-                showExpandedTime ? "bg-surface-20" : "bg-transparent"
-              }`}
-            />
-            {/* 진행 바 */}
-            <div
-              className="absolute left-0 top-1/2 -translate-y-1/2 h-1.5 rounded-full bg-primary transition-[width] duration-150 pointer-events-none"
-              style={{ width: `${(showExpandedTime ? progress : 0) * 100}%` }}
-            />
-          </div>
-        )}
+        {showProgressBar && showExpandedTime && totalSeconds > 0 ? (
+          <Slider
+            className="w-full shrink-0 py-2"
+            min={0}
+            max={totalSeconds}
+            step={1}
+            value={currentTime}
+            onValueChange={(value) => {
+              const next = Array.isArray(value) ? value[0] : value;
+              onSeek?.(next);
+            }}
+            disabled={!onSeek}
+            aria-label="재생 위치"
+          />
+        ) : null}
       </div>
     </div>
   );

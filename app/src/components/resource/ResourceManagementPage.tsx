@@ -15,7 +15,7 @@ import { BgmSection } from "./bgm/BgmSection";
 import { ConfirmDeleteModal } from "./modals/ConfirmDeleteModal";
 import { PAGE_CARD_SHELL_MOBILE_FLUSH_CLASS, PAGE_FLUSH_CONTENT_PAD_X_CLASS, PAGE_GUTTER_GAP_CLASS, PAGE_SCROLL_COLUMN_CLASS, PAGE_SUBHEADER_PAGE_SHELL_CLASS, PAGE_SUBHEADER_WITH_STICKY_CLASS } from "@/lib/page-layout";
 import { RESOURCE_THUMBNAIL_FLUID_SIZE_CLASS, RESOURCE_THUMBNAIL_GRID_CLASS } from "@/lib/thumbnail-styles";
-import { cn } from "@/lib/utils";
+import { cn } from "design-system/utils";
 import type { ImageLightboxItem } from "./ImageLightbox";
 import type {
   ResourceCategory,
@@ -244,10 +244,10 @@ export function ResourceManagementPage() {
       <div className={PAGE_SUBHEADER_PAGE_SHELL_CLASS}>
         {/* [정책 1] 헤더 (레이아웃 가이드: margin 40, max-width 1200, min-width 640) */}
         <header className={PAGE_SUBHEADER_WITH_STICKY_CLASS}>
-          <div className="flex w-full min-w-0 max-w-[1200px] mx-auto items-center justify-between gap-my-16">
-            <div className="flex items-center justify-start gap-my-12">
+          <div className="flex w-full min-w-0 max-w-[1200px] mx-auto items-center justify-between gap-4">
+            <div className="flex items-center justify-start gap-3">
               <HeaderBackButton onClick={handleBack} aria-label="시리즈 목록으로" />
-              <h1 className="text-heading2_700 text-on-surface-10">리소스 관리</h1>
+              <h1 className="text-heading2_700 text-foreground">리소스 관리</h1>
             </div>
           </div>
         </header>
@@ -256,10 +256,10 @@ export function ResourceManagementPage() {
           <div className={cn("mx-auto flex w-full min-w-0 max-w-[1200px] flex-col", PAGE_GUTTER_GAP_CLASS)}>
             <ResourceBanner seriesId={seriesId} />
 
-            <div className="flex w-full min-w-0 flex-col items-stretch gap-my-24 lg:flex-row lg:items-start">
+            <div className="flex w-full min-w-0 flex-col items-stretch gap-6 lg:flex-row lg:items-start">
               {showPreview && (
                 <aside className="w-full min-w-0 lg:w-[380px] lg:shrink-0 lg:sticky lg:top-6">
-                  <div className={cn("w-full min-w-0 rounded-[4px] border border-border-10 bg-surface-10 py-my-20 max-lg:rounded-none max-lg:border-0", PAGE_FLUSH_CONTENT_PAD_X_CLASS)}>
+                  <div className={cn("w-full min-w-0 rounded-sm border border-border bg-background py-5 max-lg:rounded-none max-lg:border-0", PAGE_FLUSH_CONTENT_PAD_X_CLASS)}>
                     <Title2
                       text="미리보기"
                       asSectionHeader
@@ -275,7 +275,7 @@ export function ResourceManagementPage() {
                 </aside>
               )}
 
-              <div className="flex w-full min-w-0 flex-1 flex-col gap-my-16">
+              <div className="flex w-full min-w-0 flex-1 flex-col gap-4">
 
             {/* 등장인물 [정책 2, 3, 5] */}
             <ResourceSection
@@ -284,7 +284,7 @@ export function ResourceManagementPage() {
               emptyMessage="등록된 등장인물이 없습니다"
               addButtonLabel="등장인물 등록"
               isEmpty={characters.length === 0}
-              descriptionColorClassName="text-on-surface-30"
+              descriptionColorClassName="text-foreground-placeholder"
               onAddClick={() => navigateTo(ROUTES.character.new(seriesId))}
             >
               <div className={RESOURCE_THUMBNAIL_GRID_CLASS}>
@@ -325,7 +325,7 @@ export function ResourceManagementPage() {
               emptyMessage="등록된 배경이 없습니다"
               addButtonLabel="배경 등록"
               isEmpty={backgrounds.length === 0}
-              descriptionColorClassName="text-on-surface-30"
+              descriptionColorClassName="text-foreground-placeholder"
               onAddClick={() => navigateTo(ROUTES.background.new(seriesId))}
             >
               <div className={RESOURCE_THUMBNAIL_GRID_CLASS}>
@@ -365,7 +365,7 @@ export function ResourceManagementPage() {
               emptyMessage="등록된 연출장면이 없습니다"
               addButtonLabel="연출장면 등록"
               isEmpty={scenes.length === 0}
-              descriptionColorClassName="text-on-surface-30"
+              descriptionColorClassName="text-foreground-placeholder"
               onAddClick={() => navigateTo(ROUTES.scene.new(seriesId))}
             >
               <div className={RESOURCE_THUMBNAIL_GRID_CLASS}>
@@ -403,7 +403,7 @@ export function ResourceManagementPage() {
               emptyMessage="등록된 미디어가 없습니다"
               addButtonLabel="미디어 등록"
               isEmpty={media.length === 0}
-              descriptionColorClassName="text-on-surface-30"
+              descriptionColorClassName="text-foreground-placeholder"
               onAddClick={() => navigateTo(ROUTES.media.new(seriesId))}
             >
               <div className={RESOURCE_THUMBNAIL_GRID_CLASS}>
@@ -440,7 +440,7 @@ export function ResourceManagementPage() {
               emptyMessage="등록된 갤러리가 없습니다"
               addButtonLabel="갤러리 등록"
               isEmpty={gallery.length === 0}
-              descriptionColorClassName="text-on-surface-30"
+              descriptionColorClassName="text-foreground-placeholder"
               onAddClick={() => navigateTo(ROUTES.gallery.new(seriesId))}
             >
               <div className={RESOURCE_THUMBNAIL_GRID_CLASS}>

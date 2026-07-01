@@ -13,7 +13,7 @@ import {
 import { useVisualKeyboardInset } from "@/hooks/useVisualKeyboardInset";
 import { useClientMounted } from "@/hooks/useClientMounted";
 import { useEditorStore } from "@/store/useEditorStore";
-import { cn } from "@/lib/utils";
+import { cn } from "design-system/utils";
 
 export interface EditorMobileFloatingActionsProps {
   active: EditorMobilePanel;
@@ -31,7 +31,7 @@ export interface EditorMobileFloatingActionsProps {
 /**
  * lg 미만 에디터 우측 하단 FAB 스택.
  * - 전환 FAB: 하단 고정
- * - 오류 FAB: 전환 FAB 위 gap-my-8(8px)
+ * - 오류 FAB: 전환 FAB 위 gap-2(8px)
  */
 export function EditorMobileFloatingActions({
   active,
@@ -73,7 +73,7 @@ export function EditorMobileFloatingActions({
   return (
     <div
       className={cn(
-        "pointer-events-none fixed z-40 flex flex-col-reverse items-end lg:hidden",
+        "pointer-events-none fixed z-modal flex flex-col-reverse items-end lg:hidden",
         EDITOR_MOBILE_FAB_RIGHT_CLASS,
         EDITOR_MOBILE_FAB_STACK_GAP_CLASS,
         bottomClass,

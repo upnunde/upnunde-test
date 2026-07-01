@@ -14,12 +14,12 @@ export default function ToastTestPage() {
   const { toast } = useToast();
 
   return (
-    <div className="flex min-h-0 flex-1 flex-col items-center justify-center gap-my-24 p-my-32 lg:min-h-screen">
-      <h1 className="text-heading2_700 text-on-surface-10">토스트 정책 테스트</h1>
-      <p className="text-body3_400 text-on-surface-30">
+    <div className="flex min-h-0 flex-1 flex-col items-center justify-center gap-6 p-8 lg:min-h-screen">
+      <h1 className="text-heading2_700 text-foreground">토스트 정책 테스트</h1>
+      <p className="text-body3_400 text-foreground-placeholder">
         하단 40px, 토스트 간격 16px, 최대 3개 · 3~5초 자동 닫힘
       </p>
-      <div className="flex flex-wrap items-center justify-center gap-my-16">
+      <div className="flex flex-wrap items-center justify-center gap-4">
         <Button
           variant="outline"
           onClick={() =>

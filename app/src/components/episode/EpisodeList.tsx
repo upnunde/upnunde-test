@@ -6,7 +6,7 @@ import type { Episode } from "@/types/episode";
 import {
   PAGE_MOBILE_LIST_STACK_GAP_CLASS,
 } from "@/lib/page-layout";
-import { cn } from "@/lib/utils";
+import { cn } from "design-system/utils";
 
 export interface EpisodeListProps {
   episodes: Episode[];
@@ -39,13 +39,13 @@ export function EpisodeList({
   return (
     <div className={cn("flex w-full shrink-0 flex-col", className)}>
       {/* Table Header — 모바일은 카드형 행만 표시 */}
-      <div className="hidden h-[42px] shrink-0 items-center rounded-t-[4px] border-b border-divider-10 bg-white px-my-20 lg:flex">
-        <div className="w-20 text-caption1_400 text-on-surface-30">회차</div>
-        <div className="flex-1 px-0 text-caption1_400 text-on-surface-30">제목</div>
-        <div className="w-40 px-0 text-caption1_400 text-on-surface-30">개시일</div>
-        <div className="w-24 px-0 text-caption1_400 text-on-surface-30">조회수</div>
-        <div className="w-24 px-0 text-caption1_400 text-on-surface-30">공개여부</div>
-        <div className="w-48 px-0 text-right text-caption1_400 text-on-surface-30">작업</div>
+      <div className="hidden h-[42px] shrink-0 items-center rounded-t-sm border-b border-divider bg-background px-5 lg:flex">
+        <div className="w-20 text-caption1_400 text-foreground-placeholder">회차</div>
+        <div className="flex-1 px-0 text-caption1_400 text-foreground-placeholder">제목</div>
+        <div className="w-40 px-0 text-caption1_400 text-foreground-placeholder">개시일</div>
+        <div className="w-24 px-0 text-caption1_400 text-foreground-placeholder">조회수</div>
+        <div className="w-24 px-0 text-caption1_400 text-foreground-placeholder">공개여부</div>
+        <div className="w-48 px-0 text-right text-caption1_400 text-foreground-placeholder">작업</div>
       </div>
 
       {/* Table Body */}

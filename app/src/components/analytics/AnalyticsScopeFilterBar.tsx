@@ -29,7 +29,7 @@ import {
   isAllAnalyticsSeriesId,
   type AnalyticsSeriesId,
 } from "@/components/analytics/analytics-series-options";
-import { cn } from "@/lib/utils";
+import { cn } from "design-system/utils";
 
 const AREA_TABS = [
   { id: "content", label: "콘텐츠" },
@@ -79,15 +79,15 @@ export function AnalyticsScopeFilterBar({
 
   return (
     <div className={cn(analyticsScopeFilterShellClassName, className)}>
-      <div className="flex w-full min-w-0 items-center justify-between gap-my-4 sm:flex-wrap sm:gap-x-my-16 sm:gap-y-my-8 lg:gap-my-8">
+      <div className="flex w-full min-w-0 items-center justify-between gap-1 sm:flex-wrap sm:gap-x-4 sm:gap-y-2 lg:gap-2">
         <div className="min-w-0 flex-1">
           <SegmentedTextTabs
             aria-label="분석 영역"
             items={[...AREA_TABS]}
             activeId={analyticsArea}
             onSelect={(id) => onAnalyticsAreaChange(id as AnalyticsAreaTabId)}
-            size="xl"
-            underline={false}
+            tabsVariant="text"
+            size="2xl"
           />
         </div>
         <div className="shrink-0">

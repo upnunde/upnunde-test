@@ -22,41 +22,41 @@ import { scrollMobileEditorInputIntoView } from "@/lib/editor-scroll";
 import { isMobileDocumentScrollMode } from "@/lib/mobile-document-scroll";
 import { editorLeadingControlsClass, editorRowHoverClass, EDITOR_MOBILE_FOCUSED_ROW_CLASS } from "@/lib/editor-control-visibility";
 import { useIsLgUp } from "@/hooks/useMediaQuery";
-import { cn } from "@/lib/utils";
+import { cn } from "design-system/utils";
 import { Button } from "@/components/ui/button";
-import { Plus } from "lucide-react";
+import { ICONS } from "@/lib/icons";
 import { ScriptBlock } from "./ScriptBlock";
 import { SlashCommandMenu, type SlashSelectPayload } from "./SlashCommandMenu";
 import type { BlockType, ScriptBlockData } from "@/types/editor";
 
 const WRAPPER_CLASS_TEXT = cn(
-  "group group/row relative flex h-fit w-full min-h-9 items-start justify-start gap-0 rounded bg-white py-my-4 outline-none",
+  "group group/row relative flex h-fit w-full min-h-9 items-start justify-start gap-0 rounded bg-background py-1 outline-none",
   editorRowHoverClass(),
 );
 const ROOT_CLASS_TEXT = "min-h-8 min-w-0 flex-1 h-fit";
 
-/** 선택지 블록: 텍스트 행과 동일 래퍼( min-h-9·py-1·bg-white·rounded·group/row ) */
+/** 선택지 블록: 텍스트 행과 동일 래퍼( min-h-9·py-1·bg-background·rounded·group/row ) */
 const WRAPPER_CLASS_CHOICE = cn(
-  "group group/row relative flex h-fit w-full min-h-9 items-start justify-start gap-0 rounded bg-white py-my-4 outline-none",
+  "group group/row relative flex h-fit w-full min-h-9 items-start justify-start gap-0 rounded bg-background py-1 outline-none",
   editorRowHoverClass(),
 );
 const ROOT_CLASS_CHOICE = "min-h-8 min-w-0 flex-1 h-fit";
 
 /** 한 줄 블록 (캐릭터/연출/배경 등): 고정 높이 32px(h-8), px-0 py-1 */
 const WRAPPER_CLASS_COMPACT = cn(
-  "group flex h-fit min-h-9 items-center justify-start gap-0 rounded-lg py-my-4",
+  "group flex h-fit min-h-9 items-center justify-start gap-0 rounded-lg py-1",
   editorRowHoverClass(),
 );
 const ROOT_CLASS_COMPACT = "min-w-0 flex-1 min-h-8 h-8";
 
 /** 장면·장면정보 — 긴 제목 줄바꿈 허용 */
 const WRAPPER_CLASS_WRAP = cn(
-  "group flex h-fit min-h-9 items-start justify-start gap-0 rounded-lg py-my-4 outline-none",
+  "group flex h-fit min-h-9 items-start justify-start gap-0 rounded-lg py-1 outline-none",
   editorRowHoverClass(),
 );
 /** 장면 — min-height 32px · 제목 줄 수에 따라 행 높이 확장 */
 const WRAPPER_CLASS_SCENE = cn(
-  "group flex h-fit min-h-8 items-start justify-start gap-0 rounded-lg py-my-4 outline-none",
+  "group flex h-fit min-h-8 items-start justify-start gap-0 rounded-lg py-1 outline-none",
   editorRowHoverClass(),
 );
 const ROOT_CLASS_WRAP = "min-w-0 flex-1 min-h-8 h-auto self-start";
@@ -182,7 +182,7 @@ function SortableBlockWrapper({
               : isWrapRow
                 ? WRAPPER_CLASS_WRAP
                 : WRAPPER_CLASS_COMPACT,
-        isDragging && "relative z-50 opacity-50",
+        isDragging && "relative z-sticky opacity-50",
         isFocused && EDITOR_MOBILE_FOCUSED_ROW_CLASS,
         EDITOR_MOBILE_GUTTER_X_CLASS,
       )}
@@ -192,29 +192,22 @@ function SortableBlockWrapper({
           type="button"
           variant="ghost"
           size="icon"
-          className="h-8 w-6 shrink-0 rounded-full p-0 text-on-surface-30 hover:bg-surface-20 hover:text-on-surface-30"
+          className="h-8 w-6 shrink-0 rounded-full p-0 text-foreground-placeholder hover:bg-muted hover:text-foreground-placeholder"
           aria-label="Add block below"
           aria-expanded={insertMenuPosition !== null}
           aria-haspopup="listbox"
           onClick={handleAddButtonClick}
         >
-          <Plus className="size-5" />
+          <ICONS.plus className="size-5" />
         </Button>
         {!isSeedDefault ? (
           <button
             type="button"
-            className="flex h-8 w-6 shrink-0 cursor-grab touch-none items-center justify-center rounded-full p-0 text-on-surface-30 hover:bg-surface-20 hover:text-on-surface-30 active:cursor-grabbing"
+            className="flex h-8 w-6 shrink-0 cursor-grab touch-none items-center justify-center rounded-full p-0 text-foreground-placeholder hover:bg-muted hover:text-foreground-placeholder active:cursor-grabbing"
             aria-label="Drag to reorder"
             {...desktopHandleDragProps}
           >
-            <svg className="h-5 w-5" viewBox="0 0 24 24" fill="currentColor" aria-hidden>
-              <circle cx="8" cy="6" r="2" />
-              <circle cx="8" cy="12" r="2" />
-              <circle cx="8" cy="18" r="2" />
-              <circle cx="16" cy="6" r="2" />
-              <circle cx="16" cy="12" r="2" />
-              <circle cx="16" cy="18" r="2" />
-            </svg>
+            <ICONS.gripVertical className="size-5" aria-hidden />
           </button>
         ) : (
           <div className="h-8 w-6 shrink-0" aria-hidden />
@@ -235,10 +228,10 @@ function SortableBlockWrapper({
           isFocused
             ? "text-primary"
             : hasIssue
-              ? "text-rose-600"
+              ? "text-destructive"
               : isTextLikeRow
-                ? "text-on-surface-disabled"
-                : "text-on-surface-disabled",
+                ? "text-foreground-disabled"
+                : "text-foreground-disabled",
           !isDesktop && !isSeedDefault && "max-lg:touch-none",
         )}
         aria-label={!isDesktop && !isSeedDefault ? "길게 눌러 순서 변경" : undefined}
@@ -494,7 +487,7 @@ export default function EditorBody() {
           strategy={verticalListSortingStrategy}
         >
           <div
-            className="mx-auto flex min-h-full w-full min-w-0 flex-col gap-my-4 px-0 lg:px-my-8"
+            className="mx-auto flex min-h-full w-full min-w-0 flex-col gap-1 px-0 lg:px-2"
             onClick={handleBackgroundClick}
           >
             {blocks.map((block, i) => {
@@ -504,7 +497,7 @@ export default function EditorBody() {
               return (
                 <Fragment key={block.id}>
                   {showDivider && (
-                    <div className="mx-0 my-10 border-t border-border-10" />
+                    <div className="mx-0 my-10 border-t border-border" />
                   )}
                   <SortableBlockWrapper
                     block={block}

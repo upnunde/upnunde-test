@@ -55,3 +55,16 @@ useEditorStore.getState().setEditorEntryFromFormConversion(false);
 
 - 빈 콘텐츠 블록(`scene`, `top_desc`, `text`, `direction`), 선택지 필수 필드, `event`/`event_end` 쌍 불일치 → `hasValidationIssues = true`.
 - 검증 실패 시 `등록하기` 버튼 비활성.
+
+## 블록 라벨 chroma (DS 예외)
+
+- `#장면`, `#장면정보`, `#배경` 등 **블록 타입 라벨** 색은 `src/lib/blockLabelColors.ts`의 `LABEL_COLOR_BY_TYPE`만 정본.
+- 일반 UI의 `text-{role}-foreground` 짝 규칙과 **별도 예외** — chroma 값은 `block-label-chroma.css`(DS primitive) + `blockLabelColors.ts`만 정본.
+- `ScriptBlock`·`EditorBodyReadOnly`는 매핑을 직접 하드코딩하지 말고 `LABEL_COLOR_BY_TYPE[block.type]`만 사용.
+- 임의 hex·Tailwind 팔레트는 라벨에도 금지. `npm run check:ds`가 소비처 우회를 검사한다.
+
+## 커스텀 컴포넌트 파운데이션
+
+- **형태·기능**은 도메인 커스텀 OK. **spacing·색·radius·shadow·motion·z-index**는 DS 토큰만 (`docs/design-system.md`).
+- 반복 클래스는 `src/lib/*-styles.ts` 단일 소스로 추출 (예: `editor-control-styles.ts`, `editor-block-layout.ts`, `thumbnail-styles.ts`).
+- 레거시 `text-on-*-container`, `var(--on-surface-*)`, `duration-150`, `z-[숫자]`, `shadow-[…]` 등 금지 — `npm run check:ds` · `npm run migrate:ds-foundation`.

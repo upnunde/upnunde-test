@@ -3,7 +3,7 @@ export const ANALYTICS_PRIMARY_DESCENDING_DOT_CLASSES: readonly string[] = [
   "bg-primary",
   "bg-primary/50",
   "bg-primary/25",
-  "bg-primary-primary-container",
+  "bg-primary-container",
 ];
 
 /** 차트 세그먼트용 동일 톤 팔레트 (진함 -> 연함) */

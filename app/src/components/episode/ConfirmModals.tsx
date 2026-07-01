@@ -8,7 +8,7 @@ import {
   ModalHeader,
   modalDialogContentClassName,
 } from "@/components/ui/modal";
-import { formTextFieldSmClassName } from "@/lib/form-field-styles";
+import { Input } from "@/components/ui/input";
 import { CONFIRM_INPUT_PHRASE } from "@/lib/deleteConfirmPhrase";
 import { formatScheduledPublishSummary } from "@/lib/formatEpisode";
 import {
@@ -18,7 +18,7 @@ import {
   toInputDateValue,
   toInputTimeValue,
 } from "@/lib/scheduled-publish";
-import { cn } from "@/lib/utils";
+import { cn } from "design-system/utils";
 import type { Episode } from "@/types/episode";
 
 export type PublishMode = "immediate" | "scheduled";
@@ -185,8 +185,8 @@ export function PublishConfirmModal({
               title="공개 방식"
               subtitle="에피소드를 언제 공개할지 선택해 주세요."
             />
-            <div className="self-stretch px-my-20 pb-my-20 space-y-my-8">
-              <div className="flex w-full gap-my-8" role="group" aria-label="공개 방식">
+            <div className="self-stretch px-5 pb-5 space-y-2">
+              <div className="flex w-full gap-2" role="group" aria-label="공개 방식">
                 <button
                   type="button"
                   onClick={() => handleModeSelect("immediate")}
@@ -195,7 +195,7 @@ export function PublishConfirmModal({
                     publishModeToggleClassName,
                     publishMode === "immediate"
                       ? "border-primary bg-primary/10 text-primary"
-                      : "border-border-10 bg-white text-on-surface-20 hover:bg-surface-20",
+                      : "border-border bg-background text-foreground-muted hover:bg-muted",
                   )}
                 >
                   즉시 공개
@@ -208,7 +208,7 @@ export function PublishConfirmModal({
                     publishModeToggleClassName,
                     publishMode === "scheduled"
                       ? "border-primary bg-primary/10 text-primary"
-                      : "border-border-10 bg-white text-on-surface-20 hover:bg-surface-20",
+                      : "border-border bg-background text-foreground-muted hover:bg-muted",
                   )}
                 >
                   예약 공개
@@ -216,19 +216,21 @@ export function PublishConfirmModal({
               </div>
 
               {publishMode === "scheduled" ? (
-                <div className="flex gap-my-8">
-                  <input
+                <div className="flex gap-2">
+                  <Input
                     type="date"
+                    size="sm"
                     value={scheduledDate}
                     onChange={(e) => setScheduledDate(e.target.value)}
-                    className={cn(formTextFieldSmClassName, "min-w-0 flex-1")}
+                    className="min-w-0 flex-1"
                     aria-label="공개 날짜"
                   />
-                  <input
+                  <Input
                     type="time"
+                    size="sm"
                     value={scheduledTime}
                     onChange={(e) => setScheduledTime(e.target.value)}
-                    className={cn(formTextFieldSmClassName, "w-[8.75rem] shrink-0")}
+                    className="w-[8.75rem] shrink-0"
                     aria-label="공개 시간"
                   />
                 </div>
@@ -255,15 +257,15 @@ export function PublishConfirmModal({
           </>
         ) : (
           <>
-            <div className="self-stretch px-my-20 pt-my-40 pb-my-16 bg-surface-10 max-lg:rounded-t-[16px] lg:rounded-t-[4px] flex flex-col justify-start items-center gap-my-20">
-              <div className="self-stretch flex flex-col justify-center items-center gap-my-8">
+            <div className="self-stretch px-5 pt-10 pb-4 bg-background max-lg:rounded-t-xl lg:rounded-t-sm flex flex-col justify-start items-center gap-5">
+              <div className="self-stretch flex flex-col justify-center items-center gap-2">
                 <DialogTitle asChild>
-                  <h2 className="text-center text-on-surface-10 text-heading2_700 font-['Pretendard_JP']">
+                  <h2 className="text-center text-foreground text-heading2_700 font-['Pretendard_JP']">
                     공개 전 유의사항
                   </h2>
                 </DialogTitle>
               </div>
-              <div className="self-stretch text-on-surface-20 text-body1_500 font-['Pretendard_JP'] space-y-my-12">
+              <div className="self-stretch text-foreground-muted text-body1_500 font-['Pretendard_JP'] space-y-3">
                 <p className="text-center">
                   에피소드를 공개하기 전, 아래 내용을 꼭 확인해 주세요!
                 </p>
@@ -274,21 +276,21 @@ export function PublishConfirmModal({
                 ) : (
                   <p className="text-center text-body3_500 text-primary">즉시 공개</p>
                 )}
-                <div className="self-stretch p-my-20 bg-surface-20 rounded-lg inline-flex flex-col justify-center items-center gap-my-8">
-                  <div className="self-stretch inline-flex justify-start items-start gap-my-8">
-                    <div className="w-4 justify-center text-on-surface-20 text-body3_500 font-['Pretendard_JP']">
+                <div className="self-stretch p-5 bg-muted rounded-lg inline-flex flex-col justify-center items-center gap-2">
+                  <div className="self-stretch inline-flex justify-start items-start gap-2">
+                    <div className="w-4 justify-center text-foreground-muted text-body3_500 font-['Pretendard_JP']">
                       1
                     </div>
-                    <div className="flex-1 justify-center text-on-surface-20 text-body3_400 font-['Pretendard_JP']">
+                    <div className="flex-1 justify-center text-foreground-muted text-body3_400 font-['Pretendard_JP']">
                       결제 보안 및 데이터 신뢰성 보호를 위해 공개 이후에는 창작자가 직접 에피소드를 수정하거나
                       삭제할 수 없습니다.
                     </div>
                   </div>
-                  <div className="self-stretch inline-flex justify-start items-start gap-my-8">
-                    <div className="w-4 justify-center text-on-surface-20 text-body3_500 font-['Pretendard_JP']">
+                  <div className="self-stretch inline-flex justify-start items-start gap-2">
+                    <div className="w-4 justify-center text-foreground-muted text-body3_500 font-['Pretendard_JP']">
                       2
                     </div>
-                    <div className="flex-1 justify-center text-on-surface-20 text-body3_400 font-['Pretendard_JP']">
+                    <div className="flex-1 justify-center text-foreground-muted text-body3_400 font-['Pretendard_JP']">
                       내용의 변경 또는 삭제가 반드시 필요한 경우, 고객센터 이메일을 통한 별도의 요청 및 승인
                       절차를 거쳐야 합니다.
                     </div>
@@ -357,7 +359,7 @@ export function DeleteConfirmModal({
           subtitle="정말 삭제하시겠어요? 삭제 후에는 복구할 수 없어요."
         />
         {episode ? (
-          <p className="-mt-3 px-my-24 pb-my-8 text-center font-['Pretendard_JP'] text-body1_500 text-on-surface-10">
+          <p className="-mt-3 px-6 pb-2 text-center font-['Pretendard_JP'] text-body1_500 text-foreground">
             「{episode.title}」
           </p>
         ) : null}

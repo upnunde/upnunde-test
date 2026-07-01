@@ -131,7 +131,7 @@ export default function SeriesEditPage() {
       logoPreviewUrl={logoPreviewUrl}
     >
       {activeTab === "image" && (
-                        <div className="flex flex-col gap-my-40">
+                        <div className="flex flex-col gap-10">
                           <SeriesImageUploadField
                             label="대표이미지*"
                             subtitle="시리즈를 대표하는 공식 이미지입니다. 부적절한 이미지는 사용이 제한됩니다."
@@ -170,7 +170,7 @@ export default function SeriesEditPage() {
                             <Button
                               type="button"
                               variant="secondary"
-                              size="form"
+                              size="lg"
                               className={PAGE_FOOTER_ACTION_BUTTON_CLASS}
                               onClick={() => setActiveTab("info")}
                             >
@@ -181,7 +181,7 @@ export default function SeriesEditPage() {
       )}
 
       {activeTab === "info" && (
-                        <div className="flex flex-col gap-my-40">
+                        <div className="flex flex-col gap-10">
                           <SeriesFormTextInputField
                             title="시리즈 제목*"
                             subtitle="요약 내용이 AI 전개의 가이드라인이 된다는 기술적 사실을 전달합니다."
@@ -243,7 +243,7 @@ export default function SeriesEditPage() {
                             <Button
                               type="button"
                               variant="secondary"
-                              size="form"
+                              size="lg"
                               className={PAGE_FOOTER_ACTION_BUTTON_CLASS}
                               onClick={() => setActiveTab("image")}
                             >
@@ -252,7 +252,7 @@ export default function SeriesEditPage() {
                             <Button
                               type="button"
                               variant="secondary"
-                              size="form"
+                              size="lg"
                               className={PAGE_FOOTER_ACTION_BUTTON_CLASS}
                               onClick={() => setActiveTab("worldview")}
                             >
@@ -263,7 +263,7 @@ export default function SeriesEditPage() {
       )}
 
       {activeTab === "worldview" && (
-                        <div className="flex flex-col gap-my-40">
+                        <div className="flex flex-col gap-10">
                           <SeriesFormTextareaField
                             title="세계관 프롬프트*"
                             subtitle="세계관은 모든 에피소드의 배경과 논리를 구성하는 절대적인 기준이 됩니다. 설정이 구체적일수록 AI가 원작의 의도에서 벗어나지 않고 일관성 있는 전개를 이어갈 수 있습니다."
@@ -295,7 +295,7 @@ export default function SeriesEditPage() {
                             <Button
                               type="button"
                               variant="secondary"
-                              size="form"
+                              size="lg"
                               className={PAGE_FOOTER_ACTION_BUTTON_CLASS}
                               onClick={() => setActiveTab("info")}
                             >

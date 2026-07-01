@@ -1,12 +1,12 @@
 "use client";
 
-import { FileText, Smartphone } from "lucide-react";
+import { ICONS } from "@/lib/icons";
 import {
   EDITOR_MOBILE_FAB_BUTTON_CLASS,
   EDITOR_MOBILE_FAB_SIZE_CLASS,
   type EditorMobilePanel,
 } from "@/components/editor/editor-mobile-floating-layout";
-import { cn } from "@/lib/utils";
+import { cn } from "design-system/utils";
 
 export interface EditorMobilePanelToggleFabProps {
   active: EditorMobilePanel;
@@ -24,7 +24,7 @@ export function EditorMobilePanelToggleFab({
   className,
 }: EditorMobilePanelToggleFabProps) {
   const isEdit = active === "edit";
-  const TargetIcon = isEdit ? Smartphone : FileText;
+  const TargetIcon = isEdit ? ICONS.smartphone : ICONS.fileText;
   const ariaLabel = isEdit ? "미리보기로 전환" : `${editTargetLabel}으로 전환`;
 
   return (

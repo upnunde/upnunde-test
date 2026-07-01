@@ -2,7 +2,7 @@
 
 import React, { useState, useEffect, useMemo } from "react";
 import { useRouter, usePathname, useSearchParams } from "next/navigation";
-import { FileText } from "lucide-react";
+import { ICONS } from "@/lib/icons";
 import Header from "@/components/Header/Header";
 import { Button } from "@/components/ui/button";
 import { HeaderBackButton } from "@/components/ui/header-back-button";
@@ -42,7 +42,7 @@ import { EDITOR_MOBILE_GUTTER_X_CLASS } from "@/lib/editor-block-layout";
 import { APP_BROWSER_BG_CLASS, APP_PAGE_ROOT_CLASS } from "@/lib/mobile-viewport";
 import { APP_MAIN_PANEL_CLASS, APP_SHELL_BODY_ROW_CLASS, EDITOR_PAGE_SCROLL_CLASS } from "@/lib/page-layout";
 import { INITIAL_SCRIPT } from "@/lib/initialScript";
-import { cn } from "@/lib/utils";
+import { cn } from "design-system/utils";
 
 function EpisodeReadOnlyWorkspace({
   isDesktop,
@@ -55,13 +55,13 @@ function EpisodeReadOnlyWorkspace({
 }) {
   if (isDesktop) {
     return (
-      <div className="flex min-h-0 w-full flex-1 items-start justify-center overflow-hidden bg-white">
-        <div className="relative flex h-full min-h-0 w-full flex-1 flex-col overflow-hidden border-r border-border-10">
+      <div className="flex min-h-0 w-full flex-1 items-start justify-center overflow-hidden bg-background">
+        <div className="relative flex h-full min-h-0 w-full flex-1 flex-col overflow-hidden border-r border-border">
           <div className={scrollClassName} {...{ [EDITOR_SCROLL_ROOT_ATTR]: "" }}>
             <EditorBodyReadOnly />
           </div>
         </div>
-        <div className="sticky top-10 ml-auto flex h-full shrink-0 flex-col items-center justify-start p-my-40">
+        <div className="sticky top-10 ml-auto flex h-full shrink-0 flex-col items-center justify-start p-10">
           <IPhone15ProFrame>
             <PreviewScreen />
           </IPhone15ProFrame>
@@ -71,7 +71,7 @@ function EpisodeReadOnlyWorkspace({
   }
 
   return (
-    <div className={cn("flex min-h-0 flex-1 flex-col overflow-hidden bg-white", APP_MAIN_PANEL_CLASS)}>
+    <div className={cn("flex min-h-0 flex-1 flex-col overflow-hidden bg-background", APP_MAIN_PANEL_CLASS)}>
       <div
         className={cn(
           "flex min-h-0 flex-1 flex-col overflow-hidden",
@@ -141,11 +141,11 @@ export default function EpisodeDetailPage() {
   const scrollClassName = cn(
     EDITOR_PAGE_SCROLL_CLASS,
     isDesktop
-      ? "px-0 py-my-40"
+      ? "px-0 py-10"
       : cn(
           EDITOR_MOBILE_GUTTER_X_CLASS,
           EDITOR_MOBILE_SCROLL_ROOT_TRAP_CLASS,
-          "max-lg:pt-my-12",
+          "max-lg:pt-3",
           EDITOR_MOBILE_SCROLL_BOTTOM_PAD_FAB_ONLY_CLASS,
         ),
   );
@@ -173,8 +173,8 @@ export default function EpisodeDetailPage() {
           <aside
             className={
               isSceneSidebarCollapsed
-                ? "w-fit shrink-0 overflow-y-auto border-r border-border-10 bg-white px-my-8"
-                : "w-[240px] shrink-0 self-stretch min-h-0 overflow-y-auto border-r border-border-10 bg-white"
+                ? "w-fit shrink-0 overflow-y-auto border-r border-border bg-background px-2"
+                : "w-[240px] shrink-0 self-stretch min-h-0 overflow-y-auto border-r border-border bg-background"
             }
           >
             <SceneNavigation
@@ -206,11 +206,11 @@ export default function EpisodeDetailPage() {
             )}
           >
             <div className={EDITOR_MOBILE_SUB_HEADER_INNER_CLASS}>
-              <header className="flex h-my-56 shrink-0 items-center justify-start py-0 pl-my-16 pr-my-12 lg:h-my-64 lg:px-my-24">
-                <div className="flex w-full min-w-0 items-center justify-between gap-my-12">
-                  <div className="flex min-w-0 items-center justify-start gap-my-8 lg:gap-my-12">
+              <header className="flex h-14 shrink-0 items-center justify-start py-0 pl-4 pr-3 lg:h-16 lg:px-6">
+                <div className="flex w-full min-w-0 items-center justify-between gap-3">
+                  <div className="flex min-w-0 items-center justify-start gap-2 lg:gap-3">
                     <HeaderBackButton onClick={handleBack} aria-label="에피소드 목록으로" />
-                    <h1 className="min-w-0 truncate text-body1_700 text-on-surface-10 lg:text-heading2_700">
+                    <h1 className="min-w-0 truncate text-body1_700 text-foreground lg:text-heading2_700">
                       {episodeHeaderTitle}
                     </h1>
                   </div>
@@ -219,10 +219,10 @@ export default function EpisodeDetailPage() {
                     variant="outline"
                     size="icon"
                     onClick={() => setIsPromptModalOpen(true)}
-                    className="h-8 w-8 shrink-0 rounded-full shadow-none disabled:border-border-20"
+                    className="h-8 w-8 shrink-0 rounded-full shadow-none disabled:border-border"
                     aria-label="에피소드 기준 프롬프트 보기"
                   >
-                    <FileText className="h-4 w-4 text-on-surface-30" aria-hidden />
+                    <ICONS.fileText className="h-4 w-4 text-foreground-placeholder" aria-hidden />
                   </Button>
                 </div>
               </header>

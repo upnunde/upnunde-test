@@ -3,7 +3,7 @@
 import type { ReactNode } from "react";
 import { DialogClose } from "@/components/ui/dialog";
 import { Button } from "@/components/ui/button";
-import { cn } from "@/lib/utils";
+import { cn } from "design-system/utils";
 import {
   modalFooterButtonRowClassName,
   modalFooterButtonToneClassName,

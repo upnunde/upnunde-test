@@ -5,10 +5,8 @@ import {
   MenuListItem,
   MenuListLabel,
   MenuListSeparator,
-  menuListItemFormClassName,
   menuListLabelClassName,
 } from "@/components/ui/menu-list";
-import { cn } from "@/lib/utils";
 
 export type EditorMenuPresentation = "dropdown" | "sheet";
 
@@ -32,7 +30,7 @@ export function EditorMenuOption({
       <DropdownMenuItem
         variant={destructive ? "destructive" : "default"}
         onClick={onSelect}
-        className={cn(menuListItemFormClassName, className)}
+        className={className}
       >
         {children}
       </DropdownMenuItem>

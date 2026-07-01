@@ -11,7 +11,7 @@ import {
   PAGE_SCROLL_ROOT_MOBILE_FLUSH_CLASS,
   PAGE_STACK_CLASS,
 } from "@/lib/page-layout";
-import { cn } from "@/lib/utils";
+import { cn } from "design-system/utils";
 import { AnalyticsContentTab } from "@/components/analytics/AnalyticsContentTab";
 import { AnalyticsUserTab } from "@/components/analytics/AnalyticsUserTab";
 import { MonetizationDashboard } from "@/components/monetization/MonetizationDashboard";

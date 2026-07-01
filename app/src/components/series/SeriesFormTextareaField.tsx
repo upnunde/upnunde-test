@@ -1,7 +1,11 @@
 "use client";
 
-import { Title1 } from "@/components/ui/title1";
-import { cn } from "@/lib/utils";
+import { useId } from "react";
+
+import { FormFieldLabel, formFieldAriaDescribedBy } from "@/components/ui/field-label";
+import { InputGroup, InputHypertext } from "@/components/ui/input";
+import { Textarea } from "@/components/ui/textarea";
+import { cn } from "design-system/utils";
 
 interface SeriesFormTextareaFieldProps {
   title: string;
@@ -28,25 +32,31 @@ export function SeriesFormTextareaField({
   minHeightClassName = "min-h-[160px]",
   onValueChange,
 }: SeriesFormTextareaFieldProps) {
+  const inputId = useId().replace(/:/g, "");
+
   return (
-    <div className="flex flex-col gap-my-4">
-      <Title1 text={title} variant="title-subtitle-dot" subtitleText={subtitle} />
-      <textarea
-        ref={textareaRef}
-        rows={rows}
-        maxLength={maxLength}
-        value={value}
-        onChange={(e) => onValueChange(e.target.value)}
-        placeholder={placeholder}
-        className={cn(
-          "mt-1 w-full max-h-[400px] resize-y rounded-md border bg-white px-my-12 py-my-8 text-body3_400 text-on-surface-10 placeholder:text-on-surface-30 focus:outline-none focus:ring-2",
-          minHeightClassName,
-          error ? "border-destructive focus:ring-destructive/40" : "border-border-10 focus:ring-primary"
-        )}
-      />
-      <div className="flex justify-end text-caption1_400 text-on-surface-30">
-        {value.length}/{maxLength}
-      </div>
+    <div className="flex flex-col gap-1">
+      <FormFieldLabel title={title} subtitle={subtitle} inputId={inputId} />
+      <InputGroup className="mt-1">
+        <Textarea
+          ref={textareaRef}
+          id={inputId}
+          aria-describedby={formFieldAriaDescribedBy(inputId, Boolean(subtitle))}
+          rows={rows}
+          maxLength={maxLength}
+          value={value}
+          onChange={(e) => onValueChange(e.target.value)}
+          placeholder={placeholder}
+          aria-invalid={error}
+          className={cn("max-h-[400px] resize-y", minHeightClassName)}
+        />
+        <InputHypertext
+          id={formFieldAriaDescribedBy(inputId, Boolean(subtitle))}
+          count={value.length}
+          max={maxLength}
+          variant={error ? "error" : "default"}
+        />
+      </InputGroup>
     </div>
   );
 }

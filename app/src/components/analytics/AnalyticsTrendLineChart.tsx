@@ -1,7 +1,7 @@
 "use client";
 
 import { useEffect, useMemo, useRef, useState } from "react";
-import { cn } from "@/lib/utils";
+import { cn } from "design-system/utils";
 import VChart from "@visactor/vchart";
 import type { ILineChartSpec } from "@visactor/vchart";
 import { ANALYTICS_TREND_LINE_SHELL_CLASS } from "@/components/analytics/analytics-trend-chart-shell";

@@ -1,7 +1,7 @@
 "use client";
 
 import NextImage from "next/image";
-import { Film, Music } from "lucide-react";
+import { ICONS } from "@/lib/icons";
 import type { BlockType, ScriptBlock } from "@/types/editor";
 import { BACKGROUNDS, CHARACTERS, GALLERIES } from "@/lib/mockData";
 import { initialCharacters } from "@/lib/resourceMockData";
@@ -9,7 +9,7 @@ import {
   isResourceValueEmpty,
   resolveRegisteredResourceName,
 } from "@/lib/resolveRegisteredResourceName";
-import { cn } from "@/lib/utils";
+import { cn } from "design-system/utils";
 import { ReadonlyValueBox } from "./ReadonlyValueBox";
 
 const PICKER_RESOURCE_TYPES: BlockType[] = [
@@ -57,15 +57,15 @@ function ResourceLeadingIcon({
   }
   if (blockType === "bgm" || blockType === "sfx") {
     return (
-      <span className="flex h-5 w-5 shrink-0 items-center justify-center rounded-full bg-surface-20 text-on-surface-30">
-        <Music className="h-3 w-3" />
+      <span className="flex h-5 w-5 shrink-0 items-center justify-center rounded-full bg-muted text-foreground-placeholder">
+        <ICONS.music className="h-3 w-3" />
       </span>
     );
   }
   if (blockType === "video") {
     return (
-      <span className="flex h-5 w-5 shrink-0 items-center justify-center rounded-full bg-surface-20 text-on-surface-30">
-        <Film className="h-3 w-3" />
+      <span className="flex h-5 w-5 shrink-0 items-center justify-center rounded-full bg-muted text-foreground-placeholder">
+        <ICONS.film className="h-3 w-3" />
       </span>
     );
   }
@@ -103,7 +103,7 @@ export function ReadonlyResourceValues({
   const videoPlaybackLabel = videoPlayback === "once" ? "한 번만" : "무한루프";
 
   return (
-    <div className={cn("flex min-w-0 flex-1 flex-wrap items-center gap-my-8", className)}>
+    <div className={cn("flex min-w-0 flex-1 flex-wrap items-center gap-2", className)}>
       <ReadonlyValueBox
         empty={isEmpty}
         label={isEmpty ? "선택 안됨" : displayName}

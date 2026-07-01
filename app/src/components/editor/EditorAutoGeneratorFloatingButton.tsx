@@ -1,8 +1,8 @@
 "use client";
 
-import { Sparkles } from "lucide-react";
+import { ICONS } from "@/lib/icons";
 import { Button } from "@/components/ui/button";
-import { cn } from "@/lib/utils";
+import { cn } from "design-system/utils";
 
 export type EditorAutoGeneratorButtonPlacement = "overlay" | "below-tabs";
 
@@ -16,7 +16,7 @@ export interface EditorAutoGeneratorFloatingButtonProps {
 }
 
 const buttonVisualClass =
-  "rounded-full bg-slate-800 text-body3_500 text-white shadow-elevation-10 hover:bg-slate-700 hover:text-white";
+  "rounded-full bg-inverse text-body3_500 text-inverse-foreground shadow-elevation-10 hover:bg-inverse hover:text-inverse-foreground";
 
 /** 에피소드 생성기 진입 버튼 */
 export function EditorAutoGeneratorFloatingButton({
@@ -29,21 +29,21 @@ export function EditorAutoGeneratorFloatingButton({
     <Button
       type="button"
       variant="ghost"
-      size={compact ? "icon-lg" : "form"}
+      size={compact ? "icon-lg" : "lg"}
       className={cn(
         buttonVisualClass,
-        "transition-[width,padding] duration-200 ease-out",
-        placement === "overlay" && "absolute top-my-12 right-my-12 z-30 px-my-16",
+        "transition-[width,padding] duration-short ease-standard",
+        placement === "overlay" && "absolute top-3 right-3 z-overlay px-4",
         placement === "below-tabs" &&
-          "absolute top-full right-my-8 z-30 mt-my-8 shrink-0",
-        compact ? "h-12 w-12 min-w-0 p-0" : "px-my-16",
+          "absolute top-full right-2 z-overlay mt-2 shrink-0",
+        compact ? "h-12 w-12 min-w-0 p-0" : "px-4",
         className,
       )}
       onClick={onClick}
       aria-label={compact ? "에피소드 생성기" : undefined}
     >
       {compact ? (
-        <Sparkles className="h-5 w-5 shrink-0" aria-hidden />
+        <ICONS.sparkles className="h-5 w-5 shrink-0" aria-hidden />
       ) : (
         "에피소드 생성기"
       )}

@@ -10,9 +10,11 @@ import {
   RESOURCE_THUMBNAIL_FLUID_IMAGE_SIZES,
   RESOURCE_THUMBNAIL_FLUID_SIZE_CLASS,
   THUMBNAIL_DIM_OVERLAY_CLASS,
+  THUMBNAIL_META_BAR_DIM_CLASS,
+  DIM_OVERLAY_TEXT_CLASS,
 } from "@/lib/thumbnail-styles";
 import { isDummyResourceUrl } from "@/lib/dummy-asset-path";
-import { cn } from "@/lib/utils";
+import { cn } from "design-system/utils";
 
 /** [정책 7] 미디어 카드. 썸네일 + 재생시간 표시. 클릭 시 상세 페이지, 삭제 시 확인 팝업. */
 export interface MediaCardProps {
@@ -57,18 +59,18 @@ export function MediaCard({
       onClick={handleCardClick}
       onKeyDown={(e) => e.key === "Enter" && (onPreviewClick ? onPreviewClick(item) : onDetailClick(item))}
       className={cn(
-        "group flex cursor-pointer flex-col items-start justify-start gap-my-4",
+        "group flex cursor-pointer flex-col items-start justify-start gap-1",
         fluid ? "w-full min-w-0" : "w-[90px]",
       )}
       aria-label={`${item.name} 상세 보기`}
     >
       <div
         className={cn(
-          "relative flex flex-col items-center justify-center gap-my-8 overflow-hidden rounded-lg outline outline-1 outline-offset-[-1px]",
+          "relative flex flex-col items-center justify-center gap-2 overflow-hidden rounded-lg outline outline-1 outline-offset-[-1px]",
           fluid ? RESOURCE_THUMBNAIL_FLUID_SIZE_CLASS : RESOURCE_THUMBNAIL_FIXED_9_16_CLASS,
           error
-            ? "bg-error-error-container outline-error-on-error-container"
-            : "bg-surface-disabled/0 outline-border-20",
+            ? "bg-destructive-container outline-on-destructive-container"
+            : "bg-disabled/0 outline-border",
         )}
       >
         <Image
@@ -80,8 +82,8 @@ export function MediaCard({
           className="object-cover"
         />
         <div className={THUMBNAIL_DIM_OVERLAY_CLASS} aria-hidden />
-        <div className="w-full h-6 left-0 bottom-0 absolute inline-flex justify-center items-center pointer-events-none bg-black/40">
-          <span className="text-center text-white text-caption1_700 font-['Pretendard_JP']">
+        <div className={THUMBNAIL_META_BAR_DIM_CLASS}>
+          <span className={cn("text-center text-caption1_700 font-['Pretendard_JP']", DIM_OVERLAY_TEXT_CLASS)}>
             {item.duration}
           </span>
         </div>
@@ -92,11 +94,11 @@ export function MediaCard({
         />
       </div>
       {showName && (
-        <div className="self-stretch inline-flex justify-start items-center gap-my-8 overflow-hidden">
+        <div className="self-stretch inline-flex justify-start items-center gap-2 overflow-hidden">
           <span
             className={cn(
               "flex-1 text-body4_400 font-['Pretendard_JP'] truncate",
-              error ? "text-error-on-error-container" : "text-on-surface-10"
+              error ? "text-destructive-container-foreground" : "text-foreground"
             )}
           >
             {item.name}

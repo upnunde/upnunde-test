@@ -7,13 +7,15 @@ import { SegmentedTextTabs } from "@/components/ui/segmented-text-tabs";
 import { AnalyticsPanel } from "@/components/analytics/AnalyticsPanel";
 import {
   ANALYTICS_KEY_STAT_BUTTON_CLASS,
+  ANALYTICS_KEY_STAT_BUTTON_INTERACTION_CLASS,
   ANALYTICS_KEY_STAT_DELTA_CLASS,
-  ANALYTICS_KEY_STAT_LABEL_CLASS,
-  ANALYTICS_KEY_STAT_VALUE_CLASS,
   ANALYTICS_KEY_STATS_ROW_CLASS,
+  analyticsKeyStatButtonStateClass,
+  analyticsKeyStatLabelClass,
+  analyticsKeyStatValueClass,
 } from "@/components/analytics/analytics-key-stats-layout";
 import { PAGE_FLUSH_CONTENT_PAD_X_CLASS } from "@/lib/page-layout";
-import { cn } from "@/lib/utils";
+import { cn } from "design-system/utils";
 import type { AnalyticsPrimaryMetric } from "@/components/analytics/AnalyticsTrendLineChart";
 import { type AnalyticsPeriodRange } from "@/components/analytics/analytics-date";
 import {
@@ -103,7 +105,7 @@ export function AnalyticsContentTab({
   );
 
   return (
-    <div className="flex flex-col items-start justify-start gap-my-12 lg:gap-my-20 self-stretch px-0">
+    <div className="flex flex-col items-start justify-start gap-3 lg:gap-5 self-stretch px-0">
       <AnalyticsPanel>
         <Title2 text="주요통계" variant="title" asSectionHeader />
 
@@ -121,13 +123,13 @@ export function AnalyticsContentTab({
                 aria-label={`${label} 통계 선택, 하단 그래프에 반영`}
                 className={cn(
                   ANALYTICS_KEY_STAT_BUTTON_CLASS,
-                  "cursor-pointer text-left transition-colors outline-none",
+                  ANALYTICS_KEY_STAT_BUTTON_INTERACTION_CLASS,
                   i < arr.length - 1 && "border-r",
-                  selected ? "z-[1] bg-white" : "bg-surface-disabled-10 hover:bg-surface-10/80",
+                  analyticsKeyStatButtonStateClass(selected),
                 )}
               >
-                <div className={ANALYTICS_KEY_STAT_LABEL_CLASS}>{label}</div>
-                <div className={ANALYTICS_KEY_STAT_VALUE_CLASS}>{stat.value}</div>
+                <div className={analyticsKeyStatLabelClass(selected)}>{label}</div>
+                <div className={analyticsKeyStatValueClass(selected)}>{stat.value}</div>
                 <div className={cn(ANALYTICS_KEY_STAT_DELTA_CLASS, deltaClassName(stat.deltaTone))}>
                   {stat.delta}
                 </div>
@@ -136,8 +138,8 @@ export function AnalyticsContentTab({
           })}
         </div>
 
-        <div className="flex flex-col items-stretch gap-my-12 self-stretch px-0 py-my-40">
-          <p className={cn(PAGE_FLUSH_CONTENT_PAD_X_CLASS, "text-body3_500 text-on-surface-20")}>
+        <div className="flex flex-col items-stretch gap-3 self-stretch px-0 py-10">
+          <p className={cn(PAGE_FLUSH_CONTENT_PAD_X_CLASS, "text-body3_500 text-foreground-muted")}>
             {PRIMARY_LABELS[primaryMetric] ?? "조회수"} 추이
           </p>
           <AnalyticsTrendLineChart
@@ -148,7 +150,7 @@ export function AnalyticsContentTab({
         </div>
       </AnalyticsPanel>
 
-      <div className="flex w-full flex-col items-stretch gap-my-12 lg:gap-my-20 lg:flex-row">
+      <div className="flex w-full flex-col items-stretch gap-3 lg:gap-5 lg:flex-row">
         <PopularContentsCard rows={popularTop5Rows} isSeriesScope={isSeriesScope} />
         <AttentionContentsCard rows={attentionTop5Rows} isSeriesScope={isSeriesScope} />
       </div>
@@ -174,7 +176,7 @@ function PopularContentsCard({
         variant="title"
         asSectionHeader
       />
-      <div className={cn(PAGE_FLUSH_CONTENT_PAD_X_CLASS, "pt-my-12")}>
+      <div className={cn(PAGE_FLUSH_CONTENT_PAD_X_CLASS, "pt-3")}>
         <SegmentedTextTabs
           aria-label="인기 콘텐츠 기준"
           items={[
@@ -185,7 +187,7 @@ function PopularContentsCard({
           ]}
           activeId={popularCriterion}
           onSelect={(id) => setPopularCriterion(id as PopularCriterionId)}
-          variant="chip"
+          size="m"
           tabListClassName="self-stretch"
         />
       </div>
@@ -213,7 +215,7 @@ function AttentionContentsCard({
         variant="title"
         asSectionHeader
       />
-      <div className={cn(PAGE_FLUSH_CONTENT_PAD_X_CLASS, "pt-my-12")}>
+      <div className={cn(PAGE_FLUSH_CONTENT_PAD_X_CLASS, "pt-3")}>
         <SegmentedTextTabs
           aria-label="주의 콘텐츠 기준"
           items={[
@@ -222,13 +224,13 @@ function AttentionContentsCard({
           ]}
           activeId={attentionCriterion}
           onSelect={(id) => setAttentionCriterion(id as AttentionCriterionId)}
-          variant="chip"
+          size="m"
           tabListClassName="self-stretch"
         />
       </div>
       {isEmpty ? (
-        <div className="flex h-[584px] flex-col items-center justify-center gap-my-16 p-my-20">
-          <p className="text-body3_400 text-on-surface-disabled">
+        <div className="flex h-[584px] flex-col items-center justify-center gap-4 p-5">
+          <p className="text-body3_400 text-foreground-disabled">
             데이터가 충분하지 않아 이 보고서를 표시할 수 없습니다.
           </p>
         </div>

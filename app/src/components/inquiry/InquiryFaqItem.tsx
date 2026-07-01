@@ -1,8 +1,8 @@
 import { PAGE_FLUSH_CONTENT_PAD_X_CLASS } from "@/lib/page-layout";
 import { getInquiryFaqCategoryLabel } from "@/lib/inquiry-faq";
 import type { InquiryFaqItem as InquiryFaqItemType } from "@/lib/inquiry-faq";
-import { cn } from "@/lib/utils";
-import { ChevronDown } from "lucide-react";
+import { cn } from "design-system/utils";
+import { ICONS } from "@/lib/icons";
 
 export interface InquiryFaqItemProps {
   item: InquiryFaqItemType;
@@ -17,28 +17,28 @@ export function InquiryFaqItem({ item, isOpen = false, onToggle }: InquiryFaqIte
     <div
       className={cn(
         PAGE_FLUSH_CONTENT_PAD_X_CLASS,
-        "transition-colors hover:bg-surface-20",
-        isOpen && "bg-surface-20",
+        "transition-colors hover:bg-muted",
+        isOpen && "bg-muted",
       )}
     >
       <button
         type="button"
         onClick={() => onToggle?.()}
-        className="inline-flex w-full min-h-[72px] cursor-pointer items-center gap-my-12 self-stretch rounded-lg py-my-20 transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-inset lg:gap-my-20 lg:py-my-12"
+        className="inline-flex w-full min-h-[72px] cursor-pointer items-center gap-3 self-stretch rounded-lg py-5 transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-inset lg:gap-5 lg:py-3"
         aria-expanded={isOpen}
         aria-controls={`inquiry-faq-content-${id}`}
         id={`inquiry-faq-trigger-${id}`}
       >
-        <div className="flex min-w-0 flex-1 flex-col items-start justify-center gap-my-4">
-          <span className="text-body4_500 text-on-surface-30 lg:text-caption1_500">
+        <div className="flex min-w-0 flex-1 flex-col items-start justify-center gap-1">
+          <span className="text-body4_500 text-foreground-placeholder lg:text-caption1_500">
             {getInquiryFaqCategoryLabel(category)}
           </span>
-          <span className="w-full min-w-0 text-left text-body1_700 text-on-surface-10 lg:text-body2_500">
+          <span className="w-full min-w-0 text-left text-body1_700 text-foreground lg:text-body2_500">
             {question}
           </span>
         </div>
-        <div className="flex h-8 w-8 shrink-0 items-center justify-center overflow-hidden rounded-[999px] bg-transparent px-my-12 text-on-surface-30">
-          <ChevronDown
+        <div className="flex h-8 w-8 shrink-0 items-center justify-center overflow-hidden rounded-[999px] bg-transparent px-3 text-foreground-placeholder">
+          <ICONS.chevronDown
             className={cn("h-4 w-4 shrink-0 transition-transform", isOpen && "rotate-180")}
             aria-hidden
           />
@@ -50,17 +50,17 @@ export function InquiryFaqItem({ item, isOpen = false, onToggle }: InquiryFaqIte
           id={`inquiry-faq-content-${id}`}
           role="region"
           aria-labelledby={`inquiry-faq-trigger-${id}`}
-          className="flex flex-col gap-my-12 pb-my-16 pt-0 lg:pb-my-20"
+          className="flex flex-col gap-3 pb-4 pt-0 lg:pb-5"
         >
-          <p className="whitespace-pre-wrap text-body3_400 text-on-surface-20">{answer}</p>
-          <div className="flex items-center justify-end gap-my-8">
+          <p className="whitespace-pre-wrap text-body3_400 text-foreground-muted">{answer}</p>
+          <div className="flex items-center justify-end gap-2">
             <button
               type="button"
               onClick={(e) => {
                 e.stopPropagation();
                 onToggle?.();
               }}
-              className="h-8 cursor-pointer rounded-md border border-border-20 bg-white px-my-12 text-body3_500 text-on-surface-20 transition-colors hover:bg-surface-20 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-2"
+              className="h-8 cursor-pointer rounded-md border border-border bg-background px-3 text-body3_500 text-foreground-muted transition-colors hover:bg-muted focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-2"
             >
               접기
             </button>

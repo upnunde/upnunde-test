@@ -1,0 +1,54 @@
+/**
+ * 에디터 블록 타입 라벨 chroma — DS primitive 변수만 참조.
+ * 매핑 정본: `src/lib/blockLabelColors.ts`
+ *
+ * 시각 스펙(에디터 카테고리 라벨):
+ *  #장면N orange · #장면정보 yellow · #배경 lime · #배경음악 teal
+ *  #효과음 sky · #캐릭터 royal blue · #갤러리 purple · #동영상 magenta
+ *  #선택지 steel blue · #장면 전환 dusty rose · 스피커 gray
+ */
+@layer utilities {
+  .text-block-label-scene {
+    color: var(--warning-500);
+  }
+
+  .text-block-label-top-desc {
+    color: var(--warning-400);
+  }
+
+  .text-block-label-background {
+    color: var(--success-400);
+  }
+
+  .text-block-label-bgm {
+    color: var(--success-600);
+  }
+
+  .text-block-label-sfx {
+    color: var(--info-400);
+  }
+
+  .text-block-label-character {
+    color: var(--info-600);
+  }
+
+  .text-block-label-gallery {
+    color: var(--brand-800);
+  }
+
+  .text-block-label-video {
+    color: var(--brand-500);
+  }
+
+  .text-block-label-direction {
+    color: var(--brand-600);
+  }
+
+  .text-block-label-choice {
+    color: var(--info-800);
+  }
+
+  .text-block-label-event {
+    color: var(--error-400);
+  }
+}

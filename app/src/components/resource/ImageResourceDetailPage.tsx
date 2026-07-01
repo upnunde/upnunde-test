@@ -3,17 +3,17 @@
 import React, { useCallback, useEffect, useRef, useState } from "react";
 import Image from "next/image";
 import { useRouter, usePathname } from "next/navigation";
-import { Pencil, Trash2 } from "lucide-react";
+import { ICONS } from "@/lib/icons";
 import { Button } from "@/components/ui/button";
 import { HeaderBackButton } from "@/components/ui/header-back-button";
-import { Input } from "@/components/ui/input";
+import { Input, InputGroup, InputHypertext } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import { FloatingAiComposerPortal } from "@/components/ui/FloatingAiComposerPortal";
 import { FLOATING_COMPOSER_SCROLL_PAD_CLASS } from "@/components/ui/floating-composer-bar";
 import { AddResourceSlot } from "@/components/resource/cards/AddResourceSlot";
 import { createOptimizedImageObjectUrl } from "@/lib/image-upload-compress";
-import { THUMBNAIL_DIM_OVERLAY_CLASS } from "@/lib/thumbnail-styles";
-import { Title1 } from "@/components/ui/title1";
+import { THUMBNAIL_DIM_OVERLAY_CLASS, thumbnailHoverDimOverlayClass } from "@/lib/thumbnail-styles";
+import { FormFieldLabel, formFieldAriaDescribedBy } from "@/components/ui/field-label";
 import { Title2 } from "@/components/ui/title2";
 import {
   PAGE_CARD_SHELL_MOBILE_FLUSH_CLASS,
@@ -24,8 +24,9 @@ import {
   PAGE_SUBHEADER_PAGE_SHELL_CLASS,
   PAGE_SUBHEADER_WITH_STICKY_CLASS,
 } from "@/lib/page-layout";
-import { cn } from "@/lib/utils";
+import { cn } from "design-system/utils";
 import { generateResourceDraftFromBrief } from "@/lib/resource-ai-draft";
+import { RESOURCE_DESCRIPTION_MAX } from "@/lib/resource-ai-draft-types";
 import { useFormAiDraftComposer } from "@/hooks/useFormAiDraftComposer";
 import { ImageCropPosterModal } from "@/components/resource/character/CharacterExpressionModal";
 import type { ImageResource, ImageResourceKind, MediaResource } from "@/types/resource";
@@ -34,6 +35,9 @@ export type { ImageResourceKind };
 
 /** OS 파일 선택창 — label htmlFor 연결용 */
 const IMAGE_RESOURCE_THUMBNAIL_FILE_INPUT_ID = "image-resource-thumbnail-file";
+const IMAGE_RESOURCE_NAME_INPUT_ID = "image-resource-name";
+const IMAGE_RESOURCE_DESCRIPTION_INPUT_ID = "image-resource-description";
+const IMAGE_RESOURCE_SCENE_AI_GROUP_ID = "image-resource-scene-ai";
 
 /** 편집 시 기존 데이터. 배경/연출/갤러리는 imageUrl, 미디어는 thumbnailUrl 사용 */
 export type ImageResourceInitialData = ImageResource | MediaResource;
@@ -234,10 +238,10 @@ export function ImageResourceDetailPage({ kind, initialData }: ImageResourceDeta
     <div className={PAGE_SUBHEADER_PAGE_SHELL_CLASS}>
       {/* 상단 서브 헤더 */}
       <header className={PAGE_SUBHEADER_WITH_STICKY_CLASS}>
-        <div className="flex w-full min-w-0 max-w-[1200px] mx-auto items-center justify-between gap-my-16">
-          <div className="flex items-center justify-start gap-my-12">
+        <div className="flex w-full min-w-0 max-w-[1200px] mx-auto items-center justify-between gap-4">
+          <div className="flex items-center justify-start gap-3">
             <HeaderBackButton onClick={handleBack} aria-label="리소스 목록으로" />
-            <h1 className="text-heading2_700 text-on-surface-10">{labels.headerTitle}</h1>
+            <h1 className="text-heading2_700 text-foreground">{labels.headerTitle}</h1>
           </div>
         </div>
       </header>
@@ -252,7 +256,7 @@ export function ImageResourceDetailPage({ kind, initialData }: ImageResourceDeta
         <div className="w-full min-w-0 max-w-[1200px] mx-auto mx-auto">
           <div
             className={cn(
-              "w-full rounded-[4px] border border-border-10 bg-white",
+              "w-full rounded-sm border border-border bg-background",
               PAGE_CARD_SHELL_MOBILE_FLUSH_CLASS,
             )}
           >
@@ -261,52 +265,64 @@ export function ImageResourceDetailPage({ kind, initialData }: ImageResourceDeta
               asSectionHeader
             />
 
-            <div className={`${PAGE_CONTENT_BODY_CLASS} flex flex-col gap-my-32`}>
+            <div className={`${PAGE_CONTENT_BODY_CLASS} flex flex-col gap-8`}>
               {/* 이름 */}
-              <section className="flex flex-col gap-my-8">
-                <Title1
-                  text={labels.nameLabel}
-                  variant="title-subtitle-dot"
-                  subtitleText={labels.nameSubtitle}
+              <section className="flex flex-col gap-2">
+                <FormFieldLabel
+                  title={labels.nameLabel}
+                  subtitle={labels.nameSubtitle}
+                  inputId={IMAGE_RESOURCE_NAME_INPUT_ID}
                 />
-                <div className="flex flex-col justify-center items-start gap-my-8">
+                <InputGroup>
                   <Input
+                    id={IMAGE_RESOURCE_NAME_INPUT_ID}
+                    aria-describedby={formFieldAriaDescribedBy(IMAGE_RESOURCE_NAME_INPUT_ID)}
+                    size="lg"
                     value={name}
                     onChange={(e) => setName(e.target.value)}
                     placeholder="이름을 입력해 주세요."
-                    className="h-[42px] rounded-md border border-border-10 bg-white px-my-12 py-my-8 text-body3_400 text-on-surface-10 placeholder:text-on-surface-30 focus:outline-none focus:ring-2 focus:ring-primary shadow-none"
                   />
-                </div>
+                </InputGroup>
               </section>
 
               {/* 설명 */}
-              <section className="flex flex-col gap-my-8">
-                <Title1
-                  text={labels.descriptionLabel}
-                  variant="title-subtitle-dot"
-                  subtitleText={labels.descriptionSubtitle}
+              <section className="flex flex-col gap-2">
+                <FormFieldLabel
+                  title={labels.descriptionLabel}
+                  subtitle={labels.descriptionSubtitle}
+                  inputId={IMAGE_RESOURCE_DESCRIPTION_INPUT_ID}
                 />
-                <div className="flex flex-col justify-center items-start gap-my-8">
+                <InputGroup>
                   <Textarea
+                    id={IMAGE_RESOURCE_DESCRIPTION_INPUT_ID}
+                    aria-describedby={formFieldAriaDescribedBy(IMAGE_RESOURCE_DESCRIPTION_INPUT_ID)}
                     rows={4}
+                    maxLength={RESOURCE_DESCRIPTION_MAX}
                     value={description}
-                    onChange={(e) => setDescription(e.target.value)}
+                    onChange={(e) =>
+                      setDescription(e.target.value.slice(0, RESOURCE_DESCRIPTION_MAX))
+                    }
                     placeholder="설명을 입력해 주세요."
-                    className="min-h-[96px] max-h-[400px] w-full resize-y rounded-md border border-border-10 bg-white px-my-12 py-my-8 text-body3_400 text-on-surface-10 placeholder:text-on-surface-30 shadow-none focus:outline-none focus:ring-2 focus:ring-primary"
+                    className="min-h-[96px] max-h-[400px] resize-y"
                   />
-                </div>
+                  <InputHypertext
+                    id={formFieldAriaDescribedBy(IMAGE_RESOURCE_DESCRIPTION_INPUT_ID)}
+                    count={description.length}
+                    max={RESOURCE_DESCRIPTION_MAX}
+                  />
+                </InputGroup>
               </section>
 
               {/* 이미지 업로드 */}
-              <section className="flex flex-col gap-my-12">
-                <Title1
-                  text={labels.thumbnailLabel}
-                  variant="title-subtitle-dot"
-                  subtitleText={labels.thumbnailSubtitle}
+              <section className="flex flex-col gap-3">
+                <FormFieldLabel
+                  title={labels.thumbnailLabel}
+                  subtitle={labels.thumbnailSubtitle}
+                  inputId={IMAGE_RESOURCE_THUMBNAIL_FILE_INPUT_ID}
                 />
                 {thumbnailUrl ? (
-                  <div className="inline-flex flex-col justify-start items-start gap-my-4 w-[90px] group">
-                    <div className="w-[90px] h-[160px] rounded-lg overflow-hidden border border-border-10 bg-surface-20 relative">
+                  <div className="inline-flex flex-col justify-start items-start gap-1 w-[90px] group">
+                    <div className="w-[90px] h-[160px] rounded-lg overflow-hidden border border-border bg-muted relative">
                       <button
                         type="button"
                         onClick={handleThumbnailClick}
@@ -323,30 +339,32 @@ export function ImageResourceDetailPage({ kind, initialData }: ImageResourceDeta
                         />
                         <div className={THUMBNAIL_DIM_OVERLAY_CLASS} aria-hidden />
                       </button>
-                      <div className="absolute inset-0 z-[1] bg-black/10 opacity-0 group-hover:opacity-100 transition-opacity pointer-events-none" />
-                      <div className="absolute right-1 top-1 z-[2] flex flex-col justify-center items-start gap-my-4 opacity-0 group-hover:opacity-100 transition-opacity pointer-events-none group-hover:pointer-events-auto">
-                        <button
-                          type="button"
-                          className="w-8 h-8 rounded-full cursor-pointer bg-surface-10 inline-flex justify-center items-center text-on-surface-10 hover:bg-surface-20"
+                      <div className={thumbnailHoverDimOverlayClass()} aria-hidden />
+                      <div className="absolute right-1 top-1 z-dropdown flex flex-col justify-center items-start gap-1 opacity-0 group-hover:opacity-100 transition-opacity pointer-events-none group-hover:pointer-events-auto">
+                        <Button
+                          variant="ghost"
+                          size="icon-sm"
+                          className="rounded-full bg-background text-foreground"
                           aria-label={`${labels.thumbnailLabel.replace("*", "")} 편집`}
                           onClick={(e) => {
                             e.stopPropagation();
                             handleThumbnailClick();
                           }}
                         >
-                          <Pencil className="w-4 h-4" />
-                        </button>
-                        <button
-                          type="button"
-                          className="w-8 h-8 rounded-full cursor-pointer bg-surface-10 inline-flex justify-center items-center text-on-surface-10 hover:bg-surface-20"
+                          <ICONS.pencil className="w-4 h-4" />
+                        </Button>
+                        <Button
+                          variant="ghost"
+                          size="icon-sm"
+                          className="rounded-full bg-background text-foreground"
                           aria-label={`${labels.thumbnailLabel.replace("*", "")} 삭제`}
                           onClick={(e) => {
                             e.stopPropagation();
                             handleThumbnailRemove();
                           }}
                         >
-                          <Trash2 className="w-4 h-4" />
-                        </button>
+                          <ICONS.trash2 className="w-4 h-4" />
+                        </Button>
                       </div>
                     </div>
                   </div>
@@ -366,23 +384,28 @@ export function ImageResourceDetailPage({ kind, initialData }: ImageResourceDeta
 
               {/* 연출장면 전용: AI채팅 적용 여부 */}
               {kind === "scene" && (
-                <section className="flex flex-col gap-my-8">
-                  <Title1
-                    text="AI채팅 적용 여부*"
-                    variant="title-subtitle-dot"
-                    subtitleText="이 연출장면을 AI 자동 전개에 사용할지 여부를 선택해 주세요."
+                <section className="flex flex-col gap-2">
+                  <FormFieldLabel
+                    title="AI채팅 적용 여부*"
+                    subtitle="이 연출장면을 AI 자동 전개에 사용할지 여부를 선택해 주세요."
+                    inputId={IMAGE_RESOURCE_SCENE_AI_GROUP_ID}
                   />
-                  <div className="flex items-center gap-my-24 mt-1">
+                  <div
+                    id={IMAGE_RESOURCE_SCENE_AI_GROUP_ID}
+                    role="radiogroup"
+                    aria-describedby={formFieldAriaDescribedBy(IMAGE_RESOURCE_SCENE_AI_GROUP_ID)}
+                    className="mt-1 flex items-center gap-6"
+                  >
                     <button
                       type="button"
                       onClick={() => setSceneAiMode("apply")}
-                      className="inline-flex items-center gap-my-8 text-body3_500 text-on-surface-10 cursor-pointer"
+                      className="inline-flex items-center gap-2 text-body3_500 text-foreground cursor-pointer"
                     >
                       <span
                         className={`flex h-4 w-4 items-center justify-center rounded-full border ${
                           sceneAiMode === "apply"
-                            ? "border-[rgba(255,0,128,1)]"
-                            : "border-border-20"
+                            ? "border-primary"
+                            : "border-border"
                         }`}
                       >
                         {sceneAiMode === "apply" && (
@@ -394,13 +417,13 @@ export function ImageResourceDetailPage({ kind, initialData }: ImageResourceDeta
                     <button
                       type="button"
                       onClick={() => setSceneAiMode("none")}
-                      className="inline-flex items-center gap-my-8 text-body3_500 text-on-surface-10 cursor-pointer"
+                      className="inline-flex items-center gap-2 text-body3_500 text-foreground cursor-pointer"
                     >
                       <span
                         className={`flex h-4 w-4 items-center justify-center rounded-full border ${
                           sceneAiMode === "none"
-                            ? "border-[rgba(255,0,128,1)]"
-                            : "border-border-20"
+                            ? "border-primary"
+                            : "border-border"
                         }`}
                       >
                         {sceneAiMode === "none" && (
@@ -414,11 +437,11 @@ export function ImageResourceDetailPage({ kind, initialData }: ImageResourceDeta
               )}
             </div>
 
-            <div className={`${PAGE_CONTENT_FOOTER_CLASS} flex items-center justify-end gap-my-8`}>
+            <div className={`${PAGE_CONTENT_FOOTER_CLASS} flex items-center justify-end gap-2`}>
               <Button
                 type="button"
                 variant="outline"
-                size="form"
+                size="lg"
                 className={PAGE_FOOTER_ACTION_BUTTON_CLASS}
                 onClick={handleBack}
               >
@@ -426,7 +449,7 @@ export function ImageResourceDetailPage({ kind, initialData }: ImageResourceDeta
               </Button>
               <Button
                 type="button"
-                size="form"
+                size="lg"
                 className={PAGE_FOOTER_ACTION_BUTTON_CLASS}
                 onClick={handleSave}
               >

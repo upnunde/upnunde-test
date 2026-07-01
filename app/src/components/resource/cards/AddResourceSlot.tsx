@@ -1,13 +1,13 @@
 "use client";
 
 import React from "react";
-import { Plus } from "lucide-react";
+import { ICONS } from "@/lib/icons";
 import type { MediaSlotType } from "@/types/resource";
 import {
   RESOURCE_FILE_INPUT_OVERLAY_CLASS,
   THUMBNAIL_SLOT_ARIA,
 } from "@/lib/thumbnail-styles";
-import { cn } from "@/lib/utils";
+import { cn } from "design-system/utils";
 
 export interface AddResourceSlotFileInputProps {
   id?: string;
@@ -71,12 +71,12 @@ export function AddResourceSlot({
   const isInlineThumbnail = slotKind === "thumbnail" && !showName;
   const sizeClass = sizeClassName ?? SLOT_SIZE_CLASS[variant === "character" ? "character" : variant];
   const slotClassName = cn(
-    "rounded-lg flex flex-col justify-center items-center gap-my-8 overflow-hidden transition-colors cursor-pointer focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary",
+    "rounded-lg flex flex-col justify-center items-center gap-2 overflow-hidden transition-colors cursor-pointer focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary",
     sizeClass,
     (fileInput || fileInputId) && "relative",
     error
-      ? "bg-error-error-container text-error-on-error-container hover:bg-error-error-container/90"
-      : "border border-dashed border-border-20 bg-white text-muted-foreground hover:border-border-10 hover:bg-surface-20",
+      ? "bg-destructive-container text-destructive-container-foreground hover:bg-destructive-container/90"
+      : "border border-dashed border-border bg-background text-muted-foreground hover:border-border hover:bg-muted",
   );
   const plusIcon = (
     <span
@@ -85,14 +85,14 @@ export function AddResourceSlot({
         sizeClassName ? "h-4 w-4" : "h-5 w-5",
       )}
     >
-      <Plus className={cn("shrink-0", sizeClassName ? "h-4 w-4" : "h-5 w-5")} aria-hidden />
+      <ICONS.plus className={cn("shrink-0", sizeClassName ? "h-4 w-4" : "h-5 w-5")} aria-hidden />
     </span>
   );
 
   return (
     <div
       className={cn(
-        "flex flex-col items-start justify-start gap-my-4",
+        "flex flex-col items-start justify-start gap-1",
         isInlineThumbnail
           ? cn("inline-flex shrink-0", sizeClassName ? "w-[64px]" : "w-[90px]")
           : "w-full min-w-0",
@@ -130,11 +130,11 @@ export function AddResourceSlot({
         </span>
       ) : null}
       {showName && (
-        <div className="self-stretch inline-flex justify-start items-center gap-my-8 overflow-hidden">
+        <div className="self-stretch inline-flex justify-start items-center gap-2 overflow-hidden">
           <span
             className={cn(
               "flex-1 text-body1_400 font-['Pretendard_JP'] truncate",
-              error ? "text-error-on-error-container" : "text-muted-foreground"
+              error ? "text-destructive-container-foreground" : "text-muted-foreground"
             )}
           >
             name

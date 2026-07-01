@@ -1,0 +1,43 @@
+---
+description: 작업 마무리·세션 종료·커밋 전후에 개인 작업 일지(WORKLOG) 갱신. 어제 작업 이어가기·과거 맥락 복구 시 참조.
+alwaysApply: false
+---
+
+# 작업 일지 (WORKLOG)
+
+개인 작업 **맥락**을 남기는 용도다. 제품 원고(`scriptHistory`)·`docs/` 정책 문서와 별개.
+
+## 파일
+
+| 경로 | 용도 |
+|------|------|
+| `docs/wip/WORKLOG.md` | **현재** 진행 중인 작업 요약 (Git 추적) |
+| `docs/wip/history/YYYY-MM-DD/` | 일별 스냅샷 (로컬만, `npm run worklog:snapshot`) |
+
+## 에이전트가 갱신할 때
+
+사용자가 **커밋·푸시·오늘 마무리·이어서** 등을 요청하거나, 의미 있는 작업 단위가 끝났을 때:
+
+1. `docs/wip/WORKLOG.md` 상단 **마지막 갱신** 날짜를 오늘로 수정
+2. **오늘 한 일** — 이번 세션에서 실제로 바꾼 것 (파일·기능 단위, 3~7줄)
+3. **다음에 할 일** — 미완·후속 (없으면 `-` 유지)
+4. **막힌 것** — 블로커·미결정만 (없으면 비움)
+5. **주요 파일 · 브랜치** — `git branch --show-current`와 핵심 경로
+
+과거 세션 전체를 WORKLOG에 붙여넣지 않는다. **최신 상태만** 유지한다.
+
+## 이어서 작업할 때
+
+1. `docs/wip/WORKLOG.md` 먼저 읽기
+2. 필요 시 `docs/wip/history/` 최근 스냅샷 또는 `/ce-sessions`로 지난 대화 검색
+3. 코드 복구는 **Git** (`git log`, `git diff`, 브랜치)
+
+## 스냅샷 (사용자)
+
+하루 1회 또는 세션 종료 시:
+
+```bash
+npm run worklog:snapshot
+```
+
+7일 지난 `docs/wip/history/` 폴더는 스크립트가 삭제한다.

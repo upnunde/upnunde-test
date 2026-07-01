@@ -8,7 +8,7 @@ import type { AnalyticsScopeCategoryId } from "@/components/analytics/analytics-
 import type { AnalyticsCharacterId } from "@/components/analytics/analytics-character-options";
 import type { AnalyticsScenarioId } from "@/components/analytics/analytics-scenario-options";
 import type { AnalyticsSeriesId } from "@/components/analytics/analytics-series-options";
-import { cn } from "@/lib/utils";
+import { cn } from "design-system/utils";
 
 export function AnalyticsMonthlyRevenueSection({
   scopeCategory,

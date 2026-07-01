@@ -12,7 +12,7 @@ import {
   THUMBNAIL_DIM_OVERLAY_CLASS,
 } from "@/lib/thumbnail-styles";
 import { isDummyResourceUrl } from "@/lib/dummy-asset-path";
-import { cn } from "@/lib/utils";
+import { cn } from "design-system/utils";
 
 /** [정책 2] 등장인물 전용 카드. 3인 버튼 형태(호버 시 편집/삭제 버튼). [정책 3] 클릭 시 상세 페이지 이동. */
 export interface CharacterCardProps {
@@ -57,18 +57,18 @@ export function CharacterCard({
       onClick={handleCardClick}
       onKeyDown={(e) => e.key === "Enter" && (onPreviewClick ? onPreviewClick(character) : handleCardClick(e as unknown as React.MouseEvent))}
       className={cn(
-        "group flex cursor-pointer flex-col items-start justify-start gap-my-4",
+        "group flex cursor-pointer flex-col items-start justify-start gap-1",
         fluid ? "w-full min-w-0" : "w-[90px]",
       )}
       aria-label={`${character.name} 상세 보기`}
     >
       <div
         className={cn(
-          "relative flex flex-col items-center justify-center gap-my-8 overflow-hidden rounded-lg outline outline-1 outline-offset-[-1px]",
+          "relative flex flex-col items-center justify-center gap-2 overflow-hidden rounded-lg outline outline-1 outline-offset-[-1px]",
           fluid ? RESOURCE_THUMBNAIL_FLUID_SIZE_CLASS : RESOURCE_THUMBNAIL_FIXED_9_16_CLASS,
           error
-            ? "bg-error-error-container outline-error-on-error-container"
-            : "bg-surface-disabled/0 outline-border-20",
+            ? "bg-destructive-container outline-on-destructive-container"
+            : "bg-disabled/0 outline-border",
         )}
       >
         <Image
@@ -88,11 +88,11 @@ export function CharacterCard({
         />
       </div>
       {showName && (
-        <div className="self-stretch inline-flex justify-start items-center gap-my-8 overflow-hidden">
+        <div className="self-stretch inline-flex justify-start items-center gap-2 overflow-hidden">
           <span
             className={cn(
               "flex-1 text-body4_400 font-['Pretendard_JP'] truncate",
-              error ? "text-error-on-error-container" : "text-on-surface-10"
+              error ? "text-destructive-container-foreground" : "text-foreground"
             )}
           >
             {character.name}

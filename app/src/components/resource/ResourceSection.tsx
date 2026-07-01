@@ -2,9 +2,9 @@
 
 import React from "react";
 import { Button } from "@/components/ui/button";
-import { Title2 } from "@/components/ui/title2";
 import { PAGE_CARD_SHELL_MOBILE_FLUSH_CLASS, PAGE_CONTENT_PAD_X_CLASS } from "@/lib/page-layout";
-import { cn } from "@/lib/utils";
+import { cn } from "design-system/utils";
+import { ResourceSectionHeader } from "./ResourceSectionHeader";
 
 /** 시각 자원(등장인물, 배경, 연출장면, 미디어, 갤러리) 섹션 래퍼. 공통 그리드 레이아웃. */
 export interface ResourceSectionProps {
@@ -36,42 +36,28 @@ export function ResourceSection({
   return (
     <div
       className={cn(
-        "flex w-full min-w-0 flex-col items-stretch justify-start rounded-[4px] border border-border-10 bg-surface-10",
+        "flex w-full min-w-0 flex-col items-stretch justify-start rounded-sm border border-border bg-background",
         PAGE_CARD_SHELL_MOBILE_FLUSH_CLASS,
       )}
     >
-      {headerAction ? (
-        <div
-          className={cn(
-            "w-full h-fit py-my-12 border-b border-border-10/5 flex items-center justify-between gap-my-12",
-            PAGE_CONTENT_PAD_X_CLASS,
-          )}
-          style={{ borderBottomColor: "rgba(0, 0, 0, 0.07)" }}
-        >
-          <div className="min-w-0 flex-1">
-            <Title2 text={title} subtitle subtitleText={description} />
-          </div>
-          {headerAction}
-        </div>
-      ) : (
-        <Title2 text={title} asSectionHeader subtitle subtitleText={description} />
-      )}
+      <ResourceSectionHeader title={title} description={description} headerAction={headerAction} />
       {isEmpty ? (
-        <div className="self-stretch h-36 p-my-20 rounded-[4px] flex flex-col justify-center items-center gap-my-16">
-          <p className="text-on-surface-30 text-body3_400 font-['Pretendard_JP']">
+        <div className="self-stretch h-36 p-5 rounded-sm flex flex-col justify-center items-center gap-4">
+          <p className="text-foreground-placeholder text-body3_400 font-['Pretendard_JP']">
             {emptyMessage}
           </p>
           <Button
             type="button"
             variant="outline"
-            className="h-9 min-w-20 px-my-12 rounded-md border border-border-20 text-on-secondary text-body1_500 font-['Pretendard_JP'] hover:bg-surface-20"
+            shape="square"
+            size="default"
             onClick={onAddClick}
           >
             {addButtonLabel}
           </Button>
         </div>
       ) : (
-        <div className={cn("w-full min-w-0 self-stretch py-my-20", PAGE_CONTENT_PAD_X_CLASS)}>{children}</div>
+        <div className={cn("w-full min-w-0 self-stretch py-5", PAGE_CONTENT_PAD_X_CLASS)}>{children}</div>
       )}
     </div>
   );

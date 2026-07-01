@@ -1,13 +1,9 @@
 "use client";
 
+import { Button } from "@/components/ui/button";
+
 const containerClassName =
-  "flex h-full min-h-[241px] w-full flex-col items-center justify-center gap-my-12 rounded-[4px] border-2 border-dashed border-border-10";
-
-const primaryActionClassName =
-  "inline-flex items-center gap-my-8 rounded-md bg-slate-800 px-my-16 py-my-8 text-body3_500 text-white hover:bg-slate-700 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-2";
-
-const secondaryActionClassName =
-  "inline-flex items-center gap-my-8 rounded-md border border-border-20 bg-white px-my-16 py-my-8 text-body3_500 text-on-surface-20 hover:bg-surface-20 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-2 disabled:border-border-20";
+  "flex h-full min-h-[241px] w-full flex-col items-center justify-center gap-3 rounded-sm border-2 border-dashed border-border";
 
 export interface WorksEmptyCreateButtonProps {
   hint: string;
@@ -32,27 +28,31 @@ export function WorksEmptyCreateButton({
   if (hasSecondary) {
     return (
       <div className={containerClassName}>
-        <span className="text-body3_400 text-on-surface-30">{hint}</span>
-        <div className="flex flex-wrap items-center justify-center gap-my-8">
-          <button type="button" onClick={onClick} className={primaryActionClassName}>
+        <span className="text-body3_400 text-foreground-placeholder">{hint}</span>
+        <div className="flex flex-wrap items-center justify-center gap-2">
+          <Button type="button" variant="default" shape="square" size="default" onClick={onClick}>
             {actionLabel}
-          </button>
-          <button type="button" onClick={onSecondaryClick} className={secondaryActionClassName}>
+          </Button>
+          <Button
+            type="button"
+            variant="outline"
+            shape="square"
+            size="default"
+            onClick={onSecondaryClick}
+          >
             {secondaryActionLabel}
-          </button>
+          </Button>
         </div>
       </div>
     );
   }
 
   return (
-    <button
-      type="button"
-      onClick={onClick}
-      className={`${containerClassName} cursor-pointer transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-2`}
-    >
-      <span className="text-body3_400 text-on-surface-30">{hint}</span>
-      <span className={primaryActionClassName}>{actionLabel}</span>
-    </button>
+    <div className={containerClassName}>
+      <span className="text-body3_400 text-foreground-placeholder">{hint}</span>
+      <Button type="button" variant="default" shape="square" size="default" onClick={onClick}>
+        {actionLabel}
+      </Button>
+    </div>
   );
 }

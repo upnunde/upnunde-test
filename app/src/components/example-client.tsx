@@ -11,16 +11,16 @@ export function ExampleClient() {
   const [open, setOpen] = useState(false);
 
   return (
-    <div className="rounded-lg border border-zinc-200 p-4 dark:border-zinc-700">
+    <div className="rounded-lg border border-border p-4 dark:border-border-strong">
       <button
         type="button"
         onClick={() => setOpen(!open)}
-        className="cursor-pointer text-sm font-medium text-zinc-700 dark:text-zinc-300"
+        className="cursor-pointer text-sm font-medium text-foreground dark:text-foreground-disabled"
       >
         {open ? "접기" : "펼치기"}
       </button>
       {open && (
-        <p className="mt-2 text-sm text-zinc-500 dark:text-zinc-400">
+        <p className="mt-2 text-sm text-foreground-placeholder dark:text-foreground-placeholder">
           React 훅으로 작성된 클라이언트 컴포넌트입니다.
         </p>
       )}

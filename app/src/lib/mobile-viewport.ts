@@ -27,13 +27,13 @@ export const MOBILE_BOTTOM_SHEET_PAD_CLASS = [
 
 /** 모바일 full-width 하단 고정 바 셸(탭 네비·액션 바 등) */
 export const MOBILE_FIXED_BOTTOM_BAR_SHELL_CLASS = [
-  "max-lg:fixed max-lg:inset-x-0 max-lg:z-30",
+  "max-lg:fixed max-lg:inset-x-0 max-lg:z-overlay",
   MOBILE_FIXED_BOTTOM_ANCHOR_CLASS,
 ].join(" ");
 
-/** 모바일 fixed 요소 bottom offset — spacing-my-16 + safe-area + 브라우저 하단 크롬 */
+/** 모바일 fixed 요소 bottom offset — spacing-4 + safe-area + 브라우저 하단 크롬 */
 export const MOBILE_FIXED_BOTTOM_OFFSET_CLASS =
-  "max-lg:bottom-[calc(var(--spacing-my-16)+env(safe-area-inset-bottom,0px)+var(--app-keyboard-inset,var(--app-vv-bottom,0px)))]";
+  "max-lg:bottom-[calc(var(--space-4)+env(safe-area-inset-bottom,0px)+var(--app-keyboard-inset,var(--app-vv-bottom,0px)))]";
 
 /**
  * 앱 루트 셸
@@ -43,15 +43,19 @@ export const MOBILE_FIXED_BOTTOM_OFFSET_CLASS =
 export const APP_VIEWPORT_SHELL_CLASS =
   "flex w-full min-h-dvh flex-col box-border lg:h-dvh lg:max-h-dvh lg:overflow-hidden";
 
-/** 브라우저·페이지 셸 배경 — design-system background-20 (#F8F8FC) */
-export const APP_BROWSER_BG_CLASS = "bg-background-20";
+/** 브라우저·페이지 셸 배경 — DS canvas (라이트 white · 다크 black) */
+export const APP_BROWSER_BG_CLASS = "bg-canvas";
 
-/** 기본 앱 theme-color — background-20 (#F8F8FC) */
-export const APP_BROWSER_BG_BACKGROUND_20_THEME_COLOR = "#F8F8FC";
+/** 브라우저 chrome theme-color — DS canvas (라이트 white · 다크 black) */
+export const APP_BROWSER_BG_CANVAS_THEME_COLOR_LIGHT = "#ffffff";
+export const APP_BROWSER_BG_CANVAS_THEME_COLOR_DARK = "#000000";
+
+/** @deprecated `APP_BROWSER_BG_CANVAS_THEME_COLOR_LIGHT` 사용 */
+export const APP_BROWSER_BG_BACKGROUND_20_THEME_COLOR = APP_BROWSER_BG_CANVAS_THEME_COLOR_LIGHT;
 
 /** 글로벌 헤더 — 모바일 sticky (문서 스크롤·당겨서 새로고침 시 함께 이동) */
 export const APP_HEADER_STICKY_CLASS =
-  "max-lg:sticky max-lg:top-0 max-lg:z-50 max-lg:bg-white";
+  "max-lg:sticky max-lg:top-0 max-lg:z-sticky max-lg:bg-background";
 
 /** @deprecated `APP_HEADER_STICKY_CLASS` 사용 */
 export const APP_HEADER_FIXED_CLASS = APP_HEADER_STICKY_CLASS;

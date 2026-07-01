@@ -3,13 +3,15 @@ import { Geist, Geist_Mono } from "next/font/google";
 import "./globals.css";
 import { MobileViewportSync } from "@/components/MobileViewportSync";
 import { Toaster } from "@/components/ui/toaster";
+import { ThemeInitScript } from "@/components/ThemeInitScript";
 import DevConsoleFilter from "@/components/DevConsoleFilter";
 import {
-  APP_BROWSER_BG_BACKGROUND_20_THEME_COLOR,
+  APP_BROWSER_BG_CANVAS_THEME_COLOR_DARK,
+  APP_BROWSER_BG_CANVAS_THEME_COLOR_LIGHT,
   APP_BROWSER_BG_CLASS,
   APP_VIEWPORT_SHELL_CLASS,
 } from "@/lib/mobile-viewport";
-import { cn } from "@/lib/utils";
+import { cn } from "design-system/utils";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -30,7 +32,10 @@ export const viewport: Viewport = {
   width: "device-width",
   initialScale: 1,
   viewportFit: "cover",
-  themeColor: APP_BROWSER_BG_BACKGROUND_20_THEME_COLOR,
+  themeColor: [
+    { media: "(prefers-color-scheme: light)", color: APP_BROWSER_BG_CANVAS_THEME_COLOR_LIGHT },
+    { media: "(prefers-color-scheme: dark)", color: APP_BROWSER_BG_CANVAS_THEME_COLOR_DARK },
+  ],
   /** 키보드가 visual viewport만 줄여 화면이 눌리는 동작 완화 (Chrome 등) */
   interactiveWidget: "resizes-content",
 };
@@ -52,6 +57,7 @@ export default function RootLayout({
       <body
         className={`${geistSans.variable} ${geistMono.variable} antialiased m-0 w-full max-lg:overscroll-x-none lg:overscroll-none p-0 lg:flex lg:h-dvh lg:flex-col lg:overflow-hidden`}
       >
+        <ThemeInitScript />
         <DevConsoleFilter />
         <MobileViewportSync />
         <div

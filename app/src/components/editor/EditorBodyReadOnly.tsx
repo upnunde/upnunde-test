@@ -11,7 +11,7 @@ import {
   EDITOR_SCENE_TITLE_FIELD_SHELL_CLASS,
   EDITOR_TOP_DESC_DISPLAY_CLASS,
 } from "@/lib/editor-block-layout";
-import { cn } from "@/lib/utils";
+import { cn } from "design-system/utils";
 import { scrollEditorBlockIntoView } from "@/lib/editor-scroll";
 import { LABEL_COLOR_BY_TYPE } from "@/lib/blockLabelColors";
 import { BLOCK_LABEL_KO } from "@/lib/blockTypeLabels";
@@ -23,16 +23,16 @@ import {
 
 /** EditorBody 줄번호 열과 동일 톤 (포커스 없을 때) */
 const INDEX_COL_CLASS = cn(
-  "text-body4_500 tabular-nums flex items-center justify-start mt-0 text-on-surface-disabled min-h-8 py-my-4",
+  "text-body4_500 tabular-nums flex items-center justify-start mt-0 text-foreground-disabled min-h-8 py-1",
   EDITOR_BLOCK_INDEX_COLUMN_CLASS,
 );
 const READONLY_ROW_LABEL_CELL_CLASS = cn(
   EDITOR_BLOCK_LABEL_COLUMN_CLASS,
-  "min-h-8 py-my-4 flex items-center justify-start",
+  "min-h-8 py-1 flex items-center justify-start",
 );
 const READONLY_ROW_CONTENT_CELL_CLASS = "min-w-0 flex-1 min-h-8 py-0 flex items-center justify-start";
 const READONLY_BODY_TEXT_CLASS =
-  "text-body1_400 text-on-surface-10 whitespace-pre-wrap break-words align-middle";
+  "text-body1_400 text-foreground whitespace-pre-wrap break-words align-middle";
 const INLINE_TAG_TOKEN_REGEX = /(<[^>]+>)/g;
 
 function renderInlineTagHighlightedText(content: string): React.ReactNode {
@@ -75,7 +75,7 @@ function ReadOnlyBlockRow({
   const seriesPersona = useEditorStore((s) => s.seriesPersona);
   const indexColClass = cn(
     INDEX_COL_CLASS,
-    isFocused ? "text-primary" : "transition-colors group-hover/preview:text-on-surface-20"
+    isFocused ? "text-primary" : "transition-colors group-hover/preview:text-foreground-muted"
   );
 
   if (block.type === "text") {
@@ -83,8 +83,8 @@ function ReadOnlyBlockRow({
     return (
       <>
         <div className={indexColClass}>{indexLabel}</div>
-        <div className={cn(READONLY_ROW_LABEL_CELL_CLASS, "pr-my-8")}>
-          <span className="inline-block w-fit max-w-[76px] truncate text-left text-caption1_500 text-on-surface-30">
+        <div className={cn(READONLY_ROW_LABEL_CELL_CLASS, "pr-2")}>
+          <span className="inline-block w-fit max-w-[76px] truncate text-left text-caption1_500 text-foreground-placeholder">
             {speaker}
           </span>
         </div>
@@ -115,10 +115,10 @@ function ReadOnlyBlockRow({
     return (
       <>
         <div className={indexColClass}>{indexLabel}</div>
-        <div className={cn(READONLY_ROW_LABEL_CELL_CLASS, "self-start overflow-hidden pt-my-2")}>
+        <div className={cn(READONLY_ROW_LABEL_CELL_CLASS, "self-start overflow-hidden pt-0.5")}>
           <span className={cn("text-caption1_500", labelColorClass)}>#선택지</span>
         </div>
-        <div className={cn(READONLY_ROW_CONTENT_CELL_CLASS, "items-start py-my-4")}>
+        <div className={cn(READONLY_ROW_CONTENT_CELL_CLASS, "items-start py-1")}>
           <ReadonlyChoiceTable
             choices={displayChoices}
             sceneOptions={buildSceneOptions(blocks)}
@@ -239,7 +239,7 @@ export function EditorBodyReadOnly() {
 
   if (!blocks || blocks.length === 0) {
     return (
-      <div className="min-h-full w-full flex items-center justify-center text-on-surface-30 text-body3_400">
+      <div className="min-h-full w-full flex items-center justify-center text-foreground-placeholder text-body3_400">
         표시할 원고가 없습니다.
       </div>
     );
@@ -247,7 +247,7 @@ export function EditorBodyReadOnly() {
 
   return (
     <div className="min-h-full w-full cursor-default select-text">
-      <div className="mx-auto flex min-h-full w-full flex-col gap-my-4 pl-my-8 pr-0">
+      <div className="mx-auto flex min-h-full w-full flex-col gap-1 pl-2 pr-0">
         {blocks.map((block, i) => {
           const isScene = block.type === "scene";
           const prevBlock = i > 0 ? blocks[i - 1] : null;
@@ -255,7 +255,7 @@ export function EditorBodyReadOnly() {
           return (
             <Fragment key={block.id}>
               {showDivider && (
-                <div className="mx-0 my-10 border-t border-border-10" />
+                <div className="mx-0 my-10 border-t border-border" />
               )}
               <div
                 id={`block-${block.id}`}
@@ -264,7 +264,7 @@ export function EditorBodyReadOnly() {
                 tabIndex={0}
                 onClick={() => focusBlock(block.id)}
                 className={cn(
-                  "group/preview w-full rounded bg-white inline-flex items-start justify-start gap-0 px-0 lg:px-my-20 py-my-4 text-left outline-none transition-colors hover:bg-surface-20/50"
+                  "group/preview w-full rounded bg-background inline-flex items-start justify-start gap-0 px-0 lg:px-5 py-1 text-left outline-none transition-colors hover:bg-muted/50"
                 )}
               >
                 <ReadOnlyBlockRow

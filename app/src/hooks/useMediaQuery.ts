@@ -1,12 +1,15 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useLayoutEffect, useState } from "react";
 
 /** `matchMedia` 구독 — SSR 시 `defaultMatches` 사용 */
 export function useMediaQuery(query: string, defaultMatches = false): boolean {
-  const [matches, setMatches] = useState(defaultMatches);
+  const [matches, setMatches] = useState(() => {
+    if (typeof window === "undefined") return defaultMatches;
+    return window.matchMedia(query).matches;
+  });
 
-  useEffect(() => {
+  useLayoutEffect(() => {
     const media = window.matchMedia(query);
     const onChange = () => setMatches(media.matches);
     onChange();

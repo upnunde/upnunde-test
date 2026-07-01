@@ -12,7 +12,7 @@ import {
   THUMBNAIL_DIM_OVERLAY_CLASS,
 } from "@/lib/thumbnail-styles";
 import { isDummyResourceUrl } from "@/lib/dummy-asset-path";
-import { cn } from "@/lib/utils";
+import { cn } from "design-system/utils";
 
 /** [정책 6, 7] 배경/연출장면/갤러리용 이미지 카드. 클릭 시 상세 페이지, 삭제 시 확인 팝업. */
 export interface ImageCardProps {
@@ -103,7 +103,7 @@ export function ImageCard({
       onClick={handleCardClick}
       onKeyDown={(e) => e.key === "Enter" && (onPreviewClick ? onPreviewClick(item) : onDetailClick(item))}
       className={cn(
-        "group flex cursor-pointer flex-col items-start justify-start gap-my-4",
+        "group flex cursor-pointer flex-col items-start justify-start gap-1",
         widthClass,
         hoveredProp !== undefined && "pointer-events-auto",
         containerClassName
@@ -113,10 +113,10 @@ export function ImageCard({
       <div
         className={cn(
           sizeClass,
-          "rounded-lg outline outline-1 outline-offset-[-1px] flex flex-col justify-center items-center gap-my-8 overflow-hidden relative",
+          "rounded-lg outline outline-1 outline-offset-[-1px] flex flex-col justify-center items-center gap-2 overflow-hidden relative",
           error
-            ? "bg-error-error-container outline-error-on-error-container"
-            : "bg-surface-disabled/0 outline-border-20 outline outline-1 outline-offset-[-1px]",
+            ? "bg-destructive-container outline-on-destructive-container"
+            : "bg-disabled/0 outline-border outline outline-1 outline-offset-[-1px]",
           selected && !error && "outline-2 outline-offset-[-2px] outline-primary",
           frameClassName
         )}
@@ -144,11 +144,11 @@ export function ImageCard({
         )}
       </div>
       {showName && (
-        <div className="self-stretch inline-flex justify-start items-center gap-my-8 overflow-hidden">
+        <div className="self-stretch inline-flex justify-start items-center gap-2 overflow-hidden">
           <span
             className={cn(
               "flex-1 text-body4_400 font-['Pretendard_JP'] truncate text-left justify-start",
-              error ? "text-error-on-error-container" : "text-on-surface-10"
+              error ? "text-destructive-container-foreground" : "text-foreground"
             )}
           >
             {item.name}

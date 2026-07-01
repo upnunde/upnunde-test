@@ -1,29 +1,29 @@
 import { cva, type VariantProps } from "class-variance-authority";
 
 /** 인터랙티브 컨트롤 compact 티어 — 32px */
-export const CONTROL_HEIGHT_CLASS = "h-my-32 min-h-my-32";
+export const CONTROL_HEIGHT_CLASS = "h-8 min-h-8";
 
 /** 인터랙티브 컨트롤 standard 티어 — 36px. 구 h-10(40px) 대체 */
-export const CONTROL_HEIGHT_STANDARD_CLASS = "h-my-36 min-h-my-36";
+export const CONTROL_HEIGHT_STANDARD_CLASS = "h-9 min-h-9";
 
 /** 인터랙티브 컨트롤 form 티어 — 42px. 구 h-12(48px) 대체 */
 export const CONTROL_HEIGHT_FORM_CLASS = "h-[42px] min-h-[42px]";
 
 /** compact(32px) 컨트롤 그룹 가로 간격 — spacing-4 = 4px */
-export const CONTROL_GROUP_GAP_COMPACT_CLASS = "gap-my-4";
+export const CONTROL_GROUP_GAP_COMPACT_CLASS = "gap-1";
 
 /** standard(36px) 컨트롤 그룹 가로 간격 — spacing-8 = 8px */
-export const CONTROL_GROUP_GAP_STANDARD_CLASS = "gap-my-8";
+export const CONTROL_GROUP_GAP_STANDARD_CLASS = "gap-2";
 
 /** standard 그룹 — 모바일 4px · lg+ 8px */
-export const CONTROL_GROUP_GAP_STANDARD_RESPONSIVE_CLASS = "gap-my-4 lg:gap-my-8";
+export const CONTROL_GROUP_GAP_STANDARD_RESPONSIVE_CLASS = "gap-1 lg:gap-2";
 
 /** @deprecated `CONTROL_GROUP_GAP_COMPACT_CLASS` — FilterChip M 그룹 */
 export const CHIP_GROUP_GAP_CLASS = CONTROL_GROUP_GAP_COMPACT_CLASS;
 
 /** FilterChip M(32px)과 같은 행 — 날짜·드롭다운·셀렉트 트리거 높이·라운드·보더 */
 export const CHIP_COMPANION_CONTROL_CLASS =
-  "h-my-32 min-h-my-32 shrink-0 rounded-[8px] border border-border-20 bg-white px-my-12 text-body3_400 text-on-surface-20 shadow-none hover:bg-surface-20 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-2 disabled:border-border-20";
+  "h-8 min-h-8 shrink-0 rounded-md border border-border bg-background px-3 text-body3_400 text-foreground-muted shadow-none hover:bg-muted focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-2 disabled:border-border";
 
 /** Figma `chips` — type × variant × corner × size × icon */
 export const chipVariants = cva(
@@ -48,11 +48,11 @@ export const chipVariants = cva(
         square: "",
       },
       size: {
-        l: "h-my-36 min-w-0 text-body1_500",
-        m: "h-my-32 min-w-0 text-body3_500",
+        l: "h-9 min-w-0 text-body1_500",
+        m: "h-8 min-w-0 text-body3_500",
       },
       icon: {
-        true: "gap-my-2",
+        true: "gap-0.5",
         false: "",
       },
     },
@@ -61,31 +61,31 @@ export const chipVariants = cva(
         chipType: "fill",
         variant: "activated",
         class:
-          "border-0 bg-secondary-secondary-container text-secondary-on-secondary-container hover:opacity-90",
+          "border-0 bg-secondary-container text-secondary-container-foreground hover:opacity-90",
       },
       {
         chipType: "fill",
         variant: "default",
         class:
-          "bg-surface-20 text-on-surface-30 outline outline-1 outline-offset-[-1px] outline-border-10 hover:text-on-surface-20",
+          "bg-muted text-foreground-placeholder outline outline-1 outline-offset-[-1px] outline-border hover:text-foreground-muted",
       },
       {
         chipType: "outline",
         variant: "activated",
         class:
-          "text-on-surface-10 outline outline-1 outline-offset-[-1px] outline-border-strong",
+          "text-foreground outline outline-1 outline-offset-[-1px] outline-border-strong",
       },
       {
         chipType: "outline",
         variant: "default",
         class:
-          "text-on-surface-30 outline outline-1 outline-offset-[-1px] outline-border-20 hover:text-on-surface-20",
+          "text-foreground-placeholder outline outline-1 outline-offset-[-1px] outline-border hover:text-foreground-muted",
       },
-      { corner: "square", class: "rounded-[8px]" },
-      { icon: false, size: "l", class: "px-my-16" },
-      { icon: false, size: "m", class: "px-my-12" },
-      { icon: true, size: "l", class: "pl-my-16 pr-my-8" },
-      { icon: true, size: "m", class: "pl-my-12 pr-my-8" },
+      { corner: "square", class: "rounded-md" },
+      { icon: false, size: "l", class: "px-4" },
+      { icon: false, size: "m", class: "px-3" },
+      { icon: true, size: "l", class: "pl-4 pr-2" },
+      { icon: true, size: "m", class: "pl-3 pr-2" },
     ],
     defaultVariants: {
       chipType: "outline",

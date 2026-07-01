@@ -34,7 +34,7 @@ import {
   PAGE_SCROLL_COLUMN_CLASS,
   PAGE_SUBHEADER_WITH_STICKY_CLASS,
 } from "@/lib/page-layout";
-import { cn } from "@/lib/utils";
+import { cn } from "design-system/utils";
 import type { SeriesFormTab } from "@/lib/seriesForm";
 
 export interface SeriesFormAiComposerConfig {
@@ -79,7 +79,7 @@ export function SeriesFormPageScaffold({
   children,
   showDraftButton = false,
   onDraftClick,
-  contentGapClassName = "gap-my-40",
+  contentGapClassName = "gap-10",
   aiComposer,
 }: SeriesFormPageScaffoldProps) {
   const isLgUp = useIsLgUp();
@@ -113,19 +113,19 @@ export function SeriesFormPageScaffold({
         </div>
         <main className={APP_MAIN_CLASS}>
           <header className={cn(PAGE_SUBHEADER_WITH_STICKY_CLASS, previewChromeHidden)}>
-            <div className="flex w-full max-w-[1200px] items-center justify-between gap-my-16">
-              <div className="flex items-center justify-start gap-my-12">
+            <div className="flex w-full max-w-[1200px] items-center justify-between gap-4">
+              <div className="flex items-center justify-start gap-3">
                 <HeaderBackButton onClick={onBack} aria-label="시리즈 목록으로" />
-                <h1 className="text-heading2_700 text-on-surface-10">{title}</h1>
+                <h1 className="text-heading2_700 text-foreground">{title}</h1>
               </div>
-              <div className="hidden items-center gap-my-12 lg:flex">
+              <div className="hidden items-center gap-3 lg:flex">
                 {showDraftButton ? (
                   <Button
                     type="button"
                     variant="outline"
                     size="lg"
                     onClick={onDraftClick}
-                    className="bg-white text-on-surface-20 hover:bg-surface-20 disabled:border-border-20"
+                    className="bg-background text-foreground-muted hover:bg-muted disabled:border-border"
                   >
                     임시저장
                   </Button>
@@ -164,7 +164,7 @@ export function SeriesFormPageScaffold({
                     <PageCard
                       fullWidth
                       className={cn(
-                        "flex h-fit shrink-0 flex-col gap-my-20 overflow-hidden rounded-[4px] px-0 shadow-none",
+                        "flex h-fit shrink-0 flex-col gap-5 overflow-hidden rounded-sm px-0 shadow-none",
                         PAGE_CARD_SHELL_MOBILE_FLUSH_CLASS,
                         "max-lg:rounded-none max-lg:border-0",
                       )}
@@ -188,7 +188,7 @@ export function SeriesFormPageScaffold({
             ) : null}
 
             {showPreviewPanel ? (
-              <div className={cn("flex flex-col bg-black max-lg:min-h-dvh", APP_MAIN_PANEL_CLASS)}>
+              <div className={cn("flex flex-col bg-inverse max-lg:min-h-dvh", APP_MAIN_PANEL_CLASS)}>
                 <SeriesPreviewPanel
                   coverPreviewUrl={coverPreviewUrl}
                   logoPreviewUrl={logoPreviewUrl}

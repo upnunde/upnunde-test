@@ -1,7 +1,9 @@
 "use client";
 
-import { Title1 } from "@/components/ui/title1";
-import { cn } from "@/lib/utils";
+import { useId } from "react";
+
+import { FormFieldLabel, formFieldAriaDescribedBy } from "@/components/ui/field-label";
+import { Input, InputGroup, InputHypertext } from "@/components/ui/input";
 
 interface SeriesFormTextInputFieldProps {
   title: string;
@@ -24,24 +26,26 @@ export function SeriesFormTextInputField({
   inputRef,
   onValueChange,
 }: SeriesFormTextInputFieldProps) {
+  const inputId = useId().replace(/:/g, "");
+
   return (
-    <div className="flex flex-col gap-my-4">
-      <Title1 text={title} variant="title-subtitle-dot" subtitleText={subtitle} />
-      <input
-        ref={inputRef}
-        type="text"
-        maxLength={maxLength}
-        value={value}
-        onChange={(e) => onValueChange(e.target.value)}
-        placeholder={placeholder}
-        className={cn(
-          "mt-1 h-[42px] w-full rounded-md border bg-white px-my-12 py-my-8 text-body3_400 text-on-surface-10 placeholder:text-on-surface-30 focus:outline-none focus:ring-2",
-          error ? "border-destructive focus:ring-destructive/40" : "border-border-10 focus:ring-primary"
-        )}
-      />
-      <div className="flex justify-end text-caption1_400 text-on-surface-30">
-        {value.length}/{maxLength}
-      </div>
+    <div className="flex flex-col gap-1">
+      <FormFieldLabel title={title} subtitle={subtitle} inputId={inputId} />
+      <InputGroup className="mt-1">
+        <Input
+          ref={inputRef}
+          id={inputId}
+          aria-describedby={formFieldAriaDescribedBy(inputId, Boolean(subtitle))}
+          type="text"
+          size="lg"
+          maxLength={maxLength}
+          value={value}
+          onChange={(e) => onValueChange(e.target.value)}
+          placeholder={placeholder}
+          aria-invalid={error}
+        />
+        <InputHypertext count={value.length} max={maxLength} variant={error ? "error" : "default"} />
+      </InputGroup>
     </div>
   );
 }

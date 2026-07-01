@@ -1,14 +1,15 @@
 "use client";
 
 import { useCallback, useEffect, useLayoutEffect, useRef, useState } from "react";
-import { ArrowUp } from "lucide-react";
+import { ICONS } from "@/lib/icons";
 import { AiFieldLoadingMessage } from "@/components/episode/EpisodeAiFieldLoading";
 import { EPISODE_FORM_FIELD_COPY } from "@/lib/episode-form-copy";
 import {
   SERIES_FORM_MOBILE_COMPOSER_FIXED_INSET_CLASS,
   SERIES_FORM_MOBILE_FLOATING_ROW_BOTTOM_CLASS,
 } from "@/lib/series-form-mobile-layout";
-import { cn } from "@/lib/utils";
+import { Textarea } from "@/components/ui/textarea";
+import { cn } from "design-system/utils";
 
 export type FloatingComposerBarPlacement = "fixed" | "sticky";
 
@@ -17,11 +18,11 @@ export const FLOATING_COMPOSER_MAX_WIDTH_CLASS = "max-w-[560px] w-full";
 
 /** fixed 배치 가로 폭·정렬 — safe-area·20px 양쪽 여백, 가로 화면(landscape) 대응 */
 const FLOATING_COMPOSER_FIXED_WIDTH_CLASS =
-  "left-1/2 -translate-x-1/2 w-[min(560px,calc(100dvw-env(safe-area-inset-left,0px)-env(safe-area-inset-right,0px)-2*var(--spacing-my-20)))]";
+  "left-1/2 -translate-x-1/2 w-[min(560px,calc(100dvw-env(safe-area-inset-left,0px)-env(safe-area-inset-right,0px)-2*var(--space-5)))]";
 
 /** 미리보기 FAB와 겹치지 않도록 우측 inset 확보 */
 const FLOATING_COMPOSER_FIXED_WIDTH_WITH_MOBILE_FAB_LANE_CLASS =
-  "left-[max(var(--spacing-my-20),env(safe-area-inset-left,0px))] right-[calc(var(--spacing-my-16)+3rem+var(--spacing-my-8)+env(safe-area-inset-right,0px))] w-auto max-w-[560px] translate-x-0";
+  "left-[max(var(--space-5),env(safe-area-inset-left,0px))] right-[calc(var(--space-4)+3rem+var(--space-2)+env(safe-area-inset-right,0px))] w-auto max-w-[560px] translate-x-0";
 
 const COMPOSER_TEXTAREA_MAX_HEIGHT_PX = 120;
 /** text-sm leading-5 한 줄 line-height */
@@ -48,8 +49,7 @@ export interface FloatingComposerBarProps {
   ariaLabel?: string;
 }
 
-const shellShadow =
-  "shadow-[0_-2px_12px_rgba(15,23,42,0.06),0_8px_24px_rgba(15,23,42,0.08)]";
+const shellShadow = "shadow-elevation-40";
 
 /** 플로팅 컴포저 pill 한 줄 높이 */
 const COMPOSER_BAR_HEIGHT_CLASS = "h-[48px]";
@@ -58,10 +58,10 @@ const COMPOSER_BAR_HEIGHT_CLASS = "h-[48px]";
  * fixed 배치 하단 앵커 — 모바일: 20px + safe-area + 브라우저/키보드 크롬 · 데스크톱: 20px
  */
 const FLOATING_COMPOSER_FIXED_BOTTOM_CLASS =
-  "max-lg:bottom-[calc(var(--spacing-my-20)+env(safe-area-inset-bottom,0px)+var(--app-keyboard-inset,var(--app-vv-bottom,0px)))] lg:bottom-my-20";
+  "max-lg:bottom-[calc(var(--space-5)+env(safe-area-inset-bottom,0px)+var(--app-keyboard-inset,var(--app-vv-bottom,0px)))] lg:bottom-5";
 
 const FLOATING_COMPOSER_FIXED_ABOVE_SUBMIT_BAR_BOTTOM_CLASS =
-  `${SERIES_FORM_MOBILE_FLOATING_ROW_BOTTOM_CLASS} lg:bottom-my-20`;
+  `${SERIES_FORM_MOBILE_FLOATING_ROW_BOTTOM_CLASS} lg:bottom-5`;
 
 /**
  * 플로팅 AI 프롬프트 바 — 기본: 첨부 pill(한 줄 + 우측 전송).
@@ -237,37 +237,37 @@ export function FloatingComposerBar({
       className={cn(
         "flex size-9 shrink-0 items-center justify-center rounded-full transition-all",
         canSubmit
-          ? "bg-gradient-to-br from-violet-500 to-fuchsia-500 text-white shadow-elevation-10 hover:opacity-90"
-          : "cursor-not-allowed bg-surface-20 text-on-surface-30",
+          ? "bg-gradient-to-br from-violet-500 to-fuchsia-500 text-inverse-foreground shadow-elevation-10 hover:opacity-90"
+          : "cursor-not-allowed bg-muted text-foreground-placeholder",
       )}
       aria-label="AI로 초안 채우기"
     >
-      <ArrowUp className="size-4" strokeWidth={2.25} aria-hidden />
+      <ICONS.arrowUp className="size-4" strokeWidth={2.25} aria-hidden />
     </button>
   );
 
   return (
     <div
       className={cn(
-        "z-30 pointer-events-auto",
+        "z-overlay pointer-events-auto",
         placement === "fixed"
           ? `fixed ${fixedWidthClass} ${fixedBottomClass}`
           : maxWidthClassName,
         placement === "sticky" &&
-          "sticky bottom-0 w-full shrink-0 bg-gradient-to-t from-surface-20 from-40% via-surface-20/95 to-transparent py-my-24",
+          "sticky bottom-0 w-full shrink-0 bg-gradient-to-t from-muted from-40% via-muted/95 to-transparent py-6",
         className,
       )}
     >
       <div
         className={cn(
           "composer-bar-gradient-inner",
-          placement === "sticky" && "mb-my-20",
+          placement === "sticky" && "mb-5",
           shellRadiusClass,
           shellShadow,
-          "grid pl-my-16 grid-cols-[1fr_auto] pr-my-8",
+          "grid pl-4 grid-cols-[1fr_auto] pr-2",
           showExpandedLayout
-            ? "gap-x-my-8 gap-y-my-8 py-my-8"
-            : `${COMPOSER_BAR_HEIGHT_CLASS} items-center gap-my-8 py-0`,
+            ? "gap-x-2 gap-y-2 py-2"
+            : `${COMPOSER_BAR_HEIGHT_CLASS} items-center gap-2 py-0`,
           isFocused && "ring-0",
           disabled && "opacity-70",
         )}
@@ -281,7 +281,7 @@ export function FloatingComposerBar({
             showExpandedLayout ? "col-span-full" : "flex items-center self-stretch",
           )}
         >
-          <textarea
+          <Textarea
             ref={textareaRef}
             rows={1}
             value={value}
@@ -300,10 +300,10 @@ export function FloatingComposerBar({
             placeholder={`✨${placeholder}`}
             aria-label={ariaLabel}
             className={cn(
-              "block min-w-0 w-full resize-none border-0 bg-transparent text-body3_400 caret-primary",
-              "text-on-surface-10 placeholder:text-on-surface-30 focus:outline-none focus:ring-0",
+              "block min-h-0 w-full min-w-0 resize-none border-0 bg-transparent shadow-none caret-primary",
+              "text-foreground placeholder:text-foreground-placeholder focus-visible:ring-0",
               showExpandedLayout
-                ? "max-h-[120px] py-my-2"
+                ? "max-h-[120px] py-0.5"
                 : "min-h-5 py-0 leading-5",
               isLoading && "pointer-events-none text-transparent placeholder:text-transparent",
             )}
@@ -318,7 +318,7 @@ export function FloatingComposerBar({
           className={cn(
             "col-start-2 flex shrink-0 items-center justify-center",
             showExpandedLayout
-              ? "col-span-full row-start-2 w-full justify-end pt-my-2"
+              ? "col-span-full row-start-2 w-full justify-end pt-0.5"
               : "row-start-1 self-center",
             !showSendButton && !showExpandedLayout && "invisible pointer-events-none",
           )}
@@ -332,4 +332,4 @@ export function FloatingComposerBar({
 
 /** 플로팅 컴포저가 열린 페이지 스크롤 영역 하단 여백 */
 export const FLOATING_COMPOSER_SCROLL_PAD_CLASS =
-  "max-lg:pb-[calc(var(--spacing-my-20)+3rem+env(safe-area-inset-bottom,0px)+var(--app-keyboard-inset,var(--app-vv-bottom,0px)))] lg:pb-[calc(var(--spacing-my-20)+3rem)]";
+  "max-lg:pb-[calc(var(--space-5)+3rem+env(safe-area-inset-bottom,0px)+var(--app-keyboard-inset,var(--app-vv-bottom,0px)))] lg:pb-[calc(var(--space-5)+3rem)]";

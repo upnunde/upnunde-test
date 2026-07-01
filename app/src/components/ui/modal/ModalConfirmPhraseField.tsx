@@ -1,8 +1,8 @@
 "use client";
 
-import { Input } from "@/components/ui/input";
+import { Input, InputGroup, InputHypertext } from "@/components/ui/input";
 import { CONFIRM_INPUT_PHRASE } from "@/lib/deleteConfirmPhrase";
-import { cn } from "@/lib/utils";
+import { cn } from "design-system/utils";
 
 export interface ModalConfirmPhraseFieldProps {
   inputId: string;
@@ -21,31 +21,26 @@ export function ModalConfirmPhraseField({
   className,
 }: ModalConfirmPhraseFieldProps) {
   return (
-    <div className={cn("w-full bg-surface-10 px-my-24 py-my-8", className)}>
-      <div className="flex flex-col gap-my-8">
-        <p className="text-body3_500 text-on-surface-20">
+    <div className={cn("w-full bg-background px-6 py-2", className)}>
+      <div className="flex flex-col gap-2">
+        <p className="text-body3_500 text-foreground-muted">
           위 내용에 동의하시면 <span className="text-primary">{`‘${CONFIRM_INPUT_PHRASE}’`}</span>를 입력해
           주세요.
         </p>
-        <div className="flex flex-col items-stretch gap-my-8 rounded">
+        <InputGroup>
           <Input
             id={inputId}
             type="text"
+            size="lg"
             autoComplete="off"
             maxLength={maxLength}
             placeholder={CONFIRM_INPUT_PHRASE}
             value={value}
             onChange={(e) => onChange(e.target.value)}
-            className="px-my-16 text-body1_400 shadow-none placeholder:text-on-surface-disabled"
           />
-          <div className="inline-flex items-center justify-end gap-my-8 self-stretch">
-            <p className="text-right text-caption1_400 text-on-surface-30">
-              {value.length}/{maxLength}
-            </p>
-          </div>
-        </div>
+          <InputHypertext count={value.length} max={maxLength} />
+        </InputGroup>
       </div>
     </div>
   );
 }
-

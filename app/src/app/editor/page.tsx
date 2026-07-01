@@ -58,7 +58,7 @@ import {
   isEditorMobileBlockToolbarVisible,
 } from "@/components/editor/editor-mobile-floating-layout";
 import { EDITOR_MOBILE_GUTTER_X_CLASS } from "@/lib/editor-block-layout";
-import { cn } from "@/lib/utils";
+import { cn } from "design-system/utils";
 
 function EditorWorkspace({
   isDesktop,
@@ -86,11 +86,11 @@ function EditorWorkspace({
   const editorScrollClass = cn(
     EDITOR_PAGE_SCROLL_CLASS,
     isDesktop
-      ? "py-my-40 px-0"
+      ? "py-10 px-0"
       : cn(
           EDITOR_MOBILE_GUTTER_X_CLASS,
           EDITOR_MOBILE_SCROLL_ROOT_TRAP_CLASS,
-          "max-lg:pt-my-12",
+          "max-lg:pt-3",
           mobileToolbarVisible
             ? EDITOR_MOBILE_SCROLL_BOTTOM_PAD_WITH_TOOLBAR_CLASS
             : EDITOR_MOBILE_SCROLL_BOTTOM_PAD_FAB_ONLY_CLASS,
@@ -99,14 +99,14 @@ function EditorWorkspace({
 
   if (isDesktop) {
     return (
-      <div className="flex min-h-0 w-full flex-1 items-start justify-center overflow-hidden bg-white">
-        <div className="relative flex h-full min-h-0 w-full flex-1 flex-col overflow-hidden border-r border-border-10">
+      <div className="flex min-h-0 w-full flex-1 items-start justify-center overflow-hidden bg-background">
+        <div className="relative flex h-full min-h-0 w-full flex-1 flex-col overflow-hidden border-r border-border">
           <EditorAutoGeneratorFloatingButton onClick={onOpenAutoGenerator} />
           <div className={editorScrollClass} {...{ [EDITOR_SCROLL_ROOT_ATTR]: "" }}>
             <EditorBody />
           </div>
         </div>
-        <div className="sticky top-10 ml-auto flex h-full shrink-0 flex-col items-center justify-start p-my-40">
+        <div className="sticky top-10 ml-auto flex h-full shrink-0 flex-col items-center justify-start p-10">
           <IPhone15ProFrame>
             <PreviewScreen />
           </IPhone15ProFrame>
@@ -116,7 +116,7 @@ function EditorWorkspace({
   }
 
   return (
-    <div className={cn("flex min-h-0 flex-1 flex-col overflow-hidden bg-white", APP_MAIN_PANEL_CLASS)}>
+    <div className={cn("flex min-h-0 flex-1 flex-col overflow-hidden bg-background", APP_MAIN_PANEL_CLASS)}>
       <div
         className={cn(
           "flex min-h-0 flex-1 flex-col overflow-hidden",
@@ -255,8 +255,8 @@ function EditorInner() {
           <aside
             className={
               isSceneSidebarCollapsed
-                ? "relative z-20 w-fit shrink-0 overflow-visible border-r border-border-10 bg-white px-my-8"
-                : "w-[240px] shrink-0 self-stretch min-h-0 overflow-y-auto overscroll-none border-r border-border-10 bg-white"
+                ? "relative z-sticky w-fit shrink-0 overflow-visible border-r border-border bg-background px-2"
+                : "w-[240px] shrink-0 self-stretch min-h-0 overflow-y-auto overscroll-none border-r border-border bg-background"
             }
           >
             <SceneNavigation

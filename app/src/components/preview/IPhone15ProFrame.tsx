@@ -1,7 +1,12 @@
 "use client";
 
 import type { ReactNode } from "react";
-import { cn } from "@/lib/utils";
+import {
+  PREVIEW_DEVICE_FRAME_INNER_CLASS,
+  PREVIEW_DEVICE_FRAME_OUTER_CLASS,
+  PREVIEW_PLAYER_ROOT_CLASS,
+} from "@/lib/preview-overlay-styles";
+import { cn } from "design-system/utils";
 
 interface IPhone15ProFrameProps {
   children: ReactNode;
@@ -10,13 +15,8 @@ interface IPhone15ProFrameProps {
 
 export function IPhone15ProFrame({ children, className }: IPhone15ProFrameProps) {
   return (
-    <div
-      className={cn(
-        "relative flex h-[650px] w-[300px] flex-col overflow-hidden rounded-[2.25rem] bg-surface-30 outline outline-[3px] outline-slate-800",
-        className,
-      )}
-    >
-      <div className="relative h-full w-full min-h-0 min-w-0 overflow-hidden rounded-[2rem] bg-black">
+    <div className={cn(PREVIEW_DEVICE_FRAME_OUTER_CLASS, className)}>
+      <div className={cn(PREVIEW_DEVICE_FRAME_INNER_CLASS, PREVIEW_PLAYER_ROOT_CLASS)}>
         {children}
       </div>
     </div>

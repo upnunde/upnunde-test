@@ -1,11 +1,13 @@
 "use client";
 
 import React, { useId, useState } from "react";
-import { ChevronDown, Plus } from "lucide-react";
+import { ICONS } from "@/lib/icons";
 import { Button } from "@/components/ui/button";
-import { Title1 } from "@/components/ui/title1";
+import { FormFieldLabel, formFieldAriaDescribedBy } from "@/components/ui/field-label";
 import { PAGE_FLUSH_CONTENT_PAD_X_CLASS } from "@/lib/page-layout";
-import { cn } from "@/lib/utils";
+import { Input, InputGroup, InputHypertext } from "@/components/ui/input";
+import { Textarea } from "@/components/ui/textarea";
+import { cn } from "design-system/utils";
 
 export type InquiryCategory = "account" | "payment" | "bug" | "etc";
 
@@ -35,7 +37,7 @@ export function InquiryForm({
   onSubmit = defaultSubmit,
   onSuccess,
   onCancel,
-  className = `mt-4 flex flex-col gap-my-40 ${PAGE_FLUSH_CONTENT_PAD_X_CLASS}`,
+  className = `mt-4 flex flex-col gap-10 ${PAGE_FLUSH_CONTENT_PAD_X_CLASS}`,
   rootClassName,
 }: InquiryFormProps) {
   const prefix = idPrefix ? `${idPrefix}-` : "";
@@ -72,103 +74,113 @@ export function InquiryForm({
         className={cn("max-lg:overflow-visible lg:min-h-0 lg:flex-1 lg:overflow-y-auto", className)}
       >
       {/* 문의 유형 */}
-      <div className="flex flex-col gap-my-4">
-        <Title1
-          text="문의 유형*"
-          variant="title-subtitle-dot"
-          subtitleText="문의 내용을 가장 잘 설명하는 유형을 선택해 주세요."
+      <div className="flex flex-col gap-1">
+        <FormFieldLabel
+          title="문의 유형*"
+          subtitle="문의 내용을 가장 잘 설명하는 유형을 선택해 주세요."
+          inputId={`${prefix}inquiry-category`}
         />
         <div className="relative mt-1 w-full">
           <select
             id={`${prefix}inquiry-category`}
+            aria-describedby={formFieldAriaDescribedBy(`${prefix}inquiry-category`)}
             value={category}
             onChange={(e) =>
               setCategory(e.target.value as InquiryCategory)
             }
-            className="h-9 w-full appearance-none rounded-md border border-border-10 bg-white pl-my-12 pr-my-12 text-body3_400 text-on-surface-10 outline-none focus:outline-none focus:ring-2 focus:ring-primary"
+            className="h-9 w-full appearance-none rounded-md border border-border bg-background pl-3 pr-3 text-body3_400 text-foreground outline-none focus:outline-none focus:ring-2 focus:ring-primary"
           >
             <option value="account">계정 / 로그인</option>
             <option value="payment">결제 / 정산</option>
             <option value="bug">버그 / 오류 제보</option>
             <option value="etc">기타 문의</option>
           </select>
-          <ChevronDown
-            className="pointer-events-none absolute right-3 top-1/2 h-4 w-4 -translate-y-1/2 text-on-surface-20"
+          <ICONS.chevronDown
+            className="pointer-events-none absolute right-3 top-1/2 h-4 w-4 -translate-y-1/2 text-foreground-muted"
             aria-hidden
           />
         </div>
       </div>
 
       {/* 제목 */}
-      <div className="flex flex-col gap-my-4">
-        <Title1
-          text="제목*"
-          variant="title-subtitle-dot"
-          subtitleText="제목을 입력해주세요."
+      <div className="flex flex-col gap-1">
+        <FormFieldLabel
+          title="제목*"
+          subtitle="제목을 입력해주세요."
+          inputId={`${prefix}inquiry-title`}
         />
-        <input
-          id={`${prefix}inquiry-title`}
-          type="text"
-          value={title}
-          onChange={(e) => setTitle(e.target.value)}
-          placeholder="제목을 입력해주세요."
-          className="mt-1 h-[42px] rounded-md border border-border-10 bg-white px-my-12 py-my-8 text-body3_400 text-on-surface-10 placeholder:text-on-surface-30 focus:outline-none focus:ring-2 focus:ring-primary"
-          required
-        />
+        <InputGroup className="mt-1">
+          <Input
+            id={`${prefix}inquiry-title`}
+            aria-describedby={formFieldAriaDescribedBy(`${prefix}inquiry-title`)}
+            type="text"
+            size="lg"
+            value={title}
+            onChange={(e) => setTitle(e.target.value)}
+            placeholder="제목을 입력해주세요."
+            required
+          />
+        </InputGroup>
       </div>
 
       {/* 상세내용 작성 */}
-      <div className="flex flex-col gap-my-4">
-        <Title1
-          text="상세내용 작성*"
-          variant="title-subtitle-dot"
-          subtitleText="내용을 최대한 상세하게 작성해 주세요."
+      <div className="flex flex-col gap-1">
+        <FormFieldLabel
+          title="상세내용 작성*"
+          subtitle="내용을 최대한 상세하게 작성해 주세요."
+          inputId={`${prefix}inquiry-content`}
         />
-        <textarea
-          id={`${prefix}inquiry-content`}
-          rows={6}
-          value={content}
-          onChange={(e) => setContent(e.target.value)}
-          placeholder="상세내용을 작성해 주세요."
-          className="mt-1 min-h-[160px] max-h-[400px] rounded-md border border-border-10 bg-white px-my-12 py-my-8 text-body3_400 text-on-surface-10 placeholder:text-on-surface-30 focus:outline-none focus:ring-2 focus:ring-primary"
-          required
-        />
-        <p className="text-caption1_400 text-on-surface-30">
-          개인정보(주민등록번호, 카드번호 등) 입력은 지양해 주세요. 필요한 경우 최소한의 정보만
-          적어 주셔도 충분합니다.
-        </p>
+        <InputGroup className="mt-1">
+          <Textarea
+            id={`${prefix}inquiry-content`}
+            aria-describedby={formFieldAriaDescribedBy(`${prefix}inquiry-content`, true)}
+            rows={6}
+            value={content}
+            onChange={(e) => setContent(e.target.value)}
+            placeholder="상세내용을 작성해 주세요."
+            className="min-h-[160px] max-h-[400px]"
+            required
+          />
+          <InputHypertext id={formFieldAriaDescribedBy(`${prefix}inquiry-content`, true)}>
+            개인정보(주민등록번호, 카드번호 등) 입력은 지양해 주세요. 필요한 경우 최소한의 정보만
+            적어 주셔도 충분합니다.
+          </InputHypertext>
+        </InputGroup>
       </div>
 
       {/* 이메일 */}
-      <div className="flex flex-col gap-my-4">
-        <Title1
-          text="이메일"
-          variant="title-subtitle"
-          subtitleText="답변이 필요하신 경우 이메일 주소를 남겨주세요."
+      <div className="flex flex-col gap-1">
+        <FormFieldLabel
+          title="이메일"
+          subtitle="답변이 필요하신 경우 이메일 주소를 남겨주세요."
+          inputId={`${prefix}inquiry-email`}
         />
-        <input
-          id={`${prefix}inquiry-email`}
-          type="email"
-          value={email}
-          onChange={(e) => setEmail(e.target.value)}
-          placeholder="이메일 주소를 입력해주세요."
-          className="mt-1 h-[42px] rounded-md border border-border-10 bg-white px-my-12 py-my-8 text-body3_400 text-on-surface-10 placeholder:text-on-surface-30 focus:outline-none focus:ring-2 focus:ring-primary"
-        />
+        <InputGroup className="mt-1">
+          <Input
+            id={`${prefix}inquiry-email`}
+            aria-describedby={formFieldAriaDescribedBy(`${prefix}inquiry-email`)}
+            type="email"
+            size="lg"
+            value={email}
+            onChange={(e) => setEmail(e.target.value)}
+            placeholder="이메일 주소를 입력해주세요."
+          />
+        </InputGroup>
       </div>
 
       {/* 이미지 파일 첨부 */}
-      <div className="flex flex-col gap-my-4 pb-my-8">
-        <Title1
-          text="이미지 파일 첨부"
-          variant="title-subtitle"
-          subtitleText="최대 5개의 파일 업로드 가능. 지원되는 파일 유형: jpg, png, gif, webp, heic, tiff"
+      <div className="flex flex-col gap-1 pb-2">
+        <FormFieldLabel
+          title="이미지 파일 첨부"
+          subtitle="최대 5개의 파일 업로드 가능. 지원되는 파일 유형: jpg, png, gif, webp, heic, tiff"
+          inputId={`${prefix}inquiry-attachments`}
         />
         <div className="mt-2">
           <label
             htmlFor={`${prefix}inquiry-attachments`}
-            className="flex w-[120px] h-[120px] cursor-pointer items-center justify-center rounded-lg border border-dashed border-border-20 bg-white text-muted-foreground transition-colors hover:border-border-10 hover:bg-white"
+            className="flex w-[120px] h-[120px] cursor-pointer items-center justify-center rounded-lg border border-dashed border-border bg-background text-muted-foreground transition-colors hover:border-border hover:bg-background"
           >
-            <Plus className="w-5 h-5" aria-hidden />
+            <ICONS.plus className="w-5 h-5" aria-hidden />
           </label>
           <input
             id={`${prefix}inquiry-attachments`}
@@ -182,13 +194,13 @@ export function InquiryForm({
       </form>
 
       {/* form과 동일 레벨 — 모달 하단 고정 */}
-      <div className={cn("mx-0 mt-0 w-full shrink-0 bg-white pt-my-20 pb-my-20", PAGE_FLUSH_CONTENT_PAD_X_CLASS)}>
-        <div className="flex items-center justify-end gap-my-12">
+      <div className={cn("mx-0 mt-0 w-full shrink-0 bg-background pt-5 pb-5", PAGE_FLUSH_CONTENT_PAD_X_CLASS)}>
+        <div className="flex items-center justify-end gap-3">
           <Button
             type="button"
             variant="outline"
             size="sm"
-            className="px-my-20"
+            className="px-5"
             onClick={handleCancel}
           >
             취소
@@ -197,7 +209,7 @@ export function InquiryForm({
             type="submit"
             form={formDomId}
             size="sm"
-            className="px-my-20"
+            className="px-5"
             disabled={!title || !content}
           >
             제출

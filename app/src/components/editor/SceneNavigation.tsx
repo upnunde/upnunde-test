@@ -1,8 +1,10 @@
 "use client";
 
 import React, { useMemo, useState, useRef, useEffect } from "react";
-import { AlertTriangle, Menu } from "lucide-react";
+import { ICONS } from "@/lib/icons";
 import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
+import { Badge } from "@/components/ui/badge";
 import { useEditorStore } from "@/store/useEditorStore";
 import {
   useEditorIssues,
@@ -11,7 +13,7 @@ import {
 } from "@/hooks/useEditorIssues";
 import { useEditorScrollActiveSceneId } from "@/hooks/useEditorScrollActiveSceneId";
 import { resolveEditorActiveSceneId } from "@/lib/editor-scroll";
-import { cn } from "@/lib/utils";
+import { cn } from "design-system/utils";
 
 interface SceneNavigationProps {
   onSceneClick?: (blockId: string) => void;
@@ -159,18 +161,18 @@ export function SceneNavigation({
     <div className="flex h-full flex-col">
       <nav
         className={cn(
-          "flex-1 overflow-y-auto pt-my-8",
-          collapsed ? "px-0" : "px-my-4"
+          "flex-1 overflow-y-auto pt-2",
+          collapsed ? "px-0" : "px-1"
         )}
       >
         <div
           className={cn(
-            "flex items-center gap-my-8 py-my-8",
-            collapsed ? "justify-center" : "justify-between pl-my-12 pr-my-8"
+            "flex items-center gap-2 py-2",
+            collapsed ? "justify-center" : "justify-between pl-3 pr-2"
           )}
         >
           {!collapsed && (
-            <h2 className="text-body3_500 text-on-surface-10 flex items-center gap-my-8">
+            <h2 className="text-body3_500 text-foreground flex items-center gap-2">
               장면 목록
             </h2>
           )}
@@ -180,21 +182,21 @@ export function SceneNavigation({
               variant="outline"
               size="icon-lg"
               onClick={onToggleCollapsed}
-              className="shrink-0 rounded-full shadow-none text-on-surface-30 disabled:border-border-20"
+              className="shrink-0 rounded-full shadow-none text-foreground-placeholder disabled:border-border"
               aria-label={collapsed ? "장면 목록 펼치기" : "장면 목록 최소화"}
             >
-              <Menu aria-hidden="true" />
+              <ICONS.menu aria-hidden="true" />
             </Button>
           ) : null}
         </div>
 
         {!collapsed &&
           (scenes.length === 0 ? (
-            <div className="px-my-12 py-my-8 text-body3_400 text-on-surface-30 text-center">
+            <div className="px-3 py-2 text-body3_400 text-foreground-placeholder text-center">
               장면이 없습니다
             </div>
           ) : (
-            <ul className="space-y-my-4 px-my-4">
+            <ul className="space-y-1 px-1">
               {scenes.map(({ block, index }) => {
                 const sceneNumber = blocks.slice(0, index).filter((b) => b.type === "scene").length + 1;
                 const isActive = activeSceneId === block.id;
@@ -202,14 +204,15 @@ export function SceneNavigation({
                 const isEditing = editingBlockId === block.id;
 
                 const rowContent = (
-                  <div className="flex items-center gap-my-12 min-w-0">
-                    <span className="text-caption1_400 text-on-surface-30 font-mono tabular-nums shrink-0">
+                  <div className="flex items-center gap-3 min-w-0">
+                    <span className="text-caption1_400 text-foreground-placeholder font-mono tabular-nums shrink-0">
                       {String(sceneNumber).padStart(2, "0")}
                     </span>
                     {isEditing ? (
-                      <input
+                      <Input
                         ref={inputRef}
                         type="text"
+                        size="sm"
                         value={editValue}
                         onChange={(e) => setEditValue(e.target.value)}
                         onBlur={() => commitEdit(block.id, block.content ?? "")}
@@ -222,7 +225,7 @@ export function SceneNavigation({
                           }
                         }}
                         onClick={(e) => e.stopPropagation()}
-                        className="flex-1 min-w-0 rounded px-my-4 py-my-2 text-body3_500 bg-white border border-border-20 focus:outline-none focus:ring-1 focus:ring-border-20 focus:border-border-20"
+                        className="min-w-0 flex-1"
                         aria-label="장면 제목 편집"
                       />
                     ) : (
@@ -242,8 +245,8 @@ export function SceneNavigation({
                     {isEditing ? (
                       <div
                         className={cn(
-                          "w-full px-my-12 py-my-8 rounded-md text-body3_400",
-                          "bg-white ring-1 ring-border-20 ring-inset"
+                          "w-full px-3 py-2 rounded-md text-body3_400",
+                          "bg-background ring-1 ring-border ring-inset"
                         )}
                       >
                         {rowContent}
@@ -253,10 +256,10 @@ export function SceneNavigation({
                         type="button"
                         onClick={() => handleSceneClick(block.id)}
                         className={cn(
-                          "w-full text-left px-my-12 py-my-8 rounded-md text-body3_400 transition-colors",
-                          "hover:bg-surface-20",
-                          isActive && "font-medium text-black",
-                          !isActive && "text-on-surface-30"
+                          "w-full text-left px-3 py-2 rounded-md text-body3_400 transition-colors",
+                          "hover:bg-muted",
+                          isActive && "font-medium text-foreground",
+                          !isActive && "text-foreground-placeholder"
                         )}
                       >
                         {rowContent}
@@ -274,19 +277,19 @@ export function SceneNavigation({
 
       {/* 최하단: 오류/누락 알림 박스 (hover 시 상세 리스트 노출, 클릭 시 해당 위치로 이동) */}
       {showIssues && !collapsed && (
-        <div className="mt-auto px-my-8 pb-my-8">
+        <div className="mt-auto px-2 pb-2">
           <div className="relative group">
             <button
               type="button"
               className={cn(
-                "w-full rounded-lg border px-my-12 py-my-8 text-left transition-colors",
+                "w-full rounded-lg border px-3 py-2 text-left transition-colors",
                 issues.length > 0
-                  ? "border-rose-300 bg-rose-50 text-rose-900 hover:bg-rose-100"
-                  : "border-border-10 bg-surface-20 text-on-surface-30 hover:bg-surface-20"
+                  ? "border-destructive/40 bg-destructive-container text-destructive hover:bg-destructive-container"
+                  : "border-border bg-muted text-foreground-placeholder hover:bg-muted"
               )}
               aria-label="오류 및 누락 알림"
             >
-              <div className="flex items-center justify-between gap-my-12">
+              <div className="flex items-center justify-between gap-3">
                 <div className="text-body3_500">
                   {issues.length > 0 ? "오류/누락 있음" : "오류/누락 없음"}
                 </div>
@@ -299,36 +302,36 @@ export function SceneNavigation({
             {/* Hover list */}
             {issues.length > 0 && (
               <div
-                className="absolute left-0 right-0 bottom-full mb-0 hidden group-hover:block z-50"
+                className="absolute left-0 right-0 bottom-full mb-0 hidden group-hover:block z-sticky"
                 role="dialog"
                 aria-label="오류 및 누락 상세"
               >
-                <div className="rounded-lg border border-border-10 bg-white shadow-elevation-40 overflow-hidden">
-                  <div className="px-my-12 py-my-8 border-b border-border-10 bg-surface-20">
-                    <div className="text-caption1_500 text-on-surface-20">오류/누락 목록</div>
-                    <div className="text-caption2_400 text-on-surface-30">클릭하면 해당 위치로 이동합니다</div>
+                <div className="rounded-lg border border-border bg-background shadow-elevation-40 overflow-hidden">
+                  <div className="px-3 py-2 border-b border-border bg-muted">
+                    <div className="text-caption1_500 text-foreground-muted">오류/누락 목록</div>
+                    <div className="text-caption2_400 text-foreground-placeholder">클릭하면 해당 위치로 이동합니다</div>
                   </div>
-                  <ul className="max-h-60 overflow-y-auto py-my-4">
+                  <ul className="max-h-60 overflow-y-auto py-1">
                     {issues.map((it, idx) => (
                       <li key={`${it.blockId}-${idx}`}>
                         <button
                           type="button"
                           className={cn(
-                            "w-full px-my-12 py-my-8 text-left text-caption1_400 hover:bg-surface-20 transition-colors",
-                            it.kind === "error" ? "text-rose-700" : "text-rose-700"
+                            "w-full px-3 py-2 text-left text-caption1_400 hover:bg-muted transition-colors",
+                            it.kind === "error" ? "text-destructive" : "text-destructive"
                           )}
                           onClick={() => {
                             applyIssueFocus(it);
                             navigateToBlock(it.blockId, { preserveIssueFocus: true });
                           }}
                         >
-                          <div className="flex items-start justify-between gap-my-8">
+                          <div className="flex items-start justify-between gap-2">
                             <div className="font-medium">{it.title}</div>
                             <div className="shrink-0 text-caption2_400 uppercase opacity-70">
                               {it.kind}
                             </div>
                           </div>
-                          {it.detail && <div className="mt-0.5 text-caption2_400 text-on-surface-30">{it.detail}</div>}
+                          {it.detail && <div className="mt-0.5 text-caption2_400 text-foreground-placeholder">{it.detail}</div>}
                         </button>
                       </li>
                     ))}
@@ -344,7 +347,7 @@ export function SceneNavigation({
       {!showIssues && collapsed && <div className="mt-auto h-[42px]" aria-hidden />}
 
       {showIssues && collapsed && (
-        <div className="mt-auto pb-my-8">
+        <div className="mt-auto pb-2">
           <div ref={collapsedIssueWrapRef} className="relative">
             <button
               type="button"
@@ -352,40 +355,43 @@ export function SceneNavigation({
               className={cn(
                 "relative mx-auto flex h-9 w-9 items-center justify-center rounded-lg border transition-colors",
                 issues.length > 0
-                  ? "border-rose-300 bg-rose-50 text-rose-900 hover:bg-rose-100"
-                  : "border-border-10 bg-surface-20 text-on-surface-30 hover:bg-surface-20"
+                  ? "border-destructive/40 bg-destructive-container text-destructive hover:bg-destructive-container"
+                  : "border-border bg-muted text-foreground-placeholder hover:bg-muted"
               )}
               aria-label={issues.length > 0 ? `오류 및 누락 알림 ${issues.length}건` : "오류 및 누락 없음"}
               aria-expanded={collapsedIssueOpen}
               aria-haspopup="dialog"
             >
-              <AlertTriangle className="h-4 w-4" aria-hidden="true" />
+              <ICONS.warning className="h-4 w-4" aria-hidden="true" />
               {issues.length > 0 && (
-                <span className="absolute -right-1 -top-1 min-w-4 rounded-full bg-rose-600 px-my-4 text-caption2_400 text-white">
+                <Badge
+                  variant="destructive"
+                  className="absolute -right-1 -top-1 min-w-4 px-1 py-0 text-caption2_400"
+                >
                   {issues.length > 99 ? "99+" : issues.length}
-                </span>
+                </Badge>
               )}
             </button>
 
             {collapsedIssueOpen && issues.length > 0 && (
               <div
-                className="absolute bottom-full left-0 z-[80] mb-2 w-[280px]"
+                className="absolute bottom-full left-0 z-toast mb-2 w-[280px]"
                 role="dialog"
                 aria-label="오류 및 누락 상세"
               >
-                <div className="rounded-lg border border-border-10 bg-white shadow-elevation-40 overflow-hidden">
-                  <div className="px-my-12 py-my-8 border-b border-border-10 bg-surface-20">
-                    <div className="text-caption1_500 text-on-surface-20">오류/누락 목록</div>
-                    <div className="text-caption2_400 text-on-surface-30">클릭하면 해당 위치로 이동합니다</div>
+                <div className="rounded-lg border border-border bg-background shadow-elevation-40 overflow-hidden">
+                  <div className="px-3 py-2 border-b border-border bg-muted">
+                    <div className="text-caption1_500 text-foreground-muted">오류/누락 목록</div>
+                    <div className="text-caption2_400 text-foreground-placeholder">클릭하면 해당 위치로 이동합니다</div>
                   </div>
-                  <ul className="max-h-60 overflow-y-auto py-my-4">
+                  <ul className="max-h-60 overflow-y-auto py-1">
                     {issues.map((it, idx) => (
                       <li key={`${it.blockId}-${idx}`}>
                         <button
                           type="button"
                           className={cn(
-                            "w-full px-my-12 py-my-8 text-left text-caption1_400 hover:bg-surface-20 transition-colors",
-                            it.kind === "error" ? "text-rose-700" : "text-rose-700"
+                            "w-full px-3 py-2 text-left text-caption1_400 hover:bg-muted transition-colors",
+                            it.kind === "error" ? "text-destructive" : "text-destructive"
                           )}
                           onClick={() => {
                             applyIssueFocus(it);
@@ -393,13 +399,13 @@ export function SceneNavigation({
                             setCollapsedIssueOpen(false);
                           }}
                         >
-                          <div className="flex items-start justify-between gap-my-8">
+                          <div className="flex items-start justify-between gap-2">
                             <div className="font-medium">{it.title}</div>
                             <div className="shrink-0 text-caption2_400 uppercase opacity-70">
                               {it.kind}
                             </div>
                           </div>
-                          {it.detail && <div className="mt-0.5 text-caption2_400 text-on-surface-30">{it.detail}</div>}
+                          {it.detail && <div className="mt-0.5 text-caption2_400 text-foreground-placeholder">{it.detail}</div>}
                         </button>
                       </li>
                     ))}

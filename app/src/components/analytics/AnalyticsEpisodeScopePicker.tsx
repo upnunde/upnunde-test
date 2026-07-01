@@ -35,7 +35,6 @@ export function AnalyticsEpisodeScopePicker({
       ariaLabelPrefix="집계 회차"
       placeholder="에피소드 전체"
       align="end"
-      className="shrink-0"
     />
   );
 }

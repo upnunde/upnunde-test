@@ -1,5 +1,5 @@
 import { chipVariants } from "@/lib/chip-styles";
-import { cn } from "@/lib/utils";
+import { cn } from "design-system/utils";
 
 /** @deprecated `FilterChip` / `chipVariants` 사용 권장 */
 export const filterChipOutlineClassName = chipVariants({

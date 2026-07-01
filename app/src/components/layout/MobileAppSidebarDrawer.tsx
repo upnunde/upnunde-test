@@ -3,7 +3,7 @@
 import AppSidebar, { deriveSidebarActiveId, type SidebarItemId } from "@/components/AppSidebar/AppSidebar";
 
 const MOBILE_SIDEBAR_BACKDROP_CLASS =
-  "fixed inset-x-0 bottom-0 top-0 z-40 bg-black/50 lg:hidden max-lg:bottom-auto max-lg:top-[var(--app-vv-live-top,0px)] max-lg:h-[var(--app-vv-live-height,100dvh)]";
+  "fixed inset-x-0 bottom-0 top-0 z-overlay bg-dim-20 lg:hidden max-lg:bottom-auto max-lg:top-[var(--app-vv-live-top,0px)] max-lg:h-[var(--app-vv-live-height,100dvh)]";
 
 export interface MobileAppSidebarDrawerProps {
   open: boolean;

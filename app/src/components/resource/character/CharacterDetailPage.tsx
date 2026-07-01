@@ -3,14 +3,14 @@
 import React, { useCallback, useState, useEffect, useRef, useMemo } from "react";
 import Image from "next/image";
 import { useRouter, usePathname } from "next/navigation";
-import { Pencil, Trash2 } from "lucide-react";
+import { ICONS } from "@/lib/icons";
 import { Button } from "@/components/ui/button";
 import { HeaderBackButton } from "@/components/ui/header-back-button";
-import { Input } from "@/components/ui/input";
+import { Input, InputGroup, InputHypertext } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import { AddResourceSlot } from "@/components/resource/cards/AddResourceSlot";
 import { createOptimizedImageObjectUrl } from "@/lib/image-upload-compress";
-import { THUMBNAIL_SLOT_ARIA, THUMBNAIL_DIM_OVERLAY_CLASS } from "@/lib/thumbnail-styles";
+import { THUMBNAIL_SLOT_ARIA, THUMBNAIL_DIM_OVERLAY_CLASS, thumbnailHoverDimOverlayClass } from "@/lib/thumbnail-styles";
 import {
   CharacterExpressionMultiModal,
   CharacterExpressionSingleModal,
@@ -25,7 +25,7 @@ import {
   FLOATING_COMPOSER_SCROLL_PAD_CLASS,
 } from "@/components/ui/floating-composer-bar";
 import { FloatingAiComposerPortal } from "@/components/ui/FloatingAiComposerPortal";
-import { Title1 } from "@/components/ui/title1";
+import { FormFieldLabel, formFieldAriaDescribedBy } from "@/components/ui/field-label";
 import { Title2 } from "@/components/ui/title2";
 import {
   PAGE_CARD_SHELL_MOBILE_FLUSH_CLASS,
@@ -36,7 +36,7 @@ import {
   PAGE_SUBHEADER_PAGE_SHELL_CLASS,
   PAGE_SUBHEADER_WITH_STICKY_CLASS,
 } from "@/lib/page-layout";
-import { cn } from "@/lib/utils";
+import { cn } from "design-system/utils";
 import { generateCharacterDraftFromBrief } from "@/lib/character-ai-draft";
 import type { CharacterAiDraft } from "@/lib/character-ai-draft";
 import { useFormAiDraftComposer } from "@/hooks/useFormAiDraftComposer";
@@ -52,6 +52,10 @@ export type CharacterDetailPageContext = "series-resource" | "my-works";
 /** OS 파일 선택창 — label htmlFor 연결용 (ref.click() 대신) */
 const CHARACTER_DETAIL_THUMBNAIL_FILE_INPUT_ID = "character-detail-thumbnail-file";
 const CHARACTER_DETAIL_EXPRESSION_FILE_INPUT_ID = "character-detail-expression-file";
+const CHARACTER_DETAIL_NAME_INPUT_ID = "character-detail-name";
+const CHARACTER_DETAIL_SUMMARY_INPUT_ID = "character-detail-summary";
+const CHARACTER_DETAIL_TAGS_INPUT_ID = "character-detail-tags";
+const CHARACTER_DETAIL_GREETING_INPUT_ID = "character-detail-greeting";
 
 interface CharacterDetailPageProps {
   /** 신규 생성인지 여부 (지금은 true 만 사용) */
@@ -313,13 +317,13 @@ export function CharacterDetailPage({
     <div className={PAGE_SUBHEADER_PAGE_SHELL_CLASS}>
       {/* 상단 서브 헤더 - 리소스 관리/에피소드 관리와 동일 톤 */}
       <header className={PAGE_SUBHEADER_WITH_STICKY_CLASS}>
-        <div className="flex w-full min-w-0 max-w-[1200px] mx-auto items-center justify-between gap-my-16">
-          <div className="flex items-center justify-start gap-my-12">
+        <div className="flex w-full min-w-0 max-w-[1200px] mx-auto items-center justify-between gap-4">
+          <div className="flex items-center justify-start gap-3">
             <HeaderBackButton
               onClick={handleBack}
               aria-label={isMyWorks ? "캐릭터 목록으로" : "리소스 목록으로"}
             />
-            <h1 className="text-heading2_700 text-on-surface-10">
+            <h1 className="text-heading2_700 text-foreground">
               {isMyWorks ? "캐릭터" : "등장인물"} {isNew ? "등록" : "상세"}
             </h1>
           </div>
@@ -336,7 +340,7 @@ export function CharacterDetailPage({
         <div className="w-full min-w-0 max-w-[1200px] mx-auto mx-auto">
           <div
             className={cn(
-              "w-full rounded-[4px] border border-border-10 bg-white",
+              "w-full rounded-sm border border-border bg-background",
               PAGE_CARD_SHELL_MOBILE_FLUSH_CLASS,
             )}
           >
@@ -348,8 +352,9 @@ export function CharacterDetailPage({
                   <Button
                     type="button"
                     variant="outline"
+                    shape="square"
+                    size="sm"
                     onClick={() => setImportCharacterModalOpen(true)}
-                    className="h-8 rounded-md bg-white px-my-12 text-body3_500 text-on-surface-10 hover:bg-surface-20 disabled:border-border-20"
                   >
                     캐릭터 가져오기
                   </Button>
@@ -357,61 +362,61 @@ export function CharacterDetailPage({
               }
             />
 
-            <div className={`${PAGE_CONTENT_BODY_CLASS} flex flex-col gap-my-32`}>
+            <div className={`${PAGE_CONTENT_BODY_CLASS} flex flex-col gap-8`}>
               {/* 이름 */}
-              <section className="flex flex-col gap-my-8">
-                <Title1
-                  text="이름*"
-                  variant="title-subtitle-dot"
-                  subtitleText="캐릭터의 이름을 입력해 주세요."
+              <section className="flex flex-col gap-2">
+                <FormFieldLabel
+                  title="이름*"
+                  subtitle="캐릭터의 이름을 입력해 주세요."
+                  inputId={CHARACTER_DETAIL_NAME_INPUT_ID}
                 />
-                <div className="flex flex-col justify-center items-start gap-my-8">
+                <InputGroup>
                   <Input
+                    id={CHARACTER_DETAIL_NAME_INPUT_ID}
+                    aria-describedby={formFieldAriaDescribedBy(CHARACTER_DETAIL_NAME_INPUT_ID)}
+                    size="lg"
                     value={name}
                     onChange={(e) => setName(e.target.value.slice(0, MAX_NAME))}
                     maxLength={MAX_NAME}
                     placeholder="예) 한하루"
-                    className="h-[42px] rounded-md border border-border-10 bg-white px-my-12 py-my-8 text-body3_400 text-on-surface-10 placeholder:text-on-surface-30 focus:outline-none focus:ring-2 focus:ring-primary shadow-none"
                   />
-                  <div className="w-full inline-flex justify-end items-center gap-my-8">
-                    <div className="text-right text-on-surface-30 text-caption1_400 tabular-nums">{name.length}/{MAX_NAME}</div>
-                  </div>
-                </div>
+                  <InputHypertext count={name.length} max={MAX_NAME} />
+                </InputGroup>
               </section>
 
               {/* 인물 소개 */}
-              <section className="flex flex-col gap-my-8">
-                <Title1
-                  text="인물 소개*"
-                  variant="title-subtitle-dot"
-                  subtitleText="한 줄로 인물의 특징이 드러나도록 정리해 주세요."
+              <section className="flex flex-col gap-2">
+                <FormFieldLabel
+                  title="인물 소개*"
+                  subtitle="한 줄로 인물의 특징이 드러나도록 정리해 주세요."
+                  inputId={CHARACTER_DETAIL_SUMMARY_INPUT_ID}
                 />
-                <div className="flex flex-col justify-center items-start gap-my-8">
+                <InputGroup>
                   <Input
+                    id={CHARACTER_DETAIL_SUMMARY_INPUT_ID}
+                    aria-describedby={formFieldAriaDescribedBy(CHARACTER_DETAIL_SUMMARY_INPUT_ID)}
+                    size="lg"
                     value={summary}
                     onChange={(e) => setSummary(e.target.value.slice(0, MAX_SUMMARY))}
                     maxLength={MAX_SUMMARY}
                     placeholder="예) 사람의 소리를 볼 수 있는 소리 수집가 소년"
-                    className="h-[42px] rounded-md border border-border-10 bg-white px-my-12 py-my-8 text-body3_400 text-on-surface-10 placeholder:text-on-surface-30 focus:outline-none focus:ring-2 focus:ring-primary"
                   />
-                  <div className="w-full inline-flex justify-end items-center gap-my-8">
-                    <div className="text-right text-on-surface-30 text-caption1_400 tabular-nums">{summary.length}/{MAX_SUMMARY}</div>
-                  </div>
-                </div>
+                  <InputHypertext count={summary.length} max={MAX_SUMMARY} />
+                </InputGroup>
               </section>
 
               {/* 캐릭터 이미지 / 표정 */}
-              <section className="flex flex-col gap-my-16">
-                <div className="grid grid-cols-[auto,1fr] gap-my-32 items-start">
-                  <div className="flex flex-col gap-my-12">
-                    <Title1
-                      text="캐릭터 이미지*"
-                      variant="title-subtitle-dot"
-                      subtitleText="대화·연출에 쓰일 캐릭터 이미지입니다. 등록한 이미지는 목록 썸네일 등에도 함께 쓰입니다."
+              <section className="flex flex-col gap-4">
+                <div className="grid grid-cols-[auto,1fr] gap-8 items-start">
+                  <div className="flex flex-col gap-3">
+                    <FormFieldLabel
+                      title="캐릭터 이미지*"
+                      subtitle="대화·연출에 쓰일 캐릭터 이미지입니다. 등록한 이미지는 목록 썸네일 등에도 함께 쓰입니다."
+                      inputId={CHARACTER_DETAIL_THUMBNAIL_FILE_INPUT_ID}
                     />
                     {thumbnailUrl ? (
-                      <div className="inline-flex flex-col justify-start items-start gap-my-4 w-[90px] group">
-                        <div className="w-[90px] h-[160px] rounded-lg overflow-hidden border border-border-10 bg-surface-20 relative">
+                      <div className="inline-flex flex-col justify-start items-start gap-1 w-[90px] group">
+                        <div className="w-[90px] h-[160px] rounded-lg overflow-hidden border border-border bg-muted relative">
                           <button
                             type="button"
                             onClick={handleThumbnailAddClick}
@@ -428,30 +433,32 @@ export function CharacterDetailPage({
                             />
                             <div className={THUMBNAIL_DIM_OVERLAY_CLASS} aria-hidden />
                           </button>
-                          <div className="absolute inset-0 z-[1] bg-black/10 opacity-0 group-hover:opacity-100 transition-opacity pointer-events-none" />
-                          <div className="absolute right-1 top-1 z-[2] flex flex-col justify-center items-start gap-my-4 opacity-0 group-hover:opacity-100 transition-opacity pointer-events-none group-hover:pointer-events-auto">
-                            <button
-                              type="button"
-                              className="w-8 h-8 rounded-full cursor-pointer bg-surface-10 inline-flex justify-center items-center text-on-surface-10 hover:bg-surface-20"
+                          <div className={thumbnailHoverDimOverlayClass()} aria-hidden />
+                          <div className="absolute right-1 top-1 z-dropdown flex flex-col justify-center items-start gap-1 opacity-0 group-hover:opacity-100 transition-opacity pointer-events-none group-hover:pointer-events-auto">
+                            <Button
+                              variant="ghost"
+                              size="icon-sm"
+                              className="rounded-full bg-background text-foreground"
                               aria-label="캐릭터 이미지 편집"
                               onClick={(e) => {
                                 e.stopPropagation();
                                 handleThumbnailAddClick();
                               }}
                             >
-                              <Pencil className="w-4 h-4" />
-                            </button>
-                            <button
-                              type="button"
-                              className="w-8 h-8 rounded-full cursor-pointer bg-surface-10 inline-flex justify-center items-center text-on-surface-10 hover:bg-surface-20"
+                              <ICONS.pencil className="w-4 h-4" />
+                            </Button>
+                            <Button
+                              variant="ghost"
+                              size="icon-sm"
+                              className="rounded-full bg-background text-foreground"
                               aria-label="캐릭터 이미지 삭제"
                               onClick={(e) => {
                                 e.stopPropagation();
                                 handleThumbnailRemove();
                               }}
                             >
-                              <Trash2 className="w-4 h-4" />
-                            </button>
+                              <ICONS.trash2 className="w-4 h-4" />
+                            </Button>
                           </div>
                         </div>
                       </div>
@@ -469,19 +476,19 @@ export function CharacterDetailPage({
                     )}
                   </div>
 
-                  <div className="flex flex-col gap-my-12">
-                    <Title1
-                      text="표정*"
-                      variant="title-subtitle-dot"
-                      subtitleText="다양한 감정을 표현할 수 있는 표정을 여러 장까지 등록해 둘 수 있어요. (최대 10개)"
+                  <div className="flex flex-col gap-3">
+                    <FormFieldLabel
+                      title="표정*"
+                      subtitle="다양한 감정을 표현할 수 있는 표정을 여러 장까지 등록해 둘 수 있어요. (최대 10개)"
+                      inputId={CHARACTER_DETAIL_EXPRESSION_FILE_INPUT_ID}
                     />
-                    <div className="flex flex-wrap items-start gap-my-12">
+                    <div className="flex flex-wrap items-start gap-3">
                       {expressionSlots.filter((s) => s.imageUrl).map((slot) => (
                         <div
                           key={slot.id}
-                          className="inline-flex shrink-0 flex-col justify-start items-start gap-my-4 w-[90px] group"
+                          className="inline-flex shrink-0 flex-col justify-start items-start gap-1 w-[90px] group"
                         >
-                          <div className="w-[90px] h-[160px] rounded-lg overflow-hidden border border-border-10 bg-surface-20 relative">
+                          <div className="w-[90px] h-[160px] rounded-lg overflow-hidden border border-border bg-muted relative">
                             <Image
                               src={slot.imageUrl ?? ""}
                               alt=""
@@ -492,20 +499,22 @@ export function CharacterDetailPage({
                             />
                             <div className={THUMBNAIL_DIM_OVERLAY_CLASS} aria-hidden />
                             {/* 어두운 오버레이 */}
-                            <div className="absolute inset-0 w-full h-full bg-black/10 opacity-0 group-hover:opacity-100 transition-opacity pointer-events-none" />
+                            <div className={thumbnailHoverDimOverlayClass()} aria-hidden />
                             {/* 편집 / 삭제 아이콘 버튼 (9:16 썸네일과 동일 스타일) */}
-                            <div className="absolute right-1 top-1 flex flex-col justify-center items-start gap-my-4 opacity-0 group-hover:opacity-100 transition-opacity pointer-events-none group-hover:pointer-events-auto">
-                              <button
-                                type="button"
-                                className="w-8 h-8 rounded-full cursor-pointer bg-surface-10 inline-flex justify-center items-center text-on-surface-10 hover:bg-surface-20"
+                            <div className="absolute right-1 top-1 flex flex-col justify-center items-start gap-1 opacity-0 group-hover:opacity-100 transition-opacity pointer-events-none group-hover:pointer-events-auto">
+                              <Button
+                                variant="ghost"
+                                size="icon-sm"
+                                className="rounded-full bg-background text-foreground"
                                 aria-label="표정 편집"
                                 onClick={() => handleExpressionEditClick(slot)}
                               >
-                                <Pencil className="w-4 h-4" />
-                              </button>
-                              <button
-                                type="button"
-                                className="w-8 h-8 rounded-full cursor-pointer bg-surface-10 inline-flex justify-center items-center text-on-surface-10 hover:bg-surface-20"
+                                <ICONS.pencil className="w-4 h-4" />
+                              </Button>
+                              <Button
+                                variant="ghost"
+                                size="icon-sm"
+                                className="rounded-full bg-background text-foreground"
                                 aria-label="표정 삭제"
                                 onClick={() =>
                                   setExpressionSlots((prev) =>
@@ -513,11 +522,11 @@ export function CharacterDetailPage({
                                   )
                                 }
                               >
-                                <Trash2 className="w-4 h-4" />
-                              </button>
+                                <ICONS.trash2 className="w-4 h-4" />
+                              </Button>
                             </div>
                           </div>
-                          <span className="w-[90px] text-caption1_400 text-on-surface-10 truncate whitespace-nowrap text-left">
+                          <span className="w-[90px] text-caption1_400 text-foreground truncate whitespace-nowrap text-left">
                             {slot.expressionLabel || "untitle"}
                           </span>
                         </div>
@@ -540,14 +549,17 @@ export function CharacterDetailPage({
               </section>
 
               {/* 해시태그 */}
-              <section className="flex flex-col gap-my-8">
-                <Title1
-                  text="해시태그*"
-                  variant="title-subtitle-dot"
-                  subtitleText="캐릭터를 한눈에 파악할 수 있는 키워드를 입력해 주세요. 쉼표로 구분됩니다."
+              <section className="flex flex-col gap-2">
+                <FormFieldLabel
+                  title="해시태그*"
+                  subtitle="캐릭터를 한눈에 파악할 수 있는 키워드를 입력해 주세요. 쉼표로 구분됩니다."
+                  inputId={CHARACTER_DETAIL_TAGS_INPUT_ID}
                 />
-                <div className="flex flex-col justify-center items-start gap-my-8">
+                <InputGroup>
                   <Input
+                    id={CHARACTER_DETAIL_TAGS_INPUT_ID}
+                    aria-describedby={formFieldAriaDescribedBy(CHARACTER_DETAIL_TAGS_INPUT_ID)}
+                    size="lg"
                     value={tags}
                     onChange={(e) => setTags(e.target.value.slice(0, MAX_TAGS))}
                     maxLength={MAX_TAGS}
@@ -558,59 +570,59 @@ export function CharacterDetailPage({
                         e.preventDefault();
                         handleAddTag();
                       } else if (e.key === "Backspace" && !tags && tagList.length > 0) {
-                        // 입력이 비어 있고 백스페이스를 누르면 마지막 태그 삭제
                         e.preventDefault();
                         setTagList((prev) => prev.slice(0, -1));
                       }
                     }}
                     placeholder="예) 고등학생, 사진, 츤데레"
-                    className="h-[42px] rounded-md border border-border-10 bg-white px-my-12 py-my-8 text-body3_400 text-on-surface-10 placeholder:text-on-surface-30 focus:outline-none focus:ring-2 focus:ring-primary"
                   />
-                  <div className="w-full inline-flex justify-end items-start gap-my-8">
-                    {tagList.length > 0 && (
-                      <div className="flex flex-wrap gap-my-8 w-full">
+                  <div className="flex w-full items-start justify-end gap-2">
+                    {tagList.length > 0 ? (
+                      <div className="flex w-full flex-wrap gap-2">
                         {tagList.map((tag) => (
                           <Tag key={tag} onDismiss={() => handleRemoveTag(tag)}>
                             #{tag}
                           </Tag>
                         ))}
                       </div>
-                    )}
-                    <div className="w-fit text-right text-on-surface-30 text-caption1_400 tabular-nums">
-                      {tags.length}/{MAX_TAGS}
-                    </div>
+                    ) : null}
+                    <InputHypertext count={tags.length} max={MAX_TAGS} className="w-fit shrink-0" />
                   </div>
-                </div>
+                </InputGroup>
               </section>
 
               {/* 인물 인사 */}
-              <section className="flex flex-col gap-my-8">
-                <Title1
-                  text="인물 인사*"
-                  variant="title-subtitle-dot"
-                  subtitleText="캐릭터의 말투와 성격이 드러나는 짧은 소개 멘트를 작성해 주세요."
+              <section className="flex flex-col gap-2">
+                <FormFieldLabel
+                  title="인물 인사*"
+                  subtitle="캐릭터의 말투와 성격이 드러나는 짧은 소개 멘트를 작성해 주세요."
+                  inputId={CHARACTER_DETAIL_GREETING_INPUT_ID}
                 />
-                <div className="flex flex-col justify-start items-start gap-my-8">
+                <InputGroup>
                   <Textarea
+                    id={CHARACTER_DETAIL_GREETING_INPUT_ID}
+                    aria-describedby={formFieldAriaDescribedBy(CHARACTER_DETAIL_GREETING_INPUT_ID)}
                     rows={5}
                     value={greeting}
                     onChange={(e) => setGreeting(e.target.value.slice(0, MAX_GREETING))}
                     maxLength={MAX_GREETING}
                     placeholder="예) 안녕, 오늘도 사진 찍으러 나갈 준비됐지?"
-                    className="resize-y rounded-md border border-border-10 bg-white px-my-12 py-my-8 text-body3_400 text-on-surface-10 placeholder:text-on-surface-30 focus:outline-none focus:ring-2 focus:ring-primary w-full min-h-[80px]"
+                    className="min-h-[80px] resize-y"
                   />
-                  <div className="w-full inline-flex justify-end items-center gap-my-8">
-                    <div className="text-right text-on-surface-30 text-caption1_400 tabular-nums">{greeting.length}/{MAX_GREETING}</div>
-                  </div>
-                </div>
+                  <InputHypertext
+                    id={formFieldAriaDescribedBy(CHARACTER_DETAIL_GREETING_INPUT_ID)}
+                    count={greeting.length}
+                    max={MAX_GREETING}
+                  />
+                </InputGroup>
               </section>
             </div>
 
-            <div className={`${PAGE_CONTENT_FOOTER_CLASS} flex items-center justify-end gap-my-8`}>
+            <div className={`${PAGE_CONTENT_FOOTER_CLASS} flex items-center justify-end gap-2`}>
               <Button
                 type="button"
                 variant="outline"
-                size="form"
+                size="lg"
                 className={PAGE_FOOTER_ACTION_BUTTON_CLASS}
                 onClick={handleBack}
               >
@@ -618,7 +630,7 @@ export function CharacterDetailPage({
               </Button>
               <Button
                 type="button"
-                size="form"
+                size="lg"
                 className={PAGE_FOOTER_ACTION_BUTTON_CLASS}
                 disabled={!isFormComplete}
                 title={

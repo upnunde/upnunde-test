@@ -1,8 +1,8 @@
-import { cn } from "@/lib/utils";
+import { cn } from "design-system/utils";
 
 /** label 내부 file input — `hidden`/`display:none` 대신 투명 오버레이 (OS 파일 선택창 안정 동작) */
 export const RESOURCE_FILE_INPUT_OVERLAY_CLASS =
-  "absolute inset-0 z-10 h-full w-full cursor-pointer opacity-0";
+  "absolute inset-0 z-dropdown h-full w-full cursor-pointer opacity-0";
 
 /** 썸네일 슬롯(AddResourceSlot·SeriesImageUploadField 등) 접근성 라벨 — 일반 파일 첨부와 구분 */
 export const THUMBNAIL_SLOT_ARIA = {
@@ -21,9 +21,30 @@ export const THUMBNAIL_SLOT_ARIA = {
   addExpression: "표정 추가",
 } as const;
 
-/** 썸네일 이미지 위 #000000 2% 딤 — `surface-disabled` 토큰 */
+/** 썸네일 카드 내부 로컬 스택 — DS z-0 · z-dropdown */
+export const THUMBNAIL_STACK_BASE_Z_CLASS = "z-0";
+export const THUMBNAIL_STACK_ACTIONS_Z_CLASS = "z-dropdown";
+
+/** 썸네일 이미지 위 기본 딤 — DS `bg-dim-10` (`--dim-10` / `black-opacity-10`) */
 export const THUMBNAIL_DIM_OVERLAY_CLASS =
-  "pointer-events-none absolute inset-0 z-[1] bg-surface-disabled";
+  `pointer-events-none absolute inset-0 ${THUMBNAIL_STACK_BASE_Z_CLASS} bg-dim-10`;
+
+/** 썸네일 호버 딤 — DS `bg-dim-10` + PC group-hover 노출 */
+export function thumbnailHoverDimOverlayClass(forceVisible = false): string {
+  return cn(
+    "pointer-events-none absolute inset-0",
+    THUMBNAIL_STACK_BASE_Z_CLASS,
+    "bg-dim-10",
+    thumbnailHoverRevealClass(forceVisible),
+  );
+}
+
+/** 썸네일 하단 메타 바(재생시간 등) — DS `bg-dim-10` */
+export const THUMBNAIL_META_BAR_DIM_CLASS =
+  "pointer-events-none absolute inset-x-0 bottom-0 flex h-6 w-full items-center justify-center bg-dim-10";
+
+/** `bg-dim-*` 위 텍스트·아이콘 — `text-dim-overlay` (`--white`, 다크모드 불변) */
+export const DIM_OVERLAY_TEXT_CLASS = "text-dim-overlay";
 
 /** 썸네일 호버 오버레이·액션 — PC group-hover (모바일 그리드는 ResourceThumbnailActions ⋮ 메뉴) */
 export function thumbnailHoverRevealClass(forceVisible = false): string {
@@ -37,16 +58,16 @@ export function thumbnailHoverRevealClass(forceVisible = false): string {
 export const MODAL_CROP_STAGE_SIZE_PX = 400;
 
 export const MODAL_CROP_STAGE_CLASS =
-  "relative aspect-square w-[min(400px,calc(100vw-48px),calc(100dvh-240px))] shrink-0 self-center overflow-hidden rounded-lg bg-neutral-900";
+  "relative aspect-square w-[min(400px,calc(100vw-48px),calc(100dvh-240px))] shrink-0 self-center overflow-hidden rounded-lg bg-inverse";
 
 /** 리소스 섹션 썸네일 그리드 — 셀 min 90px · 1fr fill · 가로 8/16 · 세로 20 */
 export const RESOURCE_THUMBNAIL_GRID_CLASS =
-  "grid w-full grid-cols-[repeat(auto-fill,minmax(90px,1fr))] gap-x-my-8 gap-y-my-20 self-stretch rounded-[4px] p-0 lg:gap-x-my-16";
+  "grid w-full grid-cols-[repeat(auto-fill,minmax(90px,1fr))] gap-x-2 gap-y-5 self-stretch rounded-sm p-0 lg:gap-x-4";
 
 /** 에디터 리소스 피커(모바일 바텀시트) — ResourceSection 본문과 동일 그리드·인셋 */
 export const RESOURCE_PICKER_SHEET_GRID_CLASS = cn(
   RESOURCE_THUMBNAIL_GRID_CLASS,
-  "px-my-20 py-my-20",
+  "px-5 py-5",
 );
 
 /** `RESOURCE_THUMBNAIL_GRID_CLASS` 열 수 추정 — 피커 키보드 그리드 이동용 */
@@ -67,7 +88,7 @@ export const RESOURCE_THUMBNAIL_FIXED_IMAGE_SIZES = "90px";
 
 /** 리소스 썸네일 라이트박스 — 9:16, 최대 384×640, 모바일 뷰포트 축소 */
 export const IMAGE_LIGHTBOX_FRAME_CLASS =
-  "relative aspect-[9/16] w-[min(384px,calc(100vw-4rem),calc((100dvh-12rem)*9/16))] shrink-0 overflow-hidden rounded-[4px] outline outline-4 outline-offset-[-4px] outline-white shadow-elevation-50";
+  "relative aspect-[9/16] w-[min(384px,calc(100vw-4rem),calc((100dvh-12rem)*9/16))] shrink-0 overflow-hidden rounded-sm outline outline-4 outline-offset-[-4px] outline-white shadow-elevation-50";
 
 export const IMAGE_LIGHTBOX_IMAGE_SIZES = "(max-width: 512px) 90vw, 384px";
 

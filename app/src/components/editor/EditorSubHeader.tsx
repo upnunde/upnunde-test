@@ -1,12 +1,13 @@
 "use client";
 
-import { History, MoreVertical, Pencil, X } from "lucide-react";
+import { ICONS, Icon } from "@/lib/icons";
 import { useRouter } from "next/navigation";
 import { createPortal } from "react-dom";
 import { useCallback, useEffect, useLayoutEffect, useMemo, useRef, useState } from "react";
 import { createDefaultSeedBlocks, useEditorStore } from "@/store/useEditorStore";
 import { Button } from "@/components/ui/button";
 import { HeaderBackButton } from "@/components/ui/header-back-button";
+import { IconButton } from "@/components/ui/icon-button";
 import { Snackbar } from "@/components/episode/Snackbar";
 import { EditorUnsavedConfirmModal } from "@/components/editor/EditorUnsavedConfirmModal";
 import {
@@ -17,20 +18,15 @@ import {
 import {
   DropdownMenu,
   DropdownMenuContent,
+  DropdownMenuGroup,
   DropdownMenuItem,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import { MOBILE_BOTTOM_SHEET_SCRIM_CLASS, MOBILE_BOTTOM_SHEET_SHELL_BASE_CLASS, mobileBottomSheetLargeMaxHeightClassName } from "@/components/ui/modal/modal-styles";
-import { menuListItemFormClassName } from "@/components/ui/menu-list";
 import { useClientMounted } from "@/hooks/useClientMounted";
 import { useIsLgUp } from "@/hooks/useMediaQuery";
-import { cn } from "@/lib/utils";
+import { cn } from "design-system/utils";
 import type { ScriptBlock } from "@/types/editor";
-
-/** 시리즈·에피소드 더보기 메뉴와 동일 스타일 */
-const MORE_MENU_CONTENT_CLASS =
-  "w-48 rounded-lg border border-border-10 bg-white p-my-4 shadow-elevation-40";
-const MORE_MENU_ITEM_CLASS = menuListItemFormClassName;
 
 /** 히스토리 목록: MM.DD, HH:mm (예: 04.07, 16:23) */
 function formatScriptHistoryTimestamp(savedAt: number): string {
@@ -47,7 +43,7 @@ function HistoryNewDot({ className }: { className?: string }) {
   return (
     <span
       className={cn(
-        "pointer-events-none absolute size-2 rounded-full bg-destructive ring-2 ring-white",
+        "pointer-events-none absolute size-2 rounded-full bg-destructive ring-2 ring-background",
         className,
       )}
       aria-hidden
@@ -337,28 +333,28 @@ export function EditorSubHeader({
     <>
       <div
         className={cn(
-          mobile ? "px-my-8 pb-my-4" : "max-h-[min(40vh,280px)] overflow-y-auto px-my-8 pb-my-4",
+          mobile ? "px-2 pb-1" : "max-h-[min(40vh,280px)] overflow-y-auto px-2 pb-1",
         )}
       >
-        <ul className={cn("flex flex-col", mobile ? "gap-my-4" : "gap-my-2")}>
+        <ul className={cn("flex flex-col", mobile ? "gap-1" : "gap-0.5")}>
           {historyListItems.map((entry) => (
             <li key={entry.id}>
               <div
                 className={cn(
-                  "relative flex min-h-9 items-center justify-between gap-my-8 rounded-md",
+                  "relative flex min-h-9 items-center justify-between gap-2 rounded-md",
                   mobile
-                    ? "min-h-11 gap-my-12 px-my-12 py-my-12"
-                    : "group px-my-8 py-my-8 hover:bg-surface-20",
+                    ? "min-h-11 gap-3 px-3 py-3"
+                    : "group px-2 py-2 hover:bg-muted",
                 )}
               >
                 {historyOpen && newHistoryEntryId === entry.id ? (
                   <HistoryNewDot className={mobile ? "top-2 left-2" : "top-1.5 left-1.5"} />
                 ) : null}
-                <div className="flex min-w-0 flex-1 items-center gap-my-8 text-body3_500">
-                  <div className="text-on-surface-10">
+                <div className="flex min-w-0 flex-1 items-center gap-2 text-body3_500">
+                  <div className="text-foreground">
                     {formatScriptHistoryTimestamp(entry.savedAt)}
                   </div>
-                  <div className="text-on-surface-03">
+                  <div className="text-foreground-placeholder">
                     {entry.source === "created" ? "신규생성" : "임시저장"}
                   </div>
                 </div>
@@ -369,11 +365,11 @@ export function EditorSubHeader({
                   title="이 시점의 원고 불러오기"
                   onClick={() => handleHistoryLoadClick(entry.id)}
                   className={cn(
-                    "shrink-0 bg-white px-my-12 text-caption1_500 text-on-surface-10 shadow-none disabled:border-border-20",
+                    "shrink-0 bg-background px-3 text-caption1_500 text-foreground shadow-none disabled:border-border",
                     mobile
                       ? "h-8"
                       : cn(
-                          "h-7 px-my-8 opacity-0 pointer-events-none transition-opacity",
+                          "h-7 px-2 opacity-0 pointer-events-none transition-opacity",
                           "group-hover:opacity-100 group-hover:pointer-events-auto",
                           "[@media(hover:none)]:opacity-100 [@media(hover:none)]:pointer-events-auto",
                         ),
@@ -386,13 +382,13 @@ export function EditorSubHeader({
           ))}
         </ul>
       </div>
-      <div className="border-t border-border-10 px-my-8 py-my-8">
+      <div className="border-t border-border px-2 py-2">
         <Button
           type="button"
           variant="ghost"
           size="sm"
           className={cn(
-            "h-8 px-my-12 text-body3_500 text-primary",
+            "h-8 px-3 text-body3_500 text-primary",
             mobile ? "active:bg-accent active:text-primary" : "hover:bg-accent hover:text-primary",
           )}
           onClick={handleRecreate}
@@ -405,8 +401,8 @@ export function EditorSubHeader({
 
   const desktopHistoryPopoverContent = (
     <>
-      <div className="px-my-12 pt-my-16 pb-my-4">
-        <p className="text-body3_500 text-on-surface-30">히스토리</p>
+      <div className="px-3 pt-4 pb-1">
+        <p className="text-body3_500 text-foreground-placeholder">히스토리</p>
       </div>
       {renderHistoryPanelList(false)}
     </>
@@ -435,19 +431,19 @@ export function EditorSubHeader({
               aria-modal="true"
               aria-label="히스토리"
             >
-              <div className="flex w-full shrink-0 items-center justify-between border-b border-border-10 px-my-16 py-my-16">
-                <div className="text-body1_700 text-on-surface-10">히스토리</div>
+              <div className="flex w-full shrink-0 items-center justify-between border-b border-border px-4 py-4">
+                <div className="text-body1_700 text-foreground">히스토리</div>
                 <button
                   type="button"
                   aria-label="닫기"
                   onClick={() => handleHistoryOpenChange(false)}
-                  className="flex h-8 w-8 cursor-pointer items-center justify-center rounded-full text-on-surface-30 transition-colors hover:bg-surface-20/60 hover:text-on-surface-10 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-inset focus-visible:ring-primary"
+                  className="flex h-8 w-8 cursor-pointer items-center justify-center rounded-full text-foreground-placeholder transition-colors hover:bg-muted/60 hover:text-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-inset focus-visible:ring-primary"
                   style={{ marginRight: -8 }}
                 >
-                  <X className="h-5 w-5" aria-hidden />
+                  <ICONS.close className="h-5 w-5" aria-hidden />
                 </button>
               </div>
-              <div className="min-h-0 flex-1 overflow-y-auto px-my-8 py-my-8">
+              <div className="min-h-0 flex-1 overflow-y-auto px-2 py-2">
                 {renderHistoryPanelList(true)}
               </div>
             </div>
@@ -457,7 +453,7 @@ export function EditorSubHeader({
       : null;
 
   const titleHeading = (
-    <h1 className="min-w-0 truncate text-body1_700 text-on-surface-10 lg:text-heading2_700">
+    <h1 className="min-w-0 truncate text-body1_700 text-foreground lg:text-heading2_700">
       {title}
     </h1>
   );
@@ -468,82 +464,83 @@ export function EditorSubHeader({
         type="button"
         variant="ghost"
         size="icon-lg"
-        className="shrink-0 text-on-surface-30 hover:bg-surface-20 hover:text-on-surface-10"
+        className="shrink-0 text-foreground-placeholder hover:bg-muted hover:text-foreground"
         aria-label="회차 정보 수정"
         onClick={onEditEpisodeInfo}
       >
-        <Pencil />
+        <ICONS.pencil />
       </Button>
     ) : null;
 
   return (
     <>
-      <header className="relative mx-auto w-full min-w-0 shrink-0 px-my-20">
+      <header className="relative mx-auto w-full min-w-0 shrink-0 px-5">
         {/* 모바일 */}
-        <div className="flex h-14 items-center gap-my-8 lg:hidden">
+        <div className="flex h-14 items-center gap-2 lg:hidden">
           <HeaderBackButton onClick={handleBack} />
-          <div className="flex min-w-0 flex-1 items-center gap-my-8">{titleHeading}</div>
+          <div className="flex min-w-0 flex-1 items-center gap-2">{titleHeading}</div>
           <Button
             type="button"
             size="sm"
             disabled={!canSubmit}
-            className="h-8 shrink-0 px-my-12 shadow-none"
+            className="h-8 shrink-0 px-3 shadow-none"
             onClick={handleSubmit}
           >
             등록
           </Button>
           <DropdownMenu open={moreMenuOpen} onOpenChange={setMoreMenuOpen}>
             <DropdownMenuTrigger asChild>
-              <Button
+              <IconButton
                 type="button"
                 variant="outline"
+                shape="circle"
                 size="icon-lg"
-                className="relative shrink-0 bg-white shadow-none"
+                icon={ICONS.moreVertical}
                 aria-label="더보기"
+                className="relative shrink-0 bg-background shadow-none"
               >
-                <MoreVertical />
                 {newHistoryEntryId ? (
                   <HistoryNewDot className="top-0 right-0" />
                 ) : null}
-              </Button>
+              </IconButton>
             </DropdownMenuTrigger>
-            <DropdownMenuContent align="end" className={MORE_MENU_CONTENT_CLASS}>
-              {onEditEpisodeInfo ? (
+            <DropdownMenuContent align="end">
+              <DropdownMenuGroup>
+                {onEditEpisodeInfo ? (
+                  <DropdownMenuItem onSelect={onEditEpisodeInfo}>
+                    <Icon icon={ICONS.settings2} size="md" />
+                    정보수정
+                  </DropdownMenuItem>
+                ) : null}
                 <DropdownMenuItem
-                  className={MORE_MENU_ITEM_CLASS}
-                  onSelect={onEditEpisodeInfo}
+                  disabled={!hasChangesSinceSave}
+                  onSelect={handleTemporarySave}
                 >
-                  정보수정
+                  <Icon icon={ICONS.fileText} size="md" />
+                  임시저장
                 </DropdownMenuItem>
-              ) : null}
-              <DropdownMenuItem
-                disabled={!hasChangesSinceSave}
-                className={MORE_MENU_ITEM_CLASS}
-                onSelect={handleTemporarySave}
-              >
-                임시저장
-              </DropdownMenuItem>
-              <DropdownMenuItem
-                disabled={!isHistoryEnabled}
-                className={MORE_MENU_ITEM_CLASS}
-                onSelect={scheduleOpenHistoryPanel}
-              >
-                히스토리
-              </DropdownMenuItem>
+                <DropdownMenuItem
+                  disabled={!isHistoryEnabled}
+                  onSelect={scheduleOpenHistoryPanel}
+                >
+                  <Icon icon={ICONS.history} size="md" />
+                  히스토리
+                </DropdownMenuItem>
+              </DropdownMenuGroup>
             </DropdownMenuContent>
           </DropdownMenu>
         </div>
 
         {/* 데스크톱 */}
-        <div className="hidden h-16 items-center justify-between gap-my-12 lg:flex">
-          <div className="flex min-w-0 items-center gap-my-12">
+        <div className="hidden h-16 items-center justify-between gap-3 lg:flex">
+          <div className="flex min-w-0 items-center gap-3">
             <HeaderBackButton onClick={handleBack} />
-            <div className="flex min-w-0 flex-1 items-center gap-my-8">
+            <div className="flex min-w-0 flex-1 items-center gap-2">
               {titleHeading}
               {editEpisodeInfoButton}
             </div>
           </div>
-          <div className="flex shrink-0 items-center gap-my-8">
+          <div className="flex shrink-0 items-center gap-2">
             <Popover
               open={isDesktop && historyOpen}
               onOpenChange={(open) => {
@@ -552,24 +549,22 @@ export function EditorSubHeader({
               }}
             >
               <PopoverTrigger asChild>
-                <Button
+                <IconButton
                   type="button"
-                  variant="outline"
-                  size="icon-lg"
-                  className="relative shrink-0 bg-white shadow-none text-on-surface-30 hover:text-on-surface-10 disabled:border-border-20"
+                  icon={ICONS.history}
                   aria-label="히스토리"
                   disabled={!isHistoryEnabled}
+                  className="shrink-0"
                 >
-                  <History />
                   {newHistoryEntryId ? (
                     <HistoryNewDot className="top-0 right-0" />
                   ) : null}
-                </Button>
+                </IconButton>
               </PopoverTrigger>
               <PopoverContent
                 align="end"
                 sideOffset={8}
-                className="w-[min(100vw-2rem,280px)] max-w-[280px] rounded-lg border border-border-10 p-0 shadow-elevation-40"
+                className="w-[min(100vw-2rem,280px)] max-w-[280px] rounded-lg border border-border p-0 shadow-elevation-40"
               >
                 {desktopHistoryPopoverContent}
               </PopoverContent>
@@ -578,7 +573,7 @@ export function EditorSubHeader({
               type="button"
               variant="outline"
               size="sm"
-              className="h-9 shadow-none bg-white"
+              className="h-9 shadow-none bg-background"
               disabled={!hasChangesSinceSave}
               onClick={handleTemporarySave}
             >

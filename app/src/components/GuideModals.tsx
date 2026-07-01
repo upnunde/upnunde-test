@@ -47,8 +47,8 @@ export function StartCheckModal({
           title="잠깐! 시작하기 전 체크"
           subtitle="새로운 콘텐츠 제작 전, 아래 내용을 꼭 확인해 주세요!"
         />
-        <div className="px-my-24 pb-my-16">
-          <ol className="list-decimal list-inside space-y-my-8 text-body3_400 text-on-surface-20">
+        <div className="px-6 pb-4">
+          <ol className="list-decimal list-inside space-y-2 text-body3_400 text-foreground-muted">
             <li>선정적·폭력적 콘텐츠를 다루지 마세요.</li>
             <li>저작권이 있는 자료를 사용하지 마세요.</li>
             <li>부적절한 콘텐츠는 삭제 또는 제재될 수 있습니다.</li>
@@ -57,15 +57,15 @@ export function StartCheckModal({
         <ModalFooterButtons
           layout="end"
           body={
-            <div className="flex items-center gap-my-8 bg-surface-10 px-my-24 py-my-8">
+            <div className="flex items-center gap-2 bg-background px-6 py-2">
               <input
                 type="checkbox"
                 id="policy-read"
                 checked={policyChecked}
                 onChange={(e) => setPolicyChecked(e.target.checked)}
-                className="rounded border-border-20 text-primary focus:ring-primary"
+                className="rounded border-border text-primary focus:ring-primary"
               />
-              <label htmlFor="policy-read" className="cursor-pointer text-body3_400 text-on-surface-20">
+              <label htmlFor="policy-read" className="cursor-pointer text-body3_400 text-foreground-muted">
                 직접 운영 정책 읽기
               </label>
               <a
@@ -152,7 +152,7 @@ export function ResourceDeleteModal({
           subtitle="선택한 리소스를 삭제하면 이 리소스를 사용 중인 모든 에피소드에서 표시 오류나 오류가 발생할 수 있습니다."
         />
         {resourceName ? (
-          <p className="-mt-3 px-my-24 pb-my-8 text-center text-body1_500 text-on-surface-10">
+          <p className="-mt-3 px-6 pb-2 text-center text-body1_500 text-foreground">
             「{resourceName}」
           </p>
         ) : null}

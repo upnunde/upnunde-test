@@ -1,13 +1,14 @@
 "use client";
 
 import { useCallback, useState } from "react";
-import { AlertTriangle } from "lucide-react";
+import { ICONS } from "@/lib/icons";
 import { EditorBottomSheetMenu } from "@/components/editor/EditorBottomSheetMenu";
 import { EDITOR_MOBILE_FAB_SIZE_CLASS } from "@/components/editor/editor-mobile-floating-layout";
+import { Badge } from "@/components/ui/badge";
 import { useEditorIssues, getIssueFocusTarget } from "@/hooks/useEditorIssues";
 import { useEditorStore } from "@/store/useEditorStore";
 import { scrollEditorBlockIntoView } from "@/lib/editor-scroll";
-import { cn } from "@/lib/utils";
+import { cn } from "design-system/utils";
 
 /**
  * 모바일 편집 — 오류/누락이 있을 때만 본문 우측 하단에 노출되는 플로팅 버튼.
@@ -46,21 +47,24 @@ export function EditorMobileIssueFloatingButton({ className }: { className?: str
           type="button"
           className={cn(
             EDITOR_MOBILE_FAB_SIZE_CLASS,
-            "relative flex cursor-pointer items-center justify-center rounded-full border border-rose-300 bg-rose-50 text-rose-900 shadow-elevation-20 transition-colors active:bg-rose-100",
+            "relative flex cursor-pointer items-center justify-center rounded-full border border-destructive/40 bg-destructive-container text-destructive shadow-elevation-20 transition-colors active:bg-destructive-container",
             className,
           )}
           aria-label={`오류 및 누락 알림 ${issues.length}건`}
         >
-          <AlertTriangle className="h-5 w-5" aria-hidden />
-          <span className="absolute -right-1 -top-1 min-w-5 rounded-full bg-rose-600 px-my-4 py-my-2 text-center text-caption2_400 leading-none text-white">
+          <ICONS.warning className="h-5 w-5" aria-hidden />
+          <Badge
+            variant="destructive"
+            className="absolute -right-1 -top-1 min-w-5 px-1 py-0.5 text-caption2_400 leading-none"
+          >
             {issues.length > 99 ? "99+" : issues.length}
-          </span>
+          </Badge>
         </button>
       }
     >
       {() => (
         <div>
-          <p className="px-my-8 pb-my-8 text-caption1_400 text-on-surface-30">
+          <p className="px-2 pb-2 text-caption1_400 text-foreground-placeholder">
             항목을 선택하면 해당 위치로 이동합니다
           </p>
           <ul className="flex flex-col">
@@ -69,16 +73,16 @@ export function EditorMobileIssueFloatingButton({ className }: { className?: str
                 <button
                   type="button"
                   onClick={() => handleIssueClick(issue)}
-                  className="flex w-full cursor-pointer flex-col gap-my-2 rounded-md px-my-12 py-my-12 text-left transition-colors focus:bg-surface-20 active:bg-surface-20"
+                  className="flex w-full cursor-pointer flex-col gap-0.5 rounded-md px-3 py-3 text-left transition-colors focus:bg-muted active:bg-muted"
                 >
-                  <span className="flex items-start justify-between gap-my-8">
-                    <span className="text-body3_500 text-rose-700">{issue.title}</span>
-                    <span className="shrink-0 text-caption2_400 uppercase text-on-surface-30">
+                  <span className="flex items-start justify-between gap-2">
+                    <span className="text-body3_500 text-destructive">{issue.title}</span>
+                    <span className="shrink-0 text-caption2_400 uppercase text-foreground-placeholder">
                       {issue.kind}
                     </span>
                   </span>
                   {issue.detail ? (
-                    <span className="text-caption1_400 text-on-surface-30">{issue.detail}</span>
+                    <span className="text-caption1_400 text-foreground-placeholder">{issue.detail}</span>
                   ) : null}
                 </button>
               </li>

@@ -2,13 +2,14 @@
 
 import React from "react";
 import Image from "next/image";
-import { Title1 } from "@/components/ui/title1";
+import { FormFieldLabel } from "@/components/ui/field-label";
 import {
   RESOURCE_FILE_INPUT_OVERLAY_CLASS,
   THUMBNAIL_SLOT_ARIA,
   THUMBNAIL_DIM_OVERLAY_CLASS,
 } from "@/lib/thumbnail-styles";
-import { cn } from "@/lib/utils";
+import { ICONS } from "@/lib/icons";
+import { cn } from "design-system/utils";
 
 interface SeriesImageUploadFieldProps {
   label: string;
@@ -45,13 +46,13 @@ export function SeriesImageUploadField({
   onFileSelected,
 }: SeriesImageUploadFieldProps) {
   const slotClassName = cn(
-    "mt-2 relative flex h-[160px] w-[90px] cursor-pointer items-center justify-center overflow-hidden rounded-lg border border-dashed bg-white",
-    error ? "border-destructive" : "border-border-20",
+    "mt-2 relative flex h-[160px] w-[90px] cursor-pointer items-center justify-center overflow-hidden rounded-lg border border-dashed bg-background",
+    error ? "border-destructive" : "border-border",
   );
 
   return (
-    <div className="flex flex-col gap-my-4">
-      <Title1 text={label} variant="title-subtitle-dot" subtitleText={subtitle} />
+    <div className="flex flex-col gap-1">
+      <FormFieldLabel title={label} subtitle={subtitle} inputId={inputId} />
       {previewUrl ? (
         <label
           ref={labelRef}
@@ -86,26 +87,9 @@ export function SeriesImageUploadField({
               e.stopPropagation();
               onClearPreview();
             }}
-            className="absolute right-1 top-1 hidden h-8 w-8 cursor-pointer items-center justify-center rounded-full bg-surface-10 text-on-surface-10 shadow-elevation-10 group-hover:inline-flex hover:bg-surface-20"
+            className="absolute right-1 top-1 hidden h-8 w-8 cursor-pointer items-center justify-center rounded-full bg-background text-foreground shadow-elevation-10 group-hover:inline-flex hover:bg-muted"
           >
-            <svg
-              xmlns="http://www.w3.org/2000/svg"
-              width="16"
-              height="16"
-              viewBox="0 0 24 24"
-              fill="none"
-              stroke="currentColor"
-              strokeWidth="2"
-              strokeLinecap="round"
-              strokeLinejoin="round"
-              aria-hidden="true"
-            >
-              <path d="M3 6h18" />
-              <path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6" />
-              <path d="M8 6V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2" />
-              <line x1="10" y1="11" x2="10" y2="17" />
-              <line x1="14" y1="11" x2="14" y2="17" />
-            </svg>
+            <ICONS.trash2 className="size-4" aria-hidden />
           </button>
         </label>
       ) : (
@@ -126,22 +110,8 @@ export function SeriesImageUploadField({
               e.target.value = "";
             }}
           />
-          <div className="pointer-events-none relative z-0 flex h-6 w-6 items-center justify-center text-on-surface-10">
-            <svg
-              width="20"
-              height="20"
-              viewBox="0 0 24 24"
-              fill="none"
-              xmlns="http://www.w3.org/2000/svg"
-              aria-hidden="true"
-            >
-              <path
-                d="M12 5v14M5 12h14"
-                stroke="currentColor"
-                strokeWidth="2"
-                strokeLinecap="round"
-              />
-            </svg>
+          <div className="pointer-events-none relative z-0 flex h-6 w-6 items-center justify-center text-foreground">
+            <ICONS.plus className="size-5" aria-hidden />
           </div>
         </label>
       )}

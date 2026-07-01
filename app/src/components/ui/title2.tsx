@@ -2,9 +2,9 @@
 
 import React from "react";
 import type { ReactNode } from "react";
-import { Info } from "lucide-react";
+import { ICONS } from "@/lib/icons";
 import { PAGE_CONTENT_PAD_X_CLASS } from "@/lib/page-layout";
-import { cn } from "@/lib/utils";
+import { cn } from "design-system/utils";
 import { Button } from "@/components/ui/button";
 
 /**
@@ -88,13 +88,13 @@ export function Title2({
     : { showDot, showGuide, subtitle };
 
   const titleRow = (
-    <div className="inline-flex justify-start items-start gap-my-2">
-      <div className="justify-start text-on-surface-10 text-body1_700 font-['Pretendard_JP']">
+    <div className="inline-flex justify-start items-start gap-0.5">
+      <div className="justify-start text-foreground text-body1_700 font-['Pretendard_JP']">
         {text}
       </div>
       {flags.showDot && (
         <div
-          className="w-1 h-1 rounded-full bg-error-error shrink-0 mt-1.5"
+          className="w-1 h-1 rounded-full bg-destructive shrink-0 mt-1.5"
           aria-hidden
         />
       )}
@@ -103,21 +103,21 @@ export function Title2({
           type="button"
           variant="secondary"
           size="icon-xs"
-          className="h-6 w-6 rounded-[999px] px-0 shrink-0 [&_svg]:size-4 text-on-secondary hover:bg-surface-20 hover:text-on-surface-10"
+          className="h-6 w-6 rounded-[999px] px-0 shrink-0 [&_svg]:size-4 text-secondary-foreground hover:bg-muted hover:text-foreground"
           onClick={onGuideClick}
           aria-label="안내 보기"
         >
-          <Info aria-hidden />
+          <ICONS.info aria-hidden />
         </Button>
       )}
     </div>
   );
 
   const body = (
-    <div className="self-stretch flex flex-col gap-my-4">
+    <div className="self-stretch flex flex-col gap-1">
       {titleRow}
       {flags.subtitle && (
-        <div className="self-stretch justify-start text-on-surface-30 text-body4_400 font-['Pretendard_JP']">
+        <div className="self-stretch justify-start text-foreground-placeholder text-body4_400 font-['Pretendard_JP']">
           {subtitleText}
         </div>
       )}
@@ -129,10 +129,9 @@ export function Title2({
       return (
         <div
           className={cn(
-            `w-full h-fit ${PAGE_CONTENT_PAD_X_CLASS} py-my-12 border-b border-border-10/5 flex items-center justify-between gap-my-12`,
+            `w-full h-fit ${PAGE_CONTENT_PAD_X_CLASS} py-3 border-b border-divider flex items-center justify-between gap-3`,
             className
           )}
-          style={{ borderBottomColor: "rgba(0, 0, 0, 0.07)" }}
         >
           <div className="min-w-0 flex-1">{body}</div>
           <div className="shrink-0">{sectionEnd}</div>
@@ -142,10 +141,9 @@ export function Title2({
     return (
       <div
         className={cn(
-          `w-full h-fit ${PAGE_CONTENT_PAD_X_CLASS} py-my-12 border-b border-border-10/5 flex flex-col justify-center items-start`,
+          `w-full h-fit ${PAGE_CONTENT_PAD_X_CLASS} py-3 border-b border-divider flex flex-col justify-center items-start`,
           className
         )}
-        style={{ borderBottomColor: "rgba(0, 0, 0, 0.07)" }}
       >
         {body}
       </div>

@@ -1,9 +1,9 @@
 "use client";
 
 import * as React from "react";
-import { X } from "lucide-react";
+import { ICONS } from "@/lib/icons";
 import { chipVariants, filterChipVariantProps, type ChipVariantProps } from "@/lib/chip-styles";
-import { cn } from "@/lib/utils";
+import { cn } from "design-system/utils";
 
 export interface ChipProps
   extends Omit<React.ButtonHTMLAttributes<HTMLButtonElement>, "children">,
@@ -11,7 +11,7 @@ export interface ChipProps
   children: React.ReactNode;
   /** 닫기 아이콘 표시 (Tag에서 사용) */
   dismissIcon?: boolean;
-  /** 우측 아이콘 슬롯 — `icon: true`일 때 X 대신 렌더 (드롭다운 chevron 등) */
+  /** 우측 아이콘 슬롯 — `icon: true`일 때 ICONS.close 대신 렌더 (드롭다운 chevron 등) */
   trailingIcon?: React.ReactNode;
 }
 
@@ -49,15 +49,15 @@ export function Chip({
         <span
           className={cn(
             "relative inline-flex shrink-0 items-center justify-center",
-            size === "l" ? "size-my-24" : "size-my-20",
+            size === "l" ? "size-6" : "size-5",
           )}
           aria-hidden
         >
           {trailingIcon ?? (
-            <X
+            <ICONS.close
               className={cn(
                 "text-current",
-                size === "l" ? "size-my-16" : "size-my-12",
+                size === "l" ? "size-4" : "size-3",
               )}
               strokeWidth={2.25}
             />

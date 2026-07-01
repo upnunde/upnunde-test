@@ -3,7 +3,7 @@ import {
   CONTROL_HEIGHT_FORM_CLASS,
   CONTROL_HEIGHT_STANDARD_CLASS,
 } from "@/lib/chip-styles";
-import { cn } from "@/lib/utils";
+import { cn } from "design-system/utils";
 
 /** Figma `tab` · `tab instance` size (구 h48/h40/h32 → 서비스 42/36/32px) */
 export type TabSize = "xl" | "l" | "m";
@@ -20,26 +20,26 @@ export const TAB_SIZE_META: Record<
     heightClass: CONTROL_HEIGHT_FORM_CLASS,
     labelClass: "text-heading4_700",
     /** Figma `tab` XL 행 — 탭 사이 spacing-20(20px) */
-    listGapClass: "gap-my-20",
+    listGapClass: "gap-5",
   },
   l: {
     heightToken: "h40",
     heightClass: CONTROL_HEIGHT_STANDARD_CLASS,
     labelClass: "text-body1_700",
     /** Figma `tab` L 행 — spacing-16(16px) */
-    listGapClass: "gap-my-16",
+    listGapClass: "gap-4",
   },
   m: {
     heightToken: "h32",
     heightClass: CONTROL_HEIGHT_CLASS,
     labelClass: "text-body3_700",
     /** Figma `tab` M 행 — spacing-12(12px) */
-    listGapClass: "gap-my-12",
+    listGapClass: "gap-3",
   },
 };
 
 /** Figma `tab` — underline=true일 때 탭 목록 트랙 하단선 */
-export const TAB_LIST_TRACK_UNDERLINE_CLASS = "border-b border-border-10";
+export const TAB_LIST_TRACK_UNDERLINE_CLASS = "border-b border-border";
 
 /** 가로 스크롤 탭·칩 행 — 스크롤바 비노출 (스와이프·휠 스크롤은 유지) */
 export const HORIZONTAL_SCROLLBAR_HIDE_CLASS =
@@ -60,12 +60,12 @@ export function tabInstanceClassName({
 }: TabInstanceStyleOptions): string {
   const { heightClass, labelClass } = TAB_SIZE_META[size];
   return cn(
-    "inline-flex min-w-0 shrink-0 items-center justify-center gap-my-8 px-0 font-['Pretendard_JP',sans-serif] transition-colors",
+    "inline-flex min-w-0 shrink-0 items-center justify-center gap-2 px-0 font-['Pretendard_JP',sans-serif] transition-colors",
     heightClass,
     labelClass,
     selectline && activated && "border-b-2 border-border-strong",
     selectline && !activated && "border-transparent",
-    activated ? "text-on-surface-10" : "text-on-surface-disabled",
+    activated ? "text-foreground" : "text-foreground-disabled",
   );
 }
 

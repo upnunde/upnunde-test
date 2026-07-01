@@ -2,29 +2,24 @@
 
 import React, { useState } from "react";
 import Image from "next/image";
-import { Pencil, Trash2, MoreVertical, FileText, Mail, Eye, X, Calendar } from "lucide-react";
+import { ICONS, Icon } from "@/lib/icons";
 import {
   DropdownMenu,
   DropdownMenuTrigger,
   DropdownMenuContent,
+  DropdownMenuGroup,
   DropdownMenuItem,
 } from "@/components/ui/dropdown-menu";
 import { EditorBottomSheetMenu } from "@/components/editor/EditorBottomSheetMenu";
 import { EditorMenuOption } from "@/components/editor/EditorMenuOption";
+import { Button } from "@/components/ui/button";
+import { IconButton } from "@/components/ui/icon-button";
 import type { Episode, EpisodeStatus } from "@/types/episode";
 import { formatViews, formatDateOrRelative, formatScheduledPublishAtParts } from "@/lib/formatEpisode";
 import { THUMBNAIL_DIM_OVERLAY_CLASS } from "@/lib/thumbnail-styles";
+import { isDummyResourceUrl } from "@/lib/dummy-asset-path";
 import { PAGE_MOBILE_LIST_ITEM_CARD_CLASS } from "@/lib/page-layout";
-import { cn } from "@/lib/utils";
-
-const ACTION_ICON_BUTTON_BASE =
-  "flex h-8 w-8 shrink-0 cursor-pointer items-center justify-center rounded-full border border-border-20 text-on-surface-30 transition-all duration-150 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-2 disabled:border-border-20";
-const ACTION_ICON_BUTTON_EDIT_HOVER =
-  "hover:border-primary/30 hover:bg-primary/10 hover:text-primary active:scale-95";
-const ACTION_ICON_BUTTON_DELETE_HOVER =
-  "hover:border-rose-200 hover:bg-rose-50 hover:text-rose-600 active:scale-95";
-const ACTION_ICON_BUTTON_MORE_HOVER =
-  "hover:border-border-20 hover:bg-surface-30 hover:text-on-surface-10 active:scale-95";
+import { cn } from "design-system/utils";
 
 const STATUS_LABEL: Record<EpisodeStatus, string> = {
   DRAFT: "임시저장",
@@ -34,10 +29,10 @@ const STATUS_LABEL: Record<EpisodeStatus, string> = {
 };
 
 const STATUS_TEXT_CLASS: Record<EpisodeStatus, string> = {
-  DRAFT: "text-on-surface-30",
-  PRIVATE: "text-on-surface-30",
+  DRAFT: "text-foreground-placeholder",
+  PRIVATE: "text-foreground-placeholder",
   SCHEDULED: "text-primary",
-  PUBLISHED: "text-blue-600",
+  PUBLISHED: "text-info",
 };
 
 function EpisodeDateDisplay({
@@ -60,7 +55,7 @@ function EpisodeDateDisplay({
   if (isScheduled && scheduledPublishAt) {
     const { date: datePart, time } = formatScheduledPublishAtParts(scheduledPublishAt);
     return (
-      <div className={cn("flex items-center gap-my-8", className)}>
+      <div className={cn("flex items-center gap-2", className)}>
         <span>{datePart}</span>
         <span>{time}</span>
       </div>
@@ -122,20 +117,19 @@ function EpisodeListItemActions({
         onOpenChange={setSheetOpen}
         title="에피소드 작업"
         trigger={
-          <button
+          <IconButton
             type="button"
-            className={cn(
-              "flex h-8 w-8 shrink-0 cursor-pointer items-center justify-center rounded-full text-on-surface-30 transition-colors active:bg-surface-20 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-2",
-              className,
-            )}
+            variant="ghost"
+            shape="circle"
+            size="icon-sm"
+            icon={ICONS.moreVertical}
             aria-label="에피소드 작업"
-          >
-            <MoreVertical className="h-5 w-5" aria-hidden />
-          </button>
+            className={className}
+          />
         }
       >
         {(presentation) => (
-          <div className="flex flex-col pb-my-8">
+          <div className="flex flex-col pb-2">
             {status === "DRAFT" && (
               <>
                 <EditorMenuOption
@@ -145,7 +139,7 @@ function EpisodeListItemActions({
                     closeSheet();
                   }}
                 >
-                  <Pencil className="h-4 w-4 shrink-0 text-on-surface-30" aria-hidden />
+                  <Icon icon={ICONS.pencil} size="md" />
                   수정
                 </EditorMenuOption>
                 <EditorMenuOption
@@ -156,7 +150,7 @@ function EpisodeListItemActions({
                     closeSheet();
                   }}
                 >
-                  <Trash2 className="h-4 w-4 shrink-0" aria-hidden />
+                  <Icon icon={ICONS.trash2} size="md" />
                   삭제
                 </EditorMenuOption>
               </>
@@ -171,7 +165,7 @@ function EpisodeListItemActions({
                   }}
                   className="text-primary"
                 >
-                  <Eye className="h-4 w-4 shrink-0" aria-hidden />
+                  <Icon icon={ICONS.eye} size="md" />
                   공개로 전환
                 </EditorMenuOption>
                 <EditorMenuOption
@@ -181,7 +175,7 @@ function EpisodeListItemActions({
                     closeSheet();
                   }}
                 >
-                  <Pencil className="h-4 w-4 shrink-0 text-on-surface-30" aria-hidden />
+                  <Icon icon={ICONS.pencil} size="md" />
                   수정
                 </EditorMenuOption>
                 <EditorMenuOption
@@ -192,7 +186,7 @@ function EpisodeListItemActions({
                     closeSheet();
                   }}
                 >
-                  <Trash2 className="h-4 w-4 shrink-0" aria-hidden />
+                  <Icon icon={ICONS.trash2} size="md" />
                   삭제
                 </EditorMenuOption>
               </>
@@ -207,7 +201,7 @@ function EpisodeListItemActions({
                   }}
                   className="text-primary"
                 >
-                  <Eye className="h-4 w-4 shrink-0" aria-hidden />
+                  <Icon icon={ICONS.eye} size="md" />
                   예약 변경
                 </EditorMenuOption>
                 <EditorMenuOption
@@ -217,7 +211,7 @@ function EpisodeListItemActions({
                     closeSheet();
                   }}
                 >
-                  <FileText className="h-4 w-4 shrink-0 text-on-surface-30" aria-hidden />
+                  <Icon icon={ICONS.fileText} size="md" />
                   에피소드 상세
                 </EditorMenuOption>
                 <EditorMenuOption
@@ -227,7 +221,7 @@ function EpisodeListItemActions({
                     closeSheet();
                   }}
                 >
-                  <X className="h-4 w-4 shrink-0 text-on-surface-30" aria-hidden />
+                  <Icon icon={ICONS.close} size="md" />
                   예약취소
                 </EditorMenuOption>
               </>
@@ -241,7 +235,7 @@ function EpisodeListItemActions({
                     closeSheet();
                   }}
                 >
-                  <FileText className="h-4 w-4 shrink-0 text-on-surface-30" aria-hidden />
+                  <Icon icon={ICONS.fileText} size="md" />
                   에피소드 상세
                 </EditorMenuOption>
                 <EditorMenuOption
@@ -251,7 +245,7 @@ function EpisodeListItemActions({
                     closeSheet();
                   }}
                 >
-                  <Mail className="h-4 w-4 shrink-0 text-on-surface-30" aria-hidden />
+                  <Icon icon={ICONS.mail} size="md" />
                   문의하기
                 </EditorMenuOption>
               </>
@@ -263,91 +257,97 @@ function EpisodeListItemActions({
   }
 
   return (
-    <div className={cn("flex shrink-0 items-center justify-end gap-my-8", className)}>
+    <div className={cn("flex shrink-0 items-center justify-end gap-2", className)}>
       {status === "DRAFT" && (
         <>
-          <button
+          <IconButton
             type="button"
-            onClick={() => onEdit?.(episode)}
-            className={`${ACTION_ICON_BUTTON_BASE} ${ACTION_ICON_BUTTON_EDIT_HOVER}`}
+            variant="outline"
+            shape="circle"
+            size="icon-sm"
+            icon={ICONS.pencil}
             aria-label="수정"
-          >
-            <Pencil className="h-4 w-4" aria-hidden />
-          </button>
-          <button
+            onClick={() => onEdit?.(episode)}
+          />
+          <IconButton
             type="button"
-            onClick={() => onDelete?.(episode)}
-            className={`${ACTION_ICON_BUTTON_BASE} ${ACTION_ICON_BUTTON_DELETE_HOVER}`}
+            variant="outline"
+            shape="circle"
+            size="icon-sm"
+            icon={ICONS.trash2}
             aria-label="삭제"
-          >
-            <Trash2 className="h-4 w-4" aria-hidden />
-          </button>
+            onClick={() => onDelete?.(episode)}
+          />
         </>
       )}
 
       {status === "PRIVATE" && (
         <>
-          <button
+          <Button
             type="button"
+            variant="outline"
+            shape="square"
+            size="sm"
+            className="shrink-0"
             onClick={() => onPublish?.(episode)}
-            className="h-8 shrink-0 cursor-pointer rounded-md border border-primary px-my-8 text-body3_500 text-primary transition-colors hover:bg-primary/10 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-2 sm:px-my-12"
           >
             공개로 전환
-          </button>
-          <button
+          </Button>
+          <IconButton
             type="button"
-            onClick={() => onEdit?.(episode)}
-            className={`${ACTION_ICON_BUTTON_BASE} ${ACTION_ICON_BUTTON_EDIT_HOVER}`}
+            variant="outline"
+            shape="circle"
+            size="icon-sm"
+            icon={ICONS.pencil}
             aria-label="수정"
-          >
-            <Pencil className="h-4 w-4" aria-hidden />
-          </button>
-          <button
+            onClick={() => onEdit?.(episode)}
+          />
+          <IconButton
             type="button"
-            onClick={() => onDelete?.(episode)}
-            className={`${ACTION_ICON_BUTTON_BASE} ${ACTION_ICON_BUTTON_DELETE_HOVER}`}
+            variant="outline"
+            shape="circle"
+            size="icon-sm"
+            icon={ICONS.trash2}
             aria-label="삭제"
-          >
-            <Trash2 className="h-4 w-4" aria-hidden />
-          </button>
+            onClick={() => onDelete?.(episode)}
+          />
         </>
       )}
 
       {status === "SCHEDULED" && (
         <>
-          <button
+          <Button
             type="button"
+            variant="outline"
+            shape="square"
+            size="sm"
+            className="shrink-0"
             onClick={() => onPublish?.(episode)}
-            className="h-8 shrink-0 cursor-pointer rounded-md border border-primary px-my-8 text-body3_500 text-primary transition-colors hover:bg-primary/10 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-2 sm:px-my-12"
           >
             예약 변경
-          </button>
+          </Button>
           <DropdownMenu>
-            <DropdownMenuTrigger
-              type="button"
-              className={`${ACTION_ICON_BUTTON_BASE} ${ACTION_ICON_BUTTON_MORE_HOVER}`}
-              aria-label="더보기"
-            >
-              <MoreVertical className="h-4 w-4" aria-hidden />
+            <DropdownMenuTrigger asChild>
+              <IconButton
+                type="button"
+                variant="outline"
+                shape="circle"
+                size="icon-sm"
+                icon={ICONS.moreVertical}
+                aria-label="더보기"
+              />
             </DropdownMenuTrigger>
-            <DropdownMenuContent
-              align="end"
-              className="w-48 rounded-lg border border-border-10 bg-white p-my-4"
-            >
-              <DropdownMenuItem
-                className="flex cursor-pointer items-center gap-my-8 rounded-md px-my-12 py-my-8 text-body3_400 text-on-surface-20 outline-none hover:bg-surface-20"
-                onSelect={() => onLinkEditor?.(episode)}
-              >
-                <FileText className="h-4 w-4 shrink-0 text-on-surface-30" aria-hidden />
-                에피소드 상세
-              </DropdownMenuItem>
-              <DropdownMenuItem
-                className="flex cursor-pointer items-center gap-my-8 rounded-md px-my-12 py-my-8 text-body3_400 text-on-surface-20 outline-none hover:bg-surface-20"
-                onSelect={() => onCancelSchedule?.(episode)}
-              >
-                <X className="h-4 w-4 shrink-0 text-on-surface-30" aria-hidden />
-                예약취소
-              </DropdownMenuItem>
+            <DropdownMenuContent align="end">
+              <DropdownMenuGroup>
+                <DropdownMenuItem onSelect={() => onLinkEditor?.(episode)}>
+                  <Icon icon={ICONS.fileText} size="md" />
+                  에피소드 상세
+                </DropdownMenuItem>
+                <DropdownMenuItem onSelect={() => onCancelSchedule?.(episode)}>
+                  <Icon icon={ICONS.close} size="md" />
+                  예약취소
+                </DropdownMenuItem>
+              </DropdownMenuGroup>
             </DropdownMenuContent>
           </DropdownMenu>
         </>
@@ -355,31 +355,27 @@ function EpisodeListItemActions({
 
       {status === "PUBLISHED" && (
         <DropdownMenu>
-          <DropdownMenuTrigger
-            type="button"
-            className={`${ACTION_ICON_BUTTON_BASE} ${ACTION_ICON_BUTTON_MORE_HOVER}`}
-            aria-label="더보기"
-          >
-            <MoreVertical className="h-4 w-4" aria-hidden />
+          <DropdownMenuTrigger asChild>
+            <IconButton
+              type="button"
+              variant="outline"
+              shape="circle"
+              size="icon-sm"
+              icon={ICONS.moreVertical}
+              aria-label="더보기"
+            />
           </DropdownMenuTrigger>
-          <DropdownMenuContent
-            align="end"
-            className="w-48 rounded-lg border border-border-10 bg-white p-my-4"
-          >
-            <DropdownMenuItem
-              className="flex cursor-pointer items-center gap-my-8 rounded-md px-my-12 py-my-8 text-body3_400 text-on-surface-20 outline-none hover:bg-surface-20"
-              onSelect={() => onLinkEditor?.(episode)}
-            >
-              <FileText className="h-4 w-4 shrink-0 text-on-surface-30" aria-hidden />
-              에피소드 상세
-            </DropdownMenuItem>
-            <DropdownMenuItem
-              className="flex cursor-pointer items-center gap-my-8 rounded-md px-my-12 py-my-8 text-body3_400 text-on-surface-20 outline-none hover:bg-surface-20"
-              onSelect={() => onInquiry?.(episode)}
-            >
-              <Mail className="h-4 w-4 shrink-0 text-on-surface-30" aria-hidden />
-              문의하기
-            </DropdownMenuItem>
+          <DropdownMenuContent align="end">
+            <DropdownMenuGroup>
+              <DropdownMenuItem onSelect={() => onLinkEditor?.(episode)}>
+                <Icon icon={ICONS.fileText} size="md" />
+                에피소드 상세
+              </DropdownMenuItem>
+              <DropdownMenuItem onSelect={() => onInquiry?.(episode)}>
+                <Icon icon={ICONS.mail} size="md" />
+                문의하기
+              </DropdownMenuItem>
+            </DropdownMenuGroup>
           </DropdownMenuContent>
         </DropdownMenu>
       )}
@@ -423,27 +419,28 @@ export function EpisodeListItem({
       className={cn(
         "cursor-pointer transition-colors",
         PAGE_MOBILE_LIST_ITEM_CARD_CLASS,
-        "max-lg:hover:bg-white",
-        "lg:border-b lg:border-divider-10 lg:px-my-20 lg:py-my-12 lg:last:border-b-0 lg:hover:bg-surface-20",
+        "max-lg:hover:bg-background",
+        "lg:border-b lg:border-divider lg:px-5 lg:py-3 lg:last:border-b-0 lg:hover:bg-muted",
       )}
       aria-label={`${episode.episodeNumber}화 ${episode.title}`}
     >
       {/* 모바일: 썸네일 + 제목·상태·메타 / 우상단 ⋮ 메뉴 */}
-      <div className="flex items-start gap-my-12 lg:hidden">
-        <div className="relative aspect-[9/16] h-[120px] shrink-0 overflow-hidden rounded border border-border-10 bg-slate-200">
+      <div className="flex items-start gap-3 lg:hidden">
+        <div className="relative aspect-[9/16] h-[120px] shrink-0 overflow-hidden rounded border border-border bg-secondary">
           <Image
             src={episode.thumbnail}
             alt=""
             fill
             sizes="(max-width: 1024px) 68px, 60px"
             className="object-cover"
+            unoptimized={isDummyResourceUrl(episode.thumbnail)}
           />
           <div className={THUMBNAIL_DIM_OVERLAY_CLASS} aria-hidden />
         </div>
 
         <div className="flex min-w-0 flex-1 flex-col gap-0">
-          <div className="flex items-center justify-between gap-my-4">
-            <p className="min-w-0 text-caption1_400 text-on-surface-30">
+          <div className="flex items-center justify-between gap-1">
+            <p className="min-w-0 text-caption1_400 text-foreground-placeholder">
               {episode.episodeNumber}화
             </p>
             <div className="-mr-2 shrink-0" onClick={(e) => e.stopPropagation()}>
@@ -460,13 +457,13 @@ export function EpisodeListItem({
               />
             </div>
           </div>
-          <span className="line-clamp-2 text-body1_700 text-on-surface-10">{episode.title}</span>
+          <span className="line-clamp-2 text-body1_700 text-foreground">{episode.title}</span>
           <span className={cn("text-caption1_400", STATUS_TEXT_CLASS[status])}>
             {STATUS_LABEL[status]}
           </span>
-          <div className="mt-my-16 flex items-center gap-x-my-12 text-caption1_400 text-on-surface-30">
-            <div className="flex items-center gap-my-8">
-              <Calendar className="h-4 w-4 shrink-0" aria-hidden />
+          <div className="mt-4 flex items-center gap-x-3 text-caption1_400 text-foreground-placeholder">
+            <div className="flex items-center gap-2">
+              <ICONS.calendar className="h-4 w-4 shrink-0" aria-hidden />
               <EpisodeDateDisplay
                 isDraft={isDraft}
                 isScheduled={isScheduled}
@@ -475,8 +472,8 @@ export function EpisodeListItem({
               />
             </div>
             {!isDraft ? (
-              <div className="flex items-center gap-my-8">
-                <Eye className="h-4 w-4 shrink-0" aria-hidden />
+              <div className="flex items-center gap-2">
+                <ICONS.eye className="h-4 w-4 shrink-0" aria-hidden />
                 <span>{viewsDisplay}</span>
               </div>
             ) : null}
@@ -486,22 +483,23 @@ export function EpisodeListItem({
 
       {/* lg 이상: 기존 테이블 행 (헤더 컬럼 폭과 동일) */}
       <div className="hidden w-full items-center lg:flex">
-        <div className="w-20 shrink-0 text-body3_400 text-on-surface-20" aria-hidden>
+        <div className="w-20 shrink-0 text-body3_400 text-foreground-muted" aria-hidden>
           {episode.episodeNumber}화
         </div>
 
-        <div className="flex min-w-0 flex-1 items-center gap-my-16">
-          <div className="relative h-[107px] w-[60px] shrink-0 overflow-hidden rounded border border-border-10 bg-slate-200">
+        <div className="flex min-w-0 flex-1 items-center gap-4">
+          <div className="relative h-[107px] w-[60px] shrink-0 overflow-hidden rounded border border-border bg-secondary">
             <Image
               src={episode.thumbnail}
               alt=""
               fill
               sizes="60px"
               className="object-cover"
+              unoptimized={isDummyResourceUrl(episode.thumbnail)}
             />
             <div className={THUMBNAIL_DIM_OVERLAY_CLASS} aria-hidden />
           </div>
-          <span className="min-w-0 flex-1 truncate text-body1_500 text-on-surface-10">
+          <span className="min-w-0 flex-1 truncate text-body1_500 text-foreground">
             {episode.title}
           </span>
         </div>
@@ -511,9 +509,9 @@ export function EpisodeListItem({
           isScheduled={isScheduled}
           scheduledPublishAt={scheduledPublishAt}
           date={date}
-          className="w-40 shrink-0 px-0 text-body3_400 text-on-surface-20"
+          className="w-40 shrink-0 px-0 text-body3_400 text-foreground-muted"
         />
-        <div className="w-24 shrink-0 px-0 text-body3_400 text-on-surface-30">{viewsDisplay}</div>
+        <div className="w-24 shrink-0 px-0 text-body3_400 text-foreground-placeholder">{viewsDisplay}</div>
         <div className={cn("w-24 shrink-0 px-0 text-body3_400", STATUS_TEXT_CLASS[status])}>
           {STATUS_LABEL[status]}
         </div>

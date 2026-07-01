@@ -2,7 +2,7 @@
 
 import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import { createPortal } from "react-dom";
-import { Pencil, Plus, Trash2 } from "lucide-react";
+import { ICONS } from "@/lib/icons";
 import { SlashCommandMenu, type SlashSelectPayload } from "@/components/editor/SlashCommandMenu";
 import { Button } from "@/components/ui/button";
 import {
@@ -20,7 +20,7 @@ import {
 import { useEditorStore } from "@/store/useEditorStore";
 import { useToast } from "@/store/useToastStore";
 import type { BlockType } from "@/types/editor";
-import { cn } from "@/lib/utils";
+import { cn } from "design-system/utils";
 
 /**
  * 모바일 편집 — 하이브리드 블록 액션 바.
@@ -131,14 +131,14 @@ export function EditorMobileBlockToolbar({ className }: { className?: string }) 
         variant="outline"
         size="sm"
         className={cn(
-          "gap-my-8 bg-white shadow-none",
+          "gap-2 bg-background shadow-none",
           isKeyboardOpen ? "h-11 w-11 shrink-0 p-0" : "h-10 flex-1",
         )}
         disabled={focusedIndex < 0}
         onClick={() => setMenuOpen(true)}
         aria-label="블록 추가"
       >
-        <Plus className="h-4 w-4 shrink-0" aria-hidden />
+        <ICONS.plus className="h-4 w-4 shrink-0" aria-hidden />
         {!isKeyboardOpen ? "블록 추가" : null}
       </Button>
       {!isKeyboardOpen && showContentEditButton ? (
@@ -146,11 +146,11 @@ export function EditorMobileBlockToolbar({ className }: { className?: string }) 
           type="button"
           variant="outline"
           size="sm"
-          className="h-10 flex-1 gap-my-8 bg-white shadow-none"
+          className="h-10 flex-1 gap-2 bg-background shadow-none"
           onClick={handleContentEdit}
           aria-label={contentEditButtonLabel}
         >
-          <Pencil className="h-4 w-4 shrink-0" aria-hidden />
+          <ICONS.pencil className="h-4 w-4 shrink-0" aria-hidden />
           {contentEditButtonLabel}
         </Button>
       ) : null}
@@ -158,12 +158,12 @@ export function EditorMobileBlockToolbar({ className }: { className?: string }) 
         type="button"
         variant="outline"
         size="icon"
-        className="h-10 w-10 shrink-0 bg-white shadow-none text-on-surface-30 lg:hover:bg-red-50 lg:hover:text-red-600 disabled:border-border-20"
+        className="h-10 w-10 shrink-0 bg-background shadow-none text-foreground-placeholder lg:hover:bg-destructive-container lg:hover:text-destructive disabled:border-border"
         disabled={!canDelete}
         onClick={handleDelete}
         aria-label="블록 삭제"
       >
-        <Trash2 className="h-4 w-4 shrink-0" aria-hidden />
+        <ICONS.trash2 className="h-4 w-4 shrink-0" aria-hidden />
       </Button>
     </>
   );
@@ -183,7 +183,7 @@ export function EditorMobileBlockToolbar({ className }: { className?: string }) 
           >
             <div
               className={cn(
-                "flex items-center gap-my-8",
+                "flex items-center gap-2",
                 isKeyboardOpen && "justify-between",
               )}
             >

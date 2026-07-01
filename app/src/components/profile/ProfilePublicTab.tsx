@@ -2,17 +2,14 @@
 
 import { useEffect, useRef, useState } from "react";
 import Image from "next/image";
-import { User } from "lucide-react";
+import { ICONS } from "@/lib/icons";
 import { Button } from "@/components/ui/button";
 import { Title2 } from "@/components/ui/title2";
 import { AnalyticsPanel } from "@/components/analytics/AnalyticsPanel";
-import {
-  ProfileCharCount,
-  ProfileFieldLabel,
-  profileEditableInputClassName,
-  profileReadonlyInputClassName,
-  profileTextareaClassName,
-} from "@/components/profile/profile-field-styles";
+import { Input, InputGroup, InputHypertext } from "@/components/ui/input";
+import { Textarea } from "@/components/ui/textarea";
+import { ProfileFieldLabel } from "@/components/profile/profile-field-styles";
+import { formFieldAriaDescribedBy } from "@/components/ui/field-label";
 import {
   loadProfileSettings,
   PROFILE_DESCRIPTION_MAX,
@@ -20,6 +17,10 @@ import {
   saveCreatorProfile,
 } from "@/lib/profile-storage";
 import type { CreatorProfile } from "@/types/profile";
+
+const PROFILE_PUBLIC_LOGIN_ID = "profile-public-login-id";
+const PROFILE_PUBLIC_PEN_NAME_ID = "profile-public-pen-name";
+const PROFILE_PUBLIC_DESCRIPTION_ID = "profile-public-description";
 
 export function ProfilePublicTab({
   avatarUrl,
@@ -64,8 +65,8 @@ export function ProfilePublicTab({
   return (
     <AnalyticsPanel className="overflow-hidden border-0 bg-transparent">
       <Title2 text="공개 프로필" variant="title" asSectionHeader />
-      <div className="flex flex-col gap-my-32 p-my-20">
-        <div className="flex flex-col items-center gap-my-12">
+      <div className="flex flex-col gap-8 p-5">
+        <div className="flex flex-col items-center gap-3">
           <input
             ref={fileInputRef}
             type="file"
@@ -75,7 +76,7 @@ export function ProfilePublicTab({
             onChange={handleAvatarFileChange}
           />
           <div className="relative h-24 w-24">
-            <div className="flex h-24 w-24 items-center justify-center overflow-hidden rounded-full border border-slate-200 bg-slate-100">
+            <div className="flex h-24 w-24 items-center justify-center overflow-hidden rounded-full border border-border bg-muted">
               {displayAvatar ? (
                 <Image
                   src={displayAvatar}
@@ -86,64 +87,88 @@ export function ProfilePublicTab({
                   className="h-full w-full object-cover"
                 />
               ) : (
-                <User className="h-my-40 w-my-40 text-on-surface-30" aria-hidden />
+                <ICONS.user className="h-10 w-10 text-foreground-placeholder" aria-hidden />
               )}
             </div>
             <button
               type="button"
               onClick={() => fileInputRef.current?.click()}
-              className="absolute bottom-0 right-0 flex h-8 w-8 items-center justify-center rounded-full border-2 border-white bg-[#2d2d2d] hover:bg-black"
+              className="absolute bottom-0 right-0 flex h-8 w-8 items-center justify-center rounded-full border-2 border-inverse bg-inverse hover:bg-inverse"
               aria-label="프로필 사진 변경"
             >
-              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="white" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" aria-hidden>
-                <path d="M17 3a2.85 2.83 0 1 1 4 4L7.5 20.5 2 22l1.5-5.5Z" />
-                <path d="m15 5 4 4" />
-              </svg>
+              <ICONS.pencil className="size-4 text-inverse-foreground" aria-hidden />
             </button>
           </div>
-          <p className="text-center text-body3_400 text-on-surface-20">
+          <p className="text-center text-body3_400 text-foreground-muted">
             독자에게 표시되는 작가 프로필이에요.
           </p>
         </div>
 
-        <div className="flex max-w-xl flex-col gap-my-12 lg:gap-my-20">
-          <div className="flex flex-col gap-my-12">
-            <ProfileFieldLabel text="아이디" hint="로그인에 사용하는 이메일이에요." />
-            <input type="text" disabled value={draft.loginId} className={profileReadonlyInputClassName} />
+        <div className="flex max-w-xl flex-col gap-3 lg:gap-5">
+          <div className="flex flex-col gap-3">
+            <ProfileFieldLabel text="아이디" hint="로그인에 사용하는 이메일이에요." htmlFor={PROFILE_PUBLIC_LOGIN_ID} />
+            <InputGroup>
+              <Input
+                id={PROFILE_PUBLIC_LOGIN_ID}
+                aria-describedby={formFieldAriaDescribedBy(PROFILE_PUBLIC_LOGIN_ID)}
+                type="text"
+                size="lg"
+                disabled
+                value={draft.loginId}
+              />
+            </InputGroup>
           </div>
 
-          <div className="flex flex-col gap-my-12">
-            <ProfileFieldLabel text="작가명" />
-            <input
-              type="text"
-              value={draft.penName}
-              maxLength={PROFILE_PEN_NAME_MAX}
-              onChange={(e) => setDraft((prev) => ({ ...prev, penName: e.target.value.slice(0, PROFILE_PEN_NAME_MAX) }))}
-              className={profileEditableInputClassName}
-            />
-            <ProfileCharCount current={draft.penName.length} max={PROFILE_PEN_NAME_MAX} />
+          <div className="flex flex-col gap-3">
+            <ProfileFieldLabel text="작가명" htmlFor={PROFILE_PUBLIC_PEN_NAME_ID} />
+            <InputGroup>
+              <Input
+                id={PROFILE_PUBLIC_PEN_NAME_ID}
+                aria-describedby={formFieldAriaDescribedBy(PROFILE_PUBLIC_PEN_NAME_ID)}
+                type="text"
+                size="lg"
+                value={draft.penName}
+                maxLength={PROFILE_PEN_NAME_MAX}
+                onChange={(e) =>
+                  setDraft((prev) => ({ ...prev, penName: e.target.value.slice(0, PROFILE_PEN_NAME_MAX) }))
+                }
+              />
+              <InputHypertext
+                id={formFieldAriaDescribedBy(PROFILE_PUBLIC_PEN_NAME_ID)}
+                count={draft.penName.length}
+                max={PROFILE_PEN_NAME_MAX}
+              />
+            </InputGroup>
           </div>
 
-          <div className="flex flex-col gap-my-12">
-            <ProfileFieldLabel text="소개" />
-            <textarea
-              placeholder="소개 내용을 작성해 주세요."
-              value={draft.description}
-              maxLength={PROFILE_DESCRIPTION_MAX}
-              onChange={(e) =>
-                setDraft((prev) => ({
-                  ...prev,
-                  description: e.target.value.slice(0, PROFILE_DESCRIPTION_MAX),
-                }))
-              }
-              className={profileTextareaClassName}
-            />
-            <ProfileCharCount current={draft.description.length} max={PROFILE_DESCRIPTION_MAX} />
+          <div className="flex flex-col gap-3">
+            <ProfileFieldLabel text="소개" htmlFor={PROFILE_PUBLIC_DESCRIPTION_ID} />
+            <InputGroup>
+              <Textarea
+                id={PROFILE_PUBLIC_DESCRIPTION_ID}
+                aria-describedby={formFieldAriaDescribedBy(PROFILE_PUBLIC_DESCRIPTION_ID)}
+                placeholder="소개 내용을 작성해 주세요."
+                value={draft.description}
+                maxLength={PROFILE_DESCRIPTION_MAX}
+                onChange={(e) =>
+                  setDraft((prev) => ({
+                    ...prev,
+                    description: e.target.value.slice(0, PROFILE_DESCRIPTION_MAX),
+                  }))
+                }
+                className="min-h-[120px] resize-none"
+              />
+              <InputHypertext
+                id={formFieldAriaDescribedBy(PROFILE_PUBLIC_DESCRIPTION_ID)}
+                count={draft.description.length}
+                max={PROFILE_DESCRIPTION_MAX}
+              />
+            </InputGroup>
           </div>
         </div>
 
-        <div className="flex justify-end border-t border-border-10 pt-my-20">
-          <Button type="button" className="h-my-36 min-w-my-80 px-my-16" onClick={handleSave}>
+        <div className="flex justify-end border-t border-border pt-5">
+          <Button type="button" className="h-9 min-w-20 px-4" onClick={handleSave}>
             저장
           </Button>
         </div>

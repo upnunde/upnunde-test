@@ -4,13 +4,19 @@ import { useCallback, useEffect, useState } from "react";
 import { createPortal } from "react-dom";
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/ui/dialog";
 import { Button } from "@/components/ui/button";
-import { Title1 } from "@/components/ui/title1";
+import { FormFieldLabel, formFieldAriaDescribedBy } from "@/components/ui/field-label";
 import { Title2 } from "@/components/ui/title2";
 import { AiFieldLoadingMessage } from "@/components/episode/EpisodeAiFieldLoading";
+import { InputGroup, InputHypertext } from "@/components/ui/input";
+import { Textarea } from "@/components/ui/textarea";
 import { EpisodeScriptTextarea } from "@/components/episode/EpisodeScriptTextarea";
 import { Snackbar } from "@/components/episode/Snackbar";
 import { AiConvertLoadingOverlay } from "@/components/episode/AiConvertLoadingOverlay";
 import { FloatingComposerBar } from "@/components/ui/floating-composer-bar";
+import {
+  DIALOG_OVERLAY_Z_CLASS,
+  TOAST_STACK_Z_CLASS,
+} from "@/components/ui/modal/modal-styles";
 import {
   EPISODE_APPLY_TO_EDITOR_DELAY_MS,
   EPISODE_APPLY_TO_EDITOR_LOADING_STEPS,
@@ -29,9 +35,10 @@ import {
   formDialogSheetStickyFooterClassName,
 } from "@/components/ui/modal";
 import { PAGE_GUTTER_X_CLASS } from "@/lib/page-layout";
-import { cn } from "@/lib/utils";
+import { cn } from "design-system/utils";
 
 const MAX_HISTORY = 5000;
+const EPISODE_AUTO_HISTORY_ID = "episode-auto-generator-history";
 
 /** AI 제작 버튼·플로팅 입력 바 */
 const EPISODE_AUTO_GENERATOR_AI_COMPOSER_ENABLED = true;
@@ -153,7 +160,7 @@ export function EpisodeAutoGeneratorModal({
               isLoading={isGenerating}
               submitDisabled={isGenerating || briefPrompt.trim().length === 0}
               placement="fixed"
-              className="!z-[80] !pointer-events-auto"
+              className={`!${TOAST_STACK_Z_CLASS} !pointer-events-auto`}
               ariaLabel="에피소드 자동 입력기"
             />
           </div>,
@@ -166,7 +173,7 @@ export function EpisodeAutoGeneratorModal({
     typeof document !== "undefined"
       ? createPortal(
           <div
-            className="fixed inset-x-0 bottom-0 top-0 z-[49] bg-black/50 max-lg:bottom-auto max-lg:top-[var(--app-vv-live-top,0px)] max-lg:h-[var(--app-vv-live-height,100dvh)]"
+            className={`fixed inset-x-0 bottom-0 top-0 ${DIALOG_OVERLAY_Z_CLASS} bg-dim-20 max-lg:bottom-auto max-lg:top-[var(--app-vv-live-top,0px)] max-lg:h-[var(--app-vv-live-height,100dvh)]`}
             aria-hidden
           />,
           document.body,
@@ -176,20 +183,21 @@ export function EpisodeAutoGeneratorModal({
   return (
     <Dialog
       open={open}
-      onOpenChange={onOpenChange}
+      onOpenChange={(nextOpen, details) => {
+        /* 하단 자동 입력기·외부 클릭·포커스 이탈 시 자동 닫힘 방지 */
+        if (
+          details?.reason === "outside-press" ||
+          details?.reason === "focus-out"
+        ) {
+          return;
+        }
+        onOpenChange(nextOpen);
+      }}
       modal={EPISODE_AUTO_GENERATOR_AI_COMPOSER_ENABLED ? false : undefined}
     >
       <DialogContent
         className={formDialogShellClassName}
         aria-describedby={undefined}
-        onPointerDownOutside={(event) => {
-          // 하단 자동 입력기 및 외부 클릭으로 모달이 자동 닫히지 않도록 유지
-          event.preventDefault();
-        }}
-        onFocusOutside={(event) => {
-          // 포커스가 하단 자동 입력기로 이동할 때 모달이 닫히지 않도록 유지
-          event.preventDefault();
-        }}
       >
         <DialogHeader className="sr-only">
           <DialogTitle>에피소드 생성기 입력</DialogTitle>
@@ -206,22 +214,22 @@ export function EpisodeAutoGeneratorModal({
               className={cn(
                 formDialogSheetScrollBodyClassName,
                 PAGE_GUTTER_X_CLASS,
-                "flex flex-col gap-my-24 pt-my-20",
+                "flex flex-col gap-6 pt-5",
               )}
             >
-              <div className="flex flex-col gap-my-12">
-                <div className="flex items-start justify-between gap-my-12">
-                  <Title1
-                    text="지난 사건 히스토리"
-                    variant="title-subtitle-dot"
-                    subtitleText={EPISODE_FORM_FIELD_COPY.history.subtitle}
+              <div className="flex flex-col gap-3">
+                <div className="flex items-start justify-between gap-3">
+                  <FormFieldLabel
+                    title="지난 사건 히스토리"
+                    subtitle={EPISODE_FORM_FIELD_COPY.history.subtitle}
+                    inputId={EPISODE_AUTO_HISTORY_ID}
                     className="min-w-0 flex-1"
                   />
                   <Button
                     type="button"
                     variant="outline"
                     size="sm"
-                    className="h-8 shrink-0 gap-my-8 shadow-none bg-white px-my-12"
+                    className="h-8 shrink-0 gap-2 shadow-none bg-background px-3"
                     disabled={
                       !canAutoFillPreviousHistory ||
                       isHistoryAutoFilling ||
@@ -240,7 +248,7 @@ export function EpisodeAutoGeneratorModal({
                 </div>
                 {isHistoryAutoFilling ? (
                   <div
-                    className="flex min-h-[120px] max-h-[280px] w-full items-start rounded-md border border-border-10 bg-white px-my-12 py-my-12"
+                    className="flex min-h-[120px] max-h-[280px] w-full items-start rounded-md border border-border bg-background px-3 py-3"
                     aria-busy="true"
                     aria-label="지난 사건 히스토리"
                   >
@@ -249,26 +257,32 @@ export function EpisodeAutoGeneratorModal({
                     />
                   </div>
                 ) : (
-                  <textarea
-                    rows={3}
-                    maxLength={MAX_HISTORY}
-                    value={history}
-                    onChange={(e) => setHistory(e.target.value)}
-                    placeholder={EPISODE_FORM_FIELD_COPY.history.placeholder}
-                    aria-label="지난 사건 히스토리"
-                    className="min-h-[120px] max-h-[280px] w-full resize-y overflow-y-auto rounded-md border border-border-10 bg-white px-my-12 py-my-8 text-body3_400 text-on-surface-10 placeholder:text-on-surface-30 focus:outline-none focus:ring-2 focus:ring-primary"
-                  />
+                  <InputGroup>
+                    <Textarea
+                      id={EPISODE_AUTO_HISTORY_ID}
+                      aria-describedby={formFieldAriaDescribedBy(EPISODE_AUTO_HISTORY_ID)}
+                      rows={3}
+                      maxLength={MAX_HISTORY}
+                      value={history}
+                      onChange={(e) => setHistory(e.target.value)}
+                      placeholder={EPISODE_FORM_FIELD_COPY.history.placeholder}
+                      aria-label="지난 사건 히스토리"
+                      className="min-h-[120px] max-h-[280px] resize-y overflow-y-auto"
+                    />
+                    <InputHypertext count={history.length} max={MAX_HISTORY} />
+                  </InputGroup>
                 )}
-                <div className="flex justify-end text-caption1_400 text-on-surface-30">
-                  {isHistoryAutoFilling ? "—" : `${history.length}/${MAX_HISTORY}`}
-                </div>
+                {isHistoryAutoFilling ? (
+                  <div className="flex justify-end text-body4_400 tabular-nums text-foreground-muted">
+                    —/{MAX_HISTORY}
+                  </div>
+                ) : null}
               </div>
 
-              <div className="flex flex-col gap-my-12">
-                <Title1
-                  text="에피소드 대본"
-                  variant="title-subtitle-dot"
-                  subtitleText={EPISODE_FORM_FIELD_COPY.script.subtitle}
+              <div className="flex flex-col gap-3">
+                <FormFieldLabel
+                  title="에피소드 대본"
+                  subtitle={EPISODE_FORM_FIELD_COPY.script.subtitle}
                 />
                 <EpisodeScriptTextarea
                   value={script}
@@ -279,7 +293,7 @@ export function EpisodeAutoGeneratorModal({
               </div>
             </div>
             <div className={formDialogSheetStickyFooterClassName}>
-              <div className="flex justify-end gap-my-8">
+              <div className="flex justify-end gap-2">
                 <Button
                   type="button"
                   variant="outline"

@@ -1,6 +1,6 @@
 "use client";
 
-import { AlertCircle } from "lucide-react";
+import { ICONS } from "@/lib/icons";
 import { Dialog, DialogContent } from "@/components/ui/dialog";
 import {
   ModalFooterButtons,
@@ -46,10 +46,10 @@ export function ConfirmDeleteModal({
           subtitle={RESOURCE_DELETE_SUBTITLE}
           icon={
             <span
-              className="flex h-7 w-7 items-center justify-center rounded-full bg-[var(--surface-inverse-10)]"
+              className="flex h-7 w-7 items-center justify-center rounded-full bg-inverse/10"
               aria-hidden
             >
-              <AlertCircle className="h-4 w-4 text-[var(--on-surface-inverse)]" strokeWidth={2.25} />
+              <ICONS.alertCircle className="h-4 w-4 text-inverse-foreground" strokeWidth={2.25} />
             </span>
           }
         />

@@ -1,41 +1,41 @@
 /**
  * 페이지·카드 본문 인셋 — design-system spacing
- * 본문 여백형 페이지 가로·상단 12px(모바일·데스크톱 공통) → `docs/mobile-layout.md`
+ * 본문 여백형 페이지 가로 12px · 상단 모바일 12px·데스크톱 40px → `docs/mobile-layout.md`
  */
 
 /** 페이지·카드 좌우 인셋 — 12px (모바일·lg+ 공통) — 스크롤 루트 등 */
-export const PAGE_GUTTER_X_CLASS = "px-my-12";
+export const PAGE_GUTTER_X_CLASS = "px-3";
 
 /**
  * 풀블리드 카드·섹션 내부 좌우 인셋 — 20px (모바일·lg+ 공통).
  * 에디터 본문(`EDITOR_PAGE_SCROLL_CLASS`) 제외.
  */
-export const PAGE_FLUSH_CONTENT_PAD_X_CLASS = "px-my-20";
+export const PAGE_FLUSH_CONTENT_PAD_X_CLASS = "px-5";
 
 /** 페이지·섹션 스택 간격 — 모바일 12px · lg+ 20px */
-export const PAGE_GUTTER_GAP_CLASS = "gap-my-12 lg:gap-my-20";
+export const PAGE_GUTTER_GAP_CLASS = "gap-3 lg:gap-5";
 
 /** 카드 섹션 헤더·본문·푸터 좌우 인셋 — 20px */
 export const PAGE_CONTENT_PAD_X_CLASS = PAGE_FLUSH_CONTENT_PAD_X_CLASS;
 
 /** 카드 본문(폼 필드 묶음) */
-export const PAGE_CONTENT_BODY_CLASS = `${PAGE_CONTENT_PAD_X_CLASS} py-my-20`;
+export const PAGE_CONTENT_BODY_CLASS = `${PAGE_CONTENT_PAD_X_CLASS} py-5`;
 
 /** 카드 하단 액션 바 */
-export const PAGE_CONTENT_FOOTER_CLASS = `${PAGE_CONTENT_PAD_X_CLASS} py-my-16`;
+export const PAGE_CONTENT_FOOTER_CLASS = `${PAGE_CONTENT_PAD_X_CLASS} py-4`;
 
 /** 카드 하단 취소·저장 등 — 모바일 form 42px · lg+ 36px */
 export const PAGE_FOOTER_ACTION_BUTTON_CLASS =
-  "lg:h-my-36 lg:min-h-my-36 lg:min-w-my-72 lg:px-my-12 lg:text-body2_500";
+  "lg:h-9 lg:min-h-9 lg:min-w-18 lg:px-3 lg:text-body2_500";
 
 /** 메인 스크롤 영역 — max-width 컨테이너 바깥 가로 여백 */
 export const PAGE_SCROLL_GUTTER_CLASS = PAGE_GUTTER_X_CLASS;
 
 /** 스크롤 영역 마지막 콘텐츠 하단 여백 — 80px (모든 뷰포트 공통) */
-export const PAGE_SCROLL_BOTTOM_CLASS = "pb-my-80";
+export const PAGE_SCROLL_BOTTOM_CLASS = "pb-20";
 
-/** 스크롤 영역 상단 여백 — 12px (모든 뷰포트 공통) */
-export const PAGE_SCROLL_TOP_CLASS = "pt-my-12";
+/** 스크롤 영역 상단 여백 — 모바일 12px · lg+ 40px */
+export const PAGE_SCROLL_TOP_CLASS = "max-lg:pt-3 lg:pt-10";
 
 /**
  * 모바일: 문서(body) 스크롤 — 콘텐츠 높이만큼 부모가 늘어나야 sticky containing block이 유효함.
@@ -50,14 +50,14 @@ const PAGE_SCROLL_LG_TRAP_CLASS = "lg:min-h-0 lg:flex-1 lg:overflow-y-auto";
  * 모바일: 콘텐츠 높이만큼 확장(문서 스크롤·sticky) / lg: flex-1 내부 스크롤
  */
 export const APP_MAIN_CLASS =
-  "flex min-w-0 w-full flex-col bg-background-20 max-lg:overflow-visible lg:min-h-0 lg:flex-1 lg:overflow-hidden";
+  "flex min-w-0 w-full flex-col bg-canvas max-lg:overflow-visible lg:min-h-0 lg:flex-1 lg:overflow-hidden";
 
 /** AppShell·시리즈 페이지 본문 패널 */
 export const APP_MAIN_PANEL_CLASS =
   "flex w-full flex-col max-lg:overflow-visible lg:min-h-0 lg:flex-1 lg:overflow-hidden";
 
 /** 서브헤더 + 스크롤 본문을 한 덩어리로 묶는 페이지 셸(리소스 상세·관리 등) */
-export const PAGE_SUBHEADER_PAGE_SHELL_CLASS = `${APP_MAIN_PANEL_CLASS} bg-background-20`;
+export const PAGE_SUBHEADER_PAGE_SHELL_CLASS = `${APP_MAIN_PANEL_CLASS} bg-canvas`;
 
 /**
  * AppShell 사이드바+본문 행
@@ -67,9 +67,14 @@ export const PAGE_SUBHEADER_PAGE_SHELL_CLASS = `${APP_MAIN_PANEL_CLASS} bg-backg
 export const APP_SHELL_BODY_ROW_CLASS =
   "relative flex w-full min-w-0 flex-col max-lg:overflow-visible lg:min-h-0 lg:flex-1 lg:flex-row lg:overflow-hidden";
 
-/** AppShell main 스크롤 루트 — 상단·가로 인셋 · 하단 80px */
-export const PAGE_SCROLL_ROOT_CLASS =
+const PAGE_SCROLL_ROOT_LAYOUT_CLASS =
   `flex flex-col max-lg:overflow-visible ${PAGE_SCROLL_MOBILE_FILL_CLASS} ${PAGE_SCROLL_LG_TRAP_CLASS} ${PAGE_SCROLL_TOP_CLASS} ${PAGE_SCROLL_GUTTER_CLASS} ${PAGE_SCROLL_BOTTOM_CLASS}`;
+
+/** AppShell main 스크롤 루트 — 상단·가로 인셋 · 하단 80px */
+export const PAGE_SCROLL_ROOT_CLASS = `${PAGE_SCROLL_ROOT_LAYOUT_CLASS} bg-canvas`;
+
+/** 스크롤 루트 배경 없음 — AppShell browser base(canvas)가 비치도록 */
+export const PAGE_SCROLL_ROOT_TRANSPARENT_CLASS = PAGE_SCROLL_ROOT_LAYOUT_CLASS;
 
 /** 모바일 풀블리드 스크롤 루트 — 외곽 패딩만 제거(콘텐츠 gap은 페이지에서 유지) */
 export const PAGE_SCROLL_ROOT_MOBILE_FLUSH_CLASS = "max-lg:pt-0 max-lg:px-0 max-lg:pb-0";
@@ -79,25 +84,25 @@ export const PAGE_CARD_SHELL_MOBILE_FLUSH_CLASS = "max-lg:rounded-none max-lg:bo
 
 /** 모바일 카드형 목록 행 — 정산·내 작품·에피소드 공통 */
 export const PAGE_MOBILE_LIST_ITEM_CARD_CLASS =
-  "max-lg:rounded-[8px] max-lg:border-0 max-lg:bg-white max-lg:p-my-16 max-lg:shadow-elevation-30";
+  "max-lg:rounded-md max-lg:border-0 max-lg:bg-background max-lg:p-4 max-lg:shadow-elevation-30";
 
 /** 모바일 카드형 목록 컨테이너 간격 */
-export const PAGE_MOBILE_LIST_STACK_GAP_CLASS = "max-lg:gap-my-12";
+export const PAGE_MOBILE_LIST_STACK_GAP_CLASS = "max-lg:gap-3";
 
 /** AppShell main 스크롤 루트 — 상단 여백 · 가로 인셋 · 하단 80px */
 export const PAGE_SCROLL_ROOT_TOP_CLASS =
-  `flex flex-col max-lg:overflow-visible ${PAGE_SCROLL_LG_TRAP_CLASS} ${PAGE_SCROLL_TOP_CLASS} ${PAGE_SCROLL_GUTTER_CLASS} ${PAGE_SCROLL_BOTTOM_CLASS}`;
+  `flex flex-col bg-canvas max-lg:overflow-visible ${PAGE_SCROLL_LG_TRAP_CLASS} ${PAGE_SCROLL_TOP_CLASS} ${PAGE_SCROLL_GUTTER_CLASS} ${PAGE_SCROLL_BOTTOM_CLASS}`;
 
 /** @deprecated 서브헤더 sticky 미사용 */
 export const PAGE_SUBHEADER_STICKY_CLASS = "";
 
 /** 모바일 sticky 글로벌 헤더(h-14) 바로 아래 — 필터·탭 띠 전용 */
 export const PAGE_FILTER_HEADER_STICKY_CLASS =
-  "max-lg:sticky max-lg:top-14 max-lg:z-30";
+  "max-lg:sticky max-lg:top-14 max-lg:z-overlay";
 
 /** 서브 페이지 상단 바(뒤로가기·제목) — 모바일 56px · lg+ 64px · 좌우 20px */
 export const PAGE_SUBHEADER_CLASS =
-  `flex h-my-56 w-full shrink-0 items-center justify-center border-b border-border-10 bg-white ${PAGE_FLUSH_CONTENT_PAD_X_CLASS} py-0 lg:h-my-64`;
+  `flex h-14 w-full shrink-0 items-center justify-center border-b border-border bg-background ${PAGE_FLUSH_CONTENT_PAD_X_CLASS} py-0 lg:h-16`;
 
 /** 필터 띠와 함께 쓰는 서브헤더 */
 export const PAGE_SUBHEADER_WITH_FILTER_CLASS = PAGE_SUBHEADER_CLASS;
@@ -110,9 +115,9 @@ export const PAGE_SUBHEADER_WITH_STICKY_CLASS = PAGE_SUBHEADER_CLASS;
  * 모바일 글로벌 헤더 아래 sticky.
  */
 export const PAGE_FILTER_HEADER_SHELL_CLASS = [
-  "flex w-full shrink-0 flex-col items-center border-b border-border-10 bg-surface-10",
+  "flex w-full shrink-0 flex-col items-center border-b border-border bg-background",
   PAGE_FLUSH_CONTENT_PAD_X_CLASS,
-  "py-my-12",
+  "py-3",
   PAGE_FILTER_HEADER_STICKY_CLASS,
 ].join(" ");
 
@@ -124,21 +129,21 @@ export const PAGE_FILTER_HEADER_INNER_CLASS = "w-full min-w-0 max-w-[1200px]";
 
 /** 인라인 탭 띠 셸(알림·문의 등) — 모바일 헤더 아래 sticky, 하단 구분선 유지 */
 export const PAGE_INLINE_TAB_STRIP_SHELL_CLASS = [
-  "w-full shrink-0 border-b border-border-10 bg-white",
+  "w-full shrink-0 border-b border-border bg-background",
   PAGE_GUTTER_X_CLASS,
   PAGE_FILTER_HEADER_STICKY_CLASS,
 ].join(" ");
 
 /** 스크롤 + 중앙 정렬 레이아웃(리소스 상세·목록 등) */
 export const PAGE_SCROLL_COLUMN_CLASS =
-  `flex flex-col items-center max-lg:overflow-visible ${PAGE_SCROLL_MOBILE_FILL_CLASS} ${PAGE_SCROLL_LG_TRAP_CLASS} ${PAGE_SCROLL_TOP_CLASS} ${PAGE_GUTTER_GAP_CLASS} ${PAGE_GUTTER_X_CLASS} ${PAGE_SCROLL_BOTTOM_CLASS}`;
+  `flex flex-col items-center bg-canvas max-lg:overflow-visible ${PAGE_SCROLL_MOBILE_FILL_CLASS} ${PAGE_SCROLL_LG_TRAP_CLASS} ${PAGE_SCROLL_TOP_CLASS} ${PAGE_GUTTER_GAP_CLASS} ${PAGE_GUTTER_X_CLASS} ${PAGE_SCROLL_BOTTOM_CLASS}`;
 
 /** PAGE_SCROLL_COLUMN 스크롤 루트 식별자 — 모바일 헤더 접힘 훅용 */
 export const PAGE_SCROLL_COLUMN_ROOT_ATTR = "data-page-scroll-column-root";
 
 /** 모바일 하단 고정 액션 바(36px 버튼 + py-12×2) 위 스크롤 하단 여백 */
 export const PAGE_MOBILE_FIXED_ACTION_BAR_SCROLL_PAD_CLASS =
-  "max-lg:pb-[calc(var(--spacing-my-80)+var(--spacing-my-12)+var(--spacing-my-36)+var(--spacing-my-12)+env(safe-area-inset-bottom,0px))]";
+  "max-lg:pb-[calc(var(--space-20)+var(--space-3)+var(--space-9)+var(--space-3)+env(safe-area-inset-bottom,0px))]";
 
 /** 본문·카드·서브헤더 내부 — 모바일 가로 스크롤 방지 (min-w-0) */
 export const PAGE_CONTAINER_CLASS = "w-full min-w-0 max-w-[1200px] mx-auto";

@@ -4,12 +4,13 @@ import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import { createPortal } from "react-dom";
 import Image from "next/image";
 import { useRouter } from "next/navigation";
-import { X } from "lucide-react";
+import { ICONS } from "@/lib/icons";
 import {
   Popover,
   PopoverContent,
   PopoverAnchor,
 } from "@/components/ui/popover";
+import { Button } from "@/components/ui/button";
 import { useIsLgUp } from "@/hooks/useMediaQuery";
 import { MenuList, MenuListItem, MenuListSeparator } from "@/components/ui/menu-list";
 import { MOBILE_BOTTOM_SHEET_SCRIM_CLASS, MOBILE_BOTTOM_SHEET_SHELL_BASE_CLASS, mobileBottomSheetMediumMaxHeightClassName } from "@/components/ui/modal/modal-styles";
@@ -23,7 +24,7 @@ import {
 } from "@/lib/thumbnail-styles";
 import type { BlockType } from "@/types/editor";
 import { getResourceCreateLink } from "@/lib/resource-create-path";
-import { cn } from "@/lib/utils";
+import { cn } from "design-system/utils";
 
 const PICKER_TYPES: BlockType[] = ["background", "character", "bgm", "sfx", "gallery", "video", "event"];
 const EPISODE_END_LABEL = "에피소드 종료";
@@ -72,7 +73,7 @@ function isImageType(type: BlockType): boolean {
   return type === "background" || type === "character" || type === "gallery";
 }
 
-/** Inset ring layer above image (z-10) so it is not covered by the resource */
+/** Inset ring layer above image (z-dropdown) so it is not covered by the resource */
 function ThumbnailFrameOverlay({
   isActive,
   className,
@@ -85,10 +86,10 @@ function ThumbnailFrameOverlay({
     <span
       aria-hidden
       className={cn(
-        "pointer-events-none absolute inset-0 z-10 rounded-lg",
+        "pointer-events-none absolute inset-0 z-dropdown rounded-lg",
         isActive
           ? "ring-2 ring-inset ring-primary"
-          : "ring-1 ring-inset ring-border-20/10",
+          : "ring-1 ring-inset ring-border/10",
         "group-focus-visible:ring-2 group-focus-visible:ring-inset group-focus-visible:ring-primary",
         className
       )}
@@ -98,7 +99,7 @@ function ThumbnailFrameOverlay({
 
 /** PC 팝오버 — 배경·갤러리·캐릭터 공통 9:16 고정 썸네일 */
 const DESKTOP_PICKER_THUMB_CLASS =
-  "relative h-44 w-24 overflow-hidden rounded-lg bg-surface-disabled-10/0";
+  "relative h-44 w-24 overflow-hidden rounded-lg bg-disabled/0";
 
 const PICKER_TITLE: Record<BlockType, string> = {
   character: "캐릭터",
@@ -142,8 +143,8 @@ function ResourcePickerRegisterFooter({
   return (
     <div
       className={cn(
-        "shrink-0 border-t border-border-10",
-        isSheet ? "px-my-12 pb-my-16 pt-my-12" : "px-my-12 pb-my-12 pt-my-8",
+        "shrink-0 border-t border-border",
+        isSheet ? "px-3 pb-4 pt-3" : "px-3 pb-3 pt-2",
       )}
     >
       <button
@@ -176,11 +177,11 @@ function ResourcePickerOptions({
   const imageThumbClass = (selected?: boolean) => {
     if (isSheet) {
       return cn(
-        "relative overflow-hidden rounded-lg bg-surface-disabled/0 outline outline-1 outline-offset-[-1px]",
+        "relative overflow-hidden rounded-lg bg-disabled/0 outline outline-1 outline-offset-[-1px]",
         RESOURCE_THUMBNAIL_FLUID_SIZE_CLASS,
         selected
           ? "outline-2 outline-offset-[-2px] outline-primary"
-          : "outline-border-20",
+          : "outline-border",
       );
     }
 
@@ -190,8 +191,8 @@ function ResourcePickerOptions({
   const imageCellClass = cn(
     "group flex min-w-0 cursor-pointer flex-col focus:outline-none focus:ring-0",
     isSheet
-      ? "w-full items-start justify-start gap-my-4"
-      : "inline-flex items-start justify-start gap-my-8 hover:bg-surface-10/40",
+      ? "w-full items-start justify-start gap-1"
+      : "inline-flex items-start justify-start gap-2 hover:bg-background/40",
   );
 
   const imageLabelClass = cn(
@@ -207,7 +208,7 @@ function ResourcePickerOptions({
         <div
           className={cn(
             "grid",
-            isSheet ? RESOURCE_PICKER_SHEET_GRID_CLASS : "w-fit grid-cols-3 gap-my-16 px-my-20 pb-my-20 pt-my-20",
+            isSheet ? RESOURCE_PICKER_SHEET_GRID_CLASS : "w-fit grid-cols-3 gap-4 px-5 pb-5 pt-5",
           )}
         >
         <button
@@ -220,10 +221,10 @@ function ResourcePickerOptions({
           className={cn(imageCellClass, !isSheet && "col-span-1")}
         >
           <div className={imageThumbClass(selectedName === "")}>
-            <div className="absolute inset-0 z-0 bg-surface-disabled/30">
+            <div className="absolute inset-0 z-0 bg-disabled/30">
               <div className="absolute inset-0" aria-hidden>
                 <svg
-                  className="absolute inset-0 h-full w-full text-border-20/20"
+                  className="absolute inset-0 h-full w-full text-border/20"
                   viewBox="0 0 100 100"
                   preserveAspectRatio="none"
                   aria-hidden
@@ -236,7 +237,7 @@ function ResourcePickerOptions({
               <ThumbnailFrameOverlay isActive={selectedName === ""} />
             )}
           </div>
-          <span className={cn(imageLabelClass, "text-on-surface-10")}>선택 안 함</span>
+          <span className={cn(imageLabelClass, "text-foreground")}>선택 안 함</span>
         </button>
         {items.map((item, idx) => (
           <button
@@ -262,7 +263,7 @@ function ResourcePickerOptions({
                   <div className={THUMBNAIL_DIM_OVERLAY_CLASS} aria-hidden />
                 </>
               ) : (
-                <div className="relative z-0 flex h-full w-full items-center justify-center text-caption1_400 text-on-surface-30">
+                <div className="relative z-0 flex h-full w-full items-center justify-center text-caption1_400 text-foreground-placeholder">
                   —
                 </div>
               )}
@@ -273,7 +274,7 @@ function ResourcePickerOptions({
             <span
               className={cn(
                 imageLabelClass,
-                selectedName === item.name ? "text-primary" : "text-on-surface-10",
+                selectedName === item.name ? "text-primary" : "text-foreground",
               )}
             >
               {item.name}
@@ -296,7 +297,7 @@ function ResourcePickerOptions({
     <>
         <MenuList
       className={cn(
-        isSheet ? "w-full px-my-8 pb-my-16 pt-my-8" : "gap-my-2 px-my-8 pb-my-8 pt-0",
+        isSheet ? "w-full px-2 pb-4 pt-2" : "gap-0.5 px-2 pb-2 pt-0",
       )}
     >
           {!isSceneTransition && (
@@ -308,7 +309,7 @@ function ResourcePickerOptions({
               }}
               onKeyDown={(e) => onOptionKeyDown(0, e)}
             >
-              <span className="flex h-8 w-8 shrink-0 items-center justify-center rounded bg-surface-20 text-on-surface-disabled/60">
+              <span className="flex h-8 w-8 shrink-0 items-center justify-center rounded bg-muted text-foreground-disabled/60">
                 —
               </span>
               <span className="truncate">선택 안 함</span>
@@ -325,7 +326,7 @@ function ResourcePickerOptions({
               onKeyDown={(e) => onOptionKeyDown(idx + (isSceneTransition ? 0 : 1), e)}
             >
               {!isSceneTransition && (
-                <span className="flex h-8 w-8 shrink-0 items-center justify-center rounded bg-surface-20 text-on-surface-30">
+                <span className="flex h-8 w-8 shrink-0 items-center justify-center rounded bg-muted text-foreground-placeholder">
                   ♪
                 </span>
               )}
@@ -369,17 +370,17 @@ function ResourcePickerHeader({
   onClose: () => void;
 }) {
   return (
-    <div className="flex w-full shrink-0 items-center justify-between border-b border-border-10 px-my-12 py-my-12 lg:px-my-20 lg:py-my-8">
-      <div className="text-body1_700 text-on-surface-10">{title}</div>
-      <button
-        type="button"
+    <div className="flex w-full shrink-0 items-center justify-between border-b border-border px-3 py-3 lg:px-5 lg:py-2">
+      <div className="text-body1_700 text-foreground">{title}</div>
+      <Button
+        variant="ghost"
+        size="icon-sm"
         aria-label="닫기"
         onClick={onClose}
-        className="flex h-8 w-8 cursor-pointer items-center justify-center rounded-full text-on-surface-30 transition-colors hover:bg-surface-20/60 hover:text-on-surface-10 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-inset focus-visible:ring-primary"
-        style={{ marginRight: -8 }}
+        className="rounded-full text-foreground-placeholder -mr-2"
       >
-        <X className="h-5 w-5" aria-hidden />
-      </button>
+        <ICONS.close className="h-5 w-5" aria-hidden />
+      </Button>
     </div>
   );
 }
@@ -543,7 +544,7 @@ export function ResourcePicker({
             <div
               className={cn(
                 MOBILE_BOTTOM_SHEET_SHELL_BASE_CLASS,
-                "bg-surface-10",
+                "bg-background",
                 mobileBottomSheetMediumMaxHeightClassName,
               )}
               role="dialog"
@@ -574,7 +575,7 @@ export function ResourcePicker({
       <PopoverAnchor asChild>{children}</PopoverAnchor>
       <PopoverContent
         align="start"
-        className="flex max-h-[480px] min-h-0 w-fit flex-col overflow-hidden rounded-[4px] border border-[rgba(0,0,0,0.07)] bg-surface-10 p-0 outline outline-1 outline-offset-[-1px] outline-border-20/10"
+        className="flex max-h-[480px] min-h-0 w-fit flex-col overflow-hidden rounded-sm border border-border/10 bg-background p-0 outline outline-1 outline-offset-[-1px] outline-border/10"
         onCloseAutoFocus={(e) => e.preventDefault()}
         onOpenAutoFocus={(e) => {
           e.preventDefault();

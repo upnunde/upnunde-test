@@ -15,7 +15,8 @@
     "n8n:down": "docker compose --env-file n8n/.env -f n8n/docker-compose.yml down",
     "n8n:logs": "docker compose --env-file n8n/.env -f n8n/docker-compose.yml logs -f",
     "n8n:restart": "npm run n8n:down && npm run n8n:up",
-    "pm:req": "node scripts/pm-request.mjs"
+    "pm:req": "node scripts/pm-request.mjs",
+    "worklog:snapshot": "sh scripts/snapshot-worklog.sh"
   },
   "dependencies": {
     "@dnd-kit/core": "^6.3.1",

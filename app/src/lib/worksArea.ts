@@ -9,26 +9,26 @@ export const WORKS_GRID_CELL_MAX_WIDTH_CLASS =
 
 /** 내 작품 목록 카드(시리즈·캐릭터·상황공략) 공통 셸 — max-lg: 모바일 카드 · lg+: 가로형 카드 */
 export const WORKS_ITEM_CARD_CLASS =
-  "flex h-full min-w-0 w-full flex-col gap-my-12 lg:flex-row lg:gap-my-20 max-lg:rounded-[8px] max-lg:border-0 max-lg:shadow-elevation-30 lg:rounded-[4px] lg:border lg:border-border-10 lg:shadow-none bg-white py-my-20 px-my-20";
+  "flex h-full min-w-0 w-full flex-col gap-3 lg:flex-row lg:gap-5 max-lg:rounded-md max-lg:border-0 max-lg:shadow-elevation-30 lg:rounded-sm lg:border lg:border-border lg:shadow-none bg-card py-5 px-5";
 
 /** max-lg: 썸네일+정보 가로 한 줄 · lg+: contents로 썸네일·우측열 분리 */
 export const WORKS_ITEM_CARD_INNER_CLASS =
-  "flex min-w-0 w-full flex-row gap-my-12 lg:contents lg:gap-my-20";
+  "flex min-w-0 w-full flex-row gap-3 lg:contents lg:gap-5";
 
 export const WORKS_ITEM_THUMBNAIL_CLASS =
-  "relative aspect-[9/16] w-[calc(7rem*0.8)] lg:w-28 shrink-0 overflow-hidden rounded bg-slate-200";
+  "relative aspect-[9/16] w-[calc(7rem*0.8)] lg:w-28 shrink-0 overflow-hidden rounded bg-muted";
 
 /** 내 작품 카드 — 상태 뱃지·제목: 모바일 세로 · lg+ 가로 */
 export const WORKS_ITEM_TITLE_GROUP_CLASS =
-  "flex min-w-0 flex-1 flex-col items-start gap-my-8 lg:flex-row lg:items-center";
+  "flex min-w-0 flex-1 flex-col items-start gap-2 lg:flex-row lg:items-center";
 
 /** 내 작품 카드 메타(날짜·조회수 등) — max-lg: 상단 20px · lg+: mt-0 */
 export const WORKS_ITEM_META_ROW_CLASS =
-  "mt-my-20 flex w-full text-body4_400 text-on-surface-20 lg:mb-5 lg:mt-0 [&_svg]:shrink-0 [&_svg]:text-on-surface-20";
+  "mt-5 flex w-full text-body4_400 text-foreground-muted lg:mb-5 lg:mt-0 [&_svg]:shrink-0 [&_svg]:text-foreground-muted";
 
-/** 내 작품 목록 그리드 — 모바일 1열 · md+(태블릿)~데스크톱 2열(max 1200px) */
+/** 내 작품 목록 그리드 — 모바일 1열 · lg+ 2열(max 1200px) */
 export const WORKS_LIST_GRID_CLASS =
-  "mx-auto grid w-full min-w-0 max-w-[1200px] grid-cols-1 items-stretch gap-my-12 md:grid-cols-2 md:gap-my-16";
+  "mx-auto grid w-full min-w-0 max-w-[1200px] grid-cols-1 items-stretch gap-3 lg:grid-cols-2 lg:gap-4";
 
 /** 목록 그리드 내 생성 CTA 슬롯 — 같은 행의 카드 높이에 맞춤 */
 export const WORKS_LIST_CREATE_SLOT_CLASS = "flex h-full min-w-0 flex-col";

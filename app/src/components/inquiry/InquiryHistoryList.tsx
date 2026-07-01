@@ -3,7 +3,7 @@
 import React, { useState } from "react";
 import { InquiryHistoryItem } from "./InquiryHistoryItem";
 import type { InquiryHistoryItem as InquiryHistoryItemType } from "@/types/inquiry";
-import { cn } from "@/lib/utils";
+import { cn } from "design-system/utils";
 
 export interface InquiryHistoryListProps {
   items: InquiryHistoryItemType[];
@@ -17,9 +17,9 @@ export function InquiryHistoryList({ items, className }: InquiryHistoryListProps
   if (items.length === 0) {
     return (
       <div className={cn("flex h-fit w-full shrink-0 flex-col", className)}>
-        <div className="flex flex-col items-center justify-center py-my-64 text-center">
-          <p className="text-body3_400 text-on-surface-30">등록된 문의내역이 없습니다.</p>
-          <p className="mt-1 text-caption1_400 text-on-surface-30">문의 탭에서 새 문의를 등록해 주세요.</p>
+        <div className="flex flex-col items-center justify-center py-16 text-center">
+          <p className="text-body3_400 text-foreground-placeholder">등록된 문의내역이 없습니다.</p>
+          <p className="mt-1 text-caption1_400 text-foreground-placeholder">문의 탭에서 새 문의를 등록해 주세요.</p>
         </div>
       </div>
     );
@@ -32,7 +32,7 @@ export function InquiryHistoryList({ items, className }: InquiryHistoryListProps
           <React.Fragment key={item.id}>
             {index > 0 ? (
               <li aria-hidden className="list-none">
-                <div className="my-0 h-px w-full bg-surface-20" role="separator" />
+                <div className="my-0 h-px w-full bg-muted" role="separator" />
               </li>
             ) : null}
             <li>

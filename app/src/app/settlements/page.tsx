@@ -3,7 +3,7 @@
 import React, { useCallback, useMemo, useState } from "react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
-import { AlertCircle, CalendarDays, ChevronDown, Download, FileText } from "lucide-react";
+import { ICONS } from "@/lib/icons";
 import { AppShell } from "@/components/layout/AppShell";
 import {
   PAGE_CONTAINER_CLASS,
@@ -14,10 +14,13 @@ import {
   PAGE_STACK_CLASS,
   PAGE_SUBHEADER_WITH_STICKY_CLASS,
 } from "@/lib/page-layout";
+import { Alert, AlertDescription } from "@/components/ui/alert";
 import { Button } from "@/components/ui/button";
-import { FilterChip } from "@/components/ui/chip";
+import { Input } from "@/components/ui/input";
+import { Badge, badgeVariants } from "@/components/ui/badge";
+import { IconButton } from "@/components/ui/icon-button";
+import type { VariantProps } from "class-variance-authority";
 import { CHIP_COMPANION_CONTROL_CLASS, CHIP_GROUP_GAP_CLASS } from "@/lib/chip-styles";
-import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from "@/components/ui/dropdown-menu";
 import { Dialog, DialogContent, DialogTitle } from "@/components/ui/dialog";
 import {
   ModalFooterButtons,
@@ -25,10 +28,10 @@ import {
   modalDialogContentClassName,
 } from "@/components/ui/modal";
 import { AnalyticsPanel } from "@/components/analytics/AnalyticsPanel";
-import { analyticsOutlineChipClassName } from "@/components/analytics/analytics-filter-chips";
 import { Title2 } from "@/components/ui/title2";
+import { SegmentedTextTabs } from "@/components/ui/segmented-text-tabs";
 import { Pagination } from "@/components/episode/Pagination";
-import { cn } from "@/lib/utils";
+import { cn } from "design-system/utils";
 
 type SettlementStatus = "completed" | "reviewing" | "waiting" | "rejected";
 
@@ -173,15 +176,51 @@ const SETTLEMENT_ITEMS: SettlementItem[] = baseSettlementItems.map((item) => ({
   rejectionReason: null,
 }));
 
-function statusBadgeClassName(status: SettlementStatus): string {
-  if (status === "completed") return "bg-primary-primary-container text-primary-on-primary-container";
-  if (status === "reviewing") return "bg-surface-20 text-on-surface-20";
-  if (status === "waiting") return "bg-warning-warning/15 text-warning-on-warning";
-  return "bg-error-error/15 text-error-error";
+function settlementStatusBadgeVariant(
+  status: SettlementStatus,
+): NonNullable<VariantProps<typeof badgeVariants>["variant"]> {
+  if (status === "completed") return "default";
+  if (status === "reviewing") return "secondary";
+  if (status === "waiting") return "outline";
+  return "destructive";
 }
 
-/** 정산 표 상태 뱃지 — 행 본문(15px)과 별도 · caption 12px / sm+ body4 13px */
-const SETTLEMENT_STATUS_BADGE_TYPO_CLASS = "text-caption1_400 sm:text-body4_400";
+function SettlementStatusBadge({
+  status,
+  rejectionReason,
+  onRejectionReason,
+}: {
+  status: SettlementStatus;
+  rejectionReason?: string | null;
+  onRejectionReason?: () => void;
+}) {
+  const label = getSettlementStatusLabel(status);
+  const variant = settlementStatusBadgeVariant(status);
+
+  if (status === "rejected" && rejectionReason && onRejectionReason) {
+    return (
+      <Badge
+        variant="destructive"
+        shape="circle"
+        size="md"
+        render={<button type="button" />}
+        className="max-w-full"
+        title={`반려 사유: ${rejectionReason}`}
+        aria-label={`반려 사유 확인: ${rejectionReason}`}
+        onClick={onRejectionReason}
+      >
+        <span className="truncate">{label}</span>
+        <ICONS.alertCircle className="size-3.5 shrink-0" aria-hidden />
+      </Badge>
+    );
+  }
+
+  return (
+    <Badge variant={variant} shape="circle" size="md" className="max-w-full">
+      <span className="truncate">{label}</span>
+    </Badge>
+  );
+}
 
 function SettlementSummaryCard({
   title,
@@ -191,11 +230,11 @@ function SettlementSummaryCard({
   amount: number;
 }) {
   return (
-    <div className="flex h-[80px] w-full min-w-0 flex-col justify-center gap-my-4 rounded-[4px] border border-border-10 bg-surface-10 px-my-20 max-lg:py-0 lg:min-h-0 lg:h-auto lg:flex-1 lg:flex-row lg:items-center lg:justify-between lg:gap-my-16 lg:py-my-20">
-      <p className="min-w-0 text-body3_400 text-on-surface-20 lg:shrink">{title}</p>
-      <div className="inline-flex min-w-0 flex-wrap items-baseline gap-x-my-4 gap-y-0 tabular-nums">
-        <p className="text-heading4_700 text-on-surface-10 lg:text-2xl">{formatAmount(amount)}</p>
-        <p className="text-heading4_700 text-on-surface-10 lg:text-2xl">원</p>
+    <div className="flex h-[80px] w-full min-w-0 flex-col justify-center gap-1 rounded-sm border border-border bg-background px-5 max-lg:py-0 lg:min-h-0 lg:h-auto lg:flex-1 lg:flex-row lg:items-center lg:justify-between lg:gap-4 lg:py-5">
+      <p className="min-w-0 text-body3_400 text-foreground-muted lg:shrink">{title}</p>
+      <div className="inline-flex min-w-0 flex-wrap items-baseline gap-x-1 gap-y-0 tabular-nums">
+        <p className="text-heading4_700 text-foreground lg:text-heading2_700">{formatAmount(amount)}</p>
+        <p className="text-heading4_700 text-foreground lg:text-heading2_700">원</p>
       </div>
     </div>
   );
@@ -217,63 +256,41 @@ function SettlementRowDesktop({
   onRejectionReason: () => void;
 }) {
   return (
-    <div className={cn(SETTLEMENT_TABLE_GRID_CLASS, "min-h-16 items-center px-my-20 py-my-8 sm:min-h-20")}>
+    <div className={cn(SETTLEMENT_TABLE_GRID_CLASS, "min-h-16 items-center px-5 py-2 sm:min-h-20")}>
       <div className="flex min-w-0 items-center">
-        {item.status === "rejected" && item.rejectionReason ? (
-          <button
-            type="button"
-            className={cn(
-              "inline-flex max-w-full items-center gap-my-4 truncate rounded-[4px] px-my-8 py-my-4 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-error-error/40",
-              SETTLEMENT_STATUS_BADGE_TYPO_CLASS,
-              statusBadgeClassName(item.status),
-            )}
-            title={`반려 사유: ${item.rejectionReason}`}
-            aria-label={`반려 사유 확인: ${item.rejectionReason}`}
-            onClick={onRejectionReason}
-          >
-            <span className="truncate">{getSettlementStatusLabel(item.status)}</span>
-            <AlertCircle className="h-3.5 w-3.5 shrink-0" aria-hidden />
-          </button>
-        ) : (
-          <span
-            className={cn(
-              "inline-flex max-w-full items-center justify-center truncate rounded-[4px] px-my-8 py-my-4",
-              SETTLEMENT_STATUS_BADGE_TYPO_CLASS,
-              statusBadgeClassName(item.status),
-            )}
-          >
-            <span className="truncate">{getSettlementStatusLabel(item.status)}</span>
-          </span>
-        )}
+        <SettlementStatusBadge
+          status={item.status}
+          rejectionReason={item.rejectionReason}
+          onRejectionReason={onRejectionReason}
+        />
       </div>
-      <div className="flex min-w-0 items-center gap-my-2 tabular-nums">
-        <p className="truncate text-body2_700 text-on-surface-10">{item.revenueAmount}</p>
-        <p className="shrink-0 text-body2_400 text-on-surface-20">원</p>
+      <div className="flex min-w-0 items-center gap-0.5 tabular-nums">
+        <p className="truncate text-body2_700 text-foreground">{item.revenueAmount}</p>
+        <p className="shrink-0 text-body2_400 text-foreground-muted">원</p>
       </div>
-      <div className="min-w-0 truncate text-body2_400 text-on-surface-20">{item.requestedAt}</div>
-      <div className="min-w-0 truncate text-body2_400 text-on-surface-20">{item.payoutDueAt}</div>
-      <div className="flex min-w-0 items-center gap-my-2 tabular-nums">
-        <p className="truncate text-body2_400 text-on-surface-20">{item.vatAmount}</p>
-        <p className="shrink-0 text-body2_400 text-on-surface-20">원</p>
+      <div className="min-w-0 truncate text-body2_400 text-foreground-muted">{item.requestedAt}</div>
+      <div className="min-w-0 truncate text-body2_400 text-foreground-muted">{item.payoutDueAt}</div>
+      <div className="flex min-w-0 items-center gap-0.5 tabular-nums">
+        <p className="truncate text-body2_400 text-foreground-muted">{item.vatAmount}</p>
+        <p className="shrink-0 text-body2_400 text-foreground-muted">원</p>
       </div>
-      <div className="flex min-w-0 items-center gap-my-2 tabular-nums">
-        <p className="truncate text-body2_400 text-on-surface-20">{item.settlementAmount}</p>
-        <p className="shrink-0 text-body2_400 text-on-surface-20">원</p>
+      <div className="flex min-w-0 items-center gap-0.5 tabular-nums">
+        <p className="truncate text-body2_400 text-foreground-muted">{item.settlementAmount}</p>
+        <p className="shrink-0 text-body2_400 text-foreground-muted">원</p>
       </div>
       <div className="flex min-w-0 items-center justify-end">
         {item.status === "completed" ? (
-          <Button
+          <IconButton
             type="button"
             variant="ghost"
-            size="icon-sm"
-            className="shrink-0 rounded-full text-on-surface-30 hover:bg-surface-20"
+            shape="circle"
+            size="icon"
+            icon={ICONS.fileText}
             onClick={onTaxDetail}
             aria-label="세금 계산 상세 보기"
-          >
-            <FileText className="h-4 w-4" aria-hidden />
-          </Button>
+          />
         ) : (
-          <span aria-hidden className="size-my-32" />
+          <span aria-hidden className="size-9" />
         )}
       </div>
     </div>
@@ -291,15 +308,15 @@ function SettlementMobileFieldRow({
 }) {
   const labelClassName =
     variant === "revenue"
-      ? "text-body1_700 text-on-surface-20"
-      : "text-body3_400 text-on-surface-20";
+      ? "text-body1_700 text-foreground-muted"
+      : "text-body3_400 text-foreground-muted";
   const valueClassName =
     variant === "revenue"
-      ? "text-body1_700 text-on-surface-10"
-      : "text-body3_500 text-on-surface-20";
+      ? "text-body1_700 text-foreground"
+      : "text-body3_500 text-foreground-muted";
 
   return (
-    <div className="flex items-center justify-between gap-my-12 self-stretch">
+    <div className="flex items-center justify-between gap-3 self-stretch">
       <span className={cn("shrink-0", labelClassName)}>{label}</span>
       <span className={cn("min-w-0 truncate text-right tabular-nums", valueClassName)}>{value}</span>
     </div>
@@ -316,49 +333,29 @@ function SettlementRowMobile({
   onRejectionReason: () => void;
 }) {
   return (
-    <div className="rounded-[8px] bg-white p-my-16 shadow-elevation-30">
-      <div className="flex items-start justify-between gap-my-12">
+    <div className="rounded-md bg-background p-4 shadow-elevation-30">
+      <div className="flex items-start justify-between gap-3">
         <div className="min-w-0 flex-1">
-          {item.status === "rejected" && item.rejectionReason ? (
-            <button
-              type="button"
-              className={cn(
-                "inline-flex max-w-full items-center gap-my-4 rounded-[4px] px-my-8 py-my-4 text-body4_400 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-error-error/40",
-                statusBadgeClassName(item.status),
-              )}
-              title={`반려 사유: ${item.rejectionReason}`}
-              aria-label={`반려 사유 확인: ${item.rejectionReason}`}
-              onClick={onRejectionReason}
-            >
-              <span className="truncate">{getSettlementStatusLabel(item.status)}</span>
-              <AlertCircle className="h-3.5 w-3.5 shrink-0" aria-hidden />
-            </button>
-          ) : (
-            <span
-              className={cn(
-                "inline-flex items-center rounded-[4px] px-my-8 py-my-4 text-body4_400",
-                statusBadgeClassName(item.status),
-              )}
-            >
-              {getSettlementStatusLabel(item.status)}
-            </span>
-          )}
+          <SettlementStatusBadge
+            status={item.status}
+            rejectionReason={item.rejectionReason}
+            onRejectionReason={onRejectionReason}
+          />
         </div>
         {item.status === "completed" ? (
-          <Button
+          <IconButton
             type="button"
             variant="ghost"
-            size="icon-sm"
-            className="shrink-0 rounded-full text-on-surface-30 hover:bg-surface-20"
+            shape="circle"
+            size="icon"
+            icon={ICONS.fileText}
             onClick={onTaxDetail}
             aria-label="세금 계산 상세 보기"
-          >
-            <FileText className="h-4 w-4" aria-hidden />
-          </Button>
+          />
         ) : null}
       </div>
 
-      <div className="mt-my-12 flex flex-col gap-my-8 self-stretch">
+      <div className="mt-3 flex flex-col gap-2 self-stretch">
         <SettlementMobileFieldRow
           label="수익금"
           value={`${item.revenueAmount}원`}
@@ -366,7 +363,7 @@ function SettlementRowMobile({
         />
         <SettlementMobileFieldRow label="부가세" value={`${item.vatAmount}원`} />
         <SettlementMobileFieldRow label="실지급액" value={`${item.settlementAmount}원`} />
-        <div className="my-my-8 h-px w-full bg-divider-10" aria-hidden />
+        <div className="my-2 h-px w-full bg-divider" aria-hidden />
         <SettlementMobileFieldRow
           label="신청일"
           value={formatSettlementMobileDate(item.requestedDate)}
@@ -399,14 +396,6 @@ export default function MonetizationSettlementsPage() {
     () => formatRangeLabel(startDate, endDate, true),
     [startDate, endDate],
   );
-  const rangePresetLabel = useMemo(() => {
-    if (rangePreset === "custom") return rangeLabel;
-    return RANGE_PRESET_OPTIONS.find((option) => option.value === rangePreset)?.label ?? "전체 기간";
-  }, [rangeLabel, rangePreset]);
-  const rangePresetLabelCompact = useMemo(() => {
-    if (rangePreset === "custom") return rangeLabelCompact;
-    return RANGE_PRESET_OPTIONS.find((option) => option.value === rangePreset)?.label ?? "전체 기간";
-  }, [rangeLabelCompact, rangePreset]);
 
   const applyPresetRange = useCallback((preset: RangePreset) => {
     const end = new Date(2026, 4, 29);
@@ -561,8 +550,8 @@ export default function MonetizationSettlementsPage() {
   return (
     <AppShell sidebarActiveId="settlements">
       <div className={PAGE_SUBHEADER_WITH_STICKY_CLASS}>
-          <div className={`${PAGE_CONTAINER_CLASS} flex items-center justify-start gap-my-16`}>
-            <h1 className="text-heading2_700 text-on-surface-10">정산</h1>
+          <div className={`${PAGE_CONTAINER_CLASS} flex items-center justify-start gap-4`}>
+            <h1 className="text-heading2_700 text-foreground">정산</h1>
           </div>
         </div>
 
@@ -580,44 +569,46 @@ export default function MonetizationSettlementsPage() {
                     variant="title"
                     asSectionHeader
                     sectionEnd={
-                      <Link
-                        href="/analytics?area=revenue"
-                        className={cn(analyticsOutlineChipClassName, "shrink-0")}
+                      <Button
+                        variant="outline"
+                        size="sm"
+                        render={<Link href="/analytics?area=revenue" />}
+                        nativeButton={false}
                       >
                         수익 분석
-                      </Link>
+                      </Button>
                     }
                   />
-                  <div className={cn("flex flex-col p-my-20", PAGE_GUTTER_GAP_CLASS)}>
-                    <div className="flex flex-col gap-my-12 rounded-[4px] bg-surface-20 p-my-20 sm:p-my-32 lg:flex-row lg:items-center lg:justify-between lg:gap-my-24 lg:p-my-40">
-                      <div className={cn("flex flex-col items-start justify-start mb-my-20", PAGE_GUTTER_GAP_CLASS)}>
-                        <p className="text-body3_700 text-on-surface-20">지금 출금 가능한 금액</p>
-                        <div className="flex flex-col items-start gap-my-8">
-                          <div className="inline-flex items-center gap-my-4">
-                            <p className="text-heading1_700 text-on-surface-10">
+                  <div className={cn("flex flex-col p-5", PAGE_GUTTER_GAP_CLASS)}>
+                    <div className="flex flex-col gap-3 rounded-sm bg-background-muted p-5 sm:p-8 lg:flex-row lg:items-center lg:justify-between lg:gap-6 lg:p-10">
+                      <div className={cn("flex flex-col items-start justify-start mb-5", PAGE_GUTTER_GAP_CLASS)}>
+                        <p className="text-body3_700 text-foreground-muted">지금 출금 가능한 금액</p>
+                        <div className="flex flex-col items-start gap-2">
+                          <div className="inline-flex items-center gap-1">
+                            <p className="text-heading1_700 text-foreground">
                               {formatAmount(SETTLEMENT_SUMMARY.availableAmount)}
                             </p>
-                            <p className="text-heading1_700 text-on-surface-10">원</p>
+                            <p className="text-heading1_700 text-foreground">원</p>
                           </div>
-                          <div className="flex flex-wrap items-center gap-my-12">
-                            <p className="text-body3_400 text-on-surface-20">
+                          <div className="flex flex-wrap items-center gap-3">
+                            <p className="text-body3_400 text-foreground-muted">
                               {SETTLEMENT_SUMMARY.bankAccountMasked}
                             </p>
-                            <div className="h-4 w-px bg-border-20" />
-                            <p className="text-body3_400 text-on-surface-20">
+                            <div className="h-4 w-px bg-border" />
+                            <p className="text-body3_400 text-foreground-muted">
                               {SETTLEMENT_SUMMARY.depositor}
                             </p>
                             <button
                               type="button"
                               onClick={() => router.push("/profile?tab=settlement")}
-                              className="inline-flex items-center gap-my-4 text-body3_500 text-on-surface-20 underline underline-offset-4 hover:text-on-surface-10 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary/40 rounded-sm"
+                              className="inline-flex items-center gap-1 text-body3_500 text-foreground-muted underline underline-offset-4 hover:text-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary/40 rounded-sm"
                             >
                               계좌 변경
                             </button>
                           </div>
                         </div>
                       </div>
-                      <Button type="button" className="h-[42px] min-w-24 rounded-md px-my-16 text-body1_400">
+                      <Button type="button" className="h-[42px] min-w-24 rounded-md px-4 text-body1_400">
                         출금 신청
                       </Button>
                     </div>
@@ -636,69 +627,29 @@ export default function MonetizationSettlementsPage() {
                 </AnalyticsPanel>
 
                 <AnalyticsPanel>
-                  <div className="px-my-20 py-my-16">
-                    <div className="flex flex-wrap items-center justify-between gap-my-12">
-                      <h3 className="text-heading5_700 text-on-surface-10">정산 내역</h3>
+                  <div className="px-5 py-4">
+                    <div className="flex flex-wrap items-center justify-between gap-3">
+                      <h3 className="text-heading5_700 text-foreground">정산 내역</h3>
                     </div>
-                    <div className="mt-3 flex flex-wrap items-center justify-between gap-my-16">
+                    <div className="mt-3 flex flex-wrap items-center justify-between gap-4">
                       <div
                         className={cn(
-                          "flex flex-wrap items-center",
+                          "flex min-w-0 flex-wrap items-center",
                           CHIP_GROUP_GAP_CLASS,
                         )}
                       >
-                        <DropdownMenu>
-                          <DropdownMenuTrigger asChild>
-                            <Button
-                              type="button"
-                              variant="outline"
-                              size="sm"
-                              className={cn(
-                                CHIP_COMPANION_CONTROL_CLASS,
-                                "min-w-0 justify-between lg:hidden",
-                              )}
-                              aria-label={`정산 내역 조회 기간 — ${rangePresetLabel}`}
-                            >
-                              <span className="truncate">{rangePresetLabelCompact}</span>
-                              <ChevronDown className="h-4 w-4 shrink-0 text-on-surface-30" aria-hidden />
-                            </Button>
-                          </DropdownMenuTrigger>
-                          <DropdownMenuContent
-                            align="start"
-                            className="w-[160px] rounded-[4px] border border-border-10 bg-white p-my-4"
-                          >
-                            {RANGE_PRESET_OPTIONS.map((option) => (
-                              <DropdownMenuItem
-                                key={option.value}
-                                className="cursor-pointer rounded-[4px] px-my-12 py-my-8 text-body3_400 text-on-surface-20 hover:bg-surface-20"
-                                onSelect={() => applyPresetRange(option.value)}
-                              >
-                                {option.label}
-                              </DropdownMenuItem>
-                            ))}
-                          </DropdownMenuContent>
-                        </DropdownMenu>
-                        <div
-                          className={cn("hidden flex-wrap items-center lg:flex", CHIP_GROUP_GAP_CLASS)}
-                          role="group"
+                        <SegmentedTextTabs
                           aria-label="정산 내역 조회 기간"
-                        >
-                          {RANGE_PRESET_OPTIONS.map(({ value, label }) => {
-                            const selected = rangePreset === value;
-                            return (
-                              <FilterChip
-                                key={value}
-                                selected={selected}
-                                chipSize="m"
-                                aria-pressed={selected}
-                                className="min-w-0"
-                                onClick={() => applyPresetRange(value)}
-                              >
-                                {label}
-                              </FilterChip>
-                            );
-                          })}
-                        </div>
+                          size="m"
+                          items={RANGE_PRESET_OPTIONS.map(({ value, label }) => ({
+                            id: value,
+                            label,
+                          }))}
+                          activeId={rangePreset === "custom" ? null : rangePreset}
+                          onSelect={(id) =>
+                            applyPresetRange(id as Exclude<RangePreset, "custom">)
+                          }
+                        />
                         <Button
                           type="button"
                           variant="outline"
@@ -711,7 +662,7 @@ export default function MonetizationSettlementsPage() {
                         >
                           <span className="truncate max-lg:inline lg:hidden">{rangeLabelCompact}</span>
                           <span className="hidden truncate lg:inline">{rangeLabel}</span>
-                          <CalendarDays className="h-4 w-4 shrink-0 text-on-surface-30" aria-hidden />
+                          <ICONS.calendarDays className="h-4 w-4 shrink-0 text-foreground-placeholder" aria-hidden />
                         </Button>
                       </div>
                       <Button
@@ -721,20 +672,20 @@ export default function MonetizationSettlementsPage() {
                         className="min-w-0 shrink"
                         onClick={handleDownloadCsv}
                       >
-                        <Download className="h-4 w-4 shrink-0" aria-hidden />
+                        <ICONS.download className="h-4 w-4 shrink-0" aria-hidden />
                         <span className="truncate">내역 저장</span>
                       </Button>
                     </div>
                   </div>
                   <div className="w-full min-w-0">
                     {pagedSettlementItems.length === 0 ? (
-                      <div className="px-my-20 py-my-40 text-center text-body3_400 text-on-surface-30">
+                      <div className="px-5 py-10 text-center text-body3_400 text-foreground-placeholder">
                         조건에 맞는 정산 내역이 없어요. 기간을 다시 선택해 주세요.
                       </div>
                     ) : (
                       <>
                         {/* xl 미만·사이드바 포함 폭에서는 표 대신 카드로 가로 스크롤 없이 표시 */}
-                        <div className="mb-my-20 flex flex-col gap-my-16 bg-surface-10 px-my-20 py-0 xl:hidden">
+                        <div className="mb-5 flex flex-col gap-4 bg-background px-5 py-0 xl:hidden">
                           {pagedSettlementItems.map((item) => (
                             <SettlementRowMobile
                               key={item.id}
@@ -749,16 +700,16 @@ export default function MonetizationSettlementsPage() {
                           <div
                             className={cn(
                               SETTLEMENT_TABLE_GRID_CLASS,
-                              "items-center border-b border-divider-10 bg-surface-10 px-my-20 py-my-12",
+                              "items-center border-b border-divider bg-background px-5 py-3",
                             )}
                           >
-                            <div className="min-w-0 truncate text-caption1_400 text-on-surface-30">상태</div>
-                            <div className="min-w-0 truncate text-caption1_400 text-on-surface-30">수익금</div>
-                            <div className="min-w-0 truncate text-caption1_400 text-on-surface-30">신청일</div>
-                            <div className="min-w-0 truncate text-caption1_400 text-on-surface-30">지급 예정일</div>
-                            <div className="min-w-0 truncate text-caption1_400 text-on-surface-30">부가세</div>
-                            <div className="min-w-0 truncate text-caption1_400 text-on-surface-30">실지급액</div>
-                            <div className="min-w-0 truncate text-right text-caption1_400 text-on-surface-30">세금 상세</div>
+                            <div className="min-w-0 truncate text-caption1_400 text-foreground-placeholder">상태</div>
+                            <div className="min-w-0 truncate text-caption1_400 text-foreground-placeholder">수익금</div>
+                            <div className="min-w-0 truncate text-caption1_400 text-foreground-placeholder">신청일</div>
+                            <div className="min-w-0 truncate text-caption1_400 text-foreground-placeholder">지급 예정일</div>
+                            <div className="min-w-0 truncate text-caption1_400 text-foreground-placeholder">부가세</div>
+                            <div className="min-w-0 truncate text-caption1_400 text-foreground-placeholder">실지급액</div>
+                            <div className="min-w-0 truncate text-right text-caption1_400 text-foreground-placeholder">세금 상세</div>
                           </div>
 
                           {pagedSettlementItems.map((item, idx) => (
@@ -769,8 +720,8 @@ export default function MonetizationSettlementsPage() {
                                 onRejectionReason={() => setRejectionReasonTarget(item)}
                               />
                               {idx < pagedSettlementItems.length - 1 ? (
-                                <div className="px-my-20">
-                                  <div className="h-px w-full bg-divider-10" />
+                                <div className="px-5">
+                                  <div className="h-px w-full bg-divider" />
                                 </div>
                               ) : null}
                             </React.Fragment>
@@ -784,76 +735,78 @@ export default function MonetizationSettlementsPage() {
                     totalItems={filteredSettlementItems.length}
                     pageSize={SETTLEMENT_PAGE_SIZE}
                     onPageChange={setCurrentPage}
-                    className="rounded-b-[4px] border-t border-divider-10"
+                    className="rounded-b-sm border-t border-divider"
                   />
                 </AnalyticsPanel>
               </div>
             </div>
       <Dialog open={!!taxDetailTarget} onOpenChange={(open) => !open && setTaxDetailTarget(null)}>
-        <DialogContent className="w-full max-lg:max-w-none lg:w-[560px] lg:max-w-[calc(100vw-2rem)] max-lg:rounded-t-[16px] max-lg:rounded-b-none lg:rounded-[4px] border border-border-10 bg-white p-0">
-          <div className="border-b border-divider-10 px-my-24 py-my-16">
-            <DialogTitle className="text-heading5_700 text-on-surface-10">
+        <DialogContent className="w-full max-lg:max-w-none lg:w-[560px] lg:max-w-[calc(100vw-2rem)] max-lg:rounded-t-xl max-lg:rounded-b-none lg:rounded-sm border border-border bg-background p-0">
+          <div className="border-b border-divider px-6 py-4">
+            <DialogTitle className="text-heading5_700 text-foreground">
               세금 계산 내역
             </DialogTitle>
-            <p className="mt-1 text-body3_400 text-on-surface-30">정산 계산과 증빙 준비 상태를 확인해 주세요.</p>
+            <p className="mt-1 text-body3_400 text-foreground-placeholder">정산 계산과 증빙 준비 상태를 확인해 주세요.</p>
           </div>
           {taxDetailTarget ? (
             <>
-              <div className="space-y-my-16 px-my-24 py-my-20 text-body3_400 text-on-surface-20">
-                <section className="rounded-[4px] border border-border-10 bg-white px-my-16 py-my-16">
-                  <div className="space-y-my-12">
-                    <div className="flex items-center justify-between gap-my-16">
-                      <p className="text-on-surface-30">과세 대상 금액</p>
-                      <p className="font-semibold text-on-surface-10">{taxDetailTarget.revenueAmount}원</p>
+              <div className="space-y-4 px-6 py-5 text-body3_400 text-foreground-muted">
+                <section className="rounded-sm border border-border bg-background px-4 py-4">
+                  <div className="space-y-3">
+                    <div className="flex items-center justify-between gap-4">
+                      <p className="text-foreground-placeholder">과세 대상 금액</p>
+                      <p className="font-semibold text-foreground">{taxDetailTarget.revenueAmount}원</p>
                     </div>
-                    <div className="flex items-center justify-between gap-my-16">
-                      <p className="text-on-surface-30">부가세 (10%)</p>
-                      <p className="font-semibold text-on-surface-10">{taxDetailTarget.vatAmount}원</p>
+                    <div className="flex items-center justify-between gap-4">
+                      <p className="text-foreground-placeholder">부가세 (10%)</p>
+                      <p className="font-semibold text-foreground">{taxDetailTarget.vatAmount}원</p>
                     </div>
-                    <div className="h-px bg-divider-10" />
-                    <div className="flex items-center justify-between gap-my-16">
-                      <p className="text-body3_700 text-on-surface-20">실지급액</p>
-                      <p className="text-heading5_700 text-on-surface-10">{taxDetailTarget.settlementAmount}원</p>
+                    <div className="h-px bg-divider" />
+                    <div className="flex items-center justify-between gap-4">
+                      <p className="text-body3_700 text-foreground-muted">실지급액</p>
+                      <p className="text-heading5_700 text-foreground">{taxDetailTarget.settlementAmount}원</p>
                     </div>
                   </div>
                 </section>
 
-                <section className="rounded-[4px] border border-border-10 bg-white px-my-16 py-my-16">
-                  <div className="space-y-my-12">
-                    <div className="flex items-center justify-between gap-my-16">
-                      <p className="text-caption1_400 text-on-surface-30">세금계산서 번호</p>
-                      <p className="text-body3_500 text-on-surface-10">{taxDetailTarget.invoiceNumber}</p>
+                <section className="rounded-sm border border-border bg-background px-4 py-4">
+                  <div className="space-y-3">
+                    <div className="flex items-center justify-between gap-4">
+                      <p className="text-caption1_400 text-foreground-placeholder">세금계산서 번호</p>
+                      <p className="text-body3_500 text-foreground">{taxDetailTarget.invoiceNumber}</p>
                     </div>
-                    <div className="flex items-center justify-between gap-my-16">
-                      <p className="text-caption1_400 text-on-surface-30">발행일</p>
-                      <p className="text-body3_500 text-on-surface-10">{taxDetailTarget.invoiceIssuedAt}</p>
+                    <div className="flex items-center justify-between gap-4">
+                      <p className="text-caption1_400 text-foreground-placeholder">발행일</p>
+                      <p className="text-body3_500 text-foreground">{taxDetailTarget.invoiceIssuedAt}</p>
                     </div>
-                    <div className="flex items-center justify-between gap-my-16">
-                      <p className="text-caption1_400 text-on-surface-30">공급자 등록번호</p>
-                      <p className="text-body3_500 text-on-surface-10">{taxDetailTarget.supplierBizNumber}</p>
+                    <div className="flex items-center justify-between gap-4">
+                      <p className="text-caption1_400 text-foreground-placeholder">공급자 등록번호</p>
+                      <p className="text-body3_500 text-foreground">{taxDetailTarget.supplierBizNumber}</p>
                     </div>
-                    <div className="flex items-center justify-between gap-my-16">
-                      <p className="text-caption1_400 text-on-surface-30">공급받는자 등록번호</p>
-                      <p className="text-body3_500 text-on-surface-10">{taxDetailTarget.buyerBizNumber}</p>
+                    <div className="flex items-center justify-between gap-4">
+                      <p className="text-caption1_400 text-foreground-placeholder">공급받는자 등록번호</p>
+                      <p className="text-body3_500 text-foreground">{taxDetailTarget.buyerBizNumber}</p>
                     </div>
                   </div>
                 </section>
 
                 {!getTaxInvoiceCompleteness(taxDetailTarget) ? (
-                  <div className="rounded-[4px] border border-error-error/30 bg-error-error/10 px-my-12 py-my-8 text-caption1_400 text-error-error">
-                    필수 증빙 항목이 일부 누락되었거나 검증이 완료되지 않았어요. 발행 정보와 검증 상태를 확인해 주세요.
-                  </div>
+                  <Alert variant="destructive" className="border-destructive/30 bg-destructive/10 px-3 py-2 rounded-sm">
+                    <AlertDescription className="text-caption1_400 text-destructive">
+                      필수 증빙 항목이 일부 누락되었거나 검증이 완료되지 않았어요. 발행 정보와 검증 상태를 확인해 주세요.
+                    </AlertDescription>
+                  </Alert>
                 ) : null}
               </div>
-              <div className="flex items-center justify-end gap-my-8 border-t border-divider-10 px-my-24 py-my-16">
+              <div className="flex items-center justify-end gap-2 border-t border-divider px-6 py-4">
                 <Button
                   type="button"
                   variant="outline"
                   size="sm"
-                  className="h-8 border-border-10 bg-white hover:bg-surface-20"
+                  className="h-8 border-border bg-background hover:bg-muted"
                   onClick={() => handleDownloadSingleSettlementCsv(taxDetailTarget)}
                 >
-                  <Download className="h-4 w-4" aria-hidden />
+                  <ICONS.download className="h-4 w-4" aria-hidden />
                   이 내역 다운로드
                 </Button>
                 <Button
@@ -874,9 +827,9 @@ export default function MonetizationSettlementsPage() {
           <ModalHeader title="반려 사유" />
           {rejectionReasonTarget ? (
             <>
-              <div className="px-my-24 pb-my-16">
-                <p className="text-body3_400 text-on-surface-20">{rejectionReasonTarget.rejectionReason}</p>
-                <p className="mt-2 text-caption1_400 text-on-surface-30">
+              <div className="px-6 pb-4">
+                <p className="text-body3_400 text-foreground-muted">{rejectionReasonTarget.rejectionReason}</p>
+                <p className="mt-2 text-caption1_400 text-foreground-placeholder">
                   신청일 {rejectionReasonTarget.requestedAt} · 상태 {getSettlementStatusLabel(rejectionReasonTarget.status)}
                 </p>
               </div>
@@ -895,29 +848,31 @@ export default function MonetizationSettlementsPage() {
         </DialogContent>
       </Dialog>
       <Dialog open={datePickerOpen} onOpenChange={setDatePickerOpen}>
-        <DialogContent className="w-full max-lg:max-w-none lg:w-[420px] lg:max-w-[calc(100vw-2rem)] max-lg:rounded-t-[16px] max-lg:rounded-b-none lg:rounded-[4px] border border-border-10 bg-white p-0">
-          <div className="border-b border-divider-10 px-my-20 py-my-12">
-            <DialogTitle className="text-body1_700 text-on-surface-10">기간 선택</DialogTitle>
-            <p className="mt-1 text-body3_400 text-on-surface-30">조회할 신청일 기간을 설정해 주세요.</p>
+        <DialogContent className="w-full max-lg:max-w-none lg:w-[420px] lg:max-w-[calc(100vw-2rem)] max-lg:rounded-t-xl max-lg:rounded-b-none lg:rounded-sm border border-border bg-background p-0">
+          <div className="border-b border-divider px-5 py-3">
+            <DialogTitle className="text-body1_700 text-foreground">기간 선택</DialogTitle>
+            <p className="mt-1 text-body3_400 text-foreground-placeholder">조회할 신청일 기간을 설정해 주세요.</p>
           </div>
-          <div className="px-my-20 py-my-16">
-            <div className="flex items-center gap-my-8">
-              <input
+          <div className="px-5 py-4">
+            <div className="flex items-center gap-2">
+              <Input
                 type="date"
+                size="sm"
                 value={pendingStartDate}
                 onChange={(e) => setPendingStartDate(e.target.value)}
-                className="h-8 flex-1 rounded-md border border-border-10 px-my-12 text-body3_400"
+                className="flex-1"
               />
-              <span className="text-body3_400 text-on-surface-30">~</span>
-              <input
+              <span className="text-body3_400 text-foreground-placeholder">~</span>
+              <Input
                 type="date"
+                size="sm"
                 value={pendingEndDate}
                 onChange={(e) => setPendingEndDate(e.target.value)}
-                className="h-8 flex-1 rounded-md border border-border-10 px-my-12 text-body3_400"
+                className="flex-1"
               />
             </div>
           </div>
-          <div className="flex items-center justify-end gap-my-8 border-t border-divider-10 px-my-20 py-my-12">
+          <div className="flex items-center justify-end gap-2 border-t border-divider px-5 py-3">
             <Button
               type="button"
               variant="outline"

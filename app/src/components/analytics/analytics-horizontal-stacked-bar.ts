@@ -26,4 +26,4 @@ export const ANALYTICS_HORIZONTAL_STACK_BAR_AXES: NonNullable<IBarChartSpec["axe
 
 /** 캔버스를 트랙 높이에 맞춤 — 좌우 20px 마진(w-full과 동시에 붙이면 레이아웃 깨지므로 calc 사용) */
 export const analyticsHorizontalStackBarTrackClassName =
-  "mx-[20px] min-h-0 w-[calc(100%-40px)] shrink-0 overflow-hidden rounded-full bg-surface-disabled-10 p-0 leading-none [&_canvas]:block";
+  "mx-[20px] min-h-0 w-[calc(100%-40px)] shrink-0 overflow-hidden rounded-full bg-disabled p-0 leading-none [&_canvas]:block";

@@ -1,7 +1,7 @@
 "use client";
 
 import React from "react";
-import { cn } from "@/lib/utils";
+import { cn } from "design-system/utils";
 
 /**
  * 타이틀1 UI 패턴 (피그마 스펙)
@@ -61,13 +61,13 @@ export function Title1({
 
   const displayText = showDot && text.endsWith("*") ? text.slice(0, -1).trimEnd() : text;
   const titleRow = (
-    <div className="inline-flex justify-start items-start gap-my-2">
-      <div className="justify-center text-on-surface-10 text-body2_700 font-['Pretendard_JP']">
+    <div className="inline-flex justify-start items-start gap-0.5">
+      <div className="justify-center text-foreground text-body2_700 font-['Pretendard_JP']">
         {displayText}
       </div>
       {showDot && (
         <div
-          className="w-1 h-1 rounded-full bg-error-error shrink-0 mt-0.5 mb-0.5 ml-0.5"
+          className="w-1 h-1 rounded-full bg-destructive shrink-0 mt-0.5 mb-0.5 ml-0.5"
           aria-hidden
           role="img"
           aria-label="필수"
@@ -78,10 +78,10 @@ export function Title1({
 
   return (
     <div className={cn("relative rounded-[5px] overflow-hidden min-w-0", className)}>
-      <div className="inline-flex flex-col justify-start items-start gap-my-4">
+      <div className="inline-flex flex-col justify-start items-start gap-1">
         {titleRow}
         {subtitle && (
-          <div className="justify-center text-on-surface-30 text-body4_400 font-['Pretendard_JP']">
+          <div className="justify-center text-foreground-placeholder text-body4_400 font-['Pretendard_JP']">
             {subtitleText}
           </div>
         )}

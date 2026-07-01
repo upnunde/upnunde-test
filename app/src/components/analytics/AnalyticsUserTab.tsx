@@ -2,19 +2,18 @@
 
 import { useMemo, useState } from "react";
 import dynamic from "next/dynamic";
-import {
-  DropdownMenu,
-  DropdownMenuContent,
-  DropdownMenuRadioGroup,
-  DropdownMenuRadioItem,
-  DropdownMenuTrigger,
-} from "@/components/ui/dropdown-menu";
 import { Title2 } from "@/components/ui/title2";
 import { SegmentedTextTabs } from "@/components/ui/segmented-text-tabs";
 import { AnalyticsPanel } from "@/components/analytics/AnalyticsPanel";
 import { AnalyticsViewerHourlyActivityChart } from "@/components/analytics/AnalyticsViewerHourlyActivityChart";
+import {
+  ANALYTICS_KEY_STAT_BUTTON_INTERACTION_CLASS,
+  analyticsKeyStatButtonStateClass,
+  analyticsKeyStatLabelClass,
+  analyticsKeyStatValueClass,
+} from "@/components/analytics/analytics-key-stats-layout";
 import { PAGE_FLUSH_CONTENT_PAD_X_CLASS } from "@/lib/page-layout";
-import { cn } from "@/lib/utils";
+import { cn } from "design-system/utils";
 import type { AnalyticsUserMetric } from "@/components/analytics/AnalyticsTrendLineChart";
 import { type AnalyticsPeriodRange } from "@/components/analytics/analytics-date";
 import { analyticsScopeFilterDividerClassName } from "@/components/analytics/analytics-filter-chips";
@@ -63,7 +62,7 @@ const AnalyticsDistributionStackedBarChart = dynamic(
   {
     ssr: false,
     loading: () => (
-      <div className="h-3 w-full animate-pulse rounded-full bg-primary-primary-container" aria-hidden />
+      <div className="h-3 w-full animate-pulse rounded-full bg-primary-container" aria-hidden />
     ),
   },
 );
@@ -76,7 +75,7 @@ const AnalyticsRevisitStackedBarChart = dynamic(
   {
     ssr: false,
     loading: () => (
-      <div className="h-4 w-full animate-pulse rounded-[999px] bg-primary-primary-container" aria-hidden />
+      <div className="h-4 w-full animate-pulse rounded-[999px] bg-primary-container" aria-hidden />
     ),
   },
 );
@@ -93,11 +92,11 @@ function getFollowerDummyProfileUrl(nick: string): string {
 function LegendRow({ dotClass, label, value }: { dotClass: string; label: string; value: string }) {
   return (
     <div className="inline-flex h-5 w-full items-center justify-between">
-      <div className="flex items-center gap-my-8">
+      <div className="flex items-center gap-2">
         <div className={cn("h-3 w-3 shrink-0 rounded-full", dotClass)} />
-        <span className="text-body3_500 text-on-surface-20">{label}</span>
+        <span className="text-body3_500 text-foreground-muted">{label}</span>
       </div>
-      <span className="text-body3_500 text-on-surface-20">{value}</span>
+      <span className="text-body3_500 text-foreground-muted">{value}</span>
     </div>
   );
 }
@@ -146,7 +145,7 @@ export function AnalyticsUserTab({
   }));
 
   return (
-    <div className="flex flex-col items-start justify-start gap-my-12 lg:gap-my-20 self-stretch px-0">
+    <div className="flex flex-col items-start justify-start gap-3 lg:gap-5 self-stretch px-0">
       <AnalyticsPanel>
         <Title2 text="주요통계" variant="title" asSectionHeader />
         <div className="inline-flex w-full flex-wrap items-stretch sm:flex-nowrap">
@@ -160,15 +159,16 @@ export function AnalyticsUserTab({
                 onClick={() => setUserMetric(stat.id)}
                 aria-pressed={selected}
                 className={cn(
-                  "flex min-w-[140px] flex-1 flex-col items-center gap-my-4 border-b border-border-10 py-my-40 text-left outline-none transition-colors",
+                  "flex min-w-[140px] flex-1 flex-col items-center gap-1 border-b border-border py-10 text-left",
                   PAGE_FLUSH_CONTENT_PAD_X_CLASS,
-                  i < arr.length - 1 && "border-r border-border-10",
-                  selected ? "bg-white" : "bg-surface-disabled-10 hover:bg-surface-10/80",
+                  ANALYTICS_KEY_STAT_BUTTON_INTERACTION_CLASS,
+                  i < arr.length - 1 && "border-r border-border",
+                  analyticsKeyStatButtonStateClass(selected),
                 )}
               >
-                <span className="text-center text-body3_500 text-on-surface-20">{label}</span>
-                <span className="text-center text-heading2_700 text-on-surface-10">{stat.value}</span>
-                <div className="inline-flex items-center justify-center gap-my-4">
+                <span className={analyticsKeyStatLabelClass(selected)}>{label}</span>
+                <span className={analyticsKeyStatValueClass(selected)}>{stat.value}</span>
+                <div className="inline-flex items-center justify-center gap-1">
                   <span className={cn("text-body3_400", deltaClassName(stat.deltaTone))}>
                     {stat.delta}
                   </span>
@@ -177,8 +177,8 @@ export function AnalyticsUserTab({
             );
           })}
         </div>
-        <div className="flex flex-col items-stretch gap-my-12 self-stretch px-0 py-my-40">
-          <p className={cn(PAGE_FLUSH_CONTENT_PAD_X_CLASS, "text-body3_500 text-on-surface-20")}>
+        <div className="flex flex-col items-stretch gap-3 self-stretch px-0 py-10">
+          <p className={cn(PAGE_FLUSH_CONTENT_PAD_X_CLASS, "text-body3_500 text-foreground-muted")}>
             {USER_PRIMARY_LABELS[userMetric] ?? "이용자 수"} 추이
           </p>
           <AnalyticsTrendLineChart
@@ -191,7 +191,7 @@ export function AnalyticsUserTab({
 
       <AnalyticsPanel>
         <Title2 text="이용자 재방문률" variant="title" asSectionHeader />
-        <div className={cn("mb-2 mt-2 inline-flex flex-col items-start justify-start gap-my-8 self-stretch pb-0 pt-0", PAGE_FLUSH_CONTENT_PAD_X_CLASS)}>
+        <div className={cn("mb-2 mt-2 inline-flex flex-col items-start justify-start gap-2 self-stretch pb-0 pt-0", PAGE_FLUSH_CONTENT_PAD_X_CLASS)}>
           <SegmentedTextTabs
             aria-label="재방문 횟수 구간"
             items={[
@@ -201,11 +201,11 @@ export function AnalyticsUserTab({
             ]}
             activeId={revisitSegment}
             onSelect={(id) => setRevisitSegment(id as RevisitSegmentId)}
-            variant="chip"
+            size="m"
             tabListClassName="self-stretch"
           />
         </div>
-        <div className="flex flex-col items-start justify-start gap-my-12 self-stretch rounded-lg pb-my-20 pt-my-12">
+        <div className="flex flex-col items-start justify-start gap-3 self-stretch rounded-lg pb-5 pt-3">
           <div
             className="flex h-4 w-full items-center"
             role="img"
@@ -218,28 +218,28 @@ export function AnalyticsUserTab({
             />
           </div>
           <div className={cn("inline-flex items-start justify-between self-stretch", PAGE_FLUSH_CONTENT_PAD_X_CLASS)}>
-            <div className="inline-flex flex-1 flex-col items-start justify-center gap-my-2">
-              <div className="text-justify text-heading4_700 text-on-surface-10">
+            <div className="inline-flex flex-1 flex-col items-start justify-center gap-0.5">
+              <div className="text-justify text-heading4_700 text-foreground">
                 {revisitRates.revisitPct.toFixed(1)}%
               </div>
-              <div className="text-justify text-body3_400 text-on-surface-20">다시 방문함</div>
+              <div className="text-justify text-body3_400 text-foreground-muted">다시 방문함</div>
             </div>
-            <div className="inline-flex flex-1 flex-col items-end justify-center gap-my-2">
-              <div className="text-justify text-heading4_700 text-on-surface-10">
+            <div className="inline-flex flex-1 flex-col items-end justify-center gap-0.5">
+              <div className="text-justify text-heading4_700 text-foreground">
                 {revisitRates.noRevisitPct.toFixed(1)}%
               </div>
-              <div className="text-justify text-body3_400 text-on-surface-20">재방문 안 함</div>
+              <div className="text-justify text-body3_400 text-foreground-muted">재방문 안 함</div>
             </div>
           </div>
         </div>
       </AnalyticsPanel>
 
-      <div className="inline-flex w-full flex-col items-stretch gap-my-12 lg:gap-my-20 lg:inline-flex lg:flex-row">
-        <div className="flex min-w-0 flex-1 flex-col gap-my-12 lg:gap-my-20">
+      <div className="inline-flex w-full flex-col items-stretch gap-3 lg:gap-5 lg:inline-flex lg:flex-row">
+        <div className="flex min-w-0 flex-1 flex-col gap-3 lg:gap-5">
           <AnalyticsPanel>
             <Title2 text="연령 및 성별" variant="title" asSectionHeader />
-            <div className={cn("flex flex-col gap-my-12 pt-my-12", PAGE_FLUSH_CONTENT_PAD_X_CLASS)}>
-              <div className="flex min-w-0 flex-nowrap items-center gap-my-16 overflow-x-auto overflow-y-hidden [scrollbar-width:none] [-ms-overflow-style:none] [&::-webkit-scrollbar]:hidden">
+            <div className={cn("flex flex-col gap-3 pt-3", PAGE_FLUSH_CONTENT_PAD_X_CLASS)}>
+              <div className="flex min-w-0 flex-nowrap items-center gap-4 overflow-x-auto overflow-y-hidden [scrollbar-width:none] [-ms-overflow-style:none] [&::-webkit-scrollbar]:hidden">
                 <SegmentedTextTabs
                   aria-label="연령 필터"
                   items={[
@@ -252,7 +252,7 @@ export function AnalyticsUserTab({
                   ]}
                   activeId={ageBand}
                   onSelect={setAgeBand}
-                  variant="chip"
+                  size="m"
                 />
                 <div
                   className={cn(analyticsScopeFilterDividerClassName, "self-center")}
@@ -269,7 +269,7 @@ export function AnalyticsUserTab({
                   ]}
                   activeId={genderBand}
                   onSelect={setGenderBand}
-                  variant="chip"
+                  size="m"
                 />
               </div>
             </div>
@@ -282,7 +282,7 @@ export function AnalyticsUserTab({
           </AnalyticsPanel>
         </div>
 
-        <div className="flex min-w-0 flex-1 flex-col gap-my-12 lg:gap-my-20">
+        <div className="flex min-w-0 flex-1 flex-col gap-3 lg:gap-5">
           <AudienceBreakdownPanel
             title="이용자 성별"
             audienceTab={audienceGender}
@@ -327,7 +327,7 @@ export function AnalyticsUserTab({
           />
           <AnalyticsPanel>
             <Title2 text="이용 시간대" variant="title" asSectionHeader />
-            <div className={cn(PAGE_FLUSH_CONTENT_PAD_X_CLASS, "pt-my-12")}>
+            <div className={cn(PAGE_FLUSH_CONTENT_PAD_X_CLASS, "pt-3")}>
               <SegmentedTextTabs
                 aria-label="이용 시간대 기준"
                 items={[
@@ -337,10 +337,10 @@ export function AnalyticsUserTab({
                 ]}
                 activeId={audienceTimeSegment}
                 onSelect={(id) => setAudienceTimeSegment(id as AudienceTabId)}
-                variant="chip"
+                size="m"
               />
             </div>
-            <div className="p-my-20">
+            <div className="p-5">
               <AnalyticsViewerHourlyActivityChart
                 hourlyWeights={timeOfDayHourlyForPeriod}
                 periodRange={periodRange}
@@ -351,10 +351,10 @@ export function AnalyticsUserTab({
 
           <AnalyticsPanel>
             <Title2 text="가장 적극 활동중인 팔로워" variant="title" asSectionHeader />
-            <div className="grid grid-cols-3 justify-items-center gap-x-my-12 gap-y-my-16 px-my-16 py-my-20 sm:grid-cols-4 lg:grid-cols-5 lg:gap-x-my-20 lg:gap-y-my-24 lg:p-my-20">
+            <div className="grid grid-cols-3 justify-items-center gap-x-3 gap-y-4 px-4 py-5 sm:grid-cols-4 lg:grid-cols-5 lg:gap-x-5 lg:gap-y-6 lg:p-5">
               {userDummy.activeFollowers.map(({ id, nick }) => (
-                <div key={id} className="flex w-full min-w-0 max-w-28 flex-col items-center justify-center gap-my-8">
-                  <div className="relative h-14 w-14 shrink-0 overflow-hidden rounded-full bg-zinc-100 sm:h-16 sm:w-16">
+                <div key={id} className="flex w-full min-w-0 max-w-28 flex-col items-center justify-center gap-2">
+                  <div className="relative h-14 w-14 shrink-0 overflow-hidden rounded-full bg-muted sm:h-16 sm:w-16">
                     <img
                       src={getFollowerDummyProfileUrl(nick)}
                       alt={`${nick} 프로필`}
@@ -362,7 +362,7 @@ export function AnalyticsUserTab({
                       loading="lazy"
                     />
                   </div>
-                  <span className="w-full truncate text-center text-caption1_400 text-on-surface-20 sm:text-body4_400">
+                  <span className="w-full truncate text-center text-caption1_400 text-foreground-muted sm:text-body4_400">
                     {nick}
                   </span>
                 </div>
@@ -393,7 +393,7 @@ function AudienceBreakdownPanel({
   return (
     <AnalyticsPanel>
       <Title2 text={title} variant="title" asSectionHeader />
-      <div className={cn(PAGE_FLUSH_CONTENT_PAD_X_CLASS, "pt-my-12")}>
+      <div className={cn(PAGE_FLUSH_CONTENT_PAD_X_CLASS, "pt-3")}>
         <SegmentedTextTabs
           aria-label={`${title} 기준`}
           items={[
@@ -403,12 +403,12 @@ function AudienceBreakdownPanel({
           ]}
           activeId={audienceTab}
           onSelect={(id) => onAudienceChange(id as AudienceTabId)}
-          variant="chip"
+          size="m"
         />
       </div>
-      <div className="flex flex-col gap-my-12 lg:gap-my-20 pb-my-20 pt-my-12">
+      <div className="flex flex-col gap-3 lg:gap-5 pb-5 pt-3">
         <AnalyticsDistributionStackedBarChart values={stackValues} />
-        <div className={cn("flex flex-col gap-my-8", PAGE_FLUSH_CONTENT_PAD_X_CLASS)}>
+        <div className={cn("flex flex-col gap-2", PAGE_FLUSH_CONTENT_PAD_X_CLASS)}>
           {legend.map((row, i) => (
             <LegendRow
               key={`${row.label}-${row.value}`}
@@ -442,7 +442,7 @@ function SimpleDistributionPanel({
     <AnalyticsPanel>
       <Title2 text={title} variant="title" asSectionHeader />
       {audienceTab != null && onAudienceChange != null ? (
-        <div className={cn(PAGE_FLUSH_CONTENT_PAD_X_CLASS, "pt-my-12")}>
+        <div className={cn(PAGE_FLUSH_CONTENT_PAD_X_CLASS, "pt-3")}>
           <SegmentedTextTabs
             aria-label={`${title} 기준`}
             items={[
@@ -452,13 +452,13 @@ function SimpleDistributionPanel({
             ]}
             activeId={audienceTab}
             onSelect={(id) => onAudienceChange(id as AudienceTabId)}
-            variant="chip"
+            size="m"
           />
         </div>
       ) : null}
-      <div className="flex flex-col gap-my-12 lg:gap-my-20 pb-my-20 pt-my-12">
+      <div className="flex flex-col gap-3 lg:gap-5 pb-5 pt-3">
         <AnalyticsDistributionStackedBarChart values={stackValues} />
-        <div className={cn("flex flex-col gap-my-8", PAGE_FLUSH_CONTENT_PAD_X_CLASS)}>
+        <div className={cn("flex flex-col gap-2", PAGE_FLUSH_CONTENT_PAD_X_CLASS)}>
           {legend.map((row, i) => (
             <LegendRow
               key={`${row.label}-${row.value}`}

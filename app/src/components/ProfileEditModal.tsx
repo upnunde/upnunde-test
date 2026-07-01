@@ -3,13 +3,15 @@
 import React, { useCallback, useEffect, useLayoutEffect, useRef, useState } from "react";
 import { createPortal } from "react-dom";
 import Image from "next/image";
-import { X } from "lucide-react";
+import { ICONS } from "@/lib/icons";
 import { useRouter } from "next/navigation";
 import { useIsLgUp } from "@/hooks/useMediaQuery";
 import { PAGE_GUTTER_X_CLASS } from "@/lib/page-layout";
 import { Button } from "@/components/ui/button";
+import { Input, InputGroup, InputHypertext } from "@/components/ui/input";
+import { Textarea } from "@/components/ui/textarea";
 import { formDialogSheetStickyFooterClassName, MOBILE_BOTTOM_SHEET_SCRIM_CLASS, MOBILE_BOTTOM_SHEET_SHELL_BASE_CLASS, mobileBottomSheetLargeMaxHeightClassName } from "@/components/ui/modal/modal-styles";
-import { cn } from "@/lib/utils";
+import { cn } from "design-system/utils";
 
 const MODAL_WIDTH = 384;
 const GAP_BELOW_ANCHOR = 8;
@@ -48,7 +50,7 @@ function ProfileEditFormFields({
 }) {
   return (
     <>
-      <div className="flex w-full shrink-0 items-center justify-center self-stretch pt-my-20 pb-my-20">
+      <div className="flex w-full shrink-0 items-center justify-center self-stretch pt-5 pb-5">
         <input
           ref={fileInputRef}
           type="file"
@@ -58,7 +60,7 @@ function ProfileEditFormFields({
           onChange={onAvatarFileChange}
         />
         <div className="relative h-24 w-24">
-          <div className="absolute inset-0 flex items-center justify-center overflow-hidden rounded-full border border-slate-200 bg-slate-100">
+          <div className="absolute inset-0 flex items-center justify-center overflow-hidden rounded-full border border-border bg-muted">
             {avatarPreview ? (
               <Image
                 src={avatarPreview}
@@ -69,68 +71,55 @@ function ProfileEditFormFields({
                 className="h-full w-full object-cover"
               />
             ) : (
-              <svg width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" className="text-on-surface-30"><path d="M19 21v-2a4 4 0 0 0-4-4H9a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
+              <ICONS.user className="size-10 text-foreground-placeholder" aria-hidden />
             )}
           </div>
           <button
             type="button"
             onClick={triggerAvatarFileSelect}
-            className="absolute bottom-0 right-0 flex h-8 w-8 cursor-pointer items-center justify-center overflow-hidden rounded-full border-2 border-white bg-[#2d2d2d] transition-colors hover:bg-black"
+            className="absolute bottom-0 right-0 flex h-8 w-8 cursor-pointer items-center justify-center overflow-hidden rounded-full border-2 border-inverse bg-inverse transition-colors hover:bg-inverse"
             aria-label="프로필 사진 변경"
           >
-            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="white" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M17 3a2.85 2.83 0 1 1 4 4L7.5 20.5 2 22l1.5-5.5Z"/><path d="m15 5 4 4"/></svg>
+            <ICONS.pencil className="size-4 text-inverse-foreground" aria-hidden />
           </button>
         </div>
       </div>
 
-      <div className="flex w-full flex-col gap-my-20">
-        <div className="flex flex-col gap-my-12">
-          <div className="text-body1_700 text-on-surface-10">아이디</div>
-          <div className="flex h-[42px] items-center overflow-hidden rounded-md border border-slate-200 bg-slate-100 px-my-16">
-            <input
+      <div className="flex w-full flex-col gap-5">
+        <div className="flex flex-col gap-3">
+          <div className="text-body1_700 text-foreground">아이디</div>
+          <InputGroup>
+            <Input type="text" size="lg" disabled value="selly@linefriends.com" />
+          </InputGroup>
+        </div>
+
+        <div className="flex flex-col gap-3">
+          <div className="text-body1_700 text-foreground">작가명</div>
+          <InputGroup>
+            <Input
               type="text"
-              disabled
-              value="selly@linefriends.com"
-              className="w-full bg-transparent text-body1_400 text-on-surface-30 focus:outline-none"
+              size="lg"
+              value={penName}
+              onChange={(e) => onPenNameChange(e.target.value.slice(0, MAX_PEN_NAME))}
+              maxLength={MAX_PEN_NAME}
             />
-          </div>
+            <InputHypertext count={penName.length} max={MAX_PEN_NAME} />
+          </InputGroup>
         </div>
 
-        <div className="flex flex-col gap-my-12">
-          <div className="text-body1_700 text-on-surface-10">작가명</div>
-          <div className="flex flex-col gap-my-8">
-            <div className="flex h-[42px] items-center overflow-hidden rounded-md border border-slate-200 bg-white px-my-16 focus-within:border-slate-400 focus-within:ring-1 focus-within:ring-slate-400/30">
-              <input
-                type="text"
-                value={penName}
-                onChange={(e) => onPenNameChange(e.target.value.slice(0, MAX_PEN_NAME))}
-                maxLength={MAX_PEN_NAME}
-                className="w-full bg-transparent text-body1_500 text-on-surface-10 focus:outline-none placeholder:text-on-surface-30"
-              />
-            </div>
-            <div className="text-right text-caption1_400 tabular-nums text-on-surface-30">
-              {penName.length}/{MAX_PEN_NAME}
-            </div>
-          </div>
-        </div>
-
-        <div className="flex flex-col gap-my-12">
-          <div className="text-body1_700 text-on-surface-10">소개</div>
-          <div className="flex flex-col gap-my-8">
-            <div className="flex h-[120px] items-stretch rounded-lg border border-slate-200 bg-white p-my-16 focus-within:border-slate-400 focus-within:ring-1 focus-within:ring-slate-400/30">
-              <textarea
-                placeholder="소개 내용을 작성해주세요."
-                rows={5}
-                value={description}
-                onChange={(e) => onDescriptionChange(e.target.value.slice(0, MAX_DESCRIPTION))}
-                maxLength={MAX_DESCRIPTION}
-                className="h-full min-h-0 w-full resize-none bg-transparent text-body1_400 text-on-surface-10 placeholder:text-on-surface-30 focus:outline-none"
-              />
-            </div>
-            <div className="text-right text-caption1_400 tabular-nums text-on-surface-30">
-              {description.length}/{MAX_DESCRIPTION}
-            </div>
-          </div>
+        <div className="flex flex-col gap-3">
+          <div className="text-body1_700 text-foreground">소개</div>
+          <InputGroup>
+            <Textarea
+              placeholder="소개 내용을 작성해주세요."
+              rows={5}
+              value={description}
+              onChange={(e) => onDescriptionChange(e.target.value.slice(0, MAX_DESCRIPTION))}
+              maxLength={MAX_DESCRIPTION}
+              className="min-h-[120px] resize-none"
+            />
+            <InputHypertext count={description.length} max={MAX_DESCRIPTION} />
+          </InputGroup>
         </div>
       </div>
     </>
@@ -153,23 +142,23 @@ function ProfileEditFooter({
   return (
     <div
       className={cn(
-        "flex shrink-0 items-center justify-between gap-my-8",
+        "flex shrink-0 items-center justify-between gap-2",
         mobile
           ? formDialogSheetStickyFooterClassName
-          : "border-t border-border-10 pt-my-12 pb-my-12",
+          : "border-t border-border pt-3 pb-3",
         className,
       )}
     >
       <Button
         type="button"
-        variant="tertiary"
+        variant="ghost"
         size="lg"
-        className="min-w-0 px-my-8 text-error-error hover:text-error-error"
+        className="min-w-0 px-2 text-destructive hover:text-destructive"
         onClick={onLogout}
       >
         로그아웃
       </Button>
-      <div className="inline-flex items-center gap-my-8">
+      <div className="inline-flex items-center gap-2">
         <Button type="button" variant="outline" size="lg" onClick={onCancel}>
           취소
         </Button>
@@ -303,22 +292,22 @@ export function ProfileEditModal({ isOpen, onClose, anchorRef, onSave }: Profile
               >
                 <div
                   className={cn(
-                    "flex w-full shrink-0 items-center justify-between border-b border-border-10 py-my-16",
+                    "flex w-full shrink-0 items-center justify-between border-b border-border py-4",
                     PAGE_GUTTER_X_CLASS,
                   )}
                 >
-                  <div className="text-body1_700 text-on-surface-10">프로필편집</div>
-                  <button
-                    type="button"
+                  <div className="text-body1_700 text-foreground">프로필편집</div>
+                  <Button
+                    variant="ghost"
+                    size="icon-sm"
                     aria-label="닫기"
                     onClick={handleClose}
-                    className="flex h-8 w-8 cursor-pointer items-center justify-center rounded-full text-on-surface-30 transition-colors hover:bg-surface-20/60 hover:text-on-surface-10 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-inset focus-visible:ring-primary"
-                    style={{ marginRight: -8 }}
+                    className="rounded-full text-foreground-placeholder -mr-2"
                   >
-                    <X className="h-5 w-5" aria-hidden />
-                  </button>
+                    <ICONS.close className="h-5 w-5" aria-hidden />
+                  </Button>
                 </div>
-                <div className={cn("min-h-0 flex-1 overflow-y-auto py-my-12", PAGE_GUTTER_X_CLASS)}>
+                <div className={cn("min-h-0 flex-1 overflow-y-auto py-3", PAGE_GUTTER_X_CLASS)}>
                   {formFields}
                 </div>
                 <ProfileEditFooter
@@ -359,25 +348,26 @@ export function ProfileEditModal({ isOpen, onClose, anchorRef, onSave }: Profile
 
   const desktopContent = (
     <>
-      <div className="fixed inset-0 z-40" onClick={handleClose} aria-hidden />
+      <div className="fixed inset-0 z-modal" onClick={handleClose} aria-hidden />
       {showCard ? (
-        <div className="fixed z-50 animate-in fade-in zoom-in-95 duration-200" style={style}>
+        <div className="fixed z-sticky animate-in fade-in zoom-in-95 duration-short" style={style}>
           <div
             ref={cardRef}
-            className="relative flex w-full max-w-96 flex-col items-start justify-start overflow-y-auto rounded-[4px] border border-slate-200 bg-white shadow-elevation-50"
+            className="relative flex w-full max-w-96 flex-col items-start justify-start overflow-y-auto rounded-sm border border-border bg-background shadow-elevation-50"
             style={position ? { maxHeight: position.maxHeight } : undefined}
             onClick={(e) => e.stopPropagation()}
           >
             <div className="inline-flex h-16 w-full shrink-0 items-center justify-between pl-5 pr-2 pb-2 pt-4">
-              <div className="text-heading5_700 text-on-surface-10">프로필편집</div>
-              <button
-                type="button"
+              <div className="text-heading5_700 text-foreground">프로필편집</div>
+              <Button
+                variant="ghost"
+                size="icon-lg"
                 onClick={handleClose}
-                className="flex h-9 w-9 cursor-pointer items-center justify-center rounded-full text-slate-600 transition-colors hover:bg-slate-100"
+                className="rounded-full text-foreground-muted"
                 aria-label="닫기"
               >
-                <X className="h-6 w-6" aria-hidden />
-              </button>
+                <ICONS.close className="h-6 w-6" aria-hidden />
+              </Button>
             </div>
 
             <div className="w-full px-5">{formFields}</div>

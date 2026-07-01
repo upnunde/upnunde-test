@@ -1,6 +1,6 @@
 import type { ReactNode } from "react";
 import Image from "next/image";
-import { cn } from "@/lib/utils";
+import { cn } from "design-system/utils";
 import { getAnalyticsTopFiveThumbnailUrl } from "@/lib/analyticsTopFiveThumbnails";
 import { THUMBNAIL_DIM_OVERLAY_CLASS } from "@/lib/thumbnail-styles";
 
@@ -11,11 +11,11 @@ export function contentTypeAccentClass(tone: ContentTone): string {
   switch (tone) {
     case "series":
     case "seriesBlue":
-      return "text-primary-on-primary-container";
+      return "text-primary-container-foreground";
     case "character":
-      return "text-blue-500";
+      return "text-info";
     case "scenario":
-      return "text-lime-600";
+      return "text-success";
   }
 }
 
@@ -44,10 +44,10 @@ export function ContentTypeBadge({
 export function RankDecoration({ rank, tone }: { rank: number; tone: ContentTone }) {
   if (rank === 2) {
     return (
-      <div className="flex w-9 items-center justify-center gap-my-4 lg:justify-start">
+      <div className="flex w-9 items-center justify-center gap-1 lg:justify-start">
         <div className="relative h-5 w-5">
           <div
-            className="absolute left-[4.38px] top-[9.38px] h-[1.25px] w-3 bg-on-surface-30"
+            className="absolute left-[4.38px] top-[9.38px] h-[1.25px] w-3 bg-foreground-placeholder"
             aria-hidden
           />
         </div>
@@ -56,8 +56,8 @@ export function RankDecoration({ rank, tone }: { rank: number; tone: ContentTone
   }
   if (rank === 5) {
     return (
-      <div className="flex w-9 items-center justify-center gap-my-4 lg:justify-start">
-        <div className="text-center justify-center text-error-error text-body3_400 font-['Pretendard_JP']">
+      <div className="flex w-9 items-center justify-center gap-1 lg:justify-start">
+        <div className="text-center justify-center text-destructive text-body3_400 font-['Pretendard_JP']">
           New
         </div>
       </div>
@@ -66,44 +66,44 @@ export function RankDecoration({ rank, tone }: { rank: number; tone: ContentTone
   if (rank === 4 || tone === "seriesBlue" || tone === "character") {
     const num = "3";
     return (
-      <div className="flex w-9 items-center justify-center gap-my-2 lg:justify-start">
-        <span className="text-body3_400 text-blue-500" aria-hidden>
+      <div className="flex w-9 items-center justify-center gap-0.5 lg:justify-start">
+        <span className="text-body3_400 text-info" aria-hidden>
           ▼
         </span>
-        <span className="text-body3_400 text-blue-500">{num}</span>
+        <span className="text-body3_400 text-info">{num}</span>
       </div>
     );
   }
   const num = rank === 3 ? "1" : "3";
   return (
-    <div className="flex w-9 items-center justify-center gap-my-2 lg:justify-start">
-      <span className="text-body3_400 text-error-error" aria-hidden>
+    <div className="flex w-9 items-center justify-center gap-0.5 lg:justify-start">
+      <span className="text-body3_400 text-destructive" aria-hidden>
         ▲
       </span>
-      <span className="text-body3_400 text-error-error">{num}</span>
+      <span className="text-body3_400 text-destructive">{num}</span>
     </div>
   );
 }
 
 export function AnalyticsTopFiveRowList({ rows }: { rows: readonly AnalyticsTopFiveRow[] }) {
   return (
-    <div className="flex flex-col items-start justify-start gap-my-16 self-stretch rounded-[4px] p-my-20">
+    <div className="flex flex-col items-start justify-start gap-4 self-stretch rounded-sm p-5">
       {rows.map((row) => {
         const count = row.countLabel ?? "5,678";
         const suffix = row.countSuffix ?? "회";
         return (
           <div
             key={row.rank}
-            className="flex w-full items-center justify-between gap-my-8 self-stretch lg:gap-my-12"
+            className="flex w-full items-center justify-between gap-2 self-stretch lg:gap-3"
           >
-            <div className="flex min-w-0 flex-1 items-center gap-my-12 lg:gap-my-16">
-              <div className="flex w-9 shrink-0 flex-col items-center justify-center gap-my-4 lg:w-14 lg:flex-row lg:items-center lg:justify-start lg:gap-my-4">
+            <div className="flex min-w-0 flex-1 items-center gap-3 lg:gap-4">
+              <div className="flex w-9 shrink-0 flex-col items-center justify-center gap-1 lg:w-14 lg:flex-row lg:items-center lg:justify-start lg:gap-1">
                 <RankDecoration rank={row.rank} tone={row.tone} />
-                <div className="text-body1_700 text-on-surface-10 font-['Pretendard_JP']">
+                <div className="text-body1_700 text-foreground font-['Pretendard_JP']">
                   {row.rank}
                 </div>
               </div>
-              <div className="relative aspect-[9/16] w-14 shrink-0 overflow-hidden rounded-[4px] outline outline-1 outline-offset-[-1px] outline-border-10/5">
+              <div className="relative aspect-[9/16] w-14 shrink-0 overflow-hidden rounded-sm outline outline-1 outline-offset-[-1px] outline-border/5">
                 <Image
                   src={getAnalyticsTopFiveThumbnailUrl({
                     rank: row.rank,
@@ -117,16 +117,16 @@ export function AnalyticsTopFiveRowList({ rows }: { rows: readonly AnalyticsTopF
                 />
                 <div className={THUMBNAIL_DIM_OVERLAY_CLASS} aria-hidden />
               </div>
-              <div className="flex min-w-0 flex-1 flex-col items-start justify-center gap-my-4">
+              <div className="flex min-w-0 flex-1 flex-col items-start justify-center gap-1">
                 <ContentTypeBadge tone={row.tone}>{row.badge}</ContentTypeBadge>
-                <span className="line-clamp-2 text-left text-body1_500 text-on-surface-10">
+                <span className="line-clamp-2 text-left text-body1_500 text-foreground">
                   {row.title}
                 </span>
               </div>
             </div>
-            <div className="flex shrink-0 items-center justify-end gap-my-4">
-              <span className="text-body1_500 text-on-surface-10">{count}</span>
-              <span className="text-body1_500 text-on-surface-30">{suffix}</span>
+            <div className="flex shrink-0 items-center justify-end gap-1">
+              <span className="text-body1_500 text-foreground">{count}</span>
+              <span className="text-body1_500 text-foreground-placeholder">{suffix}</span>
             </div>
           </div>
         );

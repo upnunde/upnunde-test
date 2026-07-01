@@ -1,7 +1,7 @@
 "use client";
 
 import { useCallback, useEffect, useMemo, useState } from "react";
-import { RotateCcw } from "lucide-react";
+import { ICONS } from "@/lib/icons";
 import type { ChoiceItem } from "@/types/editor";
 import { PreviewScreen } from "@/components/editor/PreviewScreen";
 import {
@@ -11,6 +11,11 @@ import {
   EDITOR_MOBILE_FAB_SIZE_CLASS,
   EDITOR_MOBILE_PREVIEW_HINT_BOTTOM_CLASS,
 } from "@/components/editor/editor-mobile-floating-layout";
+import {
+  PREVIEW_END_HINT_BADGE_CLASS,
+  PREVIEW_HINT_BADGE_CLASS,
+  PREVIEW_MOBILE_SHELL_CLASS,
+} from "@/lib/preview-overlay-styles";
 import { useMobilePreviewScrollLock } from "@/hooks/useMobilePreviewScrollLock";
 import { useEditorStore } from "@/store/useEditorStore";
 import {
@@ -18,7 +23,7 @@ import {
   findSceneBlockIndex,
   resolvePlaybackIndexFromFocus,
 } from "@/lib/preview-playback";
-import { cn } from "@/lib/utils";
+import { cn } from "design-system/utils";
 
 export interface EditorMobilePreviewPlayerProps {
   /** 미리보기 탭 활성 시 재생 위치 초기화 */
@@ -84,13 +89,13 @@ export function EditorMobilePreviewPlayer({ isActive }: EditorMobilePreviewPlaye
   );
 
   return (
-    <div className="relative flex min-h-0 flex-1 flex-col overflow-hidden bg-black">
+    <div className={cn("relative", PREVIEW_MOBILE_SHELL_CLASS)}>
       <button
         type="button"
         onClick={resetPlayback}
         disabled={blocks.length === 0}
         className={cn(
-          "fixed z-40 lg:hidden",
+          "fixed z-modal lg:hidden",
           EDITOR_MOBILE_FAB_RIGHT_CLASS,
           EDITOR_MOBILE_FAB_BOTTOM_ABOVE_PANEL_TOGGLE_CLASS,
           EDITOR_MOBILE_FAB_SIZE_CLASS,
@@ -99,11 +104,11 @@ export function EditorMobilePreviewPlayer({ isActive }: EditorMobilePreviewPlaye
         )}
         aria-label="처음부터"
       >
-        <RotateCcw className="h-5 w-5 shrink-0" aria-hidden />
+        <ICONS.rotateCcw className="h-5 w-5 shrink-0" aria-hidden />
       </button>
 
       {blocks.length === 0 ? (
-        <div className="flex flex-1 items-center justify-center px-my-20 text-center text-body3_400 text-on-surface-30">
+        <div className="flex flex-1 items-center justify-center px-5 text-center text-body3_400 preview-text-placeholder">
           원고를 작성하면 미리볼 수 있어요
         </div>
       ) : (
@@ -120,13 +125,13 @@ export function EditorMobilePreviewPlayer({ isActive }: EditorMobilePreviewPlaye
       {canTapAdvance && showTapHint ? (
         <div
           className={cn(
-            "pointer-events-none absolute inset-x-0 z-30 flex justify-center",
+            "pointer-events-none absolute inset-x-0 z-overlay flex justify-center",
             EDITOR_MOBILE_PREVIEW_HINT_BOTTOM_CLASS,
             focusedBlock?.type === "text" &&
-              "max-lg:bottom-[calc(var(--spacing-my-16)+3rem+var(--spacing-my-36)+env(safe-area-inset-bottom,0px)+var(--app-keyboard-inset,var(--app-vv-bottom,0px)))]",
+              "max-lg:bottom-[calc(var(--space-4)+3rem+var(--space-9)+env(safe-area-inset-bottom,0px)+var(--app-keyboard-inset,var(--app-vv-bottom,0px)))]",
           )}
         >
-          <span className="rounded-full bg-black/45 px-my-12 py-my-4 text-caption2_400 text-white/70 backdrop-blur-sm">
+          <span className={PREVIEW_HINT_BADGE_CLASS}>
             화면을 탭해 다음으로
           </span>
         </div>
@@ -135,11 +140,11 @@ export function EditorMobilePreviewPlayer({ isActive }: EditorMobilePreviewPlaye
       {isAtEnd && blocks.length > 0 ? (
         <div
           className={cn(
-            "pointer-events-none absolute inset-x-0 z-30 flex justify-center",
+            "pointer-events-none absolute inset-x-0 z-overlay flex justify-center",
             EDITOR_MOBILE_PREVIEW_HINT_BOTTOM_CLASS,
           )}
         >
-          <span className="rounded-full bg-black/55 px-my-16 py-my-8 text-caption1_400 text-white/85 backdrop-blur-sm">
+          <span className={PREVIEW_END_HINT_BADGE_CLASS}>
             미리보기가 끝났어요
           </span>
         </div>

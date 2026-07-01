@@ -11,11 +11,11 @@ import {
 import { Button } from "@/components/ui/button";
 import { FilterChip } from "@/components/ui/chip";
 import { SegmentedTextTabs } from "@/components/ui/segmented-text-tabs";
-import { Info } from "lucide-react";
+import { ICONS } from "@/lib/icons";
 import { SidebarList } from "@/components/AppSidebar/SidebarList";
 import { CHIP_GROUP_GAP_CLASS } from "@/lib/chip-styles";
 import { deterministicBgmDuration } from "@/lib/bgm-duration";
-import { cn } from "@/lib/utils";
+import { cn } from "design-system/utils";
 import { BgmListItem } from "./BgmListItem";
 
 function parseDurationToSeconds(duration: string): number {
@@ -350,25 +350,25 @@ export function BgmListModal({ open, onClose, onAdd }: BgmListModalProps) {
 
   return (
     <Dialog open={open} onOpenChange={(o) => !o && onClose()}>
-      <DialogContent className="flex w-full min-h-0 max-lg:max-w-none flex-col gap-0 overflow-hidden bg-surface-10 max-lg:rounded-t-[16px] max-lg:rounded-b-none lg:rounded-[4px] border border-border-10 p-0 lg:p-0 lg:pb-0 lg:w-[800px] lg:max-w-[calc(100vw-2rem)]">
-        <DialogHeader className="justify-center items-start h-9 px-my-20 pt-my-12 pb-0 lg:border-b lg:border-border-10 lg:pt-my-4">
-          <div className="flex items-center justify-center gap-my-4">
-            <DialogTitle className="text-on-surface-10 text-body1_700 font-['Pretendard_JP']">
+      <DialogContent className="flex w-full min-h-0 max-lg:max-w-none flex-col gap-0 overflow-hidden bg-background max-lg:rounded-t-xl max-lg:rounded-b-none lg:rounded-sm border border-border p-0 lg:p-0 lg:pb-0 lg:w-[800px] lg:max-w-[calc(100vw-2rem)]">
+        <DialogHeader className="justify-center items-start h-9 px-5 pt-3 pb-0 lg:border-b lg:border-border lg:pt-1">
+          <div className="flex items-center justify-center gap-1">
+            <DialogTitle className="text-foreground text-body1_700 font-['Pretendard_JP']">
               BGM
             </DialogTitle>
-            <span className="inline-flex h-5 w-5 items-center justify-center rounded-full bg-surface-20">
-              <Info className="w-3 h-3 text-on-surface-30" aria-hidden />
+            <span className="inline-flex h-5 w-5 items-center justify-center rounded-full bg-muted">
+              <ICONS.info className="w-3 h-3 text-foreground-placeholder" aria-hidden />
             </span>
           </div>
         </DialogHeader>
 
         {/* 모바일 — 장르 칩 · 탭 전환 · 단일 패널 스크롤 */}
         <div className="flex min-h-0 flex-1 flex-col lg:hidden">
-          <div className="shrink-0 px-my-16 py-my-12">
+          <div className="shrink-0 px-4 py-3">
             {genreChips}
           </div>
 
-          <div className="shrink-0 border-b border-border-10 px-my-16">
+          <div className="shrink-0 border-b border-border px-4">
             <SegmentedTextTabs
               items={[
                 { id: "list", label: "리스트" },
@@ -385,56 +385,56 @@ export function BgmListModal({ open, onClose, onAdd }: BgmListModalProps) {
             />
           </div>
 
-          <div className="flex min-h-[min(52dvh,480px)] flex-1 flex-col gap-my-4 overflow-y-auto px-my-8 py-my-8 [scrollbar-width:none] [&::-webkit-scrollbar]:hidden">
+          <div className="flex min-h-[min(52dvh,480px)] flex-1 flex-col gap-1 overflow-y-auto px-2 py-2 [scrollbar-width:none] [&::-webkit-scrollbar]:hidden">
             {mobilePanel === "list" ? listTrackItems : selectedTrackItems}
           </div>
         </div>
 
         {/* 데스크톱 — 3열 레이아웃 */}
         <div className="hidden h-[400px] lg:flex">
-          <div className="flex w-[160px] flex-col gap-my-12 border-r border-border-10 bg-surface-10 py-my-16 pl-my-20 pr-my-8">
-            <div className="text-caption1_500 text-on-surface-30">장르</div>
+          <div className="flex w-[160px] flex-col gap-3 border-r border-border bg-background py-4 pl-5 pr-2">
+            <div className="text-caption1_500 text-foreground-placeholder">장르</div>
             <SidebarList
               items={GENRES.map((g) => ({ id: g, label: g }))}
               activeId={activeGenre}
               onSelect={setActiveGenre}
-              listClassName="flex flex-col gap-my-4"
+              listClassName="flex flex-col gap-1"
               itemWrapperClassName="-ml-3 flex h-8 items-center justify-start pl-0 pr-0 rounded-md"
-              itemClassName="flex h-8 w-full items-center justify-start text-left text-body3_400 rounded-md px-my-12 py-my-8 transition-colors"
+              itemClassName="flex h-8 w-full items-center justify-start text-left text-body3_400 rounded-md px-3 py-2 transition-colors"
               itemActiveClassName="text-primary font-medium"
-              itemInactiveClassName="text-on-surface-30 hover:text-on-surface-10 hover:bg-surface-20"
+              itemInactiveClassName="text-foreground-placeholder hover:text-foreground hover:bg-muted"
             />
           </div>
 
-          <div className="flex min-w-0 flex-1 flex-col gap-0 border-r border-border-10 px-my-8 py-0">
-            <div className="mt-2 flex h-8 w-full items-center justify-between px-my-12 text-caption1_500 text-on-surface-30">
+          <div className="flex min-w-0 flex-1 flex-col gap-0 border-r border-border px-2 py-0">
+            <div className="mt-2 flex h-8 w-full items-center justify-between px-3 text-caption1_500 text-foreground-placeholder">
               <span>리스트</span>
             </div>
-            <div className="flex flex-1 flex-col gap-my-4 overflow-y-auto pl-0 pr-0 [scrollbar-width:none] [&::-webkit-scrollbar]:hidden">
+            <div className="flex flex-1 flex-col gap-1 overflow-y-auto pl-0 pr-0 [scrollbar-width:none] [&::-webkit-scrollbar]:hidden">
               {listTrackItems}
             </div>
           </div>
 
-          <div className="flex min-w-0 flex-1 flex-col gap-0 px-my-8 py-0">
-            <div className="mt-2 flex h-8 w-full items-center justify-between px-my-12 text-caption1_500 text-on-surface-30">
+          <div className="flex min-w-0 flex-1 flex-col gap-0 px-2 py-0">
+            <div className="mt-2 flex h-8 w-full items-center justify-between px-3 text-caption1_500 text-foreground-placeholder">
               <span>선택한 음악</span>
-              <span className="text-on-surface-20">
-                <span className="text-on-surface-10">{selectedTracks.length}</span>
-                <span className="text-on-surface-20"> / {MAX_SELECTED}</span>
+              <span className="text-foreground-muted">
+                <span className="text-foreground">{selectedTracks.length}</span>
+                <span className="text-foreground-muted"> / {MAX_SELECTED}</span>
               </span>
             </div>
-            <div className="flex flex-1 flex-col gap-my-4 overflow-y-auto pl-0 pr-0 [scrollbar-width:none] [&::-webkit-scrollbar]:hidden">
+            <div className="flex flex-1 flex-col gap-1 overflow-y-auto pl-0 pr-0 [scrollbar-width:none] [&::-webkit-scrollbar]:hidden">
               {selectedTrackItems}
             </div>
           </div>
         </div>
 
-        <div className="flex shrink-0 justify-end gap-my-8 border-t border-border-10 bg-surface-5 px-my-16 py-my-16 lg:px-my-24">
+        <div className="flex shrink-0 justify-end gap-2 border-t border-border bg-background px-4 py-4 lg:px-6">
           <DialogClose asChild>
             <Button
               type="button"
               variant="outline"
-              className="min-w-[80px] border-border-20 text-on-surface-30"
+              className="min-w-[80px] border-border text-foreground-placeholder"
             >
               취소
             </Button>

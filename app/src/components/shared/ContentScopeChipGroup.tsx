@@ -1,9 +1,7 @@
 "use client";
 
-import { analyticsFilterChipResponsiveClassName } from "@/components/analytics/analytics-filter-chips";
-import { FilterChip } from "@/components/ui/chip";
-import { CONTROL_GROUP_GAP_STANDARD_RESPONSIVE_CLASS } from "@/lib/chip-styles";
-import { cn } from "@/lib/utils";
+import { Tabs, TabsList, TabsTrigger } from "design-system/ui/tabs";
+import { cn } from "design-system/utils";
 
 export interface ContentScopeChipGroupProps<T extends string> {
   items: readonly { id: T; label: string }[];
@@ -13,7 +11,9 @@ export interface ContentScopeChipGroupProps<T extends string> {
   className?: string;
 }
 
-/** 시리즈·캐릭터·상황공략 범위 칩 — 분석·내 작품 공통 */
+/**
+ * 시리즈·캐릭터·상황공략 범위 — DS Tabs showcase와 동일 (`TabsList` default size·variant).
+ */
 export function ContentScopeChipGroup<T extends string>({
   items,
   activeId,
@@ -22,26 +22,18 @@ export function ContentScopeChipGroup<T extends string>({
   className,
 }: ContentScopeChipGroupProps<T>) {
   return (
-    <div
-      className={cn("flex shrink-0 items-center", CONTROL_GROUP_GAP_STANDARD_RESPONSIVE_CLASS, className)}
-      role="group"
-      aria-label={ariaLabel}
+    <Tabs
+      value={activeId}
+      onValueChange={(value) => onSelect(value as T)}
+      className={cn("shrink-0", className)}
     >
-      {items.map(({ id, label }) => {
-        const selected = activeId === id;
-        return (
-          <FilterChip
-            key={id}
-            selected={selected}
-            chipSize="l"
-            aria-pressed={selected}
-            className={cn("min-w-20", analyticsFilterChipResponsiveClassName)}
-            onClick={() => onSelect(id)}
-          >
+      <TabsList aria-label={ariaLabel}>
+        {items.map(({ id, label }) => (
+          <TabsTrigger key={id} value={id}>
             {label}
-          </FilterChip>
-        );
-      })}
-    </div>
+          </TabsTrigger>
+        ))}
+      </TabsList>
+    </Tabs>
   );
 }

@@ -6,7 +6,7 @@ import { deriveSidebarActiveId, type SidebarItemId } from "@/components/AppSideb
 import { MobileAppSidebarDrawer } from "@/components/layout/MobileAppSidebarDrawer";
 import { APP_BROWSER_BG_CLASS, APP_PAGE_ROOT_CLASS } from "@/lib/mobile-viewport";
 import { APP_MAIN_CLASS, APP_MAIN_PANEL_CLASS, APP_SHELL_BODY_ROW_CLASS } from "@/lib/page-layout";
-import { cn } from "@/lib/utils";
+import { cn } from "design-system/utils";
 import { usePathname } from "next/navigation";
 
 export interface AppShellProps {

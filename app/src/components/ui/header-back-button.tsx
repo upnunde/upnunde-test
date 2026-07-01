@@ -1,13 +1,9 @@
 "use client";
 
-import { ChevronLeft } from "lucide-react";
-import { Button } from "@/components/ui/button";
-import { cn } from "@/lib/utils";
+import { ICONS } from "@/lib/icons";
+import { IconButton } from "@/components/ui/icon-button";
 
-/** 서브 헤더·에디터 헤더 뒤로가기 — standard 36×36 (`size="icon-lg"`) */
-export const HEADER_BACK_BUTTON_CLASS =
-  "shrink-0 rounded-full border-border-20 disabled:border-border-20 shadow-none focus-visible:ring-0 focus-visible:ring-offset-0";
-
+/** 서브 헤더·에디터 헤더 뒤로가기 — DS icon md_s36 · circle outline */
 export function HeaderBackButton({
   onClick,
   "aria-label": ariaLabel = "뒤로 가기",
@@ -18,15 +14,15 @@ export function HeaderBackButton({
   className?: string;
 }) {
   return (
-    <Button
+    <IconButton
       type="button"
-      variant="outline"
-      size="icon-lg"
-      onClick={onClick}
+      icon={ICONS.chevronLeft}
       aria-label={ariaLabel}
-      className={cn(HEADER_BACK_BUTTON_CLASS, className)}
-    >
-      <ChevronLeft className="text-on-surface-30" />
-    </Button>
+      onClick={onClick}
+      variant="outline"
+      shape="circle"
+      size="icon"
+      className={className}
+    />
   );
 }

@@ -10,7 +10,7 @@ import {
   PAGE_SCROLL_TOP_CLASS,
   PAGE_SUBHEADER_WITH_FILTER_CLASS,
 } from "@/lib/page-layout";
-import { cn } from "@/lib/utils";
+import { cn } from "design-system/utils";
 import { InquiryFaqList } from "@/components/inquiry/InquiryFaqList";
 import { InquiryForm } from "@/components/inquiry/InquiryForm";
 import { InquiryHistoryList } from "@/components/inquiry/InquiryHistoryList";
@@ -51,8 +51,8 @@ export default function InquiryPage() {
   return (
     <AppShell sidebarActiveId="inquiry">
       <div className={PAGE_SUBHEADER_WITH_FILTER_CLASS}>
-          <div className={`${PAGE_CONTAINER_CLASS} flex items-center justify-start gap-my-16`}>
-            <h1 className="text-heading2_700 text-on-surface-10">문의</h1>
+          <div className={`${PAGE_CONTAINER_CLASS} flex items-center justify-start gap-4`}>
+            <h1 className="text-heading2_700 text-foreground">문의</h1>
           </div>
         </div>
 
@@ -69,7 +69,7 @@ export default function InquiryPage() {
             <div className="min-w-0 flex-1">
               <PageCard
                 fullWidth
-                className="flex h-fit shrink-0 flex-col gap-0 overflow-hidden rounded-[4px] px-0 pt-my-8 pb-my-20 max-lg:rounded-none max-lg:border-0 lg:px-0"
+                className="flex h-fit shrink-0 flex-col gap-0 overflow-hidden rounded-sm px-0 pt-2 pb-5 max-lg:rounded-none max-lg:border-0 lg:px-0"
               >
                 <InquiryTabStrip activeTab={activeTab} onTabChange={setActiveTab} />
                 {activeTab === "faq" ? (

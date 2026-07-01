@@ -6,10 +6,12 @@ import { Title2 } from "@/components/ui/title2";
 import { AnalyticsPanel } from "@/components/analytics/AnalyticsPanel";
 import {
   ANALYTICS_KEY_STAT_BUTTON_CLASS,
+  ANALYTICS_KEY_STAT_BUTTON_INTERACTION_CLASS,
   ANALYTICS_KEY_STAT_DELTA_CLASS,
-  ANALYTICS_KEY_STAT_LABEL_CLASS,
-  ANALYTICS_KEY_STAT_VALUE_CLASS,
   ANALYTICS_KEY_STATS_ROW_CLASS,
+  analyticsKeyStatButtonStateClass,
+  analyticsKeyStatLabelClass,
+  analyticsKeyStatValueClass,
 } from "@/components/analytics/analytics-key-stats-layout";
 import type { AnalyticsPeriodRange } from "@/components/analytics/analytics-date";
 import {
@@ -18,7 +20,7 @@ import {
 } from "@/components/analytics/analytics-trend-chart-shell";
 import { PAGE_FLUSH_CONTENT_PAD_X_CLASS } from "@/lib/page-layout";
 import { deltaClassName, getMonetizationDummy } from "@/components/analytics/analytics-dummy-by-scope";
-import { cn } from "@/lib/utils";
+import { cn } from "design-system/utils";
 import {
   AnalyticsMonthlyRevenueRangeFilter,
   DEFAULT_MONTHLY_REVENUE_RANGE_MONTHS,
@@ -89,7 +91,7 @@ export function MonetizationDashboard({
   const monetizationChartValues = dummy.chartSeries[selectedMonetizationStat];
 
   return (
-      <div className="flex flex-col items-start justify-start gap-my-12 lg:gap-my-20 self-stretch px-0">
+      <div className="flex flex-col items-start justify-start gap-3 lg:gap-5 self-stretch px-0">
         <AnalyticsPanel>
           <Title2 text="주요통계" variant="title" asSectionHeader />
           <div className={ANALYTICS_KEY_STATS_ROW_CLASS}>
@@ -102,15 +104,15 @@ export function MonetizationDashboard({
                 aria-label={`${stat.label} 통계 선택`}
                 className={cn(
                   ANALYTICS_KEY_STAT_BUTTON_CLASS,
-                  "cursor-pointer text-left transition-colors outline-none",
+                  ANALYTICS_KEY_STAT_BUTTON_INTERACTION_CLASS,
                   i < arr.length - 1 && "border-r",
-                  selectedMonetizationStat === stat.id
-                    ? "z-[1] bg-white"
-                    : "bg-surface-disabled-10 hover:bg-surface-10/80",
+                  analyticsKeyStatButtonStateClass(selectedMonetizationStat === stat.id),
                 )}
               >
-                <div className={ANALYTICS_KEY_STAT_LABEL_CLASS}>{stat.label}</div>
-                <div className={ANALYTICS_KEY_STAT_VALUE_CLASS}>
+                <div className={analyticsKeyStatLabelClass(selectedMonetizationStat === stat.id)}>
+                  {stat.label}
+                </div>
+                <div className={analyticsKeyStatValueClass(selectedMonetizationStat === stat.id)}>
                   {dummy.stats[stat.id].value}
                 </div>
                 <div className={cn(ANALYTICS_KEY_STAT_DELTA_CLASS, deltaClassName(dummy.stats[stat.id].deltaTone))}>
@@ -120,8 +122,8 @@ export function MonetizationDashboard({
             ))}
           </div>
 
-          <div className="flex flex-col items-stretch gap-my-12 self-stretch px-0 py-my-40">
-            <p className={cn(PAGE_FLUSH_CONTENT_PAD_X_CLASS, "text-body3_500 text-on-surface-20")}>수익금 추이</p>
+          <div className="flex flex-col items-stretch gap-3 self-stretch px-0 py-10">
+            <p className={cn(PAGE_FLUSH_CONTENT_PAD_X_CLASS, "text-body3_500 text-foreground-muted")}>수익금 추이</p>
             <AnalyticsTrendLineChart
               metric="views"
               periodRange={periodRange}
@@ -130,20 +132,20 @@ export function MonetizationDashboard({
           </div>
         </AnalyticsPanel>
 
-      <div className="flex w-full flex-col items-stretch gap-my-12 lg:gap-my-20 lg:flex-row lg:items-start">
+      <div className="flex w-full flex-col items-stretch gap-3 lg:gap-5 lg:flex-row lg:items-start">
           <AnalyticsPanel className="w-full min-w-0 flex-1 lg:min-w-[260px]">
             <Title2 text="매출 기여 콘텐츠 TOP5" variant="title" asSectionHeader />
           <AnalyticsTopFiveRowList rows={dummy.top5} />
           </AnalyticsPanel>
         <AnalyticsPanel className="h-fit w-full min-w-0 flex-1 self-start lg:min-w-[260px]">
           <Title2 text="월별 수익" variant="title" asSectionHeader />
-          <div className={cn(PAGE_FLUSH_CONTENT_PAD_X_CLASS, "pt-my-12")}>
+          <div className={cn(PAGE_FLUSH_CONTENT_PAD_X_CLASS, "pt-3")}>
             <AnalyticsMonthlyRevenueRangeFilter
               value={monthlyRevenueRange}
               onChange={setMonthlyRevenueRange}
             />
           </div>
-          <div className="p-my-20">
+          <div className="p-5">
             <AnalyticsMonthlyRevenueSection
               scopeCategory={scopeCategory}
               seriesId={seriesId}

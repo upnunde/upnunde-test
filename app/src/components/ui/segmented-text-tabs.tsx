@@ -1,43 +1,51 @@
 "use client";
 
-import { FilterChip } from "@/components/ui/chip";
-import { chipGroupGapClass } from "@/lib/chip-styles";
 import {
-  TAB_SIZE_META,
-  tabInstanceClassName,
-  tabListClassName,
-  type TabSize,
-} from "@/lib/tab-styles";
-import { cn } from "@/lib/utils";
+  Tabs as DsTabs,
+  TabsList as DsTabsList,
+  TabsTrigger as DsTabsTrigger,
+} from "design-system/ui/tabs";
+import { cn } from "design-system/utils";
 
 export interface SegmentedTextTabItem {
   id: string;
   label: string;
 }
 
-/** @deprecated `TabSize` — `app/src/lib/tab-styles.ts` */
+export type TabSize = "2xl" | "xl" | "l" | "m";
+/** @deprecated `TabSize` — inline export */
 export type SegmentedTabSize = TabSize;
 
 export type SegmentedTextTabsVariant = "text" | "chip";
 
-const CHIP_FILTER_SIZE: Record<TabSize, "l" | "m"> = {
-  xl: "l",
-  l: "l",
-  m: "m",
+/** DS TabsList variant */
+export type DsTabsListVariant = "default" | "line" | "text";
+
+/** 리노벨 size → DS Tabs size (`size` 미지정 시 DS 기본 `default`) */
+const DS_TABS_SIZE: Record<TabSize, "sm" | "default" | "lg" | "xl" | "2xl"> = {
+  m: "sm",
+  l: "default",
+  xl: "xl",
+  "2xl": "2xl",
 };
 
 export interface SegmentedTextTabsProps {
   items: readonly SegmentedTextTabItem[];
-  activeId: string;
+  /** `null` — 사용자 지정 등 프리셋 미선택 */
+  activeId: string | null;
   onSelect?: (id: string) => void;
   /**
-   * Figma `tab` · `underline` (= tab instance `selectline`)
-   * true: 목록 트랙 `border-b border-border-10`, 활성 탭 `border-b-2 border-border-strong`
+   * DS TabsList variant.
+   * 미지정 시 `underline` — true: `line`, false: `default`(pill).
+   */
+  tabsVariant?: DsTabsListVariant;
+  /**
+   * @deprecated `tabsVariant="line"` 사용.
+   * true: DS Tabs `variant="line"` — 활성 시 하단 언더라인.
    */
   underline?: boolean;
-  /** `text`: Figma tab / tab instance · `chip`: Figma chips (별도 가이드) */
+  /** @deprecated `chip` — DS Tabs pill과 동일. 하위 호환용. */
   variant?: SegmentedTextTabsVariant;
-  /** text 기본 `l`, chip 기본 `m` */
   size?: TabSize;
   className?: string;
   tabListClassName?: string;
@@ -45,90 +53,44 @@ export interface SegmentedTextTabsProps {
 }
 
 /**
- * Figma `tab` 컴포넌트 — 텍스트 탭 목록.
- * 칩 필터는 `variant="chip"` + `FilterChip` (Chip DS).
+ * 텍스트·필터 탭 — DS `Tabs` 어댑터.
+ * pill(`default`) · line · text(`tabsVariant="text"`) DS 정본 스타일.
  */
 export function SegmentedTextTabs({
   items,
   activeId,
   onSelect,
+  tabsVariant,
   underline = false,
-  variant = "text",
-  size,
   className,
-  tabListClassName: tabListClassNameProp,
+  size,
+  tabListClassName,
   "aria-label": ariaLabel,
 }: SegmentedTextTabsProps) {
-  const isChip = variant === "chip";
-  const resolvedSize: TabSize = size ?? (isChip ? "m" : "l");
-  const chipSize = CHIP_FILTER_SIZE[resolvedSize];
-  const resolvedTabListGap = isChip ? chipGroupGapClass(chipSize) : undefined;
+  const listVariant = tabsVariant ?? (underline ? "line" : "default");
+  const dsSize = size ? DS_TABS_SIZE[size] : undefined;
 
-  const tabList = (
-    <div
-      role="tablist"
-      aria-label={ariaLabel}
-      className={
-        isChip
-          ? cn(
-              "inline-flex max-w-full min-w-0 items-center justify-start overflow-x-auto overflow-y-visible",
-              resolvedTabListGap,
-              tabListClassNameProp,
-            )
-          : tabListClassName({
-              size: resolvedSize,
-              underline,
-              className: tabListClassNameProp,
-            })
-      }
+  return (
+    <DsTabs
+      value={activeId}
+      onValueChange={(value) => onSelect?.(String(value))}
+      className={cn("max-w-full min-w-0", className)}
     >
-      {items.map(({ id, label }) => {
-        const isActive = activeId === id;
-        const isClickable = !!onSelect;
-
-        if (isChip) {
-          return (
-            <FilterChip
-              key={id}
-              role="tab"
-              aria-selected={isActive}
-              selected={isActive}
-              chipSize={chipSize}
-              disabled={!isClickable}
-              className="min-w-0"
-              onClick={() => onSelect?.(id)}
-            >
-              {label}
-            </FilterChip>
-          );
-        }
-
-        return (
-          <button
-            key={id}
-            type="button"
-            role="tab"
-            aria-selected={isActive}
-            data-activated={isActive ? "true" : "false"}
-            data-selectline={underline ? "true" : "false"}
-            data-height={TAB_SIZE_META[resolvedSize].heightToken}
-            className={cn(
-              tabInstanceClassName({
-                activated: isActive,
-                selectline: underline,
-                size: resolvedSize,
-              }),
-              isClickable ? "cursor-pointer" : "cursor-default",
-              !isActive && isClickable && "hover:text-on-surface-20",
-            )}
-            onClick={() => onSelect?.(id)}
-          >
-            <span className="whitespace-nowrap">{label}</span>
-          </button>
-        );
-      })}
-    </div>
+      <DsTabsList
+        variant={listVariant}
+        {...(dsSize ? { size: dsSize } : {})}
+        aria-label={ariaLabel}
+        className={cn(
+          "max-w-full min-w-0 overflow-x-auto",
+          tabListClassName,
+        )}
+      >
+        {items.map(({ id, label }) => (
+          <DsTabsTrigger key={id} value={id} disabled={!onSelect}>
+            {label}
+          </DsTabsTrigger>
+        ))}
+      </DsTabsList>
+    </DsTabs>
   );
-
-  return <div className={cn(className)}>{tabList}</div>;
 }

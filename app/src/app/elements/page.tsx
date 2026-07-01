@@ -5,7 +5,7 @@ import { AppShell } from "@/components/layout/AppShell";
 import { Button } from "@/components/ui/button";
 import { Chip, FilterChip } from "@/components/ui/chip";
 import type { ChipVariantProps } from "@/lib/chip-styles";
-import { Input } from "@/components/ui/input";
+import { Input, InputGroup, InputHypertext } from "@/components/ui/input";
 import {
   CHIP_COMPANION_CONTROL_CLASS,
   CONTROL_GROUP_GAP_COMPACT_CLASS,
@@ -21,7 +21,7 @@ import {
   PAGE_SCROLL_COLUMN_CLASS,
   PAGE_SUBHEADER_WITH_STICKY_CLASS,
 } from "@/lib/page-layout";
-import { cn } from "@/lib/utils";
+import { cn } from "design-system/utils";
 
 const AREA_TABS = [
   { id: "content", label: "콘텐츠" },
@@ -34,8 +34,8 @@ const GENRE_LABELS = ["전체", "일상", "로맨스", "미스터리"] as const;
 
 function SpecRow({ label, children }: { label: string; children: React.ReactNode }) {
   return (
-    <section className="flex w-full max-w-[1200px] flex-col gap-my-12 rounded-[4px] border border-border-10 bg-white p-my-20">
-      <h2 className="text-body1_700 text-on-surface-10">{label}</h2>
+    <section className="flex w-full max-w-[1200px] flex-col gap-3 rounded-sm border border-border bg-background p-5">
+      <h2 className="text-body1_700 text-foreground">{label}</h2>
       {children}
     </section>
   );
@@ -73,7 +73,7 @@ function ChipIconPlaceholder({ size }: { size: NonNullable<ChipVariantProps["siz
     <span
       className={cn(
         "bg-current",
-        size === "l" ? "size-my-16" : "size-my-12",
+        size === "l" ? "size-4" : "size-3",
       )}
     />
   );
@@ -88,19 +88,19 @@ export default function ElementsPage() {
     <AppShell sidebarActiveId="guide">
       <div className={PAGE_SUBHEADER_WITH_STICKY_CLASS}>
           <div className={`${PAGE_CONTAINER_CLASS} flex items-center justify-start`}>
-            <h1 className="text-heading2_700 text-on-surface-10">UI 요소</h1>
+            <h1 className="text-heading2_700 text-foreground">UI 요소</h1>
           </div>
         </div>
 
         <div className={PAGE_SCROLL_COLUMN_CLASS}>
-              <SpecRow label="Tab XL — 분석 영역 (underline false · 탭 간격 20px)">
+              <SpecRow label="Tab 2xl — 분석 영역 (variant text)">
                 <SegmentedTextTabs
                   aria-label="분석 영역 미리보기"
                   items={[...AREA_TABS]}
                   activeId={areaTab}
                   onSelect={(id) => setAreaTab(id as (typeof AREA_TABS)[number]["id"])}
-                  size="xl"
-                  underline={false}
+                  tabsVariant="text"
+                  size="2xl"
                 />
               </SpecRow>
 
@@ -134,12 +134,12 @@ export default function ElementsPage() {
                 <div className="overflow-x-auto">
                   <table className="w-full min-w-[720px] border-collapse text-left">
                     <thead>
-                      <tr className="border-b border-border-10">
-                        <th className="pb-my-12 pr-my-16 text-body3_500 text-on-surface-30">상태</th>
+                      <tr className="border-b border-border">
+                        <th className="pb-3 pr-4 text-body3_500 text-foreground-placeholder">상태</th>
                         {CHIP_MATRIX_COLUMNS.map((col) => (
                           <th
                             key={col.label}
-                            className="pb-my-12 pr-my-16 text-body3_500 text-on-surface-30"
+                            className="pb-3 pr-4 text-body3_500 text-foreground-placeholder"
                           >
                             {col.label}
                           </th>
@@ -148,12 +148,12 @@ export default function ElementsPage() {
                     </thead>
                     <tbody>
                       {CHIP_MATRIX_ROWS.map((row) => (
-                        <tr key={row.label} className="border-b border-border-10 last:border-0">
-                          <td className="py-my-12 pr-my-16 align-middle text-body3_400 text-on-surface-20">
+                        <tr key={row.label} className="border-b border-border last:border-0">
+                          <td className="py-3 pr-4 align-middle text-body3_400 text-foreground-muted">
                             {row.label}
                           </td>
                           {CHIP_MATRIX_COLUMNS.map((col) => (
-                            <td key={col.label} className="py-my-12 pr-my-16 align-middle">
+                            <td key={col.label} className="py-3 pr-4 align-middle">
                               <Chip
                                 chipType={row.chipType}
                                 variant={row.variant}
@@ -246,28 +246,31 @@ export default function ElementsPage() {
 
               <SpecRow label="Input · form 42px">
                 <div className="max-w-md">
-                  <Input placeholder="시리즈 제목" aria-label="시리즈 제목" />
+                  <InputGroup>
+                    <Input size="lg" placeholder="시리즈 제목" aria-label="시리즈 제목" />
+                    <InputHypertext count={0} max={30} />
+                  </InputGroup>
                 </div>
               </SpecRow>
 
               <SpecRow label="높이 클래스 참고">
-                <ul className="list-inside list-disc text-body3_400 text-on-surface-20">
+                <ul className="list-inside list-disc text-body3_400 text-foreground-muted">
                   <li>
-                    <code className="text-on-surface-10">CONTROL_HEIGHT_CLASS</code> — {CONTROL_HEIGHT_CLASS}
+                    <code className="text-foreground">CONTROL_HEIGHT_CLASS</code> — {CONTROL_HEIGHT_CLASS}
                   </li>
                   <li>
-                    <code className="text-on-surface-10">CONTROL_HEIGHT_STANDARD_CLASS</code> —{" "}
+                    <code className="text-foreground">CONTROL_HEIGHT_STANDARD_CLASS</code> —{" "}
                     {CONTROL_HEIGHT_STANDARD_CLASS}
                   </li>
                   <li>
-                    <code className="text-on-surface-10">CONTROL_HEIGHT_FORM_CLASS</code> —{" "}
+                    <code className="text-foreground">CONTROL_HEIGHT_FORM_CLASS</code> —{" "}
                     {CONTROL_HEIGHT_FORM_CLASS}
                   </li>
                   <li>
-                    <code className="text-on-surface-10">CONTROL_GROUP_GAP_COMPACT_CLASS</code> — 4px
+                    <code className="text-foreground">CONTROL_GROUP_GAP_COMPACT_CLASS</code> — 4px
                   </li>
                   <li>
-                    <code className="text-on-surface-10">CONTROL_GROUP_GAP_STANDARD_CLASS</code> — 8px
+                    <code className="text-foreground">CONTROL_GROUP_GAP_STANDARD_CLASS</code> — 8px
                   </li>
                 </ul>
               </SpecRow>

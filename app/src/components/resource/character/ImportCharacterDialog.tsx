@@ -14,7 +14,7 @@ import {
 } from "@/lib/importableCharactersMock";
 import type { CharacterSourceSeries } from "@/types/character";
 import { THUMBNAIL_DIM_OVERLAY_CLASS } from "@/lib/thumbnail-styles";
-import { cn } from "@/lib/utils";
+import { cn } from "design-system/utils";
 
 export type { ImportableCharacterPick };
 
@@ -143,14 +143,14 @@ export function ImportCharacterDialog({
 
   return (
     <Dialog open={open} onOpenChange={handleDialogOpenChange}>
-      <DialogContent className="flex w-full max-h-[90vh] min-h-0 max-lg:max-w-none flex-col gap-0 overflow-hidden lg:rounded-[4px] border border-border-10 bg-white p-0 lg:max-w-2xl">
-        <div className="border-b border-border-10/5 px-my-20 py-my-12">
-          <DialogTitle className="text-body1_700 text-on-surface-10">{title}</DialogTitle>
-          <p className="mt-1 text-body3_400 text-on-surface-30">{description}</p>
+      <DialogContent className="flex w-full max-h-[90vh] min-h-0 max-lg:max-w-none flex-col gap-0 overflow-hidden lg:rounded-sm border border-border bg-background p-0 lg:max-w-2xl">
+        <div className="border-b border-border/5 px-5 py-3">
+          <DialogTitle className="text-body1_700 text-foreground">{title}</DialogTitle>
+          <p className="mt-1 text-body3_400 text-foreground-placeholder">{description}</p>
         </div>
 
         {showSeriesFilter && (
-          <div className="border-b border-border-10/5 px-my-20 pb-my-12 pt-0">
+          <div className="border-b border-border/5 px-5 pb-3 pt-0">
             <div
               className={cn(
                 "inline-flex w-full min-w-0 flex-wrap items-center overflow-x-auto",
@@ -180,15 +180,15 @@ export function ImportCharacterDialog({
           </div>
         )}
 
-        <div className="min-h-0 flex-1 overflow-y-auto px-my-20 py-my-16">
+        <div className="min-h-0 flex-1 overflow-y-auto px-5 py-4">
           {visibleCharacters.length === 0 ? (
-            <p className="py-my-32 text-center text-body3_400 text-on-surface-30">
+            <p className="py-8 text-center text-body3_400 text-foreground-placeholder">
               {showSeriesFilter
                 ? "불러올 수 있는 등장인물이 없어요. 이미 모두 내 작품에 추가했거나 이 시리즈에 등록된 인물이 없어요."
                 : "불러올 수 있는 캐릭터가 없어요."}
             </p>
           ) : (
-            <div className="flex flex-col gap-my-12">
+            <div className="flex flex-col gap-3">
               {visibleCharacters.map((character) => {
                 const selected = character.id === resolvedId;
                 return (
@@ -196,13 +196,13 @@ export function ImportCharacterDialog({
                     key={character.id}
                     type="button"
                     onClick={() => setSelectedImportCharacterId(character.id)}
-                    className={`flex w-full items-center gap-my-12 rounded-[4px] border px-my-12 py-my-12 text-left transition-colors ${
+                    className={`flex w-full items-center gap-3 rounded-sm border px-3 py-3 text-left transition-colors ${
                       selected
                         ? "border-primary bg-primary/5"
-                        : "border-border-10 bg-white hover:bg-surface-20"
+                        : "border-border bg-background hover:bg-muted"
                     }`}
                   >
-                    <div className="relative h-20 w-14 shrink-0 overflow-hidden rounded border border-border-10 bg-surface-20">
+                    <div className="relative h-20 w-14 shrink-0 overflow-hidden rounded border border-border bg-muted">
                       <Image
                         src={character.imageUrl}
                         alt={character.name}
@@ -213,8 +213,8 @@ export function ImportCharacterDialog({
                       <div className={THUMBNAIL_DIM_OVERLAY_CLASS} aria-hidden />
                     </div>
                     <div className="min-w-0 flex-1">
-                      <p className="truncate text-body3_700 text-on-surface-10">{character.name}</p>
-                      <p className="mt-1 line-clamp-2 text-body3_400 text-on-surface-30">{character.summary}</p>
+                      <p className="truncate text-body3_700 text-foreground">{character.name}</p>
+                      <p className="mt-1 line-clamp-2 text-body3_400 text-foreground-placeholder">{character.summary}</p>
                     </div>
                   </button>
                 );
@@ -223,18 +223,18 @@ export function ImportCharacterDialog({
           )}
         </div>
 
-        <div className="flex items-center justify-end gap-my-8 border-t border-border-10/5 px-my-20 py-my-12">
+        <div className="flex items-center justify-end gap-2 border-t border-border/5 px-5 py-3">
           <Button
             type="button"
             variant="outline"
-            className="h-my-36 min-h-my-36 rounded-md bg-white px-my-12 text-body3_400 text-on-surface-10 hover:bg-surface-20 disabled:border-border-20 lg:h-8 lg:min-h-8"
+            className="h-9 min-h-9 rounded-md bg-background px-3 text-body3_400 text-foreground hover:bg-muted disabled:border-border lg:h-8 lg:min-h-8"
             onClick={() => handleDialogOpenChange(false)}
           >
             취소
           </Button>
           <Button
             type="button"
-            className="h-my-36 min-h-my-36 rounded-md bg-slate-800 px-my-12 text-body3_400 text-white hover:bg-slate-700 lg:h-8 lg:min-h-8"
+            className="h-9 min-h-9 rounded-md bg-inverse px-3 text-body3_400 text-inverse-foreground hover:bg-inverse lg:h-8 lg:min-h-8"
             onClick={handleApply}
             disabled={!resolvedId}
           >

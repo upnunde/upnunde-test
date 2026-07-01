@@ -3,10 +3,10 @@
 import React, { useCallback, useEffect, useRef, useState } from "react";
 import Image from "next/image";
 import { useRouter, usePathname } from "next/navigation";
-import { Pause, Pencil, Play, Trash2 } from "lucide-react";
+import { ICONS } from "@/lib/icons";
 import { Button } from "@/components/ui/button";
 import { HeaderBackButton } from "@/components/ui/header-back-button";
-import { Input } from "@/components/ui/input";
+import { Input, InputGroup, InputHypertext } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import { FloatingAiComposerPortal } from "@/components/ui/FloatingAiComposerPortal";
 import { FLOATING_COMPOSER_SCROLL_PAD_CLASS } from "@/components/ui/floating-composer-bar";
@@ -15,9 +15,12 @@ import { createOptimizedImageObjectUrl } from "@/lib/image-upload-compress";
 import {
   RESOURCE_THUMBNAIL_FIXED_9_16_CLASS,
   THUMBNAIL_DIM_OVERLAY_CLASS,
+  THUMBNAIL_META_BAR_DIM_CLASS,
   THUMBNAIL_SLOT_ARIA,
+  thumbnailHoverDimOverlayClass,
+  DIM_OVERLAY_TEXT_CLASS,
 } from "@/lib/thumbnail-styles";
-import { Title1 } from "@/components/ui/title1";
+import { FormFieldLabel, formFieldAriaDescribedBy } from "@/components/ui/field-label";
 import { Title2 } from "@/components/ui/title2";
 import {
   PAGE_CARD_SHELL_MOBILE_FLUSH_CLASS,
@@ -28,8 +31,9 @@ import {
   PAGE_SUBHEADER_PAGE_SHELL_CLASS,
   PAGE_SUBHEADER_WITH_STICKY_CLASS,
 } from "@/lib/page-layout";
-import { cn } from "@/lib/utils";
+import { cn } from "design-system/utils";
 import { generateResourceDraftFromBrief } from "@/lib/resource-ai-draft";
+import { RESOURCE_DESCRIPTION_MAX } from "@/lib/resource-ai-draft-types";
 import { useFormAiDraftComposer } from "@/hooks/useFormAiDraftComposer";
 import { ImageCropPosterModal } from "@/components/resource/character/CharacterExpressionModal";
 import {
@@ -41,6 +45,8 @@ import type { MediaResource } from "@/types/resource";
 
 const MEDIA_VIDEO_FILE_INPUT_ID = "media-resource-video-file";
 const MEDIA_PREVIEW_IMAGE_FILE_INPUT_ID = "media-resource-preview-image-file";
+const MEDIA_NAME_INPUT_ID = "media-resource-name";
+const MEDIA_DESCRIPTION_INPUT_ID = "media-resource-description";
 
 const ACCEPTED_VIDEO_TYPES = "video/mp4,video/webm,video/quicktime";
 
@@ -241,10 +247,10 @@ export function MediaResourceDetailPage({ initialData }: MediaResourceDetailPage
   return (
     <div className={PAGE_SUBHEADER_PAGE_SHELL_CLASS}>
       <header className={PAGE_SUBHEADER_WITH_STICKY_CLASS}>
-        <div className="flex w-full min-w-0 max-w-[1200px] mx-auto items-center justify-between gap-my-16">
-          <div className="flex items-center justify-start gap-my-12">
+        <div className="flex w-full min-w-0 max-w-[1200px] mx-auto items-center justify-between gap-4">
+          <div className="flex items-center justify-start gap-3">
             <HeaderBackButton onClick={handleBack} aria-label="리소스 목록으로" />
-            <h1 className="text-heading2_700 text-on-surface-10">미디어 등록</h1>
+            <h1 className="text-heading2_700 text-foreground">미디어 등록</h1>
           </div>
         </div>
       </header>
@@ -259,53 +265,69 @@ export function MediaResourceDetailPage({ initialData }: MediaResourceDetailPage
         <div className="w-full min-w-0 max-w-[1200px] mx-auto mx-auto">
           <div
             className={cn(
-              "w-full rounded-[4px] border border-border-10 bg-white",
+              "w-full rounded-sm border border-border bg-background",
               PAGE_CARD_SHELL_MOBILE_FLUSH_CLASS,
             )}
           >
             <Title2 text="미디어 정보" asSectionHeader />
 
-            <div className={`${PAGE_CONTENT_BODY_CLASS} flex flex-col gap-my-32`}>
-              <section className="flex flex-col gap-my-8">
-                <Title1
-                  text="미디어 이름*"
-                  variant="title-subtitle-dot"
-                  subtitleText="영상·음성 등을 구분할 수 있는 이름을 입력해 주세요."
+            <div className={`${PAGE_CONTENT_BODY_CLASS} flex flex-col gap-8`}>
+              <section className="flex flex-col gap-2">
+                <FormFieldLabel
+                  title="미디어 이름*"
+                  subtitle="영상·음성 등을 구분할 수 있는 이름을 입력해 주세요."
+                  inputId={MEDIA_NAME_INPUT_ID}
                 />
-                <Input
-                  value={name}
-                  onChange={(e) => setName(e.target.value)}
-                  placeholder="이름을 입력해 주세요."
-                  className="h-[42px] rounded-md border border-border-10 bg-white px-my-12 py-my-8 text-body3_400 text-on-surface-10 placeholder:text-on-surface-30 focus:outline-none focus:ring-2 focus:ring-primary shadow-none"
-                />
+                <InputGroup>
+                  <Input
+                    id={MEDIA_NAME_INPUT_ID}
+                    aria-describedby={formFieldAriaDescribedBy(MEDIA_NAME_INPUT_ID)}
+                    size="lg"
+                    value={name}
+                    onChange={(e) => setName(e.target.value)}
+                    placeholder="이름을 입력해 주세요."
+                  />
+                </InputGroup>
               </section>
 
-              <section className="flex flex-col gap-my-8">
-                <Title1
-                  text="미디어 설명*"
-                  variant="title-subtitle-dot"
-                  subtitleText="어떤 장면에서 사용되는 미디어인지 간단히 설명해 주세요."
+              <section className="flex flex-col gap-2">
+                <FormFieldLabel
+                  title="미디어 설명*"
+                  subtitle="어떤 장면에서 사용되는 미디어인지 간단히 설명해 주세요."
+                  inputId={MEDIA_DESCRIPTION_INPUT_ID}
                 />
-                <Textarea
-                  rows={4}
-                  value={description}
-                  onChange={(e) => setDescription(e.target.value)}
-                  placeholder="설명을 입력해 주세요."
-                  className="min-h-[96px] max-h-[400px] w-full resize-y rounded-md border border-border-10 bg-white px-my-12 py-my-8 text-body3_400 text-on-surface-10 placeholder:text-on-surface-30 shadow-none focus:outline-none focus:ring-2 focus:ring-primary"
-                />
+                <InputGroup>
+                  <Textarea
+                    id={MEDIA_DESCRIPTION_INPUT_ID}
+                    aria-describedby={formFieldAriaDescribedBy(MEDIA_DESCRIPTION_INPUT_ID)}
+                    rows={4}
+                    maxLength={RESOURCE_DESCRIPTION_MAX}
+                    value={description}
+                    onChange={(e) =>
+                      setDescription(e.target.value.slice(0, RESOURCE_DESCRIPTION_MAX))
+                    }
+                    placeholder="설명을 입력해 주세요."
+                    className="min-h-[96px] max-h-[400px] resize-y"
+                  />
+                  <InputHypertext
+                    id={formFieldAriaDescribedBy(MEDIA_DESCRIPTION_INPUT_ID)}
+                    count={description.length}
+                    max={RESOURCE_DESCRIPTION_MAX}
+                  />
+                </InputGroup>
               </section>
 
-              <section className="flex flex-col gap-my-12">
-                <Title1
-                  text="미디어 파일*"
-                  variant="title-subtitle-dot"
-                  subtitleText="에피소드에 삽입할 영상 파일입니다. MP4·WebM 등을 업로드할 수 있습니다."
+              <section className="flex flex-col gap-3">
+                <FormFieldLabel
+                  title="미디어 파일*"
+                  subtitle="에피소드에 삽입할 영상 파일입니다. MP4·WebM 등을 업로드할 수 있습니다."
+                  inputId={MEDIA_VIDEO_FILE_INPUT_ID}
                 />
                 {videoUrl ? (
-                  <div className="inline-flex flex-col justify-start items-start gap-my-4 w-[90px] group">
+                  <div className="inline-flex flex-col justify-start items-start gap-1 w-[90px] group">
                     <div
                       className={cn(
-                        "relative overflow-hidden rounded-lg border border-border-10 bg-black",
+                        "relative overflow-hidden rounded-lg border border-border bg-inverse",
                         RESOURCE_THUMBNAIL_FIXED_9_16_CLASS,
                       )}
                     >
@@ -321,36 +343,40 @@ export function MediaResourceDetailPage({ initialData }: MediaResourceDetailPage
                       <button
                         type="button"
                         onClick={togglePlayback}
-                        className="absolute inset-0 z-[1] flex items-center justify-center bg-black/20 text-white transition-colors hover:bg-black/30 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary"
+                        className={cn(
+                          "absolute inset-0 z-0 flex items-center justify-center bg-dim-10 transition-colors hover:bg-dim-10 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary",
+                          DIM_OVERLAY_TEXT_CLASS,
+                        )}
                         aria-label={isPlaying ? "영상 일시정지" : "영상 재생"}
                       >
                         {isPlaying ? (
-                          <Pause className="h-8 w-8" aria-hidden />
+                          <ICONS.pause className="h-8 w-8" aria-hidden />
                         ) : (
-                          <Play className="h-8 w-8" aria-hidden />
+                          <ICONS.play className="h-8 w-8" aria-hidden />
                         )}
                       </button>
                       <div className={THUMBNAIL_DIM_OVERLAY_CLASS} aria-hidden />
-                      <div className="pointer-events-none absolute bottom-0 left-0 flex h-6 w-full items-center justify-center bg-black/40">
-                        <span className="text-center text-caption1_700 text-white">{duration}</span>
+                      <div className={THUMBNAIL_META_BAR_DIM_CLASS}>
+                        <span className={cn("text-center text-caption1_700", DIM_OVERLAY_TEXT_CLASS)}>{duration}</span>
                       </div>
-                      <div className="pointer-events-none absolute inset-0 z-[1] bg-black/10 opacity-0 transition-opacity group-hover:opacity-100" />
-                      <div className="absolute right-1 top-1 z-[2] flex flex-col items-start justify-center gap-my-4 opacity-0 transition-opacity pointer-events-none group-hover:opacity-100 group-hover:pointer-events-auto">
+                      <div className={thumbnailHoverDimOverlayClass()} aria-hidden />
+                      <div className="absolute right-1 top-1 z-dropdown flex flex-col items-start justify-center gap-1 opacity-0 transition-opacity pointer-events-none group-hover:opacity-100 group-hover:pointer-events-auto">
                         <label
                           htmlFor={MEDIA_VIDEO_FILE_INPUT_ID}
-                          className="inline-flex h-8 w-8 cursor-pointer items-center justify-center rounded-full bg-surface-10 text-on-surface-10 hover:bg-surface-20"
+                          className="inline-flex h-8 w-8 cursor-pointer items-center justify-center rounded-full bg-background text-foreground hover:bg-muted"
                           aria-label="미디어 파일 변경"
                         >
-                          <Pencil className="h-4 w-4" aria-hidden />
+                          <ICONS.pencil className="h-4 w-4" aria-hidden />
                         </label>
-                        <button
-                          type="button"
-                          className="inline-flex h-8 w-8 cursor-pointer items-center justify-center rounded-full bg-surface-10 text-on-surface-10 hover:bg-surface-20"
+                        <Button
+                          variant="ghost"
+                          size="icon-sm"
+                          className="rounded-full bg-background text-foreground"
                           aria-label="미디어 파일 삭제"
                           onClick={handleVideoRemove}
                         >
-                          <Trash2 className="h-4 w-4" aria-hidden />
-                        </button>
+                          <ICONS.trash2 className="h-4 w-4" aria-hidden />
+                        </Button>
                       </div>
                     </div>
                     <input
@@ -377,17 +403,17 @@ export function MediaResourceDetailPage({ initialData }: MediaResourceDetailPage
                 )}
               </section>
 
-              <section className="flex flex-col gap-my-12">
-                <Title1
-                  text="미리보기 이미지*"
-                  variant="title-subtitle-dot"
-                  subtitleText="목록에 표시됩니다. 영상 등록 시 첫 프레임으로 자동 채워집니다."
+              <section className="flex flex-col gap-3">
+                <FormFieldLabel
+                  title="미리보기 이미지*"
+                  subtitle="목록에 표시됩니다. 영상 등록 시 첫 프레임으로 자동 채워집니다."
+                  inputId={MEDIA_PREVIEW_IMAGE_FILE_INPUT_ID}
                 />
                 {isExtractingPreview && !thumbnailUrl ? (
-                  <p className="text-body4_400 text-on-surface-30">영상에서 미리보기를 만드는 중…</p>
+                  <p className="text-body4_400 text-foreground-placeholder">영상에서 미리보기를 만드는 중…</p>
                 ) : thumbnailUrl ? (
-                  <div className="inline-flex flex-col justify-start items-start gap-my-4 w-[90px] group">
-                    <div className="w-[90px] h-[160px] rounded-lg overflow-hidden border border-border-10 bg-surface-20 relative">
+                  <div className="inline-flex flex-col justify-start items-start gap-1 w-[90px] group">
+                    <div className="w-[90px] h-[160px] rounded-lg overflow-hidden border border-border bg-muted relative">
                       <button
                         type="button"
                         onClick={handleThumbnailClick}
@@ -404,30 +430,32 @@ export function MediaResourceDetailPage({ initialData }: MediaResourceDetailPage
                         />
                         <div className={THUMBNAIL_DIM_OVERLAY_CLASS} aria-hidden />
                       </button>
-                      <div className="absolute inset-0 z-[1] bg-black/10 opacity-0 group-hover:opacity-100 transition-opacity pointer-events-none" />
-                      <div className="absolute right-1 top-1 z-[2] flex flex-col justify-center items-start gap-my-4 opacity-0 group-hover:opacity-100 transition-opacity pointer-events-none group-hover:pointer-events-auto">
-                        <button
-                          type="button"
-                          className="w-8 h-8 rounded-full cursor-pointer bg-surface-10 inline-flex justify-center items-center text-on-surface-10 hover:bg-surface-20"
+                      <div className={thumbnailHoverDimOverlayClass()} aria-hidden />
+                      <div className="absolute right-1 top-1 z-dropdown flex flex-col justify-center items-start gap-1 opacity-0 group-hover:opacity-100 transition-opacity pointer-events-none group-hover:pointer-events-auto">
+                        <Button
+                          variant="ghost"
+                          size="icon-sm"
+                          className="rounded-full bg-background text-foreground"
                           aria-label="미리보기 이미지 편집"
                           onClick={(e) => {
                             e.stopPropagation();
                             handleThumbnailClick();
                           }}
                         >
-                          <Pencil className="w-4 h-4" />
-                        </button>
-                        <button
-                          type="button"
-                          className="w-8 h-8 rounded-full cursor-pointer bg-surface-10 inline-flex justify-center items-center text-on-surface-10 hover:bg-surface-20"
+                          <ICONS.pencil className="w-4 h-4" />
+                        </Button>
+                        <Button
+                          variant="ghost"
+                          size="icon-sm"
+                          className="rounded-full bg-background text-foreground"
                           aria-label="미리보기 이미지 삭제"
                           onClick={(e) => {
                             e.stopPropagation();
                             handleThumbnailRemove();
                           }}
                         >
-                          <Trash2 className="w-4 h-4" />
-                        </button>
+                          <ICONS.trash2 className="w-4 h-4" />
+                        </Button>
                       </div>
                     </div>
                   </div>
@@ -446,11 +474,11 @@ export function MediaResourceDetailPage({ initialData }: MediaResourceDetailPage
               </section>
             </div>
 
-            <div className={`${PAGE_CONTENT_FOOTER_CLASS} flex items-center justify-end gap-my-8`}>
+            <div className={`${PAGE_CONTENT_FOOTER_CLASS} flex items-center justify-end gap-2`}>
               <Button
                 type="button"
                 variant="outline"
-                size="form"
+                size="lg"
                 className={PAGE_FOOTER_ACTION_BUTTON_CLASS}
                 onClick={handleBack}
               >
@@ -458,7 +486,7 @@ export function MediaResourceDetailPage({ initialData }: MediaResourceDetailPage
               </Button>
               <Button
                 type="button"
-                size="form"
+                size="lg"
                 className={PAGE_FOOTER_ACTION_BUTTON_CLASS}
                 onClick={handleSave}
               >

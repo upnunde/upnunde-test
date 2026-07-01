@@ -16,11 +16,11 @@ import {
   PAGE_CONTAINER_CLASS,
   PAGE_FILTER_HEADER_INNER_CLASS,
   PAGE_FILTER_HEADER_SHELL_CLASS,
-  PAGE_SCROLL_ROOT_CLASS,
+  PAGE_SCROLL_ROOT_TRANSPARENT_CLASS,
   PAGE_SUBHEADER_WITH_FILTER_CLASS,
 } from "@/lib/page-layout";
 import { CONTROL_GROUP_GAP_STANDARD_RESPONSIVE_CLASS } from "@/lib/chip-styles";
-import { cn } from "@/lib/utils";
+import { cn } from "design-system/utils";
 import { WORKS_TABS, WORKS_TAB_PATH, getWorksTabFromPathname } from "@/lib/worksArea";
 
 export default function MyWorksLayout({ children }: { children: React.ReactNode }) {
@@ -31,8 +31,8 @@ export default function MyWorksLayout({ children }: { children: React.ReactNode 
   return (
     <AppShell sidebarActiveId="series">
       <div className={PAGE_SUBHEADER_WITH_FILTER_CLASS}>
-        <div className={cn(PAGE_CONTAINER_CLASS, "flex items-center justify-start gap-my-16")}>
-          <h1 className="text-heading2_700 text-on-surface-10">내 작품</h1>
+        <div className={cn(PAGE_CONTAINER_CLASS, "flex items-center justify-start gap-4")}>
+          <h1 className="text-heading2_700 text-foreground">내 작품</h1>
         </div>
       </div>
 
@@ -58,9 +58,9 @@ export default function MyWorksLayout({ children }: { children: React.ReactNode 
 
       <div
         className={cn(
-          PAGE_SCROLL_ROOT_CLASS,
+          PAGE_SCROLL_ROOT_TRANSPARENT_CLASS,
           "w-full min-w-0 max-w-[1200px] mx-auto lg:max-w-none",
-          "items-center gap-0 lg:p-my-12 max-lg:gap-my-16 max-lg:pt-my-20",
+          "items-center gap-0 max-lg:gap-4 max-lg:pt-5",
         )}
       >
         {children}

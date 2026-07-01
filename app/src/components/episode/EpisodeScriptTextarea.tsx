@@ -1,8 +1,10 @@
 "use client";
 
 import { AiFieldLoadingMessage } from "@/components/episode/EpisodeAiFieldLoading";
+import { InputGroup, InputHypertext } from "@/components/ui/input";
+import { Textarea } from "@/components/ui/textarea";
 import { EPISODE_FORM_FIELD_COPY } from "@/lib/episode-form-copy";
-import { cn } from "@/lib/utils";
+import { cn } from "design-system/utils";
 
 const MAX_SCRIPT = 5000;
 
@@ -27,31 +29,36 @@ export function EpisodeScriptTextarea({
   loadingMessage = EPISODE_FORM_FIELD_COPY.aiComposer.fieldLoading.script,
 }: EpisodeScriptTextareaProps) {
   return (
-    <div className={cn("flex flex-col gap-my-12", className)}>
+    <div className={cn("flex flex-col gap-3", className)}>
       {isLoading ? (
-        <div
-          className="flex h-[400px] max-h-[400px] w-full items-start rounded-md border border-border-10 bg-white px-my-12 py-my-12"
-          aria-busy="true"
-        >
-          <AiFieldLoadingMessage message={loadingMessage} />
-        </div>
+        <>
+          <div
+            className="flex h-[400px] max-h-[400px] w-full items-start rounded-md border border-border bg-background px-3 py-3"
+            aria-busy="true"
+          >
+            <AiFieldLoadingMessage message={loadingMessage} />
+          </div>
+          <div className="flex justify-end text-body4_400 tabular-nums text-foreground-muted">
+            —/{MAX_SCRIPT}
+          </div>
+        </>
       ) : (
-        <textarea
-          rows={rows}
-          maxLength={MAX_SCRIPT}
-          value={value}
-          onChange={(e) => onChange(e.target.value)}
-          placeholder={EPISODE_FORM_FIELD_COPY.script.placeholder}
-          aria-label="에피소드 대본"
-          className={cn(
-            "h-[400px] min-h-[160px] max-h-[400px] w-full resize-y overflow-y-auto rounded-md border border-border-10 bg-white px-my-12 py-my-8 text-body3_400 text-on-surface-10 placeholder:text-on-surface-30 focus:outline-none focus:ring-2 focus:ring-primary",
-            textareaClassName,
-          )}
-        />
+        <InputGroup>
+          <Textarea
+            rows={rows}
+            maxLength={MAX_SCRIPT}
+            value={value}
+            onChange={(e) => onChange(e.target.value)}
+            placeholder={EPISODE_FORM_FIELD_COPY.script.placeholder}
+            aria-label="에피소드 대본"
+            className={cn(
+              "h-[400px] min-h-[160px] max-h-[400px] resize-y overflow-y-auto",
+              textareaClassName,
+            )}
+          />
+          <InputHypertext count={value.length} max={MAX_SCRIPT} />
+        </InputGroup>
       )}
-      <div className="flex justify-end text-caption1_400 text-on-surface-30">
-        {isLoading ? "—" : value.length}/{MAX_SCRIPT}
-      </div>
     </div>
   );
 }

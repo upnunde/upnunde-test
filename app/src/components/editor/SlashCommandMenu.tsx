@@ -1,18 +1,7 @@
 "use client";
 
 import { useEffect, useRef } from "react";
-import {
-  Image,
-  Music,
-  User,
-  Film,
-  ImagePlus,
-  ListChecks,
-  Heading,
-  Sparkles,
-  Clapperboard,
-  MessageSquareText,
-} from "lucide-react";
+import { ICONS } from "@/lib/icons";
 import type { BlockType } from "@/types/editor";
 import { MenuList, MenuListBody, MenuListItem } from "@/components/ui/menu-list";
 import {
@@ -20,7 +9,7 @@ import {
   MOBILE_BOTTOM_SHEET_SHELL_BASE_CLASS,
   mobileBottomSheetMediumMaxHeightClassName,
 } from "@/components/ui/modal/modal-styles";
-import { cn } from "@/lib/utils";
+import { cn } from "design-system/utils";
 import {
   BACKGROUNDS,
   CHARACTERS,
@@ -53,20 +42,20 @@ export interface SlashCommandMenuProps {
 
 /** 문장 내 안내문구(PICKER_LABEL_KO)와 동일한 한글 라벨 */
 const BLOCK_OPTIONS: { type: BlockType; label: string; icon: React.ElementType }[] = [
-  { type: "scene", label: "장면추가", icon: Heading },
-  { type: "top_desc", label: "장면정보", icon: Clapperboard },
-  { type: "background", label: "배경", icon: Image },
-  { type: "bgm", label: "배경음악", icon: Music },
-  { type: "sfx", label: "효과음", icon: Music },
-  { type: "character", label: "캐릭터", icon: User },
-  { type: "gallery", label: "갤러리", icon: ImagePlus },
-  { type: "video", label: "동영상", icon: Film },
-  { type: "choice", label: "선택지", icon: ListChecks },
-  { type: "event", label: "장면 전환", icon: Sparkles },
+  { type: "scene", label: "장면추가", icon: ICONS.heading },
+  { type: "top_desc", label: "장면정보", icon: ICONS.clapperboard },
+  { type: "background", label: "배경", icon: ICONS.image },
+  { type: "bgm", label: "배경음악", icon: ICONS.music },
+  { type: "sfx", label: "효과음", icon: ICONS.music },
+  { type: "character", label: "캐릭터", icon: ICONS.user },
+  { type: "gallery", label: "갤러리", icon: ICONS.imagePlus },
+  { type: "video", label: "동영상", icon: ICONS.film },
+  { type: "choice", label: "선택지", icon: ICONS.listChecks },
+  { type: "event", label: "장면 전환", icon: ICONS.sparkles },
 ];
 
 const MENU_OPTIONS: SlashMenuOption[] = [
-  { id: "add_sentence", label: "문장추가", icon: MessageSquareText },
+  { id: "add_sentence", label: "문장추가", icon: ICONS.messageSquareText },
   ...BLOCK_OPTIONS.map((opt) => ({ id: opt.type, ...opt })),
 ];
 
@@ -197,7 +186,7 @@ export function SlashCommandMenu({
         variant={isSheet ? "form" : "compact"}
         role="option"
         aria-selected={false}
-        className={isSheet ? undefined : "gap-my-8"}
+        className={isSheet ? undefined : "gap-2"}
         onClick={() => {
           if (option.id === "add_sentence") {
             onSelect({ action: "add_sentence" });
@@ -213,8 +202,8 @@ export function SlashCommandMenu({
         }}
         onKeyDown={(e) => handleOptionKeyDown(index, e)}
       >
-        <Icon className={cn("shrink-0 text-on-surface-30", isSheet ? "h-5 w-5" : "h-4 w-4")} />
-        <span className={cn(isSheet ? undefined : "text-on-surface-10")}>{option.label}</span>
+        <Icon className={cn("shrink-0 text-foreground-placeholder", isSheet ? "h-5 w-5" : "h-4 w-4")} />
+        <span className={cn(isSheet ? undefined : "text-foreground")}>{option.label}</span>
       </MenuListItem>
     );
   };
@@ -236,9 +225,9 @@ export function SlashCommandMenu({
           role="listbox"
           aria-label="블록 추가"
         >
-          <div className="shrink-0 border-b border-border-10 px-my-20 py-my-16">
-            <p className="text-body1_700 text-on-surface-10">블록 추가</p>
-            <p className="mt-my-4 text-caption1_400 text-on-surface-30">
+          <div className="shrink-0 border-b border-border px-5 py-4">
+            <p className="text-body1_700 text-foreground">블록 추가</p>
+            <p className="mt-1 text-caption1_400 text-foreground-placeholder">
               아래에 추가할 블록을 선택해 주세요
             </p>
           </div>
@@ -255,12 +244,12 @@ export function SlashCommandMenu({
   return (
     <>
       <div
-        className="fixed inset-0 z-40 cursor-pointer"
+        className="fixed inset-0 z-modal cursor-pointer"
         aria-hidden
         onClick={onClose}
       />
       <MenuList
-        className="fixed z-50 min-w-[200px] rounded-lg border border-border-10 bg-white py-my-4 shadow-elevation-40"
+        className="fixed z-sticky min-w-[200px] rounded-lg border border-border bg-background py-1 shadow-elevation-40"
         style={{ top: adjustedPosition.top, left: adjustedPosition.left }}
         role="listbox"
       >

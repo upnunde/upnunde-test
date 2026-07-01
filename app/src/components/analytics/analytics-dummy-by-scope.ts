@@ -335,7 +335,7 @@ export function getUserTimeOfDayHourlyDummy(
 }
 
 export function deltaClassName(tone: DeltaTone): string {
-  if (tone === "loss") return "text-blue-500";
-  if (tone === "neutral") return "text-on-surface-30";
-  return "text-error-error";
+  if (tone === "loss") return "text-info";
+  if (tone === "neutral") return "text-foreground-placeholder";
+  return "text-destructive";
 }

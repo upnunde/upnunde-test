@@ -3,11 +3,10 @@
 import React, { useState, useEffect, useRef, useMemo } from "react";
 import dynamic from "next/dynamic";
 import { Button } from "@/components/ui/button";
-import { FilterChip } from "@/components/ui/chip";
-import { CHIP_GROUP_GAP_CLASS } from "@/lib/chip-styles";
+import { Tabs, TabsList, TabsTrigger } from "design-system/ui/tabs";
 import { PAGE_CARD_SHELL_MOBILE_FLUSH_CLASS, PAGE_FLUSH_CONTENT_PAD_X_CLASS } from "@/lib/page-layout";
-import { cn } from "@/lib/utils";
-import { Title2 } from "@/components/ui/title2";
+import { cn } from "design-system/utils";
+import { ResourceSectionHeader } from "@/components/resource/ResourceSectionHeader";
 import { BgmListItem } from "./BgmListItem";
 import type { BgmResource } from "@/types/resource";
 
@@ -133,82 +132,69 @@ export function BgmSection({
     <>
       <div
         className={cn(
-          "flex w-full min-w-0 flex-col items-stretch justify-start rounded-[4px] border border-border-10 bg-surface-10",
+          "flex w-full min-w-0 flex-col items-stretch justify-start rounded-sm border border-border bg-background",
           PAGE_CARD_SHELL_MOBILE_FLUSH_CLASS,
         )}
       >
-        <div className={cn("w-full self-stretch border-b border-border-10 pb-my-12 pt-my-20", PAGE_FLUSH_CONTENT_PAD_X_CLASS)}>
-          <Title2
-            text={title}
-            asSectionHeader
-            subtitle
-            subtitleText={description}
-            className="!p-0 !px-0 !border-0 !border-b-0 w-full"
-            sectionEnd={
-              items.length > 0 ? (
-                <Button
-                  type="button"
-                  variant="outline"
-                  size="sm"
-                  className="h-8 shrink-0 border-border-20 text-on-surface-10"
-                  onClick={() => setModalOpen(true)}
-                >
-                  추가하기
-                </Button>
-              ) : undefined
-            }
-          />
-        </div>
+        <ResourceSectionHeader
+          title={title}
+          description={description}
+          headerAction={
+            items.length > 0 ? (
+              <Button
+                type="button"
+                variant="outline"
+                shape="square"
+                size="sm"
+                onClick={() => setModalOpen(true)}
+              >
+                추가하기
+              </Button>
+            ) : undefined
+          }
+        />
         {items.length === 0 ? (
-          <div className="self-stretch h-36 p-my-20 rounded-[4px] flex flex-col justify-center items-center gap-my-16">
-            <p className="text-on-surface-30 text-body3_400 font-['Pretendard_JP']">
+          <div className="self-stretch h-36 p-5 rounded-sm flex flex-col justify-center items-center gap-4">
+            <p className="text-foreground-placeholder text-body3_400 font-['Pretendard_JP']">
               {emptyMessage}
             </p>
             <Button
               type="button"
               variant="outline"
-              className="h-9 min-w-20 px-my-12 rounded-md border border-border-20 text-on-surface-10"
+              shape="square"
+              size="default"
               onClick={() => setModalOpen(true)}
             >
               {addButtonLabel}
             </Button>
           </div>
         ) : (
-          <div className={cn("self-stretch pb-my-8 pt-my-8 rounded-[4px] flex flex-col justify-start items-start gap-my-12", PAGE_FLUSH_CONTENT_PAD_X_CLASS)}>
+          <div className={cn("self-stretch pb-2 pt-2 rounded-sm flex flex-col justify-start items-start gap-3", PAGE_FLUSH_CONTENT_PAD_X_CLASS)}>
             <div className="mb-1 mt-0 w-full pt-0 pb-0">
-              <div
-                className={cn(
-                  "flex w-full min-w-0 items-center overflow-x-auto overscroll-x-contain",
-                  "max-lg:flex-nowrap max-lg:pb-my-4",
-                  "lg:flex-wrap",
-                  CHIP_GROUP_GAP_CLASS,
-                )}
-                role="tablist"
-                aria-label="BGM 장르"
+              <Tabs
+                value={activeGenre}
+                onValueChange={setActiveGenre}
+                className="w-full min-w-0"
               >
-                {GENRE_TABS_WITH_ALL.map((genre) => {
-                  const isActive = genre === activeGenre;
-                  return (
-                    <FilterChip
-                      key={genre}
-                      role="tab"
-                      aria-selected={isActive}
-                      selected={isActive}
-                      chipSize="m"
-                      className="min-w-0"
-                      onClick={() => setActiveGenre(genre)}
-                    >
+                <TabsList
+                  variant="default"
+                  size="sm"
+                  aria-label="BGM 장르"
+                  className="max-w-full min-w-0 overflow-x-auto overscroll-x-contain max-lg:flex-nowrap lg:flex-wrap"
+                >
+                  {GENRE_TABS_WITH_ALL.map((genre) => (
+                    <TabsTrigger key={genre} value={genre}>
                       {genre}
-                    </FilterChip>
-                  );
-                })}
-              </div>
+                    </TabsTrigger>
+                  ))}
+                </TabsList>
+              </Tabs>
             </div>
-            <div className="w-full grid grid-cols-1 gap-y-0 lg:grid-cols-3 lg:gap-x-my-40">
+            <div className="w-full grid grid-cols-1 gap-y-0 lg:grid-cols-3 lg:gap-x-10">
               {filteredItems.map((item, idx) => (
                 <div
                   key={item.id}
-                  className="w-full border-b border-border-10 last:border-b-0 lg:border-b-0"
+                  className="w-full border-b border-border last:border-b-0 lg:border-b-0"
                 >
                   <BgmListItem
                     variant="default"

@@ -1,4 +1,4 @@
-import { cn } from "@/lib/utils";
+import { cn } from "design-system/utils";
 
 /**
  * 에디터 블록 행 보조 컨트롤 노출 규칙
@@ -14,14 +14,14 @@ import { cn } from "@/lib/utils";
 
 /** 블록 행 hover·포커스 배경 — 데스크톱만 (모바일은 focusBlockId 기반 하이라이트) */
 export function editorRowHoverClass() {
-  return "lg:hover:bg-surface-20/50 lg:focus-within:bg-surface-20/50";
+  return "lg:hover:bg-muted/50 lg:focus-within:bg-muted/50";
 }
 
 /** 모바일 블록·필드 선택 하이라이트 — 데스크톱 행 hover와 동일 */
-export const EDITOR_MOBILE_ACTIVE_SURFACE_CLASS = "bg-surface-20/50";
+export const EDITOR_MOBILE_ACTIVE_SURFACE_CLASS = "bg-muted/50";
 
 /** 모바일 포커스된 블록 행 배경 */
-export const EDITOR_MOBILE_FOCUSED_ROW_CLASS = "max-lg:bg-surface-20/50";
+export const EDITOR_MOBILE_FOCUSED_ROW_CLASS = "max-lg:bg-muted/50";
 
 /** 좌측 + · 드래그 핸들 — 데스크톱 전용 (`lg` 미만에서는 렌더하지 않음) */
 export function editorLeadingControlsClass() {

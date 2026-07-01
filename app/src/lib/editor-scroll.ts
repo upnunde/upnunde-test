@@ -59,7 +59,7 @@ export function editorMobileSubHeaderHideVarStyle(hiddenPx: number): Record<stri
 /** 모바일 에디터 서브헤더 셸 — 스크롤 이동량만큼 높이·클립 축소 */
 export function editorMobileSubHeaderShellClass(isFullyHidden: boolean) {
   return [
-    "w-full shrink-0 overflow-hidden border-b border-border-10 bg-white",
+    "w-full shrink-0 overflow-hidden border-b border-border bg-background",
     EDITOR_SUB_HEADER_STICKY_CLASS,
     "max-lg:h-[calc(3.5rem-var(--editor-sub-header-hide,0px))]",
     isFullyHidden ? "max-lg:border-b-0" : "",
@@ -75,7 +75,7 @@ export const EDITOR_MOBILE_SUB_HEADER_INNER_CLASS =
 /** 모바일 장면 탭·생성기 버튼 셸 — 스크롤 루트 위 고정(shrink-0) */
 export function editorMobileSceneHeaderShellClass() {
   return [
-    "relative hidden w-full shrink-0 overflow-visible border-b border-border-10 bg-white",
+    "relative hidden w-full shrink-0 overflow-visible border-b border-border bg-background",
   ].join(" ");
 }
 

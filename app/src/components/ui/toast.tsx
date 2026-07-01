@@ -1,8 +1,8 @@
 "use client";
 
 import * as React from "react";
-import { X } from "lucide-react";
-import { cn } from "@/lib/utils";
+import { ICONS } from "@/lib/icons";
+import { cn } from "design-system/utils";
 
 /** 단일 토스트 루트 — 스낵바 스타일 (반전 컬러: on-surface-10 배경, shadow, rounded-lg) */
 const Toast = React.forwardRef<
@@ -17,8 +17,8 @@ const Toast = React.forwardRef<
     role="status"
     aria-live="polite"
     className={cn(
-      "w-full max-w-[24rem] inline-flex justify-start items-center gap-my-16 rounded-lg bg-on-surface-10 shadow-elevation-20 py-my-12",
-      messageOnly ? "px-my-16" : "pl-my-16 pr-my-8",
+      "w-full max-w-[24rem] inline-flex justify-start items-center gap-4 rounded-lg bg-foreground shadow-elevation-20 py-3",
+      messageOnly ? "px-4" : "pl-4 pr-2",
       "data-[state=open]:animate-in data-[state=closed]:animate-out data-[state=closed]:fade-out-0 data-[state=open]:fade-in-0",
       className
     )}
@@ -35,7 +35,7 @@ const ToastTitle = React.forwardRef<
   <p
     ref={ref}
     className={cn(
-      "flex-1 min-w-0 justify-start text-surface-10 text-body3_500 font-['Pretendard_JP',sans-serif]",
+      "flex-1 min-w-0 justify-start text-background text-body3_500 font-['Pretendard_JP',sans-serif]",
       className
     )}
     {...props}
@@ -43,7 +43,7 @@ const ToastTitle = React.forwardRef<
 ));
 ToastTitle.displayName = "ToastTitle";
 
-/** Type B: 닫기(X) 아이콘 버튼 — 40x40 원형, 클릭 시 토스트 즉시 닫힘 */
+/** Type B: 닫기(ICONS.close) 아이콘 버튼 — 40x40 원형, 클릭 시 토스트 즉시 닫힘 */
 const ToastClose = React.forwardRef<
   HTMLButtonElement,
   React.ButtonHTMLAttributes<HTMLButtonElement>
@@ -53,12 +53,12 @@ const ToastClose = React.forwardRef<
     type="button"
     aria-label="닫기"
     className={cn(
-      "w-9 h-9 shrink-0 rounded-[999px] cursor-pointer flex justify-center items-center overflow-hidden text-surface-10 hover:bg-white/10 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring",
+      "w-9 h-9 shrink-0 rounded-[999px] cursor-pointer flex justify-center items-center overflow-hidden text-background hover:bg-inverse-foreground/10 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring",
       className
     )}
     {...props}
   >
-    <X className="w-5 h-5" aria-hidden />
+    <ICONS.close className="w-5 h-5" aria-hidden />
   </button>
 ));
 ToastClose.displayName = "ToastClose";
@@ -72,7 +72,7 @@ const ToastAction = React.forwardRef<
     ref={ref}
     type="button"
     className={cn(
-      "h-8 min-w-16 shrink-0 px-my-12 rounded-md cursor-pointer flex justify-center items-center gap-my-4 overflow-hidden text-primary text-body3_500 font-['Pretendard_JP',sans-serif] hover:bg-white/10 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring",
+      "h-8 min-w-16 shrink-0 px-3 rounded-md cursor-pointer flex justify-center items-center gap-1 overflow-hidden text-primary text-body3_500 font-['Pretendard_JP',sans-serif] hover:bg-inverse-foreground/10 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring",
       className
     )}
     {...props}

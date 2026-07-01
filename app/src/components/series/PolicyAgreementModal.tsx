@@ -2,14 +2,14 @@
 
 import React, { useState } from "react";
 import Link from "next/link";
-import { Check } from "lucide-react";
+import { ICONS } from "@/lib/icons";
 import { Dialog, DialogContent } from "@/components/ui/dialog";
 import {
   ModalFooterButtons,
   ModalHeader,
   modalDialogContentClassName,
 } from "@/components/ui/modal";
-import { cn } from "@/lib/utils";
+import { cn } from "design-system/utils";
 
 export interface PolicyAgreementModalProps {
   open: boolean;
@@ -57,10 +57,10 @@ export function PolicyAgreementModal({
 
         <div
           id="policy-agreement-description"
-          className="w-full px-my-24 pb-my-16"
+          className="w-full px-6 pb-4"
         >
-          <div className="w-full rounded-lg bg-surface-20 px-my-16 py-my-12">
-            <ol className="list-decimal list-inside space-y-my-8 text-body3_400 text-on-surface-20">
+          <div className="w-full rounded-lg bg-muted px-4 py-3">
+            <ol className="list-decimal list-inside space-y-2 text-body3_400 text-foreground-muted">
               {POLICIES.map((text, i) => (
                 <li key={i}>{text}</li>
               ))}
@@ -71,11 +71,11 @@ export function PolicyAgreementModal({
         <ModalFooterButtons
           layout="end"
           body={
-            <div className="flex w-full items-center justify-between gap-my-8 bg-surface-10 px-my-24 py-my-8">
+            <div className="flex w-full items-center justify-between gap-2 bg-background px-6 py-2">
               <button
                 type="button"
                 onClick={() => setAgreed((prev) => !prev)}
-                className="flex items-center gap-my-8 rounded text-body3_400 text-on-surface-20 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-2"
+                className="flex items-center gap-2 rounded text-body3_400 text-foreground-muted focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-2"
                 aria-pressed={agreed}
                 aria-label={agreed ? "리노벨 운영정책 동의함" : "리노벨 운영정책 동의"}
               >
@@ -83,18 +83,18 @@ export function PolicyAgreementModal({
                   className={cn(
                     "flex h-5 w-5 shrink-0 items-center justify-center rounded-full border-2 transition-colors",
                     agreed
-                      ? "border-primary bg-primary text-white"
-                      : "border-border-20 bg-white",
+                      ? "border-primary bg-primary text-inverse-foreground"
+                      : "border-border bg-background",
                   )}
                   aria-hidden
                 >
-                  {agreed && <Check className="h-3 w-3" strokeWidth={3} />}
+                  {agreed && <ICONS.check className="h-3 w-3" strokeWidth={3} />}
                 </span>
                 <span>리노벨 운영정책 동의</span>
               </button>
               <Link
                 href="/guide"
-                className="rounded text-body3_400 text-on-surface-10 underline hover:underline focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-2"
+                className="rounded text-body3_400 text-foreground underline hover:underline focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-2"
               >
                 보기
               </Link>

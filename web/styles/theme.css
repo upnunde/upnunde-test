@@ -44,7 +44,7 @@
   /* The color for focus rings, outlines, and other focus indicators. */
   --ring: rgba(246, 66, 212, 1.00);
   /* Shadow for small elevations, such as cards or modals. */
-  --elevation-sm: 0px 2px 4px 2px rgba(0, 0, 0, 0.16);
+  --elevation-sm: 0px 2px 4px 2px rgba(0, 0, 0, 0.1);
   /* The color for chart elements, such as a bar or line in a chart. */
   --chart-1: rgba(246, 66, 212, 1.00);
   /* The color for another chart element, such as a bar or line in a chart. */

@@ -11,7 +11,7 @@ import {
   menuListLabelClassName,
   menuListSeparatorClassName,
 } from "@/components/ui/menu-list-styles";
-import { cn } from "@/lib/utils";
+import { cn } from "design-system/utils";
 
 export type MenuListItemVariant = "form" | "compact";
 

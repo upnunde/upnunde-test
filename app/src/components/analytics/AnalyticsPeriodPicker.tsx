@@ -1,8 +1,8 @@
 "use client";
 
-import { useCallback, useEffect, useMemo, useState } from "react";
+import { forwardRef, useCallback, useEffect, useMemo, useState, type ComponentPropsWithoutRef } from "react";
 import { createPortal } from "react-dom";
-import { CalendarDays, ChevronDown, X } from "lucide-react";
+import { ICONS } from "@/lib/icons";
 import {
   ANALYTICS_PERIOD_PRESETS,
   formatYmdFull,
@@ -15,6 +15,7 @@ import {
 } from "@/components/analytics/analytics-date";
 import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover";
 import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
 import { analyticsPeriodInlineTriggerClassName } from "@/components/analytics/analytics-filter-chips";
 import { useIsLgUp } from "@/hooks/useMediaQuery";
 import { PAGE_GUTTER_X_CLASS } from "@/lib/page-layout";
@@ -25,7 +26,7 @@ import {
   MOBILE_BOTTOM_SHEET_BOTTOM_RADIUS_CLASS,
   mobileBottomSheetMediumMaxHeightClassName,
 } from "@/components/ui/modal/modal-styles";
-import { cn } from "@/lib/utils";
+import { cn } from "design-system/utils";
 
 /**
  * 분석 기간 통합 피커 — 트리거 하나로 프리셋 + 사용자 지정 기간을 모두 다룬다.
@@ -49,16 +50,16 @@ export interface AnalyticsPeriodPickerProps {
 }
 
 const TRIGGER_BASE_CLASS = cn(
-  "inline-flex h-9 min-w-0 shrink-0 cursor-pointer items-center justify-between gap-my-8 rounded-md border border-slate-200 bg-white px-my-12 text-body3_500 text-on-surface-10 transition-colors hover:bg-slate-50 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-2 data-[state=open]:border-slate-300 data-[state=open]:bg-slate-50",
+  "inline-flex h-9 min-w-0 shrink-0 cursor-pointer items-center justify-between gap-2 rounded-md border border-border bg-background px-3 text-body3_500 text-foreground transition-colors hover:bg-muted focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-2 data-[state=open]:border-border data-[state=open]:bg-muted",
 );
 
 const TRIGGER_INLINE_CLASS = analyticsPeriodInlineTriggerClassName;
 
 const PANEL_SHELL_CLASS = cn(
-  "w-[320px] border border-border-10 bg-white p-0 shadow-elevation-40 max-lg:w-full max-lg:rounded-none max-lg:border-0 max-lg:shadow-none",
+  "w-[320px] border border-border bg-background p-0 shadow-elevation-40 max-lg:w-full max-lg:rounded-none max-lg:border-0 max-lg:shadow-none",
   MOBILE_MODAL_TOP_RADIUS_CLASS,
   MOBILE_BOTTOM_SHEET_BOTTOM_RADIUS_CLASS,
-  "lg:rounded-[4px]",
+  "lg:rounded-sm",
 );
 
 interface PeriodPickerPanelProps {
@@ -90,15 +91,15 @@ function PeriodPickerPanel({
   return (
     <>
       {showIntro ? (
-        <div className={cn("border-b border-border-10/50 py-my-12", PAGE_GUTTER_X_CLASS)}>
-          <div className="text-body3_700 text-on-surface-10">기간 선택</div>
-          <p className="mt-1 text-caption1_400 text-on-surface-30">
+        <div className={cn("border-b border-border/50 py-3", PAGE_GUTTER_X_CLASS)}>
+          <div className="text-body3_700 text-foreground">기간 선택</div>
+          <p className="mt-1 text-caption1_400 text-foreground-placeholder">
             프리셋이나 사용자 지정 기간을 선택해 주세요.
           </p>
         </div>
       ) : null}
 
-      <div role="radiogroup" aria-label="프리셋 기간" className="flex flex-col py-my-4">
+      <div role="radiogroup" aria-label="프리셋 기간" className="flex flex-col py-1">
         {ANALYTICS_PERIOD_PRESETS.map(({ value: preset, label }) => {
           const checked = activePreset === preset;
           return (
@@ -109,8 +110,8 @@ function PeriodPickerPanel({
               aria-checked={checked}
               onClick={() => onPresetSelect(preset)}
               className={cn(
-                "flex w-full cursor-pointer items-center justify-between px-my-16 py-my-8 text-body3_500 transition-colors hover:bg-surface-20",
-                checked ? "text-on-surface-10" : "text-on-surface-20",
+                "flex w-full cursor-pointer items-center justify-between px-4 py-2 text-body3_500 transition-colors hover:bg-muted",
+                checked ? "text-foreground" : "text-foreground-muted",
               )}
             >
               <span>{label}</span>
@@ -124,40 +125,42 @@ function PeriodPickerPanel({
         })}
       </div>
 
-      <div className={cn("border-t border-border-10/50 py-my-12", PAGE_GUTTER_X_CLASS)}>
+      <div className={cn("border-t border-border/50 py-3", PAGE_GUTTER_X_CLASS)}>
         <div className="mb-2 flex items-center justify-between">
-          <span className="text-caption1_500 text-on-surface-30">사용자 지정</span>
+          <span className="text-caption1_500 text-foreground-placeholder">사용자 지정</span>
           {isCustomPeriod(value) ? (
             <span className="text-caption1_400 text-primary" aria-hidden>
               선택됨
             </span>
           ) : null}
         </div>
-        <div className="flex items-center gap-my-8">
-          <input
+        <div className="flex items-center gap-2">
+          <Input
             type="date"
+            size="sm"
             value={pendingFrom}
             max={pendingTo || undefined}
             onChange={(e) => onPendingFromChange(e.target.value)}
-            className="h-8 min-w-0 flex-1 rounded-md border border-border-10 bg-white px-my-8 text-caption1_400 text-on-surface-10 focus:border-primary focus:outline-none"
+            className="min-w-0 flex-1"
             aria-label="시작 날짜"
           />
-          <span className="text-caption1_400 text-on-surface-30">~</span>
-          <input
+          <span className="text-caption1_400 text-foreground-placeholder">~</span>
+          <Input
             type="date"
+            size="sm"
             value={pendingTo}
             min={pendingFrom || undefined}
             onChange={(e) => onPendingToChange(e.target.value)}
-            className="h-8 min-w-0 flex-1 rounded-md border border-border-10 bg-white px-my-8 text-caption1_400 text-on-surface-10 focus:border-primary focus:outline-none"
+            className="min-w-0 flex-1"
             aria-label="종료 날짜"
           />
         </div>
         {pendingFrom && pendingTo && !customInvalid ? (
-          <p className="mt-2 text-caption1_400 text-on-surface-30">
+          <p className="mt-2 text-caption1_400 text-foreground-placeholder">
             {formatYmdFull(pendingFrom)} ~ {formatYmdFull(pendingTo)}
           </p>
         ) : (
-          <p className="mt-2 text-caption1_400 text-error-error">
+          <p className="mt-2 text-caption1_400 text-destructive">
             {customInvalid && pendingFrom && pendingTo
               ? "시작일이 종료일보다 늦을 수 없어요."
               : "시작·종료일을 선택해 주세요."}
@@ -173,46 +176,60 @@ function PeriodPickerPanel({
   );
 }
 
-function PeriodPickerTrigger({
-  variant,
-  triggerClassName,
-  ariaLabelPrefix,
-  triggerLabel,
-  triggerCompactLabel,
-  open,
-  onClick,
-}: {
+type PeriodPickerTriggerProps = Omit<ComponentPropsWithoutRef<"button">, "children"> & {
   variant: "default" | "inline";
   triggerClassName?: string;
   ariaLabelPrefix: string;
   triggerLabel: string;
   triggerCompactLabel: string;
-  open: boolean;
-  onClick?: () => void;
-}) {
-  return (
-    <button
-      type="button"
-      className={cn(variant === "inline" ? TRIGGER_INLINE_CLASS : TRIGGER_BASE_CLASS, triggerClassName)}
-      aria-label={`${ariaLabelPrefix} — 현재 ${triggerLabel}`}
-      aria-expanded={open}
-      aria-haspopup="dialog"
-      onClick={onClick}
-    >
-      <CalendarDays
-        className="h-5 w-5 shrink-0 text-on-surface-20 max-sm:hidden"
-        aria-hidden
-      />
-      <span className="min-w-0 truncate text-center text-body3_500 sm:hidden">
-        {triggerCompactLabel}
-      </span>
-      <span className="hidden min-w-0 max-w-[280px] truncate text-center text-body3_500 sm:inline">
-        {triggerLabel}
-      </span>
-      <ChevronDown className="h-4 w-4 shrink-0 text-on-surface-20 sm:h-5 sm:w-5" aria-hidden />
-    </button>
-  );
-}
+  /** 모바일 단독 트리거 — Popover 미사용 시 aria-expanded 수동 제어 */
+  managedOpen?: boolean;
+};
+
+const PeriodPickerTrigger = forwardRef<HTMLButtonElement, PeriodPickerTriggerProps>(
+  function PeriodPickerTrigger(
+    {
+      variant,
+      triggerClassName,
+      ariaLabelPrefix,
+      triggerLabel,
+      triggerCompactLabel,
+      managedOpen,
+      className,
+      type = "button",
+      ...props
+    },
+    ref,
+  ) {
+    return (
+      <button
+        ref={ref}
+        type={type}
+        className={cn(
+          variant === "inline" ? TRIGGER_INLINE_CLASS : TRIGGER_BASE_CLASS,
+          triggerClassName,
+          className,
+        )}
+        aria-label={`${ariaLabelPrefix} — 현재 ${triggerLabel}`}
+        aria-haspopup="dialog"
+        {...(managedOpen !== undefined ? { "aria-expanded": managedOpen } : {})}
+        {...props}
+      >
+        <ICONS.calendarDays
+          className="h-5 w-5 shrink-0 text-foreground-muted max-sm:hidden"
+          aria-hidden
+        />
+        <span className="min-w-0 truncate text-center text-body3_500 sm:hidden">
+          {triggerCompactLabel}
+        </span>
+        <span className="hidden min-w-0 max-w-[280px] truncate text-center text-body3_500 sm:inline">
+          {triggerLabel}
+        </span>
+        <ICONS.chevronDown className="h-4 w-4 shrink-0 text-foreground-muted sm:h-5 sm:w-5" aria-hidden />
+      </button>
+    );
+  },
+);
 
 export function AnalyticsPeriodPicker({
   value,
@@ -292,17 +309,13 @@ export function AnalyticsPeriodPicker({
     />
   );
 
-  const trigger = (
-    <PeriodPickerTrigger
-      variant={variant}
-      triggerClassName={triggerClassName}
-      ariaLabelPrefix={ariaLabelPrefix}
-      triggerLabel={triggerLabel}
-      triggerCompactLabel={triggerCompactLabel}
-      open={open}
-      onClick={isDesktop ? undefined : () => setOpen(true)}
-    />
-  );
+  const triggerProps = {
+    variant,
+    triggerClassName,
+    ariaLabelPrefix,
+    triggerLabel,
+    triggerCompactLabel,
+  } as const;
 
   if (!isDesktop) {
     const mobileSheet =
@@ -321,23 +334,23 @@ export function AnalyticsPeriodPicker({
               >
                 <div
                   className={cn(
-                    "flex w-full shrink-0 flex-col gap-my-4 border-b border-border-10 py-my-16",
+                    "flex w-full shrink-0 flex-col gap-1 border-b border-border py-4",
                     PAGE_GUTTER_X_CLASS,
                   )}
                 >
                   <div className="flex items-center justify-between">
-                    <div className="text-body1_700 text-on-surface-10">기간 선택</div>
-                    <button
-                      type="button"
+                    <div className="text-body1_700 text-foreground">기간 선택</div>
+                    <Button
+                      variant="ghost"
+                      size="icon-sm"
                       aria-label="닫기"
                       onClick={handleDismiss}
-                      className="flex h-8 w-8 cursor-pointer items-center justify-center rounded-full text-on-surface-30 transition-colors hover:bg-surface-20/60 hover:text-on-surface-10 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-inset focus-visible:ring-primary"
-                      style={{ marginRight: -8 }}
+                      className="rounded-full text-foreground-placeholder -mr-2"
                     >
-                      <X className="h-5 w-5" aria-hidden />
-                    </button>
+                      <ICONS.close className="h-5 w-5" aria-hidden />
+                    </Button>
                   </div>
-                  <p className="text-caption1_400 text-on-surface-30">
+                  <p className="text-caption1_400 text-foreground-placeholder">
                     프리셋이나 사용자 지정 기간을 선택해 주세요.
                   </p>
                 </div>
@@ -363,7 +376,11 @@ export function AnalyticsPeriodPicker({
 
     return (
       <>
-        {trigger}
+        <PeriodPickerTrigger
+          {...triggerProps}
+          managedOpen={open}
+          onClick={() => setOpen(true)}
+        />
         {mobileSheet}
       </>
     );
@@ -371,8 +388,10 @@ export function AnalyticsPeriodPicker({
 
   return (
     <Popover open={open} onOpenChange={setOpen}>
-      <PopoverTrigger asChild>{trigger}</PopoverTrigger>
-      <PopoverContent align="end" sideOffset={8} className={PANEL_SHELL_CLASS}>
+      <PopoverTrigger asChild>
+        <PeriodPickerTrigger {...triggerProps} />
+      </PopoverTrigger>
+      <PopoverContent align="end" sideOffset={8} className={cn(PANEL_SHELL_CLASS, "z-overlay")}>
         {panel}
       </PopoverContent>
     </Popover>

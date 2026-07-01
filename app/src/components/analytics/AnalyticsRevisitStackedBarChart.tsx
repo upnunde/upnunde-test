@@ -5,7 +5,7 @@ import {
   ANALYTICS_HORIZONTAL_STACK_BAR_AXES,
   analyticsHorizontalStackBarTrackClassName,
 } from "@/components/analytics/analytics-horizontal-stacked-bar";
-import { cn } from "@/lib/utils";
+import { cn } from "design-system/utils";
 import VChart from "@visactor/vchart";
 import type { IBarChartSpec } from "@visactor/vchart";
 

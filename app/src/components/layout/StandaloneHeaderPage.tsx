@@ -9,7 +9,7 @@ import {
 } from "@/components/layout/MobileAppSidebarDrawer";
 import { APP_BROWSER_BG_CLASS, APP_PAGE_ROOT_CLASS } from "@/lib/mobile-viewport";
 import { APP_MAIN_CLASS, APP_MAIN_PANEL_CLASS } from "@/lib/page-layout";
-import { cn } from "@/lib/utils";
+import { cn } from "design-system/utils";
 import type { SidebarItemId } from "@/components/AppSidebar/AppSidebar";
 
 export interface StandaloneHeaderPageProps {

@@ -9,14 +9,14 @@ import {
   DialogTitle,
 } from "@/components/ui/dialog";
 import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
+import { Input, InputGroup, InputHypertext } from "@/components/ui/input";
 import {
   formDialogShellClassName,
   formDialogSheetBodyWrapperClassName,
   formDialogSheetScrollBodyClassName,
   formDialogSheetStickyFooterClassName,
 } from "@/components/ui/modal";
-import { Trash2, RefreshCw } from "lucide-react";
+import { ICONS, Icon } from "@/lib/icons";
 import { AddResourceSlot } from "@/components/resource/cards/AddResourceSlot";
 import {
   MODAL_CROP_STAGE_CLASS,
@@ -30,7 +30,7 @@ import {
   encodeCroppedCanvas,
   scaleCropOutputDimensions,
 } from "@/lib/image-upload-compress";
-import { cn } from "@/lib/utils";
+import { cn } from "design-system/utils";
 import { useIsLgUp } from "@/hooks/useMediaQuery";
 import type { CharacterExpressionSlot } from "@/types/resource";
 
@@ -516,7 +516,7 @@ export function CharacterExpressionModal({
           }
           className={cn(
             "group inline-flex flex-col items-start justify-start",
-            isCarousel ? "w-[64px] shrink-0 snap-start gap-my-2" : "gap-my-4",
+            isCarousel ? "w-[64px] shrink-0 snap-start gap-0.5" : "gap-1",
           )}
         >
           <div className={cn("relative", itemWidthClass)}>
@@ -524,12 +524,12 @@ export function CharacterExpressionModal({
               type="button"
               onClick={() => handleSelectSlot(index)}
               className={cn(
-                "flex cursor-pointer flex-col items-center justify-center overflow-hidden rounded-lg bg-surface-disabled/0 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary",
+                "flex cursor-pointer flex-col items-center justify-center overflow-hidden rounded-lg bg-disabled/0 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary",
                 thumbClass,
                 isCarousel && "gap-0",
                 isSelected
                   ? "outline outline-2 outline-offset-[-2px] outline-primary"
-                  : "outline outline-1 outline-offset-[-1px] outline-border-10 hover:outline-border-20",
+                  : "outline outline-1 outline-offset-[-1px] outline-border hover:outline-border",
               )}
               aria-label={`표정 ${index + 1}: ${label}`}
               aria-current={isSelected ? "true" : undefined}
@@ -549,13 +549,13 @@ export function CharacterExpressionModal({
               aria-label="표정 삭제"
               onClick={() => setSlots((prev) => prev.filter((s) => s.id !== slot.id))}
               className={cn(
-                "absolute flex cursor-pointer items-center justify-center rounded-full bg-surface-10 text-on-surface-10 shadow-elevation-10 hover:bg-surface-20",
+                "absolute flex cursor-pointer items-center justify-center rounded-full bg-background text-foreground shadow-elevation-10 hover:bg-muted",
                 isCarousel
                   ? "right-0.5 top-0.5 h-6 w-6"
                   : "right-1 top-1 hidden h-8 w-8 max-lg:inline-flex lg:group-hover:inline-flex",
               )}
             >
-              <Trash2 className={cn("pointer-events-none", isCarousel ? "h-3 w-3" : "h-4 w-4")} />
+              <ICONS.trash2 className={cn("pointer-events-none", isCarousel ? "h-3 w-3" : "h-4 w-4")} />
             </button>
           </div>
           <div className={cn("inline-flex items-center justify-start overflow-hidden self-stretch", itemWidthClass)}>
@@ -565,9 +565,9 @@ export function CharacterExpressionModal({
                 isCarousel ? "text-caption1_400" : "text-body3_400",
                 label === "untitle"
                   ? isCarousel
-                    ? "text-on-surface-disabled"
-                    : "text-on-surface-30"
-                  : "text-on-surface-20",
+                    ? "text-foreground-disabled"
+                    : "text-foreground-placeholder"
+                  : "text-foreground-muted",
               )}
             >
               {label}
@@ -587,7 +587,7 @@ export function CharacterExpressionModal({
           "shrink-0",
           options?.carouselItem
             ? cn(MOBILE_EXPRESSION_CAROUSEL_ITEM_CLASS, "snap-start")
-            : "inline-flex flex-col items-start gap-my-4",
+            : "inline-flex flex-col items-start gap-1",
         )}
       >
         <AddResourceSlot
@@ -729,7 +729,7 @@ export function CharacterExpressionModal({
         presentation="auto"
         className={cn(
           formDialogShellClassName,
-          "gap-0 overflow-hidden border-0 bg-surface-10 p-0 shadow-elevation-50 outline outline-1 outline-offset-[-1px] outline-border-10",
+          "gap-0 overflow-hidden border-0 bg-background p-0 shadow-elevation-50 outline outline-1 outline-offset-[-1px] outline-border",
           layoutShowSlotList && EXPRESSION_MULTI_MODAL_DESKTOP_SHELL_CLASS,
           !layoutShowSlotList && "lg:!w-[432px] lg:!min-w-[432px] lg:!max-w-none",
         )}
@@ -763,10 +763,10 @@ export function CharacterExpressionModal({
           <div
             ref={layoutShowSlotList ? leftPanelRef : undefined}
             className={cn(
-              "flex flex-col items-center justify-start gap-my-20 p-my-16 sm:p-my-20",
+              "flex flex-col items-center justify-start gap-5 p-4 sm:p-5",
               layoutShowSlotList
                 ? cn(
-                    "w-full min-w-0 shrink-0 self-stretch max-lg:border-b max-lg:border-border-10 lg:h-fit lg:self-start lg:border-r lg:border-border-10",
+                    "w-full min-w-0 shrink-0 self-stretch max-lg:border-b max-lg:border-border lg:h-fit lg:self-start lg:border-r lg:border-border",
                     EXPRESSION_MULTI_MODAL_DESKTOP_LEFT_PANEL_CLASS,
                   )
                 : cn("w-full min-w-0 shrink-0 self-stretch", formDialogSheetScrollBodyClassName),
@@ -792,7 +792,7 @@ export function CharacterExpressionModal({
                 onWheel={handleCropWheel}
               />
               {!previewImageUrl && (
-                <label className="absolute inset-0 z-[2] flex cursor-pointer items-center justify-center px-my-8 text-center text-on-surface-30 text-body3_400">
+                <label className="absolute inset-0 z-dropdown flex cursor-pointer items-center justify-center px-2 text-center text-foreground-placeholder text-body3_400">
                   <input
                     type="file"
                     accept="image/*"
@@ -811,20 +811,20 @@ export function CharacterExpressionModal({
               )}
               {cropAspect === "9/16" && (
                 <>
-                  <div className="pointer-events-none absolute left-0 top-0 h-full w-[21.875%] bg-dim-30" aria-hidden />
-                  <div className="pointer-events-none absolute right-0 top-0 h-full w-[21.875%] bg-dim-30" aria-hidden />
+                  <div className="pointer-events-none absolute left-0 top-0 h-full w-[21.875%] bg-dim-10" aria-hidden />
+                  <div className="pointer-events-none absolute right-0 top-0 h-full w-[21.875%] bg-dim-10" aria-hidden />
                   <div className="pointer-events-none absolute left-[21.875%] top-0 h-full w-[56.25%] border-2 border-primary-primary" aria-hidden />
                 </>
               )}
             </div>
             {/* 슬라이더: primary 트랙 + 서피스 썸 (참고: w-14 채움 + w-48 빈 트랙 + thumb) */}
-            <div className="h-6 inline-flex justify-start items-center w-full self-stretch gap-my-40">
+            <div className="h-6 inline-flex justify-start items-center w-full self-stretch gap-10">
               <div className="relative flex-1 h-6 inline-flex items-center gap-0">
-                <div className="flex-1 flex h-2 rounded-[999px] overflow-hidden bg-surface-disabled">
+                <div className="flex-1 flex h-2 rounded-[999px] overflow-hidden bg-disabled">
                   <div className="h-full bg-primary rounded-[999px] transition-[width]" style={{ width: `${((zoom - 0.5) / 1.5) * 100}%` }} />
                 </div>
                 <div
-                  className="w-8 h-8 top-1/2 -translate-y-1/2 absolute bg-surface-10 rounded-full shadow-elevation-10 border border-border-20/10 -translate-x-1/2 pointer-events-none"
+                  className="w-8 h-8 top-1/2 -translate-y-1/2 absolute bg-background rounded-full shadow-elevation-10 border border-border/10 -translate-x-1/2 pointer-events-none"
                   style={{ left: `${((zoom - 0.5) / 1.5) * 100}%` }}
                   aria-hidden
                 />
@@ -841,15 +841,16 @@ export function CharacterExpressionModal({
                       setZoomBySlotId((prev) => ({ ...prev, [selectedSlot.id]: v }));
                     }
                   }}
-                  className="absolute inset-0 w-full opacity-0 cursor-pointer z-[1]"
+                  className="absolute inset-0 w-full opacity-0 cursor-pointer z-0"
                   aria-label="확대/축소"
                 />
               </div>
               <Button
                 type="button"
                 variant="outline"
+                shape="circle"
                 size="icon"
-                className="shrink-0 w-8 h-8 bg-transparent hover:bg-transparent active:bg-transparent shadow-none rounded-full disabled:border-border-20"
+                className="shrink-0"
                 onClick={() => {
                   if (selectedSlot?.id) {
                     setZoom(1);
@@ -864,21 +865,21 @@ export function CharacterExpressionModal({
                 }}
                 aria-label="뷰 초기화"
               >
-                <RefreshCw className="w-5 h-5" />
+                <Icon icon={ICONS.refreshCw} size="md" />
               </Button>
             </div>
             {/* 표정: 라벨 + 설명 + 인풋 + 0/50 (showExpressionSection일 때만) */}
             {showExpressionSection && (
-              <div className="self-stretch flex flex-col justify-start items-start gap-my-8">
-                <div className="justify-center text-on-surface-10 text-body1_700 font-['Pretendard_JP']">
+              <div className="self-stretch flex flex-col justify-start items-start gap-2">
+                <div className="justify-center text-foreground text-body1_700 font-['Pretendard_JP']">
                   표정
                 </div>
-                <div className="justify-center text-on-surface-30 text-caption1_400 font-['Pretendard_JP']">
+                <div className="justify-center text-foreground-placeholder text-caption1_400 font-['Pretendard_JP']">
                   표정은 에피소드에서 인물의 감정 표현에 사용됩니다
                 </div>
-                <div className="self-stretch rounded flex flex-col justify-center items-end gap-my-8 relative">
-                  <div className="self-stretch">
+                  <InputGroup className="self-stretch">
                     <Input
+                      size="lg"
                       value={expressionInput}
                       onChange={(e) => {
                         const v = e.target.value.slice(0, EXPRESSION_MAX_LENGTH);
@@ -900,23 +901,17 @@ export function CharacterExpressionModal({
                       onBlur={() => setTimeout(() => setSuggestionOpen(false), 150)}
                       placeholder="인물의 표정을 입력하세요"
                       maxLength={EXPRESSION_MAX_LENGTH}
-                      className="h-[42px] w-full rounded-md border border-border-10 bg-white px-my-12 py-my-8 text-body3_400 text-on-surface-10 placeholder:text-on-surface-30 focus:outline-none focus:ring-2 focus:ring-primary shadow-none font-['Pretendard_JP']"
                     />
-                  </div>
-                  <div className="self-stretch inline-flex justify-end items-center gap-my-8">
-                    <span className="text-right justify-center text-on-surface-30 text-caption1_400 font-['Pretendard_JP'] tabular-nums">
-                      {expressionInput.length}/{EXPRESSION_MAX_LENGTH}
-                    </span>
-                  </div>
-                </div>
+                    <InputHypertext count={expressionInput.length} max={EXPRESSION_MAX_LENGTH} />
+                  </InputGroup>
               </div>
             )}
             {layoutShowSlotList && (
-              <div className="hidden self-stretch justify-end gap-my-8 lg:flex">
+              <div className="hidden self-stretch justify-end gap-2 lg:flex">
                 <Button
                   type="button"
                   variant="outline"
-                  className="h-8 rounded-md font-['Pretendard_JP'] text-body3_500 text-secondary-foreground px-my-12 w-auto disabled:border-border-20"
+                  className="h-8 rounded-md font-['Pretendard_JP'] text-body3_500 text-secondary-foreground px-3 w-auto disabled:border-border"
                   onClick={() => handleNavigateFilledSlots("prev")}
                   disabled={filledSlotIndices.length <= 1}
                 >
@@ -925,7 +920,7 @@ export function CharacterExpressionModal({
                 <Button
                   type="button"
                   variant="outline"
-                  className="h-8 rounded-md font-['Pretendard_JP'] text-body3_500 text-secondary-foreground px-my-12 w-auto disabled:border-border-20"
+                  className="h-8 rounded-md font-['Pretendard_JP'] text-body3_500 text-secondary-foreground px-3 w-auto disabled:border-border"
                   onClick={() => handleNavigateFilledSlots("next")}
                   disabled={filledSlotIndices.length <= 1}
                 >
@@ -938,8 +933,8 @@ export function CharacterExpressionModal({
           {/* 모바일: 가로 스냅 캐러셀 / 데스크톱: 3열 그리드 */}
           {layoutShowSlotList && (
             <>
-              <div className="w-full shrink-0 px-my-16 py-my-8 lg:hidden">
-                <div className="flex snap-x snap-mandatory gap-my-4 overflow-x-auto overscroll-x-contain scroll-px-my-16 [-ms-overflow-style:none] [scrollbar-width:none] [&::-webkit-scrollbar]:hidden">
+              <div className="w-full shrink-0 px-4 py-2 lg:hidden">
+                <div className="flex snap-x snap-mandatory gap-1 overflow-x-auto overscroll-x-contain scroll-px-4 [-ms-overflow-style:none] [scrollbar-width:none] [&::-webkit-scrollbar]:hidden">
                   {filledImageSlots.map((slot) =>
                     renderExpressionSlotItem(slot, slots.indexOf(slot), { carouselItem: true }),
                   )}
@@ -950,7 +945,7 @@ export function CharacterExpressionModal({
               <div
                 data-expression-slot-grid
                 className={cn(
-                  "hidden w-fit min-w-fit shrink-0 auto-rows-max grid-cols-3 items-start justify-start gap-x-my-8 gap-y-my-16 overflow-x-hidden p-my-20 lg:grid lg:h-[var(--expression-panel-h)] lg:max-h-[var(--expression-panel-h)] lg:min-h-0 lg:overflow-y-auto",
+                  "hidden w-fit min-w-fit shrink-0 auto-rows-max grid-cols-3 items-start justify-start gap-x-2 gap-y-4 overflow-x-hidden p-5 lg:grid lg:h-[var(--expression-panel-h)] lg:max-h-[var(--expression-panel-h)] lg:min-h-0 lg:overflow-y-auto",
                   EXPRESSION_MULTI_MODAL_DESKTOP_RIGHT_GRID_CLASS,
                 )}
               >
@@ -967,14 +962,14 @@ export function CharacterExpressionModal({
         <div
           className={cn(
             formDialogSheetStickyFooterClassName,
-            "inline-flex items-center justify-end gap-my-8",
+            "inline-flex items-center justify-end gap-2",
           )}
         >
           <DialogClose asChild>
             <Button
               type="button"
               variant="outline"
-              className="min-w-20 h-9 rounded-md font-['Pretendard_JP'] text-body1_500 text-secondary-foreground disabled:border-border-20"
+              className="min-w-20 h-9 rounded-md font-['Pretendard_JP'] text-body1_500 text-secondary-foreground disabled:border-border"
               onClick={handleClose}
             >
               취소

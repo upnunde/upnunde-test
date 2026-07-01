@@ -3,9 +3,11 @@
 import Image from "next/image";
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/ui/dialog";
 import { Button } from "@/components/ui/button";
-import { Title1 } from "@/components/ui/title1";
+import { FormFieldLabel, formFieldAriaDescribedBy } from "@/components/ui/field-label";
 import { Title2 } from "@/components/ui/title2";
 import { THUMBNAIL_DIM_OVERLAY_CLASS } from "@/lib/thumbnail-styles";
+import { Input, InputGroup, InputHypertext } from "@/components/ui/input";
+import { Textarea } from "@/components/ui/textarea";
 import { DUMMY_DEFAULT_THUMBNAIL } from "@/lib/dummy-thumbnail-images";
 
 interface EpisodePromptReferenceModalProps {
@@ -17,6 +19,11 @@ const MAX_TITLE = 50;
 const MAX_SUMMARY = 100;
 const MAX_HISTORY = 5000;
 const MAX_SCRIPT = 5000;
+
+const REF_TITLE_ID = "episode-prompt-ref-title";
+const REF_SUMMARY_ID = "episode-prompt-ref-summary";
+const REF_HISTORY_ID = "episode-prompt-ref-history";
+const REF_SCRIPT_ID = "episode-prompt-ref-script";
 
 const REFERENCE_TITLE = "새벽의 문턱에서";
 const REFERENCE_SUMMARY = "봉인된 문이 열리며 주인공이 첫 선택의 대가를 마주합니다.";
@@ -41,59 +48,64 @@ export function EpisodePromptReferenceModal({
 }: EpisodePromptReferenceModalProps) {
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
-      <DialogContent className="w-full max-lg:max-w-none max-lg:rounded-t-[16px] lg:max-w-[760px] min-w-0 border-0 bg-transparent p-0 shadow-none">
+      <DialogContent className="w-full max-lg:max-w-none max-lg:rounded-t-xl lg:max-w-[760px] min-w-0 border-0 bg-transparent p-0 shadow-none">
         <DialogHeader className="sr-only">
           <DialogTitle>에피소드 기준 프롬프트</DialogTitle>
         </DialogHeader>
-        <div className="mx-auto w-full rounded-[4px] border border-border-10 bg-white shadow-none flex min-h-0 h-full flex-col overflow-hidden max-w-[760px] min-w-0">
+        <div className="mx-auto w-full rounded-sm border border-border bg-background shadow-none flex min-h-0 h-full flex-col overflow-hidden max-w-[760px] min-w-0">
           <Title2 text="에피소드" asSectionHeader />
-          <div className="mx-0 max-w-none min-w-0 border-0 rounded-none px-my-20 pt-my-20 pb-my-20 shadow-none min-h-0 flex-1 overflow-y-auto">
-            <div className="mt-0 flex flex-col gap-my-24">
-              <div className="flex flex-col gap-my-12">
-                <Title1
-                  text="에피소드 제목*"
-                  variant="title-subtitle-dot"
-                  subtitleText="에피소드 제목을 입력해주세요."
+          <div className="mx-0 max-w-none min-w-0 border-0 rounded-none px-5 pt-5 pb-5 shadow-none min-h-0 flex-1 overflow-y-auto">
+            <div className="mt-0 flex flex-col gap-6">
+              <div className="flex flex-col gap-3">
+                <FormFieldLabel
+                  title="에피소드 제목*"
+                  subtitle="에피소드 제목을 입력해주세요."
+                  inputId={REF_TITLE_ID}
                 />
-                <input
-                  type="text"
-                  maxLength={MAX_TITLE}
-                  value={REFERENCE_TITLE}
-                  readOnly
-                  tabIndex={-1}
-                  className="h-[42px] rounded-md border border-border-10 bg-surface-20 px-my-12 py-my-8 text-body3_400 text-on-surface-10 pointer-events-none"
-                />
-                <div className="flex justify-end text-caption1_400 text-on-surface-30">
-                  {REFERENCE_TITLE.length}/{MAX_TITLE}
-                </div>
+                <InputGroup>
+                  <Input
+                    id={REF_TITLE_ID}
+                    aria-describedby={formFieldAriaDescribedBy(REF_TITLE_ID)}
+                    type="text"
+                    size="lg"
+                    maxLength={MAX_TITLE}
+                    value={REFERENCE_TITLE}
+                    readOnly
+                    tabIndex={-1}
+                    className="pointer-events-none bg-muted"
+                  />
+                  <InputHypertext count={REFERENCE_TITLE.length} max={MAX_TITLE} />
+                </InputGroup>
               </div>
 
-              <div className="flex flex-col gap-my-12">
-                <Title1
-                  text="에피소드 요약*"
-                  variant="title-subtitle-dot"
-                  subtitleText="에피소드를 한 줄로 소개해주세요."
+              <div className="flex flex-col gap-3">
+                <FormFieldLabel
+                  title="에피소드 요약*"
+                  subtitle="에피소드를 한 줄로 소개해주세요."
+                  inputId={REF_SUMMARY_ID}
                 />
-                <input
-                  type="text"
-                  maxLength={MAX_SUMMARY}
-                  value={REFERENCE_SUMMARY}
-                  readOnly
-                  tabIndex={-1}
-                  className="h-[42px] rounded-md border border-border-10 bg-surface-20 px-my-12 py-my-8 text-body3_400 text-on-surface-10 pointer-events-none"
-                />
-                <div className="flex justify-end text-caption1_400 text-on-surface-30">
-                  {REFERENCE_SUMMARY.length}/{MAX_SUMMARY}
-                </div>
+                <InputGroup>
+                  <Input
+                    id={REF_SUMMARY_ID}
+                    aria-describedby={formFieldAriaDescribedBy(REF_SUMMARY_ID)}
+                    type="text"
+                    size="lg"
+                    maxLength={MAX_SUMMARY}
+                    value={REFERENCE_SUMMARY}
+                    readOnly
+                    tabIndex={-1}
+                    className="pointer-events-none bg-muted"
+                  />
+                  <InputHypertext count={REFERENCE_SUMMARY.length} max={MAX_SUMMARY} />
+                </InputGroup>
               </div>
 
-              <div className="flex flex-col gap-my-12 pb-my-20">
-                <Title1
-                  text="대표 이미지*"
-                  variant="title-subtitle-dot"
-                  subtitleText="에피소드 대표 이미지를 등록해주세요."
+              <div className="flex flex-col gap-3 pb-5">
+                <FormFieldLabel
+                  title="대표 이미지*"
+                  subtitle="에피소드 대표 이미지를 등록해주세요."
                 />
-                <div className="relative h-[107px] w-[60px] overflow-hidden rounded border border-border-10 bg-slate-200">
+                <div className="relative h-[107px] w-[60px] overflow-hidden rounded border border-border bg-secondary">
                   <Image
                     src={REFERENCE_THUMBNAIL}
                     alt="대표 이미지"
@@ -105,46 +117,50 @@ export function EpisodePromptReferenceModal({
                 </div>
               </div>
 
-              <div className="flex flex-col gap-my-12">
-                <Title1
-                  text="지난 사건 히스토리*"
-                  variant="title-subtitle-dot"
-                  subtitleText="지난 사건의 히스토리를 작성해 주세요."
+              <div className="flex flex-col gap-3">
+                <FormFieldLabel
+                  title="지난 사건 히스토리*"
+                  subtitle="지난 사건의 히스토리를 작성해 주세요."
+                  inputId={REF_HISTORY_ID}
                 />
-                <textarea
-                  rows={4}
-                  maxLength={MAX_HISTORY}
-                  value={REFERENCE_HISTORY}
-                  readOnly
-                  tabIndex={-1}
-                  className="min-h-[160px] max-h-[400px] rounded-md border border-border-10 bg-surface-20 px-my-12 py-my-8 text-body3_400 text-on-surface-10 pointer-events-none"
-                />
-                <div className="flex justify-end text-caption1_400 text-on-surface-30">
-                  {REFERENCE_HISTORY.length}/{MAX_HISTORY}
-                </div>
+                <InputGroup>
+                  <Textarea
+                    id={REF_HISTORY_ID}
+                    aria-describedby={formFieldAriaDescribedBy(REF_HISTORY_ID)}
+                    rows={4}
+                    maxLength={MAX_HISTORY}
+                    value={REFERENCE_HISTORY}
+                    readOnly
+                    tabIndex={-1}
+                    className="pointer-events-none min-h-[160px] max-h-[400px] bg-muted"
+                  />
+                  <InputHypertext count={REFERENCE_HISTORY.length} max={MAX_HISTORY} />
+                </InputGroup>
               </div>
 
-              <div className="flex flex-col gap-my-12">
-                <Title1
-                  text="에피소드 대본*"
-                  variant="title-subtitle-dot"
-                  subtitleText="에피소드 대본을 상세하게 작성해 주세요."
+              <div className="flex flex-col gap-3">
+                <FormFieldLabel
+                  title="에피소드 대본*"
+                  subtitle="에피소드 대본을 상세하게 작성해 주세요."
+                  inputId={REF_SCRIPT_ID}
                 />
-                <textarea
-                  rows={8}
-                  maxLength={MAX_SCRIPT}
-                  value={REFERENCE_SCRIPT}
-                  readOnly
-                  tabIndex={-1}
-                  className="min-h-[160px] max-h-[400px] rounded-md border border-border-10 bg-surface-20 px-my-12 py-my-8 text-body3_400 text-on-surface-10 pointer-events-none"
-                />
-                <div className="flex justify-end text-caption1_400 text-on-surface-30">
-                  {REFERENCE_SCRIPT.length}/{MAX_SCRIPT}
-                </div>
+                <InputGroup>
+                  <Textarea
+                    id={REF_SCRIPT_ID}
+                    aria-describedby={formFieldAriaDescribedBy(REF_SCRIPT_ID)}
+                    rows={8}
+                    maxLength={MAX_SCRIPT}
+                    value={REFERENCE_SCRIPT}
+                    readOnly
+                    tabIndex={-1}
+                    className="pointer-events-none min-h-[160px] max-h-[400px] bg-muted"
+                  />
+                  <InputHypertext count={REFERENCE_SCRIPT.length} max={MAX_SCRIPT} />
+                </InputGroup>
               </div>
             </div>
           </div>
-          <div className="sticky bottom-0 border-t border-border-10 bg-white px-my-20 py-my-16">
+          <div className="sticky bottom-0 border-t border-border bg-background px-5 py-4">
             <div className="flex justify-end">
               <Button type="button" variant="outline" onClick={() => onOpenChange(false)}>
                 닫기

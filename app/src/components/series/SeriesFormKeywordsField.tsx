@@ -1,9 +1,10 @@
 "use client";
 
-import { Title1 } from "@/components/ui/title1";
-import { Input } from "@/components/ui/input";
+import { useId } from "react";
+
+import { FormFieldLabel, formFieldAriaDescribedBy } from "@/components/ui/field-label";
+import { Input, InputGroup, InputHypertext } from "@/components/ui/input";
 import { Tag } from "@/components/ui/tag";
-import { cn } from "@/lib/utils";
 
 interface SeriesFormKeywordsFieldProps {
   title: string;
@@ -37,13 +38,18 @@ export function SeriesFormKeywordsField({
   onAddKeyword,
   onRemoveKeyword,
 }: SeriesFormKeywordsFieldProps) {
+  const inputId = useId().replace(/:/g, "");
+
   return (
-    <div className="flex flex-col gap-my-4">
-      <Title1 text={title} variant="title-subtitle-dot" subtitleText={subtitle} />
-      <div className="flex flex-col items-start justify-center gap-my-8">
+    <div className="flex flex-col gap-1">
+      <FormFieldLabel title={title} subtitle={subtitle} inputId={inputId} />
+      <InputGroup className="mt-1">
         <Input
           ref={inputRef}
+          id={inputId}
+          aria-describedby={formFieldAriaDescribedBy(inputId, Boolean(subtitle))}
           type="text"
+          size="lg"
           maxLength={maxLength}
           value={keywordInput}
           onChange={(e) => onKeywordInputChange(e.target.value)}
@@ -60,14 +66,10 @@ export function SeriesFormKeywordsField({
           }}
           placeholder={placeholder}
           aria-invalid={error}
-          className={cn(
-            "h-[42px] rounded-md border bg-white px-my-12 py-my-8 text-body3_400 text-on-surface-10 placeholder:text-on-surface-30",
-            error ? "border-destructive focus-visible:ring-destructive/40" : "border-border-10",
-          )}
         />
-        <div className="inline-flex w-full items-start justify-end gap-my-8">
+        <div className="flex w-full items-start justify-end gap-2">
           {keywordList.length > 0 ? (
-            <div className="flex min-w-0 flex-1 flex-wrap gap-my-8">
+            <div className="flex min-w-0 flex-1 flex-wrap gap-2">
               {keywordList.map((keyword) => (
                 <Tag key={keyword} onDismiss={() => onRemoveKeyword(keyword)}>
                   #{keyword}
@@ -75,11 +77,14 @@ export function SeriesFormKeywordsField({
               ))}
             </div>
           ) : null}
-          <div className="w-fit shrink-0 text-right text-caption1_400 tabular-nums text-on-surface-30">
-            {keywordInput.length}/{maxLength}
-          </div>
+          <InputHypertext
+            count={keywordInput.length}
+            max={maxLength}
+            variant={error ? "error" : "default"}
+            className="w-fit shrink-0"
+          />
         </div>
-      </div>
+      </InputGroup>
     </div>
   );
 }

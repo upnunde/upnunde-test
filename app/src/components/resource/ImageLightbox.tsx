@@ -2,14 +2,14 @@
 
 import React, { useCallback, useEffect, useState } from "react";
 import Image from "next/image";
-import { ChevronLeft, ChevronRight, X } from "lucide-react";
+import { ICONS } from "@/lib/icons";
 import { isDummyResourceUrl } from "@/lib/dummy-asset-path";
 import {
   IMAGE_LIGHTBOX_CHECKERBOARD_STYLE,
   IMAGE_LIGHTBOX_FRAME_CLASS,
   IMAGE_LIGHTBOX_IMAGE_SIZES,
 } from "@/lib/thumbnail-styles";
-import { cn } from "@/lib/utils";
+import { cn } from "design-system/utils";
 
 export interface ImageLightboxItem {
   id: string;
@@ -26,7 +26,7 @@ export interface ImageLightboxProps {
 }
 
 const IMAGE_LIGHTBOX_CONTROL_BUTTON_CLASS =
-  "inline-flex h-10 w-10 cursor-pointer items-center justify-center overflow-hidden rounded-full sm:h-14 sm:w-14 bg-surface-10 shadow-elevation-20 hover:bg-surface-20 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-2";
+  "inline-flex h-10 w-10 cursor-pointer items-center justify-center overflow-hidden rounded-full sm:h-14 sm:w-14 bg-background shadow-elevation-20 hover:bg-muted focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-2";
 
 export function ImageLightbox({
   open,
@@ -76,8 +76,8 @@ export function ImageLightbox({
   return (
     <div
       className={cn(
-        "fixed inset-0 z-50 flex items-center justify-center overflow-y-auto p-my-16",
-        "bg-black/50 data-[state=open]:animate-in data-[state=closed]:animate-out data-[state=closed]:fade-out-0 data-[state=open]:fade-in-0",
+        "fixed inset-0 z-sticky flex items-center justify-center overflow-y-auto p-4",
+        "bg-dim-20 data-[state=open]:animate-in data-[state=closed]:animate-out data-[state=closed]:fade-out-0 data-[state=open]:fade-in-0",
         className,
       )}
       role="dialog"
@@ -86,10 +86,10 @@ export function ImageLightbox({
       onClick={(e) => e.target === e.currentTarget && onClose()}
     >
       <div
-        className="flex w-full max-w-[512px] max-h-[min(92dvh,716px)] flex-col items-center gap-my-16"
+        className="flex w-full max-w-[512px] max-h-[min(92dvh,716px)] flex-col items-center gap-4"
         onClick={(e) => e.stopPropagation()}
       >
-        <div className="relative flex w-full items-center justify-center px-my-12 sm:px-14">
+        <div className="relative flex w-full items-center justify-center px-3 sm:px-14">
           <div className={IMAGE_LIGHTBOX_FRAME_CLASS} style={IMAGE_LIGHTBOX_CHECKERBOARD_STYLE}>
             {item && (
               <Image
@@ -110,13 +110,13 @@ export function ImageLightbox({
               onClick={goPrev}
               disabled={!canPrev}
               className={cn(
-                "absolute left-0 top-1/2 z-10 -translate-y-1/2",
+                "absolute left-0 top-1/2 z-dropdown -translate-y-1/2",
                 IMAGE_LIGHTBOX_CONTROL_BUTTON_CLASS,
                 "disabled:pointer-events-none disabled:opacity-40",
               )}
               aria-label="이전 이미지"
             >
-              <ChevronLeft className="h-5 w-5 text-on-surface-10 sm:h-6 sm:w-6" strokeWidth={2} />
+              <ICONS.chevronLeft className="h-5 w-5 text-foreground sm:h-6 sm:w-6" strokeWidth={2} />
             </button>
           )}
 
@@ -127,13 +127,13 @@ export function ImageLightbox({
               onClick={goNext}
               disabled={!canNext}
               className={cn(
-                "absolute right-0 top-1/2 z-10 -translate-y-1/2",
+                "absolute right-0 top-1/2 z-dropdown -translate-y-1/2",
                 IMAGE_LIGHTBOX_CONTROL_BUTTON_CLASS,
                 "disabled:pointer-events-none disabled:opacity-40",
               )}
               aria-label="다음 이미지"
             >
-              <ChevronRight className="h-5 w-5 text-on-surface-10 sm:h-6 sm:w-6" strokeWidth={2} />
+              <ICONS.chevronRight className="h-5 w-5 text-foreground sm:h-6 sm:w-6" strokeWidth={2} />
             </button>
           )}
         </div>
@@ -145,7 +145,7 @@ export function ImageLightbox({
           className={cn("shrink-0", IMAGE_LIGHTBOX_CONTROL_BUTTON_CLASS)}
           aria-label="닫기"
         >
-          <X className="h-5 w-5 text-on-surface-10 sm:h-6 sm:w-6" strokeWidth={2} />
+          <ICONS.close className="h-5 w-5 text-foreground sm:h-6 sm:w-6" strokeWidth={2} />
         </button>
       </div>
     </div>

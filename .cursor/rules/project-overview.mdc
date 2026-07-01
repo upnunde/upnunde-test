@@ -28,3 +28,4 @@ alwaysApply: true
 - 리소스·이미지 업로드·크롭: **`.cursor/rules/resource-patterns.mdc`**
 - 에디터: **`.cursor/rules/editor-patterns.mdc`**
 - 정책 카피·도메인: **`.cursor/rules/service-policy-baseline.mdc`**
+- 작업 일지·세션 이어가기: **`docs/wip/WORKLOG.md`** · **`.cursor/rules/worklog.mdc`** · `npm run worklog:snapshot`

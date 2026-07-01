@@ -1,7 +1,7 @@
 "use client";
 
 import type { ReactNode } from "react";
-import { cn } from "@/lib/utils";
+import { cn } from "design-system/utils";
 
 export function AiFieldLoadingMessage({
   message,
@@ -28,7 +28,7 @@ export function AiFieldLoadingMessage({
 }
 
 const inputShellClass =
-  "rounded-md border border-border-10 bg-white px-my-12 text-body3_400 text-on-surface-10";
+  "rounded-md border border-border bg-background px-3 text-body3_400 text-foreground";
 
 export function EpisodeAiTextField({
   isLoading,
@@ -62,7 +62,7 @@ export function EpisodeAiThumbnailLoading({
   return (
     <div
       className={cn(
-        "h-[160px] w-[90px] shrink-0 animate-pulse rounded-[4px] bg-surface-20",
+        "h-[160px] w-[90px] shrink-0 animate-pulse rounded-sm bg-muted",
         className,
       )}
       role="status"

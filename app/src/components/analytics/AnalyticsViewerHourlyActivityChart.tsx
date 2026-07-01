@@ -1,7 +1,7 @@
 "use client";
 
 import { useEffect, useMemo, useRef } from "react";
-import { cn } from "@/lib/utils";
+import { cn } from "design-system/utils";
 import VChart from "@visactor/vchart";
 import type { IBarChartSpec } from "@visactor/vchart";
 import { getAnalyticsPeriodInclusiveDays, type AnalyticsPeriodRange } from "@/components/analytics/analytics-date";
@@ -242,18 +242,18 @@ export function AnalyticsViewerHourlyActivityChart({
 
   if (hideChart) {
     return (
-      <div className={cn("flex flex-col gap-my-16", className)}>
-        <p className="text-body3_500 text-on-surface-20">{summaryText}</p>
+      <div className={cn("flex flex-col gap-4", className)}>
+        <p className="text-body3_500 text-foreground-muted">{summaryText}</p>
       </div>
     );
   }
 
   return (
-    <div className={cn("flex flex-col gap-my-16", className)}>
-      <p className="text-body3_500 text-on-surface-20">{summaryText}</p>
+    <div className={cn("flex flex-col gap-4", className)}>
+      <p className="text-body3_500 text-foreground-muted">{summaryText}</p>
 
       <div
-        className="w-full min-w-0 overflow-hidden rounded-[4px]"
+        className="w-full min-w-0 overflow-hidden rounded-sm"
         role="img"
         aria-label={`24시간 이용자 분포(2시간 단위), 피크 시간대 ${twoHourBinAmPmLabel(peakBin.startHour)}, 이용자 수 ${formatViewerCountKo(peakBin.viewerSum)}`}
       >
