@@ -5,6 +5,7 @@ import { DUMMY_ASSET_CACHE_VERSION } from "./src/lib/dummy-asset-path";
 const appRoot = path.resolve(__dirname);
 
 const nextConfig: NextConfig = {
+  transpilePackages: ["design-system"],
   outputFileTracingRoot: appRoot,
   turbopack: {
     root: appRoot,

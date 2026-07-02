@@ -14,7 +14,7 @@ export function ThemeToggleButton() {
       type="button"
       variant="outline"
       shape="circle"
-      size="icon-xl"
+      size="icon"
       icon={icon}
       onClick={toggle}
       aria-label={mode === "dark" ? "라이트 모드로 전환" : "다크 모드로 전환"}

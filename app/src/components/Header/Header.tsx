@@ -66,7 +66,7 @@ export default function Header({ profileImageUrl, onProfileImageChange, onMenuCl
           className="cursor-pointer rounded-full focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2"
           aria-label="프로필 편집"
         >
-          <Avatar className="size-10 border border-border transition-opacity hover:opacity-90">
+          <Avatar className="size-9 border border-border transition-opacity hover:opacity-90">
             {profileImageUrl ? <AvatarImage src={profileImageUrl} alt="프로필" /> : null}
             <AvatarFallback>
               <ICONS.user className="h-5 w-5 text-foreground-placeholder" aria-hidden />
