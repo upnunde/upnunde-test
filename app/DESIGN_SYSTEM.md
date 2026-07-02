@@ -1,60 +1,73 @@
 # Design System 연결 가이드
 
-`design-system` 패키지가 file: 링크로 연결되어 있어 로컬 변경이 즉시 반영된다.
+`design-system`은 GitHub 패키지로 설치한다.
 
-원본: `../../Design System Test/packages/design-system`
+```json
+"design-system": "github:upnunde/Renovel-Studio-DS#v0.1.1"
+```
+
+저장소: [upnunde/Renovel-Studio-DS](https://github.com/upnunde/Renovel-Studio-DS)
+
+## 설치
+
+```bash
+cd app
+npm install
+```
+
+CI·클린 환경(lockfile이 `git+ssh`로 resolve된 경우):
+
+```bash
+cd app
+sh scripts/ci-install.sh
+```
 
 ## Import 가능한 것
 
 ### CSS
 
 ```css
-@import "design-system/tokens.css";   /* 시맨틱 변수 (--background, --foreground, --primary 등) */
-@import "design-system/theme.css";    /* Tailwind v4 매핑 (bg-primary 같은 유틸) */
-@import "design-system/icons.css";    /* 아이콘 정규화 */
-@import "design-system/fonts.css";    /* Pretendard */
+@import "design-system/tokens.css";
+@import "design-system/theme.css";
+@import "design-system/icons.css";
+@import "design-system/fonts.css";
 ```
 
 ### TS 모듈
 
 ```ts
-import { cn } from "design-system"
-import { CONTROL_SIZE_SCALE, controlSizeToIconGlyph } from "design-system/component-size-tokens"
-import { SPACING_SCALE, space } from "design-system/spacing-tokens"
-import { RADIUS_SCALE } from "design-system/radius-tokens"
-import { ICON_GLYPH_SCALE } from "design-system/icon-tokens"
-import { MOTION_DURATION_SCALE, MOTION_CHOREOGRAPHY } from "design-system/motion-tokens"
-import { BRAND_COLOR_GROUPS } from "design-system/brand-colors"
+import { cn } from "design-system/utils";
+import { Button } from "design-system/ui/button";
+import { ICON_GLYPH_SCALE } from "design-system/icon-tokens";
 ```
 
-## 점진적 마이그레이션 전략
+전체 export 목록은 `node_modules/design-system/package.json`의 `exports` 필드를 참고한다.
 
-리노벨은 자체 토큰 체계(`--surface-*`, `--on-surface-*`, `text-body3_500` 등)가 이미 깔려 있다. 한 번에 교체하지 말고 공존부터 시작.
+## 버전 올리기
 
-### Phase A — 새 컴포넌트만 디자인 시스템 사용
-새로 만드는 컴포넌트는 디자인 시스템의 토큰·유틸을 우선. 기존 컴포넌트는 그대로 둠.
+1. [Renovel-Studio-DS](https://github.com/upnunde/Renovel-Studio-DS)에 변경 푸시 + 태그 (예: `v0.1.2`)
+2. `app/package.json`의 `#v0.1.1` → `#v0.1.2`
+3. `npm install` 후 `package-lock.json` 커밋
+4. `npm run check:ds` · `npx tsc --noEmit` · `npm run build` 확인
 
-### Phase B — globals.css에서 디자인 시스템 토큰 import
-충돌 토큰은 리노벨 정의가 이기도록 import 순서 조정.
+## Next.js
 
-### Phase C — 컴포넌트 단위 교체
-기존 컴포넌트 → 디자인 시스템 베이스로 wrapping.
+`next.config.ts`에 `transpilePackages: ["design-system"]` 설정됨 (GitHub에서 받은 TS 소스 트랜스파일).
 
-### Phase D — 자체 토큰 폐기
-모든 사용처 마이그레이션 후 자체 토큰 블록 제거.
+## 로컬 DS 개발 (선택)
+
+패키지 소스를 직접 수정하며 연동하려면 일시적으로 file 의존성으로 바꿀 수 있다.
+
+```json
+"design-system": "file:../../path/to/design-system"
+```
+
+작업 후 GitHub 태그 버전으로 되돌리고 lockfile을 갱신한다.
 
 ## 동작 확인
 
 ```bash
 cd app
+npm run check:ds
 npm run dev
 ```
-
-## 디자인 시스템 수정이 필요할 때
-
-`../../Design System Test/`로 이동해서 작업. 심볼릭 링크라 저장 즉시 반영됨.
-
-## 주의
-
-- 디자인 시스템 디렉토리를 이동하면 경로 갱신 필요
-- npm publish 시점에 file: → npm 의존성으로 전환
