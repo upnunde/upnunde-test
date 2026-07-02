@@ -1,8 +1,7 @@
 "use client";
 
 import { SegmentedTextTabs } from "@/components/ui/segmented-text-tabs";
-import { PAGE_FLUSH_CONTENT_PAD_X_CLASS } from "@/lib/page-layout";
-import { cn } from "design-system/utils";
+import { LINE_TAB_STRIP_SHELL_CLASS, lineTabStripListClassName } from "@/lib/tab-styles";
 
 export type InquiryTab = "faq" | "inquiry" | "history";
 
@@ -20,15 +19,16 @@ const TAB_ITEMS = [
 /** 문의 페이지 상단 탭 — PageCard 내부에 배치 */
 export function InquiryTabStrip({ activeTab, onTabChange }: InquiryTabStripProps) {
   return (
-    <div className={cn("inline-flex flex-col items-start justify-start gap-2 self-stretch border-b border-border pb-0 pt-0", PAGE_FLUSH_CONTENT_PAD_X_CLASS)}>
+    <div className={LINE_TAB_STRIP_SHELL_CLASS}>
       <SegmentedTextTabs
         aria-label="문의 탭"
         items={TAB_ITEMS}
         activeId={activeTab}
         onSelect={(id) => onTabChange(id as InquiryTab)}
-        underline
+        tabsVariant="line"
         size="l"
-        tabListClassName="mb-0 self-stretch border-b-0"
+        className="w-full"
+        tabListClassName={lineTabStripListClassName("l")}
       />
     </div>
   );

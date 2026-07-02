@@ -1,4 +1,5 @@
 import { PAGE_FLUSH_CONTENT_PAD_X_CLASS } from "@/lib/page-layout";
+import { INQUIRY_NOTIFICATION_LIST_ITEM_SURFACE_CLASS } from "@/lib/inquiry-list-styles";
 import { getInquiryFaqCategoryLabel } from "@/lib/inquiry-faq";
 import type { InquiryFaqItem as InquiryFaqItemType } from "@/lib/inquiry-faq";
 import { cn } from "design-system/utils";
@@ -17,8 +18,8 @@ export function InquiryFaqItem({ item, isOpen = false, onToggle }: InquiryFaqIte
     <div
       className={cn(
         PAGE_FLUSH_CONTENT_PAD_X_CLASS,
-        "transition-colors hover:bg-muted",
-        isOpen && "bg-muted",
+        INQUIRY_NOTIFICATION_LIST_ITEM_SURFACE_CLASS,
+        isOpen && "bg-background-muted",
       )}
     >
       <button

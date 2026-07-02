@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState, useCallback, useEffect } from "react";
+import React, { useState, useCallback, useEffect, startTransition } from "react";
 import { useRouter } from "next/navigation";
 import { SeriesList } from "@/components/series/SeriesList";
 import { SeriesDeleteModal } from "@/components/series/SeriesDeleteModal";
@@ -25,7 +25,7 @@ export default function SeriesListPage() {
   useEffect(() => {
     const syncList = () => {
       ensureDemoSeries();
-      setSeriesList(listSeries());
+      startTransition(() => setSeriesList(listSeries()));
     };
 
     syncList();

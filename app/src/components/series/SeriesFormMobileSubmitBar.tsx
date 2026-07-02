@@ -40,22 +40,20 @@ export function SeriesFormMobileSubmitBar({
         <Button
           type="button"
           variant="outline"
+          shape="square"
           size="lg"
           onClick={onDraftClick}
-          className="bg-background text-foreground-muted hover:bg-muted disabled:border-border"
         >
           임시저장
         </Button>
       ) : null}
       <Button
         type="button"
+        variant="primary"
+        shape="square"
         size="lg"
-        onClick={onSubmit}
         disabled={submitDisabled}
-        className={cn(
-          "bg-primary text-primary-foreground hover:bg-primary/90",
-          submitDisabled && "bg-primary/40 hover:bg-primary/40 cursor-not-allowed",
-        )}
+        onClick={onSubmit}
       >
         등록하기
       </Button>

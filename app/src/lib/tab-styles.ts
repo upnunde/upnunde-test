@@ -41,6 +41,26 @@ export const TAB_SIZE_META: Record<
 /** Figma `tab` — underline=true일 때 탭 목록 트랙 하단선 */
 export const TAB_LIST_TRACK_UNDERLINE_CLASS = "border-b border-border";
 
+/** PageCard 상단 라인 탭(`tabsVariant="line"`) — 알림·시리즈 폼·문의 등 공통 */
+export function lineTabStripListClassName(
+  size: TabSize,
+  className?: string,
+): string {
+  return cn(
+    "-mb-px w-full min-w-0 self-stretch",
+    TAB_SIZE_META[size].listGapClass,
+    TAB_LIST_TRACK_UNDERLINE_CLASS,
+    HORIZONTAL_SCROLLBAR_HIDE_CLASS,
+    className,
+  );
+}
+
+/** PageCard 라인 탭 스트립 좌우 인셋 — spacing-16 (16px) */
+export const LINE_TAB_STRIP_PAD_X_CLASS = "px-4";
+
+/** PageCard 내부 라인 탭 스트립 래퍼 */
+export const LINE_TAB_STRIP_SHELL_CLASS = `self-stretch pb-0 pt-0 ${LINE_TAB_STRIP_PAD_X_CLASS}`;
+
 /** 가로 스크롤 탭·칩 행 — 스크롤바 비노출 (스와이프·휠 스크롤은 유지) */
 export const HORIZONTAL_SCROLLBAR_HIDE_CLASS =
   "[scrollbar-width:none] [-ms-overflow-style:none] [&::-webkit-scrollbar]:hidden";

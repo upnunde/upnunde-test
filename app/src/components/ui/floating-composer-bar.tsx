@@ -237,7 +237,7 @@ export function FloatingComposerBar({
       className={cn(
         "flex size-9 shrink-0 items-center justify-center rounded-full transition-all",
         canSubmit
-          ? "bg-gradient-to-br from-violet-500 to-fuchsia-500 text-inverse-foreground shadow-elevation-10 hover:opacity-90"
+          ? "composer-bar-send-active shadow-elevation-10 hover:opacity-90"
           : "cursor-not-allowed bg-muted text-foreground-placeholder",
       )}
       aria-label="AI로 초안 채우기"

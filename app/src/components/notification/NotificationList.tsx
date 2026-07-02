@@ -5,11 +5,9 @@ import { NotificationItem } from "@/components/notification/NotificationItem";
 import type { NotificationData } from "@/types/notification";
 import { SegmentedTextTabs } from "@/components/ui/segmented-text-tabs";
 import {
-  HORIZONTAL_SCROLLBAR_HIDE_CLASS,
-  TAB_LIST_TRACK_UNDERLINE_CLASS,
-  TAB_SIZE_META,
+  LINE_TAB_STRIP_SHELL_CLASS,
+  lineTabStripListClassName,
 } from "@/lib/tab-styles";
-import { PAGE_FLUSH_CONTENT_PAD_X_CLASS } from "@/lib/page-layout";
 import { cn } from "design-system/utils";
 
 export type NotificationTab = "all" | "NOTICE" | "WORK_ALERT";
@@ -28,7 +26,7 @@ const TAB_ITEMS = [
 /** 알림 목록 상단 탭(전체/공지/작품알림) — PageCard 내부에 배치 */
 export function NotificationTabStrip({ activeTab, onTabChange }: NotificationTabStripProps) {
   return (
-    <div className={cn("self-stretch pb-0 pt-0", PAGE_FLUSH_CONTENT_PAD_X_CLASS)}>
+    <div className={LINE_TAB_STRIP_SHELL_CLASS}>
       <SegmentedTextTabs
         aria-label="알림 필터"
         items={TAB_ITEMS}
@@ -37,12 +35,7 @@ export function NotificationTabStrip({ activeTab, onTabChange }: NotificationTab
         tabsVariant="line"
         size="l"
         className="w-full"
-        tabListClassName={cn(
-          "-mb-px w-full min-w-0 self-stretch",
-          TAB_SIZE_META.l.listGapClass,
-          TAB_LIST_TRACK_UNDERLINE_CLASS,
-          HORIZONTAL_SCROLLBAR_HIDE_CLASS,
-        )}
+        tabListClassName={lineTabStripListClassName("l")}
       />
     </div>
   );

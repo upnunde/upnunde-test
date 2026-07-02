@@ -3,6 +3,7 @@
 import React, { useCallback, useEffect, useState } from "react";
 import Image from "next/image";
 import { ICONS } from "@/lib/icons";
+import { IconButton } from "@/components/ui/icon-button";
 import { isDummyResourceUrl } from "@/lib/dummy-asset-path";
 import {
   IMAGE_LIGHTBOX_CHECKERBOARD_STYLE,
@@ -25,8 +26,11 @@ export interface ImageLightboxProps {
   className?: string;
 }
 
-const IMAGE_LIGHTBOX_CONTROL_BUTTON_CLASS =
-  "inline-flex h-10 w-10 cursor-pointer items-center justify-center overflow-hidden rounded-full sm:h-14 sm:w-14 bg-background shadow-elevation-20 hover:bg-muted focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-2";
+const IMAGE_LIGHTBOX_CONTROL_BUTTON_CLASS = "shadow-elevation-20 sm:size-14";
+
+/** DS Button active:translate-y-px 가 -translate-y-1/2 와 충돌해 튀는 현상 방지 */
+const IMAGE_LIGHTBOX_NAV_BUTTON_CLASS =
+  "absolute top-1/2 z-dropdown -translate-y-1/2 active:!-translate-y-1/2";
 
 export function ImageLightbox({
   open,
@@ -36,16 +40,10 @@ export function ImageLightbox({
   className,
 }: ImageLightboxProps) {
   const [index, setIndex] = useState(initialIndex);
-  /** open / initialIndex / items 길이 변경 시 인덱스를 다시 정렬 — effect 대신 render-during-set 패턴 */
-  const [snapshot, setSnapshot] = useState({ open, initialIndex, length: items.length });
-  if (
-    snapshot.open !== open ||
-    snapshot.initialIndex !== initialIndex ||
-    snapshot.length !== items.length
-  ) {
-    setSnapshot({ open, initialIndex, length: items.length });
+
+  useEffect(() => {
     setIndex(Math.min(Math.max(0, initialIndex), Math.max(0, items.length - 1)));
-  }
+  }, [open, initialIndex, items.length]);
 
   const item = items[index];
   const hasMultiple = items.length > 1;
@@ -105,48 +103,53 @@ export function ImageLightbox({
 
           {/* 왼쪽 이전 버튼 */}
           {hasMultiple && (
-            <button
+            <IconButton
               type="button"
+              variant="outline"
+              shape="circle"
+              size="icon-xl"
+              icon={ICONS.chevronLeft}
+              aria-label="이전 이미지"
               onClick={goPrev}
               disabled={!canPrev}
               className={cn(
-                "absolute left-0 top-1/2 z-dropdown -translate-y-1/2",
+                "left-0",
+                IMAGE_LIGHTBOX_NAV_BUTTON_CLASS,
                 IMAGE_LIGHTBOX_CONTROL_BUTTON_CLASS,
-                "disabled:pointer-events-none disabled:opacity-40",
               )}
-              aria-label="이전 이미지"
-            >
-              <ICONS.chevronLeft className="h-5 w-5 text-foreground sm:h-6 sm:w-6" strokeWidth={2} />
-            </button>
+            />
           )}
 
-          {/* 오른쪽 다음 버튼 */}
           {hasMultiple && (
-            <button
+            <IconButton
               type="button"
+              variant="outline"
+              shape="circle"
+              size="icon-xl"
+              icon={ICONS.chevronRight}
+              aria-label="다음 이미지"
               onClick={goNext}
               disabled={!canNext}
               className={cn(
-                "absolute right-0 top-1/2 z-dropdown -translate-y-1/2",
+                "right-0",
+                IMAGE_LIGHTBOX_NAV_BUTTON_CLASS,
                 IMAGE_LIGHTBOX_CONTROL_BUTTON_CLASS,
-                "disabled:pointer-events-none disabled:opacity-40",
               )}
-              aria-label="다음 이미지"
-            >
-              <ICONS.chevronRight className="h-5 w-5 text-foreground sm:h-6 sm:w-6" strokeWidth={2} />
-            </button>
+            />
           )}
         </div>
 
         {/* 닫기 버튼 (하단 중앙) */}
-        <button
+        <IconButton
           type="button"
-          onClick={onClose}
-          className={cn("shrink-0", IMAGE_LIGHTBOX_CONTROL_BUTTON_CLASS)}
+          variant="outline"
+          shape="circle"
+          size="icon-xl"
+          icon={ICONS.close}
           aria-label="닫기"
-        >
-          <ICONS.close className="h-5 w-5 text-foreground sm:h-6 sm:w-6" strokeWidth={2} />
-        </button>
+          onClick={onClose}
+          className={cn("shrink-0 active:!translate-y-0", IMAGE_LIGHTBOX_CONTROL_BUTTON_CLASS)}
+        />
       </div>
     </div>
   );

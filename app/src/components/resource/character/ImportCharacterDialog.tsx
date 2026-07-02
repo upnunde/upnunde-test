@@ -2,10 +2,11 @@
 
 import React, { useCallback, useEffect, useMemo, useState } from "react";
 import Image from "next/image";
+import { Dialog, DialogClose, DialogContent, DialogTitle } from "@/components/ui/dialog";
 import { Button } from "@/components/ui/button";
+import { FieldLabel } from "@/components/ui/field-label";
 import { FilterChip } from "@/components/ui/chip";
-import { Dialog, DialogContent, DialogTitle } from "@/components/ui/dialog";
-import { CHIP_GROUP_GAP_CLASS } from "@/lib/chip-styles";
+import { CONTROL_GROUP_GAP_COMPACT_CLASS, CONTROL_GROUP_GAP_STANDARD_CLASS } from "@/lib/chip-styles";
 import {
   IMPORTABLE_CHARACTERS,
   importedResourceKey,
@@ -13,7 +14,12 @@ import {
   type ImportableCharacterPick,
 } from "@/lib/importableCharactersMock";
 import type { CharacterSourceSeries } from "@/types/character";
+import { PAGE_CONTENT_PAD_X_CLASS } from "@/lib/page-layout";
 import { THUMBNAIL_DIM_OVERLAY_CLASS } from "@/lib/thumbnail-styles";
+import {
+  DESKTOP_MODAL_RADIUS_CLASS,
+  MOBILE_MODAL_TOP_RADIUS_CLASS,
+} from "@/components/ui/modal/modal-styles";
 import { cn } from "design-system/utils";
 
 export type { ImportableCharacterPick };
@@ -35,6 +41,23 @@ export interface ImportCharacterDialogProps {
   /** 이미 불러온 리소스 등장인물 키 (`seriesId:resourceCharacterId`) — 목록에서 제외 */
   excludeResourceKeys?: ReadonlySet<string> | readonly string[];
 }
+
+const IMPORT_DIALOG_SECTION_BORDER_CLASS = "border-b border-divider";
+const IMPORT_DIALOG_FOOTER_CLASS = cn(
+  "flex items-center justify-end border-t border-divider py-3",
+  PAGE_CONTENT_PAD_X_CLASS,
+  CONTROL_GROUP_GAP_STANDARD_CLASS,
+);
+
+const IMPORT_CHARACTER_OPTION_BASE_CLASS =
+  "flex w-full items-center gap-3 rounded-sm border px-3 py-3 text-left transition-colors";
+
+const IMPORT_CHARACTER_OPTION_SELECTED_CLASS = "border-primary bg-primary/10";
+const IMPORT_CHARACTER_OPTION_IDLE_CLASS =
+  "border-border bg-background hover:bg-muted";
+
+const IMPORT_CHARACTER_THUMB_CLASS =
+  "relative h-20 w-14 shrink-0 overflow-hidden rounded border border-border bg-background-muted";
 
 export function ImportCharacterDialog({
   open,
@@ -143,18 +166,28 @@ export function ImportCharacterDialog({
 
   return (
     <Dialog open={open} onOpenChange={handleDialogOpenChange}>
-      <DialogContent className="flex w-full max-h-[90vh] min-h-0 max-lg:max-w-none flex-col gap-0 overflow-hidden lg:rounded-sm border border-border bg-background p-0 lg:max-w-2xl">
-        <div className="border-b border-border/5 px-5 py-3">
-          <DialogTitle className="text-body1_700 text-foreground">{title}</DialogTitle>
-          <p className="mt-1 text-body3_400 text-foreground-placeholder">{description}</p>
+      <DialogContent
+        className={cn(
+          "flex w-full max-h-[90vh] min-h-0 max-lg:max-w-none flex-col gap-0 overflow-hidden border border-border bg-background p-0 lg:max-w-2xl",
+          MOBILE_MODAL_TOP_RADIUS_CLASS,
+          "max-lg:rounded-b-none",
+          DESKTOP_MODAL_RADIUS_CLASS,
+        )}
+      >
+        <div className={cn(IMPORT_DIALOG_SECTION_BORDER_CLASS, PAGE_CONTENT_PAD_X_CLASS, "py-3")}>
+          <DialogTitle asChild>
+            <FieldLabel description={description} className="w-full">
+              {title}
+            </FieldLabel>
+          </DialogTitle>
         </div>
 
         {showSeriesFilter && (
-          <div className="border-b border-border/5 px-5 pb-3 pt-0">
+          <div className={cn(IMPORT_DIALOG_SECTION_BORDER_CLASS, PAGE_CONTENT_PAD_X_CLASS, "pb-3 pt-0")}>
             <div
               className={cn(
                 "inline-flex w-full min-w-0 flex-wrap items-center overflow-x-auto",
-                CHIP_GROUP_GAP_CLASS
+                CONTROL_GROUP_GAP_COMPACT_CLASS,
               )}
               role="tablist"
               aria-label="시리즈 선택"
@@ -180,7 +213,7 @@ export function ImportCharacterDialog({
           </div>
         )}
 
-        <div className="min-h-0 flex-1 overflow-y-auto px-5 py-4">
+        <div className={cn("min-h-0 flex-1 overflow-y-auto py-4", PAGE_CONTENT_PAD_X_CLASS)}>
           {visibleCharacters.length === 0 ? (
             <p className="py-8 text-center text-body3_400 text-foreground-placeholder">
               {showSeriesFilter
@@ -196,13 +229,15 @@ export function ImportCharacterDialog({
                     key={character.id}
                     type="button"
                     onClick={() => setSelectedImportCharacterId(character.id)}
-                    className={`flex w-full items-center gap-3 rounded-sm border px-3 py-3 text-left transition-colors ${
+                    aria-pressed={selected}
+                    className={cn(
+                      IMPORT_CHARACTER_OPTION_BASE_CLASS,
                       selected
-                        ? "border-primary bg-primary/5"
-                        : "border-border bg-background hover:bg-muted"
-                    }`}
+                        ? IMPORT_CHARACTER_OPTION_SELECTED_CLASS
+                        : IMPORT_CHARACTER_OPTION_IDLE_CLASS,
+                    )}
                   >
-                    <div className="relative h-20 w-14 shrink-0 overflow-hidden rounded border border-border bg-muted">
+                    <div className={IMPORT_CHARACTER_THUMB_CLASS}>
                       <Image
                         src={character.imageUrl}
                         alt={character.name}
@@ -214,7 +249,9 @@ export function ImportCharacterDialog({
                     </div>
                     <div className="min-w-0 flex-1">
                       <p className="truncate text-body3_700 text-foreground">{character.name}</p>
-                      <p className="mt-1 line-clamp-2 text-body3_400 text-foreground-placeholder">{character.summary}</p>
+                      <p className="mt-1 line-clamp-2 text-body3_400 text-foreground-placeholder">
+                        {character.summary}
+                      </p>
                     </div>
                   </button>
                 );
@@ -223,18 +260,22 @@ export function ImportCharacterDialog({
           )}
         </div>
 
-        <div className="flex items-center justify-end gap-2 border-t border-border/5 px-5 py-3">
+        <div className={IMPORT_DIALOG_FOOTER_CLASS}>
+          <DialogClose asChild>
+            <Button
+              type="button"
+              variant="outline"
+              size="sm"
+              onClick={() => handleDialogOpenChange(false)}
+            >
+              취소
+            </Button>
+          </DialogClose>
           <Button
             type="button"
-            variant="outline"
-            className="h-9 min-h-9 rounded-md bg-background px-3 text-body3_400 text-foreground hover:bg-muted disabled:border-border lg:h-8 lg:min-h-8"
-            onClick={() => handleDialogOpenChange(false)}
-          >
-            취소
-          </Button>
-          <Button
-            type="button"
-            className="h-9 min-h-9 rounded-md bg-inverse px-3 text-body3_400 text-inverse-foreground hover:bg-inverse lg:h-8 lg:min-h-8"
+            variant="default"
+            shape="square"
+            size="sm"
             onClick={handleApply}
             disabled={!resolvedId}
           >

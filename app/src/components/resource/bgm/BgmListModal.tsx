@@ -14,6 +14,7 @@ import { SegmentedTextTabs } from "@/components/ui/segmented-text-tabs";
 import { ICONS } from "@/lib/icons";
 import { SidebarList } from "@/components/AppSidebar/SidebarList";
 import { CHIP_GROUP_GAP_CLASS } from "@/lib/chip-styles";
+import { LINE_TAB_STRIP_SHELL_CLASS, lineTabStripListClassName } from "@/lib/tab-styles";
 import { deterministicBgmDuration } from "@/lib/bgm-duration";
 import { cn } from "design-system/utils";
 import { BgmListItem } from "./BgmListItem";
@@ -368,7 +369,7 @@ export function BgmListModal({ open, onClose, onAdd }: BgmListModalProps) {
             {genreChips}
           </div>
 
-          <div className="shrink-0 border-b border-border px-4">
+          <div className={cn(LINE_TAB_STRIP_SHELL_CLASS, "shrink-0")}>
             <SegmentedTextTabs
               items={[
                 { id: "list", label: "리스트" },
@@ -379,9 +380,11 @@ export function BgmListModal({ open, onClose, onAdd }: BgmListModalProps) {
               ]}
               activeId={mobilePanel}
               onSelect={(id) => setMobilePanel(id as MobilePanel)}
-              underline
+              tabsVariant="line"
               size="m"
               aria-label="BGM 패널"
+              className="w-full"
+              tabListClassName={lineTabStripListClassName("m")}
             />
           </div>
 

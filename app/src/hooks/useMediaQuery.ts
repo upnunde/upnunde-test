@@ -2,12 +2,9 @@
 
 import { useLayoutEffect, useState } from "react";
 
-/** `matchMedia` 구독 — SSR 시 `defaultMatches` 사용 */
+/** `matchMedia` 구독 — SSR·hydration 첫 패스는 `defaultMatches`로 통일 */
 export function useMediaQuery(query: string, defaultMatches = false): boolean {
-  const [matches, setMatches] = useState(() => {
-    if (typeof window === "undefined") return defaultMatches;
-    return window.matchMedia(query).matches;
-  });
+  const [matches, setMatches] = useState(defaultMatches);
 
   useLayoutEffect(() => {
     const media = window.matchMedia(query);

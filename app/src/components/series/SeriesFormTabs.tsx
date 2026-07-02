@@ -2,8 +2,7 @@
 
 import type { SeriesFormTab } from "@/lib/seriesForm";
 import { SegmentedTextTabs } from "@/components/ui/segmented-text-tabs";
-import { PAGE_FLUSH_CONTENT_PAD_X_CLASS } from "@/lib/page-layout";
-import { cn } from "design-system/utils";
+import { LINE_TAB_STRIP_SHELL_CLASS, lineTabStripListClassName } from "@/lib/tab-styles";
 
 interface SeriesFormTabsProps {
   activeTab: SeriesFormTab;
@@ -18,15 +17,16 @@ const ITEMS: Array<{ id: SeriesFormTab; label: string }> = [
 
 export function SeriesFormTabs({ activeTab, onChange }: SeriesFormTabsProps) {
   return (
-    <div className={cn("inline-flex flex-col items-start justify-start gap-2 self-stretch border-b border-border pb-0 pt-0", PAGE_FLUSH_CONTENT_PAD_X_CLASS)}>
+    <div className={LINE_TAB_STRIP_SHELL_CLASS}>
       <SegmentedTextTabs
         aria-label="시리즈 폼 섹션"
         items={ITEMS}
         activeId={activeTab}
         onSelect={(id) => onChange(id as SeriesFormTab)}
-        underline
+        tabsVariant="line"
         size="l"
-        tabListClassName="mb-0 self-stretch border-b-0"
+        className="w-full"
+        tabListClassName={lineTabStripListClassName("l")}
       />
     </div>
   );

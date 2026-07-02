@@ -30,6 +30,45 @@
   --app-vv-offset-top: 0px;
   --app-vv-live-top: 0px;
   --app-vv-live-height: 100dvh;
+
+  /** FloatingComposerBar — 표면·AI 보더 그라데이션 (라이트) */
+  --composer-bar-fill: var(--background);
+  --composer-bar-border-gradient: linear-gradient(
+    90deg,
+    var(--brand-200) 0%,
+    var(--brand-300) 12%,
+    var(--brand-400) 28%,
+    var(--brand-500) 44%,
+    var(--info-500) 60%,
+    var(--brand-500) 76%,
+    var(--brand-300) 88%,
+    var(--brand-200) 100%
+  );
+  --composer-bar-send-gradient: linear-gradient(
+    135deg,
+    var(--brand-400) 0%,
+    var(--brand-600) 100%
+  );
+}
+
+.dark {
+  --composer-bar-fill: var(--background);
+  --composer-bar-border-gradient: linear-gradient(
+    90deg,
+    var(--brand-800) 0%,
+    var(--brand-600) 12%,
+    var(--brand-500) 28%,
+    var(--brand-400) 44%,
+    var(--info-400) 60%,
+    var(--brand-500) 76%,
+    var(--brand-400) 88%,
+    var(--brand-300) 100%
+  );
+  --composer-bar-send-gradient: linear-gradient(
+    135deg,
+    var(--brand-500) 0%,
+    var(--brand-700) 100%
+  );
 }
 
 @layer base {
@@ -289,22 +328,17 @@
 
   .composer-bar-gradient-inner {
     border: 2px solid transparent;
-    background-image: linear-gradient(#ffffff, #ffffff),
-      linear-gradient(
-        90deg,
-        #f0abfc 0%,
-        #e879f9 12%,
-        #a855f7 28%,
-        #8b5cf6 44%,
-        #6366f1 60%,
-        #a855f7 76%,
-        #e879f9 88%,
-        #f0abfc 100%
-      );
+    background-image: linear-gradient(var(--composer-bar-fill), var(--composer-bar-fill)),
+      var(--composer-bar-border-gradient);
     background-origin: padding-box, border-box;
     background-clip: padding-box, border-box;
     background-size: auto, 200% 100%;
     animation: composer-border-gradient-flow 4s linear infinite;
+  }
+
+  .composer-bar-send-active {
+    background-image: var(--composer-bar-send-gradient);
+    color: var(--primary-foreground);
   }
 
   /** 인풋 필드 내부 AI 생성 중 텍스트 shimmer (밝은 배경) */

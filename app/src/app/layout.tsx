@@ -5,7 +5,6 @@ import { MobileViewportSync } from "@/components/MobileViewportSync";
 import { Toaster } from "@/components/ui/toaster";
 import { ThemeInitScript } from "@/components/ThemeInitScript";
 import { DevConsoleFilterScript } from "@/components/DevConsoleFilterScript";
-import DevConsoleFilter from "@/components/DevConsoleFilter";
 import {
   APP_BROWSER_BG_CANVAS_THEME_COLOR_DARK,
   APP_BROWSER_BG_CANVAS_THEME_COLOR_LIGHT,
@@ -63,7 +62,6 @@ export default function RootLayout({
       <body
         className={`${geistSans.variable} ${geistMono.variable} antialiased m-0 w-full max-lg:overscroll-x-none lg:overscroll-none p-0 lg:flex lg:h-dvh lg:flex-col lg:overflow-hidden`}
       >
-        <DevConsoleFilter />
         <MobileViewportSync />
         <div
           data-app-viewport-shell

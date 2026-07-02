@@ -1,5 +1,6 @@
 "use client";
 
+import { startTransition, useCallback } from "react";
 import {
   Tabs as DsTabs,
   TabsList as DsTabsList,
@@ -70,10 +71,21 @@ export function SegmentedTextTabs({
   const listVariant = tabsVariant ?? (underline ? "line" : "default");
   const dsSize = size ? DS_TABS_SIZE[size] : undefined;
 
+  const handleValueChange = useCallback(
+    (value: string | number | null) => {
+      if (!onSelect || value == null) return;
+      const next = String(value);
+      if (next === activeId) return;
+      // Base UI Tabs가 마운트 직후 onValueChange를 호출할 수 있음 — React 19 경고 방지
+      startTransition(() => onSelect(next));
+    },
+    [activeId, onSelect],
+  );
+
   return (
     <DsTabs
-      value={activeId}
-      onValueChange={(value) => onSelect?.(String(value))}
+      value={activeId ?? undefined}
+      onValueChange={handleValueChange}
       className={cn("max-w-full min-w-0", className)}
     >
       <DsTabsList

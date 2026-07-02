@@ -11,6 +11,7 @@ import {
   DropdownMenuItem,
 } from "@/components/ui/dropdown-menu";
 import { Badge } from "@/components/ui/badge";
+import { Button } from "@/components/ui/button";
 import { IconButton } from "@/components/ui/icon-button";
 import type { CharacterData } from "@/types/character";
 import { formatSeriesDateOrRelative, formatSeriesViewCount } from "@/lib/formatSeries";
@@ -52,15 +53,18 @@ export function CharacterItem({
   const stat2Str = formatSeriesViewCount(stat2);
 
   const settingsButton = (
-    <button
+    <Button
       type="button"
+      variant="outline"
+      shape="square"
+      size="default"
       onClick={() => onCharacterSettings?.(character)}
-      className="flex h-9 min-w-0 flex-1 cursor-pointer items-center rounded-md border border-border bg-background px-3 text-body3_500 text-foreground-muted transition-colors hover:bg-muted focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-2 disabled:border-border"
+      className="min-w-0 flex-1"
     >
       <span className="block w-full overflow-hidden text-ellipsis whitespace-nowrap text-center">
         캐릭터 설정
       </span>
-    </button>
+    </Button>
   );
 
   return (

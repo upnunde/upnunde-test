@@ -16,6 +16,7 @@ import {
   chipGroupGapClass,
 } from "@/lib/chip-styles";
 import { SegmentedTextTabs } from "@/components/ui/segmented-text-tabs";
+import { lineTabStripListClassName } from "@/lib/tab-styles";
 import {
   PAGE_CONTAINER_CLASS,
   PAGE_SCROLL_COLUMN_CLASS,
@@ -104,7 +105,7 @@ export default function ElementsPage() {
                 />
               </SpecRow>
 
-              <SpecRow label="Tab L — underline true (탭 간격 16px)">
+              <SpecRow label="Tab L — line (탭 간격 16px)">
                 <SegmentedTextTabs
                   aria-label="밑줄 탭 L"
                   items={[
@@ -114,7 +115,9 @@ export default function ElementsPage() {
                   ]}
                   activeId="a"
                   size="l"
-                  underline
+                  tabsVariant="line"
+                  className="w-full"
+                  tabListClassName={lineTabStripListClassName("l")}
                 />
               </SpecRow>
 
