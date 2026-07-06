@@ -4,11 +4,14 @@
 # 사전 설정 (DS repo Secrets):
 #   UPNUNDE_TEST_DISPATCH_PAT — upnunde-test에 repository_dispatch 권한이 있는 PAT
 #
-# DS에서 GitHub Release publish 시 upnunde-test의 ds-sync 워크플로가 즉시 실행됩니다.
+# DS 태그 푸시(v*) 또는 GitHub Release publish 시 upnunde-test ds-sync 실행
 
 name: Notify upnunde-test (DS release)
 
 on:
+  push:
+    tags:
+      - "v*"
   release:
     types: [published]
 
@@ -22,4 +25,4 @@ jobs:
           token: ${{ secrets.UPNUNDE_TEST_DISPATCH_PAT }}
           repository: upnunde/upnunde-test
           event-type: ds-release
-          client-payload: '{"tag":"${{ github.event.release.tag_name }}"}'
+          client-payload: '{"tag":"${{ github.event.release.tag_name || github.ref_name }}"}'
