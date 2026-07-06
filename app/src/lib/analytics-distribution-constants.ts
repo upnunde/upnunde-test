@@ -6,14 +6,6 @@ export const ANALYTICS_PRIMARY_DESCENDING_DOT_CLASSES: readonly string[] = [
   "bg-primary-container",
 ];
 
-/** 차트 세그먼트용 동일 톤 팔레트 (진함 -> 연함) */
-export const ANALYTICS_PRIMARY_DESCENDING_SEGMENT_COLORS: readonly string[] = [
-  "#F642D4",
-  "rgba(246, 66, 212, 0.5)",
-  "rgba(246, 66, 212, 0.25)",
-  "#FEF0FC",
-];
-
 export function getDescendingRankOrder(values: readonly number[]): number[] {
   return values
     .map((value, index) => ({ value, index }))

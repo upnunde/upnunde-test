@@ -3,6 +3,7 @@
 import Image from "next/image";
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/ui/dialog";
 import { Button } from "@/components/ui/button";
+import { MODAL_ACTION_BUTTON_SIZE } from "@/components/ui/modal";
 import { FormFieldLabel, formFieldAriaDescribedBy } from "@/components/ui/field-label";
 import { Title2 } from "@/components/ui/title2";
 import { THUMBNAIL_DIM_OVERLAY_CLASS } from "@/lib/thumbnail-styles";
@@ -162,7 +163,7 @@ export function EpisodePromptReferenceModal({
           </div>
           <div className="sticky bottom-0 border-t border-border bg-background px-5 py-4">
             <div className="flex justify-end">
-              <Button type="button" variant="outline" onClick={() => onOpenChange(false)}>
+              <Button type="button" variant="outline" size={MODAL_ACTION_BUTTON_SIZE} onClick={() => onOpenChange(false)}>
                 닫기
               </Button>
             </div>

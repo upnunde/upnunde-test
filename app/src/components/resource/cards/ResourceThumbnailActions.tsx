@@ -2,6 +2,7 @@
 
 import React from "react";
 import { ICONS, Icon } from "@/lib/icons";
+import { Button } from "@/components/ui/button";
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -9,7 +10,6 @@ import {
   DropdownMenuItem,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
-import { IconButton } from "@/components/ui/icon-button";
 import {
   thumbnailHoverDimOverlayClass,
   thumbnailHoverRevealClass,
@@ -23,11 +23,7 @@ export interface ResourceThumbnailActionsProps {
   onDelete: () => void;
   editAriaLabel?: string;
   deleteAriaLabel?: string;
-  /** CharacterCard 등 — 데스크톱 버튼 elevation */
-  elevated?: boolean;
 }
-
-const DESKTOP_ICON_BUTTON_CLASS = "shadow-elevation-20";
 
 /** PC: hover 시 편집·삭제 / 모바일: ⋮ 오버플로 (Pinterest형 그리드) */
 export function ResourceThumbnailActions({
@@ -36,7 +32,6 @@ export function ResourceThumbnailActions({
   onDelete,
   editAriaLabel = "상세 페이지에서 편집",
   deleteAriaLabel = "삭제",
-  elevated = false,
 }: ResourceThumbnailActionsProps) {
   const stopBubble = (e: React.SyntheticEvent) => {
     e.stopPropagation();
@@ -54,47 +49,48 @@ export function ResourceThumbnailActions({
           thumbnailHoverRevealClass(forceVisible),
         )}
       >
-        <IconButton
+        <Button
           type="button"
-          variant="outline"
+          variant="secondary"
           shape="circle"
-          size="icon-sm"
-          icon={ICONS.pencil}
+          size="icon"
           aria-label={editAriaLabel}
-          className={cn(elevated && DESKTOP_ICON_BUTTON_CLASS)}
           onClick={(e) => {
             stopBubble(e);
             onEdit();
           }}
-        />
-        <IconButton
+        >
+          <Icon icon={ICONS.pencil} size="md" />
+        </Button>
+        <Button
           type="button"
-          variant="outline"
+          variant="secondary"
           shape="circle"
-          size="icon-sm"
-          icon={ICONS.trash2}
+          size="icon"
           aria-label={deleteAriaLabel}
-          className={cn(elevated && DESKTOP_ICON_BUTTON_CLASS)}
           onClick={(e) => {
             stopBubble(e);
             onDelete();
           }}
-        />
+        >
+          <Icon icon={ICONS.trash2} size="md" />
+        </Button>
       </div>
 
       <div className="absolute right-1 top-1 z-dropdown lg:hidden">
         <DropdownMenu>
           <DropdownMenuTrigger asChild>
-            <IconButton
+            <Button
               type="button"
-              variant="ghost"
+              variant="secondary"
               shape="circle"
-              size="icon"
-              icon={ICONS.moreVertical}
+              size="icon-sm"
               aria-label="작업 더보기"
               onClick={stopBubble}
               onPointerDown={stopBubble}
-            />
+            >
+              <Icon icon={ICONS.moreVertical} size="sm" />
+            </Button>
           </DropdownMenuTrigger>
           <DropdownMenuContent align="end" onClick={stopBubble}>
             <DropdownMenuGroup>

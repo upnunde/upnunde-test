@@ -4,7 +4,8 @@ import React, { useCallback, useState } from "react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
+import { EmailInput } from "@/components/ui/email-input";
+import { InputGroup } from "@/components/ui/input";
 import {
   Dialog,
   DialogContent,
@@ -63,26 +64,27 @@ export function LoginPage() {
           className="flex w-full flex-col items-stretch gap-3"
           noValidate
         >
-          <label htmlFor="login-email" className="sr-only">
-            이메일 주소
-          </label>
-          <Input
-            id="login-email"
-            type="email"
-            size="2xl"
-            placeholder="이메일 주소"
-            required
-            value={email}
-            onChange={(e) => setEmail(e.target.value)}
-            className="w-full"
-            autoComplete="email"
-          />
+          <InputGroup>
+            <label htmlFor="login-email" className="sr-only">
+              이메일 주소
+            </label>
+            <EmailInput
+              id="login-email"
+              name="email"
+              size="2xl"
+              placeholder="이메일 주소"
+              required
+              value={email}
+              onChange={(e) => setEmail(e.target.value)}
+              autoComplete="email"
+            />
+          </InputGroup>
           <Button
-            type="button"
+            type="submit"
             variant="default"
             size="lg"
-            className="w-full h-[42px] rounded-full bg-inverse text-inverse-foreground hover:bg-dim-30"
-            onClick={goToSeries}
+            shape="circle"
+            className="w-full"
           >
             계속하기
           </Button>
@@ -96,7 +98,8 @@ export function LoginPage() {
             <Button
               variant="outline"
               size="lg"
-              className="w-full rounded-full"
+              shape="circle"
+              className="w-full"
               aria-label="Google로 계속하기"
             >
               <span className="absolute -top-8 left-1/2 -translate-x-1/2 rounded bg-foreground px-2 py-1 text-caption1_500 text-background before:absolute before:left-1/2 before:top-full before:-translate-x-1/2 before:border-4 before:border-transparent before:border-t-foreground">
@@ -110,7 +113,8 @@ export function LoginPage() {
           <Button
             variant="outline"
             size="lg"
-            className="w-full rounded-full"
+            shape="circle"
+            className="w-full"
             aria-label="Apple로 계속하기"
           >
             <ICONS.appleBrand className="text-foreground" />
@@ -120,7 +124,8 @@ export function LoginPage() {
           <Button
             variant="outline"
             size="lg"
-            className="w-full rounded-full"
+            shape="circle"
+            className="w-full"
             aria-label="X로 계속하기"
           >
             <ICONS.xBrand />
@@ -130,7 +135,8 @@ export function LoginPage() {
           <Button
             variant="outline"
             size="lg"
-            className="w-full rounded-full"
+            shape="circle"
+            className="w-full"
             aria-label="LINE으로 계속하기"
           >
             <ICONS.lineBrand />
@@ -150,13 +156,15 @@ export function LoginPage() {
       </main>
 
       {/* 우측 하단 고정: 문의하기 → 클릭 시 현재 화면 유지, 480px 문의 팝업 */}
-      <button
+      <Button
         type="button"
+        variant="outline"
+        size="sm"
+        className="absolute bottom-8 right-8"
         onClick={() => setInquiryOpen(true)}
-        className="absolute bottom-8 right-8 cursor-pointer rounded-md border border-border bg-background px-4 py-2 text-body3_500 text-foreground hover:bg-accent focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
       >
         문의하기
-      </button>
+      </Button>
 
       <Dialog open={inquiryOpen} onOpenChange={setInquiryOpen}>
         <DialogContent

@@ -53,16 +53,17 @@
 
 .dark {
   --composer-bar-fill: var(--background);
+  /** 0%·100% 동일(brand-800) — border 애니메이션 루프 이음 방지. 라이트(200↔200)와 대칭 */
   --composer-bar-border-gradient: linear-gradient(
     90deg,
     var(--brand-800) 0%,
-    var(--brand-600) 12%,
-    var(--brand-500) 28%,
-    var(--brand-400) 44%,
+    var(--brand-700) 12%,
+    var(--brand-600) 28%,
+    var(--brand-500) 44%,
     var(--info-400) 60%,
     var(--brand-500) 76%,
-    var(--brand-400) 88%,
-    var(--brand-300) 100%
+    var(--brand-700) 88%,
+    var(--brand-800) 100%
   );
   --composer-bar-send-gradient: linear-gradient(
     135deg,

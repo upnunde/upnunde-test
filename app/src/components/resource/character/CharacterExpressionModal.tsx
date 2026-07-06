@@ -10,11 +10,13 @@ import {
 } from "@/components/ui/dialog";
 import { Button } from "@/components/ui/button";
 import { Input, InputGroup, InputHypertext } from "@/components/ui/input";
+import { Slider } from "@/components/ui/slider";
 import {
   formDialogShellClassName,
   formDialogSheetBodyWrapperClassName,
   formDialogSheetScrollBodyClassName,
   formDialogSheetStickyFooterClassName,
+  MODAL_ACTION_BUTTON_SIZE,
 } from "@/components/ui/modal";
 import { ICONS, Icon } from "@/lib/icons";
 import { AddResourceSlot } from "@/components/resource/cards/AddResourceSlot";
@@ -50,7 +52,7 @@ const EXPRESSION_DESKTOP_BODY_HEIGHT_VAR = "--expression-panel-h";
 const EXPRESSION_MULTI_MODAL_DESKTOP_SHELL_CLASS =
   "lg:items-start lg:gap-0 lg:overflow-hidden lg:p-0 lg:pb-0 lg:!w-[767px] lg:!min-w-[767px] lg:!max-w-[767px] lg:shrink-0";
 const EXPRESSION_MULTI_MODAL_DESKTOP_BODY_WRAPPER_CLASS =
-  "lg:w-[767px] lg:min-w-[767px] lg:max-w-[767px] lg:flex-none lg:shrink-0";
+  "lg:w-[767px] lg:min-w-[767px] lg:max-w-[767px] lg:flex-none lg:shrink-0 lg:border lg:border-border lg:rounded-sm";
 const EXPRESSION_MULTI_MODAL_DESKTOP_BODY_ROW_CLASS =
   "max-lg:w-full max-lg:flex-1 lg:w-[767px] lg:min-w-[767px] lg:max-w-[767px] lg:flex-none lg:shrink-0";
 const EXPRESSION_MULTI_MODAL_DESKTOP_LEFT_PANEL_CLASS =
@@ -817,34 +819,24 @@ export function CharacterExpressionModal({
                 </>
               )}
             </div>
-            {/* 슬라이더: primary 트랙 + 서피스 썸 (참고: w-14 채움 + w-48 빈 트랙 + thumb) */}
-            <div className="h-6 inline-flex justify-start items-center w-full self-stretch gap-10">
-              <div className="relative flex-1 h-6 inline-flex items-center gap-0">
-                <div className="flex-1 flex h-2 rounded-[999px] overflow-hidden bg-disabled">
-                  <div className="h-full bg-primary rounded-[999px] transition-[width]" style={{ width: `${((zoom - 0.5) / 1.5) * 100}%` }} />
-                </div>
-                <div
-                  className="w-8 h-8 top-1/2 -translate-y-1/2 absolute bg-background rounded-full shadow-elevation-10 border border-border/10 -translate-x-1/2 pointer-events-none"
-                  style={{ left: `${((zoom - 0.5) / 1.5) * 100}%` }}
-                  aria-hidden
-                />
-                <input
-                  type="range"
-                  min={0.5}
-                  max={2}
-                  step={0.01}
-                  value={zoom}
-                  onChange={(e) => {
-                    const v = Number(e.target.value);
-                    setZoom(v);
-                    if (selectedSlot?.id) {
-                      setZoomBySlotId((prev) => ({ ...prev, [selectedSlot.id]: v }));
-                    }
-                  }}
-                  className="absolute inset-0 w-full opacity-0 cursor-pointer z-0"
-                  aria-label="확대/축소"
-                />
-              </div>
+            {/* 슬라이더: DS Slider — 확대/축소 */}
+            <div className="flex h-6 w-full items-center gap-10 self-stretch">
+              <Slider
+                className="min-w-0 flex-1"
+                min={0.5}
+                max={2}
+                step={0.01}
+                value={zoom}
+                onValueChange={(value) => {
+                  const next = Array.isArray(value) ? value[0] : value;
+                  if (typeof next !== "number") return;
+                  setZoom(next);
+                  if (selectedSlot?.id) {
+                    setZoomBySlotId((prev) => ({ ...prev, [selectedSlot.id]: next }));
+                  }
+                }}
+                aria-label="확대/축소"
+              />
               <Button
                 type="button"
                 variant="outline"
@@ -911,7 +903,8 @@ export function CharacterExpressionModal({
                 <Button
                   type="button"
                   variant="outline"
-                  className="h-8 rounded-md font-['Pretendard_JP'] text-body3_500 text-secondary-foreground px-3 w-auto disabled:border-border"
+                  size={MODAL_ACTION_BUTTON_SIZE}
+                  className="min-w-0 w-auto px-3 font-['Pretendard_JP'] text-body3_500 text-secondary-foreground disabled:border-border"
                   onClick={() => handleNavigateFilledSlots("prev")}
                   disabled={filledSlotIndices.length <= 1}
                 >
@@ -920,7 +913,8 @@ export function CharacterExpressionModal({
                 <Button
                   type="button"
                   variant="outline"
-                  className="h-8 rounded-md font-['Pretendard_JP'] text-body3_500 text-secondary-foreground px-3 w-auto disabled:border-border"
+                  size={MODAL_ACTION_BUTTON_SIZE}
+                  className="min-w-0 w-auto px-3 font-['Pretendard_JP'] text-body3_500 text-secondary-foreground disabled:border-border"
                   onClick={() => handleNavigateFilledSlots("next")}
                   disabled={filledSlotIndices.length <= 1}
                 >
@@ -969,7 +963,8 @@ export function CharacterExpressionModal({
             <Button
               type="button"
               variant="outline"
-              className="min-w-20 h-9 rounded-md font-['Pretendard_JP'] text-body1_500 text-secondary-foreground disabled:border-border"
+              size={MODAL_ACTION_BUTTON_SIZE}
+              className="min-w-20 font-['Pretendard_JP'] text-body1_500 text-secondary-foreground disabled:border-border"
               onClick={handleClose}
             >
               취소
@@ -977,7 +972,8 @@ export function CharacterExpressionModal({
           </DialogClose>
           <Button
             type="button"
-            className="min-w-20 h-9 rounded-md font-['Pretendard_JP'] text-body1_500"
+            size={MODAL_ACTION_BUTTON_SIZE}
+            className="min-w-20 font-['Pretendard_JP'] text-body1_500"
             onClick={handleSave}
             disabled={!canSave || saving}
           >

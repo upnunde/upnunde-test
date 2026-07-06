@@ -5,6 +5,11 @@ import { cn } from "design-system/utils";
 import VChart from "@visactor/vchart";
 import type { ILineChartSpec } from "@visactor/vchart";
 import { ANALYTICS_TREND_LINE_SHELL_CLASS } from "@/components/analytics/analytics-trend-chart-shell";
+import { buildAnalyticsCartesianAxes } from "@/lib/analytics-chart-axes";
+import {
+  useAnalyticsChartTheme,
+  type AnalyticsChartTheme,
+} from "@/lib/analytics-chart-theme";
 import {
   buildAnalyticsTrendDateLabels,
   getAnalyticsTrendPointCount,
@@ -62,6 +67,7 @@ function buildLineSpec(
   metric: AnalyticsChartMetric,
   periodRange: AnalyticsPeriodRange,
   referenceDate: Date,
+  theme: AnalyticsChartTheme,
   valuesOverride?: readonly number[],
 ): ILineChartSpec {
   const bucketCount = valuesOverride?.length ?? getAnalyticsTrendPointCount(periodRange);
@@ -80,45 +86,7 @@ function buildLineSpec(
     ],
     xField: "date",
     yField: "value",
-    axes: [
-      {
-        orient: "bottom",
-        type: "band",
-        domainLine: { visible: true, style: { stroke: "#e2e8f0", lineWidth: 1 } },
-        label: {
-          style: {
-            fontSize: 10,
-            fill: "#64748b",
-          },
-        },
-      },
-      {
-        orient: "left",
-        type: "linear",
-        label: {
-          visible: true,
-          formatMethod: (text) => {
-            const raw = Array.isArray(text) ? text[0] : text;
-            const n = Number(raw);
-            if (Number.isFinite(n)) return Math.round(n).toLocaleString("ko-KR");
-            return raw != null ? String(raw) : "";
-          },
-          style: {
-            fontSize: 10,
-            fill: "#64748b",
-          },
-        },
-        domainLine: { visible: false },
-        grid: {
-          visible: true,
-          style: {
-            lineDash: [4, 4],
-            stroke: "#e2e8f0",
-            lineWidth: 1,
-          },
-        },
-      },
-    ],
+    axes: buildAnalyticsCartesianAxes(theme),
     tooltip: {
       visible: true,
       mark: {
@@ -142,15 +110,15 @@ function buildLineSpec(
         yField: "value",
         line: {
           style: {
-            stroke: "#F642D4",
+            stroke: theme.primary,
             lineWidth: 2,
           },
         },
         point: {
           visible: true,
           style: {
-            fill: "#F642D4",
-            stroke: "#ffffff",
+            fill: theme.primary,
+            stroke: theme.surface,
             lineWidth: 1,
           },
         },
@@ -182,9 +150,10 @@ export function AnalyticsTrendLineChart({
   valuesOverride,
 }: AnalyticsTrendLineChartProps) {
   const [referenceDate] = useState(() => new Date());
+  const chartTheme = useAnalyticsChartTheme();
   const spec = useMemo(
-    () => buildLineSpec(metric, periodRange, referenceDate, valuesOverride),
-    [metric, periodRange, referenceDate, valuesOverride],
+    () => buildLineSpec(metric, periodRange, referenceDate, chartTheme, valuesOverride),
+    [metric, periodRange, referenceDate, chartTheme, valuesOverride],
   );
   const containerRef = useRef<HTMLDivElement>(null);
   const chartRef = useRef<VChart | null>(null);

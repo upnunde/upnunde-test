@@ -300,8 +300,8 @@ export function FloatingComposerBar({
             placeholder={`✨${placeholder}`}
             aria-label={ariaLabel}
             className={cn(
-              "block min-h-0 w-full min-w-0 resize-none border-0 bg-transparent shadow-none caret-primary",
-              "text-foreground placeholder:text-foreground-placeholder focus-visible:ring-0",
+              "block min-h-0 w-full min-w-0 resize-none rounded-none border-0 bg-transparent px-0 shadow-none caret-primary",
+              "text-foreground placeholder:text-foreground-placeholder focus-visible:border-0 focus-visible:ring-0 dark:bg-transparent",
               showExpandedLayout
                 ? "max-h-[120px] py-0.5"
                 : "min-h-5 py-0 leading-5",

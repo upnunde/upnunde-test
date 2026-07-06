@@ -333,7 +333,7 @@ function SettlementRowMobile({
   onRejectionReason: () => void;
 }) {
   return (
-    <div className="rounded-md bg-background p-4 shadow-elevation-30">
+    <div className="rounded-md border border-border bg-background p-4">
       <div className="flex items-start justify-between gap-3">
         <div className="min-w-0 flex-1">
           <SettlementStatusBadge

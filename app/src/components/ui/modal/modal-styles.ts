@@ -131,5 +131,8 @@ export const modalFooterButtonRowClassName = cn(
 export const modalFooterTrailingGroupClassName =
   "flex w-full flex-col items-stretch gap-1 lg:w-auto lg:flex-row lg:items-center lg:justify-start";
 
+/** 모달·팝업 푸터 액션 버튼 크기 — DS `default` (h-9 / 36px) */
+export const MODAL_ACTION_BUTTON_SIZE = "default" as const;
+
 /** 모달 푸터 DS Button — 모바일 full-width · lg+ auto */
 export const modalFooterActionButtonClassName = "w-full min-w-0 lg:w-auto";

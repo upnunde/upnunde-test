@@ -82,7 +82,6 @@ export function CharacterCard({
         <div className={THUMBNAIL_DIM_OVERLAY_CLASS} aria-hidden />
         <ResourceThumbnailActions
           forceVisible={showControls}
-          elevated
           onEdit={() => onDetailClick(character)}
           onDelete={() => onDeleteClick(character)}
         />

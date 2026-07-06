@@ -73,7 +73,7 @@ const DialogOverlay = React.forwardRef<
     <DialogPrimitive.Backdrop
       ref={ref}
       className={cn(
-        "fixed inset-x-0 bottom-0 top-0 bg-dim-20 data-open:animate-in data-closed:animate-out data-closed:fade-out-0 data-open:fade-in-0",
+        "fixed inset-x-0 bottom-0 top-0 bg-dim-30 data-open:animate-in data-closed:animate-out data-closed:fade-out-0 data-open:fade-in-0",
         // 모바일: 키보드로 줄어든 visual viewport 추적
         "max-lg:bottom-auto max-lg:top-[var(--app-vv-live-top,0px)] max-lg:h-[var(--app-vv-live-height,100dvh)]",
         DIALOG_OVERLAY_Z_CLASS,

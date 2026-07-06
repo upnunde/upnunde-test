@@ -33,6 +33,7 @@ import {
   formDialogSheetEpisodeFormClassName,
   formDialogSheetScrollBodyClassName,
   formDialogSheetStickyFooterClassName,
+  MODAL_ACTION_BUTTON_SIZE,
 } from "@/components/ui/modal";
 import { PAGE_GUTTER_X_CLASS } from "@/lib/page-layout";
 import { cn } from "design-system/utils";
@@ -225,11 +226,11 @@ export function EpisodeAutoGeneratorModal({
                     inputId={EPISODE_AUTO_HISTORY_ID}
                     className="min-w-0 flex-1"
                   />
-                  <Button
-                    type="button"
-                    variant="outline"
-                    size="sm"
-                    className="h-8 shrink-0 gap-2 shadow-none bg-background px-3"
+                <Button
+                  type="button"
+                  variant="outline"
+                  size={MODAL_ACTION_BUTTON_SIZE}
+                  className="shrink-0 gap-2 shadow-none bg-background px-3"
                     disabled={
                       !canAutoFillPreviousHistory ||
                       isHistoryAutoFilling ||
@@ -297,6 +298,7 @@ export function EpisodeAutoGeneratorModal({
                 <Button
                   type="button"
                   variant="outline"
+                  size={MODAL_ACTION_BUTTON_SIZE}
                   disabled={isApplying || isGenerating || isHistoryAutoFilling}
                   onClick={() => onOpenChange(false)}
                 >
@@ -304,6 +306,7 @@ export function EpisodeAutoGeneratorModal({
                 </Button>
                 <Button
                   type="button"
+                  size={MODAL_ACTION_BUTTON_SIZE}
                   disabled={isApplying || isGenerating || isHistoryAutoFilling}
                   onClick={() => void handleSave()}
                 >

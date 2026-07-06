@@ -17,6 +17,7 @@ export {
   MOBILE_BOTTOM_SHEET_SCRIM_CLASS,
   modalFooterButtonRowClassName,
   modalFooterActionButtonClassName,
+  MODAL_ACTION_BUTTON_SIZE,
   modalFooterShellClassName,
   modalHeaderClassName,
 } from "./modal-styles";

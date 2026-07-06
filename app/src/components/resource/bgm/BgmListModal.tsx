@@ -9,6 +9,7 @@ import {
   DialogClose,
 } from "@/components/ui/dialog";
 import { Button } from "@/components/ui/button";
+import { MODAL_ACTION_BUTTON_SIZE } from "@/components/ui/modal";
 import { FilterChip } from "@/components/ui/chip";
 import { SegmentedTextTabs } from "@/components/ui/segmented-text-tabs";
 import { ICONS } from "@/lib/icons";
@@ -437,6 +438,7 @@ export function BgmListModal({ open, onClose, onAdd }: BgmListModalProps) {
             <Button
               type="button"
               variant="outline"
+              size={MODAL_ACTION_BUTTON_SIZE}
               className="min-w-[80px] border-border text-foreground-placeholder"
             >
               취소
@@ -444,6 +446,7 @@ export function BgmListModal({ open, onClose, onAdd }: BgmListModalProps) {
           </DialogClose>
           <Button
             type="button"
+            size={MODAL_ACTION_BUTTON_SIZE}
             className="min-w-[80px]"
             disabled={selectedTracks.length === 0}
             onClick={handleSave}

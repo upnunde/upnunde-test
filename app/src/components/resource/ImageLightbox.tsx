@@ -105,7 +105,7 @@ export function ImageLightbox({
           {hasMultiple && (
             <IconButton
               type="button"
-              variant="outline"
+              variant="secondary"
               shape="circle"
               size="icon-xl"
               icon={ICONS.chevronLeft}
@@ -123,7 +123,7 @@ export function ImageLightbox({
           {hasMultiple && (
             <IconButton
               type="button"
-              variant="outline"
+              variant="secondary"
               shape="circle"
               size="icon-xl"
               icon={ICONS.chevronRight}
@@ -142,7 +142,7 @@ export function ImageLightbox({
         {/* 닫기 버튼 (하단 중앙) */}
         <IconButton
           type="button"
-          variant="outline"
+          variant="secondary"
           shape="circle"
           size="icon-xl"
           icon={ICONS.close}

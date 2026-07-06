@@ -10,6 +10,7 @@ import {
   modalFooterButtonRowClassName,
   modalFooterShellClassName,
   modalFooterTrailingGroupClassName,
+  MODAL_ACTION_BUTTON_SIZE,
 } from "@/components/ui/modal/modal-styles";
 
 /** end: 보조·주 버튼 우측 정렬 | split: 좌측 1버튼 + 우측 버튼 그룹 */
@@ -59,7 +60,7 @@ function FooterActionButton({ config }: { config: ModalFooterButtonConfig }) {
       type="button"
       variant={toneToButtonVariant(tone)}
       shape="square"
-      size="sm"
+      size={MODAL_ACTION_BUTTON_SIZE}
       className={modalFooterActionButtonClassName}
       onClick={config.onClick}
       disabled={config.disabled}

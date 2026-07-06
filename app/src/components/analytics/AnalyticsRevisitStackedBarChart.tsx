@@ -8,12 +8,13 @@ import {
 import { cn } from "design-system/utils";
 import VChart from "@visactor/vchart";
 import type { IBarChartSpec } from "@visactor/vchart";
+import { useAnalyticsChartTheme, type AnalyticsChartTheme } from "@/lib/analytics-chart-theme";
 
-/** 디자인 시스템 Primary / Primary container (핑크 팔레트) */
-const COLOR_REVISIT = "#F642D4";
-const COLOR_NO_REVISIT = "#FEF0FC";
-
-function buildRevisitStackedBarSpec(revisitPct: number, noRevisitPct: number): IBarChartSpec {
+function buildRevisitStackedBarSpec(
+  revisitPct: number,
+  noRevisitPct: number,
+  theme: AnalyticsChartTheme,
+): IBarChartSpec {
   return {
     type: "bar",
     background: "transparent",
@@ -35,7 +36,7 @@ function buildRevisitStackedBarSpec(revisitPct: number, noRevisitPct: number): I
     color: {
       type: "ordinal",
       domain: ["again", "notAgain"],
-      range: [COLOR_REVISIT, COLOR_NO_REVISIT],
+      range: [theme.primary, theme.primaryContainer],
     },
     axes: ANALYTICS_HORIZONTAL_STACK_BAR_AXES,
     legends: [{ visible: false }],
@@ -68,9 +69,10 @@ export function AnalyticsRevisitStackedBarChart({
   revisitPercent,
   noRevisitPercent,
 }: AnalyticsRevisitStackedBarChartProps) {
+  const chartTheme = useAnalyticsChartTheme();
   const spec = useMemo(
-    () => buildRevisitStackedBarSpec(revisitPercent, noRevisitPercent),
-    [revisitPercent, noRevisitPercent],
+    () => buildRevisitStackedBarSpec(revisitPercent, noRevisitPercent, chartTheme),
+    [revisitPercent, noRevisitPercent, chartTheme],
   );
   const containerRef = useRef<HTMLDivElement>(null);
 

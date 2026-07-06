@@ -10,7 +10,7 @@ import { PAGE_GUTTER_X_CLASS } from "@/lib/page-layout";
 import { Button } from "@/components/ui/button";
 import { Input, InputGroup, InputHypertext } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
-import { formDialogSheetStickyFooterClassName, MOBILE_BOTTOM_SHEET_SCRIM_CLASS, MOBILE_BOTTOM_SHEET_SHELL_BASE_CLASS, mobileBottomSheetLargeMaxHeightClassName } from "@/components/ui/modal/modal-styles";
+import { formDialogSheetStickyFooterClassName, MODAL_ACTION_BUTTON_SIZE, MOBILE_BOTTOM_SHEET_SCRIM_CLASS, MOBILE_BOTTOM_SHEET_SHELL_BASE_CLASS, mobileBottomSheetLargeMaxHeightClassName } from "@/components/ui/modal/modal-styles";
 import { cn } from "design-system/utils";
 
 const MODAL_WIDTH = 384;
@@ -152,17 +152,17 @@ function ProfileEditFooter({
       <Button
         type="button"
         variant="ghost"
-        size="lg"
+        size={MODAL_ACTION_BUTTON_SIZE}
         className="min-w-0 px-2 text-destructive hover:text-destructive"
         onClick={onLogout}
       >
         로그아웃
       </Button>
       <div className="inline-flex items-center gap-2">
-        <Button type="button" variant="outline" size="lg" onClick={onCancel}>
+        <Button type="button" variant="outline" size={MODAL_ACTION_BUTTON_SIZE} onClick={onCancel}>
           취소
         </Button>
-        <Button type="button" size="lg" onClick={onSave}>
+        <Button type="button" size={MODAL_ACTION_BUTTON_SIZE} onClick={onSave}>
           저장
         </Button>
       </div>

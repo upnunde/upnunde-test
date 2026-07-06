@@ -9,13 +9,15 @@ import {
   analyticsHorizontalStackBarTrackClassName,
 } from "@/components/analytics/analytics-horizontal-stacked-bar";
 import {
-  ANALYTICS_PRIMARY_DESCENDING_SEGMENT_COLORS,
-  mapPaletteByDescendingRank,
-} from "@/lib/analytics-distribution-constants";
+  buildPrimaryDescendingChartColors,
+  useAnalyticsChartTheme,
+  type AnalyticsChartTheme,
+} from "@/lib/analytics-chart-theme";
+import { mapPaletteByDescendingRank } from "@/lib/analytics-distribution-constants";
 
 const BAND_ID = "분포";
 
-function buildSpec(rawWeights: readonly number[]): IBarChartSpec {
+function buildSpec(rawWeights: readonly number[], theme: AnalyticsChartTheme): IBarChartSpec {
   const sum = rawWeights.reduce((a, b) => a + b, 0) || 1;
   const n = rawWeights.length;
   const segmentIds = Array.from({ length: n }, (_, i) => `s${i}`);
@@ -25,7 +27,10 @@ function buildSpec(rawWeights: readonly number[]): IBarChartSpec {
     segment: seg,
     pct: pcts[i]!,
   }));
-  const colors = mapPaletteByDescendingRank(rawWeights, ANALYTICS_PRIMARY_DESCENDING_SEGMENT_COLORS);
+  const colors = mapPaletteByDescendingRank(
+    rawWeights,
+    buildPrimaryDescendingChartColors(theme),
+  );
 
   return {
     type: "bar",
@@ -75,7 +80,11 @@ export function AnalyticsDistributionStackedBarChart({
   values,
   heightPx = 12,
 }: AnalyticsDistributionStackedBarChartProps) {
-  const spec = useMemo(() => (values.length > 0 ? buildSpec(values) : null), [values]);
+  const chartTheme = useAnalyticsChartTheme();
+  const spec = useMemo(
+    () => (values.length > 0 ? buildSpec(values, chartTheme) : null),
+    [values, chartTheme],
+  );
   const containerRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {

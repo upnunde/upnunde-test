@@ -15,6 +15,7 @@ import {
   formDialogSheetEpisodeFormClassName,
   formDialogSheetScrollBodyClassName,
   formDialogSheetStickyFooterClassName,
+  MODAL_ACTION_BUTTON_SIZE,
 } from "@/components/ui/modal";
 import { cn } from "design-system/utils";
 import { EPISODE_FORM_FIELD_COPY } from "@/lib/episode-form-copy";
@@ -155,11 +156,12 @@ export function EpisodeForm({
         stickyFooter ? formDialogSheetStickyFooterClassName : "mt-8",
       )}
     >
-      <Button type="button" variant="outline" onClick={onCancel}>
+      <Button type="button" variant="outline" size={MODAL_ACTION_BUTTON_SIZE} onClick={onCancel}>
         취소
       </Button>
       <Button
         type="button"
+        size={MODAL_ACTION_BUTTON_SIZE}
         onClick={handleCreateEpisode}
         disabled={!isFormComplete || isAiFilling}
         title={

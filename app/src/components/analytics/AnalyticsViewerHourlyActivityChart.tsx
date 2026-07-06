@@ -6,9 +6,11 @@ import VChart from "@visactor/vchart";
 import type { IBarChartSpec } from "@visactor/vchart";
 import { getAnalyticsPeriodInclusiveDays, type AnalyticsPeriodRange } from "@/components/analytics/analytics-date";
 import type { AnalyticsScopeCategoryId } from "@/components/analytics/analytics-scope-category";
-
-/** 제품 primary (`globals.css` --primary) */
-const ANALYTICS_BAR_PRIMARY = "#F642D4";
+import { buildAnalyticsHourlyBarAxes } from "@/lib/analytics-chart-axes";
+import {
+  useAnalyticsChartTheme,
+  type AnalyticsChartTheme,
+} from "@/lib/analytics-chart-theme";
 
 /** 24시 정각 → 12시간제 시각 숫자(1~12) + 오전/오후 */
 function hour24To12Parts(h: number): { h12: number; pm: boolean } {
@@ -86,6 +88,7 @@ function calcPeakTwoHourBin(weights: readonly number[]): { startHour: number; vi
 
 function buildTwoHourBarSpec(
   hourlyWeights: readonly number[],
+  theme: AnalyticsChartTheme,
   options?: { showTooltip: boolean },
 ): IBarChartSpec {
   const showTooltip = options?.showTooltip ?? true;
@@ -104,39 +107,11 @@ function buildTwoHourBarSpec(
     type: "bar",
     background: "transparent",
     padding: { top: 12, bottom: 8, left: 8, right: 8 },
-    color: [ANALYTICS_BAR_PRIMARY],
+    color: [theme.primary],
     data: [{ id: "hourly", values }],
     xField: "hour",
     yField: "value",
-    axes: [
-      {
-        orient: "bottom",
-        type: "band",
-        domainLine: { visible: true, style: { stroke: "#e2e8f0", lineWidth: 1 } },
-        label: {
-          style: {
-            fontSize: 9,
-            fill: "#64748b",
-          },
-        },
-        tick: { visible: false },
-      },
-      {
-        orient: "left",
-        type: "linear",
-        label: { visible: false },
-        domainLine: { visible: false },
-        tick: { visible: false },
-        grid: {
-          visible: true,
-          style: {
-            lineDash: [4, 4],
-            stroke: "#e2e8f0",
-            lineWidth: 1,
-          },
-        },
-      },
-    ],
+    axes: buildAnalyticsHourlyBarAxes(theme),
     legends: [{ visible: false }],
     tooltip: showTooltip
       ? {
@@ -151,7 +126,7 @@ function buildTwoHourBarSpec(
             },
             hasShape: true,
             shapeType: "square",
-            shapeFill: ANALYTICS_BAR_PRIMARY,
+            shapeFill: theme.primary,
             shapeSize: 8,
             content: [
               {
@@ -218,10 +193,11 @@ export function AnalyticsViewerHourlyActivityChart({
     return buildSummaryLine(periodRange, peakBin.startHour, peakBin.viewerSum);
   }, [scopeCategory, noTimeSlotActivity, periodRange, peakBin.startHour, peakBin.viewerSum]);
 
+  const chartTheme = useAnalyticsChartTheme();
   const spec = useMemo(() => {
     if (hideChart) return null;
-    return buildTwoHourBarSpec(hourlyWeights, { showTooltip: true });
-  }, [hideChart, hourlyWeights]);
+    return buildTwoHourBarSpec(hourlyWeights, chartTheme, { showTooltip: true });
+  }, [hideChart, hourlyWeights, chartTheme]);
 
   const containerRef = useRef<HTMLDivElement>(null);
 
