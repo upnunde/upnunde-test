@@ -14,6 +14,7 @@ import { AppShell } from "@/components/layout/AppShell";
 import { ContentScopeChipGroup } from "@/components/shared/ContentScopeChipGroup";
 import {
   PAGE_CONTAINER_CLASS,
+  PAGE_CONTENT_PAD_X_CLASS,
   PAGE_FILTER_HEADER_INNER_CLASS,
   PAGE_FILTER_HEADER_SHELL_CLASS,
   PAGE_SCROLL_ROOT_TRANSPARENT_CLASS,
@@ -59,6 +60,7 @@ export default function MyWorksLayout({ children }: { children: React.ReactNode 
       <div
         className={cn(
           PAGE_SCROLL_ROOT_TRANSPARENT_CLASS,
+          PAGE_CONTENT_PAD_X_CLASS,
           "w-full min-w-0 max-w-[1200px] mx-auto lg:max-w-none",
           "items-center gap-0 max-lg:gap-4 max-lg:pt-5",
         )}

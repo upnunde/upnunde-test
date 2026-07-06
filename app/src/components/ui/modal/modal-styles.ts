@@ -127,17 +127,9 @@ export const modalFooterButtonRowClassName = cn(
   "lg:inline-flex lg:h-16 lg:min-h-16 lg:flex-row lg:items-center",
 );
 
-/** split 레이아웃 — 모바일 세로 스택 / 데스크톱 우측 버튼 그룹 */
+/** split 레이아웃 — 모바일 세로 스택 / 데스크톱 우측 버튼 그룹 (spacing-4 = 4px) */
 export const modalFooterTrailingGroupClassName =
-  "flex w-full flex-col items-stretch gap-2 lg:w-auto lg:flex-row lg:items-center lg:justify-start";
+  "flex w-full flex-col items-stretch gap-1 lg:w-auto lg:flex-row lg:items-center lg:justify-start";
 
-export const modalFooterButtonToneClassName = {
-  secondary:
-    "h-9 w-full min-w-0 rounded-md border border-border bg-background px-3 font-['Pretendard_JP'] text-body1_500 text-foreground shadow-none hover:bg-muted lg:w-auto lg:min-w-20",
-  primary:
-    "h-9 w-full min-w-0 rounded-md bg-primary px-3 font-['Pretendard_JP'] text-body1_500 text-primary-foreground shadow-none hover:bg-primary/90 lg:w-auto lg:min-w-20",
-  destructive:
-    "h-9 w-full min-w-0 rounded-md bg-destructive px-3 font-['Pretendard_JP'] text-body1_500 text-inverse-foreground shadow-none hover:bg-destructive/90 disabled:opacity-50 lg:w-auto lg:min-w-20",
-  ghost:
-    "h-9 w-full min-w-0 rounded-md border-0 bg-transparent px-3 font-['Pretendard_JP'] text-body1_500 text-foreground-placeholder shadow-none hover:bg-muted hover:text-foreground lg:w-auto",
-} as const;
+/** 모달 푸터 DS Button — 모바일 full-width · lg+ auto */
+export const modalFooterActionButtonClassName = "w-full min-w-0 lg:w-auto";

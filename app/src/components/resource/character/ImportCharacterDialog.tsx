@@ -2,11 +2,11 @@
 
 import React, { useCallback, useEffect, useMemo, useState } from "react";
 import Image from "next/image";
-import { Dialog, DialogClose, DialogContent, DialogTitle } from "@/components/ui/dialog";
-import { Button } from "@/components/ui/button";
+import { Dialog, DialogContent, DialogTitle } from "@/components/ui/dialog";
+import { ModalFooterButtons } from "@/components/ui/modal/ModalFooterButtons";
 import { FieldLabel } from "@/components/ui/field-label";
 import { FilterChip } from "@/components/ui/chip";
-import { CONTROL_GROUP_GAP_COMPACT_CLASS, CONTROL_GROUP_GAP_STANDARD_CLASS } from "@/lib/chip-styles";
+import { CONTROL_GROUP_GAP_COMPACT_CLASS } from "@/lib/chip-styles";
 import {
   IMPORTABLE_CHARACTERS,
   importedResourceKey,
@@ -43,11 +43,6 @@ export interface ImportCharacterDialogProps {
 }
 
 const IMPORT_DIALOG_SECTION_BORDER_CLASS = "border-b border-divider";
-const IMPORT_DIALOG_FOOTER_CLASS = cn(
-  "flex items-center justify-end border-t border-divider py-3",
-  PAGE_CONTENT_PAD_X_CLASS,
-  CONTROL_GROUP_GAP_STANDARD_CLASS,
-);
 
 const IMPORT_CHARACTER_OPTION_BASE_CLASS =
   "flex w-full items-center gap-3 rounded-sm border px-3 py-3 text-left transition-colors";
@@ -260,28 +255,19 @@ export function ImportCharacterDialog({
           )}
         </div>
 
-        <div className={IMPORT_DIALOG_FOOTER_CLASS}>
-          <DialogClose asChild>
-            <Button
-              type="button"
-              variant="outline"
-              size="sm"
-              onClick={() => handleDialogOpenChange(false)}
-            >
-              취소
-            </Button>
-          </DialogClose>
-          <Button
-            type="button"
-            variant="default"
-            shape="square"
-            size="sm"
-            onClick={handleApply}
-            disabled={!resolvedId}
-          >
-            적용하기
-          </Button>
-        </div>
+        <ModalFooterButtons
+          className="border-t border-divider"
+          layout="end"
+          trailingButtons={[
+            { label: "취소", closeOnSelect: true, onClick: () => handleDialogOpenChange(false) },
+            {
+              label: "적용하기",
+              tone: "primary",
+              onClick: handleApply,
+              disabled: !resolvedId,
+            },
+          ]}
+        />
       </DialogContent>
     </Dialog>
   );

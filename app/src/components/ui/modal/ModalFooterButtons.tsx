@@ -1,12 +1,13 @@
 "use client";
 
 import type { ReactNode } from "react";
+import type { VariantProps } from "class-variance-authority";
 import { DialogClose } from "@/components/ui/dialog";
-import { Button } from "@/components/ui/button";
+import { Button, buttonVariants } from "@/components/ui/button";
 import { cn } from "design-system/utils";
 import {
+  modalFooterActionButtonClassName,
   modalFooterButtonRowClassName,
-  modalFooterButtonToneClassName,
   modalFooterShellClassName,
   modalFooterTrailingGroupClassName,
 } from "@/components/ui/modal/modal-styles";
@@ -14,7 +15,7 @@ import {
 /** end: 보조·주 버튼 우측 정렬 | split: 좌측 1버튼 + 우측 버튼 그룹 */
 export type ModalFooterButtonLayout = "end" | "split";
 
-export type ModalFooterButtonTone = keyof typeof modalFooterButtonToneClassName;
+export type ModalFooterButtonTone = "secondary" | "primary" | "destructive" | "ghost";
 
 export interface ModalFooterButtonConfig {
   label: string;
@@ -36,21 +37,30 @@ export interface ModalFooterButtonsProps {
   className?: string;
 }
 
+function toneToButtonVariant(
+  tone: ModalFooterButtonTone,
+): NonNullable<VariantProps<typeof buttonVariants>["variant"]> {
+  switch (tone) {
+    case "primary":
+      return "default";
+    case "destructive":
+      return "destructive";
+    case "ghost":
+      return "ghost";
+    default:
+      return "outline";
+  }
+}
+
 function FooterActionButton({ config }: { config: ModalFooterButtonConfig }) {
   const tone = config.tone ?? "secondary";
-  const buttonVariant =
-    tone === "primary"
-      ? "default"
-      : tone === "destructive"
-        ? "destructive"
-        : tone === "ghost"
-          ? "ghost"
-          : "outline";
   const button = (
     <Button
       type="button"
-      variant={buttonVariant}
-      className={modalFooterButtonToneClassName[tone]}
+      variant={toneToButtonVariant(tone)}
+      shape="square"
+      size="sm"
+      className={modalFooterActionButtonClassName}
       onClick={config.onClick}
       disabled={config.disabled}
     >

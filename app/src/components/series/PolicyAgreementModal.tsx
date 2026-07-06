@@ -1,15 +1,16 @@
 "use client";
 
-import React, { useState } from "react";
+import React, { useId, useState } from "react";
 import Link from "next/link";
-import { ICONS } from "@/lib/icons";
 import { Dialog, DialogContent } from "@/components/ui/dialog";
+import { Button } from "@/components/ui/button";
 import {
   ModalFooterButtons,
   ModalHeader,
   modalDialogContentClassName,
 } from "@/components/ui/modal";
-import { cn } from "design-system/utils";
+import { Checkbox } from "design-system/ui/checkbox";
+import { Label } from "design-system/ui/label";
 
 export interface PolicyAgreementModalProps {
   open: boolean;
@@ -30,6 +31,7 @@ export function PolicyAgreementModal({
   onConfirm,
 }: PolicyAgreementModalProps) {
   const [agreed, setAgreed] = useState(false);
+  const agreementId = useId();
 
   const handleConfirm = () => {
     if (!agreed) return;
@@ -72,36 +74,29 @@ export function PolicyAgreementModal({
           layout="end"
           body={
             <div className="flex w-full items-center justify-between gap-2 bg-background px-6 py-2">
-              <button
-                type="button"
-                onClick={() => setAgreed((prev) => !prev)}
-                className="flex items-center gap-2 rounded text-body3_400 text-foreground-muted focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-2"
-                aria-pressed={agreed}
-                aria-label={agreed ? "리노벨 운영정책 동의함" : "리노벨 운영정책 동의"}
+              <Label
+                htmlFor={agreementId}
+                className="cursor-pointer text-body3_400 text-foreground-muted"
               >
-                <span
-                  className={cn(
-                    "flex h-5 w-5 shrink-0 items-center justify-center rounded-full border-2 transition-colors",
-                    agreed
-                      ? "border-primary bg-primary text-inverse-foreground"
-                      : "border-border bg-background",
-                  )}
-                  aria-hidden
-                >
-                  {agreed && <ICONS.check className="h-3 w-3" strokeWidth={3} />}
-                </span>
-                <span>리노벨 운영정책 동의</span>
-              </button>
-              <Link
-                href="/guide"
-                className="rounded text-body3_400 text-foreground underline hover:underline focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-2"
+                <Checkbox
+                  id={agreementId}
+                  checked={agreed}
+                  onCheckedChange={setAgreed}
+                />
+                리노벨 운영정책 동의
+              </Label>
+              <Button
+                variant="link"
+                size="sm"
+                render={<Link href="/guide" />}
+                nativeButton={false}
               >
                 보기
-              </Link>
+              </Button>
             </div>
           }
           trailingButtons={[
-            { label: "취소", closeOnSelect: true },
+            { label: "취소", closeOnSelect: true, onClick: handleClose },
             {
               label: "동의하고 계속하기",
               tone: "primary",

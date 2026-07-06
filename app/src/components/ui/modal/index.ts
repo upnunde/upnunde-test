@@ -16,7 +16,7 @@ export {
   MOBILE_BOTTOM_SHEET_SHELL_BASE_CLASS,
   MOBILE_BOTTOM_SHEET_SCRIM_CLASS,
   modalFooterButtonRowClassName,
-  modalFooterButtonToneClassName,
+  modalFooterActionButtonClassName,
   modalFooterShellClassName,
   modalHeaderClassName,
 } from "./modal-styles";

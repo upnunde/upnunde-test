@@ -1,6 +1,6 @@
 "use client";
 
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { useToastStore } from "@/store/useToastStore";
 import { Toast, ToastTitle, ToastClose, ToastAction } from "@/components/ui/toast";
 import { TOAST_STACK_Z_CLASS } from "@/components/ui/modal/modal-styles";
@@ -13,7 +13,14 @@ import { cn } from "design-system/utils";
  * - 최대 3개 노출 (store에서 FIFO 처리)
  */
 export function Toaster({ className }: { className?: string }) {
+  const [mounted, setMounted] = useState(false);
   const { toasts, remove } = useToastStore();
+
+  useEffect(() => {
+    setMounted(true);
+  }, []);
+
+  if (!mounted) return null;
 
   return (
     <div

@@ -872,23 +872,20 @@ export default function MonetizationSettlementsPage() {
               />
             </div>
           </div>
-          <div className="flex items-center justify-end gap-2 border-t border-divider px-5 py-3">
-            <Button
-              type="button"
-              variant="outline"
-              size="sm"
-              onClick={() => {
-                setPendingStartDate(startDate);
-                setPendingEndDate(endDate);
-                setDatePickerOpen(false);
-              }}
-            >
-              취소
-            </Button>
-            <Button type="button" size="sm" onClick={applyCustomRange}>
-              적용
-            </Button>
-          </div>
+          <ModalFooterButtons
+            layout="end"
+            trailingButtons={[
+              {
+                label: "취소",
+                onClick: () => {
+                  setPendingStartDate(startDate);
+                  setPendingEndDate(endDate);
+                  setDatePickerOpen(false);
+                },
+              },
+              { label: "적용", tone: "primary", onClick: applyCustomRange },
+            ]}
+          />
         </DialogContent>
       </Dialog>
     </AppShell>
