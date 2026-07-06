@@ -1,0 +1,82 @@
+name: Sync Design System
+
+on:
+  # Renovel-Studio-DS 릴리스 publish 시 repository_dispatch (docs/ds-repo-release-notify.yml)
+  repository_dispatch:
+    types: [ds-release]
+  workflow_dispatch:
+    inputs:
+      tag:
+        description: "DS 태그 (비우면 최신 릴리스)"
+        required: false
+        type: string
+  schedule:
+    # 릴리스 웹훅 누락 대비 — 매일 09:00 UTC
+    - cron: "0 9 * * *"
+
+permissions:
+  contents: write
+  pull-requests: write
+
+concurrency:
+  group: ds-sync
+  cancel-in-progress: false
+
+jobs:
+  sync:
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: app
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "20"
+          cache: npm
+          cache-dependency-path: app/package-lock.json
+
+      - name: Git HTTPS rewrite (GitHub deps)
+        run: |
+          git config --global url."https://github.com/".insteadOf "ssh://git@github.com/"
+          git config --global url."https://github.com/".insteadOf "git@github.com:"
+
+      - name: Resolve DS tag and update package.json
+        id: sync
+        env:
+          DS_TAG: ${{ github.event.client_payload.tag || github.event.inputs.tag || '' }}
+          DS_REPO_TOKEN: ${{ secrets.DS_REPO_TOKEN }}
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: node scripts/sync-design-system-version.mjs
+
+      - name: Design system check
+        if: steps.sync.outputs.changed == 'true'
+        run: npm run check:ds
+
+      - name: Typecheck
+        if: steps.sync.outputs.changed == 'true'
+        run: npx tsc --noEmit
+
+      - name: Create pull request
+        if: steps.sync.outputs.changed == 'true'
+        uses: peter-evans/create-pull-request@v7
+        with:
+          token: ${{ secrets.GITHUB_TOKEN }}
+          branch: chore/ds-${{ steps.sync.outputs.new_tag }}
+          delete-branch: true
+          title: "chore(app): design-system ${{ steps.sync.outputs.new_tag }} 동기화"
+          commit-message: "chore(app): design-system ${{ steps.sync.outputs.new_tag }} 동기화"
+          body: |
+            ## Summary
+            - [Renovel-Studio-DS](https://github.com/upnunde/Renovel-Studio-DS) `${{ steps.sync.outputs.new_tag }}` 자동 동기화
+            - 이전: `${{ steps.sync.outputs.old_tag }}`
+
+            ## Test plan
+            - [ ] `npm run check:ds`
+            - [ ] `npx tsc --noEmit`
+            - [ ] `npm run build`
+            - [ ] 주요 화면 시각 회귀 확인
+
+            트리거: `${{ github.event_name }}`
