@@ -15,7 +15,7 @@ import {
   DropdownMenuItem,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
-import { Button } from "@/components/ui/button";
+import { Button } from "design-system/ui/button";
 import {
   Dialog,
   DialogContent,
@@ -33,13 +33,14 @@ import { ChoiceBlockTable } from "./ChoiceBlockTable";
 import {
   EDITOR_BLOCK_LABEL_COLUMN_CLASS,
   EDITOR_BLOCK_SPEAKER_COLUMN_CLASS,
-  EDITOR_SCENE_TITLE_DISPLAY_CLASS,
+  EDITOR_CONTROL_MUTED_TEXT_CLASS,
+  EDITOR_INLINE_BODY_FIELD_CLASS,
+  editorInlineMenuTriggerClass,
+  editorRowControlIconClass,
   EDITOR_SCENE_TITLE_FIELD_SHELL_CLASS,
   EDITOR_SCENE_TITLE_INPUT_CLASS,
   EDITOR_SCENE_TITLE_TYPOGRAPHY_INPUT_ATTR,
   EDITOR_SCENE_TITLE_TYPOGRAPHY_INPUT_VALUE,
-  EDITOR_TOP_DESC_DISPLAY_CLASS,
-  EDITOR_TOP_DESC_INPUT_CLASS,
 } from "@/lib/editor-block-layout";
 import {
   editorBlockTrailingActionClass,
@@ -139,8 +140,12 @@ const COMPACT_BLOCK_ROOT_CLASSES =
   "flex items-center justify-start rounded-lg border-0 outline-none min-w-0 flex-1 min-h-8 h-8 px-0 py-1 gap-4 select-none";
 
 /** 오디오·동영상 등 썸네일 없는 리소스 아이콘 — surface 배경 없음 */
-const PICKER_FALLBACK_ICON_CLASS =
-  "flex h-5 w-5 shrink-0 items-center justify-center rounded-full border border-border bg-transparent text-foreground-placeholder";
+function pickerFallbackIconClass(isRowFocused: boolean) {
+  return cn(
+    "flex h-5 w-5 shrink-0 items-center justify-center rounded-full border border-border bg-transparent",
+    editorRowControlIconClass(isRowFocused),
+  );
+}
 
 /** 삭제 버튼 아이콘 공통 크기 20x20 */
 const DELETE_ICON_CLASS = "h-5 w-5";
@@ -175,6 +180,8 @@ export function ScriptBlock({
   const seriesPersona = useEditorStore((s) => s.seriesPersona);
   const updateBlockType = useEditorStore((s) => s.updateBlockType);
   const setFocusBlockId = useEditorStore((s) => s.setFocusBlockId);
+  const focusBlockId = useEditorStore((s) => s.focusBlockId);
+  const isRowFocused = focusBlockId === block.id;
   const onFocusBlock = useCallback(() => setFocusBlockId(block.id), [block.id, setFocusBlockId]);
 
   const textareaRef = useRef<HTMLTextAreaElement | null>(null);
@@ -660,14 +667,11 @@ export function ScriptBlock({
             title="화자"
             contentClassName="min-w-[200px]"
             trigger={
-              <button
-                type="button"
-                className="inline-flex h-8 min-h-8 w-full min-w-0 items-center justify-start gap-0.5 rounded-none border-0 py-0 pl-0 pr-2 text-left text-caption1_500 text-foreground-placeholder shadow-none outline-none focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring/50 focus-visible:ring-offset-0 overflow-hidden"
-              >
+              <button type="button" className={editorInlineMenuTriggerClass(isRowFocused)}>
                 <span className="inline-block min-w-0 w-fit truncate text-left">
                   {speakerDisplay}
                 </span>
-                <ICONS.chevronDown className="h-4 w-4 shrink-0" />
+                <ICONS.chevronDown className={cn("h-4 w-4 shrink-0", editorRowControlIconClass(isRowFocused))} />
               </button>
             }
           >
@@ -809,8 +813,8 @@ export function ScriptBlock({
               isDesktop ? TEXT_BLOCK_PLACEHOLDER_DESKTOP : TEXT_BLOCK_PLACEHOLDER_MOBILE
             }
             className={cn(
-              "relative z-dropdown min-h-8 h-fit min-w-0 w-full flex-1 resize-none overflow-hidden border-0 bg-transparent pt-1 pb-0 text-body1_500 outline-none placeholder:text-foreground-placeholder focus:outline-none focus:ring-0",
-              hasInlineTagToken ? "text-transparent caret-foreground" : "text-foreground-muted"
+              EDITOR_INLINE_BODY_FIELD_CLASS,
+              hasInlineTagToken ? "text-transparent caret-foreground" : EDITOR_CONTROL_MUTED_TEXT_CLASS,
             )}
             rows={1}
           />
@@ -820,9 +824,10 @@ export function ScriptBlock({
           <Button
             type="button"
             variant="ghost"
-            size="icon"
+            size="icon-sm"
+            shape="circle"
             className={cn(
-              "ml-auto h-8 w-8 shrink-0 rounded-full p-0 text-foreground-placeholder lg:hover:bg-destructive-container lg:hover:text-destructive",
+              "ml-auto shrink-0 text-foreground-placeholder lg:hover:bg-destructive-container lg:hover:text-destructive",
               editorRowTrailingActionClass(),
             )}
             aria-label="Delete block"
@@ -993,10 +998,8 @@ export function ScriptBlock({
     const labelColorClass = LABEL_COLOR_BY_TYPE[block.type];
     const placeholder =
       block.type === "scene" ? "장면 제목" : "장면정보를 입력하세요";
-    const sceneDisplayClass =
-      block.type === "scene" ? EDITOR_SCENE_TITLE_DISPLAY_CLASS : EDITOR_TOP_DESC_DISPLAY_CLASS;
     const sceneInputClass =
-      block.type === "scene" ? EDITOR_SCENE_TITLE_INPUT_CLASS : EDITOR_TOP_DESC_INPUT_CLASS;
+      block.type === "scene" ? EDITOR_SCENE_TITLE_INPUT_CLASS : EDITOR_INLINE_BODY_FIELD_CLASS;
     const showSceneValueAsReadOnly = !isDesktop && sceneMobileEdit.readOnly;
 
     return (
@@ -1040,36 +1043,39 @@ export function ScriptBlock({
             />
           </div>
         ) : (
-          <Input
-            ref={sceneInputRef as React.RefObject<HTMLInputElement>}
-            type="text"
-            size="default"
-            value={block.content}
-            onChange={(e) => updateBlock(block.id, e.target.value)}
-            onFocus={sceneMobileEdit.onContentFocus}
-            onPointerDown={sceneMobileEdit.onContentPointerDown}
-            readOnly={sceneMobileEdit.readOnly}
-            onKeyDown={handleSceneKeyDown}
-            placeholder={placeholder}
+          <div
             className={cn(
-              showSceneValueAsReadOnly
-                ? cn(
-                    sceneDisplayClass,
-                    "block h-auto min-h-8 cursor-text border-0 bg-transparent shadow-none focus-visible:ring-0",
-                  )
-                : sceneInputClass,
+              "relative flex min-h-8 min-w-0 flex-1 items-start justify-start self-stretch",
               rootClassName,
-              showSceneValueAsReadOnly && !block.content?.trim() && "text-foreground-placeholder",
             )}
-          />
+          >
+            <TextareaAutosize
+              ref={sceneInputRef as React.RefObject<HTMLTextAreaElement>}
+              value={block.content}
+              onChange={(e) => updateBlock(block.id, e.target.value)}
+              onFocus={sceneMobileEdit.onContentFocus}
+              onPointerDown={sceneMobileEdit.onContentPointerDown}
+              readOnly={sceneMobileEdit.readOnly}
+              onKeyDown={handleSceneKeyDown}
+              placeholder={placeholder}
+              rows={1}
+              className={cn(
+                sceneInputClass,
+                showSceneValueAsReadOnly && "cursor-text",
+                showSceneValueAsReadOnly && !block.content?.trim()
+                  ? "text-foreground-placeholder"
+                  : EDITOR_CONTROL_MUTED_TEXT_CLASS,
+              )}
+            />
+          </div>
         )}
         {!isSeedDefault && block.type !== "scene" ? (
           <Button
             type="button"
             variant="ghost"
-            size="icon"
+            size="icon-sm"
             className={cn(
-              "ml-auto h-8 w-8 shrink-0 self-start text-foreground-placeholder lg:hover:bg-destructive-container lg:hover:text-destructive",
+              "ml-auto shrink-0 self-start text-foreground-placeholder lg:hover:bg-destructive-container lg:hover:text-destructive",
               editorBlockTrailingActionClass(),
             )}
             aria-label="Delete block"
@@ -1130,9 +1136,9 @@ export function ScriptBlock({
           <Button
             type="button"
             variant="ghost"
-            size="icon"
+            size="icon-sm"
             className={cn(
-              "ml-auto h-8 w-8 shrink-0 text-foreground-placeholder lg:hover:bg-destructive-container lg:hover:text-destructive",
+              "ml-auto shrink-0 text-foreground-placeholder lg:hover:bg-destructive-container lg:hover:text-destructive",
               editorBlockTrailingActionClass(),
             )}
             aria-label="Delete block"
@@ -1208,11 +1214,12 @@ export function ScriptBlock({
         <Button
           type="button"
           variant="ghost"
-          size="icon"
+          size="icon-sm"
+          shape="circle"
           className={cn(
-              "ml-auto h-8 w-8 shrink-0 rounded-full p-0 text-foreground-placeholder lg:hover:bg-destructive-container lg:hover:text-destructive",
-              editorRowTrailingActionClass(),
-            )}
+            "ml-auto shrink-0 text-foreground-placeholder lg:hover:bg-destructive-container lg:hover:text-destructive",
+            editorRowTrailingActionClass(),
+          )}
           aria-label="Delete block"
           onClick={(e) => {
             e.preventDefault();
@@ -1297,9 +1304,9 @@ export function ScriptBlock({
           <Button
             type="button"
             variant="ghost"
-            size="icon"
+            size="icon-sm"
             className={cn(
-              "ml-auto h-8 w-8 shrink-0 text-foreground-placeholder lg:hover:bg-destructive-container lg:hover:text-destructive",
+              "ml-auto shrink-0 text-foreground-placeholder lg:hover:bg-destructive-container lg:hover:text-destructive",
               editorBlockTrailingActionClass(),
             )}
             aria-label="Delete block"
@@ -1456,6 +1463,7 @@ export function ScriptBlock({
             selectedName={displayName}
           >
             <BlockAttributeTrigger
+              rowFocused={isRowFocused}
               onClick={(e) => {
                 e.stopPropagation();
                 onFocusBlock();
@@ -1492,23 +1500,18 @@ export function ScriptBlock({
                   className="h-5 w-5 shrink-0 rounded-full object-cover"
                 />
               ) : block.type === "bgm" || block.type === "sfx" ? (
-                <span className={PICKER_FALLBACK_ICON_CLASS}>
+                <span className={pickerFallbackIconClass(isRowFocused)}>
                   <ICONS.music className="h-3 w-3" />
                 </span>
               ) : isVideo ? (
-                <span className={PICKER_FALLBACK_ICON_CLASS}>
+                <span className={pickerFallbackIconClass(isRowFocused)}>
                   <ICONS.film className="h-3 w-3" />
                 </span>
               ) : null}
-              <span
-                className={cn(
-                  "min-w-0 flex-1 truncate text-body4_500",
-                  isEmpty ? "text-foreground-placeholder" : "text-foreground-placeholder"
-                )}
-              >
+              <span className="min-w-0 flex-1 truncate text-body4_500">
                 {isEmpty ? "선택 안됨" : displayName}
               </span>
-              <ICONS.chevronDown className="ml-1 h-4 w-4 shrink-0 text-foreground-placeholder" />
+              <ICONS.chevronDown className={cn("ml-1 h-4 w-4 shrink-0", editorRowControlIconClass(isRowFocused))} />
             </BlockAttributeTrigger>
           </ResourcePicker>
           {isCharacter && !isEmpty && (
@@ -1519,18 +1522,15 @@ export function ScriptBlock({
               contentClassName="w-40 p-1 bg-background rounded-lg border border-border"
               trigger={
                 <BlockAttributeTrigger
+                  rowFocused={isRowFocused}
                   onClick={(e) => e.stopPropagation()}
                   onFocus={onFocusBlock}
                   className="ml-2"
                 >
-                  <span
-                    className={cn(
-                      "min-w-0 flex-1 truncate text-body4_500 text-foreground-placeholder"
-                    )}
-                  >
+                  <span className="min-w-0 flex-1 truncate text-body4_500">
                     {currentExpression}
                   </span>
-                  <ICONS.chevronDown className="ml-1 h-4 w-4 shrink-0 text-foreground-placeholder" />
+                  <ICONS.chevronDown className={cn("ml-1 h-4 w-4 shrink-0", editorRowControlIconClass(isRowFocused))} />
                 </BlockAttributeTrigger>
               }
             >
@@ -1561,14 +1561,15 @@ export function ScriptBlock({
               contentClassName="w-40 p-1 bg-background rounded-lg border border-border"
               trigger={
                 <BlockAttributeTrigger
+                  rowFocused={isRowFocused}
                   onClick={(e) => e.stopPropagation()}
                   onFocus={onFocusBlock}
                   className="ml-2"
                 >
-                  <span className="min-w-0 flex-1 truncate text-body4_500 text-foreground-placeholder">
+                  <span className="min-w-0 flex-1 truncate text-body4_500">
                     {currentVideoPlaybackLabel}
                   </span>
-                  <ICONS.chevronDown className="ml-1 h-4 w-4 shrink-0 text-foreground-placeholder" />
+                  <ICONS.chevronDown className={cn("ml-1 h-4 w-4 shrink-0", editorRowControlIconClass(isRowFocused))} />
                 </BlockAttributeTrigger>
               }
             >
@@ -1605,9 +1606,9 @@ export function ScriptBlock({
           <Button
             type="button"
             variant="ghost"
-            size="icon"
+            size="icon-sm"
             className={cn(
-              "ml-auto h-8 w-8 shrink-0 text-foreground-placeholder lg:hover:bg-destructive-container lg:hover:text-destructive",
+              "ml-auto shrink-0 text-foreground-placeholder lg:hover:bg-destructive-container lg:hover:text-destructive",
               editorBlockTrailingActionClass(),
             )}
             aria-label="Delete block"
@@ -1662,9 +1663,9 @@ export function ScriptBlock({
         <Button
           type="button"
           variant="ghost"
-          size="icon"
+          size="icon-sm"
           className={cn(
-              "ml-auto h-8 w-8 shrink-0 text-foreground-placeholder lg:hover:bg-destructive-container lg:hover:text-destructive",
+              "ml-auto shrink-0 text-foreground-placeholder lg:hover:bg-destructive-container lg:hover:text-destructive",
               editorBlockTrailingActionClass(),
             )}
           aria-label="Delete block"

@@ -15,9 +15,9 @@ import {
   PAGE_SUBHEADER_WITH_STICKY_CLASS,
 } from "@/lib/page-layout";
 import { Alert, AlertDescription } from "@/components/ui/alert";
-import { Button } from "@/components/ui/button";
+import { Button } from "design-system/ui/button";
 import { Input } from "@/components/ui/input";
-import { Badge, badgeVariants } from "@/components/ui/badge";
+import { Badge, badgeVariants } from "design-system/ui/badge";
 import { IconButton } from "@/components/ui/icon-button";
 import type { VariantProps } from "class-variance-authority";
 import { CHIP_COMPANION_CONTROL_CLASS, CHIP_GROUP_GAP_CLASS } from "@/lib/chip-styles";
@@ -176,13 +176,14 @@ const SETTLEMENT_ITEMS: SettlementItem[] = baseSettlementItems.map((item) => ({
   rejectionReason: null,
 }));
 
-function settlementStatusBadgeVariant(
-  status: SettlementStatus,
-): NonNullable<VariantProps<typeof badgeVariants>["variant"]> {
-  if (status === "completed") return "default";
-  if (status === "reviewing") return "secondary";
-  if (status === "waiting") return "outline";
-  return "destructive";
+function settlementStatusBadgeProps(status: SettlementStatus): {
+  variant: NonNullable<VariantProps<typeof badgeVariants>["variant"]>;
+  status: NonNullable<VariantProps<typeof badgeVariants>["status"]>;
+} {
+  if (status === "completed") return { variant: "default", status: "default" };
+  if (status === "reviewing") return { variant: "secondary", status: "default" };
+  if (status === "waiting") return { variant: "outline", status: "default" };
+  return { variant: "default", status: "destructive" };
 }
 
 function SettlementStatusBadge({
@@ -195,13 +196,14 @@ function SettlementStatusBadge({
   onRejectionReason?: () => void;
 }) {
   const label = getSettlementStatusLabel(status);
-  const variant = settlementStatusBadgeVariant(status);
+  const badgeProps = settlementStatusBadgeProps(status);
 
   if (status === "rejected" && rejectionReason && onRejectionReason) {
     return (
       <Badge
-        variant="destructive"
-        shape="circle"
+        variant="default"
+        status="destructive"
+        shape="square"
         size="md"
         render={<button type="button" />}
         className="max-w-full"
@@ -216,7 +218,13 @@ function SettlementStatusBadge({
   }
 
   return (
-    <Badge variant={variant} shape="circle" size="md" className="max-w-full">
+    <Badge
+      variant={badgeProps.variant}
+      status={badgeProps.status}
+      shape="square"
+      size="md"
+      className="max-w-full"
+    >
       <span className="truncate">{label}</span>
     </Badge>
   );

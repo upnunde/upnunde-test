@@ -2,7 +2,7 @@
 
 import React, { useState } from "react";
 import { AppShell } from "@/components/layout/AppShell";
-import { Button } from "@/components/ui/button";
+import { Button } from "design-system/ui/button";
 import { Chip, FilterChip } from "@/components/ui/chip";
 import type { ChipVariantProps } from "@/lib/chip-styles";
 import { Input, InputGroup, InputHypertext } from "@/components/ui/input";

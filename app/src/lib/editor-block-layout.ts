@@ -1,3 +1,5 @@
+import { cn } from "design-system/utils";
+
 /** 블록 행 번호 열 — 모바일 32px, 데스크톱 36px */
 export const EDITOR_BLOCK_INDEX_COLUMN_CLASS = "w-9 max-lg:w-8 shrink-0";
 
@@ -6,6 +8,30 @@ export const EDITOR_MOBILE_GUTTER_X_CLASS = "max-lg:px-2";
 
 /** 블록 타입·라벨 열 — 모바일 80px, 데스크톱 100px */
 export const EDITOR_BLOCK_LABEL_COLUMN_CLASS = "w-[100px] max-lg:w-[80px] shrink-0";
+
+/** 에디터 인라인 컨트롤(피커·화자·셀렉트) 보조 텍스트·아이콘 */
+export const EDITOR_CONTROL_MUTED_TEXT_CLASS = "text-foreground-muted";
+export const EDITOR_CONTROL_MUTED_ICON_CLASS = "text-foreground-muted";
+
+/** 행 포커스 시 본문색, 비포커스 시 muted */
+export function editorRowControlTextClass(isRowFocused: boolean) {
+  return isRowFocused ? "text-primary" : EDITOR_CONTROL_MUTED_TEXT_CLASS;
+}
+
+export function editorRowControlIconClass(isRowFocused: boolean) {
+  return isRowFocused ? "text-primary" : EDITOR_CONTROL_MUTED_ICON_CLASS;
+}
+
+/** 화자 등 커스텀 메뉴 트리거 — surface 없음 */
+export function editorInlineMenuTriggerClass(isRowFocused: boolean) {
+  return cn(
+    "inline-flex h-8 min-h-8 w-full min-w-0 items-center justify-start gap-0.5 rounded-none border-0 py-0 pl-0 pr-2 text-left text-caption1_500 shadow-none outline-none focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring/50 focus-visible:ring-offset-0 overflow-hidden",
+    editorRowControlTextClass(isRowFocused),
+  );
+}
+
+/** @deprecated `editorInlineMenuTriggerClass(isRowFocused)` 사용 */
+export const EDITOR_INLINE_MENU_TRIGGER_CLASS = editorInlineMenuTriggerClass(false);
 
 /** 텍스트 블록 화자 열 — 모바일 80px, 데스크톱 100px */
 export const EDITOR_BLOCK_SPEAKER_COLUMN_CLASS =
@@ -37,10 +63,13 @@ export const EDITOR_SCENE_TITLE_INPUT_CLASS =
 export const EDITOR_SCENE_TITLE_TYPOGRAPHY_INPUT_ATTR = "data-editor-typography-input";
 export const EDITOR_SCENE_TITLE_TYPOGRAPHY_INPUT_VALUE = "scene-title";
 
+/** 텍스트·장면정보 본문 인라인 필드 — DS Input surface 없음 (텍스트 블록 기준) */
+export const EDITOR_INLINE_BODY_FIELD_CLASS =
+  "relative z-dropdown min-h-8 h-fit min-w-0 w-full flex-1 resize-none overflow-hidden rounded-none border-0 bg-transparent px-0 pt-1 pb-0 shadow-none text-body1_500 outline-none placeholder:text-foreground-placeholder focus:outline-none focus:ring-0 focus-visible:border-0 focus-visible:ring-0 dark:bg-transparent";
+
 /** 장면정보 값 표시 */
 export const EDITOR_TOP_DESC_DISPLAY_CLASS =
   "min-w-0 flex-1 whitespace-pre-wrap break-words [overflow-wrap:anywhere] text-body1_500 text-foreground pt-1 pb-0";
 
-/** 장면정보 입력 */
-export const EDITOR_TOP_DESC_INPUT_CLASS =
-  "min-w-0 flex-1 h-8 min-h-8 max-w-full rounded-md border-0 bg-transparent px-0 pt-1 pb-0 text-body1_500 text-foreground placeholder:text-foreground-placeholder outline-none transition-colors focus:outline-none focus:ring-0";
+/** @deprecated `EDITOR_INLINE_BODY_FIELD_CLASS` 사용 */
+export const EDITOR_TOP_DESC_INPUT_CLASS = EDITOR_INLINE_BODY_FIELD_CLASS;

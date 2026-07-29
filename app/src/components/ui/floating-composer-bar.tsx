@@ -8,7 +8,7 @@ import {
   SERIES_FORM_MOBILE_COMPOSER_FIXED_INSET_CLASS,
   SERIES_FORM_MOBILE_FLOATING_ROW_BOTTOM_CLASS,
 } from "@/lib/series-form-mobile-layout";
-import { Textarea } from "@/components/ui/textarea";
+import { Textarea } from "design-system/ui/textarea";
 import { cn } from "design-system/utils";
 
 export type FloatingComposerBarPlacement = "fixed" | "sticky";

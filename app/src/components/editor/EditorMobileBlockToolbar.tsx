@@ -4,7 +4,7 @@ import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import { createPortal } from "react-dom";
 import { ICONS } from "@/lib/icons";
 import { SlashCommandMenu, type SlashSelectPayload } from "@/components/editor/SlashCommandMenu";
-import { Button } from "@/components/ui/button";
+import { Button } from "design-system/ui/button";
 import {
   EDITOR_MOBILE_DOCKED_TOOLBAR_SHELL_CLASS,
   EDITOR_MOBILE_KEYBOARD_TOOLBAR_SHELL_CLASS,

@@ -12,16 +12,22 @@ import { cn } from "design-system/utils";
  * - 행 hover 하이라이트 없음
  */
 
-/** 블록 행 hover·포커스 배경 — 데스크톱만 (모바일은 focusBlockId 기반 하이라이트) */
+/** 블록 행 hover 배경 — 데스크톱만 (포커스 surface는 `EDITOR_FOCUSED_ROW_SURFACE_CLASS`) */
 export function editorRowHoverClass() {
-  return "lg:hover:bg-muted/50 lg:focus-within:bg-muted/50";
+  return "lg:hover:bg-muted/50";
 }
 
-/** 모바일 블록·필드 선택 하이라이트 — 데스크톱 행 hover와 동일 */
+/** 모바일 블록·필드 터치 선택 하이라이트 */
 export const EDITOR_MOBILE_ACTIVE_SURFACE_CLASS = "bg-muted/50";
 
-/** 모바일 포커스된 블록 행 배경 */
-export const EDITOR_MOBILE_FOCUSED_ROW_CLASS = "max-lg:bg-muted/50";
+/** 포커스된 블록 행 surface — 모바일·데스크톱 공통 */
+export const EDITOR_FOCUSED_ROW_SURFACE_CLASS = "bg-muted/50";
+
+/** 포커스된 블록 행 본문 텍스트 */
+export const EDITOR_FOCUSED_ROW_TEXT_CLASS = "text-primary";
+
+/** @deprecated `EDITOR_FOCUSED_ROW_SURFACE_CLASS`와 동일 */
+export const EDITOR_MOBILE_FOCUSED_ROW_CLASS = EDITOR_FOCUSED_ROW_SURFACE_CLASS;
 
 /** 좌측 + · 드래그 핸들 — 데스크톱 전용 (`lg` 미만에서는 렌더하지 않음) */
 export function editorLeadingControlsClass() {

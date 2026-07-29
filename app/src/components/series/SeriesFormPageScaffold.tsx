@@ -10,7 +10,7 @@ import {
   MobileAppSidebarDrawer,
 } from "@/components/layout/MobileAppSidebarDrawer";
 import { PageCard } from "@/components/layout/PageCard";
-import { Button } from "@/components/ui/button";
+import { Button } from "design-system/ui/button";
 import { HeaderBackButton } from "@/components/ui/header-back-button";
 import { SeriesFormTabs } from "@/components/series/SeriesFormTabs";
 import { EditorMobileFloatingActions } from "@/components/editor/EditorMobileFloatingActions";
@@ -35,6 +35,7 @@ import {
   PAGE_SUBHEADER_WITH_STICKY_CLASS,
 } from "@/lib/page-layout";
 import { cn } from "design-system/utils";
+import { space } from "design-system/spacing-tokens";
 import type { SeriesFormTab } from "@/lib/seriesForm";
 
 export interface SeriesFormAiComposerConfig {
@@ -79,7 +80,7 @@ export function SeriesFormPageScaffold({
   children,
   showDraftButton = false,
   onDraftClick,
-  contentGapClassName = "gap-10",
+  contentGapClassName = space.form.formGroupGapRelaxed.className,
   aiComposer,
 }: SeriesFormPageScaffoldProps) {
   const isLgUp = useIsLgUp();
@@ -132,7 +133,7 @@ export function SeriesFormPageScaffold({
                 ) : null}
                 <Button
                   type="button"
-                  variant="primary"
+                  tone="brand"
                   shape="square"
                   size="lg"
                   disabled={submitDisabled}

@@ -12,6 +12,12 @@ export interface ResourceAiDraftRequest {
 
 export const RESOURCE_NAME_MAX = 80;
 export const RESOURCE_DESCRIPTION_MAX = 500;
+export const RESOURCE_DESCRIPTION_ROWS = 6;
+/** 리소스 설명 필드 — 카드 본문 너비에 맞춤 */
+export const RESOURCE_DESCRIPTION_INPUT_GROUP_CLASS = "w-full min-w-0";
+/** field-sizing-fixed: DS textarea의 content 기준 축소 방지 · 6행 최소 높이 */
+export const RESOURCE_DESCRIPTION_TEXTAREA_CLASS =
+  "field-sizing-fixed w-full min-w-0 min-h-[160px] max-h-[400px] resize-y";
 export const RESOURCE_BRIEF_MAX = 5000;
 
 export const RESOURCE_KIND_LABELS: Record<

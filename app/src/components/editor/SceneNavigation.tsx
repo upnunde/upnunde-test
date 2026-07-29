@@ -2,9 +2,9 @@
 
 import React, { useMemo, useState, useRef, useEffect } from "react";
 import { ICONS } from "@/lib/icons";
-import { Button } from "@/components/ui/button";
+import { IconButton } from "@/components/ui/icon-button";
 import { Input } from "@/components/ui/input";
-import { Badge } from "@/components/ui/badge";
+import { Badge } from "design-system/ui/badge";
 import { useEditorStore } from "@/store/useEditorStore";
 import {
   useEditorIssues,
@@ -13,6 +13,7 @@ import {
 } from "@/hooks/useEditorIssues";
 import { useEditorScrollActiveSceneId } from "@/hooks/useEditorScrollActiveSceneId";
 import { resolveEditorActiveSceneId } from "@/lib/editor-scroll";
+import { EDITOR_CONTROL_MUTED_TEXT_CLASS } from "@/lib/editor-block-layout";
 import { cn } from "design-system/utils";
 
 interface SceneNavigationProps {
@@ -177,16 +178,16 @@ export function SceneNavigation({
             </h2>
           )}
           {onToggleCollapsed ? (
-            <Button
+            <IconButton
               type="button"
               variant="outline"
-              size="icon-lg"
+              shape="circle"
+              size="icon"
+              icon={ICONS.menu}
               onClick={onToggleCollapsed}
-              className="shrink-0 rounded-full shadow-none text-foreground-placeholder disabled:border-border"
+              className="shrink-0 shadow-none text-foreground-muted"
               aria-label={collapsed ? "장면 목록 펼치기" : "장면 목록 최소화"}
-            >
-              <ICONS.menu aria-hidden="true" />
-            </Button>
+            />
           ) : null}
         </div>
 
@@ -205,7 +206,12 @@ export function SceneNavigation({
 
                 const rowContent = (
                   <div className="flex items-center gap-3 min-w-0">
-                    <span className="text-caption1_400 text-foreground-placeholder font-mono tabular-nums shrink-0">
+                    <span
+                      className={cn(
+                        "text-caption1_400 font-mono tabular-nums shrink-0",
+                        isActive ? "text-primary" : EDITOR_CONTROL_MUTED_TEXT_CLASS,
+                      )}
+                    >
                       {String(sceneNumber).padStart(2, "0")}
                     </span>
                     {isEditing ? (
@@ -230,7 +236,10 @@ export function SceneNavigation({
                       />
                     ) : (
                       <span
-                        className="truncate text-body3_500 flex-1 min-w-0"
+                        className={cn(
+                          "truncate text-body3_500 flex-1 min-w-0",
+                          isActive ? "text-primary" : EDITOR_CONTROL_MUTED_TEXT_CLASS,
+                        )}
                         onDoubleClick={(e) => startEdit(e, block)}
                         title="더블클릭하여 제목 편집"
                       >
@@ -258,8 +267,8 @@ export function SceneNavigation({
                         className={cn(
                           "w-full text-left px-3 py-2 rounded-md text-body3_400 transition-colors",
                           "hover:bg-muted",
-                          isActive && "font-medium text-foreground",
-                          !isActive && "text-foreground-placeholder"
+                          isActive && "font-medium",
+                          !isActive && EDITOR_CONTROL_MUTED_TEXT_CLASS
                         )}
                       >
                         {rowContent}
@@ -365,7 +374,8 @@ export function SceneNavigation({
               <ICONS.warning className="h-4 w-4" aria-hidden="true" />
               {issues.length > 0 && (
                 <Badge
-                  variant="destructive"
+                  variant="default"
+                  status="destructive"
                   className="absolute -right-1 -top-1 min-w-4 px-1 py-0 text-caption2_400"
                 >
                   {issues.length > 99 ? "99+" : issues.length}

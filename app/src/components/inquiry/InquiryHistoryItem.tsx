@@ -1,6 +1,6 @@
 import { PAGE_FLUSH_CONTENT_PAD_X_CLASS } from "@/lib/page-layout";
 import { INQUIRY_NOTIFICATION_LIST_ITEM_SURFACE_CLASS, INQUIRY_NOTIFICATION_ROW_CLASS } from "@/lib/inquiry-list-styles";
-import { Button } from "@/components/ui/button";
+import { Button } from "design-system/ui/button";
 import { cn } from "design-system/utils";
 import { ICONS } from "@/lib/icons";
 import type { InquiryHistoryItem as InquiryHistoryItemType } from "@/types/inquiry";

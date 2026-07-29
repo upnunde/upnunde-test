@@ -2,7 +2,7 @@
 
 import React from "react";
 import { useToast } from "@/store/useToastStore";
-import { Button } from "@/components/ui/button";
+import { Button } from "design-system/ui/button";
 
 /**
  * 토스트 기획서 정책 테스트 페이지

@@ -14,7 +14,7 @@ alwaysApply: true
 
 ## 개발 서버
 
-- 기본: `app/`에서 **`npm run dev`** (포트 3000). 미리보기 URL: **`http://renovel.localhost:3000`**
+- 기본: `app/`에서 **`npm run dev`** (포트 3002). 미리보기 URL: **`http://renovel.localhost:3002`**
 - 이상 시 **dev 로그 확인** → 필요 시 `npm run clean` 후 재시작.
 
 ## 언어

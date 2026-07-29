@@ -1,7 +1,7 @@
 "use client";
 
 import { useState, useCallback, useRef, useEffect } from "react";
-import { Button } from "@/components/ui/button";
+import { Button } from "design-system/ui/button";
 import { Input, InputGroup, InputHypertext } from "@/components/ui/input";
 import { PageCard } from "@/components/layout/PageCard";
 import { AddResourceSlot } from "@/components/resource/cards/AddResourceSlot";
@@ -18,6 +18,7 @@ import {
   MODAL_ACTION_BUTTON_SIZE,
 } from "@/components/ui/modal";
 import { cn } from "design-system/utils";
+import { space } from "design-system/spacing-tokens";
 import { EPISODE_FORM_FIELD_COPY } from "@/lib/episode-form-copy";
 import type { ImageResource } from "@/types/resource";
 
@@ -176,7 +177,7 @@ export function EpisodeForm({
   );
 
   const formFields = (
-    <div className="mt-0 flex flex-col gap-6">
+    <div className={cn("mt-0 flex flex-col", space.form.formGroupGap.className)}>
       <div className="flex flex-col gap-3">
         <FormFieldLabel
           title="에피소드 제목*"

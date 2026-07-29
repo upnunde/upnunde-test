@@ -4,10 +4,10 @@ import React, { useCallback, useEffect, useRef, useState } from "react";
 import Image from "next/image";
 import { useRouter, usePathname } from "next/navigation";
 import { ICONS } from "@/lib/icons";
-import { Button } from "@/components/ui/button";
+import { Button } from "design-system/ui/button";
 import { HeaderBackButton } from "@/components/ui/header-back-button";
 import { Input, InputGroup, InputHypertext } from "@/components/ui/input";
-import { Textarea } from "@/components/ui/textarea";
+import { Textarea } from "design-system/ui/textarea";
 import { FloatingAiComposerPortal } from "@/components/ui/FloatingAiComposerPortal";
 import { FLOATING_COMPOSER_SCROLL_PAD_CLASS } from "@/components/ui/floating-composer-bar";
 import { AddResourceSlot } from "@/components/resource/cards/AddResourceSlot";
@@ -31,9 +31,10 @@ import {
   PAGE_SUBHEADER_PAGE_SHELL_CLASS,
   PAGE_SUBHEADER_WITH_STICKY_CLASS,
 } from "@/lib/page-layout";
+import { space } from "design-system/spacing-tokens";
 import { cn } from "design-system/utils";
 import { generateResourceDraftFromBrief } from "@/lib/resource-ai-draft";
-import { RESOURCE_DESCRIPTION_MAX } from "@/lib/resource-ai-draft-types";
+import { RESOURCE_DESCRIPTION_MAX, RESOURCE_DESCRIPTION_INPUT_GROUP_CLASS, RESOURCE_DESCRIPTION_ROWS, RESOURCE_DESCRIPTION_TEXTAREA_CLASS } from "@/lib/resource-ai-draft-types";
 import { useFormAiDraftComposer } from "@/hooks/useFormAiDraftComposer";
 import { ImageCropPosterModal } from "@/components/resource/character/CharacterExpressionModal";
 import {
@@ -271,7 +272,13 @@ export function MediaResourceDetailPage({ initialData }: MediaResourceDetailPage
           >
             <Title2 text="미디어 정보" asSectionHeader />
 
-            <div className={`${PAGE_CONTENT_BODY_CLASS} flex flex-col gap-8`}>
+            <div
+              className={cn(
+                PAGE_CONTENT_BODY_CLASS,
+                "flex flex-col",
+                space.section.sectionStackGapLarge.className,
+              )}
+            >
               <section className="flex flex-col gap-2">
                 <FormFieldLabel
                   title="미디어 이름*"
@@ -296,18 +303,18 @@ export function MediaResourceDetailPage({ initialData }: MediaResourceDetailPage
                   subtitle="어떤 장면에서 사용되는 미디어인지 간단히 설명해 주세요."
                   inputId={MEDIA_DESCRIPTION_INPUT_ID}
                 />
-                <InputGroup>
+                <InputGroup className={RESOURCE_DESCRIPTION_INPUT_GROUP_CLASS}>
                   <Textarea
                     id={MEDIA_DESCRIPTION_INPUT_ID}
                     aria-describedby={formFieldAriaDescribedBy(MEDIA_DESCRIPTION_INPUT_ID)}
-                    rows={4}
+                    rows={RESOURCE_DESCRIPTION_ROWS}
                     maxLength={RESOURCE_DESCRIPTION_MAX}
                     value={description}
                     onChange={(e) =>
                       setDescription(e.target.value.slice(0, RESOURCE_DESCRIPTION_MAX))
                     }
                     placeholder="설명을 입력해 주세요."
-                    className="min-h-[96px] max-h-[400px] resize-y"
+                    className={RESOURCE_DESCRIPTION_TEXTAREA_CLASS}
                   />
                   <InputHypertext
                     id={formFieldAriaDescribedBy(MEDIA_DESCRIPTION_INPUT_ID)}

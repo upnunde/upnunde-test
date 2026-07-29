@@ -3,10 +3,12 @@
 import { useCallback, useEffect, useRef, useState } from "react";
 import { ICONS, Icon } from "@/lib/icons";
 import type { ChoiceItem } from "@/types/editor";
-import { Button } from "@/components/ui/button";
+import { Button } from "design-system/ui/button";
+import { Switch } from "@/components/ui/switch";
 import { useMobileBlockTextEdit } from "@/hooks/useMobileBlockTextEdit";
-import { Textarea } from "@/components/ui/textarea";
+import { Textarea } from "design-system/ui/textarea";
 import { cn } from "design-system/utils";
+import { EDITOR_CONTROL_MUTED_ICON_CLASS, EDITOR_CONTROL_MUTED_TEXT_CLASS } from "@/lib/editor-block-layout";
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -15,7 +17,6 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import { useEditorStore } from "@/store/useEditorStore";
-import { EDITOR_MOBILE_ACTIVE_SURFACE_CLASS } from "@/lib/editor-control-visibility";
 
 export interface SceneOption {
   value: string;
@@ -50,18 +51,10 @@ function createAiChoice(): ChoiceItem {
   };
 }
 
-/** 모바일 선택지 내용 입력 영역 — 기본 흰색, 터치·선택 시 surface */
-function choiceMobileFieldShellClass({
-  isTouched,
-  isIssue,
-}: {
-  isTouched: boolean;
-  isIssue?: boolean;
-}) {
+/** 모바일 선택지 내용 입력 영역 */
+function choiceMobileFieldShellClass({ isIssue }: { isIssue?: boolean }) {
   return cn(
     "rounded-sm border border-border bg-background px-3 py-2 transition-colors",
-    "active:bg-muted/50 focus-within:bg-muted/50",
-    isTouched && EDITOR_MOBILE_ACTIVE_SURFACE_CLASS,
     isIssue && "border-destructive",
   );
 }
@@ -128,43 +121,11 @@ function ChoiceTextField({
       placeholder={placeholder}
       rows={1}
       className={cn(
-        "w-full resize-none overflow-hidden border-0 bg-transparent px-0 py-0 shadow-none align-middle focus-visible:ring-0 focus-visible:ring-offset-0",
+        "field-sizing-fixed w-full resize-none overflow-hidden rounded-none border-0 bg-transparent px-0 py-0 shadow-none align-middle focus-visible:border-0 focus-visible:ring-0 focus-visible:ring-offset-0 dark:bg-transparent",
         className
       )}
       style={{ height: "fit-content" }}
     />
-  );
-}
-
-function SwitchToggle({
-  checked,
-  onCheckedChange,
-}: {
-  checked: boolean;
-  onCheckedChange: (checked: boolean) => void;
-}) {
-  return (
-    <button
-      type="button"
-      role="switch"
-      aria-checked={checked}
-      onClick={() => onCheckedChange(!checked)}
-      className={cn(
-        "inline-flex shrink-0 items-center rounded-full transition-colors focus:outline-none focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-2",
-        "h-8 w-[52px] p-1",
-        "lg:h-6 lg:w-[40px] lg:p-0.5",
-        checked ? "bg-primary" : "bg-muted",
-      )}
-    >
-      <span
-        className={cn(
-          "pointer-events-none rounded-full bg-background shadow-elevation-10 transition-transform",
-          "h-6 w-6",
-          "lg:h-5 lg:w-5",
-          checked ? "translate-x-5 lg:translate-x-4" : "translate-x-0",
-        )}
-      />
-    </button>
   );
 }
 
@@ -239,7 +200,7 @@ function ChoiceSceneSelect({
           isTable
             ? "h-8 rounded-md border-0 bg-transparent px-0 py-1 pr-2"
             : "h-9 rounded-sm border border-border bg-background py-0 pl-3 pr-8",
-          isSceneUnselected ? "text-foreground-placeholder" : "text-foreground",
+          isSceneUnselected ? EDITOR_CONTROL_MUTED_TEXT_CLASS : "text-foreground",
           isNextSceneIssueFocused &&
             (isTable ? "text-destructive" : "border-destructive text-destructive")
         )}
@@ -254,7 +215,7 @@ function ChoiceSceneSelect({
       {!isTable ? (
         <ICONS.chevronDown
           aria-hidden
-          className="pointer-events-none absolute right-3 top-1/2 h-4 w-4 -translate-y-1/2 text-foreground-placeholder"
+          className={cn("pointer-events-none absolute right-3 top-1/2 h-4 w-4 -translate-y-1/2", EDITOR_CONTROL_MUTED_ICON_CLASS)}
         />
       ) : null}
     </div>
@@ -318,7 +279,7 @@ function ChoiceRowMobile({
             <Button
               type="button"
               variant="ghost"
-              size="icon"
+              size="icon-sm"
               onClick={onRemove}
               className="shrink-0 text-foreground-placeholder hover:bg-destructive-container hover:text-destructive"
               aria-label="선택지 삭제"
@@ -338,7 +299,6 @@ function ChoiceRowMobile({
         ) : (
           <div
             className={choiceMobileFieldShellClass({
-              isTouched: isContentTouched,
               isIssue: isTextIssueFocused,
             })}
             onPointerDown={onSelectContent}
@@ -379,9 +339,10 @@ function ChoiceRowMobile({
 
       <div className="flex items-center justify-between gap-3">
         <span className="text-caption1_400 text-foreground-placeholder">유료 전환</span>
-        <SwitchToggle
+        <Switch
           checked={choice.isPaid}
           onCheckedChange={(checked) => onUpdate({ isPaid: checked })}
+          aria-label="유료 전환"
         />
       </div>
     </div>
@@ -459,18 +420,21 @@ function ChoiceRowDesktop({
         />
       </div>
       <div className="flex min-h-9 w-[120px] min-w-[100px] max-w-[120px] shrink-0 self-stretch items-center justify-between gap-2 px-3 py-0">
-        <SwitchToggle
+        <Switch
           checked={choice.isPaid}
           onCheckedChange={(checked) => onUpdate({ isPaid: checked })}
+          aria-label="유료 전환"
         />
-        <button
+        <Button
           type="button"
+          variant="ghost"
+          size="icon-sm"
           onClick={onRemove}
-          className="rounded p-2 text-foreground-placeholder opacity-0 transition-opacity lg:group-hover/choice-row:opacity-100 lg:group-focus-within/choice-row:opacity-100 lg:hover:bg-destructive-container lg:hover:text-destructive"
+          className="shrink-0 text-foreground-placeholder opacity-0 transition-opacity lg:group-hover/choice-row:opacity-100 lg:group-focus-within/choice-row:opacity-100 lg:hover:bg-destructive-container lg:hover:text-destructive"
           aria-label="선택지 삭제"
         >
-          <ICONS.trash2 className="h-4 w-4" />
-        </button>
+          <ICONS.trash2 className="h-4 w-4" aria-hidden />
+        </Button>
       </div>
     </div>
   );
@@ -617,12 +581,12 @@ export function ChoiceBlockTable({
         <div className="flex h-9 items-center justify-start border-t border-border px-1 py-2 lg:border-t-0">
           <DropdownMenu>
             <DropdownMenuTrigger asChild>
-              <Button type="button" variant="outline" size="sm">
+              <Button type="button" variant="ghost" size="sm">
                 선택지 추가
                 <Icon icon={ICONS.chevronDown} size="md" position="inline-end" />
               </Button>
             </DropdownMenuTrigger>
-            <DropdownMenuContent align="start">
+            <DropdownMenuContent align="start" className="w-fit">
               <DropdownMenuGroup>
                 <DropdownMenuItem onClick={handleAddNormalChoice}>
                   선택지 추가

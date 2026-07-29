@@ -1,3 +1,4 @@
+import { space } from "design-system/spacing-tokens";
 import { cn } from "design-system/utils";
 import {
   MOBILE_BOTTOM_SHEET_PAD_CLASS,
@@ -100,19 +101,26 @@ export const formDialogSheetEpisodeFormClassName =
 export const formDialogSheetBodyWrapperClassName =
   "flex min-h-0 flex-1 flex-col overflow-hidden";
 
-/** 바텀 시트·폼 모달 스크롤 본문 — 고정 푸터 위 스크롤 영역 */
-export const formDialogSheetScrollBodyClassName =
-  "min-h-0 flex-1 overflow-y-auto overflow-x-hidden overscroll-contain pb-5";
+/** 바텀 시트·폼 모달 스크롤 본문 — 고정 푸터 위 스크롤 영역 · 하단 `space.overlay.modalPaddingY` */
+export const formDialogSheetScrollBodyClassName = cn(
+  "min-h-0 flex-1 overflow-y-auto overflow-x-hidden overscroll-contain",
+  "pb-5",
+);
 
-/** 바텀 시트·폼 모달 하단 고정 버튼 영역 — 모바일 safe-area·브라우저 하단 크롬 포함 */
+/** 바텀 시트·폼 모달 하단 고정 버튼 영역 — `modalPaddingX` + `modalFooterPaddingY` + safe-area */
 export const formDialogSheetStickyFooterClassName = cn(
-  "mt-auto shrink-0 border-t border-border bg-background px-5 pt-4 pb-4",
+  "mt-auto shrink-0 border-t border-border bg-background",
+  space.overlay.modalPaddingX.className,
+  space.overlay.modalFooterPaddingY.className,
   "max-lg:pb-[calc(var(--space-4)+env(safe-area-inset-bottom,0px))]",
 );
 
 export const modalHeaderClassName = cn(
-  "flex min-h-40 w-full flex-col items-center gap-5 self-stretch overflow-hidden bg-background px-6 pb-4 pt-6",
-  "max-lg:rounded-t-xl lg:rounded-tl-sm lg:rounded-tr-sm lg:pt-10",
+  "flex min-h-40 w-full flex-col items-center self-stretch overflow-hidden bg-background",
+  space.section.sectionStackGap.className,
+  space.overlay.modalHeaderPaddingX.className,
+  space.overlay.modalHeaderPaddingY.className,
+  "max-lg:rounded-t-xl lg:rounded-tl-sm lg:rounded-tr-sm",
 );
 
 export const modalFooterShellClassName = cn(
@@ -122,14 +130,18 @@ export const modalFooterShellClassName = cn(
 );
 
 export const modalFooterButtonRowClassName = cn(
-  "flex w-full flex-col items-stretch gap-2 self-stretch bg-background px-6 pb-5 pt-2",
-  "max-lg:py-4",
+  "flex w-full flex-col items-stretch self-stretch bg-background",
+  space.actions.actionGap.className,
+  space.overlay.modalFooterPaddingX.className,
+  space.overlay.modalFooterPaddingY.className,
   "lg:inline-flex lg:h-16 lg:min-h-16 lg:flex-row lg:items-center",
 );
 
-/** split 레이아웃 — 모바일 세로 스택 / 데스크톱 우측 버튼 그룹 (spacing-4 = 4px) */
-export const modalFooterTrailingGroupClassName =
-  "flex w-full flex-col items-stretch gap-1 lg:w-auto lg:flex-row lg:items-center lg:justify-start";
+/** split 레이아웃 — 모바일 세로 스택 / 데스크톱 우측 버튼 그룹 · `space.control.controlGroupCompact` */
+export const modalFooterTrailingGroupClassName = cn(
+  "flex w-full flex-col items-stretch lg:w-auto lg:flex-row lg:items-center lg:justify-start",
+  space.control.controlGroupCompact.className,
+);
 
 /** 모달·팝업 푸터 액션 버튼 크기 — DS `default` (h-9 / 36px) */
 export const MODAL_ACTION_BUTTON_SIZE = "default" as const;

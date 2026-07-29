@@ -10,8 +10,8 @@ import {
   DropdownMenuGroup,
   DropdownMenuItem,
 } from "@/components/ui/dropdown-menu";
-import { Badge } from "@/components/ui/badge";
-import { Button } from "@/components/ui/button";
+import { Badge } from "design-system/ui/badge";
+import { Button } from "design-system/ui/button";
 import { IconButton } from "@/components/ui/icon-button";
 import type { CharacterData } from "@/types/character";
 import { formatSeriesDateOrRelative, formatSeriesViewCount } from "@/lib/formatSeries";
@@ -102,7 +102,7 @@ export function CharacterItem({
                 </Badge>
               )}
               {isBanned && (
-                <Badge variant="destructive" size="md" shape="square" className="max-w-full lg:max-w-[45%]">
+                <Badge variant="default" status="destructive" size="md" shape="square" className="max-w-full lg:max-w-[45%]">
                   <ICONS.alertCircle className="size-3.5 shrink-0" aria-hidden />
                   <span className="truncate">가이드 정책을 위반, 이용 금지</span>
                 </Badge>

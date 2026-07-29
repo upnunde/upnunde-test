@@ -11,4 +11,4 @@ fi
 
 echo "${LINE} 을(를) /etc/hosts 에 추가합니다."
 echo "${LINE}" | sudo tee -a /etc/hosts >/dev/null
-echo "완료. Cursor 미리보기 또는 브라우저에서 http://${HOST}:3000 으로 접속하세요."
+echo "완료. Cursor 미리보기 또는 브라우저에서 http://${HOST}:3002 으로 접속하세요."

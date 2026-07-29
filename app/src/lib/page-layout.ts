@@ -1,27 +1,29 @@
 /**
- * 페이지·카드 본문 인셋 — design-system spacing
- * 본문 여백형 페이지 가로 12px · 상단 모바일 12px·데스크톱 40px → `docs/mobile-layout.md`
+ * 페이지·카드 본문 인셋 — DS Spacing Semantic (`space.layout` · `space.section` · `space.list`)
+ * 앱 셸은 `pagePaddingY` 대신 `PAGE_SCROLL_TOP` + `scrollBottom` 조합.
  */
 
-/** 페이지·카드 좌우 인셋 — 12px (모바일·lg+ 공통) — 스크롤 루트 등 */
-export const PAGE_GUTTER_X_CLASS = "px-3";
+import { space } from "design-system/spacing-tokens";
+
+/** 페이지·카드 좌우 인셋 — 모바일 12px · lg+ 20px — `space.layout.pagePaddingX` */
+export const PAGE_GUTTER_X_CLASS = space.layout.pagePaddingX.className;
 
 /**
- * 풀블리드 카드·섹션 내부 좌우 인셋 — 20px (모바일·lg+ 공통).
+ * 풀블리드 카드·섹션 내부 좌우 인셋 — 20px (`space.section.sectionPadding` X축).
  * 에디터 본문(`EDITOR_PAGE_SCROLL_CLASS`) 제외.
  */
 export const PAGE_FLUSH_CONTENT_PAD_X_CLASS = "px-5";
 
-/** 페이지·섹션 스택 간격 — 모바일 12px · lg+ 20px */
-export const PAGE_GUTTER_GAP_CLASS = "gap-3 lg:gap-5";
+/** 페이지·섹션 스택 간격 — `space.layout.pageStackGap` */
+export const PAGE_GUTTER_GAP_CLASS = space.layout.pageStackGap.className;
 
 /** 카드 섹션 헤더·본문·푸터 좌우 인셋 — 20px */
 export const PAGE_CONTENT_PAD_X_CLASS = PAGE_FLUSH_CONTENT_PAD_X_CLASS;
 
-/** 카드 본문(폼 필드 묶음) */
-export const PAGE_CONTENT_BODY_CLASS = `${PAGE_CONTENT_PAD_X_CLASS} py-5`;
+/** 카드 본문 — `space.section.sectionPadding` */
+export const PAGE_CONTENT_BODY_CLASS = space.section.sectionPadding.className;
 
-/** 카드 하단 액션 바 */
+/** 카드 하단 액션 바 — 좌우 section pad X · 상하 16px */
 export const PAGE_CONTENT_FOOTER_CLASS = `${PAGE_CONTENT_PAD_X_CLASS} py-4`;
 
 /** 카드 하단 취소·저장 등 — 모바일 form 42px · lg+ 36px */
@@ -31,10 +33,13 @@ export const PAGE_FOOTER_ACTION_BUTTON_CLASS =
 /** 메인 스크롤 영역 — max-width 컨테이너 바깥 가로 여백 */
 export const PAGE_SCROLL_GUTTER_CLASS = PAGE_GUTTER_X_CLASS;
 
-/** 스크롤 영역 마지막 콘텐츠 하단 여백 — 80px (모든 뷰포트 공통) */
-export const PAGE_SCROLL_BOTTOM_CLASS = "pb-20";
+/** 스크롤 영역 마지막 콘텐츠 하단 여백 — `space.layout.scrollBottom` */
+export const PAGE_SCROLL_BOTTOM_CLASS = space.layout.scrollBottom.className;
 
-/** 스크롤 영역 상단 여백 — 모바일 12px · lg+ 40px */
+/**
+ * 스크롤 영역 상단 여백 — 모바일 12px · lg+ 40px.
+ * DS `pagePaddingY`는 앱 셸에 쓰지 않음(상·하 비대칭).
+ */
 export const PAGE_SCROLL_TOP_CLASS = "max-lg:pt-3 lg:pt-10";
 
 /**
@@ -82,11 +87,14 @@ export const PAGE_SCROLL_ROOT_MOBILE_FLUSH_CLASS = "max-lg:pt-0 max-lg:px-0 max-
 /** 모바일 풀블리드 카드 셸 — 테두리·모서리 라운드 제거 */
 export const PAGE_CARD_SHELL_MOBILE_FLUSH_CLASS = "max-lg:rounded-none max-lg:border-0";
 
+/** fullWidth PageCard — 가로 인셋 없음(스크롤 루트·내부 flush 토큰이 담당) */
+export const PAGE_CARD_FULL_WIDTH_PAD_X_CLASS = "max-lg:px-0 lg:px-0";
+
 /** 모바일 카드형 목록 행 — 정산·내 작품·에피소드 공통 */
 export const PAGE_MOBILE_LIST_ITEM_CARD_CLASS =
   "max-lg:rounded-md max-lg:border-0 max-lg:bg-background max-lg:p-4 max-lg:shadow-elevation-30";
 
-/** 모바일 카드형 목록 컨테이너 간격 */
+/** 모바일 카드형 목록 컨테이너 간격 — `space.list.listItemGap` (gap-3) */
 export const PAGE_MOBILE_LIST_STACK_GAP_CLASS = "max-lg:gap-3";
 
 /** AppShell main 스크롤 루트 — 상단 여백 · 가로 인셋 · 하단 80px */

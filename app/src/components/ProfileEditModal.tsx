@@ -7,9 +7,9 @@ import { ICONS } from "@/lib/icons";
 import { useRouter } from "next/navigation";
 import { useIsLgUp } from "@/hooks/useMediaQuery";
 import { PAGE_GUTTER_X_CLASS } from "@/lib/page-layout";
-import { Button } from "@/components/ui/button";
+import { Button } from "design-system/ui/button";
 import { Input, InputGroup, InputHypertext } from "@/components/ui/input";
-import { Textarea } from "@/components/ui/textarea";
+import { Textarea } from "design-system/ui/textarea";
 import { formDialogSheetStickyFooterClassName, MODAL_ACTION_BUTTON_SIZE, MOBILE_BOTTOM_SHEET_SCRIM_CLASS, MOBILE_BOTTOM_SHEET_SHELL_BASE_CLASS, mobileBottomSheetLargeMaxHeightClassName } from "@/components/ui/modal/modal-styles";
 import { cn } from "design-system/utils";
 

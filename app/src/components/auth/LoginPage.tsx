@@ -1,10 +1,13 @@
 "use client";
 
+import { space } from "design-system/spacing-tokens";
+import { cn } from "design-system/utils";
+
 import React, { useCallback, useState } from "react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
-import { Button } from "@/components/ui/button";
-import { EmailInput } from "@/components/ui/email-input";
+import { Button } from "design-system/ui/button";
+import { EmailInput } from "design-system/ui/email-input";
 import { InputGroup } from "@/components/ui/input";
 import {
   Dialog,
@@ -183,7 +186,7 @@ export function LoginPage() {
               setSnackbar({ open: true, message: "문의내용을 전달하였습니다" });
             }}
             onCancel={() => setInquiryOpen(false)}
-            className="flex flex-col gap-10 px-5 pt-5 pb-5"
+            className={cn("flex flex-col px-5 pt-5 pb-5", space.layout.sectionGap.className)}
             rootClassName="min-h-0 flex-1 flex-col"
           />
         </DialogContent>

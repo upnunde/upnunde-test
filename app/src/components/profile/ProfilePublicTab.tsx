@@ -1,13 +1,18 @@
 "use client";
 
+import { space } from "design-system/spacing-tokens";
+import { cn } from "design-system/utils";
+
+import { PAGE_GUTTER_GAP_CLASS } from "@/lib/page-layout";
+
 import { useEffect, useRef, useState } from "react";
 import Image from "next/image";
 import { ICONS } from "@/lib/icons";
-import { Button } from "@/components/ui/button";
+import { Button } from "design-system/ui/button";
 import { Title2 } from "@/components/ui/title2";
 import { AnalyticsPanel } from "@/components/analytics/AnalyticsPanel";
 import { Input, InputGroup, InputHypertext } from "@/components/ui/input";
-import { Textarea } from "@/components/ui/textarea";
+import { Textarea } from "design-system/ui/textarea";
 import { ProfileFieldLabel } from "@/components/profile/profile-field-styles";
 import { formFieldAriaDescribedBy } from "@/components/ui/field-label";
 import {
@@ -65,7 +70,13 @@ export function ProfilePublicTab({
   return (
     <AnalyticsPanel className="overflow-hidden border-0 bg-transparent">
       <Title2 text="공개 프로필" variant="title" asSectionHeader />
-      <div className="flex flex-col gap-8 p-5">
+      <div
+        className={cn(
+          "flex flex-col",
+          space.section.sectionStackGapLarge.className,
+          space.section.sectionPadding.className,
+        )}
+      >
         <div className="flex flex-col items-center gap-3">
           <input
             ref={fileInputRef}
@@ -104,7 +115,7 @@ export function ProfilePublicTab({
           </p>
         </div>
 
-        <div className="flex max-w-xl flex-col gap-3 lg:gap-5">
+        <div className={`flex max-w-xl flex-col ${PAGE_GUTTER_GAP_CLASS}`}>
           <div className="flex flex-col gap-3">
             <ProfileFieldLabel text="아이디" hint="로그인에 사용하는 이메일이에요." htmlFor={PROFILE_PUBLIC_LOGIN_ID} />
             <InputGroup>

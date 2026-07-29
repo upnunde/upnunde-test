@@ -14,7 +14,10 @@ import {
   analyticsKeyStatLabelClass,
   analyticsKeyStatValueClass,
 } from "@/components/analytics/analytics-key-stats-layout";
-import { PAGE_FLUSH_CONTENT_PAD_X_CLASS } from "@/lib/page-layout";
+import {
+  PAGE_FLUSH_CONTENT_PAD_X_CLASS,
+  PAGE_GUTTER_GAP_CLASS
+} from "@/lib/page-layout";
 import { cn } from "design-system/utils";
 import type { AnalyticsPrimaryMetric } from "@/components/analytics/AnalyticsTrendLineChart";
 import { type AnalyticsPeriodRange } from "@/components/analytics/analytics-date";
@@ -105,7 +108,7 @@ export function AnalyticsContentTab({
   );
 
   return (
-    <div className="flex flex-col items-start justify-start gap-3 lg:gap-5 self-stretch px-0">
+    <div className={`flex flex-col items-start justify-start ${PAGE_GUTTER_GAP_CLASS} self-stretch px-0`}>
       <AnalyticsPanel>
         <Title2 text="주요통계" variant="title" asSectionHeader />
 
@@ -150,7 +153,7 @@ export function AnalyticsContentTab({
         </div>
       </AnalyticsPanel>
 
-      <div className="flex w-full flex-col items-stretch gap-3 lg:gap-5 lg:flex-row">
+      <div className={`flex w-full flex-col items-stretch ${PAGE_GUTTER_GAP_CLASS} lg:flex-row`}>
         <PopularContentsCard rows={popularTop5Rows} isSeriesScope={isSeriesScope} />
         <AttentionContentsCard rows={attentionTop5Rows} isSeriesScope={isSeriesScope} />
       </div>

@@ -2,7 +2,7 @@
 
 import React, { useState, useSyncExternalStore } from "react";
 import { ICONS } from "@/lib/icons";
-import { Button } from "@/components/ui/button";
+import { Button } from "design-system/ui/button";
 import { PAGE_CARD_SHELL_MOBILE_FLUSH_CLASS } from "@/lib/page-layout";
 import {
   RESOURCE_MGMT_BANNER_BODY,

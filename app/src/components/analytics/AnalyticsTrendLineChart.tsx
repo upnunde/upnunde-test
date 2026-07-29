@@ -7,6 +7,11 @@ import type { ILineChartSpec } from "@visactor/vchart";
 import { ANALYTICS_TREND_LINE_SHELL_CLASS } from "@/components/analytics/analytics-trend-chart-shell";
 import { buildAnalyticsCartesianAxes } from "@/lib/analytics-chart-axes";
 import {
+  ANALYTICS_LINE_POINT_HOVER_STATE,
+  ANALYTICS_LINE_STROKE_HOVER_STATE,
+  buildAnalyticsCrosshairSpec,
+} from "@/lib/analytics-chart-interaction";
+import {
   useAnalyticsChartTheme,
   type AnalyticsChartTheme,
 } from "@/lib/analytics-chart-theme";
@@ -78,6 +83,7 @@ function buildLineSpec(
   return {
     type: "line",
     background: "transparent",
+    crosshair: buildAnalyticsCrosshairSpec(theme),
     data: [
       {
         id: "lineData",
@@ -102,6 +108,18 @@ function buildLineSpec(
         ],
       },
     },
+    line: {
+      state: ANALYTICS_LINE_STROKE_HOVER_STATE,
+    },
+    point: {
+      visible: true,
+      style: {
+        fill: theme.primary,
+        stroke: theme.surface,
+        lineWidth: 1,
+      },
+      state: ANALYTICS_LINE_POINT_HOVER_STATE,
+    },
     series: [
       {
         type: "line",
@@ -112,14 +130,6 @@ function buildLineSpec(
           style: {
             stroke: theme.primary,
             lineWidth: 2,
-          },
-        },
-        point: {
-          visible: true,
-          style: {
-            fill: theme.primary,
-            stroke: theme.surface,
-            lineWidth: 1,
           },
         },
       },

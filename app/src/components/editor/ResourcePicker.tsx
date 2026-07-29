@@ -10,7 +10,7 @@ import {
   PopoverContent,
   PopoverAnchor,
 } from "@/components/ui/popover";
-import { Button } from "@/components/ui/button";
+import { Button } from "design-system/ui/button";
 import { useIsLgUp } from "@/hooks/useMediaQuery";
 import { MenuList, MenuListItem, MenuListSeparator } from "@/components/ui/menu-list";
 import { MOBILE_BOTTOM_SHEET_SCRIM_CLASS, MOBILE_BOTTOM_SHEET_SHELL_BASE_CLASS, mobileBottomSheetMediumMaxHeightClassName } from "@/components/ui/modal/modal-styles";

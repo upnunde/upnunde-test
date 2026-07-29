@@ -162,7 +162,7 @@ export const INQUIRY_FAQ_ITEMS: InquiryFaqItem[] = [
     category: "bug",
     question: "이미지 업로드·파일 선택 창이 열리지 않아요.",
     answer:
-      "브라우저에서 파일 접근 권한이 차단되었거나, IDE 내 미리보기 창에서는 OS 파일 선택이 지원되지 않을 수 있습니다. Chrome·Safari 등 일반 브라우저에서 http://renovel.localhost:3000 으로 접속해 다시 시도해 주세요. 모바일에서는 갤러리 접근 권한도 확인해 주세요.",
+      "브라우저에서 파일 접근 권한이 차단되었거나, IDE 내 미리보기 창에서는 OS 파일 선택이 지원되지 않을 수 있습니다. Chrome·Safari 등 일반 브라우저에서 http://renovel.localhost:3002 으로 접속해 다시 시도해 주세요. 모바일에서는 갤러리 접근 권한도 확인해 주세요.",
   },
   {
     id: "faq-bug-report",

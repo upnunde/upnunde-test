@@ -2,11 +2,12 @@
 
 import React, { useId, useState } from "react";
 import { ICONS } from "@/lib/icons";
-import { Button } from "@/components/ui/button";
+import { Button } from "design-system/ui/button";
 import { FormFieldLabel, formFieldAriaDescribedBy } from "@/components/ui/field-label";
 import { PAGE_FLUSH_CONTENT_PAD_X_CLASS } from "@/lib/page-layout";
 import { Input, InputGroup, InputHypertext } from "@/components/ui/input";
-import { Textarea } from "@/components/ui/textarea";
+import { Textarea } from "design-system/ui/textarea";
+import { space } from "design-system/spacing-tokens";
 import { cn } from "design-system/utils";
 
 export type InquiryCategory = "account" | "payment" | "bug" | "etc";
@@ -37,7 +38,11 @@ export function InquiryForm({
   onSubmit = defaultSubmit,
   onSuccess,
   onCancel,
-  className = `mt-4 flex flex-col gap-10 ${PAGE_FLUSH_CONTENT_PAD_X_CLASS}`,
+  className = cn(
+    "mt-4 flex flex-col",
+    space.form.formGroupGapRelaxed.className,
+    PAGE_FLUSH_CONTENT_PAD_X_CLASS,
+  ),
   rootClassName,
 }: InquiryFormProps) {
   const prefix = idPrefix ? `${idPrefix}-` : "";

@@ -9,11 +9,11 @@ export interface TagProps {
   className?: string;
 }
 
-/** 입력 필드에 쌓이는 토큰 — DS `Chip` `variant="subtle"` `size="sm"` */
+/** 입력 필드에 쌓이는 토큰 — DS `Chip` `variant="fill"` `size="sm"` */
 export function Tag({ children, onDismiss, className }: TagProps) {
   return (
     <Chip
-      variant="subtle"
+      variant="fill"
       size="sm"
       onRemove={onDismiss}
       className={cn(className)}

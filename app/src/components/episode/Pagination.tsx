@@ -2,7 +2,7 @@
 
 import React, { useState, useEffect } from "react";
 import { ICONS } from "@/lib/icons";
-import { Button } from "@/components/ui/button";
+import { Button } from "design-system/ui/button";
 import { Input } from "@/components/ui/input";
 import { cn } from "design-system/utils";
 

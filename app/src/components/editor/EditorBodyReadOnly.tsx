@@ -7,6 +7,7 @@ import type { ScriptBlock } from "@/types/editor";
 import {
   EDITOR_BLOCK_INDEX_COLUMN_CLASS,
   EDITOR_BLOCK_LABEL_COLUMN_CLASS,
+  EDITOR_CONTROL_MUTED_TEXT_CLASS,
   EDITOR_SCENE_TITLE_DISPLAY_CLASS,
   EDITOR_SCENE_TITLE_FIELD_SHELL_CLASS,
   EDITOR_TOP_DESC_DISPLAY_CLASS,
@@ -84,7 +85,7 @@ function ReadOnlyBlockRow({
       <>
         <div className={indexColClass}>{indexLabel}</div>
         <div className={cn(READONLY_ROW_LABEL_CELL_CLASS, "pr-2")}>
-          <span className="inline-block w-fit max-w-[76px] truncate text-left text-caption1_500 text-foreground-placeholder">
+          <span className={cn("inline-block w-fit max-w-[76px] truncate text-left text-caption1_500", EDITOR_CONTROL_MUTED_TEXT_CLASS)}>
             {speaker}
           </span>
         </div>

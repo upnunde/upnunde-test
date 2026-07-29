@@ -1,7 +1,7 @@
 "use client";
 
 import React, { useMemo, useState } from "react";
-import { Button } from "@/components/ui/button";
+import { Button } from "design-system/ui/button";
 import { Input } from "@/components/ui/input";
 import { filterInquiryFaqItems } from "@/lib/inquiry-faq";
 import { PAGE_FLUSH_CONTENT_PAD_X_CLASS } from "@/lib/page-layout";

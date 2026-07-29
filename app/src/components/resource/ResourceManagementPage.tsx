@@ -3,7 +3,7 @@
 import React, { useMemo, useState, useCallback, useEffect } from "react";
 import dynamic from "next/dynamic";
 import { useRouter, usePathname } from "next/navigation";
-import { Button } from "@/components/ui/button";
+import { Button } from "design-system/ui/button";
 import { HeaderBackButton } from "@/components/ui/header-back-button";
 import { ResourceBanner } from "./ResourceBanner";
 import { ResourceSection } from "./ResourceSection";

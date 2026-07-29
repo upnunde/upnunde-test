@@ -152,20 +152,23 @@ function DropdownMenuContent({
     );
   }
 
+  // Base UI는 Positioner 앞에 Portal이 필수. 인라인 스택용이어도 Portal을 유지한다.
   return (
-    <MenuPrimitive.Positioner
-      className="isolate z-sticky outline-none"
-      align={align}
-      alignOffset={alignOffset}
-      side={side}
-      sideOffset={sideOffset}
-    >
-      <MenuPrimitive.Popup
-        data-slot="dropdown-menu-content"
-        className={cn(DROPDOWN_MENU_INLINE_CONTENT_CLASS, className)}
-        {...props}
-      />
-    </MenuPrimitive.Positioner>
+    <MenuPrimitive.Portal>
+      <MenuPrimitive.Positioner
+        className="isolate z-sticky outline-none"
+        align={align}
+        alignOffset={alignOffset}
+        side={side}
+        sideOffset={sideOffset}
+      >
+        <MenuPrimitive.Popup
+          data-slot="dropdown-menu-content"
+          className={cn(DROPDOWN_MENU_INLINE_CONTENT_CLASS, className)}
+          {...props}
+        />
+      </MenuPrimitive.Positioner>
+    </MenuPrimitive.Portal>
   );
 }
 

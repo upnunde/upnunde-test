@@ -1,6 +1,6 @@
 "use client";
 
-import { Button } from "@/components/ui/button";
+import { Button } from "design-system/ui/button";
 
 const containerClassName =
   "flex h-full min-h-[241px] w-full flex-col items-center justify-center gap-3 rounded-sm border-2 border-dashed border-border";

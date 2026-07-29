@@ -20,10 +20,10 @@ import { useEditorStore, hydrateSeriesPersonaFromSession } from "@/store/useEdit
 import { EDITOR_BLOCK_INDEX_COLUMN_CLASS, EDITOR_MOBILE_GUTTER_X_CLASS } from "@/lib/editor-block-layout";
 import { scrollMobileEditorInputIntoView } from "@/lib/editor-scroll";
 import { isMobileDocumentScrollMode } from "@/lib/mobile-document-scroll";
-import { editorLeadingControlsClass, editorRowHoverClass, EDITOR_MOBILE_FOCUSED_ROW_CLASS } from "@/lib/editor-control-visibility";
+import { editorLeadingControlsClass, editorRowHoverClass, EDITOR_FOCUSED_ROW_SURFACE_CLASS, EDITOR_FOCUSED_ROW_TEXT_CLASS } from "@/lib/editor-control-visibility";
 import { useIsLgUp } from "@/hooks/useMediaQuery";
 import { cn } from "design-system/utils";
-import { Button } from "@/components/ui/button";
+import { Button } from "design-system/ui/button";
 import { ICONS } from "@/lib/icons";
 import { ScriptBlock } from "./ScriptBlock";
 import { SlashCommandMenu, type SlashSelectPayload } from "./SlashCommandMenu";
@@ -183,7 +183,8 @@ function SortableBlockWrapper({
                 ? WRAPPER_CLASS_WRAP
                 : WRAPPER_CLASS_COMPACT,
         isDragging && "relative z-sticky opacity-50",
-        isFocused && EDITOR_MOBILE_FOCUSED_ROW_CLASS,
+        isFocused && EDITOR_FOCUSED_ROW_SURFACE_CLASS,
+        isFocused && EDITOR_FOCUSED_ROW_TEXT_CLASS,
         EDITOR_MOBILE_GUTTER_X_CLASS,
       )}
     >

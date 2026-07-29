@@ -3,7 +3,7 @@
 import type { ReactNode } from "react";
 import type { VariantProps } from "class-variance-authority";
 import { DialogClose } from "@/components/ui/dialog";
-import { Button, buttonVariants } from "@/components/ui/button";
+import { Button, buttonVariants } from "design-system/ui/button";
 import { cn } from "design-system/utils";
 import {
   modalFooterActionButtonClassName,
@@ -38,27 +38,30 @@ export interface ModalFooterButtonsProps {
   className?: string;
 }
 
-function toneToButtonVariant(
-  tone: ModalFooterButtonTone,
-): NonNullable<VariantProps<typeof buttonVariants>["variant"]> {
+function toneToButtonProps(tone: ModalFooterButtonTone): {
+  variant: NonNullable<VariantProps<typeof buttonVariants>["variant"]>;
+  tone: NonNullable<VariantProps<typeof buttonVariants>["tone"]>;
+} {
   switch (tone) {
     case "primary":
-      return "default";
+      return { variant: "default", tone: "brand" };
     case "destructive":
-      return "destructive";
+      return { variant: "default", tone: "destructive" };
     case "ghost":
-      return "ghost";
+      return { variant: "ghost", tone: "neutral" };
     default:
-      return "outline";
+      return { variant: "outline", tone: "neutral" };
   }
 }
 
 function FooterActionButton({ config }: { config: ModalFooterButtonConfig }) {
-  const tone = config.tone ?? "secondary";
+  const footerTone = config.tone ?? "secondary";
+  const { variant, tone } = toneToButtonProps(footerTone);
   const button = (
     <Button
       type="button"
-      variant={toneToButtonVariant(tone)}
+      variant={variant}
+      tone={tone}
       shape="square"
       size={MODAL_ACTION_BUTTON_SIZE}
       className={modalFooterActionButtonClassName}

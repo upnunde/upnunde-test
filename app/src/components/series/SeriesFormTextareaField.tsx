@@ -4,7 +4,7 @@ import { useId } from "react";
 
 import { FormFieldLabel, formFieldAriaDescribedBy } from "@/components/ui/field-label";
 import { InputGroup, InputHypertext } from "@/components/ui/input";
-import { Textarea } from "@/components/ui/textarea";
+import { Textarea } from "design-system/ui/textarea";
 import { cn } from "design-system/utils";
 
 interface SeriesFormTextareaFieldProps {

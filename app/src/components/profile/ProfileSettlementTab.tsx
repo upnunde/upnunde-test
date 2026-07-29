@@ -1,8 +1,10 @@
 "use client";
 
+import { PAGE_GUTTER_GAP_CLASS } from "@/lib/page-layout";
+
 import { useState } from "react";
 import Link from "next/link";
-import { Button } from "@/components/ui/button";
+import { Button } from "design-system/ui/button";
 import { Title2 } from "@/components/ui/title2";
 import { AnalyticsPanel } from "@/components/analytics/AnalyticsPanel";
 import { analyticsOutlineChipClassName } from "@/components/analytics/analytics-filter-chips";
@@ -11,6 +13,7 @@ import { ProfileFieldLabel } from "@/components/profile/profile-field-styles";
 import { formFieldAriaDescribedBy } from "@/components/ui/field-label";
 import { loadProfileSettings, saveSettlementProfile } from "@/lib/profile-storage";
 import type { SettlementProfile } from "@/types/profile";
+import { space } from "design-system/spacing-tokens";
 import { cn } from "design-system/utils";
 
 const PROFILE_SETTLEMENT_BANK_ID = "profile-settlement-bank";
@@ -32,7 +35,7 @@ export function ProfileSettlementTab({ onSaved }: { onSaved: () => void }) {
   };
 
   return (
-    <div className="flex flex-col gap-3 lg:gap-5">
+    <div className={`flex flex-col ${PAGE_GUTTER_GAP_CLASS}`}>
       <AnalyticsPanel>
         <Title2
           text="정산 계좌"
@@ -47,7 +50,11 @@ export function ProfileSettlementTab({ onSaved }: { onSaved: () => void }) {
             </Link>
           }
         />
-        <div className="flex max-w-xl flex-col gap-3 lg:gap-5 p-5">
+        <div className={cn(
+          "flex max-w-xl flex-col",
+          PAGE_GUTTER_GAP_CLASS,
+          space.section.sectionPadding.className,
+        )}>
           <p className="text-body3_400 text-foreground-muted">
             출금은 등록한 계좌로 입금돼요. 계좌 정보가 바뀌면 정산 전에 꼭 업데이트해 주세요.
           </p>
@@ -115,7 +122,11 @@ export function ProfileSettlementTab({ onSaved }: { onSaved: () => void }) {
 
       <AnalyticsPanel>
         <Title2 text="사업자·세금계산서" variant="title" asSectionHeader />
-        <div className="flex max-w-xl flex-col gap-3 lg:gap-5 p-5">
+        <div className={cn(
+          "flex max-w-xl flex-col",
+          PAGE_GUTTER_GAP_CLASS,
+          space.section.sectionPadding.className,
+        )}>
           <div className="flex flex-col gap-3">
             <ProfileFieldLabel text="사업자등록번호" htmlFor={PROFILE_SETTLEMENT_BIZ_ID} />
             <InputGroup>

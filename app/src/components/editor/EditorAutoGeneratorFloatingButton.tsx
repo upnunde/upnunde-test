@@ -1,7 +1,7 @@
 "use client";
 
 import { ICONS } from "@/lib/icons";
-import { Button } from "@/components/ui/button";
+import { Button } from "design-system/ui/button";
 import { cn } from "design-system/utils";
 
 export type EditorAutoGeneratorButtonPlacement = "overlay" | "below-tabs";

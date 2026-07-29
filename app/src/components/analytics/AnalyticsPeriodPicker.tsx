@@ -14,7 +14,7 @@ import {
   type AnalyticsPeriodRange,
 } from "@/components/analytics/analytics-date";
 import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover";
-import { Button } from "@/components/ui/button";
+import { Button } from "design-system/ui/button";
 import { Input } from "@/components/ui/input";
 import { analyticsPeriodInlineTriggerClassName } from "@/components/analytics/analytics-filter-chips";
 import { useIsLgUp } from "@/hooks/useMediaQuery";

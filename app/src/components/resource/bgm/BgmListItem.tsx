@@ -3,7 +3,7 @@
 import React, { useState } from "react";
 import { ICONS } from "@/lib/icons";
 import { IconButton } from "@/components/ui/icon-button";
-import { Slider } from "@/components/ui/slider";
+import { Slider } from "design-system/ui/slider";
 import type { BgmResource } from "@/types/resource";
 
 /** "00:00" 형식을 초( number )로 변환 */

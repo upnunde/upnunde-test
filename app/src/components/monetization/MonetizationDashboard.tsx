@@ -18,7 +18,10 @@ import {
   ANALYTICS_TREND_LINE_FIXED_HEIGHT_CLASS,
   ANALYTICS_TREND_LINE_SHELL_CLASS,
 } from "@/components/analytics/analytics-trend-chart-shell";
-import { PAGE_FLUSH_CONTENT_PAD_X_CLASS } from "@/lib/page-layout";
+import {
+  PAGE_FLUSH_CONTENT_PAD_X_CLASS,
+  PAGE_GUTTER_GAP_CLASS
+} from "@/lib/page-layout";
 import { deltaClassName, getMonetizationDummy } from "@/components/analytics/analytics-dummy-by-scope";
 import { cn } from "design-system/utils";
 import {
@@ -91,7 +94,7 @@ export function MonetizationDashboard({
   const monetizationChartValues = dummy.chartSeries[selectedMonetizationStat];
 
   return (
-      <div className="flex flex-col items-start justify-start gap-3 lg:gap-5 self-stretch px-0">
+      <div className={`flex flex-col items-start justify-start ${PAGE_GUTTER_GAP_CLASS} self-stretch px-0`}>
         <AnalyticsPanel>
           <Title2 text="주요통계" variant="title" asSectionHeader />
           <div className={ANALYTICS_KEY_STATS_ROW_CLASS}>
@@ -132,7 +135,7 @@ export function MonetizationDashboard({
           </div>
         </AnalyticsPanel>
 
-      <div className="flex w-full flex-col items-stretch gap-3 lg:gap-5 lg:flex-row lg:items-start">
+      <div className={`flex w-full flex-col items-stretch ${PAGE_GUTTER_GAP_CLASS} lg:flex-row lg:items-start`}>
           <AnalyticsPanel className="w-full min-w-0 flex-1 lg:min-w-[260px]">
             <Title2 text="매출 기여 콘텐츠 TOP5" variant="title" asSectionHeader />
           <AnalyticsTopFiveRowList rows={dummy.top5} />

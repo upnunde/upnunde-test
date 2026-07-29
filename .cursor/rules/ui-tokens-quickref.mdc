@@ -31,13 +31,17 @@ cd app && npm run migrate:tokens -- --write
 | `rounded-md` on 카드·패널·모달 컨테이너 | `rounded-[4px]` |
 | `[8px]` | `my-8` · `[20px]` | `my-20` |
 
-## 페이지 인셋·간격 (모바일)
+## 페이지 인셋·간격 (DS Spacing Semantic)
 
-- **`PAGE_GUTTER_X_CLASS`** = `px-my-12` (모바일·lg+ 공통)
-- **`PAGE_GUTTER_GAP_CLASS`** = `gap-my-12 lg:gap-my-20` · **`PAGE_STACK_CLASS`** = 컨테이너+스택
-- **`PAGE_SCROLL_TOP_CLASS`** = `pt-my-12`
-- **`PAGE_SCROLL_BOTTOM_CLASS`** = `pb-my-80` · **`PAGE_SCROLL_ROOT_CLASS`** = 스크롤 루트(가로 인셋+하단 80)
-- 가이드: `docs/mobile-layout.md` · 가로 `PAGE_GUTTER_X_CLASS` · gap `PAGE_GUTTER_GAP_CLASS`
+정본: `design-system/spacing-tokens` → `space.*`
+
+- **`PAGE_GUTTER_X_CLASS`** = `space.layout.pagePaddingX` (`max-lg:px-3 lg:px-5`)
+- **`PAGE_GUTTER_GAP_CLASS`** = `space.layout.pageStackGap` (`gap-3 lg:gap-5`)
+- **`PAGE_SCROLL_BOTTOM_CLASS`** = `space.layout.scrollBottom` (`pb-20`)
+- **`PAGE_CONTENT_BODY_CLASS`** = `space.section.sectionPadding` (`p-5`)
+- **`CONTROL_GROUP_GAP_*`** = `space.control.controlGroup*`
+- 앱 셸에 `space.layout.pagePaddingY` 쓰지 않음 — 상단은 `PAGE_SCROLL_TOP_CLASS`
+- 가이드: `docs/mobile-layout.md` · import `space` from `design-system/spacing-tokens`
 
 ## 1차 소스 (여기 먼저 맞춤)
 

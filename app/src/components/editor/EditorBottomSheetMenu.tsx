@@ -9,7 +9,7 @@ import {
   DropdownMenuGroup,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
-import { Button } from "@/components/ui/button";
+import { Button } from "design-system/ui/button";
 import { useIsLgUp } from "@/hooks/useMediaQuery";
 import type { EditorMenuPresentation } from "@/components/editor/EditorMenuOption";
 import { MenuListBody } from "@/components/ui/menu-list";

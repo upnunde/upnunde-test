@@ -8,6 +8,10 @@ import { getAnalyticsPeriodInclusiveDays, type AnalyticsPeriodRange } from "@/co
 import type { AnalyticsScopeCategoryId } from "@/components/analytics/analytics-scope-category";
 import { buildAnalyticsHourlyBarAxes } from "@/lib/analytics-chart-axes";
 import {
+  ANALYTICS_BAR_HOVER_STATE,
+  buildAnalyticsCrosshairSpec,
+} from "@/lib/analytics-chart-interaction";
+import {
   useAnalyticsChartTheme,
   type AnalyticsChartTheme,
 } from "@/lib/analytics-chart-theme";
@@ -106,6 +110,7 @@ function buildTwoHourBarSpec(
   return {
     type: "bar",
     background: "transparent",
+    crosshair: buildAnalyticsCrosshairSpec(theme),
     padding: { top: 12, bottom: 8, left: 8, right: 8 },
     color: [theme.primary],
     data: [{ id: "hourly", values }],
@@ -141,6 +146,9 @@ function buildTwoHourBarSpec(
           },
         }
       : { visible: false },
+    bar: {
+      state: ANALYTICS_BAR_HOVER_STATE,
+    },
     series: [
       {
         type: "bar",

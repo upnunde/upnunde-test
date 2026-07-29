@@ -1,35 +1,28 @@
-"use client";
-
-import dynamic from "next/dynamic";
-import React, { Suspense } from "react";
-import { useSearchParams } from "next/navigation";
 import { AppShell } from "@/components/layout/AppShell";
-import { Skeleton } from "@/components/ui/skeleton";
+import {
+  AnalyticsDashboard,
+  type AnalyticsAreaTabId,
+} from "@/components/analytics/AnalyticsDashboard";
 import { PAGE_CONTAINER_CLASS, PAGE_SUBHEADER_WITH_FILTER_CLASS } from "@/lib/page-layout";
-import type { AnalyticsAreaTabId } from "@/components/analytics/AnalyticsDashboard";
 
-const AnalyticsDashboard = dynamic(
-  () => import("@/components/analytics/AnalyticsDashboard").then((m) => m.AnalyticsDashboard),
-  {
-    ssr: true,
-    loading: () => (
-      <Skeleton
-        className="mx-auto w-full min-h-[min(60vh,520px)] max-w-[1200px] rounded-sm"
-        aria-hidden
-      />
-    ),
-  },
-);
-
-function parseDefaultArea(searchParams: URLSearchParams): AnalyticsAreaTabId {
-  const area = searchParams.get("area");
-  if (area === "revenue" || area === "user" || area === "content") return area;
+function parseDefaultArea(area: string | string[] | undefined): AnalyticsAreaTabId {
+  const value = Array.isArray(area) ? area[0] : area;
+  if (value === "revenue" || value === "user" || value === "content") return value;
   return "content";
 }
 
-function AnalyticsPageContent() {
-  const searchParams = useSearchParams();
-  const defaultArea = parseDefaultArea(searchParams);
+/**
+ * 분석 — `searchParams`는 서버에서 읽어 Suspense/`useSearchParams` bailout을 피한다.
+ * (Client Suspense 안에 Base UI Tabs가 있으면 `useId` hydration mismatch 발생)
+ */
+export default async function AnalyticsPage({
+  searchParams,
+}: {
+  searchParams: Promise<{ area?: string | string[] }>;
+}) {
+  const sp = await searchParams;
+  const defaultArea = parseDefaultArea(sp.area);
+
   return (
     <AppShell sidebarActiveId="analytics">
       <div className={PAGE_SUBHEADER_WITH_FILTER_CLASS}>
@@ -39,20 +32,5 @@ function AnalyticsPageContent() {
       </div>
       <AnalyticsDashboard defaultArea={defaultArea} />
     </AppShell>
-  );
-}
-
-export default function AnalyticsPage() {
-  return (
-    <Suspense
-      fallback={
-        <div
-          className="mx-auto w-full min-h-screen max-w-[1200px] animate-pulse bg-muted"
-          aria-hidden
-        />
-      }
-    >
-      <AnalyticsPageContent />
-    </Suspense>
   );
 }

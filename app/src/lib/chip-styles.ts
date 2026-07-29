@@ -1,4 +1,5 @@
 import { cva, type VariantProps } from "class-variance-authority";
+import { space } from "design-system/spacing-tokens";
 
 /** 인터랙티브 컨트롤 compact 티어 — 32px */
 export const CONTROL_HEIGHT_CLASS = "h-8 min-h-8";
@@ -9,14 +10,15 @@ export const CONTROL_HEIGHT_STANDARD_CLASS = "h-9 min-h-9";
 /** 인터랙티브 컨트롤 form 티어 — 42px. 구 h-12(48px) 대체 */
 export const CONTROL_HEIGHT_FORM_CLASS = "h-[42px] min-h-[42px]";
 
-/** compact(32px) 컨트롤 그룹 가로 간격 — spacing-4 = 4px */
-export const CONTROL_GROUP_GAP_COMPACT_CLASS = "gap-1";
+/** compact 컨트롤 그룹 — `space.control.controlGroupCompact` */
+export const CONTROL_GROUP_GAP_COMPACT_CLASS = space.control.controlGroupCompact.className;
 
-/** standard(36px) 컨트롤 그룹 가로 간격 — spacing-8 = 8px */
-export const CONTROL_GROUP_GAP_STANDARD_CLASS = "gap-2";
+/** standard 컨트롤 그룹 — `space.control.controlGroupStandard` */
+export const CONTROL_GROUP_GAP_STANDARD_CLASS = space.control.controlGroupStandard.className;
 
-/** standard 그룹 — 모바일 4px · lg+ 8px */
-export const CONTROL_GROUP_GAP_STANDARD_RESPONSIVE_CLASS = "gap-1 lg:gap-2";
+/** 반응형 컨트롤 그룹 — `space.control.controlGroupResponsive` */
+export const CONTROL_GROUP_GAP_STANDARD_RESPONSIVE_CLASS =
+  space.control.controlGroupResponsive.className;
 
 /** @deprecated `CONTROL_GROUP_GAP_COMPACT_CLASS` — FilterChip M 그룹 */
 export const CHIP_GROUP_GAP_CLASS = CONTROL_GROUP_GAP_COMPACT_CLASS;

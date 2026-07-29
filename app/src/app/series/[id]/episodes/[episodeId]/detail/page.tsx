@@ -4,7 +4,7 @@ import React, { useState, useEffect, useMemo } from "react";
 import { useRouter, usePathname, useSearchParams } from "next/navigation";
 import { ICONS } from "@/lib/icons";
 import Header from "@/components/Header/Header";
-import { Button } from "@/components/ui/button";
+import { Button } from "design-system/ui/button";
 import { HeaderBackButton } from "@/components/ui/header-back-button";
 import { EditorBodyReadOnly } from "@/components/editor/EditorBodyReadOnly";
 import { PreviewScreen } from "@/components/editor/PreviewScreen";

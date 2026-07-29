@@ -12,7 +12,10 @@ import {
   analyticsKeyStatLabelClass,
   analyticsKeyStatValueClass,
 } from "@/components/analytics/analytics-key-stats-layout";
-import { PAGE_FLUSH_CONTENT_PAD_X_CLASS } from "@/lib/page-layout";
+import {
+  PAGE_FLUSH_CONTENT_PAD_X_CLASS,
+  PAGE_GUTTER_GAP_CLASS
+} from "@/lib/page-layout";
 import { cn } from "design-system/utils";
 import type { AnalyticsUserMetric } from "@/components/analytics/AnalyticsTrendLineChart";
 import { type AnalyticsPeriodRange } from "@/components/analytics/analytics-date";
@@ -145,7 +148,7 @@ export function AnalyticsUserTab({
   }));
 
   return (
-    <div className="flex flex-col items-start justify-start gap-3 lg:gap-5 self-stretch px-0">
+    <div className={`flex flex-col items-start justify-start ${PAGE_GUTTER_GAP_CLASS} self-stretch px-0`}>
       <AnalyticsPanel>
         <Title2 text="주요통계" variant="title" asSectionHeader />
         <div className="inline-flex w-full flex-wrap items-stretch sm:flex-nowrap">
@@ -234,8 +237,8 @@ export function AnalyticsUserTab({
         </div>
       </AnalyticsPanel>
 
-      <div className="inline-flex w-full flex-col items-stretch gap-3 lg:gap-5 lg:inline-flex lg:flex-row">
-        <div className="flex min-w-0 flex-1 flex-col gap-3 lg:gap-5">
+      <div className={`inline-flex w-full flex-col items-stretch ${PAGE_GUTTER_GAP_CLASS} lg:inline-flex lg:flex-row`}>
+        <div className={`flex min-w-0 flex-1 flex-col ${PAGE_GUTTER_GAP_CLASS}`}>
           <AnalyticsPanel>
             <Title2 text="연령 및 성별" variant="title" asSectionHeader />
             <div className={cn("flex flex-col gap-3 pt-3", PAGE_FLUSH_CONTENT_PAD_X_CLASS)}>
@@ -282,7 +285,7 @@ export function AnalyticsUserTab({
           </AnalyticsPanel>
         </div>
 
-        <div className="flex min-w-0 flex-1 flex-col gap-3 lg:gap-5">
+        <div className={`flex min-w-0 flex-1 flex-col ${PAGE_GUTTER_GAP_CLASS}`}>
           <AudienceBreakdownPanel
             title="이용자 성별"
             audienceTab={audienceGender}
@@ -406,7 +409,7 @@ function AudienceBreakdownPanel({
           size="m"
         />
       </div>
-      <div className="flex flex-col gap-3 lg:gap-5 pb-5 pt-3">
+      <div className={`flex flex-col ${PAGE_GUTTER_GAP_CLASS} pb-5 pt-3`}>
         <AnalyticsDistributionStackedBarChart values={stackValues} />
         <div className={cn("flex flex-col gap-2", PAGE_FLUSH_CONTENT_PAD_X_CLASS)}>
           {legend.map((row, i) => (
@@ -456,7 +459,7 @@ function SimpleDistributionPanel({
           />
         </div>
       ) : null}
-      <div className="flex flex-col gap-3 lg:gap-5 pb-5 pt-3">
+      <div className={`flex flex-col ${PAGE_GUTTER_GAP_CLASS} pb-5 pt-3`}>
         <AnalyticsDistributionStackedBarChart values={stackValues} />
         <div className={cn("flex flex-col gap-2", PAGE_FLUSH_CONTENT_PAD_X_CLASS)}>
           {legend.map((row, i) => (

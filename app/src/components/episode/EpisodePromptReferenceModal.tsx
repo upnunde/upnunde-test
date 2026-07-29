@@ -1,14 +1,17 @@
 "use client";
 
+import { space } from "design-system/spacing-tokens";
+import { cn } from "design-system/utils";
+
 import Image from "next/image";
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/ui/dialog";
-import { Button } from "@/components/ui/button";
+import { Button } from "design-system/ui/button";
 import { MODAL_ACTION_BUTTON_SIZE } from "@/components/ui/modal";
 import { FormFieldLabel, formFieldAriaDescribedBy } from "@/components/ui/field-label";
 import { Title2 } from "@/components/ui/title2";
 import { THUMBNAIL_DIM_OVERLAY_CLASS } from "@/lib/thumbnail-styles";
 import { Input, InputGroup, InputHypertext } from "@/components/ui/input";
-import { Textarea } from "@/components/ui/textarea";
+import { Textarea } from "design-system/ui/textarea";
 import { DUMMY_DEFAULT_THUMBNAIL } from "@/lib/dummy-thumbnail-images";
 
 interface EpisodePromptReferenceModalProps {
@@ -56,7 +59,7 @@ export function EpisodePromptReferenceModal({
         <div className="mx-auto w-full rounded-sm border border-border bg-background shadow-none flex min-h-0 h-full flex-col overflow-hidden max-w-[760px] min-w-0">
           <Title2 text="에피소드" asSectionHeader />
           <div className="mx-0 max-w-none min-w-0 border-0 rounded-none px-5 pt-5 pb-5 shadow-none min-h-0 flex-1 overflow-y-auto">
-            <div className="mt-0 flex flex-col gap-6">
+            <div className={cn("mt-0 flex flex-col", space.overlay.modalBodyStackGap.className)}>
               <div className="flex flex-col gap-3">
                 <FormFieldLabel
                   title="에피소드 제목*"

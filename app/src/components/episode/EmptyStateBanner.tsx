@@ -1,7 +1,7 @@
 "use client";
 
 import React from "react";
-import { Button } from "@/components/ui/button";
+import { Button } from "design-system/ui/button";
 import {
   EPISODE_EMPTY_GUIDE_LINE1,
   EPISODE_EMPTY_GUIDE_LINE2,

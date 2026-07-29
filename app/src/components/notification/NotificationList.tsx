@@ -3,11 +3,7 @@
 import { useState } from "react";
 import { NotificationItem } from "@/components/notification/NotificationItem";
 import type { NotificationData } from "@/types/notification";
-import { SegmentedTextTabs } from "@/components/ui/segmented-text-tabs";
-import {
-  LINE_TAB_STRIP_SHELL_CLASS,
-  lineTabStripListClassName,
-} from "@/lib/tab-styles";
+import { LineTabStrip } from "@/components/ui/line-tab-strip";
 import { cn } from "design-system/utils";
 
 export type NotificationTab = "all" | "NOTICE" | "WORK_ALERT";
@@ -26,18 +22,13 @@ const TAB_ITEMS = [
 /** 알림 목록 상단 탭(전체/공지/작품알림) — PageCard 내부에 배치 */
 export function NotificationTabStrip({ activeTab, onTabChange }: NotificationTabStripProps) {
   return (
-    <div className={LINE_TAB_STRIP_SHELL_CLASS}>
-      <SegmentedTextTabs
-        aria-label="알림 필터"
-        items={TAB_ITEMS}
-        activeId={activeTab}
-        onSelect={(id) => onTabChange(id as NotificationTab)}
-        tabsVariant="line"
-        size="l"
-        className="w-full"
-        tabListClassName={lineTabStripListClassName("l")}
-      />
-    </div>
+    <LineTabStrip
+      aria-label="알림 필터"
+      items={TAB_ITEMS}
+      activeId={activeTab}
+      onSelect={(id) => onTabChange(id as NotificationTab)}
+      size="l"
+    />
   );
 }
 

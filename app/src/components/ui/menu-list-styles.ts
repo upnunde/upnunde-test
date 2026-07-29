@@ -1,4 +1,5 @@
 import { CONTROL_HEIGHT_FORM_CLASS } from "@/lib/chip-styles";
+import { space } from "design-system/spacing-tokens";
 import { cn } from "design-system/utils";
 
 /** shadcn DropdownMenuItem / CommandItem 공통 — 포커스·호버·비활성 */
@@ -11,9 +12,10 @@ export const menuListItemInteractiveClassName = cn(
   "disabled:pointer-events-none disabled:opacity-50",
 );
 
-/** 목록 행 공통 베이스 — 타이포는 variant별로 지정 */
+/** 목록 행 공통 베이스 — 타이포는 variant별로 지정 · `space.list.listItemGapCompact` */
 export const menuListItemBaseClassName = cn(
-  "relative flex w-full cursor-pointer items-center gap-2 text-left",
+  "relative flex w-full cursor-pointer items-center text-left",
+  space.list.listItemGapCompact.className,
   menuListItemInteractiveClassName,
 );
 

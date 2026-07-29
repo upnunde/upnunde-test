@@ -2,7 +2,7 @@
 
 import React from "react";
 import { ICONS, Icon } from "@/lib/icons";
-import { Button } from "@/components/ui/button";
+import { Button } from "design-system/ui/button";
 import {
   DropdownMenu,
   DropdownMenuContent,

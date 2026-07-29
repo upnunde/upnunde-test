@@ -3,12 +3,12 @@
 import { useCallback, useEffect, useState } from "react";
 import { createPortal } from "react-dom";
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/ui/dialog";
-import { Button } from "@/components/ui/button";
+import { Button } from "design-system/ui/button";
 import { FormFieldLabel, formFieldAriaDescribedBy } from "@/components/ui/field-label";
 import { Title2 } from "@/components/ui/title2";
 import { AiFieldLoadingMessage } from "@/components/episode/EpisodeAiFieldLoading";
 import { InputGroup, InputHypertext } from "@/components/ui/input";
-import { Textarea } from "@/components/ui/textarea";
+import { Textarea } from "design-system/ui/textarea";
 import { EpisodeScriptTextarea } from "@/components/episode/EpisodeScriptTextarea";
 import { Snackbar } from "@/components/episode/Snackbar";
 import { AiConvertLoadingOverlay } from "@/components/episode/AiConvertLoadingOverlay";
@@ -36,6 +36,7 @@ import {
   MODAL_ACTION_BUTTON_SIZE,
 } from "@/components/ui/modal";
 import { PAGE_GUTTER_X_CLASS } from "@/lib/page-layout";
+import { space } from "design-system/spacing-tokens";
 import { cn } from "design-system/utils";
 
 const MAX_HISTORY = 5000;
@@ -215,7 +216,7 @@ export function EpisodeAutoGeneratorModal({
               className={cn(
                 formDialogSheetScrollBodyClassName,
                 PAGE_GUTTER_X_CLASS,
-                "flex flex-col gap-6 pt-5",
+                cn("flex flex-col pt-5", space.form.formGroupGap.className),
               )}
             >
               <div className="flex flex-col gap-3">

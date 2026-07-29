@@ -5,7 +5,7 @@ import type { ReactNode } from "react";
 import { ICONS } from "@/lib/icons";
 import { PAGE_CONTENT_PAD_X_CLASS } from "@/lib/page-layout";
 import { cn } from "design-system/utils";
-import { Button } from "@/components/ui/button";
+import { Button } from "design-system/ui/button";
 
 /**
  * 타이틀2 — 피그마 8가지 케이스

@@ -1,6 +1,6 @@
 "use client";
 
-import { Button } from "@/components/ui/button";
+import { Button } from "design-system/ui/button";
 import { MOBILE_FIXED_BOTTOM_BAR_SHELL_CLASS } from "@/lib/mobile-viewport";
 import { PAGE_FLUSH_CONTENT_PAD_X_CLASS } from "@/lib/page-layout";
 import { cn } from "design-system/utils";
@@ -49,7 +49,7 @@ export function SeriesFormMobileSubmitBar({
       ) : null}
       <Button
         type="button"
-        variant="primary"
+        tone="brand"
         shape="square"
         size="lg"
         disabled={submitDisabled}

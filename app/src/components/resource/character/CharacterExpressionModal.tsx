@@ -8,9 +8,9 @@ import {
   DialogClose,
   DialogTitle,
 } from "@/components/ui/dialog";
-import { Button } from "@/components/ui/button";
+import { Button } from "design-system/ui/button";
 import { Input, InputGroup, InputHypertext } from "@/components/ui/input";
-import { Slider } from "@/components/ui/slider";
+import { Slider } from "design-system/ui/slider";
 import {
   formDialogShellClassName,
   formDialogSheetBodyWrapperClassName,
@@ -53,6 +53,9 @@ const EXPRESSION_MULTI_MODAL_DESKTOP_SHELL_CLASS =
   "lg:items-start lg:gap-0 lg:overflow-hidden lg:p-0 lg:pb-0 lg:!w-[767px] lg:!min-w-[767px] lg:!max-w-[767px] lg:shrink-0";
 const EXPRESSION_MULTI_MODAL_DESKTOP_BODY_WRAPPER_CLASS =
   "lg:w-[767px] lg:min-w-[767px] lg:max-w-[767px] lg:flex-none lg:shrink-0 lg:border lg:border-border lg:rounded-sm";
+/** PC 싱글 표정·크롭 모달 본문 래퍼 — 432px 고정 */
+const EXPRESSION_SINGLE_MODAL_DESKTOP_BODY_WRAPPER_CLASS =
+  "lg:w-[432px] lg:min-w-[432px] lg:max-w-[432px] lg:flex-none lg:shrink-0 lg:border lg:border-border lg:rounded-sm";
 const EXPRESSION_MULTI_MODAL_DESKTOP_BODY_ROW_CLASS =
   "max-lg:w-full max-lg:flex-1 lg:w-[767px] lg:min-w-[767px] lg:max-w-[767px] lg:flex-none lg:shrink-0";
 const EXPRESSION_MULTI_MODAL_DESKTOP_LEFT_PANEL_CLASS =
@@ -742,6 +745,7 @@ export function CharacterExpressionModal({
           className={cn(
             formDialogSheetBodyWrapperClassName,
             layoutShowSlotList && EXPRESSION_MULTI_MODAL_DESKTOP_BODY_WRAPPER_CLASS,
+            !layoutShowSlotList && EXPRESSION_SINGLE_MODAL_DESKTOP_BODY_WRAPPER_CLASS,
           )}
         >
         <div

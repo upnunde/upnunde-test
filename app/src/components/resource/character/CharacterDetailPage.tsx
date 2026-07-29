@@ -4,10 +4,10 @@ import React, { useCallback, useState, useEffect, useRef, useMemo } from "react"
 import Image from "next/image";
 import { useRouter, usePathname } from "next/navigation";
 import { ICONS } from "@/lib/icons";
-import { Button } from "@/components/ui/button";
+import { Button } from "design-system/ui/button";
 import { HeaderBackButton } from "@/components/ui/header-back-button";
 import { Input, InputGroup, InputHypertext } from "@/components/ui/input";
-import { Textarea } from "@/components/ui/textarea";
+import { Textarea } from "design-system/ui/textarea";
 import { AddResourceSlot } from "@/components/resource/cards/AddResourceSlot";
 import { createOptimizedImageObjectUrl } from "@/lib/image-upload-compress";
 import { THUMBNAIL_SLOT_ARIA, THUMBNAIL_DIM_OVERLAY_CLASS, thumbnailHoverDimOverlayClass } from "@/lib/thumbnail-styles";
@@ -36,6 +36,7 @@ import {
   PAGE_SUBHEADER_PAGE_SHELL_CLASS,
   PAGE_SUBHEADER_WITH_STICKY_CLASS,
 } from "@/lib/page-layout";
+import { space } from "design-system/spacing-tokens";
 import { cn } from "design-system/utils";
 import { generateCharacterDraftFromBrief } from "@/lib/character-ai-draft";
 import type { CharacterAiDraft } from "@/lib/character-ai-draft";
@@ -362,7 +363,13 @@ export function CharacterDetailPage({
               }
             />
 
-            <div className={`${PAGE_CONTENT_BODY_CLASS} flex flex-col gap-8`}>
+            <div
+              className={cn(
+                PAGE_CONTENT_BODY_CLASS,
+                "flex flex-col",
+                space.section.sectionStackGapLarge.className,
+              )}
+            >
               {/* 이름 */}
               <section className="flex flex-col gap-2">
                 <FormFieldLabel

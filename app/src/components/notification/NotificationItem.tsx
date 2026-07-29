@@ -3,7 +3,7 @@ import {
   INQUIRY_NOTIFICATION_LIST_ITEM_SURFACE_CLASS,
   INQUIRY_NOTIFICATION_ROW_CLASS,
 } from "@/lib/inquiry-list-styles";
-import { Button } from "@/components/ui/button";
+import { Button } from "design-system/ui/button";
 import { cn } from "design-system/utils";
 import { ICONS } from "@/lib/icons";
 import type { NotificationData } from "@/types/notification";
@@ -86,10 +86,6 @@ export function NotificationItem({
           aria-labelledby={`notification-trigger-${id}`}
           className={INQUIRY_NOTIFICATION_ROW_CLASS}
         >
-          <div
-            className="hidden w-px shrink-0 self-stretch min-h-0 rounded-full bg-muted lg:block"
-            aria-hidden
-          />
           <div className="min-w-0 flex-1 flex flex-col gap-5 py-1 lg:gap-3">
             {content != null && content !== "" ? (
               <p className="text-body3_400 text-foreground-muted whitespace-pre-wrap">{content}</p>

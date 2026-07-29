@@ -12,7 +12,7 @@ import {
 } from "@/components/ui/dropdown-menu";
 import { EditorBottomSheetMenu } from "@/components/editor/EditorBottomSheetMenu";
 import { EditorMenuOption } from "@/components/editor/EditorMenuOption";
-import { Button } from "@/components/ui/button";
+import { Button } from "design-system/ui/button";
 import { IconButton } from "@/components/ui/icon-button";
 import type { Episode, EpisodeStatus } from "@/types/episode";
 import { formatViews, formatDateOrRelative, formatScheduledPublishAtParts } from "@/lib/formatEpisode";

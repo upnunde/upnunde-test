@@ -28,7 +28,7 @@
     {
       "label": "Dev 포트 정리",
       "type": "shell",
-      "command": "sh scripts/kill-dev-ports.sh && echo '포트 3000·3001 정리 완료'",
+      "command": "sh scripts/kill-dev-ports.sh && echo '포트 3002 정리 완료'",
       "options": {
         "cwd": "${workspaceFolder}/app"
       },
@@ -54,7 +54,7 @@
     {
       "label": "Open in Browser",
       "type": "shell",
-      "command": "open http://renovel.localhost:3000",
+      "command": "open http://renovel.localhost:3002",
       "problemMatcher": [],
       "presentation": { "reveal": "never" }
     }
@@ -64,7 +64,7 @@
       "id": "openPreview",
       "type": "command",
       "command": "simpleBrowser.show",
-      "args": ["http://renovel.localhost:3000"]
+      "args": ["http://renovel.localhost:3002"]
     }
   ]
 }

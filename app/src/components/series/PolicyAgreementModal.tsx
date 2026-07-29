@@ -3,7 +3,7 @@
 import React, { useId, useState } from "react";
 import Link from "next/link";
 import { Dialog, DialogContent } from "@/components/ui/dialog";
-import { Button } from "@/components/ui/button";
+import { Button } from "design-system/ui/button";
 import {
   ModalFooterButtons,
   ModalHeader,

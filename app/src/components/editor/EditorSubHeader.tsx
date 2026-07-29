@@ -5,7 +5,7 @@ import { useRouter } from "next/navigation";
 import { createPortal } from "react-dom";
 import { useCallback, useEffect, useLayoutEffect, useMemo, useRef, useState } from "react";
 import { createDefaultSeedBlocks, useEditorStore } from "@/store/useEditorStore";
-import { Button } from "@/components/ui/button";
+import { Button } from "design-system/ui/button";
 import { HeaderBackButton } from "@/components/ui/header-back-button";
 import { IconButton } from "@/components/ui/icon-button";
 import { Snackbar } from "@/components/episode/Snackbar";
@@ -460,16 +460,16 @@ export function EditorSubHeader({
 
   const editEpisodeInfoButton =
     onEditEpisodeInfo != null ? (
-      <Button
+      <IconButton
         type="button"
         variant="ghost"
+        shape="circle"
         size="icon-lg"
-        className="shrink-0 text-foreground-placeholder hover:bg-muted hover:text-foreground"
+        icon={ICONS.pencil}
         aria-label="회차 정보 수정"
+        className="shrink-0 text-foreground-placeholder"
         onClick={onEditEpisodeInfo}
-      >
-        <ICONS.pencil />
-      </Button>
+      />
     ) : null;
 
   return (

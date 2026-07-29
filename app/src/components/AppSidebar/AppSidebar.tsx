@@ -4,7 +4,7 @@ import React from "react";
 import { useRouter, usePathname } from "next/navigation";
 import { ICONS } from "@/lib/icons";
 import { SidebarList } from "./SidebarList";
-import { Button } from "@/components/ui/button";
+import { Button } from "design-system/ui/button";
 import { RenovelStudioLogo } from "@/components/brand/RenovelStudioLogo";
 import { cn } from "design-system/utils";
 

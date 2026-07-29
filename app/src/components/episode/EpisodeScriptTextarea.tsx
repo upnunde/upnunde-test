@@ -2,7 +2,7 @@
 
 import { AiFieldLoadingMessage } from "@/components/episode/EpisodeAiFieldLoading";
 import { InputGroup, InputHypertext } from "@/components/ui/input";
-import { Textarea } from "@/components/ui/textarea";
+import { Textarea } from "design-system/ui/textarea";
 import { EPISODE_FORM_FIELD_COPY } from "@/lib/episode-form-copy";
 import { cn } from "design-system/utils";
 

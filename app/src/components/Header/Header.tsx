@@ -5,7 +5,7 @@ import { ICONS } from "@/lib/icons";
 import { ThemeToggleButton } from "@/components/ThemeToggleButton";
 import { ProfileEditModal } from "@/components/ProfileEditModal";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
-import { Button } from "@/components/ui/button";
+import { Button } from "design-system/ui/button";
 import { useRouter } from "next/navigation";
 import { APP_HEADER_STICKY_CLASS } from "@/lib/mobile-viewport";
 import { RenovelStudioLogo } from "@/components/brand/RenovelStudioLogo";

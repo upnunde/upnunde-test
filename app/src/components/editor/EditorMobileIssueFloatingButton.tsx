@@ -4,7 +4,7 @@ import { useCallback, useState } from "react";
 import { ICONS } from "@/lib/icons";
 import { EditorBottomSheetMenu } from "@/components/editor/EditorBottomSheetMenu";
 import { EDITOR_MOBILE_FAB_SIZE_CLASS } from "@/components/editor/editor-mobile-floating-layout";
-import { Badge } from "@/components/ui/badge";
+import { Badge } from "design-system/ui/badge";
 import { useEditorIssues, getIssueFocusTarget } from "@/hooks/useEditorIssues";
 import { useEditorStore } from "@/store/useEditorStore";
 import { scrollEditorBlockIntoView } from "@/lib/editor-scroll";
@@ -54,7 +54,8 @@ export function EditorMobileIssueFloatingButton({ className }: { className?: str
         >
           <ICONS.warning className="h-5 w-5" aria-hidden />
           <Badge
-            variant="destructive"
+            variant="default"
+            status="destructive"
             className="absolute -right-1 -top-1 min-w-5 px-1 py-0.5 text-caption2_400 leading-none"
           >
             {issues.length > 99 ? "99+" : issues.length}

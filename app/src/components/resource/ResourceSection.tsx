@@ -1,7 +1,7 @@
 "use client";
 
 import React from "react";
-import { Button } from "@/components/ui/button";
+import { Button } from "design-system/ui/button";
 import { PAGE_CARD_SHELL_MOBILE_FLUSH_CLASS, PAGE_CONTENT_PAD_X_CLASS } from "@/lib/page-layout";
 import { cn } from "design-system/utils";
 import { ResourceSectionHeader } from "./ResourceSectionHeader";

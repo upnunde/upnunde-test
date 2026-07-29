@@ -2,6 +2,7 @@
 
 import type { ReactNode } from "react";
 import { cn } from "design-system/utils";
+import { EDITOR_CONTROL_MUTED_TEXT_CLASS } from "@/lib/editor-block-layout";
 
 /** 편집 화면 리소스/메타 값 박스와 동일 톤 — 화살표·호버·클릭 없음 */
 export const READONLY_VALUE_BOX_CLASS =
@@ -24,10 +25,7 @@ export function ReadonlyValueBox({
     >
       {leading}
       <span
-        className={cn(
-          "min-w-0 max-w-full truncate text-body4_500",
-          empty ? "text-foreground-placeholder" : "text-foreground-placeholder"
-        )}
+        className={cn("min-w-0 max-w-full truncate text-body4_500", EDITOR_CONTROL_MUTED_TEXT_CLASS)}
       >
         {label}
       </span>

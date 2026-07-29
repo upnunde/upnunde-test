@@ -8,7 +8,7 @@ import {
   DialogTitle,
   DialogClose,
 } from "@/components/ui/dialog";
-import { Button } from "@/components/ui/button";
+import { Button } from "design-system/ui/button";
 import { MODAL_ACTION_BUTTON_SIZE } from "@/components/ui/modal";
 import { FilterChip } from "@/components/ui/chip";
 import { SegmentedTextTabs } from "@/components/ui/segmented-text-tabs";

@@ -9,7 +9,7 @@ import { Pagination } from "@/components/episode/Pagination";
 import { PublishConfirmModal, DeleteConfirmModal, type PublishConfirmPayload } from "@/components/episode/ConfirmModals";
 import { Snackbar } from "@/components/episode/Snackbar";
 import { EpisodeForm } from "@/components/episode/EpisodeForm";
-import { Button } from "@/components/ui/button";
+import { Button } from "design-system/ui/button";
 import { HeaderBackButton } from "@/components/ui/header-back-button";
 import { Dialog, DialogContent, DialogTitle } from "@/components/ui/dialog";
 import { formDialogShellClassName, formDialogSheetBodyWrapperClassName } from "@/components/ui/modal";
