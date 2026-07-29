@@ -18,7 +18,7 @@ import {
   MODAL_ACTION_BUTTON_SIZE,
 } from "@/components/ui/modal";
 import { cn } from "design-system/utils";
-import { space } from "design-system/spacing-tokens";
+import { space } from "@/lib/spacing";
 import { EPISODE_FORM_FIELD_COPY } from "@/lib/episode-form-copy";
 import type { ImageResource } from "@/types/resource";
 

@@ -1,6 +1,6 @@
 "use client";
 
-import { SegmentedTextTabs } from "@/components/ui/segmented-text-tabs";
+import { Tabs, TabsList, TabsTrigger } from "design-system/ui/tabs";
 
 export type MonthlyRevenueRangeMonths = 6 | 12;
 
@@ -22,13 +22,12 @@ export function AnalyticsMonthlyRevenueRangeFilter({
   className?: string;
 }) {
   return (
-    <SegmentedTextTabs
-      aria-label="월별 수익 표시 기간"
-      className={className}
-      size="m"
-      items={RANGE_OPTIONS.map(({ value: id, label }) => ({ id: String(id), label }))}
-      activeId={String(value)}
-      onSelect={(id) => onChange(Number(id) as MonthlyRevenueRangeMonths)}
-    />
+    <Tabs value={String(value)} onValueChange={(v) => onChange(Number(v) as MonthlyRevenueRangeMonths)} className={className}>
+      <TabsList variant="line" size="sm" aria-label="월별 수익 표시 기간">
+        {RANGE_OPTIONS.map(({ value: v, label }) => (
+          <TabsTrigger key={String(v)} value={String(v)}>{label}</TabsTrigger>
+        ))}
+      </TabsList>
+    </Tabs>
   );
 }

@@ -24,7 +24,7 @@ import {
   PAGE_SUBHEADER_PAGE_SHELL_CLASS,
   PAGE_SUBHEADER_WITH_STICKY_CLASS,
 } from "@/lib/page-layout";
-import { space } from "design-system/spacing-tokens";
+import { space } from "@/lib/spacing";
 import { cn } from "design-system/utils";
 import { generateResourceDraftFromBrief } from "@/lib/resource-ai-draft";
 import { RESOURCE_DESCRIPTION_MAX, RESOURCE_DESCRIPTION_INPUT_GROUP_CLASS, RESOURCE_DESCRIPTION_ROWS, RESOURCE_DESCRIPTION_TEXTAREA_CLASS } from "@/lib/resource-ai-draft-types";

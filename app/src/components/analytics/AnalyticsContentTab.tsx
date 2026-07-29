@@ -3,7 +3,7 @@
 import { useMemo, useState } from "react";
 import dynamic from "next/dynamic";
 import { Title2 } from "@/components/ui/title2";
-import { SegmentedTextTabs } from "@/components/ui/segmented-text-tabs";
+import { Tabs, TabsList, TabsTrigger } from "design-system/ui/tabs";
 import { AnalyticsPanel } from "@/components/analytics/AnalyticsPanel";
 import {
   ANALYTICS_KEY_STAT_BUTTON_CLASS,
@@ -180,19 +180,14 @@ function PopularContentsCard({
         asSectionHeader
       />
       <div className={cn(PAGE_FLUSH_CONTENT_PAD_X_CLASS, "pt-3")}>
-        <SegmentedTextTabs
-          aria-label="인기 콘텐츠 기준"
-          items={[
-            { id: "views", label: "최다 조회수" },
-            { id: "time", label: "최다 이용시간" },
-            { id: "likes", label: "최다 좋아요" },
-            { id: "followers", label: "최다 팔로워" },
-          ]}
-          activeId={popularCriterion}
-          onSelect={(id) => setPopularCriterion(id as PopularCriterionId)}
-          size="m"
-          tabListClassName="self-stretch"
-        />
+        <Tabs value={popularCriterion} onValueChange={(v) => setPopularCriterion(v as PopularCriterionId)}>
+          <TabsList variant="line" size="sm" aria-label="인기 콘텐츠 기준" className="self-stretch">
+            <TabsTrigger value="views">최다 조회수</TabsTrigger>
+            <TabsTrigger value="time">최다 이용시간</TabsTrigger>
+            <TabsTrigger value="likes">최다 좋아요</TabsTrigger>
+            <TabsTrigger value="followers">최다 팔로워</TabsTrigger>
+          </TabsList>
+        </Tabs>
       </div>
       <AnalyticsTopFiveRowList rows={rows} />
     </AnalyticsPanel>
@@ -219,17 +214,12 @@ function AttentionContentsCard({
         asSectionHeader
       />
       <div className={cn(PAGE_FLUSH_CONTENT_PAD_X_CLASS, "pt-3")}>
-        <SegmentedTextTabs
-          aria-label="주의 콘텐츠 기준"
-          items={[
-            { id: "lowViews", label: "최저 조회수" },
-            { id: "lowTime", label: "최저 이용시간" },
-          ]}
-          activeId={attentionCriterion}
-          onSelect={(id) => setAttentionCriterion(id as AttentionCriterionId)}
-          size="m"
-          tabListClassName="self-stretch"
-        />
+        <Tabs value={attentionCriterion} onValueChange={(v) => setAttentionCriterion(v as AttentionCriterionId)}>
+          <TabsList variant="line" size="sm" aria-label="주의 콘텐츠 기준" className="self-stretch">
+            <TabsTrigger value="lowViews">최저 조회수</TabsTrigger>
+            <TabsTrigger value="lowTime">최저 이용시간</TabsTrigger>
+          </TabsList>
+        </Tabs>
       </div>
       {isEmpty ? (
         <div className="flex h-[584px] flex-col items-center justify-center gap-4 p-5">

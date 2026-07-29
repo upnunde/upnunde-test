@@ -36,7 +36,7 @@ import {
   PAGE_SUBHEADER_PAGE_SHELL_CLASS,
   PAGE_SUBHEADER_WITH_STICKY_CLASS,
 } from "@/lib/page-layout";
-import { space } from "design-system/spacing-tokens";
+import { space } from "@/lib/spacing";
 import { cn } from "design-system/utils";
 import { generateCharacterDraftFromBrief } from "@/lib/character-ai-draft";
 import type { CharacterAiDraft } from "@/lib/character-ai-draft";

@@ -1,7 +1,7 @@
 "use client";
 
 import type { ProfileSettingsTabId } from "@/types/profile";
-import { SegmentedTextTabs } from "@/components/ui/segmented-text-tabs";
+import { Tabs, TabsList, TabsTrigger } from "design-system/ui/tabs";
 import { LINE_TAB_STRIP_SHELL_CLASS, lineTabStripListClassName } from "@/lib/tab-styles";
 import { cn } from "design-system/utils";
 
@@ -20,16 +20,13 @@ export function ProfileSettingsTabBar({
 }) {
   return (
     <div className={cn(LINE_TAB_STRIP_SHELL_CLASS, "pt-2")}>
-      <SegmentedTextTabs
-        aria-label="내 정보 관리 탭"
-        items={TABS}
-        activeId={activeTab}
-        onSelect={(id) => onTabChange(id as ProfileSettingsTabId)}
-        tabsVariant="line"
-        size="l"
-        className="w-full"
-        tabListClassName={lineTabStripListClassName("l")}
-      />
+      <Tabs value={activeTab} onValueChange={(v) => onTabChange(v as ProfileSettingsTabId)} className="w-full">
+        <TabsList variant="line" size="default" aria-label="내 정보 관리 탭" className={lineTabStripListClassName("l")}>
+          {TABS.map((tab) => (
+            <TabsTrigger key={tab.id} value={tab.id}>{tab.label}</TabsTrigger>
+          ))}
+        </TabsList>
+      </Tabs>
     </div>
   );
 }

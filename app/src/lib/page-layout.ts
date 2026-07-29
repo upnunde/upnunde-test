@@ -3,10 +3,8 @@
  * 앱 셸은 `pagePaddingY` 대신 `PAGE_SCROLL_TOP` + `scrollBottom` 조합.
  */
 
-import { space } from "design-system/spacing-tokens";
-
-/** 페이지·카드 좌우 인셋 — 모바일 12px · lg+ 20px — `space.layout.pagePaddingX` */
-export const PAGE_GUTTER_X_CLASS = space.layout.pagePaddingX.className;
+/** 페이지·카드 좌우 인셋 — 모바일 12px · lg+ 20px */
+export const PAGE_GUTTER_X_CLASS = "max-lg:px-3 lg:px-5";
 
 /**
  * 풀블리드 카드·섹션 내부 좌우 인셋 — 20px (`space.section.sectionPadding` X축).
@@ -14,14 +12,14 @@ export const PAGE_GUTTER_X_CLASS = space.layout.pagePaddingX.className;
  */
 export const PAGE_FLUSH_CONTENT_PAD_X_CLASS = "px-5";
 
-/** 페이지·섹션 스택 간격 — `space.layout.pageStackGap` */
-export const PAGE_GUTTER_GAP_CLASS = space.layout.pageStackGap.className;
+/** 페이지·섹션 스택 간격 — 모바일 12px · lg+ 20px */
+export const PAGE_GUTTER_GAP_CLASS = "gap-3 lg:gap-5";
 
 /** 카드 섹션 헤더·본문·푸터 좌우 인셋 — 20px */
 export const PAGE_CONTENT_PAD_X_CLASS = PAGE_FLUSH_CONTENT_PAD_X_CLASS;
 
-/** 카드 본문 — `space.section.sectionPadding` */
-export const PAGE_CONTENT_BODY_CLASS = space.section.sectionPadding.className;
+/** 카드 본문 — 20px 인셋 */
+export const PAGE_CONTENT_BODY_CLASS = "p-5";
 
 /** 카드 하단 액션 바 — 좌우 section pad X · 상하 16px */
 export const PAGE_CONTENT_FOOTER_CLASS = `${PAGE_CONTENT_PAD_X_CLASS} py-4`;
@@ -33,8 +31,8 @@ export const PAGE_FOOTER_ACTION_BUTTON_CLASS =
 /** 메인 스크롤 영역 — max-width 컨테이너 바깥 가로 여백 */
 export const PAGE_SCROLL_GUTTER_CLASS = PAGE_GUTTER_X_CLASS;
 
-/** 스크롤 영역 마지막 콘텐츠 하단 여백 — `space.layout.scrollBottom` */
-export const PAGE_SCROLL_BOTTOM_CLASS = space.layout.scrollBottom.className;
+/** 스크롤 영역 마지막 콘텐츠 하단 여백 — 80px */
+export const PAGE_SCROLL_BOTTOM_CLASS = "pb-20";
 
 /**
  * 스크롤 영역 상단 여백 — 모바일 12px · lg+ 40px.

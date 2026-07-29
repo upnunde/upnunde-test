@@ -13,7 +13,7 @@ import { ProfileFieldLabel } from "@/components/profile/profile-field-styles";
 import { formFieldAriaDescribedBy } from "@/components/ui/field-label";
 import { loadProfileSettings, saveSettlementProfile } from "@/lib/profile-storage";
 import type { SettlementProfile } from "@/types/profile";
-import { space } from "design-system/spacing-tokens";
+import { space } from "@/lib/spacing";
 import { cn } from "design-system/utils";
 
 const PROFILE_SETTLEMENT_BANK_ID = "profile-settlement-bank";

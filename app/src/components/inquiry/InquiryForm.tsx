@@ -7,7 +7,7 @@ import { FormFieldLabel, formFieldAriaDescribedBy } from "@/components/ui/field-
 import { PAGE_FLUSH_CONTENT_PAD_X_CLASS } from "@/lib/page-layout";
 import { Input, InputGroup, InputHypertext } from "@/components/ui/input";
 import { Textarea } from "design-system/ui/textarea";
-import { space } from "design-system/spacing-tokens";
+import { space } from "@/lib/spacing";
 import { cn } from "design-system/utils";
 
 export type InquiryCategory = "account" | "payment" | "bug" | "etc";

@@ -11,7 +11,7 @@ import {
 import { Button } from "design-system/ui/button";
 import { MODAL_ACTION_BUTTON_SIZE } from "@/components/ui/modal";
 import { FilterChip } from "@/components/ui/chip";
-import { SegmentedTextTabs } from "@/components/ui/segmented-text-tabs";
+import { Tabs, TabsList, TabsTrigger } from "design-system/ui/tabs";
 import { ICONS } from "@/lib/icons";
 import { SidebarList } from "@/components/AppSidebar/SidebarList";
 import { CHIP_GROUP_GAP_CLASS } from "@/lib/chip-styles";
@@ -371,22 +371,12 @@ export function BgmListModal({ open, onClose, onAdd }: BgmListModalProps) {
           </div>
 
           <div className={cn(LINE_TAB_STRIP_SHELL_CLASS, "shrink-0")}>
-            <SegmentedTextTabs
-              items={[
-                { id: "list", label: "리스트" },
-                {
-                  id: "selected",
-                  label: `선택한 음악 ${selectedTracks.length}/${MAX_SELECTED}`,
-                },
-              ]}
-              activeId={mobilePanel}
-              onSelect={(id) => setMobilePanel(id as MobilePanel)}
-              tabsVariant="line"
-              size="m"
-              aria-label="BGM 패널"
-              className="w-full"
-              tabListClassName={lineTabStripListClassName("m")}
-            />
+            <Tabs value={mobilePanel} onValueChange={(v) => setMobilePanel(v as MobilePanel)} className="w-full">
+              <TabsList variant="line" size="sm" aria-label="BGM 패널" className={lineTabStripListClassName("m")}>
+                <TabsTrigger value="list">리스트</TabsTrigger>
+                <TabsTrigger value="selected">{`선택한 음악 ${selectedTracks.length}/${MAX_SELECTED}`}</TabsTrigger>
+              </TabsList>
+            </Tabs>
           </div>
 
           <div className="flex min-h-[min(52dvh,480px)] flex-1 flex-col gap-1 overflow-y-auto px-2 py-2 [scrollbar-width:none] [&::-webkit-scrollbar]:hidden">

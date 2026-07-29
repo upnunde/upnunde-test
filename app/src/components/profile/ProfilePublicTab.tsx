@@ -1,6 +1,6 @@
 "use client";
 
-import { space } from "design-system/spacing-tokens";
+import { space } from "@/lib/spacing";
 import { cn } from "design-system/utils";
 
 import { PAGE_GUTTER_GAP_CLASS } from "@/lib/page-layout";

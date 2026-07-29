@@ -35,7 +35,7 @@ import {
   PAGE_SUBHEADER_WITH_STICKY_CLASS,
 } from "@/lib/page-layout";
 import { cn } from "design-system/utils";
-import { space } from "design-system/spacing-tokens";
+import { space } from "@/lib/spacing";
 import type { SeriesFormTab } from "@/lib/seriesForm";
 
 export interface SeriesFormAiComposerConfig {

@@ -1,7 +1,7 @@
 "use client";
 
 import type { SeriesFormTab } from "@/lib/seriesForm";
-import { SegmentedTextTabs } from "@/components/ui/segmented-text-tabs";
+import { Tabs, TabsList, TabsTrigger } from "design-system/ui/tabs";
 import { LINE_TAB_STRIP_SHELL_CLASS, lineTabStripListClassName } from "@/lib/tab-styles";
 
 interface SeriesFormTabsProps {
@@ -18,16 +18,13 @@ const ITEMS: Array<{ id: SeriesFormTab; label: string }> = [
 export function SeriesFormTabs({ activeTab, onChange }: SeriesFormTabsProps) {
   return (
     <div className={LINE_TAB_STRIP_SHELL_CLASS}>
-      <SegmentedTextTabs
-        aria-label="시리즈 폼 섹션"
-        items={ITEMS}
-        activeId={activeTab}
-        onSelect={(id) => onChange(id as SeriesFormTab)}
-        tabsVariant="line"
-        size="l"
-        className="w-full"
-        tabListClassName={lineTabStripListClassName("l")}
-      />
+      <Tabs value={activeTab} onValueChange={(v) => onChange(v as SeriesFormTab)} className="w-full">
+        <TabsList variant="line" size="default" aria-label="시리즈 폼 섹션" className={lineTabStripListClassName("l")}>
+          {ITEMS.map((item) => (
+            <TabsTrigger key={item.id} value={item.id}>{item.label}</TabsTrigger>
+          ))}
+        </TabsList>
+      </Tabs>
     </div>
   );
 }

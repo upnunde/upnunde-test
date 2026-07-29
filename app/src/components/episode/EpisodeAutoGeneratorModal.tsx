@@ -36,7 +36,7 @@ import {
   MODAL_ACTION_BUTTON_SIZE,
 } from "@/components/ui/modal";
 import { PAGE_GUTTER_X_CLASS } from "@/lib/page-layout";
-import { space } from "design-system/spacing-tokens";
+import { space } from "@/lib/spacing";
 import { cn } from "design-system/utils";
 
 const MAX_HISTORY = 5000;

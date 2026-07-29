@@ -15,7 +15,7 @@ import {
   CONTROL_HEIGHT_STANDARD_CLASS,
   chipGroupGapClass,
 } from "@/lib/chip-styles";
-import { SegmentedTextTabs } from "@/components/ui/segmented-text-tabs";
+import { Tabs, TabsList, TabsTrigger } from "design-system/ui/tabs";
 import { lineTabStripListClassName } from "@/lib/tab-styles";
 import {
   PAGE_CONTAINER_CLASS,
@@ -95,42 +95,32 @@ export default function ElementsPage() {
 
         <div className={PAGE_SCROLL_COLUMN_CLASS}>
               <SpecRow label="Tab 2xl — 분석 영역 (variant text)">
-                <SegmentedTextTabs
-                  aria-label="분석 영역 미리보기"
-                  items={[...AREA_TABS]}
-                  activeId={areaTab}
-                  onSelect={(id) => setAreaTab(id as (typeof AREA_TABS)[number]["id"])}
-                  tabsVariant="text"
-                  size="2xl"
-                />
+                <Tabs value={areaTab} onValueChange={(v) => setAreaTab(v as (typeof AREA_TABS)[number]["id"])}>
+                  <TabsList variant="line" size="2xl" aria-label="분석 영역 미리보기">
+                    {AREA_TABS.map((tab) => (
+                      <TabsTrigger key={tab.id} value={tab.id}>{tab.label}</TabsTrigger>
+                    ))}
+                  </TabsList>
+                </Tabs>
               </SpecRow>
 
               <SpecRow label="Tab L — line (탭 간격 16px)">
-                <SegmentedTextTabs
-                  aria-label="밑줄 탭 L"
-                  items={[
-                    { id: "a", label: "activated" },
-                    { id: "b", label: "inactived" },
-                    { id: "c", label: "inactived" },
-                  ]}
-                  activeId="a"
-                  size="l"
-                  tabsVariant="line"
-                  className="w-full"
-                  tabListClassName={lineTabStripListClassName("l")}
-                />
+                <Tabs value="a" className="w-full">
+                  <TabsList variant="line" size="default" aria-label="밑줄 탭 L" className={lineTabStripListClassName("l")}>
+                    <TabsTrigger value="a">activated</TabsTrigger>
+                    <TabsTrigger value="b">inactived</TabsTrigger>
+                    <TabsTrigger value="c">inactived</TabsTrigger>
+                  </TabsList>
+                </Tabs>
               </SpecRow>
 
               <SpecRow label="Tab M — underline false (탭 간격 12px)">
-                <SegmentedTextTabs
-                  aria-label="텍스트 탭 M"
-                  items={[
-                    { id: "a", label: "activated" },
-                    { id: "b", label: "inactived" },
-                  ]}
-                  activeId="a"
-                  size="m"
-                />
+                <Tabs value="a">
+                  <TabsList variant="line" size="sm" aria-label="텍스트 탭 M">
+                    <TabsTrigger value="a">activated</TabsTrigger>
+                    <TabsTrigger value="b">inactived</TabsTrigger>
+                  </TabsList>
+                </Tabs>
               </SpecRow>
 
               <SpecRow label="Chip 매트릭스 — Figma chips (type × variant × corner × size × icon)">

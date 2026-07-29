@@ -10,7 +10,7 @@ import { AnalyticsPanel } from "@/components/analytics/AnalyticsPanel";
 import { Input, InputGroup } from "@/components/ui/input";
 import { ProfileFieldLabel } from "@/components/profile/profile-field-styles";
 import { loadProfileSettings } from "@/lib/profile-storage";
-import { space } from "design-system/spacing-tokens";
+import { space } from "@/lib/spacing";
 import { cn } from "design-system/utils";
 
 const PROFILE_ACCOUNT_LOGIN_ID = "profile-account-login-id";

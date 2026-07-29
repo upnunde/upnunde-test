@@ -3,7 +3,6 @@ import {
   CONTROL_GROUP_GAP_STANDARD_RESPONSIVE_CLASS,
   CONTROL_HEIGHT_CLASS,
 } from "@/lib/chip-styles";
-import { space } from "design-system/spacing-tokens";
 import { cn } from "design-system/utils";
 
 /** 분석 필터 행 칩·드롭다운 — 모바일 32px · lg+ 36px */
@@ -21,7 +20,7 @@ export const analyticsFilterChipResponsiveClassName = cn(
 /** 분석 상단 필터 바 셸 — `space.control.controlGroupResponsive` */
 export const analyticsScopeFilterShellClassName = cn(
   "flex w-full flex-col",
-  space.control.controlGroupResponsive.className,
+  "gap-1 lg:gap-2",
 );
 
 /** 분석 필터 행·칩 그룹 가로 간격 — 모바일 4px · lg+ 8px */

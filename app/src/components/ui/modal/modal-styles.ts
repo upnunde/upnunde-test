@@ -1,4 +1,4 @@
-import { space } from "design-system/spacing-tokens";
+import { space } from "@/lib/spacing";
 import { cn } from "design-system/utils";
 import {
   MOBILE_BOTTOM_SHEET_PAD_CLASS,
@@ -117,8 +117,8 @@ export const formDialogSheetStickyFooterClassName = cn(
 
 export const modalHeaderClassName = cn(
   "flex min-h-40 w-full flex-col items-center self-stretch overflow-hidden bg-background",
-  space.section.sectionStackGap.className,
-  space.overlay.modalHeaderPaddingX.className,
+  "gap-3",
+  "max-lg:px-5 lg:px-6",
   space.overlay.modalHeaderPaddingY.className,
   "max-lg:rounded-t-xl lg:rounded-tl-sm lg:rounded-tr-sm",
 );
@@ -131,8 +131,8 @@ export const modalFooterShellClassName = cn(
 
 export const modalFooterButtonRowClassName = cn(
   "flex w-full flex-col items-stretch self-stretch bg-background",
-  space.actions.actionGap.className,
-  space.overlay.modalFooterPaddingX.className,
+  "gap-3",
+  "max-lg:px-5 lg:px-6",
   space.overlay.modalFooterPaddingY.className,
   "lg:inline-flex lg:h-16 lg:min-h-16 lg:flex-row lg:items-center",
 );
@@ -140,7 +140,7 @@ export const modalFooterButtonRowClassName = cn(
 /** split 레이아웃 — 모바일 세로 스택 / 데스크톱 우측 버튼 그룹 · `space.control.controlGroupCompact` */
 export const modalFooterTrailingGroupClassName = cn(
   "flex w-full flex-col items-stretch lg:w-auto lg:flex-row lg:items-center lg:justify-start",
-  space.control.controlGroupCompact.className,
+  "gap-1",
 );
 
 /** 모달·팝업 푸터 액션 버튼 크기 — DS `default` (h-9 / 36px) */

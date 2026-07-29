@@ -1,6 +1,6 @@
 "use client";
 
-import { SegmentedTextTabs } from "@/components/ui/segmented-text-tabs";
+import { Tabs, TabsList, TabsTrigger } from "design-system/ui/tabs";
 import { AnalyticsPeriodPicker } from "@/components/analytics/AnalyticsPeriodPicker";
 import { AnalyticsScopeDropdown } from "@/components/analytics/AnalyticsScopeDropdown";
 import { AnalyticsEpisodeScopePicker } from "@/components/analytics/AnalyticsEpisodeScopePicker";
@@ -81,14 +81,22 @@ export function AnalyticsScopeFilterBar({
     <div className={cn(analyticsScopeFilterShellClassName, className)}>
       <div className="flex w-full min-w-0 items-center justify-between gap-1 sm:flex-wrap sm:gap-x-4 sm:gap-y-2 lg:gap-2">
         <div className="min-w-0 flex-1">
-          <SegmentedTextTabs
-            aria-label="분석 영역"
-            items={[...AREA_TABS]}
-            activeId={analyticsArea}
-            onSelect={(id) => onAnalyticsAreaChange(id as AnalyticsAreaTabId)}
-            tabsVariant="text"
-            size="2xl"
-          />
+          <Tabs
+            value={analyticsArea}
+            onValueChange={(v) => onAnalyticsAreaChange(v as AnalyticsAreaTabId)}
+            className="max-w-full min-w-0"
+          >
+            <TabsList
+              variant="text"
+              size="2xl"
+              aria-label="분석 영역"
+              className="max-w-full min-w-0 overflow-x-auto"
+            >
+              {AREA_TABS.map((tab) => (
+                <TabsTrigger key={tab.id} value={tab.id}>{tab.label}</TabsTrigger>
+              ))}
+            </TabsList>
+          </Tabs>
         </div>
         <div className="shrink-0">
           <AnalyticsPeriodPicker value={periodRange} onChange={onPeriodRangeChange} variant="inline" />

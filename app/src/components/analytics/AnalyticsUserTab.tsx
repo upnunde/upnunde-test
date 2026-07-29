@@ -3,7 +3,7 @@
 import { useMemo, useState } from "react";
 import dynamic from "next/dynamic";
 import { Title2 } from "@/components/ui/title2";
-import { SegmentedTextTabs } from "@/components/ui/segmented-text-tabs";
+import { Tabs, TabsList, TabsTrigger } from "design-system/ui/tabs";
 import { AnalyticsPanel } from "@/components/analytics/AnalyticsPanel";
 import { AnalyticsViewerHourlyActivityChart } from "@/components/analytics/AnalyticsViewerHourlyActivityChart";
 import {
@@ -195,18 +195,13 @@ export function AnalyticsUserTab({
       <AnalyticsPanel>
         <Title2 text="이용자 재방문률" variant="title" asSectionHeader />
         <div className={cn("mb-2 mt-2 inline-flex flex-col items-start justify-start gap-2 self-stretch pb-0 pt-0", PAGE_FLUSH_CONTENT_PAD_X_CLASS)}>
-          <SegmentedTextTabs
-            aria-label="재방문 횟수 구간"
-            items={[
-              { id: "once", label: "1회" },
-              { id: "twice", label: "2회" },
-              { id: "threePlus", label: "3회 이상" },
-            ]}
-            activeId={revisitSegment}
-            onSelect={(id) => setRevisitSegment(id as RevisitSegmentId)}
-            size="m"
-            tabListClassName="self-stretch"
-          />
+          <Tabs value={revisitSegment} onValueChange={(v) => setRevisitSegment(v as RevisitSegmentId)}>
+            <TabsList variant="line" size="sm" aria-label="재방문 횟수 구간" className="self-stretch">
+              <TabsTrigger value="once">1회</TabsTrigger>
+              <TabsTrigger value="twice">2회</TabsTrigger>
+              <TabsTrigger value="threePlus">3회 이상</TabsTrigger>
+            </TabsList>
+          </Tabs>
         </div>
         <div className="flex flex-col items-start justify-start gap-3 self-stretch rounded-lg pb-5 pt-3">
           <div
@@ -243,37 +238,29 @@ export function AnalyticsUserTab({
             <Title2 text="연령 및 성별" variant="title" asSectionHeader />
             <div className={cn("flex flex-col gap-3 pt-3", PAGE_FLUSH_CONTENT_PAD_X_CLASS)}>
               <div className="flex min-w-0 flex-nowrap items-center gap-4 overflow-x-auto overflow-y-hidden [scrollbar-width:none] [-ms-overflow-style:none] [&::-webkit-scrollbar]:hidden">
-                <SegmentedTextTabs
-                  aria-label="연령 필터"
-                  items={[
-                    { id: "all", label: "전체" },
-                    { id: "10", label: "10대" },
-                    { id: "20", label: "20대" },
-                    { id: "30", label: "30대" },
-                    { id: "40", label: "40대" },
-                    { id: "50", label: "50대 이상" },
-                  ]}
-                  activeId={ageBand}
-                  onSelect={setAgeBand}
-                  size="m"
-                />
+                <Tabs value={ageBand} onValueChange={setAgeBand}>
+                  <TabsList variant="line" size="sm" aria-label="연령 필터">
+                    <TabsTrigger value="all">전체</TabsTrigger>
+                    <TabsTrigger value="10">10대</TabsTrigger>
+                    <TabsTrigger value="20">20대</TabsTrigger>
+                    <TabsTrigger value="30">30대</TabsTrigger>
+                    <TabsTrigger value="40">40대</TabsTrigger>
+                    <TabsTrigger value="50">50대 이상</TabsTrigger>
+                  </TabsList>
+                </Tabs>
                 <div
                   className={cn(analyticsScopeFilterDividerClassName, "self-center")}
                   role="separator"
                   aria-orientation="vertical"
                   aria-hidden
                 />
-                <SegmentedTextTabs
-                  aria-label="성별 필터"
-                  items={[
-                    { id: "all", label: "전체" },
-                    { id: "male", label: "남성" },
-                    { id: "female", label: "여성" },
-                  ]}
-                  activeId={genderBand}
-                  onSelect={setGenderBand}
-                  size="m"
-                />
+                <Tabs value={genderBand} onValueChange={setGenderBand}>
+                  <TabsList variant="line" size="sm" aria-label="성별 필터">
+                    <TabsTrigger value="all">전체</TabsTrigger>
+                    <TabsTrigger value="male">남성</TabsTrigger>
+                    <TabsTrigger value="female">여성</TabsTrigger>
+                  </TabsList>
+                </Tabs>
               </div>
             </div>
             <AnalyticsTopFiveRowList rows={userDummy.listA} />
@@ -331,17 +318,13 @@ export function AnalyticsUserTab({
           <AnalyticsPanel>
             <Title2 text="이용 시간대" variant="title" asSectionHeader />
             <div className={cn(PAGE_FLUSH_CONTENT_PAD_X_CLASS, "pt-3")}>
-              <SegmentedTextTabs
-                aria-label="이용 시간대 기준"
-                items={[
-                  { id: "all", label: "전체" },
-                  { id: "general", label: "일반 이용자" },
-                  { id: "follower", label: "팔로워" },
-                ]}
-                activeId={audienceTimeSegment}
-                onSelect={(id) => setAudienceTimeSegment(id as AudienceTabId)}
-                size="m"
-              />
+              <Tabs value={audienceTimeSegment} onValueChange={(v) => setAudienceTimeSegment(v as AudienceTabId)}>
+                <TabsList variant="line" size="sm" aria-label="이용 시간대 기준">
+                  <TabsTrigger value="all">전체</TabsTrigger>
+                  <TabsTrigger value="general">일반 이용자</TabsTrigger>
+                  <TabsTrigger value="follower">팔로워</TabsTrigger>
+                </TabsList>
+              </Tabs>
             </div>
             <div className="p-5">
               <AnalyticsViewerHourlyActivityChart
@@ -397,17 +380,13 @@ function AudienceBreakdownPanel({
     <AnalyticsPanel>
       <Title2 text={title} variant="title" asSectionHeader />
       <div className={cn(PAGE_FLUSH_CONTENT_PAD_X_CLASS, "pt-3")}>
-        <SegmentedTextTabs
-          aria-label={`${title} 기준`}
-          items={[
-            { id: "all", label: "전체" },
-            { id: "general", label: "일반 이용자" },
-            { id: "follower", label: "팔로워" },
-          ]}
-          activeId={audienceTab}
-          onSelect={(id) => onAudienceChange(id as AudienceTabId)}
-          size="m"
-        />
+        <Tabs value={audienceTab} onValueChange={(v) => onAudienceChange(v as AudienceTabId)}>
+          <TabsList variant="line" size="sm" aria-label={`${title} 기준`}>
+            <TabsTrigger value="all">전체</TabsTrigger>
+            <TabsTrigger value="general">일반 이용자</TabsTrigger>
+            <TabsTrigger value="follower">팔로워</TabsTrigger>
+          </TabsList>
+        </Tabs>
       </div>
       <div className={`flex flex-col ${PAGE_GUTTER_GAP_CLASS} pb-5 pt-3`}>
         <AnalyticsDistributionStackedBarChart values={stackValues} />
@@ -446,17 +425,13 @@ function SimpleDistributionPanel({
       <Title2 text={title} variant="title" asSectionHeader />
       {audienceTab != null && onAudienceChange != null ? (
         <div className={cn(PAGE_FLUSH_CONTENT_PAD_X_CLASS, "pt-3")}>
-          <SegmentedTextTabs
-            aria-label={`${title} 기준`}
-            items={[
-              { id: "all", label: "전체" },
-              { id: "general", label: "일반 이용자" },
-              { id: "follower", label: "팔로워" },
-            ]}
-            activeId={audienceTab}
-            onSelect={(id) => onAudienceChange(id as AudienceTabId)}
-            size="m"
-          />
+          <Tabs value={audienceTab} onValueChange={(v) => onAudienceChange(v as AudienceTabId)}>
+            <TabsList variant="line" size="sm" aria-label={`${title} 기준`}>
+              <TabsTrigger value="all">전체</TabsTrigger>
+              <TabsTrigger value="general">일반 이용자</TabsTrigger>
+              <TabsTrigger value="follower">팔로워</TabsTrigger>
+            </TabsList>
+          </Tabs>
         </div>
       ) : null}
       <div className={`flex flex-col ${PAGE_GUTTER_GAP_CLASS} pb-5 pt-3`}>

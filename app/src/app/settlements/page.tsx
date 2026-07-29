@@ -29,7 +29,7 @@ import {
 } from "@/components/ui/modal";
 import { AnalyticsPanel } from "@/components/analytics/AnalyticsPanel";
 import { Title2 } from "@/components/ui/title2";
-import { SegmentedTextTabs } from "@/components/ui/segmented-text-tabs";
+import { Tabs, TabsList, TabsTrigger } from "design-system/ui/tabs";
 import { Pagination } from "@/components/episode/Pagination";
 import { cn } from "design-system/utils";
 
@@ -646,18 +646,16 @@ export default function MonetizationSettlementsPage() {
                           CHIP_GROUP_GAP_CLASS,
                         )}
                       >
-                        <SegmentedTextTabs
-                          aria-label="정산 내역 조회 기간"
-                          size="m"
-                          items={RANGE_PRESET_OPTIONS.map(({ value, label }) => ({
-                            id: value,
-                            label,
-                          }))}
-                          activeId={rangePreset === "custom" ? null : rangePreset}
-                          onSelect={(id) =>
-                            applyPresetRange(id as Exclude<RangePreset, "custom">)
-                          }
-                        />
+                        <Tabs
+                          value={rangePreset === "custom" ? "" : rangePreset}
+                          onValueChange={(v) => applyPresetRange(v as Exclude<RangePreset, "custom">)}
+                        >
+                          <TabsList variant="line" size="sm" aria-label="정산 내역 조회 기간">
+                            {RANGE_PRESET_OPTIONS.map(({ value, label }) => (
+                              <TabsTrigger key={value} value={value}>{label}</TabsTrigger>
+                            ))}
+                          </TabsList>
+                        </Tabs>
                         <Button
                           type="button"
                           variant="outline"

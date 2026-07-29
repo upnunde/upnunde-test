@@ -1,6 +1,6 @@
 "use client";
 
-import { space } from "design-system/spacing-tokens";
+import { space } from "@/lib/spacing";
 import { cn } from "design-system/utils";
 
 import React, { useCallback, useState } from "react";

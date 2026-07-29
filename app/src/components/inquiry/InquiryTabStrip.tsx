@@ -1,6 +1,6 @@
 "use client";
 
-import { SegmentedTextTabs } from "@/components/ui/segmented-text-tabs";
+import { Tabs, TabsList, TabsTrigger } from "design-system/ui/tabs";
 import { LINE_TAB_STRIP_SHELL_CLASS, lineTabStripListClassName } from "@/lib/tab-styles";
 
 export type InquiryTab = "faq" | "inquiry" | "history";
@@ -20,16 +20,13 @@ const TAB_ITEMS = [
 export function InquiryTabStrip({ activeTab, onTabChange }: InquiryTabStripProps) {
   return (
     <div className={LINE_TAB_STRIP_SHELL_CLASS}>
-      <SegmentedTextTabs
-        aria-label="문의 탭"
-        items={TAB_ITEMS}
-        activeId={activeTab}
-        onSelect={(id) => onTabChange(id as InquiryTab)}
-        tabsVariant="line"
-        size="l"
-        className="w-full"
-        tabListClassName={lineTabStripListClassName("l")}
-      />
+      <Tabs value={activeTab} onValueChange={(v) => onTabChange(v as InquiryTab)} className="w-full">
+        <TabsList variant="line" size="default" aria-label="문의 탭" className={lineTabStripListClassName("l")}>
+          {TAB_ITEMS.map((tab) => (
+            <TabsTrigger key={tab.id} value={tab.id}>{tab.label}</TabsTrigger>
+          ))}
+        </TabsList>
+      </Tabs>
     </div>
   );
 }
