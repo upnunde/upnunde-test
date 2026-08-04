@@ -65,7 +65,7 @@ export function ProfileSettlementTab({ onSaved }: { onSaved: () => void }) {
               <Input
                 id={PROFILE_SETTLEMENT_BANK_ID}
                 type="text"
-                size="lg"
+                size="xl"
                 value={draft.bankName}
                 onChange={(e) => setField("bankName", e.target.value)}
                 placeholder="은행명"
@@ -84,7 +84,7 @@ export function ProfileSettlementTab({ onSaved }: { onSaved: () => void }) {
                 id={PROFILE_SETTLEMENT_ACCOUNT_ID}
                 aria-describedby={formFieldAriaDescribedBy(PROFILE_SETTLEMENT_ACCOUNT_ID)}
                 type="text"
-                size="lg"
+                size="xl"
                 inputMode="numeric"
                 value={draft.accountNumber}
                 onChange={(e) => setField("accountNumber", e.target.value.replace(/[^\d-]/g, ""))}
@@ -104,7 +104,7 @@ export function ProfileSettlementTab({ onSaved }: { onSaved: () => void }) {
                 id={PROFILE_SETTLEMENT_DEPOSITOR_ID}
                 aria-describedby={formFieldAriaDescribedBy(PROFILE_SETTLEMENT_DEPOSITOR_ID)}
                 type="text"
-                size="lg"
+                size="xl"
                 value={draft.depositor}
                 onChange={(e) => setField("depositor", e.target.value)}
                 placeholder="예금주명"
@@ -133,7 +133,7 @@ export function ProfileSettlementTab({ onSaved }: { onSaved: () => void }) {
               <Input
                 id={PROFILE_SETTLEMENT_BIZ_ID}
                 type="text"
-                size="lg"
+                size="xl"
                 value={draft.supplierBizNumber}
                 onChange={(e) => setField("supplierBizNumber", e.target.value)}
                 placeholder="000-00-00000"
@@ -147,7 +147,7 @@ export function ProfileSettlementTab({ onSaved }: { onSaved: () => void }) {
               <Input
                 id={PROFILE_SETTLEMENT_TAX_EMAIL_ID}
                 type="email"
-                size="lg"
+                size="xl"
                 value={draft.taxInvoiceEmail}
                 onChange={(e) => setField("taxInvoiceEmail", e.target.value)}
                 placeholder="email@example.com"

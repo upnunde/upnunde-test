@@ -381,7 +381,7 @@ export function CharacterDetailPage({
                   <Input
                     id={CHARACTER_DETAIL_NAME_INPUT_ID}
                     aria-describedby={formFieldAriaDescribedBy(CHARACTER_DETAIL_NAME_INPUT_ID)}
-                    size="lg"
+                    size="xl"
                     value={name}
                     onChange={(e) => setName(e.target.value.slice(0, MAX_NAME))}
                     maxLength={MAX_NAME}
@@ -402,7 +402,7 @@ export function CharacterDetailPage({
                   <Input
                     id={CHARACTER_DETAIL_SUMMARY_INPUT_ID}
                     aria-describedby={formFieldAriaDescribedBy(CHARACTER_DETAIL_SUMMARY_INPUT_ID)}
-                    size="lg"
+                    size="xl"
                     value={summary}
                     onChange={(e) => setSummary(e.target.value.slice(0, MAX_SUMMARY))}
                     maxLength={MAX_SUMMARY}
@@ -566,7 +566,7 @@ export function CharacterDetailPage({
                   <Input
                     id={CHARACTER_DETAIL_TAGS_INPUT_ID}
                     aria-describedby={formFieldAriaDescribedBy(CHARACTER_DETAIL_TAGS_INPUT_ID)}
-                    size="lg"
+                    size="xl"
                     value={tags}
                     onChange={(e) => setTags(e.target.value.slice(0, MAX_TAGS))}
                     maxLength={MAX_TAGS}
@@ -629,7 +629,7 @@ export function CharacterDetailPage({
               <Button
                 type="button"
                 variant="outline"
-                size="lg"
+                size="xl"
                 className={PAGE_FOOTER_ACTION_BUTTON_CLASS}
                 onClick={handleBack}
               >
@@ -637,7 +637,7 @@ export function CharacterDetailPage({
               </Button>
               <Button
                 type="button"
-                size="lg"
+                size="xl"
                 className={PAGE_FOOTER_ACTION_BUTTON_CLASS}
                 disabled={!isFormComplete}
                 title={

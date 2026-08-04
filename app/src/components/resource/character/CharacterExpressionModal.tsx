@@ -875,7 +875,7 @@ export function CharacterExpressionModal({
                 </div>
                   <InputGroup className="self-stretch">
                     <Input
-                      size="lg"
+                      size="xl"
                       value={expressionInput}
                       onChange={(e) => {
                         const v = e.target.value.slice(0, EXPRESSION_MAX_LENGTH);

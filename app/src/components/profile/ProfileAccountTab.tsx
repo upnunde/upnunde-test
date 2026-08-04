@@ -41,7 +41,7 @@ export function ProfileAccountTab() {
               <Input
                 id={PROFILE_ACCOUNT_LOGIN_ID}
                 type="text"
-                size="lg"
+                size="xl"
                 disabled
                 value={loginId}
               />

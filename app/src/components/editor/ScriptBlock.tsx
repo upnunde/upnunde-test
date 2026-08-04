@@ -740,7 +740,7 @@ export function ScriptBlock({
               </div>
               <div className="px-5 pb-4 lg:px-6">
                 <Input
-                  size="lg"
+                  size="xl"
                   value={speakerDraft}
                   onChange={(e) => setSpeakerDraft(e.target.value)}
                   placeholder="이름을 입력하세요"

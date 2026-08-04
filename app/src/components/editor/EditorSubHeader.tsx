@@ -464,7 +464,7 @@ export function EditorSubHeader({
         type="button"
         variant="ghost"
         shape="circle"
-        size="icon-lg"
+        size="icon-xl"
         icon={ICONS.pencil}
         aria-label="회차 정보 수정"
         className="shrink-0 text-foreground-placeholder"
@@ -494,7 +494,7 @@ export function EditorSubHeader({
                 type="button"
                 variant="outline"
                 shape="circle"
-                size="icon-lg"
+                size="icon-xl"
                 icon={ICONS.moreVertical}
                 aria-label="더보기"
                 className="relative shrink-0 bg-background shadow-none"

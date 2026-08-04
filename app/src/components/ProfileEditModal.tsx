@@ -89,7 +89,7 @@ function ProfileEditFormFields({
         <div className="flex flex-col gap-3">
           <div className="text-body1_700 text-foreground">아이디</div>
           <InputGroup>
-            <Input type="text" size="lg" disabled value="selly@linefriends.com" />
+            <Input type="text" size="xl" disabled value="selly@linefriends.com" />
           </InputGroup>
         </div>
 
@@ -98,7 +98,7 @@ function ProfileEditFormFields({
           <InputGroup>
             <Input
               type="text"
-              size="lg"
+              size="xl"
               value={penName}
               onChange={(e) => onPenNameChange(e.target.value.slice(0, MAX_PEN_NAME))}
               maxLength={MAX_PEN_NAME}
@@ -361,7 +361,7 @@ export function ProfileEditModal({ isOpen, onClose, anchorRef, onSave }: Profile
               <div className="text-heading5_700 text-foreground">프로필편집</div>
               <Button
                 variant="ghost"
-                size="icon-lg"
+                size="icon-xl"
                 onClick={handleClose}
                 className="rounded-full text-foreground-muted"
                 aria-label="닫기"

@@ -289,7 +289,7 @@ export function MediaResourceDetailPage({ initialData }: MediaResourceDetailPage
                   <Input
                     id={MEDIA_NAME_INPUT_ID}
                     aria-describedby={formFieldAriaDescribedBy(MEDIA_NAME_INPUT_ID)}
-                    size="lg"
+                    size="xl"
                     value={name}
                     onChange={(e) => setName(e.target.value)}
                     placeholder="이름을 입력해 주세요."
@@ -485,7 +485,7 @@ export function MediaResourceDetailPage({ initialData }: MediaResourceDetailPage
               <Button
                 type="button"
                 variant="outline"
-                size="lg"
+                size="xl"
                 className={PAGE_FOOTER_ACTION_BUTTON_CLASS}
                 onClick={handleBack}
               >
@@ -493,7 +493,7 @@ export function MediaResourceDetailPage({ initialData }: MediaResourceDetailPage
               </Button>
               <Button
                 type="button"
-                size="lg"
+                size="xl"
                 className={PAGE_FOOTER_ACTION_BUTTON_CLASS}
                 onClick={handleSave}
               >

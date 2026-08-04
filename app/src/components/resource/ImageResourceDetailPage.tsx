@@ -284,7 +284,7 @@ export function ImageResourceDetailPage({ kind, initialData }: ImageResourceDeta
                   <Input
                     id={IMAGE_RESOURCE_NAME_INPUT_ID}
                     aria-describedby={formFieldAriaDescribedBy(IMAGE_RESOURCE_NAME_INPUT_ID)}
-                    size="lg"
+                    size="xl"
                     value={name}
                     onChange={(e) => setName(e.target.value)}
                     placeholder="이름을 입력해 주세요."
@@ -448,7 +448,7 @@ export function ImageResourceDetailPage({ kind, initialData }: ImageResourceDeta
               <Button
                 type="button"
                 variant="outline"
-                size="lg"
+                size="xl"
                 className={PAGE_FOOTER_ACTION_BUTTON_CLASS}
                 onClick={handleBack}
               >
@@ -456,7 +456,7 @@ export function ImageResourceDetailPage({ kind, initialData }: ImageResourceDeta
               </Button>
               <Button
                 type="button"
-                size="lg"
+                size="xl"
                 className={PAGE_FOOTER_ACTION_BUTTON_CLASS}
                 onClick={handleSave}
               >

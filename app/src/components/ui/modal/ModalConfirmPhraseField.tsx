@@ -31,7 +31,7 @@ export function ModalConfirmPhraseField({
           <Input
             id={inputId}
             type="text"
-            size="lg"
+            size="xl"
             autoComplete="off"
             maxLength={maxLength}
             placeholder={CONFIRM_INPUT_PHRASE}

@@ -49,7 +49,7 @@ export function SeriesFormKeywordsField({
           id={inputId}
           aria-describedby={formFieldAriaDescribedBy(inputId, Boolean(subtitle))}
           type="text"
-          size="lg"
+          size="xl"
           maxLength={maxLength}
           value={keywordInput}
           onChange={(e) => onKeywordInputChange(e.target.value)}

@@ -190,7 +190,7 @@ export default function SeriesNewPage() {
                             <Button
                               type="button"
                               variant="secondary"
-                              size="lg"
+                              size="xl"
                               className={PAGE_FOOTER_ACTION_BUTTON_CLASS}
                               onClick={() => setActiveTab("info")}
                             >
@@ -263,7 +263,7 @@ export default function SeriesNewPage() {
                             <Button
                               type="button"
                               variant="secondary"
-                              size="lg"
+                              size="xl"
                               className={PAGE_FOOTER_ACTION_BUTTON_CLASS}
                               onClick={() => setActiveTab("image")}
                             >
@@ -272,7 +272,7 @@ export default function SeriesNewPage() {
                             <Button
                               type="button"
                               variant="secondary"
-                              size="lg"
+                              size="xl"
                               className={PAGE_FOOTER_ACTION_BUTTON_CLASS}
                               onClick={() => setActiveTab("worldview")}
                             >
@@ -315,7 +315,7 @@ export default function SeriesNewPage() {
                             <Button
                               type="button"
                               variant="secondary"
-                              size="lg"
+                              size="xl"
                               className={PAGE_FOOTER_ACTION_BUTTON_CLASS}
                               onClick={() => setActiveTab("info")}
                             >

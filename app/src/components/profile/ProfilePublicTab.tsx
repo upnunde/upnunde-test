@@ -123,7 +123,7 @@ export function ProfilePublicTab({
                 id={PROFILE_PUBLIC_LOGIN_ID}
                 aria-describedby={formFieldAriaDescribedBy(PROFILE_PUBLIC_LOGIN_ID)}
                 type="text"
-                size="lg"
+                size="xl"
                 disabled
                 value={draft.loginId}
               />
@@ -137,7 +137,7 @@ export function ProfilePublicTab({
                 id={PROFILE_PUBLIC_PEN_NAME_ID}
                 aria-describedby={formFieldAriaDescribedBy(PROFILE_PUBLIC_PEN_NAME_ID)}
                 type="text"
-                size="lg"
+                size="xl"
                 value={draft.penName}
                 maxLength={PROFILE_PEN_NAME_MAX}
                 onChange={(e) =>

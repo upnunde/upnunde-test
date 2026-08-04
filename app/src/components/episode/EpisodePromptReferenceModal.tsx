@@ -71,7 +71,7 @@ export function EpisodePromptReferenceModal({
                     id={REF_TITLE_ID}
                     aria-describedby={formFieldAriaDescribedBy(REF_TITLE_ID)}
                     type="text"
-                    size="lg"
+                    size="xl"
                     maxLength={MAX_TITLE}
                     value={REFERENCE_TITLE}
                     readOnly
@@ -93,7 +93,7 @@ export function EpisodePromptReferenceModal({
                     id={REF_SUMMARY_ID}
                     aria-describedby={formFieldAriaDescribedBy(REF_SUMMARY_ID)}
                     type="text"
-                    size="lg"
+                    size="xl"
                     maxLength={MAX_SUMMARY}
                     value={REFERENCE_SUMMARY}
                     readOnly

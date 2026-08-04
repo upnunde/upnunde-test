@@ -230,17 +230,18 @@ export default function ElementsPage() {
 
               <SpecRow label="버튼 높이 티어">
                 <div className={cn("inline-flex flex-wrap items-center", CONTROL_GROUP_GAP_STANDARD_CLASS)}>
-                  <Button size="default">default (32px)</Button>
                   <Button size="sm">sm (32px)</Button>
-                  <Button size="lg">lg (36px)</Button>
+                  <Button size="default">default (36px)</Button>
+                  <Button size="xl">xl (40px)</Button>
+                  <Button size="2xl">2xl (48px)</Button>
                   <Button className={CONTROL_HEIGHT_FORM_CLASS}>form (42px)</Button>
                 </div>
               </SpecRow>
 
-              <SpecRow label="Input · form 42px">
+              <SpecRow label="Input · xl (40px)">
                 <div className="max-w-md">
                   <InputGroup>
-                    <Input size="lg" placeholder="시리즈 제목" aria-label="시리즈 제목" />
+                    <Input size="xl" placeholder="시리즈 제목" aria-label="시리즈 제목" />
                     <InputHypertext count={0} max={30} />
                   </InputGroup>
                 </div>

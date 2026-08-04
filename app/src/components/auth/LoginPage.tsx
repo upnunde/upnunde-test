@@ -85,7 +85,7 @@ export function LoginPage() {
           <Button
             type="submit"
             variant="default"
-            size="lg"
+            size="xl"
             shape="circle"
             className="w-full"
           >
@@ -100,7 +100,7 @@ export function LoginPage() {
           <div className="relative">
             <Button
               variant="outline"
-              size="lg"
+              size="xl"
               shape="circle"
               className="w-full"
               aria-label="Google로 계속하기"
@@ -115,7 +115,7 @@ export function LoginPage() {
 
           <Button
             variant="outline"
-            size="lg"
+            size="xl"
             shape="circle"
             className="w-full"
             aria-label="Apple로 계속하기"
@@ -126,7 +126,7 @@ export function LoginPage() {
 
           <Button
             variant="outline"
-            size="lg"
+            size="xl"
             shape="circle"
             className="w-full"
             aria-label="X로 계속하기"
@@ -137,7 +137,7 @@ export function LoginPage() {
 
           <Button
             variant="outline"
-            size="lg"
+            size="xl"
             shape="circle"
             className="w-full"
             aria-label="LINE으로 계속하기"

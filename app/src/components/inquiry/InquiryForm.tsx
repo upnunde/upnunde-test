@@ -119,7 +119,7 @@ export function InquiryForm({
             id={`${prefix}inquiry-title`}
             aria-describedby={formFieldAriaDescribedBy(`${prefix}inquiry-title`)}
             type="text"
-            size="lg"
+            size="xl"
             value={title}
             onChange={(e) => setTitle(e.target.value)}
             placeholder="제목을 입력해주세요."
@@ -165,7 +165,7 @@ export function InquiryForm({
             id={`${prefix}inquiry-email`}
             aria-describedby={formFieldAriaDescribedBy(`${prefix}inquiry-email`)}
             type="email"
-            size="lg"
+            size="xl"
             value={email}
             onChange={(e) => setEmail(e.target.value)}
             placeholder="이메일 주소를 입력해주세요."

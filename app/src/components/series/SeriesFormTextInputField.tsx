@@ -37,7 +37,7 @@ export function SeriesFormTextInputField({
           id={inputId}
           aria-describedby={formFieldAriaDescribedBy(inputId, Boolean(subtitle))}
           type="text"
-          size="lg"
+          size="xl"
           maxLength={maxLength}
           value={value}
           onChange={(e) => onValueChange(e.target.value)}

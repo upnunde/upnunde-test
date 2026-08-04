@@ -189,7 +189,7 @@ export function EpisodeForm({
             id={EPISODE_FORM_TITLE_INPUT_ID}
             aria-describedby={formFieldAriaDescribedBy(EPISODE_FORM_TITLE_INPUT_ID)}
             type="text"
-            size="lg"
+            size="xl"
             maxLength={MAX_TITLE}
             value={title}
             onChange={(e) => setTitle(e.target.value)}
@@ -211,7 +211,7 @@ export function EpisodeForm({
             id={EPISODE_FORM_SUMMARY_INPUT_ID}
             aria-describedby={formFieldAriaDescribedBy(EPISODE_FORM_SUMMARY_INPUT_ID)}
             type="text"
-            size="lg"
+            size="xl"
             maxLength={MAX_SUMMARY}
             value={summary}
             onChange={(e) => setSummary(e.target.value)}

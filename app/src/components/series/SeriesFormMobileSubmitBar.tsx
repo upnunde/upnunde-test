@@ -41,7 +41,7 @@ export function SeriesFormMobileSubmitBar({
           type="button"
           variant="outline"
           shape="square"
-          size="lg"
+          size="xl"
           onClick={onDraftClick}
         >
           임시저장
@@ -51,7 +51,7 @@ export function SeriesFormMobileSubmitBar({
         type="button"
         tone="brand"
         shape="square"
-        size="lg"
+        size="xl"
         disabled={submitDisabled}
         onClick={onSubmit}
       >
