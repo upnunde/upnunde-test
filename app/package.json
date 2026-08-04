@@ -26,7 +26,7 @@
     "@dnd-kit/utilities": "^3.2.2",
     "@radix-ui/react-avatar": "^1.1.11",
     "@visactor/react-vchart": "^2.0.22",
-    "@visactor/vchart": "^2.0.22",
+    "@visactor/vchart": "^2.1.5",
     "class-variance-authority": "^0.7.1",
     "clsx": "^2.1.1",
     "design-system": "github:upnunde/Renovel-Studio-DS#v0.1.24",
