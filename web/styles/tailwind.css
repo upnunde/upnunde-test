@@ -1,5 +1,0 @@
-@config "../tailwind.config.ts";
-@import "tailwindcss" source(none);
-@source "../**/*.{js,ts,jsx,tsx,mdx}";
-
-@import "tw-animate-css";
