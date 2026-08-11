@@ -244,12 +244,12 @@ export function SlashCommandMenu({
   return (
     <>
       <div
-        className="fixed inset-0 z-modal cursor-pointer"
+        className="fixed inset-0 z-overlay cursor-pointer"
         aria-hidden
         onClick={onClose}
       />
       <MenuList
-        className="fixed z-sticky min-w-[200px] rounded-lg border border-border bg-background py-1 shadow-elevation-40"
+        className="fixed z-modal min-w-[200px] rounded-lg border border-border bg-background py-1 shadow-elevation-40"
         style={{ top: adjustedPosition.top, left: adjustedPosition.left }}
         role="listbox"
       >

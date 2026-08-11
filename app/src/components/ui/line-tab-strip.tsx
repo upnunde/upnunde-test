@@ -1,7 +1,7 @@
 "use client";
 
 import { startTransition, useCallback } from "react";
-import { Tabs, TabsList, TabsTrigger } from "design-system/ui/tabs";
+import { Tabs, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import {
   LINE_TAB_STRIP_SHELL_CLASS,
   lineTabStripListClassName,

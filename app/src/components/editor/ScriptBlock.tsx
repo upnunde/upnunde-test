@@ -554,6 +554,17 @@ export function ScriptBlock({
     (e: React.KeyboardEvent<HTMLTextAreaElement | HTMLInputElement>) => {
       const currentIdx = index - 1;
       const field = e.currentTarget;
+
+      // Enter = 새 텍스트 블록 추가 후 이동 (장면·장면정보는 인풋 내 줄바꿈 없음)
+      if (e.key === "Enter") {
+        e.preventDefault();
+        e.stopPropagation();
+        updateBlock(block.id, field.value);
+        const newId = addBlock(index, "text", "");
+        focusBlock(newId);
+        return;
+      }
+
       if (e.key === "Delete") {
         handleDeleteBlock(e);
         return;
@@ -582,7 +593,7 @@ export function ScriptBlock({
         }
       }
     },
-    [block.id, index, blocks, focusBlock, handleDeleteBlock, updateBlock],
+    [addBlock, block.id, index, blocks, focusBlock, handleDeleteBlock, updateBlock],
   );
 
   // Clear isNew after opening picker so it doesn't auto-open again on re-mount
@@ -855,30 +866,36 @@ export function ScriptBlock({
           >
             {/* Basic Icons */}
             <div className="flex items-center px-1">
-              <button
+              <Button
                 type="button"
+                variant="ghost"
+                size="icon-sm"
                 onClick={() => applyTag("<b>", "</b>")}
                 className={EDITOR_TEXT_FORMAT_TOOLBAR_BUTTON_CLASS}
-                title="ICONS.formatBold"
+                aria-label="굵게"
               >
                 <ICONS.formatBold className="w-4 h-4" />
-              </button>
-              <button
+              </Button>
+              <Button
                 type="button"
+                variant="ghost"
+                size="icon-sm"
                 onClick={() => applyTag("<i>", "</i>")}
                 className={EDITOR_TEXT_FORMAT_TOOLBAR_BUTTON_CLASS}
-                title="ICONS.formatItalic"
+                aria-label="기울임"
               >
                 <ICONS.formatItalic className="w-4 h-4" />
-              </button>
-              <button
+              </Button>
+              <Button
                 type="button"
+                variant="ghost"
+                size="icon-sm"
                 onClick={() => applyTag("<u>", "</u>")}
                 className={EDITOR_TEXT_FORMAT_TOOLBAR_BUTTON_CLASS}
-                title="ICONS.formatUnderlined"
+                aria-label="밑줄"
               >
                 <ICONS.formatUnderlined className="w-4 h-4" />
-              </button>
+              </Button>
             </div>
 
             {/* Divider */}
@@ -901,7 +918,7 @@ export function ScriptBlock({
                   className={EDITOR_TEXT_FORMAT_TOOLBAR_MENU_TRIGGER_CLASS}
                 >
                   이펙트
-                  <DsIcon icon={ICONS.chevronDown} size="sm" position="inline-end" />
+                  <DsIcon icon={ICONS.chevronDown} size="md" position="inline-end" />
                 </Button>
               </DropdownMenuTrigger>
               <DropdownMenuContent
@@ -951,7 +968,7 @@ export function ScriptBlock({
                   className={EDITOR_TEXT_FORMAT_TOOLBAR_MENU_TRIGGER_CLASS}
                 >
                   컬러
-                  <DsIcon icon={ICONS.chevronDown} size="sm" position="inline-end" />
+                  <DsIcon icon={ICONS.chevronDown} size="md" position="inline-end" />
                 </Button>
               </DropdownMenuTrigger>
               <DropdownMenuContent
@@ -1001,6 +1018,10 @@ export function ScriptBlock({
     const sceneInputClass =
       block.type === "scene" ? EDITOR_SCENE_TITLE_INPUT_CLASS : EDITOR_INLINE_BODY_FIELD_CLASS;
     const showSceneValueAsReadOnly = !isDesktop && sceneMobileEdit.readOnly;
+    /** Enter 줄바꿈 금지 — 붙여넣기 개행도 제거 (긴 문장은 soft-wrap만) */
+    const onSceneContentChange = (raw: string) => {
+      updateBlock(block.id, raw.replace(/\n/g, ""));
+    };
 
     return (
       <>
@@ -1024,7 +1045,7 @@ export function ScriptBlock({
             <TextareaAutosize
               ref={sceneInputRef as React.RefObject<HTMLTextAreaElement>}
               value={block.content}
-              onChange={(e) => updateBlock(block.id, e.target.value)}
+              onChange={(e) => onSceneContentChange(e.target.value)}
               onFocus={sceneMobileEdit.onContentFocus}
               onPointerDown={sceneMobileEdit.onContentPointerDown}
               readOnly={sceneMobileEdit.readOnly}
@@ -1052,7 +1073,7 @@ export function ScriptBlock({
             <TextareaAutosize
               ref={sceneInputRef as React.RefObject<HTMLTextAreaElement>}
               value={block.content}
-              onChange={(e) => updateBlock(block.id, e.target.value)}
+              onChange={(e) => onSceneContentChange(e.target.value)}
               onFocus={sceneMobileEdit.onContentFocus}
               onPointerDown={sceneMobileEdit.onContentPointerDown}
               readOnly={sceneMobileEdit.readOnly}
@@ -1069,7 +1090,7 @@ export function ScriptBlock({
             />
           </div>
         )}
-        {!isSeedDefault && block.type !== "scene" ? (
+        {!isSeedDefault ? (
           <Button
             type="button"
             variant="ghost"
@@ -1501,11 +1522,11 @@ export function ScriptBlock({
                 />
               ) : block.type === "bgm" || block.type === "sfx" ? (
                 <span className={pickerFallbackIconClass(isRowFocused)}>
-                  <ICONS.music className="h-3 w-3" />
+                  <ICONS.music className="h-4 w-4" />
                 </span>
               ) : isVideo ? (
                 <span className={pickerFallbackIconClass(isRowFocused)}>
-                  <ICONS.film className="h-3 w-3" />
+                  <ICONS.film className="h-4 w-4" />
                 </span>
               ) : null}
               <span className="min-w-0 flex-1 truncate text-body4_500">

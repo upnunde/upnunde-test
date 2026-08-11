@@ -3,7 +3,7 @@
 import { useMemo, useState } from "react";
 import dynamic from "next/dynamic";
 import { Title2 } from "@/components/ui/title2";
-import { Tabs, TabsList, TabsTrigger } from "design-system/ui/tabs";
+import { Tabs, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { AnalyticsPanel } from "@/components/analytics/AnalyticsPanel";
 import {
   ANALYTICS_KEY_STAT_BUTTON_CLASS,

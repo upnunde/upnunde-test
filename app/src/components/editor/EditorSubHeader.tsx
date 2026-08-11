@@ -73,8 +73,8 @@ export function EditorSubHeader({
   const addScriptHistoryEntry = useEditorStore((s) => s.addScriptHistoryEntry);
   const seedInitialScriptHistory = useEditorStore((s) => s.seedInitialScriptHistory);
   const loadScriptHistoryEntry = useEditorStore((s) => s.loadScriptHistoryEntry);
-  const undoDepth = useEditorStore((s) => s.undoStack.length);
   const setBlocks = useEditorStore((s) => s.setBlocks);
+  const focusBlockId = useEditorStore((s) => s.focusBlockId);
   const currentView = useEditorStore((s) => s.currentView);
   const setCurrentView = useEditorStore((s) => s.setCurrentView);
   const [savedSnapshot, setSavedSnapshot] = useState<string | null>(null);
@@ -89,6 +89,8 @@ export function EditorSubHeader({
   const [newHistoryEntryId, setNewHistoryEntryId] = useState<string | null>(null);
   /** 블록이 비었다가 다시 생길 때까지 한 번만 진입 기준선을 잡기 위함 */
   const snapshotBaselineInitRef = useRef(false);
+  /** 사용자가 실제 편집을 시작(블록 포커스)했는지 — 이 시점 이후로 기준선을 고정한다 */
+  const userEngagedRef = useRef(false);
   /** 더보기 메뉴 클릭 직후 같은 포인터 이벤트가 백드롭에 전달되는 것 방지 */
   const [historySheetBackdropActive, setHistorySheetBackdropActive] = useState(false);
   const [moreMenuOpen, setMoreMenuOpen] = useState(false);
@@ -251,30 +253,45 @@ export function EditorSubHeader({
     finishHistoryLoad(pendingLoadHistoryId);
   };
 
-  /** 실제 편집(undo 스택 생성)이 발생한 경우에만 저장 필요 상태로 간주 */
-  const hasChangesSinceSave = undoDepth > 0;
+  /**
+   * 저장 필요 여부는 "마지막 저장(또는 진입) 기준선 대비 실제 내용 변경"으로 판단한다.
+   * undoDepth는 마운트 시 정규화 등 비-사용자 mutation으로도 증가할 수 있어(진입 직후 뒤로가기에
+   * 저장 모달이 뜨는 원인) 기준선 스냅샷과 현재 스냅샷을 직접 비교한다.
+   * savedSnapshot === null(baseline 확보 전)이면 변경 없음으로 취급한다.
+   */
+  const hasChangesSinceSave =
+    savedSnapshot != null && blocksSnapshot !== savedSnapshot;
   const canSubmit = hasChangesSinceSave && !hasValidationIssues;
+
+  /** 사용자가 블록을 포커스하면 편집 시작으로 간주하고 기준선을 고정한다. */
+  useEffect(() => {
+    if (focusBlockId != null) userEngagedRef.current = true;
+  }, [focusBlockId]);
 
   /**
    * 편집 전 기준선(savedSnapshot) 확보.
-   * - 히스토리가 비어 있으면 신규 생성 1건을 쌓은 뒤 현재 블록을 기준선으로 삼는다.
-   * - 이미 히스토리가 있으면(목록 재진입 등) 추가 시드 없이 현재 블록만 기준선으로 삼는다.
-   * blocksSnapshot을 deps에 넣지 않아, 타이핑마다 effect가 돌며 스냅샷을 덮어쓰지 않게 한다.
+   * - 히스토리가 비어 있으면 최초 1회 신규 생성 시드를 쌓는다.
+   * - 진입 직후 실행되는 리소스 정규화 등 비-사용자 mutation으로 blocks 내용이 변할 수 있으므로,
+   *   사용자가 편집을 시작(블록 포커스)하기 전까지는 기준선을 현재 내용으로 계속 동기화한다.
+   *   → 정규화 결과를 기준선이 흡수하여, 편집 없이 뒤로가기 시 저장 모달이 뜨지 않는다.
+   * - 사용자가 편집을 시작한 이후에는 기준선을 갱신하지 않아 실제 변경만 dirty로 잡힌다.
    */
   useLayoutEffect(() => {
     if (blocks.length === 0) {
       snapshotBaselineInitRef.current = false;
+      userEngagedRef.current = false;
       return;
     }
-    if (snapshotBaselineInitRef.current) return;
-    snapshotBaselineInitRef.current = true;
-    if (scriptHistory.length === 0) {
-      seedInitialScriptHistory();
+    if (!snapshotBaselineInitRef.current) {
+      snapshotBaselineInitRef.current = true;
+      if (scriptHistory.length === 0) {
+        seedInitialScriptHistory();
+      }
     }
-    const snap = JSON.stringify(useEditorStore.getState().blocks);
-    // eslint-disable-next-line react-hooks/set-state-in-effect -- 진입 시점 baseline 확보(첫 페인트 전)
-    setSavedSnapshot(snap);
-  }, [blocks.length, scriptHistory.length, seedInitialScriptHistory]);
+    if (userEngagedRef.current) return;
+    // eslint-disable-next-line react-hooks/set-state-in-effect -- 진입~편집 시작 전 baseline 동기화(첫 페인트 전)
+    setSavedSnapshot(blocksSnapshot);
+  }, [blocks.length, blocksSnapshot, scriptHistory.length, seedInitialScriptHistory]);
 
   const historyListItems = useMemo(
     () =>
@@ -347,10 +364,13 @@ export function EditorSubHeader({
                     : "group px-2 py-2 hover:bg-muted",
                 )}
               >
-                {historyOpen && newHistoryEntryId === entry.id ? (
-                  <HistoryNewDot className={mobile ? "top-2 left-2" : "top-1.5 left-1.5"} />
-                ) : null}
                 <div className="flex min-w-0 flex-1 items-center gap-2 text-body3_500">
+                  {historyOpen && newHistoryEntryId === entry.id ? (
+                    <span
+                      className="size-2 shrink-0 rounded-full bg-destructive"
+                      aria-hidden
+                    />
+                  ) : null}
                   <div className="text-foreground">
                     {formatScriptHistoryTimestamp(entry.savedAt)}
                   </div>
@@ -453,7 +473,7 @@ export function EditorSubHeader({
       : null;
 
   const titleHeading = (
-    <h1 className="min-w-0 truncate text-body1_700 text-foreground lg:text-heading2_700">
+    <h1 className="min-w-0 truncate text-heading2_700 text-foreground">
       {title}
     </h1>
   );
@@ -464,7 +484,7 @@ export function EditorSubHeader({
         type="button"
         variant="ghost"
         shape="circle"
-        size="icon-xl"
+        size="icon"
         icon={ICONS.pencil}
         aria-label="회차 정보 수정"
         className="shrink-0 text-foreground-placeholder"
@@ -481,9 +501,11 @@ export function EditorSubHeader({
           <div className="flex min-w-0 flex-1 items-center gap-2">{titleHeading}</div>
           <Button
             type="button"
-            size="sm"
+            variant="default"
+            tone="brand"
+            size="default"
             disabled={!canSubmit}
-            className="h-8 shrink-0 px-3 shadow-none"
+            className="shrink-0"
             onClick={handleSubmit}
           >
             등록
@@ -494,7 +516,7 @@ export function EditorSubHeader({
                 type="button"
                 variant="outline"
                 shape="circle"
-                size="icon-xl"
+                size="icon"
                 icon={ICONS.moreVertical}
                 aria-label="더보기"
                 className="relative shrink-0 bg-background shadow-none"
@@ -554,7 +576,7 @@ export function EditorSubHeader({
                   icon={ICONS.history}
                   aria-label="히스토리"
                   disabled={!isHistoryEnabled}
-                  className="shrink-0"
+                  className="relative shrink-0"
                 >
                   {newHistoryEntryId ? (
                     <HistoryNewDot className="top-0 right-0" />
@@ -564,7 +586,7 @@ export function EditorSubHeader({
               <PopoverContent
                 align="end"
                 sideOffset={8}
-                className="w-[min(100vw-2rem,280px)] max-w-[280px] rounded-lg border border-border p-0 shadow-elevation-40"
+                className="z-modal w-[min(100vw-2rem,280px)] max-w-[280px] rounded-lg border border-border p-0 shadow-elevation-40"
               >
                 {desktopHistoryPopoverContent}
               </PopoverContent>
@@ -572,8 +594,9 @@ export function EditorSubHeader({
             <Button
               type="button"
               variant="outline"
-              size="sm"
-              className="h-9 shadow-none bg-background"
+              tone="neutral"
+              size="default"
+              className="bg-background"
               disabled={!hasChangesSinceSave}
               onClick={handleTemporarySave}
             >
@@ -581,9 +604,10 @@ export function EditorSubHeader({
             </Button>
             <Button
               type="button"
-              size="sm"
+              variant="default"
+              tone="brand"
+              size="default"
               disabled={!canSubmit}
-              className="h-9 shadow-none bg-primary text-primary-foreground hover:bg-primary/90 disabled:bg-primary/40 disabled:hover:bg-primary/40"
               onClick={handleSubmit}
             >
               등록하기

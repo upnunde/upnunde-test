@@ -11,7 +11,7 @@ import {
 import { Button } from "design-system/ui/button";
 import { MODAL_ACTION_BUTTON_SIZE } from "@/components/ui/modal";
 import { FilterChip } from "@/components/ui/chip";
-import { Tabs, TabsList, TabsTrigger } from "design-system/ui/tabs";
+import { Tabs, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { ICONS } from "@/lib/icons";
 import { SidebarList } from "@/components/AppSidebar/SidebarList";
 import { CHIP_GROUP_GAP_CLASS } from "@/lib/chip-styles";
@@ -359,7 +359,7 @@ export function BgmListModal({ open, onClose, onAdd }: BgmListModalProps) {
               BGM
             </DialogTitle>
             <span className="inline-flex h-5 w-5 items-center justify-center rounded-full bg-muted">
-              <ICONS.info className="w-3 h-3 text-foreground-placeholder" aria-hidden />
+              <ICONS.info className="w-4 h-4 text-foreground-placeholder" aria-hidden />
             </span>
           </div>
         </DialogHeader>

@@ -110,7 +110,7 @@ const RESOURCE_COMPOSER_PLACEHOLDER: Record<ImageResourceKind, string> = {
   background: "배경의 분위기·장면·시각적 특징을 서술형으로 입력해 주세요.",
   scene: "연출 장면의 의도·구도·감정을 서술형으로 입력해 주세요.",
   media: "미디어의 용도·장면·느낌을 서술형으로 입력해 주세요.",
-  gallery: "CG 장면의 스토리·분위기·인물 관계를 서술형으로 입력해 주세요.",
+  gallery: "CG 장면 스토리·분위기를 적어 주세요.",
 };
 
 function getThumbnailUrl(data: ImageResourceInitialData): string {

@@ -35,7 +35,7 @@ cd app && npm run migrate:tokens -- --write
 
 정본: `design-system/spacing-tokens` → `space.*`
 
-- **`PAGE_GUTTER_X_CLASS`** = `space.layout.pagePaddingX` (`max-lg:px-3 lg:px-5`)
+- **`PAGE_GUTTER_X_CLASS`** = `space.layout.pagePaddingX` (`px-5`, 모바일·lg+ 공통 20px)
 - **`PAGE_GUTTER_GAP_CLASS`** = `space.layout.pageStackGap` (`gap-3 lg:gap-5`)
 - **`PAGE_SCROLL_BOTTOM_CLASS`** = `space.layout.scrollBottom` (`pb-20`)
 - **`PAGE_CONTENT_BODY_CLASS`** = `space.section.sectionPadding` (`p-5`)

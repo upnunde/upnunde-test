@@ -560,7 +560,7 @@ export function CharacterExpressionModal({
                   : "right-1 top-1 hidden h-8 w-8 max-lg:inline-flex lg:group-hover:inline-flex",
               )}
             >
-              <ICONS.trash2 className={cn("pointer-events-none", isCarousel ? "h-3 w-3" : "h-4 w-4")} />
+              <ICONS.trash2 className={cn("pointer-events-none", isCarousel ? "h-4 w-4" : "h-4 w-4")} />
             </button>
           </div>
           <div className={cn("inline-flex items-center justify-start overflow-hidden self-stretch", itemWidthClass)}>

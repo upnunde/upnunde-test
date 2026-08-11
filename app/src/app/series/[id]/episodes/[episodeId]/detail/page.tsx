@@ -161,7 +161,7 @@ export default function EpisodeDetailPage() {
       )}
     >
       <div className={cn(previewChromeHidden)}>
-        <Header profileImageUrl={profileImageUrl} onProfileImageChange={setProfileImageUrl} />
+        <Header profileImageUrl={profileImageUrl} onProfileImageChange={setProfileImageUrl} hideOnMobile />
       </div>
       <div
         className={cn(

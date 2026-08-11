@@ -89,7 +89,7 @@ export function ResourceThumbnailActions({
               onClick={stopBubble}
               onPointerDown={stopBubble}
             >
-              <Icon icon={ICONS.moreVertical} size="sm" />
+              <Icon icon={ICONS.moreVertical} size="md" />
             </Button>
           </DropdownMenuTrigger>
           <DropdownMenuContent align="end" onClick={stopBubble}>

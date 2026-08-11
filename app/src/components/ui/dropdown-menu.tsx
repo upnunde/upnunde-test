@@ -27,8 +27,10 @@ import {
 } from "@/lib/pointer-tap-gesture";
 import { cn } from "design-system/utils";
 
-const DROPDOWN_MENU_INLINE_CONTENT_CLASS =
-  "z-sticky max-h-(--available-height) w-(--anchor-width) min-w-32 origin-(--transform-origin) overflow-x-hidden overflow-y-auto rounded-lg bg-popover p-1 text-popover-foreground shadow-elevation-40 ring-1 ring-foreground/10 outline-none data-[side=bottom]:slide-in-from-top-2 data-[side=inline-end]:slide-in-from-left-2 data-[side=inline-start]:slide-in-from-right-2 data-[side=left]:slide-in-from-right-2 data-[side=right]:slide-in-from-left-2 data-[side=top]:slide-in-from-bottom-2 data-open:animate-in data-open:fade-in-0 data-open:zoom-in-95 data-open:duration-medium data-open:ease-emphasized-decelerate data-closed:animate-out data-closed:overflow-hidden data-closed:fade-out-0 data-closed:zoom-out-95 data-closed:duration-short data-closed:ease-emphasized-accelerate";
+const DROPDOWN_MENU_CONTENT_CLASS =
+  "z-modal max-h-(--available-height) w-(--anchor-width) min-w-32 origin-(--transform-origin) overflow-x-hidden overflow-y-auto rounded-lg bg-popover p-1 text-popover-foreground shadow-elevation-40 ring-1 ring-foreground/10 outline-none data-[side=bottom]:slide-in-from-top-2 data-[side=inline-end]:slide-in-from-left-2 data-[side=inline-start]:slide-in-from-right-2 data-[side=left]:slide-in-from-right-2 data-[side=right]:slide-in-from-left-2 data-[side=top]:slide-in-from-bottom-2 data-open:animate-in data-open:fade-in-0 data-open:zoom-in-95 data-open:duration-medium data-open:ease-emphasized-decelerate data-closed:animate-out data-closed:overflow-hidden data-closed:fade-out-0 data-closed:zoom-out-95 data-closed:duration-short data-closed:ease-emphasized-accelerate";
+
+const DROPDOWN_MENU_POSITIONER_CLASS = "isolate z-modal outline-none";
 
 function DropdownMenu({
   open: openProp,
@@ -133,30 +135,18 @@ function DropdownMenuContent({
   alignOffset = 0,
   side = "bottom",
   sideOffset = 4,
-  portalled = true,
+  portalled: _portalled = true,
   ...props
 }: React.ComponentProps<typeof DsDropdownMenuContent> &
   Pick<MenuPrimitive.Positioner.Props, "align" | "alignOffset" | "side" | "sideOffset"> & {
     portalled?: boolean;
   }) {
-  if (portalled) {
-    return (
-      <DsDropdownMenuContent
-        align={align}
-        alignOffset={alignOffset}
-        side={side}
-        sideOffset={sideOffset}
-        className={className}
-        {...props}
-      />
-    );
-  }
-
-  // Base UI는 Positioner 앞에 Portal이 필수. 인라인 스택용이어도 Portal을 유지한다.
+  // DS 기본 Positioner는 z-50이라 sticky(200)·overlay(300) 아래로 깔린다.
+  // Portal + z-modal(400)로 앱 전역 메뉴 스택 최상단에 올린다(토스트 제외).
   return (
     <MenuPrimitive.Portal>
       <MenuPrimitive.Positioner
-        className="isolate z-sticky outline-none"
+        className={DROPDOWN_MENU_POSITIONER_CLASS}
         align={align}
         alignOffset={alignOffset}
         side={side}
@@ -164,7 +154,7 @@ function DropdownMenuContent({
       >
         <MenuPrimitive.Popup
           data-slot="dropdown-menu-content"
-          className={cn(DROPDOWN_MENU_INLINE_CONTENT_CLASS, className)}
+          className={cn(DROPDOWN_MENU_CONTENT_CLASS, className)}
           {...props}
         />
       </MenuPrimitive.Positioner>

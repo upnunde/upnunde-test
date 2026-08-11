@@ -1,7 +1,4 @@
 node_modules
 
-# Next.js build output
-web/.next/
-
 # 작업 일지 일별 스냅샷 (로컬 백업 — WORKLOG.md 본문은 Git 추적)
 docs/wip/history/

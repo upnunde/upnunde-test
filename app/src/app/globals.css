@@ -24,6 +24,14 @@
 }
 
 :root {
+  /**
+   * DS spacing 스케일 보강: DS tokens.css는 --space-9(36px, h-9)를 정의하지 않는다.
+   * 앱의 모바일 하단 고정 바 여백 계산(page-layout / series-form-mobile-layout 등)이
+   * var(--space-9)를 참조하므로, 미정의 시 calc()가 무효화되어 padding/bottom이 0으로
+   * 폴백된다(→ 페이지네이션이 고정 액션 바에 가려짐). 스케일 규칙(N × 0.25rem)에 맞춰 정의.
+   */
+  --space-9: 2.25rem;
+
   --app-vv-top: 0px;
   --app-vv-bottom: 0px;
   --app-vv-height: 100dvh;

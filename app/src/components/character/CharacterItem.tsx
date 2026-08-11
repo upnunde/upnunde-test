@@ -103,7 +103,7 @@ export function CharacterItem({
               )}
               {isBanned && (
                 <Badge variant="default" status="destructive" size="md" shape="square" className="max-w-full lg:max-w-[45%]">
-                  <ICONS.alertCircle className="size-3.5 shrink-0" aria-hidden />
+                  <ICONS.alertCircle className="size-4 shrink-0" aria-hidden />
                   <span className="truncate">가이드 정책을 위반, 이용 금지</span>
                 </Badge>
               )}

@@ -18,7 +18,7 @@
 - 개발 서버: {{예: cd app && npm run dev, 포트 3000}}
 - 미리보기 URL(있으면): {{예: http://localhost:3000}}
 - 스택: {{예: Next.js App Router + TypeScript + Zustand + Tailwind + Radix}}
-- 실험/레거시 폴더(작업 제외): {{예: web/, prototype/ — 없으면 "없음"}}
+- 실험/레거시 폴더(작업 제외): {{예: prototype/, ink-editor/ — 없으면 "없음"}}
 - UI 언어: 한국어 (답변·UI 문자열 모두)
 
 ## 1. Cursor Rules (.cursor/rules/)
@@ -71,7 +71,7 @@
 ## 5. 하지 말 것
 
 - .env·시크릿 커밋
-- web/.next 등 빌드 산출물 커밋
+- app/.next 등 빌드 산출물 커밋
 - 프로젝트와 무관한 대량 리팩터
 
 ## 6. 완료 후 보고

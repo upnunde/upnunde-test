@@ -1,8 +1,8 @@
 ## Cursor Talk to Figma MCP Monorepo
 
-이 리포지토리는 **Cursor ↔ Figma MCP 서버**, **Figma 플러그인**, 그리고 **Next.js 기반 웹 프론트엔드**를 함께 담고 있는 모노레포입니다.
+이 리포지토리는 **Cursor ↔ Figma MCP 서버**, **Figma 플러그인**, 그리고 **리노벨 스튜디오 앱(`app/`)**을 함께 담고 있는 모노레포입니다.
 
-기존 `cursor-talk-to-figma-mcp` 패키지의 기능은 그대로 유지하면서, 상단에 Next.js 앱(`web/`)과 HTML 프로토타입(`prototype/`)을 추가한 구조입니다.
+기존 `cursor-talk-to-figma-mcp` 패키지의 기능은 그대로 유지하면서, 리노벨 스튜디오 Next.js 앱(`app/`)과 HTML 프로토타입(`prototype/`)을 추가한 구조입니다.
 
 ---
 
@@ -41,16 +41,14 @@ http://localhost:5678
     - `src/cursor_mcp_plugin/` – Cursor와 통신하는 Figma 플러그인
     - `readme.md` – MCP 서버 및 플러그인 사용/개발 가이드 (상세)
 
-- **`web/`**  
-  - **Next.js + TypeScript** 기반의 웹 프론트엔드
-  - MCP 서버/플러그인 사용 상태를 시각화하고, 추후 데모/도구를 통합하기 위한 대시보드 역할
+- **`app/`**  
+  - **Next.js + TypeScript** 기반의 리노벨 스튜디오 본 제품
+  - 디자인 시스템(`Renovel-Studio-DS`)을 소비하며, Vercel 배포 대상
   - 주요 파일:
     - `package.json` – Next.js/React 의존성 및 스크립트
-    - `next.config.mjs` – Next.js 설정
+    - `next.config.ts` – Next.js 설정
     - `tsconfig.json` – TypeScript 설정
-    - `app/layout.tsx` – 공통 레이아웃
-    - `app/page.tsx` – 간단한 대시보드 홈 화면
-    - `app/globals.css` – 전역 스타일
+    - `src/app/` – App Router 페이지·레이아웃
 
 - **`prototype/`**
   - `ink-editor.html` – 리노벨 스튜디오용 Scene Editor HTML 프로토타입  
@@ -100,32 +98,28 @@ Figma 플러그인 설치/연결 방법도 하위 패키지의 `readme.md`에 �
 
 ---
 
-### Next.js 프론트엔드 실행 (`web/`)
+### 리노벨 스튜디오 앱 실행 (`app/`)
 
-Next.js 기반 대시보드는 MCP/플러그인과는 완전히 분리된 **독립 실행** 프론트엔드입니다.
+Next.js 기반 리노벨 스튜디오 앱은 MCP/플러그인과는 분리된 **독립 실행** 프론트엔드입니다.
 
 1. 의존성 설치
 
 ```bash
-cd web
-pnpm install
+cd app
+npm install
 ```
 
 2. 개발 서버 실행
 
 ```bash
-pnpm dev
+npm run dev
 ```
 
 3. 브라우저에서 접속
 
 ```text
-http://localhost:3000
+http://localhost:3002
 ```
-
-홈 화면에서:
-- 이 모노레포가 무엇을 하는지 간단히 요약해 주고,
-- 향후 MCP 상태 패널, 로그 뷰어, Figma/ink-editor 연동 UI 등을 추가하기 위한 베이스로 동작합니다.
 
 ---
 
@@ -157,13 +151,9 @@ pnpm dlx serve .
 - **Figma 플러그인 (`cursor-talk-to-figma-mcp/src/cursor_mcp_plugin/`)**
   - Figma 캔버스/노드에 직접 접근하여, MCP 명령을 실제 디자인 변경으로 반영
 
-- **Next.js 웹 앱 (`web/`)**
-  - 현재는 소개/대시보드 역할의 기본 페이지만 포함
-  - 향후:
-    - MCP 서버/플러그인 상태 모니터링
-    - 명령 로그/에러 로그 뷰어
-    - 간단한 툴 실행 UI
-    - `ink-editor.html`과의 연동(iframe 또는 기능 포팅) 등으로 확장 가능
+- **리노벨 스튜디오 앱 (`app/`)**
+  - Next.js 기반 본 제품 프론트엔드
+  - 디자인 시스템(`Renovel-Studio-DS`)을 소비하며 Vercel로 배포
 
 ---
 

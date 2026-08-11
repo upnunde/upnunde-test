@@ -7,8 +7,15 @@ import { Button } from "design-system/ui/button";
 import { Switch } from "@/components/ui/switch";
 import { useMobileBlockTextEdit } from "@/hooks/useMobileBlockTextEdit";
 import { Textarea } from "design-system/ui/textarea";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "design-system/ui/select";
 import { cn } from "design-system/utils";
-import { EDITOR_CONTROL_MUTED_ICON_CLASS, EDITOR_CONTROL_MUTED_TEXT_CLASS } from "@/lib/editor-block-layout";
+import { EDITOR_CONTROL_MUTED_TEXT_CLASS } from "@/lib/editor-block-layout";
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -189,36 +196,33 @@ function ChoiceSceneSelect({
   const isTable = variant === "table";
 
   return (
-    <div className={cn("relative min-w-0", className)}>
-      <select
-        value={value}
-        onChange={(e) => onChange(e.target.value)}
+    <Select
+      value={value === "" ? null : value}
+      onValueChange={(next) => onChange(next ?? "")}
+      items={sceneOptions}
+    >
+      <SelectTrigger
+        size={isTable ? "sm" : "default"}
         title={selectedSceneLabel}
+        aria-invalid={isNextSceneIssueFocused || undefined}
         className={cn(
-          "w-full min-w-0 appearance-none text-body3_400 outline-none focus:outline-none focus:ring-0 focus:ring-offset-0",
-          "overflow-hidden text-ellipsis whitespace-nowrap",
-          isTable
-            ? "h-8 rounded-md border-0 bg-transparent px-0 py-1 pr-2"
-            : "h-9 rounded-sm border border-border bg-background py-0 pl-3 pr-8",
+          "w-full min-w-0",
+          isTable && "rounded-md border-0 bg-transparent px-0 hover:bg-transparent",
           isSceneUnselected ? EDITOR_CONTROL_MUTED_TEXT_CLASS : "text-foreground",
-          isNextSceneIssueFocused &&
-            (isTable ? "text-destructive" : "border-destructive text-destructive")
+          isNextSceneIssueFocused && "text-destructive",
+          className,
         )}
       >
-        <option value="">장면 선택</option>
+        <SelectValue placeholder="장면 선택" />
+      </SelectTrigger>
+      <SelectContent>
         {sceneOptions.map((opt) => (
-          <option key={opt.value} value={opt.value}>
+          <SelectItem key={opt.value} value={opt.value}>
             {opt.label}
-          </option>
+          </SelectItem>
         ))}
-      </select>
-      {!isTable ? (
-        <ICONS.chevronDown
-          aria-hidden
-          className={cn("pointer-events-none absolute right-3 top-1/2 h-4 w-4 -translate-y-1/2", EDITOR_CONTROL_MUTED_ICON_CLASS)}
-        />
-      ) : null}
-    </div>
+      </SelectContent>
+    </Select>
   );
 }
 

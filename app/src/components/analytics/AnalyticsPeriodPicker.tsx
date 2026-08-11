@@ -15,7 +15,7 @@ import {
 } from "@/components/analytics/analytics-date";
 import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover";
 import { Button } from "design-system/ui/button";
-import { Input } from "@/components/ui/input";
+import { PeriodRangeCalendar } from "@/components/analytics/PeriodRangeCalendar";
 import { analyticsPeriodInlineTriggerClassName } from "@/components/analytics/analytics-filter-chips";
 import { useIsLgUp } from "@/hooks/useMediaQuery";
 import { PAGE_GUTTER_X_CLASS } from "@/lib/page-layout";
@@ -35,8 +35,7 @@ import { cn } from "design-system/utils";
  * - 트리거: 적용 중인 절대 날짜를 풀 표기(`YYYY.MM.DD ~ YYYY.MM.DD`)로 노출.
  *   "지난 7일" 같은 추상 라벨보다 운영자가 보는 실제 구간을 즉시 인지하게 한다.
  * - 패널: 프리셋(빈도 높음) → 사용자 지정(가끔) 순으로 시각 위계.
- * - 사용자 지정은 `<input type="date">`로 시작 (수익창출 페이지와 동일 폴백).
- *   풀 캘린더는 디자인 시스템 합의 후 별도 트랙.
+ * - 사용자 지정은 한 달 그리드에서 시작·종료를 연속 클릭으로 고른다.
  */
 export interface AnalyticsPeriodPickerProps {
   value: AnalyticsPeriodRange;
@@ -68,9 +67,10 @@ interface PeriodPickerPanelProps {
   pendingFrom: string;
   pendingTo: string;
   customInvalid: boolean;
+  /** 패널을 열 때마다 올려 캘린더 표시 월을 선택 구간에 맞춤 */
+  calendarEpoch: number;
   onPresetSelect: (preset: AnalyticsPeriodPreset) => void;
-  onPendingFromChange: (value: string) => void;
-  onPendingToChange: (value: string) => void;
+  onPendingRangeChange: (next: { fromYmd: string; toYmd: string }) => void;
   onApplyCustom: () => void;
   /** false — 바텀 시트 헤더와 중복 제거 (모바일) */
   showIntro?: boolean;
@@ -82,9 +82,9 @@ function PeriodPickerPanel({
   pendingFrom,
   pendingTo,
   customInvalid,
+  calendarEpoch,
   onPresetSelect,
-  onPendingFromChange,
-  onPendingToChange,
+  onPendingRangeChange,
   onApplyCustom,
   showIntro = true,
 }: PeriodPickerPanelProps) {
@@ -134,36 +134,19 @@ function PeriodPickerPanel({
             </span>
           ) : null}
         </div>
-        <div className="flex items-center gap-2">
-          <Input
-            type="date"
-            size="sm"
-            value={pendingFrom}
-            max={pendingTo || undefined}
-            onChange={(e) => onPendingFromChange(e.target.value)}
-            className="min-w-0 flex-1"
-            aria-label="시작 날짜"
-          />
-          <span className="text-caption1_400 text-foreground-placeholder">~</span>
-          <Input
-            type="date"
-            size="sm"
-            value={pendingTo}
-            min={pendingFrom || undefined}
-            onChange={(e) => onPendingToChange(e.target.value)}
-            className="min-w-0 flex-1"
-            aria-label="종료 날짜"
-          />
-        </div>
+        <PeriodRangeCalendar
+          key={calendarEpoch}
+          fromYmd={pendingFrom}
+          toYmd={pendingTo}
+          onChange={onPendingRangeChange}
+        />
         {pendingFrom && pendingTo && !customInvalid ? (
           <p className="mt-2 text-caption1_400 text-foreground-placeholder">
             {formatYmdFull(pendingFrom)} ~ {formatYmdFull(pendingTo)}
           </p>
-        ) : (
+        ) : pendingFrom && !pendingTo ? null : (
           <p className="mt-2 text-caption1_400 text-destructive">
-            {customInvalid && pendingFrom && pendingTo
-              ? "시작일이 종료일보다 늦을 수 없어요."
-              : "시작·종료일을 선택해 주세요."}
+            시작일과 종료일을 캘린더에서 선택해 주세요.
           </p>
         )}
         <div className="mt-3 flex items-center justify-end">
@@ -258,15 +241,22 @@ export function AnalyticsPeriodPicker({
 
   const [pendingFrom, setPendingFrom] = useState<string>("");
   const [pendingTo, setPendingTo] = useState<string>("");
+  const [calendarEpoch, setCalendarEpoch] = useState(0);
 
   useEffect(() => {
     if (!open) return;
     const win = getAnalyticsPeriodWindow(value, new Date());
     setPendingFrom(win.fromYmd ?? "");
     setPendingTo(win.toYmd);
+    setCalendarEpoch((n) => n + 1);
   }, [open, value]);
 
   const customInvalid = !pendingFrom || !pendingTo || pendingFrom > pendingTo;
+
+  const handlePendingRangeChange = useCallback((next: { fromYmd: string; toYmd: string }) => {
+    setPendingFrom(next.fromYmd);
+    setPendingTo(next.toYmd);
+  }, []);
 
   const handleDismiss = useCallback(() => {
     setOpen(false);
@@ -302,9 +292,9 @@ export function AnalyticsPeriodPicker({
       pendingFrom={pendingFrom}
       pendingTo={pendingTo}
       customInvalid={customInvalid}
+      calendarEpoch={calendarEpoch}
       onPresetSelect={applyPreset}
-      onPendingFromChange={setPendingFrom}
-      onPendingToChange={setPendingTo}
+      onPendingRangeChange={handlePendingRangeChange}
       onApplyCustom={applyCustom}
     />
   );
@@ -361,9 +351,9 @@ export function AnalyticsPeriodPicker({
                     pendingFrom={pendingFrom}
                     pendingTo={pendingTo}
                     customInvalid={customInvalid}
+                    calendarEpoch={calendarEpoch}
                     onPresetSelect={applyPreset}
-                    onPendingFromChange={setPendingFrom}
-                    onPendingToChange={setPendingTo}
+                    onPendingRangeChange={handlePendingRangeChange}
                     onApplyCustom={applyCustom}
                     showIntro={false}
                   />

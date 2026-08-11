@@ -52,7 +52,7 @@ export function ResourceBanner({ seriesId }: ResourceBannerProps) {
     <div className="inline-flex self-stretch flex-col items-center justify-start gap-3 pt-0">
       <div
         className={cn(
-          "mx-auto inline-flex w-full min-w-0 max-w-[1200px] items-center justify-center gap-4 rounded-sm bg-primary-container p-5 outline outline-1 outline-offset-[-1px] outline-primary/20",
+          "mx-auto inline-flex w-full min-w-0 max-w-[1200px] items-center justify-center gap-4 rounded-sm bg-primary-container py-2 px-4 outline outline-1 outline-offset-[-1px] outline-primary/20",
           PAGE_CARD_SHELL_MOBILE_FLUSH_CLASS,
           "max-lg:outline-none",
         )}

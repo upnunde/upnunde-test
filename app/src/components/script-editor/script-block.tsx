@@ -235,7 +235,7 @@ export function ScriptBlock({
               {style.label}
             </button>
           </PopoverTrigger>
-          <PopoverContent align="start" className="w-40 p-2 max-h-60 overflow-y-auto">
+          <PopoverContent align="start" className="z-sticky w-40 p-2 max-h-60 overflow-y-auto">
             <div className="flex flex-col gap-0.5">
               {ALL_BLOCK_TYPES.map((t) => (
                 <button

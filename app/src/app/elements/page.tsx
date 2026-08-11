@@ -15,7 +15,7 @@ import {
   CONTROL_HEIGHT_STANDARD_CLASS,
   chipGroupGapClass,
 } from "@/lib/chip-styles";
-import { Tabs, TabsList, TabsTrigger } from "design-system/ui/tabs";
+import { Tabs, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { lineTabStripListClassName } from "@/lib/tab-styles";
 import {
   PAGE_CONTAINER_CLASS,

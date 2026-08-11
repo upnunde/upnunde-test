@@ -7,7 +7,7 @@
 - **Node.js**: v24.11.1
 - **npm**: 11.6.2
 - **패키지 매니저**: pnpm (프로젝트 루트에 dependency로 포함)
-- **프로젝트 구조**: Monorepo (루트 + web 서브프로젝트)
+- **프로젝트 구조**: Monorepo (루트 + app 서브프로젝트)
 
 ## 새 프로젝트 설정 방법
 
@@ -88,7 +88,7 @@ cat ~/.bashrc | grep -E "(PATH|NODE|PNPM|BUN)"
 새프로젝트/
 ├── package.json          # 루트 package.json
 ├── pnpm-workspace.yaml   # pnpm workspace 설정 (선택사항)
-└── web/                  # 서브프로젝트
+└── app/                  # 서브프로젝트
     ├── package.json
     └── ...
 ```
@@ -96,7 +96,7 @@ cat ~/.bashrc | grep -E "(PATH|NODE|PNPM|BUN)"
 #### pnpm-workspace.yaml 생성 (선택사항)
 ```yaml
 packages:
-  - 'web'
+  - 'app'
   - 'packages/*'
 ```
 
@@ -123,8 +123,8 @@ cat > package.json << EOF
 EOF
 
 # 4. 의존성 설치 (서브프로젝트가 있는 경우)
-cd web
-pnpm install
+cd app
+npm install
 ```
 
 ### 6. 터미널 설정 확인

@@ -20,11 +20,13 @@ export interface HeaderProps {
   onProfileImageChange?: (avatarUrl: string | null) => void;
   /** 모바일 메뉴 열기 (미전달 시 햄버거 버튼 숨김) */
   onMenuClick?: () => void;
+  /** 뒤로가기 서브헤더가 있는 페이지 — 모바일/태블릿(max-lg)에서 전역 헤더 숨김 (헤더 중복 방지) */
+  hideOnMobile?: boolean;
   className?: string;
 }
 
 /** Global top header: Logo + ICONS.user avatar only. Full width. */
-export default function Header({ profileImageUrl, onProfileImageChange, onMenuClick, className }: HeaderProps) {
+export default function Header({ profileImageUrl, onProfileImageChange, onMenuClick, hideOnMobile, className }: HeaderProps) {
   const router = useRouter();
   const [isProfileModalOpen, setIsProfileModalOpen] = useState(false);
   const profileButtonRef = useRef<HTMLButtonElement>(null);
@@ -32,12 +34,13 @@ export default function Header({ profileImageUrl, onProfileImageChange, onMenuCl
   return (
     <header
       className={cn(
-        "flex h-14 shrink-0 items-center justify-between border-b border-border bg-background pl-0 pr-4",
+        "flex h-14 shrink-0 items-center justify-between border-b border-border bg-background pl-0 pr-5",
         APP_HEADER_STICKY_CLASS,
+        hideOnMobile && "max-lg:hidden",
         className,
       )}
     >
-      <div className="flex items-center gap-2 self-stretch pl-3 lg:w-[240px] lg:pl-4">
+      <div className="flex items-center gap-2 self-stretch pl-5 lg:w-[240px] lg:pl-4">
         {onMenuClick ? (
           <Button
             variant="ghost"

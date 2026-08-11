@@ -82,7 +82,9 @@ function PopoverContent({
         align={align}
         sideOffset={sideOffset}
         className={cn(
-          "bg-popover text-popover-foreground data-[state=open]:animate-in data-[state=closed]:animate-out data-[state=closed]:fade-out-0 data-[state=open]:fade-in-0 data-[state=closed]:zoom-out-95 data-[state=open]:zoom-in-95 data-[side=bottom]:slide-in-from-top-2 data-[side=left]:slide-in-from-right-2 data-[side=right]:slide-in-from-left-2 data-[side=top]:slide-in-from-bottom-2 z-sticky min-w-[200px] w-72 origin-(--radix-popover-content-transform-origin) rounded-md border border-border p-4 shadow-elevation-40 outline-hidden",
+          // z-index는 사용처에서 지정한다 — tailwind-merge가 커스텀 z-* 유틸(z-sticky/z-overlay/z-modal)을
+          // 같은 그룹으로 병합하지 못해, base에 z를 두면 사용처 override가 무효화되기 때문.
+          "bg-popover text-popover-foreground data-[state=open]:animate-in data-[state=closed]:animate-out data-[state=closed]:fade-out-0 data-[state=open]:fade-in-0 data-[state=closed]:zoom-out-95 data-[state=open]:zoom-in-95 data-[side=bottom]:slide-in-from-top-2 data-[side=left]:slide-in-from-right-2 data-[side=right]:slide-in-from-left-2 data-[side=top]:slide-in-from-bottom-2 min-w-[200px] w-72 origin-(--radix-popover-content-transform-origin) rounded-md border border-border p-4 shadow-elevation-40 outline-hidden",
           className
         )}
         {...props}

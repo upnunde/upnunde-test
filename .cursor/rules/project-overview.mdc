@@ -8,7 +8,7 @@ alwaysApply: true
 ## 저장소 구조
 
 - 메인 제품 UI는 **`app/`** (Next.js App Router + TypeScript).
-- 작업은 항상 `app/` 기준. `web/`, `ink-editor/`, `prototype/`은 별도 실험용.
+- 작업은 항상 `app/` 기준. `ink-editor/`, `prototype/`은 별도 실험용.
 - 상태 관리: **Zustand**. 스타일: **Tailwind CSS** + **Radix UI**.
 - **라우트·페이지 구조 변경** 시 `.cursor/rules/page-route-guard.mdc` 준수 → `app/`에서 `npm run check:routes`.
 

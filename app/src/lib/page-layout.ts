@@ -3,8 +3,8 @@
  * 앱 셸은 `pagePaddingY` 대신 `PAGE_SCROLL_TOP` + `scrollBottom` 조합.
  */
 
-/** 페이지·카드 좌우 인셋 — 모바일 12px · lg+ 20px */
-export const PAGE_GUTTER_X_CLASS = "max-lg:px-3 lg:px-5";
+/** 페이지·카드 좌우 인셋 — 모바일·lg+ 공통 20px */
+export const PAGE_GUTTER_X_CLASS = "px-5";
 
 /**
  * 풀블리드 카드·섹션 내부 좌우 인셋 — 20px (`space.section.sectionPadding` X축).
@@ -90,7 +90,7 @@ export const PAGE_CARD_FULL_WIDTH_PAD_X_CLASS = "max-lg:px-0 lg:px-0";
 
 /** 모바일 카드형 목록 행 — 정산·내 작품·에피소드 공통 */
 export const PAGE_MOBILE_LIST_ITEM_CARD_CLASS =
-  "max-lg:rounded-md max-lg:border-0 max-lg:bg-background max-lg:p-4 max-lg:shadow-elevation-30";
+  "max-lg:rounded-md max-lg:border max-lg:border-border max-lg:bg-background max-lg:p-4 max-lg:shadow-none";
 
 /** 모바일 카드형 목록 컨테이너 간격 — `space.list.listItemGap` (gap-3) */
 export const PAGE_MOBILE_LIST_STACK_GAP_CLASS = "max-lg:gap-3";

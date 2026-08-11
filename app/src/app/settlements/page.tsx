@@ -29,7 +29,7 @@ import {
 } from "@/components/ui/modal";
 import { AnalyticsPanel } from "@/components/analytics/AnalyticsPanel";
 import { Title2 } from "@/components/ui/title2";
-import { Tabs, TabsList, TabsTrigger } from "design-system/ui/tabs";
+import { Tabs, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Pagination } from "@/components/episode/Pagination";
 import { cn } from "design-system/utils";
 
@@ -212,7 +212,7 @@ function SettlementStatusBadge({
         onClick={onRejectionReason}
       >
         <span className="truncate">{label}</span>
-        <ICONS.alertCircle className="size-3.5 shrink-0" aria-hidden />
+        <ICONS.alertCircle className="size-4 shrink-0" aria-hidden />
       </Badge>
     );
   }
@@ -650,7 +650,7 @@ export default function MonetizationSettlementsPage() {
                           value={rangePreset === "custom" ? "" : rangePreset}
                           onValueChange={(v) => applyPresetRange(v as Exclude<RangePreset, "custom">)}
                         >
-                          <TabsList variant="line" size="sm" aria-label="정산 내역 조회 기간">
+                          <TabsList variant="default" size="sm" aria-label="정산 내역 조회 기간">
                             {RANGE_PRESET_OPTIONS.map(({ value, label }) => (
                               <TabsTrigger key={value} value={value}>{label}</TabsTrigger>
                             ))}

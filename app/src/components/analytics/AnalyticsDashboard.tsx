@@ -80,10 +80,6 @@ export function AnalyticsDashboard({ defaultArea = "content", onAreaChange }: An
     setStatsEpisodeNo("all");
   }, [seriesId, scopeCategory]);
 
-  const setPeriodRangeDeferred = useCallback((v: AnalyticsPeriodRange) => {
-    queueMicrotask(() => setPeriodRange(v));
-  }, []);
-
   const effectiveStatsEpisodeNo: "all" | number = isAllAnalyticsSeriesId(seriesId)
     ? "all"
     : statsEpisodeNo;
@@ -96,7 +92,7 @@ export function AnalyticsDashboard({ defaultArea = "content", onAreaChange }: An
             analyticsArea={analyticsArea}
             onAnalyticsAreaChange={setAnalyticsArea}
             periodRange={periodRange}
-            onPeriodRangeChange={setPeriodRangeDeferred}
+            onPeriodRangeChange={setPeriodRange}
             scopeCategory={scopeCategory}
             onScopeCategoryChange={setScopeCategory}
             seriesId={seriesId}

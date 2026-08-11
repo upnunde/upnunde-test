@@ -103,6 +103,7 @@ export function SeriesFormPageScaffold({
             profileImageUrl={profileImageUrl}
             onProfileImageChange={onProfileImageChange}
             onMenuClick={() => setSidebarOpen(true)}
+            hideOnMobile
           />
         </div>
         <div className={cn("lg:hidden", previewChromeHidden)}>

@@ -9,7 +9,7 @@ export const WORKS_GRID_CELL_MAX_WIDTH_CLASS =
 
 /** 내 작품 목록 카드(시리즈·캐릭터·상황공략) 공통 셸 — max-lg: 모바일 카드 · lg+: 가로형 카드 */
 export const WORKS_ITEM_CARD_CLASS =
-  "flex h-full min-w-0 w-full flex-col gap-3 lg:flex-row lg:gap-5 max-lg:rounded-md max-lg:border-0 max-lg:shadow-elevation-30 lg:rounded-sm lg:border lg:border-border lg:shadow-none bg-card py-5 px-5";
+  "flex h-full min-w-0 w-full flex-col gap-3 lg:flex-row lg:gap-5 max-lg:rounded-md max-lg:border max-lg:border-border max-lg:shadow-none lg:rounded-sm lg:border lg:border-border lg:shadow-none bg-card py-5 px-5";
 
 /** max-lg: 썸네일+정보 가로 한 줄 · lg+: contents로 썸네일·우측열 분리 */
 export const WORKS_ITEM_CARD_INNER_CLASS =

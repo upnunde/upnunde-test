@@ -109,11 +109,12 @@ export function Pagination({
             type="number"
             name="page"
             size="sm"
+            clearable={false}
             min={1}
             max={totalPages}
             value={pageInputValue}
             onChange={(e) => setPageInputValue(e.target.value)}
-            className="w-12 text-center"
+            className="w-12 text-center [appearance:textfield] [&::-webkit-inner-spin-button]:appearance-none [&::-webkit-outer-spin-button]:appearance-none"
             aria-label="페이지 번호"
           />
           <span className="shrink-0 text-body3_400 text-foreground-placeholder">/ {totalPages}</span>
@@ -156,11 +157,12 @@ export function Pagination({
               type="number"
               name="page"
               size="sm"
+              clearable={false}
               min={1}
               max={totalPages}
               value={pageInputValue}
               onChange={(e) => setPageInputValue(e.target.value)}
-              className="w-12 text-center"
+              className="w-12 text-center [appearance:textfield] [&::-webkit-inner-spin-button]:appearance-none [&::-webkit-outer-spin-button]:appearance-none"
               aria-label="페이지 번호"
             />
             <span className="text-body3_400 text-foreground-placeholder">/ {totalPages}</span>

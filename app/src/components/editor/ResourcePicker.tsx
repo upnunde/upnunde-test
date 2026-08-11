@@ -575,7 +575,7 @@ export function ResourcePicker({
       <PopoverAnchor asChild>{children}</PopoverAnchor>
       <PopoverContent
         align="start"
-        className="flex max-h-[480px] min-h-0 w-fit flex-col overflow-hidden rounded-sm border border-border/10 bg-background p-0 outline outline-1 outline-offset-[-1px] outline-border/10"
+        className="z-sticky flex max-h-[480px] min-h-0 w-fit flex-col overflow-hidden rounded-sm border border-border/10 bg-background p-0 outline outline-1 outline-offset-[-1px] outline-border/10"
         onCloseAutoFocus={(e) => e.preventDefault()}
         onOpenAutoFocus={(e) => {
           e.preventDefault();

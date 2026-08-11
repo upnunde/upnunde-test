@@ -29,7 +29,7 @@ export function EditorAutoGeneratorFloatingButton({
     <Button
       type="button"
       variant="ghost"
-      size={compact ? "icon-xl" : "xl"}
+      size={compact ? "icon-2xl" : "xl"}
       className={cn(
         buttonVisualClass,
         "transition-[width,padding] duration-short ease-standard",

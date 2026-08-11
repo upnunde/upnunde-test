@@ -42,6 +42,7 @@ export function StandaloneHeaderPage({
         profileImageUrl={profileImageUrl}
         onProfileImageChange={onProfileImageChange}
         onMenuClick={() => setSidebarOpen(true)}
+        hideOnMobile
       />
       <div className="lg:hidden">
         <MobileAppSidebarDrawer

@@ -159,7 +159,15 @@ function SortableBlockWrapper({
     (e: React.PointerEvent<HTMLDivElement>) => {
       if (isDesktop) return;
       const target = e.target as HTMLElement;
-      if (target.closest("textarea, input[type='text']")) return;
+      // 텍스트 입력 외에도 Select/드롭다운 트리거 등 자체 오픈 동작을 가진 컨트롤 위에서는
+      // 행 focusBlock을 건너뛴다 — 그렇지 않으면 pointerdown 리렌더가 팝업 오픈과 충돌해 즉시 닫힌다.
+      if (
+        target.closest(
+          "textarea, input[type='text'], [data-slot='select-trigger'], [role='combobox'], [aria-haspopup]",
+        )
+      ) {
+        return;
+      }
       focusBlock(block.id);
     },
     [block.id, focusBlock, isDesktop],

@@ -124,47 +124,78 @@ export function EditorMobileBlockToolbar({ className }: { className?: string }) 
     requestMobileBlockContentEdit(focusBlockId);
   }, [canEditContent, focusBlockId, isEditingContent]);
 
+  /** 편집 완료 — 편집 모드 해제 + blur로 키보드 내리기 (키보드 닫힘 effect와 동일 동작을 능동 실행) */
+  const handleDoneEditing = useCallback(() => {
+    setMobileKeyboardEditBlockId(null);
+    setMobileContentEditPromptBlockId(null);
+    if (document.activeElement instanceof HTMLElement) {
+      document.activeElement.blur();
+    }
+  }, [setMobileContentEditPromptBlockId, setMobileKeyboardEditBlockId]);
+
+  const showDoneButton = isKeyboardOpen && isEditingContent;
+
   const toolbarButtons = (
     <>
-      <Button
-        type="button"
-        variant="outline"
-        size="sm"
+      {/* 좌측 액션군: 블록 추가 · (도킹 시)내용수정 · 삭제 */}
+      <div
         className={cn(
-          "gap-2 bg-background shadow-none",
-          isKeyboardOpen ? "h-11 w-11 shrink-0 p-0" : "h-10 flex-1",
+          "flex items-center gap-2",
+          isKeyboardOpen ? "shrink-0" : "min-w-0 flex-1",
         )}
-        disabled={focusedIndex < 0}
-        onClick={() => setMenuOpen(true)}
-        aria-label="블록 추가"
       >
-        <ICONS.plus className="h-4 w-4 shrink-0" aria-hidden />
-        {!isKeyboardOpen ? "블록 추가" : null}
-      </Button>
-      {!isKeyboardOpen && showContentEditButton ? (
         <Button
           type="button"
           variant="outline"
           size="sm"
-          className="h-10 flex-1 gap-2 bg-background shadow-none"
-          onClick={handleContentEdit}
-          aria-label={contentEditButtonLabel}
+          className={cn(
+            "gap-2 bg-background shadow-none",
+            isKeyboardOpen ? "h-11 w-11 shrink-0 p-0" : "h-10 flex-1",
+          )}
+          disabled={focusedIndex < 0}
+          onClick={() => setMenuOpen(true)}
+          aria-label="블록 추가"
         >
-          <ICONS.pencil className="h-4 w-4 shrink-0" aria-hidden />
-          {contentEditButtonLabel}
+          <ICONS.plus className="h-4 w-4 shrink-0" aria-hidden />
+          {!isKeyboardOpen ? "블록 추가" : null}
+        </Button>
+        {!isKeyboardOpen && showContentEditButton ? (
+          <Button
+            type="button"
+            variant="outline"
+            size="sm"
+            className="h-10 flex-1 gap-2 bg-background shadow-none"
+            onClick={handleContentEdit}
+            aria-label={contentEditButtonLabel}
+          >
+            <ICONS.pencil className="h-4 w-4 shrink-0" aria-hidden />
+            {contentEditButtonLabel}
+          </Button>
+        ) : null}
+        <Button
+          type="button"
+          variant="outline"
+          size="icon"
+          className="h-10 w-10 shrink-0 bg-background shadow-none text-foreground-placeholder lg:hover:bg-destructive-container lg:hover:text-destructive disabled:border-border"
+          disabled={!canDelete}
+          onClick={handleDelete}
+          aria-label="블록 삭제"
+        >
+          <ICONS.trash2 className="h-4 w-4 shrink-0" aria-hidden />
+        </Button>
+      </div>
+      {/* 우측: 편집 완료 (키보드 열림 + 내용 편집 중) */}
+      {showDoneButton ? (
+        <Button
+          type="button"
+          size="sm"
+          className="h-11 shrink-0 px-4 shadow-none"
+          onClick={handleDoneEditing}
+          aria-label="편집 완료"
+        >
+          완료
         </Button>
       ) : null}
-      <Button
-        type="button"
-        variant="outline"
-        size="icon"
-        className="h-10 w-10 shrink-0 bg-background shadow-none text-foreground-placeholder lg:hover:bg-destructive-container lg:hover:text-destructive disabled:border-border"
-        disabled={!canDelete}
-        onClick={handleDelete}
-        aria-label="블록 삭제"
-      >
-        <ICONS.trash2 className="h-4 w-4 shrink-0" aria-hidden />
-      </Button>
     </>
   );
 

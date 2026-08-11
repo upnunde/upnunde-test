@@ -1,6 +1,6 @@
 "use client";
 
-import { Tabs, TabsList, TabsTrigger } from "design-system/ui/tabs";
+import { Tabs, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { AnalyticsPeriodPicker } from "@/components/analytics/AnalyticsPeriodPicker";
 import { AnalyticsScopeDropdown } from "@/components/analytics/AnalyticsScopeDropdown";
 import { AnalyticsEpisodeScopePicker } from "@/components/analytics/AnalyticsEpisodeScopePicker";
@@ -84,7 +84,7 @@ export function AnalyticsScopeFilterBar({
           <Tabs
             value={analyticsArea}
             onValueChange={(v) => onAnalyticsAreaChange(v as AnalyticsAreaTabId)}
-            className="max-w-full min-w-0"
+            className="max-w-full min-w-0 min-h-12"
           >
             <TabsList
               variant="text"
