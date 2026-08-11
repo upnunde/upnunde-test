@@ -3,6 +3,7 @@
 import React, { useState, useMemo, useCallback } from "react";
 import { useRouter, usePathname } from "next/navigation";
 import { StandaloneHeaderPage } from "@/components/layout/StandaloneHeaderPage";
+import { SubHeaderActions } from "@/components/layout/SubHeaderActions";
 import { EpisodeList } from "@/components/episode/EpisodeList";
 import { EmptyStateBanner } from "@/components/episode/EmptyStateBanner";
 import { Pagination } from "@/components/episode/Pagination";
@@ -271,9 +272,12 @@ export default function EpisodeManagementPage() {
       onProfileImageChange={setProfileImageUrl}
     >
       <header className={PAGE_SUBHEADER_WITH_STICKY_CLASS}>
-              <div className="flex w-full max-w-[1200px] items-center justify-start gap-3">
-                <HeaderBackButton onClick={handleBack} aria-label="시리즈 목록으로" />
-                <h1 className="text-heading2_700 text-foreground">에피소드 관리</h1>
+              <div className="flex w-full min-w-0 max-w-[1200px] items-center justify-between gap-3">
+                <div className="flex min-w-0 items-center justify-start gap-3">
+                  <HeaderBackButton onClick={handleBack} aria-label="시리즈 목록으로" />
+                  <h1 className="text-heading2_700 text-foreground">에피소드 관리</h1>
+                </div>
+                <SubHeaderActions />
               </div>
             </header>
 

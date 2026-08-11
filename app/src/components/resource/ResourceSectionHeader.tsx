@@ -6,7 +6,7 @@ import { PAGE_CONTENT_PAD_X_CLASS } from "@/lib/page-layout";
 import { cn } from "design-system/utils";
 
 const SECTION_HEADER_CLASS = cn(
-  "w-full h-fit pt-3 pb-0",
+  "w-full h-fit pt-3 pb-0 max-lg:pt-5",
   PAGE_CONTENT_PAD_X_CLASS,
 );
 

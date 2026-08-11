@@ -57,7 +57,7 @@ export function CharacterCard({
       onClick={handleCardClick}
       onKeyDown={(e) => e.key === "Enter" && (onPreviewClick ? onPreviewClick(character) : handleCardClick(e as unknown as React.MouseEvent))}
       className={cn(
-        "group flex cursor-pointer flex-col items-start justify-start gap-1",
+        "group flex cursor-pointer flex-col items-start justify-start gap-2",
         fluid ? "w-full min-w-0" : "w-[90px]",
       )}
       aria-label={`${character.name} 상세 보기`}

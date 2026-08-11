@@ -39,6 +39,8 @@ import {
 } from "@/lib/episode-resource-copy";
 import { PreviewScreen } from "@/components/editor/PreviewScreen";
 import { Title2 } from "@/components/ui/title2";
+import { SubHeaderActions } from "@/components/layout/SubHeaderActions";
+import { useSeriesCatalogStore } from "@/store/useSeriesCatalogStore";
 import type { ScriptBlock } from "@/types/editor";
 
 /** 신규 등록/상세 라우트 (정책 5, 3) - 실제 경로는 프로젝트에 맞게 변경 */
@@ -132,6 +134,13 @@ export function ResourceManagementPage() {
     return segments[1] ?? "";
   }, [pathname]);
   const [showPreview, setShowPreview] = useState(false);
+  const ensureDemoSeries = useSeriesCatalogStore((s) => s.ensureDemoSeries);
+  const seriesRecord = useSeriesCatalogStore((s) => s.seriesById[seriesId]);
+  const seriesTitle = seriesRecord?.title ?? "시리즈";
+
+  useEffect(() => {
+    ensureDemoSeries();
+  }, [ensureDemoSeries]);
 
   useEffect(() => {
     resetResourceManagementPageStorageIfNeeded();
@@ -245,15 +254,20 @@ export function ResourceManagementPage() {
         {/* [정책 1] 헤더 (레이아웃 가이드: margin 40, max-width 1200, min-width 640) */}
         <header className={PAGE_SUBHEADER_WITH_STICKY_CLASS}>
           <div className="flex w-full min-w-0 max-w-[1200px] mx-auto items-center justify-between gap-4">
-            <div className="flex items-center justify-start gap-3">
+            <div className="flex min-w-0 items-center justify-start gap-3">
               <HeaderBackButton onClick={handleBack} aria-label="시리즈 목록으로" />
               <h1 className="text-heading2_700 text-foreground">리소스 관리</h1>
             </div>
+            <SubHeaderActions />
           </div>
         </header>
 
-        <div className={cn(PAGE_SCROLL_COLUMN_CLASS, "max-lg:px-0 max-lg:pt-0")}>
+        <div className={cn(PAGE_SCROLL_COLUMN_CLASS, "max-lg:px-0 max-lg:pt-6")}>
           <div className={cn("mx-auto flex w-full min-w-0 max-w-[1200px] flex-col", PAGE_GUTTER_GAP_CLASS)}>
+            <div className="flex w-full shrink-0 flex-col gap-3 px-0 max-lg:px-5 lg:flex-row lg:items-center lg:justify-between">
+              <h2 className="min-w-0 text-heading4_700 text-foreground">{seriesTitle}</h2>
+            </div>
+
             <ResourceBanner seriesId={seriesId} />
 
             <div className="flex w-full min-w-0 flex-col items-stretch gap-6 lg:flex-row lg:items-start">
