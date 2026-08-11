@@ -6,7 +6,7 @@ import { PAGE_CONTENT_PAD_X_CLASS } from "@/lib/page-layout";
 import { cn } from "design-system/utils";
 
 const SECTION_HEADER_CLASS = cn(
-  "w-full h-fit pt-3 pb-0 max-lg:pt-5",
+  "w-full h-fit pt-5 pb-0",
   PAGE_CONTENT_PAD_X_CLASS,
 );
 
@@ -31,7 +31,7 @@ export function ResourceSectionHeader({
   if (headerAction) {
     return (
       <div
-        className={cn(SECTION_HEADER_CLASS, "flex items-center justify-between gap-3")}
+        className={cn(SECTION_HEADER_CLASS, "flex items-start justify-between gap-3")}
       >
         <div className="min-w-0 flex-1">{label}</div>
         {headerAction}

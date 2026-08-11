@@ -169,8 +169,7 @@ export function BgmSection({
             </Button>
           </div>
         ) : (
-          <div className={cn("self-stretch pb-2 pt-2 rounded-sm flex flex-col justify-start items-start gap-3", PAGE_FLUSH_CONTENT_PAD_X_CLASS)}>
-            <div className="mb-1 mt-0 w-full pt-0 pb-0">
+          <div className={cn("self-stretch pb-2 pt-3 rounded-sm flex flex-col justify-start items-start gap-3", PAGE_FLUSH_CONTENT_PAD_X_CLASS)}>
               <Tabs
                 value={activeGenre}
                 onValueChange={setActiveGenre}
@@ -189,12 +188,11 @@ export function BgmSection({
                   ))}
                 </TabsList>
               </Tabs>
-            </div>
             <div className="w-full grid grid-cols-1 gap-y-0 lg:grid-cols-3 lg:gap-x-10">
               {filteredItems.map((item, idx) => (
                 <div
                   key={item.id}
-                  className="w-full border-b border-border last:border-b-0 lg:border-b-0"
+                  className="w-full"
                 >
                   <BgmListItem
                     variant="default"
