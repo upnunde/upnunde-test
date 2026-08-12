@@ -1,9 +1,13 @@
 import { PAGE_FLUSH_CONTENT_PAD_X_CLASS } from "@/lib/page-layout";
 import { cn } from "design-system/utils";
 
+/** 모바일 주요통계 타일 그룹 — Title2 아래 12px · 좌우 20px 인셋 */
+export const ANALYTICS_KEY_STATS_GROUP_SHELL_CLASS =
+  "flex w-full flex-col self-stretch max-lg:pt-3 max-lg:px-5";
+
 /** 분석·수익 `주요통계` 카드 행 — 카드 min 160px, 공간 부족 시 줄바꿈 */
 export const ANALYTICS_KEY_STATS_ROW_CLASS =
-  "inline-flex min-h-0 min-w-0 flex-1 flex-wrap items-stretch justify-start self-stretch";
+  "inline-flex min-h-0 min-w-0 flex-1 flex-wrap items-stretch justify-start self-stretch max-lg:overflow-hidden max-lg:rounded-sm max-lg:border max-lg:border-border";
 
 export const ANALYTICS_KEY_STAT_BUTTON_CLASS =
   `min-w-[160px] flex-[1_1_160px] self-stretch border-b border-border py-10 inline-flex flex-col items-center justify-start gap-1 ${PAGE_FLUSH_CONTENT_PAD_X_CLASS}`;

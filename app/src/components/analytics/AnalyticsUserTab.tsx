@@ -7,7 +7,10 @@ import { Tabs, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { AnalyticsPanel } from "@/components/analytics/AnalyticsPanel";
 import { AnalyticsViewerHourlyActivityChart } from "@/components/analytics/AnalyticsViewerHourlyActivityChart";
 import {
+  ANALYTICS_KEY_STAT_BUTTON_CLASS,
   ANALYTICS_KEY_STAT_BUTTON_INTERACTION_CLASS,
+  ANALYTICS_KEY_STATS_GROUP_SHELL_CLASS,
+  ANALYTICS_KEY_STATS_ROW_CLASS,
   analyticsKeyStatButtonStateClass,
   analyticsKeyStatLabelClass,
   analyticsKeyStatValueClass,
@@ -151,7 +154,8 @@ export function AnalyticsUserTab({
     <div className={`flex flex-col items-start justify-start ${PAGE_GUTTER_GAP_CLASS} self-stretch px-0`}>
       <AnalyticsPanel>
         <Title2 text="주요통계" variant="title" asSectionHeader />
-        <div className="inline-flex w-full flex-wrap items-stretch sm:flex-nowrap">
+        <div className={ANALYTICS_KEY_STATS_GROUP_SHELL_CLASS}>
+          <div className={ANALYTICS_KEY_STATS_ROW_CLASS}>
           {userDummy.primary.map((stat, i, arr) => {
             const selected = userMetric === stat.id;
             const label = USER_PRIMARY_LABELS[stat.id];
@@ -162,10 +166,9 @@ export function AnalyticsUserTab({
                 onClick={() => setUserMetric(stat.id)}
                 aria-pressed={selected}
                 className={cn(
-                  "flex min-w-[140px] flex-1 flex-col items-center gap-1 border-b border-border py-10 text-left",
-                  PAGE_FLUSH_CONTENT_PAD_X_CLASS,
+                  ANALYTICS_KEY_STAT_BUTTON_CLASS,
                   ANALYTICS_KEY_STAT_BUTTON_INTERACTION_CLASS,
-                  i < arr.length - 1 && "border-r border-border",
+                  i < arr.length - 1 && "border-r",
                   analyticsKeyStatButtonStateClass(selected),
                 )}
               >
@@ -179,6 +182,7 @@ export function AnalyticsUserTab({
               </button>
             );
           })}
+          </div>
         </div>
         <div className="flex flex-col items-stretch gap-3 self-stretch px-0 py-10">
           <p className={cn(PAGE_FLUSH_CONTENT_PAD_X_CLASS, "text-body3_500 text-foreground-muted")}>

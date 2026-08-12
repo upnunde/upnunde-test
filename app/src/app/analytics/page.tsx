@@ -4,6 +4,7 @@ import {
   type AnalyticsAreaTabId,
 } from "@/components/analytics/AnalyticsDashboard";
 import { PAGE_CONTAINER_CLASS, PAGE_SUBHEADER_WITH_FILTER_CLASS } from "@/lib/page-layout";
+import { APP_BROWSER_BG_ROOT_CLASS } from "@/lib/mobile-viewport";
 
 function parseDefaultArea(area: string | string[] | undefined): AnalyticsAreaTabId {
   const value = Array.isArray(area) ? area[0] : area;
@@ -24,7 +25,7 @@ export default async function AnalyticsPage({
   const defaultArea = parseDefaultArea(sp.area);
 
   return (
-    <AppShell sidebarActiveId="analytics">
+    <AppShell sidebarActiveId="analytics" browserBgClassName={APP_BROWSER_BG_ROOT_CLASS}>
       <div className={PAGE_SUBHEADER_WITH_FILTER_CLASS}>
         <div className={`${PAGE_CONTAINER_CLASS} flex items-center justify-start gap-4`}>
           <h1 className="text-heading2_700 text-foreground">분석</h1>

@@ -139,6 +139,18 @@ export function BgmSection({
         <ResourceSectionHeader
           title={title}
           description={description}
+          headerAction={
+            <Button
+              type="button"
+              variant="outline"
+              shape="square"
+              size="sm"
+              className="hidden shrink-0 lg:inline-flex"
+              onClick={() => setModalOpen(true)}
+            >
+              추가하기
+            </Button>
+          }
         />
         {items.length === 0 ? (
           <div className="self-stretch h-36 p-5 rounded-sm flex flex-col justify-center items-center gap-4">
@@ -156,7 +168,7 @@ export function BgmSection({
             </Button>
           </div>
         ) : (
-          <div className={cn("self-stretch pb-2 pt-3 rounded-sm flex flex-col justify-start items-start gap-3", PAGE_FLUSH_CONTENT_PAD_X_CLASS)}>
+          <div className={cn("self-stretch pb-5 pt-3 rounded-sm flex flex-col justify-start items-start gap-3", PAGE_FLUSH_CONTENT_PAD_X_CLASS)}>
               <Tabs
                 value={activeGenre}
                 onValueChange={setActiveGenre}
@@ -196,12 +208,13 @@ export function BgmSection({
                 </div>
               ))}
             </div>
-            <div className="flex w-full justify-center pt-1">
+            <div className="flex w-full pt-1 lg:hidden">
               <Button
                 type="button"
                 variant="outline"
                 shape="square"
-                size="sm"
+                size="xl"
+                className="w-full"
                 onClick={() => setModalOpen(true)}
               >
                 추가하기

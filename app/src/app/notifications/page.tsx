@@ -11,6 +11,7 @@ import {
   PAGE_SCROLL_TOP_CLASS,
   PAGE_SUBHEADER_WITH_FILTER_CLASS,
 } from "@/lib/page-layout";
+import { APP_BROWSER_BG_ROOT_CLASS } from "@/lib/mobile-viewport";
 import { cn } from "design-system/utils";
 import {
   filterNotificationsByTab,
@@ -394,7 +395,7 @@ export default function NotificationsPage() {
   );
 
   return (
-    <AppShell sidebarActiveId="notification">
+    <AppShell sidebarActiveId="notification" browserBgClassName={APP_BROWSER_BG_ROOT_CLASS}>
       <div className={PAGE_SUBHEADER_WITH_FILTER_CLASS}>
           <div className={`${PAGE_CONTAINER_CLASS} flex items-center justify-start gap-4`}>
             <h1 className="text-heading2_700 text-foreground">알림</h1>

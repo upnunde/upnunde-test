@@ -8,6 +8,7 @@ import {
   ANALYTICS_KEY_STAT_BUTTON_CLASS,
   ANALYTICS_KEY_STAT_BUTTON_INTERACTION_CLASS,
   ANALYTICS_KEY_STAT_DELTA_CLASS,
+  ANALYTICS_KEY_STATS_GROUP_SHELL_CLASS,
   ANALYTICS_KEY_STATS_ROW_CLASS,
   analyticsKeyStatButtonStateClass,
   analyticsKeyStatLabelClass,
@@ -97,7 +98,8 @@ export function MonetizationDashboard({
       <div className={`flex flex-col items-start justify-start ${PAGE_GUTTER_GAP_CLASS} self-stretch px-0`}>
         <AnalyticsPanel>
           <Title2 text="주요통계" variant="title" asSectionHeader />
-          <div className={ANALYTICS_KEY_STATS_ROW_CLASS}>
+          <div className={ANALYTICS_KEY_STATS_GROUP_SHELL_CLASS}>
+            <div className={ANALYTICS_KEY_STATS_ROW_CLASS}>
             {MONETIZATION_KEY_STATS_ROWS.map((stat, i, arr) => (
               <button
                 key={stat.label}
@@ -123,6 +125,7 @@ export function MonetizationDashboard({
                 </div>
               </button>
             ))}
+            </div>
           </div>
 
           <div className="flex flex-col items-stretch gap-3 self-stretch px-0 py-10">

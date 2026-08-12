@@ -9,11 +9,12 @@ import {
   PAGE_CONTAINER_CLASS,
   PAGE_FLUSH_CONTENT_PAD_X_CLASS,
   PAGE_GUTTER_GAP_CLASS,
-  PAGE_SCROLL_ROOT_CLASS,
   PAGE_SCROLL_ROOT_MOBILE_FLUSH_CLASS,
+  PAGE_SCROLL_ROOT_TRANSPARENT_CLASS,
   PAGE_STACK_CLASS,
   PAGE_SUBHEADER_WITH_STICKY_CLASS,
 } from "@/lib/page-layout";
+import { APP_BROWSER_BG_ROOT_CLASS } from "@/lib/mobile-viewport";
 import { Alert, AlertDescription } from "@/components/ui/alert";
 import { Button } from "design-system/ui/button";
 import { Input } from "@/components/ui/input";
@@ -292,13 +293,13 @@ function SettlementRowDesktop({
             type="button"
             variant="ghost"
             shape="circle"
-            size="icon"
+            size="icon-sm"
             icon={ICONS.fileText}
             onClick={onTaxDetail}
             aria-label="세금 계산 상세 보기"
           />
         ) : (
-          <span aria-hidden className="size-9" />
+          <span aria-hidden className="size-8" />
         )}
       </div>
     </div>
@@ -355,7 +356,7 @@ function SettlementRowMobile({
             type="button"
             variant="ghost"
             shape="circle"
-            size="icon"
+            size="icon-sm"
             icon={ICONS.fileText}
             onClick={onTaxDetail}
             aria-label="세금 계산 상세 보기"
@@ -556,7 +557,7 @@ export default function MonetizationSettlementsPage() {
   }, []);
 
   return (
-    <AppShell sidebarActiveId="settlements">
+    <AppShell sidebarActiveId="settlements" browserBgClassName={APP_BROWSER_BG_ROOT_CLASS}>
       <div className={PAGE_SUBHEADER_WITH_STICKY_CLASS}>
           <div className={`${PAGE_CONTAINER_CLASS} flex items-center justify-start gap-4`}>
             <h1 className="text-heading2_700 text-foreground">정산</h1>
@@ -565,7 +566,7 @@ export default function MonetizationSettlementsPage() {
 
         <div
           className={cn(
-            PAGE_SCROLL_ROOT_CLASS,
+            PAGE_SCROLL_ROOT_TRANSPARENT_CLASS,
             PAGE_SCROLL_ROOT_MOBILE_FLUSH_CLASS,
             "items-stretch justify-start gap-0",
           )}
@@ -587,7 +588,7 @@ export default function MonetizationSettlementsPage() {
                       </Button>
                     }
                   />
-                  <div className={cn("flex flex-col p-5", PAGE_GUTTER_GAP_CLASS)}>
+                  <div className={cn("flex flex-col p-5 max-lg:pt-2", PAGE_GUTTER_GAP_CLASS)}>
                     <div className="flex flex-col gap-3 rounded-sm bg-background-muted p-5 sm:p-8 lg:flex-row lg:items-center lg:justify-between lg:gap-6 lg:p-10">
                       <div className={cn("flex flex-col items-start justify-start mb-5", PAGE_GUTTER_GAP_CLASS)}>
                         <p className="text-body3_700 text-foreground-muted">지금 출금 가능한 금액</p>
@@ -637,7 +638,7 @@ export default function MonetizationSettlementsPage() {
                 <AnalyticsPanel>
                   <div className="px-5 py-4">
                     <div className="flex flex-wrap items-center justify-between gap-3">
-                      <h3 className="text-heading5_700 text-foreground">정산 내역</h3>
+                      <h3 className="text-body1_700 text-foreground">정산 내역</h3>
                     </div>
                     <div className="mt-3 flex flex-wrap items-center justify-between gap-4">
                       <div

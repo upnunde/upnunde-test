@@ -50,12 +50,15 @@ export const PAGE_SCROLL_TOP_CLASS = "max-lg:pt-3 lg:pt-10";
 const PAGE_SCROLL_MOBILE_FILL_CLASS = "";
 const PAGE_SCROLL_LG_TRAP_CLASS = "lg:min-h-0 lg:flex-1 lg:overflow-y-auto";
 
+/** AppShell main 레이아웃 — 배경은 `browserBgClassName`으로 주입 */
+export const APP_MAIN_LAYOUT_CLASS =
+  "flex min-w-0 w-full flex-col max-lg:overflow-visible lg:min-h-0 lg:flex-1 lg:overflow-hidden";
+
 /**
  * 앱 본문 유일 main — AppShell·StandaloneHeaderPage에서 한 번만 사용.
  * 모바일: 콘텐츠 높이만큼 확장(문서 스크롤·sticky) / lg: flex-1 내부 스크롤
  */
-export const APP_MAIN_CLASS =
-  `flex min-w-0 w-full flex-col ${APP_BROWSER_BG_CLASS} max-lg:overflow-visible lg:min-h-0 lg:flex-1 lg:overflow-hidden`;
+export const APP_MAIN_CLASS = `${APP_MAIN_LAYOUT_CLASS} ${APP_BROWSER_BG_CLASS}`;
 
 /** AppShell·시리즈 페이지 본문 패널 */
 export const APP_MAIN_PANEL_CLASS =

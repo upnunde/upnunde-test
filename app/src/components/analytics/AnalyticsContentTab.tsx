@@ -9,6 +9,7 @@ import {
   ANALYTICS_KEY_STAT_BUTTON_CLASS,
   ANALYTICS_KEY_STAT_BUTTON_INTERACTION_CLASS,
   ANALYTICS_KEY_STAT_DELTA_CLASS,
+  ANALYTICS_KEY_STATS_GROUP_SHELL_CLASS,
   ANALYTICS_KEY_STATS_ROW_CLASS,
   analyticsKeyStatButtonStateClass,
   analyticsKeyStatLabelClass,
@@ -112,7 +113,8 @@ export function AnalyticsContentTab({
       <AnalyticsPanel>
         <Title2 text="주요통계" variant="title" asSectionHeader />
 
-        <div className={ANALYTICS_KEY_STATS_ROW_CLASS}>
+        <div className={ANALYTICS_KEY_STATS_GROUP_SHELL_CLASS}>
+          <div className={ANALYTICS_KEY_STATS_ROW_CLASS}>
           {primaryStats.map((stat, i, arr) => {
             const selected = primaryMetric === stat.id;
             const label = PRIMARY_LABELS[stat.id];
@@ -139,6 +141,7 @@ export function AnalyticsContentTab({
               </button>
             );
           })}
+          </div>
         </div>
 
         <div className="flex flex-col items-stretch gap-3 self-stretch px-0 py-10">

@@ -44,14 +44,20 @@ export const APP_VIEWPORT_SHELL_CLASS =
   "flex w-full min-h-dvh flex-col box-border lg:h-dvh lg:max-h-dvh lg:overflow-hidden";
 
 /**
- * 브라우저·페이지 셸 배경
- * - 모바일·lg+ 모두 DS canvas — 최하위 앱 배경 면(`--canvas`)으로 통일
+ * DS M3 Background — `--canvas` (최하위 앱 배경 면)
+ * 내 작품·분석·정산·알림 등 카드 대비가 필요한 목록/대시보드 페이지
  */
-export const APP_BROWSER_BG_CLASS = "bg-canvas";
+export const APP_BROWSER_BG_ROOT_CLASS = "bg-canvas";
 
-/** 모바일 브라우저 chrome theme-color — canvas (라이트 white · 다크 grayscale-150) */
-export const APP_BROWSER_BG_CANVAS_THEME_COLOR_LIGHT = "#FFFFFF";
-export const APP_BROWSER_BG_CANVAS_THEME_COLOR_DARK = "#121213";
+/**
+ * DS M3 Background Container — `--canvas-muted`
+ * 앱 기본 브라우저·페이지 셸 배경
+ */
+export const APP_BROWSER_BG_CLASS = "bg-canvas-muted";
+
+/** 브라우저 chrome theme-color — canvas-muted (라이트 grayscale-15 · 다크 grayscale-130) */
+export const APP_BROWSER_BG_CANVAS_THEME_COLOR_LIGHT = "#F1F4F6";
+export const APP_BROWSER_BG_CANVAS_THEME_COLOR_DARK = "#323235";
 
 /** @deprecated `APP_BROWSER_BG_CANVAS_THEME_COLOR_LIGHT` 사용 */
 export const APP_BROWSER_BG_BACKGROUND_20_THEME_COLOR = APP_BROWSER_BG_CANVAS_THEME_COLOR_LIGHT;
@@ -70,10 +76,11 @@ export const APP_HEADER_EDGE_X_CLASS = "pl-0 pr-5 max-lg:pr-3";
 export const APP_HEADER_START_INSET_CLASS = "pl-3 lg:pl-4";
 
 /**
- * 서브헤더·에디터 헤더 등 단일 바 좌우 인셋 — Header 유효 거터와 동일
- * 좌 `pl-3 lg:pl-4` · 우 `pr-5 max-lg:pr-3`
+ * 페이지 서브헤더·필터/탭 띠·에디터 상단 바 좌우 인셋
+ * - 모바일: 좌우 20 (`px-5`)
+ * - lg+: 좌 16 · 우 20 (`pl-4 pr-5`)
  */
-export const APP_HEADER_BAR_PAD_X_CLASS = "pl-3 pr-5 max-lg:pr-3 lg:pl-4";
+export const APP_HEADER_BAR_PAD_X_CLASS = "max-lg:px-5 lg:pl-4 lg:pr-5";
 
 /** @deprecated `APP_HEADER_STICKY_CLASS` 사용 */
 export const APP_HEADER_FIXED_CLASS = APP_HEADER_STICKY_CLASS;

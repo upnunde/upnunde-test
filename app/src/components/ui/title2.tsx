@@ -125,26 +125,20 @@ export function Title2({
   );
 
   if (asSectionHeader) {
+    const sectionHeaderShellClass = cn(
+      `w-full h-fit ${PAGE_CONTENT_PAD_X_CLASS} max-lg:pt-5 pb-0 border-b-0 lg:py-3 lg:border-b lg:border-divider`,
+      className,
+    );
     if (sectionEnd) {
       return (
-        <div
-          className={cn(
-            `w-full h-fit ${PAGE_CONTENT_PAD_X_CLASS} py-3 border-b border-divider flex items-center justify-between gap-3`,
-            className
-          )}
-        >
+        <div className={cn(sectionHeaderShellClass, "flex items-center justify-between gap-3")}>
           <div className="min-w-0 flex-1">{body}</div>
           <div className="shrink-0">{sectionEnd}</div>
         </div>
       );
     }
     return (
-      <div
-        className={cn(
-          `w-full h-fit ${PAGE_CONTENT_PAD_X_CLASS} py-3 border-b border-divider flex flex-col justify-center items-start`,
-          className
-        )}
-      >
+      <div className={cn(sectionHeaderShellClass, "flex flex-col justify-center items-start")}>
         {body}
       </div>
     );

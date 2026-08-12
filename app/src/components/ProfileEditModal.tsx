@@ -10,6 +10,7 @@ import { PAGE_GUTTER_X_CLASS } from "@/lib/page-layout";
 import { Button } from "design-system/ui/button";
 import { Input, InputGroup, InputHypertext } from "@/components/ui/input";
 import { Textarea } from "design-system/ui/textarea";
+import { ProfileAvatarEditButton } from "@/components/profile/ProfileAvatarEditButton";
 import { formDialogSheetStickyFooterClassName, MODAL_ACTION_BUTTON_SIZE, MOBILE_BOTTOM_SHEET_SCRIM_CLASS, MOBILE_BOTTOM_SHEET_SHELL_BASE_CLASS, mobileBottomSheetLargeMaxHeightClassName } from "@/components/ui/modal/modal-styles";
 import { cn } from "design-system/utils";
 
@@ -74,14 +75,7 @@ function ProfileEditFormFields({
               <ICONS.user className="size-10 text-foreground-placeholder" aria-hidden />
             )}
           </div>
-          <button
-            type="button"
-            onClick={triggerAvatarFileSelect}
-            className="absolute bottom-0 right-0 flex h-8 w-8 cursor-pointer items-center justify-center overflow-hidden rounded-full border-2 border-inverse bg-inverse transition-colors hover:bg-inverse"
-            aria-label="프로필 사진 변경"
-          >
-            <ICONS.pencil className="size-4 text-inverse-foreground" aria-hidden />
-          </button>
+          <ProfileAvatarEditButton onClick={triggerAvatarFileSelect} />
         </div>
       </div>
 
@@ -179,6 +173,7 @@ export function ProfileEditModal({ isOpen, onClose, anchorRef, onSave }: Profile
   const [description, setDescription] = useState("");
   const cardRef = useRef<HTMLDivElement>(null);
   const fileInputRef = useRef<HTMLInputElement>(null);
+  const dismissBackdropRef = useRef(false);
 
   const resetPreview = useCallback(() => {
     if (avatarPreview) URL.revokeObjectURL(avatarPreview);
@@ -239,7 +234,12 @@ export function ProfileEditModal({ isOpen, onClose, anchorRef, onSave }: Profile
 
   useLayoutEffect(() => {
     if (!isOpen || !isDesktop) return;
+    dismissBackdropRef.current = false;
     updatePosition();
+    const frame = requestAnimationFrame(() => {
+      dismissBackdropRef.current = true;
+    });
+    return () => cancelAnimationFrame(frame);
   }, [isOpen, isDesktop, updatePosition]);
 
   useLayoutEffect(() => {
@@ -247,6 +247,17 @@ export function ProfileEditModal({ isOpen, onClose, anchorRef, onSave }: Profile
     window.addEventListener("resize", updatePosition);
     return () => window.removeEventListener("resize", updatePosition);
   }, [isOpen, isDesktop, updatePosition]);
+
+  const handleBackdropPointerDown = useCallback(
+    (event: React.PointerEvent<HTMLDivElement>) => {
+      if (!dismissBackdropRef.current) {
+        event.preventDefault();
+        return;
+      }
+      handleClose();
+    },
+    [handleClose],
+  );
 
   useEffect(() => {
     if (isDesktop || !isOpen) return;
@@ -348,9 +359,13 @@ export function ProfileEditModal({ isOpen, onClose, anchorRef, onSave }: Profile
 
   const desktopContent = (
     <>
-      <div className="fixed inset-0 z-modal" onClick={handleClose} aria-hidden />
+      <div
+        className="fixed inset-0 z-overlay"
+        onPointerDown={handleBackdropPointerDown}
+        aria-hidden
+      />
       {showCard ? (
-        <div className="fixed z-sticky animate-in fade-in zoom-in-95 duration-short" style={style}>
+        <div className="fixed z-modal animate-in fade-in zoom-in-95 duration-short" style={style}>
           <div
             ref={cardRef}
             className="relative flex w-full max-w-96 flex-col items-start justify-start overflow-y-auto rounded-sm border border-border bg-background shadow-elevation-50"

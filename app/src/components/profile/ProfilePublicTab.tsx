@@ -13,6 +13,7 @@ import { Title2 } from "@/components/ui/title2";
 import { AnalyticsPanel } from "@/components/analytics/AnalyticsPanel";
 import { Input, InputGroup, InputHypertext } from "@/components/ui/input";
 import { Textarea } from "design-system/ui/textarea";
+import { ProfileAvatarEditButton } from "@/components/profile/ProfileAvatarEditButton";
 import { ProfileFieldLabel } from "@/components/profile/profile-field-styles";
 import { formFieldAriaDescribedBy } from "@/components/ui/field-label";
 import {
@@ -101,14 +102,7 @@ export function ProfilePublicTab({
                 <ICONS.user className="h-10 w-10 text-foreground-placeholder" aria-hidden />
               )}
             </div>
-            <button
-              type="button"
-              onClick={() => fileInputRef.current?.click()}
-              className="absolute bottom-0 right-0 flex h-8 w-8 items-center justify-center rounded-full border-2 border-inverse bg-inverse hover:bg-inverse"
-              aria-label="프로필 사진 변경"
-            >
-              <ICONS.pencil className="size-4 text-inverse-foreground" aria-hidden />
-            </button>
+            <ProfileAvatarEditButton onClick={() => fileInputRef.current?.click()} />
           </div>
           <p className="text-center text-body3_400 text-foreground-muted">
             독자에게 표시되는 작가 프로필이에요.

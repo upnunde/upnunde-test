@@ -12,6 +12,7 @@ import { usePathname, useRouter } from "next/navigation";
 import { analyticsScopeFilterShellClassName } from "@/components/analytics/analytics-filter-chips";
 import { AppShell } from "@/components/layout/AppShell";
 import { ContentScopeChipGroup } from "@/components/shared/ContentScopeChipGroup";
+import { APP_BROWSER_BG_ROOT_CLASS } from "@/lib/mobile-viewport";
 import {
   PAGE_CONTAINER_CLASS,
   PAGE_CONTENT_PAD_X_CLASS,
@@ -30,7 +31,7 @@ export default function MyWorksLayout({ children }: { children: React.ReactNode 
   const activeWorksTab = getWorksTabFromPathname(pathname);
 
   return (
-    <AppShell sidebarActiveId="series">
+    <AppShell sidebarActiveId="series" browserBgClassName={APP_BROWSER_BG_ROOT_CLASS}>
       <div className={PAGE_SUBHEADER_WITH_FILTER_CLASS}>
         <div className={cn(PAGE_CONTAINER_CLASS, "flex items-center justify-start gap-4")}>
           <h1 className="text-heading2_700 text-foreground">내 작품</h1>
