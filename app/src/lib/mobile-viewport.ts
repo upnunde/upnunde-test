@@ -60,6 +60,21 @@ export const APP_BROWSER_BG_BACKGROUND_20_THEME_COLOR = APP_BROWSER_BG_CANVAS_TH
 export const APP_HEADER_STICKY_CLASS =
   "max-lg:sticky max-lg:top-0 max-lg:z-sticky max-lg:bg-background";
 
+/**
+ * 글로벌 헤더 외곽 가로 인셋 — `pl-0` · 우측 `pr-5`(20) · 모바일 우측 `pr-3`(12)
+ * 좌측 실제 여백은 `APP_HEADER_START_INSET_CLASS`가 담당.
+ */
+export const APP_HEADER_EDGE_X_CLASS = "pl-0 pr-5 max-lg:pr-3";
+
+/** 헤더 좌측 클러스터(메뉴·로고·뒤로가기) 시작 인셋 — 모바일 12 · lg+ 16 */
+export const APP_HEADER_START_INSET_CLASS = "pl-3 lg:pl-4";
+
+/**
+ * 서브헤더·에디터 헤더 등 단일 바 좌우 인셋 — Header 유효 거터와 동일
+ * 좌 `pl-3 lg:pl-4` · 우 `pr-5 max-lg:pr-3`
+ */
+export const APP_HEADER_BAR_PAD_X_CLASS = "pl-3 pr-5 max-lg:pr-3 lg:pl-4";
+
 /** @deprecated `APP_HEADER_STICKY_CLASS` 사용 */
 export const APP_HEADER_FIXED_CLASS = APP_HEADER_STICKY_CLASS;
 

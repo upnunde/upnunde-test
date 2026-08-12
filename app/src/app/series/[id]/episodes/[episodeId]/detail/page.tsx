@@ -39,7 +39,7 @@ import {
   editorMobileSubHeaderShellClass,
 } from "@/lib/editor-scroll";
 import { EDITOR_MOBILE_GUTTER_X_CLASS } from "@/lib/editor-block-layout";
-import { APP_BROWSER_BG_CLASS, APP_PAGE_ROOT_CLASS } from "@/lib/mobile-viewport";
+import { APP_BROWSER_BG_CLASS, APP_HEADER_BAR_PAD_X_CLASS, APP_PAGE_ROOT_CLASS } from "@/lib/mobile-viewport";
 import { APP_MAIN_PANEL_CLASS, APP_SHELL_BODY_ROW_CLASS, EDITOR_PAGE_SCROLL_CLASS } from "@/lib/page-layout";
 import { INITIAL_SCRIPT } from "@/lib/initialScript";
 import { cn } from "design-system/utils";
@@ -206,7 +206,7 @@ export default function EpisodeDetailPage() {
             )}
           >
             <div className={EDITOR_MOBILE_SUB_HEADER_INNER_CLASS}>
-              <header className="flex h-14 shrink-0 items-center justify-start py-0 pl-4 pr-3 lg:h-16 lg:px-6">
+              <header className={cn("flex h-14 shrink-0 items-center justify-start py-0 lg:h-16", APP_HEADER_BAR_PAD_X_CLASS)}>
                 <div className="flex w-full min-w-0 items-center justify-between gap-3">
                   <div className="flex min-w-0 items-center justify-start gap-2 lg:gap-3">
                     <HeaderBackButton onClick={handleBack} aria-label="에피소드 목록으로" />

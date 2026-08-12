@@ -25,6 +25,7 @@ import {
 import { MOBILE_BOTTOM_SHEET_SCRIM_CLASS, MOBILE_BOTTOM_SHEET_SHELL_BASE_CLASS, mobileBottomSheetLargeMaxHeightClassName } from "@/components/ui/modal/modal-styles";
 import { useClientMounted } from "@/hooks/useClientMounted";
 import { useIsLgUp } from "@/hooks/useMediaQuery";
+import { APP_HEADER_BAR_PAD_X_CLASS } from "@/lib/mobile-viewport";
 import { cn } from "design-system/utils";
 import type { ScriptBlock } from "@/types/editor";
 
@@ -494,7 +495,7 @@ export function EditorSubHeader({
 
   return (
     <>
-      <header className="relative mx-auto w-full min-w-0 shrink-0 px-5">
+      <header className={cn("relative mx-auto w-full min-w-0 shrink-0", APP_HEADER_BAR_PAD_X_CLASS)}>
         {/* 모바일 */}
         <div className="flex h-14 items-center gap-2 lg:hidden">
           <HeaderBackButton onClick={handleBack} />

@@ -8,7 +8,7 @@ import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { IconButton } from "@/components/ui/icon-button";
 import { Button } from "design-system/ui/button";
 import { useRouter } from "next/navigation";
-import { APP_HEADER_STICKY_CLASS } from "@/lib/mobile-viewport";
+import { APP_HEADER_EDGE_X_CLASS, APP_HEADER_START_INSET_CLASS, APP_HEADER_STICKY_CLASS } from "@/lib/mobile-viewport";
 import { RenovelStudioLogo } from "@/components/brand/RenovelStudioLogo";
 import { cn } from "design-system/utils";
 
@@ -35,13 +35,14 @@ export default function Header({ profileImageUrl, onProfileImageChange, onMenuCl
   return (
     <header
       className={cn(
-        "flex h-14 shrink-0 items-center justify-between border-b border-border bg-background pl-0 pr-5 max-lg:pr-3",
+        "flex h-14 shrink-0 items-center justify-between border-b border-border bg-background",
+        APP_HEADER_EDGE_X_CLASS,
         APP_HEADER_STICKY_CLASS,
         hideOnMobile && "max-lg:hidden",
         className,
       )}
     >
-      <div className="flex items-center gap-2 self-stretch pl-3 lg:w-[240px] lg:pl-4">
+      <div className={cn("flex items-center gap-2 self-stretch", APP_HEADER_START_INSET_CLASS, "lg:w-[240px]")}>
         {onMenuClick ? (
           <IconButton
             type="button"

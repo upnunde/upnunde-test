@@ -15,7 +15,7 @@ export function SubHeaderActions({ className }: { className?: string }) {
   const router = useRouter();
 
   return (
-    <div className={cn("flex shrink-0 items-center gap-2 lg:hidden", className)}>
+    <div className={cn("flex shrink-0 items-center gap-1 lg:hidden", className)}>
       <IconButton
         type="button"
         variant="ghost"

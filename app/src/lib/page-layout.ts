@@ -3,7 +3,7 @@
  * 앱 셸은 `pagePaddingY` 대신 `PAGE_SCROLL_TOP` + `scrollBottom` 조합.
  */
 
-import { APP_BROWSER_BG_CLASS } from "@/lib/mobile-viewport";
+import { APP_BROWSER_BG_CLASS, APP_HEADER_BAR_PAD_X_CLASS } from "@/lib/mobile-viewport";
 
 /** 페이지·카드 좌우 인셋 — 모바일·lg+ 공통 20px */
 export const PAGE_GUTTER_X_CLASS = "px-5";
@@ -108,9 +108,9 @@ export const PAGE_SUBHEADER_STICKY_CLASS = "";
 export const PAGE_FILTER_HEADER_STICKY_CLASS =
   "max-lg:sticky max-lg:top-14 max-lg:z-overlay";
 
-/** 서브 페이지 상단 바(뒤로가기·제목) — 모바일 56px · lg+ 64px · 좌우 20px */
+/** 서브 페이지 상단 바(뒤로가기·제목) — 모바일 56px · lg+ 64px · Header와 동일 좌우 인셋 */
 export const PAGE_SUBHEADER_CLASS =
-  `flex h-14 w-full shrink-0 items-center justify-center border-b border-border bg-background ${PAGE_FLUSH_CONTENT_PAD_X_CLASS} py-0 lg:h-16`;
+  `flex h-14 w-full shrink-0 items-center justify-center border-b border-border bg-background ${APP_HEADER_BAR_PAD_X_CLASS} py-0 lg:h-16`;
 
 /** 필터 띠와 함께 쓰는 서브헤더 */
 export const PAGE_SUBHEADER_WITH_FILTER_CLASS = PAGE_SUBHEADER_CLASS;
@@ -124,7 +124,7 @@ export const PAGE_SUBHEADER_WITH_STICKY_CLASS = PAGE_SUBHEADER_CLASS;
  */
 export const PAGE_FILTER_HEADER_SHELL_CLASS = [
   "flex w-full shrink-0 flex-col items-center border-b border-border bg-background",
-  PAGE_FLUSH_CONTENT_PAD_X_CLASS,
+  APP_HEADER_BAR_PAD_X_CLASS,
   "py-3",
   PAGE_FILTER_HEADER_STICKY_CLASS,
 ].join(" ");
@@ -138,7 +138,7 @@ export const PAGE_FILTER_HEADER_INNER_CLASS = "w-full min-w-0 max-w-[1200px]";
 /** 인라인 탭 띠 셸(알림·문의 등) — 모바일 헤더 아래 sticky, 하단 구분선 유지 */
 export const PAGE_INLINE_TAB_STRIP_SHELL_CLASS = [
   "w-full shrink-0 border-b border-border bg-background",
-  PAGE_GUTTER_X_CLASS,
+  APP_HEADER_BAR_PAD_X_CLASS,
   PAGE_FILTER_HEADER_STICKY_CLASS,
 ].join(" ");
 
