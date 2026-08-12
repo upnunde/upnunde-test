@@ -172,15 +172,15 @@ export function EditorSceneTabStrip({
       {isListExpanded && typeof document !== "undefined"
         ? createPortal(
             <>
-              {/* 딤드 없이 바깥 탭으로만 닫히도록 투명 레이어 유지 */}
+              {/* 딤드 없이 바깥 탭으로만 닫히도록 투명 레이어 유지 — 패널(z-modal)보다 아래(z-overlay)에 두어 목록 항목 클릭을 가리지 않게 한다 */}
               <div
-                className="fixed inset-0 z-modal"
+                className="fixed inset-0 z-overlay"
                 aria-hidden
                 onClick={() => setIsListExpanded(false)}
               />
               <div
                 id="editor-scene-list-panel"
-                className="fixed inset-x-0 z-sticky flex max-h-[min(48vh,360px)] min-h-0 flex-col border-b border-border bg-background shadow-elevation-20"
+                className="fixed inset-x-0 z-modal flex max-h-[min(48vh,360px)] min-h-0 flex-col border-b border-border bg-background shadow-elevation-20"
                 style={{ top: listAnchorTop }}
                 role="dialog"
                 aria-modal="true"
