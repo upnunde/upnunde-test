@@ -23,11 +23,11 @@ export const ANALYTICS_KEY_STAT_BUTTON_INTERACTION_CLASS =
 
 /**
  * 주요통계 타일 표면
- * - 비선택: `bg-background-muted` (`--background-muted` · grayscale-10)
- * - 선택: `bg-background`
+ * - 선택: `bg-background-muted` (`--background-muted` · grayscale-10) — 선택 타일을 muted로 눌린 느낌
+ * - 비선택: `bg-background`
  */
 export function analyticsKeyStatButtonStateClass(selected: boolean): string {
-  return selected ? "z-0 bg-background" : "bg-background-muted";
+  return selected ? "z-0 bg-background-muted" : "bg-background";
 }
 
 /** @deprecated `ANALYTICS_KEY_STAT_LABEL_CLASS` — 하위 호환 */

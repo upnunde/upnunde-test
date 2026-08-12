@@ -5,6 +5,7 @@ import { ICONS } from "@/lib/icons";
 import { ThemeToggleButton } from "@/components/ThemeToggleButton";
 import { ProfileEditModal } from "@/components/ProfileEditModal";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
+import { IconButton } from "@/components/ui/icon-button";
 import { Button } from "design-system/ui/button";
 import { useRouter } from "next/navigation";
 import { APP_HEADER_STICKY_CLASS } from "@/lib/mobile-viewport";
@@ -34,23 +35,24 @@ export default function Header({ profileImageUrl, onProfileImageChange, onMenuCl
   return (
     <header
       className={cn(
-        "flex h-14 shrink-0 items-center justify-between border-b border-border bg-background pl-0 pr-5",
+        "flex h-14 shrink-0 items-center justify-between border-b border-border bg-background pl-0 pr-5 max-lg:pr-3",
         APP_HEADER_STICKY_CLASS,
         hideOnMobile && "max-lg:hidden",
         className,
       )}
     >
-      <div className="flex items-center gap-2 self-stretch pl-5 lg:w-[240px] lg:pl-4">
+      <div className="flex items-center gap-2 self-stretch pl-3 lg:w-[240px] lg:pl-4">
         {onMenuClick ? (
-          <Button
+          <IconButton
+            type="button"
             variant="ghost"
-            size="icon-sm"
+            shape="circle"
+            size="icon-xl"
+            icon={ICONS.menu}
             onClick={onMenuClick}
             className="text-foreground-muted lg:hidden"
             aria-label="메뉴 열기"
-          >
-            <ICONS.menu className="h-5 w-5" aria-hidden />
-          </Button>
+          />
         ) : null}
         <button
           type="button"
@@ -61,21 +63,24 @@ export default function Header({ profileImageUrl, onProfileImageChange, onMenuCl
           <RenovelStudioLogo />
         </button>
       </div>
-      <div className="flex items-center gap-2">
-        <button
+      <div className="flex items-center gap-1">
+        <Button
           ref={profileButtonRef}
           type="button"
+          variant="ghost"
+          shape="circle"
+          size="icon-xl"
           onClick={() => setIsProfileModalOpen(true)}
-          className="cursor-pointer rounded-full focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2"
+          className="overflow-hidden p-0"
           aria-label="프로필 편집"
         >
-          <Avatar className="size-9 border border-border transition-opacity hover:opacity-90">
+          <Avatar className="size-10">
             {profileImageUrl ? <AvatarImage src={profileImageUrl} alt="프로필" /> : null}
             <AvatarFallback>
               <ICONS.user className="h-5 w-5 text-foreground-placeholder" aria-hidden />
             </AvatarFallback>
           </Avatar>
-        </button>
+        </Button>
         <ThemeToggleButton />
       </div>
       <ProfileEditModal

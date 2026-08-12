@@ -19,6 +19,7 @@ import { PeriodRangeCalendar } from "@/components/analytics/PeriodRangeCalendar"
 import { analyticsPeriodInlineTriggerClassName } from "@/components/analytics/analytics-filter-chips";
 import { useIsLgUp } from "@/hooks/useMediaQuery";
 import { PAGE_GUTTER_X_CLASS } from "@/lib/page-layout";
+import { chipVariants, filterChipVariantProps, chipGroupGapClass } from "@/lib/chip-styles";
 import {
   MOBILE_BOTTOM_SHEET_SCRIM_CLASS,
   MOBILE_BOTTOM_SHEET_SHELL_BASE_CLASS,
@@ -99,7 +100,11 @@ function PeriodPickerPanel({
         </div>
       ) : null}
 
-      <div role="radiogroup" aria-label="프리셋 기간" className="flex flex-col py-1">
+      <div
+        role="radiogroup"
+        aria-label="프리셋 기간"
+        className={cn("flex flex-wrap py-3", PAGE_GUTTER_X_CLASS, chipGroupGapClass("m"))}
+      >
         {ANALYTICS_PERIOD_PRESETS.map(({ value: preset, label }) => {
           const checked = activePreset === preset;
           return (
@@ -110,16 +115,11 @@ function PeriodPickerPanel({
               aria-checked={checked}
               onClick={() => onPresetSelect(preset)}
               className={cn(
-                "flex w-full cursor-pointer items-center justify-between px-4 py-2 text-body3_500 transition-colors hover:bg-muted",
-                checked ? "text-foreground" : "text-foreground-muted",
+                chipVariants(filterChipVariantProps(checked, "m", "circle")),
+                "cursor-pointer",
               )}
             >
-              <span>{label}</span>
-              {checked ? (
-                <span className="text-caption1_400 text-primary" aria-hidden>
-                  선택됨
-                </span>
-              ) : null}
+              {label}
             </button>
           );
         })}

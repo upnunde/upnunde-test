@@ -139,19 +139,6 @@ export function BgmSection({
         <ResourceSectionHeader
           title={title}
           description={description}
-          headerAction={
-            items.length > 0 ? (
-              <Button
-                type="button"
-                variant="outline"
-                shape="square"
-                size="sm"
-                onClick={() => setModalOpen(true)}
-              >
-                추가하기
-              </Button>
-            ) : undefined
-          }
         />
         {items.length === 0 ? (
           <div className="self-stretch h-36 p-5 rounded-sm flex flex-col justify-center items-center gap-4">
@@ -208,6 +195,17 @@ export function BgmSection({
                   />
                 </div>
               ))}
+            </div>
+            <div className="flex w-full justify-center pt-1">
+              <Button
+                type="button"
+                variant="outline"
+                shape="square"
+                size="sm"
+                onClick={() => setModalOpen(true)}
+              >
+                추가하기
+              </Button>
             </div>
           </div>
         )}
