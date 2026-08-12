@@ -9,6 +9,7 @@ import { FilterChip } from "@/components/ui/chip";
 import { EDITOR_SCENE_TAB_STRIP_ID, resolveEditorActiveSceneId } from "@/lib/editor-scroll";
 import { PAGE_FLUSH_CONTENT_PAD_X_CLASS } from "@/lib/page-layout";
 import { HORIZONTAL_SCROLLBAR_HIDE_CLASS } from "@/lib/tab-styles";
+import { Button } from "design-system/ui/button";
 import { cn } from "design-system/utils";
 
 export interface EditorSceneTabStripProps {
@@ -151,10 +152,12 @@ export function EditorSceneTabStrip({
             );
           })}
         </div>
-        <button
+        <Button
           type="button"
+          variant="outline"
+          size="icon-sm"
+          className="shrink-0 shadow-none text-foreground-placeholder"
           onClick={() => setIsListExpanded((open) => !open)}
-          className="flex h-8 w-8 shrink-0 cursor-pointer items-center justify-center rounded-md border border-border text-foreground-placeholder transition-colors hover:bg-muted hover:text-foreground-muted"
           aria-label={isListExpanded ? "장면 목록 접기" : "장면 목록 펼치기"}
           aria-expanded={isListExpanded}
           aria-controls="editor-scene-list-panel"
@@ -163,7 +166,7 @@ export function EditorSceneTabStrip({
             className={cn("h-4 w-4 transition-transform duration-short", isListExpanded && "rotate-180")}
             aria-hidden
           />
-        </button>
+        </Button>
       </div>
 
       {isListExpanded && typeof document !== "undefined"

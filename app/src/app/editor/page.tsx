@@ -116,10 +116,10 @@ function EditorWorkspace({
   }
 
   return (
-    <div className={cn("flex min-h-0 flex-1 flex-col overflow-hidden bg-background", APP_MAIN_PANEL_CLASS)}>
+    <div className={cn("flex min-h-0 flex-1 flex-col overflow-hidden", APP_BROWSER_BG_CLASS, APP_MAIN_PANEL_CLASS)}>
       <div
         className={cn(
-          "flex min-h-0 flex-1 flex-col overflow-hidden",
+          "flex min-h-0 flex-1 flex-col overflow-hidden bg-background",
           APP_MAIN_PANEL_CLASS,
           mobilePanel !== "edit" && "hidden",
         )}

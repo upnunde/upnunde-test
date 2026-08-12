@@ -43,12 +43,15 @@ export const MOBILE_FIXED_BOTTOM_OFFSET_CLASS =
 export const APP_VIEWPORT_SHELL_CLASS =
   "flex w-full min-h-dvh flex-col box-border lg:h-dvh lg:max-h-dvh lg:overflow-hidden";
 
-/** 브라우저·페이지 셸 배경 — DS canvas (라이트 white · 다크 black) */
+/**
+ * 브라우저·페이지 셸 배경
+ * - 모바일·lg+ 모두 DS canvas — 최하위 앱 배경 면(`--canvas`)으로 통일
+ */
 export const APP_BROWSER_BG_CLASS = "bg-canvas";
 
-/** 브라우저 chrome theme-color — DS canvas (라이트 white · 다크 black) */
-export const APP_BROWSER_BG_CANVAS_THEME_COLOR_LIGHT = "#ffffff";
-export const APP_BROWSER_BG_CANVAS_THEME_COLOR_DARK = "#000000";
+/** 모바일 브라우저 chrome theme-color — canvas (라이트 white · 다크 grayscale-150) */
+export const APP_BROWSER_BG_CANVAS_THEME_COLOR_LIGHT = "#FFFFFF";
+export const APP_BROWSER_BG_CANVAS_THEME_COLOR_DARK = "#121213";
 
 /** @deprecated `APP_BROWSER_BG_CANVAS_THEME_COLOR_LIGHT` 사용 */
 export const APP_BROWSER_BG_BACKGROUND_20_THEME_COLOR = APP_BROWSER_BG_CANVAS_THEME_COLOR_LIGHT;

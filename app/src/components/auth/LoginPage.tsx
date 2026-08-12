@@ -1,6 +1,7 @@
 "use client";
 
 import { space } from "@/lib/spacing";
+import { APP_BROWSER_BG_CLASS } from "@/lib/mobile-viewport";
 import { cn } from "design-system/utils";
 
 import React, { useCallback, useState } from "react";
@@ -48,7 +49,7 @@ export function LoginPage() {
   };
 
   return (
-    <div className="relative flex min-h-dvh min-w-0 flex-col items-center justify-center bg-background px-6 py-8">
+    <div className={cn("relative flex min-h-dvh min-w-0 flex-col items-center justify-center px-6 py-8", APP_BROWSER_BG_CLASS)}>
       {/* 중앙 콘텐츠: 열 방향 Flexbox */}
       <main className="flex w-full max-w-[400px] flex-col items-center gap-6">
         <div className="flex w-full flex-col items-center gap-3 pb-4">

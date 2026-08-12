@@ -3,6 +3,7 @@ import {
   CONTROL_GROUP_GAP_STANDARD_RESPONSIVE_CLASS,
   CONTROL_HEIGHT_CLASS,
 } from "@/lib/chip-styles";
+import { buttonVariants } from "design-system/ui/button";
 import { cn } from "design-system/utils";
 
 /** 분석 필터 행 칩·드롭다운 — 모바일 32px · lg+ 36px */
@@ -35,9 +36,14 @@ export const analyticsOutlineChipClassName = chipVariants({
   icon: false,
 });
 
-/** 분석 상단 기간 피커 인라인 트리거 */
+/**
+ * 분석 상단 기간 피커 인라인 트리거 — DS `buttonVariants(ghost·neutral)` 기반.
+ * 보더 없는 투명 텍스트+아이콘 버튼(원래 스타일)을 DS 버튼 토큰으로 표현하되,
+ * radix `PopoverTrigger asChild` 호환을 위해 raw `<button>` + forwardRef 구조는 트리거 컴포넌트에서 유지한다.
+ */
 export const analyticsPeriodInlineTriggerClassName = cn(
-  "inline-flex h-9 min-w-20 shrink-0 cursor-pointer items-center justify-center gap-2 overflow-hidden rounded-md border-0 bg-transparent px-0 text-body2_500 text-foreground-muted shadow-none transition-colors hover:bg-transparent focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-2 data-[state=open]:bg-transparent",
+  buttonVariants({ variant: "ghost", tone: "neutral", size: "default", shape: "square" }),
+  "min-w-20 gap-2 overflow-hidden px-0 text-body2_500 text-foreground-muted hover:bg-transparent data-[state=open]:bg-transparent",
 );
 
 /** 필터 행 구분선 — 모바일 32px · lg+ 36px */

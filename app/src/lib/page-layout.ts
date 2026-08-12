@@ -3,6 +3,8 @@
  * 앱 셸은 `pagePaddingY` 대신 `PAGE_SCROLL_TOP` + `scrollBottom` 조합.
  */
 
+import { APP_BROWSER_BG_CLASS } from "@/lib/mobile-viewport";
+
 /** 페이지·카드 좌우 인셋 — 모바일·lg+ 공통 20px */
 export const PAGE_GUTTER_X_CLASS = "px-5";
 
@@ -53,14 +55,14 @@ const PAGE_SCROLL_LG_TRAP_CLASS = "lg:min-h-0 lg:flex-1 lg:overflow-y-auto";
  * 모바일: 콘텐츠 높이만큼 확장(문서 스크롤·sticky) / lg: flex-1 내부 스크롤
  */
 export const APP_MAIN_CLASS =
-  "flex min-w-0 w-full flex-col bg-canvas max-lg:overflow-visible lg:min-h-0 lg:flex-1 lg:overflow-hidden";
+  `flex min-w-0 w-full flex-col ${APP_BROWSER_BG_CLASS} max-lg:overflow-visible lg:min-h-0 lg:flex-1 lg:overflow-hidden`;
 
 /** AppShell·시리즈 페이지 본문 패널 */
 export const APP_MAIN_PANEL_CLASS =
   "flex w-full flex-col max-lg:overflow-visible lg:min-h-0 lg:flex-1 lg:overflow-hidden";
 
 /** 서브헤더 + 스크롤 본문을 한 덩어리로 묶는 페이지 셸(리소스 상세·관리 등) */
-export const PAGE_SUBHEADER_PAGE_SHELL_CLASS = `${APP_MAIN_PANEL_CLASS} bg-canvas`;
+export const PAGE_SUBHEADER_PAGE_SHELL_CLASS = `${APP_MAIN_PANEL_CLASS} ${APP_BROWSER_BG_CLASS}`;
 
 /**
  * AppShell 사이드바+본문 행
@@ -74,9 +76,9 @@ const PAGE_SCROLL_ROOT_LAYOUT_CLASS =
   `flex flex-col max-lg:overflow-visible ${PAGE_SCROLL_MOBILE_FILL_CLASS} ${PAGE_SCROLL_LG_TRAP_CLASS} ${PAGE_SCROLL_TOP_CLASS} ${PAGE_SCROLL_GUTTER_CLASS} ${PAGE_SCROLL_BOTTOM_CLASS}`;
 
 /** AppShell main 스크롤 루트 — 상단·가로 인셋 · 하단 80px */
-export const PAGE_SCROLL_ROOT_CLASS = `${PAGE_SCROLL_ROOT_LAYOUT_CLASS} bg-canvas`;
+export const PAGE_SCROLL_ROOT_CLASS = `${PAGE_SCROLL_ROOT_LAYOUT_CLASS} ${APP_BROWSER_BG_CLASS}`;
 
-/** 스크롤 루트 배경 없음 — AppShell browser base(canvas)가 비치도록 */
+/** 스크롤 루트 배경 없음 — AppShell browser base(모바일 canvas-muted · lg+ canvas)가 비치도록 */
 export const PAGE_SCROLL_ROOT_TRANSPARENT_CLASS = PAGE_SCROLL_ROOT_LAYOUT_CLASS;
 
 /** 모바일 풀블리드 스크롤 루트 — 외곽 패딩만 제거(콘텐츠 gap은 페이지에서 유지) */
@@ -88,16 +90,16 @@ export const PAGE_CARD_SHELL_MOBILE_FLUSH_CLASS = "max-lg:rounded-none max-lg:bo
 /** fullWidth PageCard — 가로 인셋 없음(스크롤 루트·내부 flush 토큰이 담당) */
 export const PAGE_CARD_FULL_WIDTH_PAD_X_CLASS = "max-lg:px-0 lg:px-0";
 
-/** 모바일 카드형 목록 행 — 정산·내 작품·에피소드 공통 */
+/** 모바일 목록 행 — 아웃라인 없이 divider로 구분 (에피소드 등) */
 export const PAGE_MOBILE_LIST_ITEM_CARD_CLASS =
-  "max-lg:rounded-md max-lg:border max-lg:border-border max-lg:bg-background max-lg:p-4 max-lg:shadow-none";
+  "max-lg:border-b max-lg:border-divider max-lg:bg-background max-lg:py-4 max-lg:last:border-b-0";
 
-/** 모바일 카드형 목록 컨테이너 간격 — `space.list.listItemGap` (gap-3) */
-export const PAGE_MOBILE_LIST_STACK_GAP_CLASS = "max-lg:gap-3";
+/** 모바일 목록 스택 — divider 행은 gap 없음 */
+export const PAGE_MOBILE_LIST_STACK_GAP_CLASS = "max-lg:gap-0";
 
 /** AppShell main 스크롤 루트 — 상단 여백 · 가로 인셋 · 하단 80px */
 export const PAGE_SCROLL_ROOT_TOP_CLASS =
-  `flex flex-col bg-canvas max-lg:overflow-visible ${PAGE_SCROLL_LG_TRAP_CLASS} ${PAGE_SCROLL_TOP_CLASS} ${PAGE_SCROLL_GUTTER_CLASS} ${PAGE_SCROLL_BOTTOM_CLASS}`;
+  `flex flex-col ${APP_BROWSER_BG_CLASS} max-lg:overflow-visible ${PAGE_SCROLL_LG_TRAP_CLASS} ${PAGE_SCROLL_TOP_CLASS} ${PAGE_SCROLL_GUTTER_CLASS} ${PAGE_SCROLL_BOTTOM_CLASS}`;
 
 /** @deprecated 서브헤더 sticky 미사용 */
 export const PAGE_SUBHEADER_STICKY_CLASS = "";
@@ -142,10 +144,23 @@ export const PAGE_INLINE_TAB_STRIP_SHELL_CLASS = [
 
 /** 스크롤 + 중앙 정렬 레이아웃(리소스 상세·목록 등) */
 export const PAGE_SCROLL_COLUMN_CLASS =
-  `flex flex-col items-center bg-canvas max-lg:overflow-visible ${PAGE_SCROLL_MOBILE_FILL_CLASS} ${PAGE_SCROLL_LG_TRAP_CLASS} ${PAGE_SCROLL_TOP_CLASS} ${PAGE_GUTTER_GAP_CLASS} ${PAGE_GUTTER_X_CLASS} ${PAGE_SCROLL_BOTTOM_CLASS}`;
+  `flex flex-col items-center ${APP_BROWSER_BG_CLASS} max-lg:overflow-visible ${PAGE_SCROLL_MOBILE_FILL_CLASS} ${PAGE_SCROLL_LG_TRAP_CLASS} ${PAGE_SCROLL_TOP_CLASS} ${PAGE_GUTTER_GAP_CLASS} ${PAGE_GUTTER_X_CLASS} ${PAGE_SCROLL_BOTTOM_CLASS}`;
 
 /** PAGE_SCROLL_COLUMN 스크롤 루트 식별자 — 모바일 헤더 접힘 훅용 */
 export const PAGE_SCROLL_COLUMN_ROOT_ATTR = "data-page-scroll-column-root";
+
+/**
+ * 모바일 시리즈 타이틀 띠 — 풀폭 surface(`bg-background`).
+ * 스크롤 상단·가로 인셋을 띠가 담당한다. 스크롤 루트는 `max-lg:px-0 max-lg:pt-0`.
+ */
+export const PAGE_SERIES_TITLE_BAND_CLASS =
+  "flex w-full min-w-0 shrink-0 flex-col gap-3 self-stretch px-0 max-lg:bg-background max-lg:px-5 max-lg:pt-6 max-lg:pb-3 lg:flex-row lg:items-center lg:justify-between";
+
+/** @deprecated 스크롤 루트 `max-lg:px-0` + `PAGE_SERIES_TITLE_BAND_CLASS` 사용 */
+export const PAGE_SERIES_TITLE_BAND_BREAKOUT_CLASS = "max-lg:-mx-5";
+
+/** 타이틀 띠 아래 본문 — 스크롤이 `max-lg:px-0`일 때 모바일 가로 인셋 + surface */
+export const PAGE_SERIES_BODY_GUTTER_CLASS = "max-lg:bg-background max-lg:px-5";
 
 /** 모바일 하단 고정 액션 바(36px 버튼 + py-12×2) 위 스크롤 하단 여백 */
 export const PAGE_MOBILE_FIXED_ACTION_BAR_SCROLL_PAD_CLASS =
@@ -161,6 +176,6 @@ export const PAGE_STACK_CLASS =
 /** 넓은 폼·모달 (에피소드 폼 등) */
 export const PAGE_MODAL_WIDE_CLASS = "w-[min(92vw,760px)] max-w-[760px] min-w-0";
 
-/** 에디터·에피소드 상세 본문 — 모바일: 헤더 아래 내부 스크롤 / lg: 패널 내부 스크롤 */
+/** 에디터·에피소드 상세 본문 — 모바일: 헤더 아래 내부 스크롤 / lg: 패널 내부 스크롤 · 편집 면은 background */
 export const EDITOR_PAGE_SCROLL_CLASS =
-  "flex min-w-0 flex-col overscroll-none lg:relative lg:z-0 lg:min-h-0 lg:flex-1 lg:overflow-y-auto";
+  "flex min-w-0 flex-col overscroll-none bg-background lg:relative lg:z-0 lg:min-h-0 lg:flex-1 lg:overflow-y-auto";

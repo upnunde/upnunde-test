@@ -18,6 +18,8 @@ import {
   PAGE_MOBILE_FIXED_ACTION_BAR_SCROLL_PAD_CLASS,
   PAGE_SCROLL_COLUMN_CLASS,
   PAGE_SCROLL_COLUMN_ROOT_ATTR,
+  PAGE_SERIES_BODY_GUTTER_CLASS,
+  PAGE_SERIES_TITLE_BAND_CLASS,
   PAGE_SUBHEADER_WITH_STICKY_CLASS,
 } from "@/lib/page-layout";
 import { SeriesFormStepNav } from "@/components/series/SeriesFormStepNav";
@@ -285,13 +287,13 @@ export default function EpisodeManagementPage() {
               className={cn(
                 PAGE_SCROLL_COLUMN_CLASS,
                 !showEmptyBanner && PAGE_MOBILE_FIXED_ACTION_BAR_SCROLL_PAD_CLASS,
-                "max-lg:pt-6",
+                "max-lg:px-0 max-lg:pt-0",
               )}
               {...{ [PAGE_SCROLL_COLUMN_ROOT_ATTR]: "" }}
             >
-              <div className="w-full max-w-[1200px] mx-auto flex flex-col gap-3">
+              <div className="mx-auto flex w-full min-w-0 max-w-[1200px] flex-col max-lg:gap-0 lg:gap-3">
               {/* Title & Actions - 정책 2, 3, 16 */}
-              <div className="flex w-full shrink-0 flex-col gap-3 px-0 lg:flex-row lg:items-center lg:justify-between">
+              <div className={PAGE_SERIES_TITLE_BAND_CLASS}>
                 <h2 className="min-w-0 text-heading4_700 text-foreground">{seriesTitle}</h2>
                 {!showEmptyBanner ? (
                   <div className="hidden items-center gap-2 lg:flex">
@@ -306,6 +308,7 @@ export default function EpisodeManagementPage() {
               </div>
 
               {/* 정책 14, 15: 빈 화면 배너 또는 리스트/페이지네이션 */}
+              <div className={cn("flex w-full min-w-0 flex-col gap-3", PAGE_SERIES_BODY_GUTTER_CLASS)}>
               {showEmptyBanner ? (
                 <div className="w-full">
                   <EmptyStateBanner
@@ -337,6 +340,7 @@ export default function EpisodeManagementPage() {
                   ) : null}
                 </div>
               )}
+              </div>
               </div>
             </div>
 

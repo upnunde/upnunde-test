@@ -4,7 +4,7 @@ import React from "react";
 import { useRouter, usePathname } from "next/navigation";
 import { ICONS } from "@/lib/icons";
 import { SidebarList } from "./SidebarList";
-import { Button } from "design-system/ui/button";
+import { IconButton } from "@/components/ui/icon-button";
 import { RenovelStudioLogo } from "@/components/brand/RenovelStudioLogo";
 import { cn } from "design-system/utils";
 
@@ -78,20 +78,20 @@ export function deriveSidebarActiveId(pathname: string | null, fallback: Sidebar
 function AppSidebarMobileHeader({ onClose }: { onClose: () => void }) {
   const router = useRouter();
 
-  // 글로벌 헤더의 [햄버거][로고] 좌측 배치와 동일하게 — 닫기(X)가 여는 햄버거 자리에 오고, 로고는 원위치 유지
+  // 글로벌 헤더의 [햄버거][로고] 좌측 배치와 동일하게 — 여는 햄버거 자리에 닫기(X)가 스왑되어 오고, 로고는 원위치 유지
   return (
-    <div className="flex h-14 shrink-0 items-center gap-2 border-b border-border bg-background pl-5 pr-5 lg:hidden">
-      {/* 닫기 버튼을 좌측(=여는 햄버거와 동일 위치)에 두어 열기↔닫기 토글을 직관적으로 */}
-      <Button
+    <div className="flex h-14 shrink-0 items-center gap-2 border-b border-border bg-background pl-3 pr-3 lg:hidden">
+      {/* 글로벌 헤더 '메뉴 열기' IconButton과 동일 스펙(ghost·circle·icon-xl) — 아이콘만 menu→close 스왑 */}
+      <IconButton
         type="button"
         variant="ghost"
-        size="icon-sm"
-        className="text-foreground-muted"
+        shape="circle"
+        size="icon-xl"
+        icon={ICONS.close}
         onClick={onClose}
+        className="text-foreground-muted"
         aria-label="메뉴 닫기"
-      >
-        <ICONS.close className="h-5 w-5" aria-hidden />
-      </Button>
+      />
       <button
         type="button"
         onClick={() => router.push("/login")}

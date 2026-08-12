@@ -514,12 +514,12 @@ export function EditorSubHeader({
             <DropdownMenuTrigger asChild>
               <IconButton
                 type="button"
-                variant="outline"
+                variant="ghost"
                 shape="circle"
                 size="icon"
                 icon={ICONS.moreVertical}
                 aria-label="더보기"
-                className="relative shrink-0 bg-background shadow-none"
+                className="relative shrink-0 shadow-none"
               >
                 {newHistoryEntryId ? (
                   <HistoryNewDot className="top-0 right-0" />

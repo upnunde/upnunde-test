@@ -13,7 +13,7 @@ import { MediaCard } from "./cards/MediaCard";
 import { AddResourceSlot } from "./cards/AddResourceSlot";
 import { BgmSection } from "./bgm/BgmSection";
 import { ConfirmDeleteModal } from "./modals/ConfirmDeleteModal";
-import { PAGE_CARD_SHELL_MOBILE_FLUSH_CLASS, PAGE_FLUSH_CONTENT_PAD_X_CLASS, PAGE_GUTTER_GAP_CLASS, PAGE_SCROLL_COLUMN_CLASS, PAGE_SUBHEADER_PAGE_SHELL_CLASS, PAGE_SUBHEADER_WITH_STICKY_CLASS } from "@/lib/page-layout";
+import { PAGE_CARD_SHELL_MOBILE_FLUSH_CLASS, PAGE_FLUSH_CONTENT_PAD_X_CLASS, PAGE_SCROLL_COLUMN_CLASS, PAGE_SERIES_TITLE_BAND_CLASS, PAGE_SUBHEADER_PAGE_SHELL_CLASS, PAGE_SUBHEADER_WITH_STICKY_CLASS } from "@/lib/page-layout";
 import { RESOURCE_THUMBNAIL_FLUID_SIZE_CLASS, RESOURCE_THUMBNAIL_GRID_CLASS } from "@/lib/thumbnail-styles";
 import { cn } from "design-system/utils";
 import type { ImageLightboxItem } from "./ImageLightbox";
@@ -262,15 +262,15 @@ export function ResourceManagementPage() {
           </div>
         </header>
 
-        <div className={cn(PAGE_SCROLL_COLUMN_CLASS, "max-lg:px-0 max-lg:pt-6")}>
-          <div className={cn("mx-auto flex w-full min-w-0 max-w-[1200px] flex-col", PAGE_GUTTER_GAP_CLASS)}>
-            <div className="flex w-full shrink-0 flex-col gap-3 px-0 max-lg:px-5 lg:flex-row lg:items-center lg:justify-between">
+        <div className={cn(PAGE_SCROLL_COLUMN_CLASS, "max-lg:px-0 max-lg:pt-0")}>
+          <div className="mx-auto flex w-full min-w-0 max-w-[1200px] flex-col max-lg:gap-0 lg:gap-5">
+            <div className={PAGE_SERIES_TITLE_BAND_CLASS}>
               <h2 className="min-w-0 text-heading4_700 text-foreground">{seriesTitle}</h2>
             </div>
 
             <ResourceBanner seriesId={seriesId} />
 
-            <div className="flex w-full min-w-0 flex-col items-stretch gap-6 lg:flex-row lg:items-start">
+            <div className="flex w-full min-w-0 flex-col items-stretch gap-6 max-lg:gap-0 lg:flex-row lg:items-start">
               {showPreview && (
                 <aside className="w-full min-w-0 lg:w-[380px] lg:shrink-0 lg:sticky lg:top-6">
                   <div className={cn("w-full min-w-0 rounded-sm border border-border bg-background py-5 max-lg:rounded-none max-lg:border-0", PAGE_FLUSH_CONTENT_PAD_X_CLASS)}>

@@ -419,7 +419,7 @@ export function EpisodeListItem({
       className={cn(
         "cursor-pointer transition-colors",
         PAGE_MOBILE_LIST_ITEM_CARD_CLASS,
-        "max-lg:hover:bg-background",
+        "max-lg:hover:bg-muted/50",
         "lg:border-b lg:border-divider lg:px-5 lg:py-3 lg:last:border-b-0 lg:hover:bg-muted",
       )}
       aria-label={`${episode.episodeNumber}화 ${episode.title}`}

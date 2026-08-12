@@ -18,9 +18,9 @@ export function SubHeaderActions({ className }: { className?: string }) {
     <div className={cn("flex shrink-0 items-center gap-2 lg:hidden", className)}>
       <IconButton
         type="button"
-        variant="outline"
+        variant="ghost"
         shape="circle"
-        size="icon"
+        size="icon-xl"
         icon={ICONS.home}
         onClick={() => router.push("/series")}
         aria-label="내 작품 홈으로"

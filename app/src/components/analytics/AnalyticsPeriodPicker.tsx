@@ -14,7 +14,7 @@ import {
   type AnalyticsPeriodRange,
 } from "@/components/analytics/analytics-date";
 import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover";
-import { Button } from "design-system/ui/button";
+import { Button, buttonVariants } from "design-system/ui/button";
 import { PeriodRangeCalendar } from "@/components/analytics/PeriodRangeCalendar";
 import { analyticsPeriodInlineTriggerClassName } from "@/components/analytics/analytics-filter-chips";
 import { useIsLgUp } from "@/hooks/useMediaQuery";
@@ -49,8 +49,13 @@ export interface AnalyticsPeriodPickerProps {
   ariaLabelPrefix?: string;
 }
 
+/**
+ * 트리거는 radix `PopoverTrigger asChild`가 ref·data-state를 주입하므로 forwardRef `<button>` 구조를 유지하되,
+ * 표면은 DS `buttonVariants(outline·neutral)`로 생성해 DS 버튼과 동일한 토큰·상태 스타일을 갖게 한다.
+ */
 const TRIGGER_BASE_CLASS = cn(
-  "inline-flex h-9 min-w-0 shrink-0 cursor-pointer items-center justify-between gap-2 rounded-md border border-border bg-background px-3 text-body3_500 text-foreground transition-colors hover:bg-muted focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-2 data-[state=open]:border-border data-[state=open]:bg-muted",
+  buttonVariants({ variant: "outline", tone: "neutral", size: "default", shape: "square" }),
+  "min-w-0 justify-between gap-2 text-body3_500 data-[state=open]:bg-accent data-[state=open]:text-accent-foreground",
 );
 
 const TRIGGER_INLINE_CLASS = analyticsPeriodInlineTriggerClassName;
@@ -275,8 +280,9 @@ export function AnalyticsPeriodPicker({
   }, [handleDismiss, isDesktop, open]);
 
   function applyPreset(preset: AnalyticsPeriodPreset) {
+    // 프리셋 선택 시 패널을 닫지 않는다 — 사용자가 여러 기간을 비교·전환하도록 열린 상태 유지.
+    // 닫기는 스크림/닫기 버튼(모바일)·외부 클릭(데스크톱)으로만.
     onChange(preset);
-    setOpen(false);
   }
 
   function applyCustom() {

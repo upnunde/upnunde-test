@@ -30,14 +30,14 @@ import { SlashCommandMenu, type SlashSelectPayload } from "./SlashCommandMenu";
 import type { BlockType, ScriptBlockData } from "@/types/editor";
 
 const WRAPPER_CLASS_TEXT = cn(
-  "group group/row relative flex h-fit w-full min-h-9 items-start justify-start gap-0 rounded bg-background py-1 outline-none",
+  "group group/row relative flex h-fit w-full min-h-9 items-start justify-start gap-0 rounded py-1 outline-none",
   editorRowHoverClass(),
 );
 const ROOT_CLASS_TEXT = "min-h-8 min-w-0 flex-1 h-fit";
 
-/** 선택지 블록: 텍스트 행과 동일 래퍼( min-h-9·py-1·bg-background·rounded·group/row ) */
+/** 선택지 블록: 텍스트 행과 동일 래퍼( min-h-9·py-1·rounded·group/row ) */
 const WRAPPER_CLASS_CHOICE = cn(
-  "group group/row relative flex h-fit w-full min-h-9 items-start justify-start gap-0 rounded bg-background py-1 outline-none",
+  "group group/row relative flex h-fit w-full min-h-9 items-start justify-start gap-0 rounded py-1 outline-none",
   editorRowHoverClass(),
 );
 const ROOT_CLASS_CHOICE = "min-h-8 min-w-0 flex-1 h-fit";
