@@ -1,7 +1,7 @@
 # DS 흡수 명세 — DS 측 세션 작업 지시서
 
 > **현재 상태 요약**: DS 패키지(`packages/design-system/`)는 토큰 CSS·TS와 `cn`만 export. 컴포넌트는 같은 레포의 별도 위치(`Design System Test/src/components/ui/`)에 있고 패키지 exports 미포함.
-> **목표**: 리노벨 스튜디오(`upnunde-test/app`)가 DS만 import해서 토큰·타이포·컴포넌트·cn을 단일 소스로 쓸 수 있게 만든다. DS는 절대 기준이며, 리노벨 자체 토큰은 영구 보존 대상이 아니다.
+> **목표**: 리노벨 스튜디오(`Renovel Studio-test/app`)가 DS만 import해서 토큰·타이포·컴포넌트·cn을 단일 소스로 쓸 수 있게 만든다. DS는 절대 기준이며, 리노벨 자체 토큰은 영구 보존 대상이 아니다.
 
 ---
 

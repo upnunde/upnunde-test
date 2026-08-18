@@ -54,7 +54,7 @@ import { ICON_GLYPH_SCALE } from "design-system/icon-tokens";
 
 ## 자동 동기화 (권장)
 
-### upnunde-test (이 저장소)
+### Renovel Studio-test (이 저장소)
 
 - **`.github/workflows/ds-sync.yml`** — DS 새 태그 감지 → `package.json`·lockfile 갱신 → `check:ds`·`tsc` → **PR 자동 생성**
 - 트리거:

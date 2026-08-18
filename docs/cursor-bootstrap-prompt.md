@@ -8,7 +8,7 @@
 ## 붙여넣기용 프롬프트
 
 ```
-이 저장소에 Cursor 작업 환경을 upnunde-test와 동일한 패턴으로 부트스트랩해줘.
+이 저장소에 Cursor 작업 환경을 Renovel Studio-test와 동일한 패턴으로 부트스트랩해줘.
 아래 항목을 실제로 파일 생성·수정까지 완료하고, 마지막에 생성 목록과 사용법을 요약해줘.
 
 ## 프로젝트 변수 (여기만 수정)
@@ -83,7 +83,7 @@
 
 ---
 
-## upnunde-test에서 그대로 복사해도 되는 것
+## Renovel Studio-test에서 그대로 복사해도 되는 것
 
 | 복사 원본 | 새 프로젝트 위치 | 비고 |
 |-----------|------------------|------|
@@ -93,7 +93,7 @@
 | `docs/wip/WORKLOG.md` | 동일 | 템플릿 |
 | `docs/cursor-bootstrap-prompt.md` | 동일 | 이 파일 |
 
-`project-overview.mdc`, `editor-patterns.mdc`, `persona.mdc` 등은 **upnunde 전용**이므로 새 프로젝트에서는 변수에 맞게 새로 작성.
+`project-overview.mdc`, `editor-patterns.mdc`, `persona.mdc` 등은 **Renovel Studio 전용**이므로 새 프로젝트에서는 변수에 맞게 새로 작성.
 
 ---
 

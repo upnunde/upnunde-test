@@ -88,7 +88,7 @@ export function ProfilePublicTab({
             onChange={handleAvatarFileChange}
           />
           <div className="relative h-24 w-24">
-            <div className="flex h-24 w-24 items-center justify-center overflow-hidden rounded-full border border-border bg-muted">
+            <div className="flex h-24 w-24 items-center justify-center overflow-hidden rounded-full border border-border bg-background-muted">
               {displayAvatar ? (
                 <Image
                   src={displayAvatar}

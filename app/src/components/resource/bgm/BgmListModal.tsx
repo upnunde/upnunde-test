@@ -9,7 +9,6 @@ import {
   DialogClose,
 } from "@/components/ui/dialog";
 import { Button } from "design-system/ui/button";
-import { MODAL_ACTION_BUTTON_SIZE } from "@/components/ui/modal";
 import { FilterChip } from "@/components/ui/chip";
 import { Tabs, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { ICONS } from "@/lib/icons";
@@ -358,7 +357,7 @@ export function BgmListModal({ open, onClose, onAdd }: BgmListModalProps) {
             <DialogTitle className="text-foreground text-body1_700 font-['Pretendard_JP']">
               BGM
             </DialogTitle>
-            <span className="inline-flex h-5 w-5 items-center justify-center rounded-full bg-muted">
+            <span className="inline-flex h-5 w-5 items-center justify-center rounded-full bg-background-muted">
               <ICONS.info className="w-4 h-4 text-foreground-placeholder" aria-hidden />
             </span>
           </div>
@@ -396,7 +395,7 @@ export function BgmListModal({ open, onClose, onAdd }: BgmListModalProps) {
               itemWrapperClassName="-ml-3 flex h-8 items-center justify-start pl-0 pr-0 rounded-md"
               itemClassName="flex h-8 w-full items-center justify-start text-left text-body3_400 rounded-md px-3 py-2 transition-colors"
               itemActiveClassName="text-primary font-medium"
-              itemInactiveClassName="text-foreground-placeholder hover:text-foreground hover:bg-muted"
+              itemInactiveClassName="text-foreground-placeholder hover:text-foreground hover:bg-muted-low"
             />
           </div>
 
@@ -424,20 +423,11 @@ export function BgmListModal({ open, onClose, onAdd }: BgmListModalProps) {
         </div>
 
         <div className="flex shrink-0 justify-end gap-2 border-t border-border bg-background px-4 py-4 lg:px-6">
-          <DialogClose asChild>
-            <Button
-              type="button"
-              variant="outline"
-              size={MODAL_ACTION_BUTTON_SIZE}
-              className="min-w-[80px] border-border text-foreground-placeholder"
-            >
-              취소
-            </Button>
+          <DialogClose render={<Button type="button" variant="outline" />}>
+            취소
           </DialogClose>
           <Button
             type="button"
-            size={MODAL_ACTION_BUTTON_SIZE}
-            className="min-w-[80px]"
             disabled={selectedTracks.length === 0}
             onClick={handleSave}
           >

@@ -24,7 +24,7 @@ import {
 
 /** EditorBody 줄번호 열과 동일 톤 (포커스 없을 때) */
 const INDEX_COL_CLASS = cn(
-  "text-body4_500 tabular-nums flex items-center justify-start mt-0 text-foreground-disabled min-h-8 py-1",
+  "text-body4_500 tabular-nums flex items-center justify-start mt-0 text-disabled-foreground min-h-8 py-1",
   EDITOR_BLOCK_INDEX_COLUMN_CLASS,
 );
 const READONLY_ROW_LABEL_CELL_CLASS = cn(

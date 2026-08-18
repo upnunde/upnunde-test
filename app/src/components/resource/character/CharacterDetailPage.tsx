@@ -36,7 +36,6 @@ import {
   PAGE_SUBHEADER_PAGE_SHELL_CLASS,
   PAGE_SUBHEADER_WITH_STICKY_CLASS,
 } from "@/lib/page-layout";
-import { space } from "@/lib/spacing";
 import { cn } from "design-system/utils";
 import { generateCharacterDraftFromBrief } from "@/lib/character-ai-draft";
 import type { CharacterAiDraft } from "@/lib/character-ai-draft";
@@ -366,8 +365,7 @@ export function CharacterDetailPage({
             <div
               className={cn(
                 PAGE_CONTENT_BODY_CLASS,
-                "flex flex-col",
-                space.section.sectionStackGapLarge.className,
+                "flex flex-col gap-10",
               )}
             >
               {/* 이름 */}
@@ -423,7 +421,7 @@ export function CharacterDetailPage({
                     />
                     {thumbnailUrl ? (
                       <div className="inline-flex flex-col justify-start items-start gap-1 w-[90px] group">
-                        <div className="w-[90px] h-[160px] rounded-lg overflow-hidden border border-border bg-muted relative">
+                        <div className="w-[90px] h-[160px] rounded-lg overflow-hidden border border-border bg-background-muted relative">
                           <button
                             type="button"
                             onClick={handleThumbnailAddClick}
@@ -495,7 +493,7 @@ export function CharacterDetailPage({
                           key={slot.id}
                           className="inline-flex shrink-0 flex-col justify-start items-start gap-1 w-[90px] group"
                         >
-                          <div className="w-[90px] h-[160px] rounded-lg overflow-hidden border border-border bg-muted relative">
+                          <div className="w-[90px] h-[160px] rounded-lg overflow-hidden border border-border bg-background-muted relative">
                             <Image
                               src={slot.imageUrl ?? ""}
                               alt=""

@@ -733,7 +733,7 @@ export function ScriptBlock({
                       alt=""
                       width={24}
                       height={24}
-                      className="size-6 shrink-0 rounded-full object-cover bg-muted"
+                      className="size-6 shrink-0 rounded-full object-cover bg-background-muted"
                     />
                     {c.name}
                   </EditorMenuOption>

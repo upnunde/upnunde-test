@@ -553,7 +553,7 @@ export function ChoiceBlockTable({
 
       {/* 데스크톱: 테이블 */}
       <div className="hidden lg:block">
-        <div className="flex min-h-8 border-b border-border bg-muted/80 text-caption1_500 text-foreground-placeholder">
+        <div className="flex min-h-8 border-b border-border bg-background-muted/80 text-caption1_500 text-foreground-placeholder">
           <div className="flex w-20 shrink-0 items-center border-r border-border px-3">
             선택
           </div>

@@ -226,7 +226,7 @@ function AttentionContentsCard({
       </div>
       {isEmpty ? (
         <div className="flex h-[584px] flex-col items-center justify-center gap-4 p-5">
-          <p className="text-body3_400 text-foreground-disabled">
+          <p className="text-body3_400 text-disabled-foreground">
             데이터가 충분하지 않아 이 보고서를 표시할 수 없습니다.
           </p>
         </div>

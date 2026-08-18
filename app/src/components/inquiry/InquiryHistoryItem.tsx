@@ -45,7 +45,7 @@ export function InquiryHistoryItem({
         <div
           className={`w-[72px] h-8 shrink-0 p-2 rounded flex justify-center items-center gap-2 ${
             status === "answered"
-              ? "bg-muted text-foreground-muted"
+              ? "bg-background-muted text-foreground-muted"
               : "bg-primary-container text-primary"
           }`}
         >
@@ -76,10 +76,6 @@ export function InquiryHistoryItem({
           aria-labelledby={`inquiry-trigger-${id}`}
           className={INQUIRY_NOTIFICATION_ROW_CLASS}
         >
-          <div
-            className="hidden w-px shrink-0 self-stretch min-h-0 rounded-full bg-muted lg:block"
-            aria-hidden
-          />
           <div className="min-w-0 flex-1 flex flex-col gap-5 py-1 lg:gap-3">
             <div>
               <p className="mb-1 text-body4_700 text-foreground-placeholder">문의 유형</p>
@@ -96,7 +92,7 @@ export function InquiryHistoryItem({
               </div>
             )}
             {status === "answered" && (
-              <div className="rounded-lg bg-muted/50 px-4 py-3 text-foreground-placeholder">
+              <div className="rounded-lg bg-background-muted/50 px-4 py-3 text-foreground-placeholder">
                 <p className="mb-1 text-body4_700 text-foreground-placeholder">답변</p>
                 <p className="text-body3_400 text-foreground-muted">
                   문의해 주셔서 감사합니다. 검토 후 연락드리겠습니다.

@@ -73,7 +73,23 @@ function FooterActionButton({ config }: { config: ModalFooterButtonConfig }) {
   );
 
   if (config.closeOnSelect) {
-    return <DialogClose asChild>{button}</DialogClose>;
+    return (
+      <DialogClose
+        render={
+          <Button
+            type="button"
+            variant={variant}
+            tone={tone}
+            shape="square"
+            size={MODAL_ACTION_BUTTON_SIZE}
+            className={modalFooterActionButtonClassName}
+            disabled={config.disabled}
+          />
+        }
+      >
+        {config.label}
+      </DialogClose>
+    );
   }
 
   return button;

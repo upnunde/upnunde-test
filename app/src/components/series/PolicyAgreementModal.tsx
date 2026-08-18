@@ -7,7 +7,6 @@ import { Button } from "design-system/ui/button";
 import {
   ModalFooterButtons,
   ModalHeader,
-  modalDialogContentClassName,
 } from "@/components/ui/modal";
 import { Checkbox } from "design-system/ui/checkbox";
 import { Label } from "design-system/ui/label";
@@ -48,8 +47,7 @@ export function PolicyAgreementModal({
   return (
     <Dialog open={open} onOpenChange={(isOpen) => !isOpen && handleClose()}>
       <DialogContent
-        presentation="center"
-        className={modalDialogContentClassName}
+        showCloseButton={false}
         aria-describedby="policy-agreement-description"
       >
         <ModalHeader
@@ -61,7 +59,7 @@ export function PolicyAgreementModal({
           id="policy-agreement-description"
           className="w-full px-6 pb-4"
         >
-          <div className="w-full rounded-lg bg-muted px-4 py-3">
+          <div className="w-full rounded-lg bg-background-muted px-4 py-3">
             <ol className="list-decimal list-inside space-y-2 text-body3_400 text-foreground-muted">
               {POLICIES.map((text, i) => (
                 <li key={i}>{text}</li>

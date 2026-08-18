@@ -1,5 +1,5 @@
 {
-  "name": "testmode",
+  "name": "renovel-studio-test",
   "version": "1.0.0",
   "description": "이 리포지토리는 **Cursor ↔ Figma MCP 서버**, **Figma 플러그인**, 그리고 **Next.js 기반 웹 프론트엔드**를 함께 담고 있는 모노레포입니다.",
   "license": "ISC",

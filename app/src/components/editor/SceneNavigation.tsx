@@ -294,7 +294,7 @@ export function SceneNavigation({
                 "w-full rounded-lg border px-3 py-2 text-left transition-colors",
                 issues.length > 0
                   ? "border-destructive/40 bg-destructive-container text-destructive hover:bg-destructive-container"
-                  : "border-border bg-muted text-foreground-placeholder hover:bg-muted"
+                  : "border-border bg-background-muted text-foreground-placeholder hover:bg-muted"
               )}
               aria-label="오류 및 누락 알림"
             >
@@ -316,7 +316,7 @@ export function SceneNavigation({
                 aria-label="오류 및 누락 상세"
               >
                 <div className="rounded-lg border border-border bg-background shadow-elevation-40 overflow-hidden">
-                  <div className="px-3 py-2 border-b border-border bg-muted">
+                  <div className="px-3 py-2 border-b border-border bg-background-muted">
                     <div className="text-caption1_500 text-foreground-muted">오류/누락 목록</div>
                     <div className="text-caption2_400 text-foreground-placeholder">클릭하면 해당 위치로 이동합니다</div>
                   </div>
@@ -365,7 +365,7 @@ export function SceneNavigation({
                 "relative mx-auto flex h-9 w-9 items-center justify-center rounded-lg border transition-colors",
                 issues.length > 0
                   ? "border-destructive/40 bg-destructive-container text-destructive hover:bg-destructive-container"
-                  : "border-border bg-muted text-foreground-placeholder hover:bg-muted"
+                  : "border-border bg-background-muted text-foreground-placeholder hover:bg-muted"
               )}
               aria-label={issues.length > 0 ? `오류 및 누락 알림 ${issues.length}건` : "오류 및 누락 없음"}
               aria-expanded={collapsedIssueOpen}
@@ -390,7 +390,7 @@ export function SceneNavigation({
                 aria-label="오류 및 누락 상세"
               >
                 <div className="rounded-lg border border-border bg-background shadow-elevation-40 overflow-hidden">
-                  <div className="px-3 py-2 border-b border-border bg-muted">
+                  <div className="px-3 py-2 border-b border-border bg-background-muted">
                     <div className="text-caption1_500 text-foreground-muted">오류/누락 목록</div>
                     <div className="text-caption2_400 text-foreground-placeholder">클릭하면 해당 위치로 이동합니다</div>
                   </div>

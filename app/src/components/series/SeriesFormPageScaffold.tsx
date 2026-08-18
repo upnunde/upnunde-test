@@ -90,8 +90,11 @@ export function SeriesFormPageScaffold({
   const showFormPanel = isLgUp || mobilePanel === "edit";
   const showPreviewPanel = !isLgUp && mobilePanel === "preview";
   const previewChromeHidden = editorMobilePreviewChromeHiddenClass(isLgUp, mobilePanel);
-  const showMobileSubmitBar = showFormPanel && !isLgUp;
-  const mobileScrollPadClass = aiComposer
+  /** 모바일 하단 제출 바 — 입력·미리보기 공통 (FAB·컴포저 행 높이 고정) */
+  const showMobileSubmitBar = !isLgUp;
+  /** AI 컴포저 — 입력 패널에서만, FAB과 한 행으로 정렬 */
+  const showMobileComposer = Boolean(aiComposer) && showFormPanel && !isLgUp;
+  const mobileScrollPadClass = showMobileComposer
     ? SERIES_FORM_MOBILE_SCROLL_PAD_WITH_COMPOSER_CLASS
     : SERIES_FORM_MOBILE_SCROLL_PAD_CLASS;
 
@@ -189,7 +192,13 @@ export function SeriesFormPageScaffold({
             ) : null}
 
             {showPreviewPanel ? (
-              <div className={cn("flex flex-col bg-inverse max-lg:min-h-dvh", APP_MAIN_PANEL_CLASS)}>
+              <div
+                className={cn(
+                  "flex flex-col bg-inverse max-lg:min-h-dvh",
+                  APP_MAIN_PANEL_CLASS,
+                  SERIES_FORM_MOBILE_SCROLL_PAD_CLASS,
+                )}
+              >
                 <SeriesPreviewPanel
                   coverPreviewUrl={coverPreviewUrl}
                   logoPreviewUrl={logoPreviewUrl}
@@ -204,9 +213,7 @@ export function SeriesFormPageScaffold({
                 onChange={setMobilePanel}
                 editTargetLabel="입력"
                 hasBlockToolbar={false}
-                fabBottomClassName={
-                  showMobileSubmitBar ? SERIES_FORM_MOBILE_FLOATING_ROW_BOTTOM_CLASS : undefined
-                }
+                fabBottomClassName={SERIES_FORM_MOBILE_FLOATING_ROW_BOTTOM_CLASS}
               />
             ) : null}
           </div>
@@ -221,13 +228,17 @@ export function SeriesFormPageScaffold({
         ) : null}
         {aiComposer ? (
           <FloatingAiComposerPortal
-            stackAboveMobileSubmitBar={showMobileSubmitBar}
-            reserveMobileFabLane={showMobileSubmitBar}
+            enabled={isLgUp || showFormPanel}
+            stackAboveMobileSubmitBar={showMobileComposer}
+            reserveMobileFabLane={showMobileComposer}
             value={aiComposer.briefPrompt}
             onChange={aiComposer.onBriefChange}
             onSubmit={aiComposer.onSubmit}
             placeholder={
-              aiComposer.placeholder ?? "시리즈 컨셉·세계관·분위기를 서술형으로 입력해 주세요."
+              aiComposer.placeholder ??
+              (isLgUp
+                ? "시리즈 컨셉·세계관·분위기를 서술형으로 입력해 주세요."
+                : "시리즈 컨셉을 입력해 주세요.")
             }
             isLoading={aiComposer.isGenerating}
             submitDisabled={

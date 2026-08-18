@@ -4,6 +4,14 @@ import React, { useMemo, useState, useCallback, useEffect } from "react";
 import dynamic from "next/dynamic";
 import { useRouter, usePathname } from "next/navigation";
 import { Button } from "design-system/ui/button";
+import {
+  Dialog,
+  DialogContent,
+  DialogDescription,
+  DialogFooter,
+  DialogHeader,
+  DialogTitle,
+} from "@/components/ui/dialog";
 import { HeaderBackButton } from "@/components/ui/header-back-button";
 import { ResourceBanner } from "./ResourceBanner";
 import { ResourceSection } from "./ResourceSection";
@@ -12,13 +20,11 @@ import { ImageCard } from "./cards/ImageCard";
 import { MediaCard } from "./cards/MediaCard";
 import { AddResourceSlot } from "./cards/AddResourceSlot";
 import { BgmSection } from "./bgm/BgmSection";
-import { ConfirmDeleteModal } from "./modals/ConfirmDeleteModal";
 import { PAGE_CARD_SHELL_MOBILE_FLUSH_CLASS, PAGE_FLUSH_CONTENT_PAD_X_CLASS, PAGE_SCROLL_COLUMN_CLASS, PAGE_SERIES_TITLE_BAND_CLASS, PAGE_SUBHEADER_PAGE_SHELL_CLASS, PAGE_SUBHEADER_WITH_STICKY_CLASS } from "@/lib/page-layout";
 import { RESOURCE_THUMBNAIL_FLUID_SIZE_CLASS, RESOURCE_THUMBNAIL_GRID_CLASS } from "@/lib/thumbnail-styles";
 import { cn } from "design-system/utils";
 import type { ImageLightboxItem } from "./ImageLightbox";
 import type {
-  ResourceCategory,
   CharacterResource,
   ImageResource,
   MediaResource,
@@ -68,6 +74,17 @@ const ROUTES = {
 } as const;
 
 const MOCK_HAS_RESOURCES = true;
+
+const RESOURCE_DELETE_TITLE = "리소스를 삭제하시겠어요?";
+const RESOURCE_DELETE_DESCRIPTION =
+  "선택한 리소스를 삭제하면 이 리소스를 사용 중인 모든 에피소드에서 표시 오류나 오류가 발생할 수 있습니다.";
+
+type PendingResourceDelete =
+  | { kind: "character"; id: string }
+  | { kind: "background"; id: string }
+  | { kind: "scene"; id: string }
+  | { kind: "media"; id: string }
+  | { kind: "gallery"; id: string };
 
 const DEMO_BGM: BgmResource[] = MOCK_HAS_RESOURCES
   ? [
@@ -184,12 +201,6 @@ export function ResourceManagementPage() {
   const [bgm, setBgm] = useState<BgmResource[]>(() => getSeedResourcesForSeries(seriesId).bgm);
   const [showAllScenes, _setShowAllScenes] = useState(false);
   const [showAllGallery, _setShowAllGallery] = useState(false);
-  const [deleteModal, setDeleteModal] = useState<{
-    open: boolean;
-    category: ResourceCategory;
-    itemName: string;
-    onConfirm: () => void;
-  }>({ open: false, category: "character", itemName: "", onConfirm: () => {} });
 
   const [lightbox, setLightbox] = useState<{
     open: boolean;
@@ -204,15 +215,18 @@ export function ResourceManagementPage() {
     setLightbox((prev) => ({ ...prev, open: false }));
   }, []);
 
-  const openDeleteConfirm = useCallback(
-    (category: ResourceCategory, itemName: string, onConfirm: () => void) => {
-      setDeleteModal({ open: true, category, itemName, onConfirm });
-    },
-    []
-  );
-  const closeDeleteConfirm = useCallback(() => {
-    setDeleteModal((d) => ({ ...d, open: false }));
-  }, []);
+  const [pendingDelete, setPendingDelete] = useState<PendingResourceDelete | null>(null);
+
+  const confirmPendingDelete = useCallback(() => {
+    if (!pendingDelete) return;
+    const { kind, id } = pendingDelete;
+    if (kind === "character") setCharacters((prev) => prev.filter((x) => x.id !== id));
+    if (kind === "background") setBackgrounds((prev) => prev.filter((x) => x.id !== id));
+    if (kind === "scene") setScenes((prev) => prev.filter((x) => x.id !== id));
+    if (kind === "media") setMedia((prev) => prev.filter((x) => x.id !== id));
+    if (kind === "gallery") setGallery((prev) => prev.filter((x) => x.id !== id));
+    setPendingDelete(null);
+  }, [pendingDelete]);
 
   const previewBlocks = useMemo<ScriptBlock[]>(() => {
     const bgName = backgrounds[0]?.name ?? "선택 안함";
@@ -252,7 +266,7 @@ export function ResourceManagementPage() {
     <>
       <div className={PAGE_SUBHEADER_PAGE_SHELL_CLASS}>
         {/* [정책 1] 헤더 (레이아웃 가이드: margin 40, max-width 1200, min-width 640) */}
-        <header className={PAGE_SUBHEADER_WITH_STICKY_CLASS}>
+        <header className={cn(PAGE_SUBHEADER_WITH_STICKY_CLASS, "max-lg:px-3")}>
           <div className="flex w-full min-w-0 max-w-[1200px] mx-auto items-center justify-between gap-4">
             <div className="flex min-w-0 items-center justify-start gap-3">
               <HeaderBackButton onClick={handleBack} aria-label="시리즈 목록으로" />
@@ -308,12 +322,7 @@ export function ResourceManagementPage() {
                     fluid
                     character={c}
                     onDetailClick={(char) => navigateTo(ROUTES.character.detail(seriesId, char.id))}
-                    onDeleteClick={(char) =>
-                      openDeleteConfirm("character", char.name, () => {
-                        setCharacters((prev) => prev.filter((x) => x.id !== char.id));
-                        closeDeleteConfirm();
-                      })
-                    }
+                    onDeleteClick={(char) => setPendingDelete({ kind: "character", id: char.id })}
                     onPreviewClick={(char) => {
                       const items: ImageLightboxItem[] = characters.map((x) => ({
                         id: x.id,
@@ -352,12 +361,7 @@ export function ResourceManagementPage() {
                     onDetailClick={(item) =>
                       navigateTo(ROUTES.background.detail(seriesId, item.id))
                     }
-                    onDeleteClick={(item) =>
-                      openDeleteConfirm("background", item.name, () => {
-                        setBackgrounds((prev) => prev.filter((x) => x.id !== item.id));
-                        closeDeleteConfirm();
-                      })
-                    }
+                    onDeleteClick={(item) => setPendingDelete({ kind: "background", id: item.id })}
                     onPreviewClick={(item) => {
                       const items: ImageLightboxItem[] = backgrounds.map((x) => ({
                         id: x.id,
@@ -390,12 +394,7 @@ export function ResourceManagementPage() {
                     item={s}
                     slotType="img9:16"
                     onDetailClick={(item) => navigateTo(ROUTES.scene.detail(seriesId, item.id))}
-                    onDeleteClick={(item) =>
-                      openDeleteConfirm("scene", item.name, () => {
-                        setScenes((prev) => prev.filter((x) => x.id !== item.id));
-                        closeDeleteConfirm();
-                      })
-                    }
+                    onDeleteClick={(item) => setPendingDelete({ kind: "scene", id: item.id })}
                     onPreviewClick={(item) => {
                       const items: ImageLightboxItem[] = scenes.map((x) => ({
                         id: x.id,
@@ -427,12 +426,7 @@ export function ResourceManagementPage() {
                     fluid
                     item={m}
                     onDetailClick={(item) => navigateTo(ROUTES.media.detail(seriesId, item.id))}
-                    onDeleteClick={(item) =>
-                      openDeleteConfirm("media", item.name, () => {
-                        setMedia((prev) => prev.filter((x) => x.id !== item.id));
-                        closeDeleteConfirm();
-                      })
-                    }
+                    onDeleteClick={(item) => setPendingDelete({ kind: "media", id: item.id })}
                     onPreviewClick={(item) => {
                       const items: ImageLightboxItem[] = media.map((x) => ({
                         id: x.id,
@@ -467,12 +461,7 @@ export function ResourceManagementPage() {
                     onDetailClick={(item) =>
                       navigateTo(ROUTES.gallery.detail(seriesId, item.id))
                     }
-                    onDeleteClick={(item) =>
-                      openDeleteConfirm("gallery", item.name, () => {
-                        setGallery((prev) => prev.filter((x) => x.id !== item.id));
-                        closeDeleteConfirm();
-                      })
-                    }
+                    onDeleteClick={(item) => setPendingDelete({ kind: "gallery", id: item.id })}
                     onPreviewClick={(item) => {
                       const items: ImageLightboxItem[] = gallery.map((x) => ({
                         id: x.id,
@@ -495,10 +484,7 @@ export function ResourceManagementPage() {
               addButtonLabel="BGM 선택"
               items={bgm}
               onDelete={(item) =>
-                openDeleteConfirm("bgm", item.title, () => {
-                  setBgm((prev) => prev.filter((x) => x.id !== item.id));
-                  closeDeleteConfirm();
-                })
+                setBgm((prev) => prev.filter((x) => x.id !== item.id))
               }
               onAddFromModal={(item) =>
                 setBgm((prev) =>
@@ -519,18 +505,25 @@ export function ResourceManagementPage() {
         items={lightbox.items}
         initialIndex={lightbox.index}
       />
-
-      {/* [정책 4] 삭제 전 확인 팝업 */}
-      <ConfirmDeleteModal
-        open={deleteModal.open}
-        category={deleteModal.category}
-        itemName={deleteModal.itemName}
-        onClose={closeDeleteConfirm}
-        onConfirm={() => {
-          deleteModal.onConfirm();
+      <Dialog
+        open={pendingDelete != null}
+        onOpenChange={(open) => {
+          if (!open) setPendingDelete(null);
         }}
-      />
-
+      >
+        <DialogContent showCloseButton={false}>
+          <DialogHeader className="text-center">
+            <DialogTitle>{RESOURCE_DELETE_TITLE}</DialogTitle>
+            <DialogDescription>{RESOURCE_DELETE_DESCRIPTION}</DialogDescription>
+          </DialogHeader>
+          <DialogFooter>
+            <Button variant="outline" onClick={() => setPendingDelete(null)}>
+              취소
+            </Button>
+            <Button onClick={confirmPendingDelete}>삭제</Button>
+          </DialogFooter>
+        </DialogContent>
+      </Dialog>
     </>
   );
 }

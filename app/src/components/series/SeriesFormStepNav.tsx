@@ -2,10 +2,7 @@
 
 import type { ReactNode } from "react";
 import { MOBILE_FIXED_BOTTOM_BAR_SHELL_CLASS } from "@/lib/mobile-viewport";
-import {
-  PAGE_CONTENT_FOOTER_CLASS,
-  PAGE_FLUSH_CONTENT_PAD_X_CLASS,
-} from "@/lib/page-layout";
+import { PAGE_CONTENT_FOOTER_CLASS } from "@/lib/page-layout";
 import { useSeriesFormMobileSubmitBarPresent } from "@/components/series/SeriesFormMobileChromeContext";
 import { cn } from "design-system/utils";
 
@@ -29,7 +26,7 @@ export function SeriesFormStepNav({
               "max-lg:w-full max-lg:[&_button]:h-9 max-lg:[&_button]:min-h-9 max-lg:[&_button]:min-w-0 max-lg:[&_button]:flex-1",
               MOBILE_FIXED_BOTTOM_BAR_SHELL_CLASS,
               "max-lg:border-t max-lg:border-border max-lg:bg-background",
-              PAGE_FLUSH_CONTENT_PAD_X_CLASS,
+              "max-lg:px-5",
               "max-lg:py-3",
               "max-lg:pb-[calc(var(--space-3)+env(safe-area-inset-bottom,0px))]",
             ],

@@ -6,7 +6,6 @@ import {
   ModalConfirmPhraseField,
   ModalFooterButtons,
   ModalHeader,
-  modalDialogContentClassName,
 } from "@/components/ui/modal";
 import { CONFIRM_INPUT_PHRASE } from "@/lib/deleteConfirmPhrase";
 import { useDeleteConfirmInput } from "@/hooks/useDeleteConfirmInput";
@@ -38,7 +37,7 @@ export function CharacterDeleteModal({
 
   return (
     <Dialog open={open} onOpenChange={handleOpenChange}>
-      <DialogContent presentation="center" className={modalDialogContentClassName}>
+      <DialogContent showCloseButton={false}>
         <ModalHeader
           title="캐릭터를 삭제하시겠어요?"
           subtitle={

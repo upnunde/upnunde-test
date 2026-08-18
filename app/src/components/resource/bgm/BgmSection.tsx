@@ -3,12 +3,24 @@
 import React, { useState, useEffect, useRef, useMemo } from "react";
 import dynamic from "next/dynamic";
 import { Button } from "design-system/ui/button";
+import {
+  Dialog,
+  DialogContent,
+  DialogDescription,
+  DialogFooter,
+  DialogHeader,
+  DialogTitle,
+} from "@/components/ui/dialog";
 import { Tabs, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { PAGE_CARD_SHELL_MOBILE_FLUSH_CLASS, PAGE_FLUSH_CONTENT_PAD_X_CLASS } from "@/lib/page-layout";
 import { cn } from "design-system/utils";
 import { ResourceSectionHeader } from "@/components/resource/ResourceSectionHeader";
 import { BgmListItem } from "./BgmListItem";
 import type { BgmResource } from "@/types/resource";
+
+const BGM_DELETE_TITLE = "BGM을 삭제하시겠어요?";
+const BGM_DELETE_DESCRIPTION =
+  "선택한 BGM을 삭제하면 이 BGM을 사용 중인 모든 에피소드에서 음원 재생 오류가 발생할 수 있습니다.";
 
 /** "00:00" 형식을 초로 변환 */
 function parseDurationToSeconds(duration: string): number {
@@ -50,6 +62,7 @@ export function BgmSection({
   onAddFromModal,
 }: BgmSectionProps) {
   const [modalOpen, setModalOpen] = useState(false);
+  const [pendingDelete, setPendingDelete] = useState<BgmResource | null>(null);
   const [playingId, setPlayingId] = useState<string | null>(null);
   const [isPaused, setIsPaused] = useState(false);
   const [currentTime, setCurrentTime] = useState(0);
@@ -203,7 +216,7 @@ export function BgmSection({
                     onPlay={handlePlay}
                     onPause={handlePause}
                     onSeek={playingId === item.id ? setCurrentTime : undefined}
-                    onDelete={onDelete}
+                    onDelete={setPendingDelete}
                   />
                 </div>
               ))}
@@ -228,6 +241,34 @@ export function BgmSection({
         onClose={() => setModalOpen(false)}
         onAdd={handleAddFromModal}
       />
+      <Dialog
+        open={pendingDelete != null}
+        onOpenChange={(open) => {
+          if (!open) setPendingDelete(null);
+        }}
+      >
+        <DialogContent showCloseButton={false}>
+          <DialogHeader className="text-center">
+            <DialogTitle>{BGM_DELETE_TITLE}</DialogTitle>
+            <DialogDescription>{BGM_DELETE_DESCRIPTION}</DialogDescription>
+          </DialogHeader>
+          <DialogFooter>
+            <Button variant="outline" onClick={() => setPendingDelete(null)}>
+              취소
+            </Button>
+            <Button
+              onClick={() => {
+                if (pendingDelete) {
+                  onDelete(pendingDelete);
+                  setPendingDelete(null);
+                }
+              }}
+            >
+              삭제
+            </Button>
+          </DialogFooter>
+        </DialogContent>
+      </Dialog>
     </>
   );
 }

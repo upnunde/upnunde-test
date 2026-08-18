@@ -570,7 +570,7 @@ export function CharacterExpressionModal({
                 isCarousel ? "text-caption1_400" : "text-body3_400",
                 label === "untitle"
                   ? isCarousel
-                    ? "text-foreground-disabled"
+                    ? "text-disabled-foreground"
                     : "text-foreground-placeholder"
                   : "text-foreground-muted",
               )}
@@ -731,7 +731,6 @@ export function CharacterExpressionModal({
   return (
     <Dialog open={open} onOpenChange={(o) => !o && handleClose()}>
       <DialogContent
-        presentation="auto"
         className={cn(
           formDialogShellClassName,
           "gap-0 overflow-hidden border-0 bg-background p-0 shadow-elevation-50 outline outline-1 outline-offset-[-1px] outline-border",
@@ -908,7 +907,7 @@ export function CharacterExpressionModal({
                   type="button"
                   variant="outline"
                   size={MODAL_ACTION_BUTTON_SIZE}
-                  className="min-w-0 w-auto px-3 font-['Pretendard_JP'] text-body3_500 text-secondary-foreground disabled:border-border"
+                  className="min-w-0 w-auto px-3 font-['Pretendard_JP'] text-body3_500 text-foreground disabled:border-border"
                   onClick={() => handleNavigateFilledSlots("prev")}
                   disabled={filledSlotIndices.length <= 1}
                 >
@@ -918,7 +917,7 @@ export function CharacterExpressionModal({
                   type="button"
                   variant="outline"
                   size={MODAL_ACTION_BUTTON_SIZE}
-                  className="min-w-0 w-auto px-3 font-['Pretendard_JP'] text-body3_500 text-secondary-foreground disabled:border-border"
+                  className="min-w-0 w-auto px-3 font-['Pretendard_JP'] text-body3_500 text-foreground disabled:border-border"
                   onClick={() => handleNavigateFilledSlots("next")}
                   disabled={filledSlotIndices.length <= 1}
                 >
@@ -963,16 +962,18 @@ export function CharacterExpressionModal({
             "inline-flex items-center justify-end gap-2",
           )}
         >
-          <DialogClose asChild>
-            <Button
-              type="button"
-              variant="outline"
-              size={MODAL_ACTION_BUTTON_SIZE}
-              className="min-w-20 font-['Pretendard_JP'] text-body1_500 text-secondary-foreground disabled:border-border"
-              onClick={handleClose}
-            >
-              취소
-            </Button>
+          <DialogClose
+            render={
+              <Button
+                type="button"
+                variant="outline"
+                size={MODAL_ACTION_BUTTON_SIZE}
+                className="min-w-20 font-['Pretendard_JP'] text-body1_500 text-foreground disabled:border-border"
+                onClick={handleClose}
+              />
+            }
+          >
+            취소
           </DialogClose>
           <Button
             type="button"

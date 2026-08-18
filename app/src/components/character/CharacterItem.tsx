@@ -72,7 +72,7 @@ export function CharacterItem({
       <div className={WORKS_ITEM_CARD_INNER_CLASS}>
         <div className={WORKS_ITEM_THUMBNAIL_CLASS}>
           {isDraft || !thumbnailUrl ? (
-            <div className="flex h-full w-full items-center justify-center bg-secondary" aria-hidden>
+            <div className="flex h-full w-full items-center justify-center bg-background-muted" aria-hidden>
               <span className="text-foreground-placeholder text-caption1_400">썸네일 없음</span>
             </div>
           ) : (

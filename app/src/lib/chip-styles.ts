@@ -67,7 +67,7 @@ export const chipVariants = cva(
         chipType: "fill",
         variant: "default",
         class:
-          "bg-muted text-foreground-placeholder outline outline-1 outline-offset-[-1px] outline-border hover:text-foreground-muted",
+          "bg-background-muted text-foreground-placeholder outline outline-1 outline-offset-[-1px] outline-border hover:text-foreground-muted",
       },
       {
         chipType: "outline",

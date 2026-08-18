@@ -41,7 +41,7 @@ export function NotificationItem({
       className={cn(
         PAGE_FLUSH_CONTENT_PAD_X_CLASS,
         INQUIRY_NOTIFICATION_LIST_ITEM_SURFACE_CLASS,
-        isOpen && "bg-background-muted",
+        isOpen && "bg-background border-y border-border",
       )}
     >
       <button
@@ -94,18 +94,16 @@ export function NotificationItem({
             )}
             <div className="flex items-center justify-end gap-2">
               <Button
-                variant="outline"
+                variant="secondary"
                 size="sm"
                 onClick={handleContactClick}
-                className="text-foreground-muted"
               >
                 문의하기
               </Button>
               <Button
-                variant="outline"
+                variant="secondary"
                 size="sm"
                 onClick={handleCollapse}
-                className="text-foreground-muted"
               >
                 접기
               </Button>

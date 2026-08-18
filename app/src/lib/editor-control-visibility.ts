@@ -18,10 +18,10 @@ export function editorRowHoverClass() {
 }
 
 /** 모바일 블록·필드 터치 선택 하이라이트 */
-export const EDITOR_MOBILE_ACTIVE_SURFACE_CLASS = "bg-muted/50";
+export const EDITOR_MOBILE_ACTIVE_SURFACE_CLASS = "bg-background-muted/50";
 
 /** 포커스된 블록 행 surface — 모바일·데스크톱 공통 */
-export const EDITOR_FOCUSED_ROW_SURFACE_CLASS = "bg-muted/50";
+export const EDITOR_FOCUSED_ROW_SURFACE_CLASS = "bg-background-muted/50";
 
 /** 포커스된 블록 행 본문 텍스트 */
 export const EDITOR_FOCUSED_ROW_TEXT_CLASS = "text-primary";

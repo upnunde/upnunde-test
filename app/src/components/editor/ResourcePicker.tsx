@@ -309,7 +309,7 @@ function ResourcePickerOptions({
               }}
               onKeyDown={(e) => onOptionKeyDown(0, e)}
             >
-              <span className="flex h-8 w-8 shrink-0 items-center justify-center rounded bg-muted text-foreground-disabled/60">
+              <span className="flex h-8 w-8 shrink-0 items-center justify-center rounded bg-background-muted text-disabled-foreground/60">
                 —
               </span>
               <span className="truncate">선택 안 함</span>
@@ -326,7 +326,7 @@ function ResourcePickerOptions({
               onKeyDown={(e) => onOptionKeyDown(idx + (isSceneTransition ? 0 : 1), e)}
             >
               {!isSceneTransition && (
-                <span className="flex h-8 w-8 shrink-0 items-center justify-center rounded bg-muted text-foreground-placeholder">
+                <span className="flex h-8 w-8 shrink-0 items-center justify-center rounded bg-background-muted text-foreground-placeholder">
                   ♪
                 </span>
               )}

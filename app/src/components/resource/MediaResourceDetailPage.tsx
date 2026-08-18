@@ -420,7 +420,7 @@ export function MediaResourceDetailPage({ initialData }: MediaResourceDetailPage
                   <p className="text-body4_400 text-foreground-placeholder">영상에서 미리보기를 만드는 중…</p>
                 ) : thumbnailUrl ? (
                   <div className="inline-flex flex-col justify-start items-start gap-1 w-[90px] group">
-                    <div className="w-[90px] h-[160px] rounded-lg overflow-hidden border border-border bg-muted relative">
+                    <div className="w-[90px] h-[160px] rounded-lg overflow-hidden border border-border bg-background-muted relative">
                       <button
                         type="button"
                         onClick={handleThumbnailClick}

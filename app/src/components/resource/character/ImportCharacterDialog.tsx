@@ -170,11 +170,10 @@ export function ImportCharacterDialog({
         )}
       >
         <div className={cn(IMPORT_DIALOG_SECTION_BORDER_CLASS, PAGE_CONTENT_PAD_X_CLASS, "py-3")}>
-          <DialogTitle asChild>
-            <FieldLabel description={description} className="w-full">
-              {title}
-            </FieldLabel>
-          </DialogTitle>
+          <DialogTitle className="sr-only">{title}</DialogTitle>
+          <FieldLabel description={description} className="w-full">
+            {title}
+          </FieldLabel>
         </div>
 
         {showSeriesFilter && (

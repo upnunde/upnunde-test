@@ -116,7 +116,7 @@ export function SeriesItem({
         {/* 썸네일 영역 (정책 6, 8, 9, 10) */}
         <div className={WORKS_ITEM_THUMBNAIL_CLASS}>
         {isDraft || !thumbnailUrl ? (
-          <div className="flex h-full w-full items-center justify-center bg-muted" aria-hidden>
+          <div className="flex h-full w-full items-center justify-center bg-background-muted" aria-hidden>
             <span className="text-foreground-placeholder text-caption1_400">썸네일 없음</span>
           </div>
         ) : (

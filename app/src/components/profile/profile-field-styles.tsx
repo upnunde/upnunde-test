@@ -41,7 +41,7 @@ export function profileTabButtonClassName(active: boolean): string {
     "flex h-9 min-w-0 cursor-pointer items-center justify-center gap-2 text-body1_700",
     active
       ? "border-b-2 border-border-strong text-foreground"
-      : "text-foreground-disabled",
+      : "text-disabled-foreground",
   );
 }
 

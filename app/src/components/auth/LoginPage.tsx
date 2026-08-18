@@ -1,13 +1,18 @@
 "use client";
 
 import { space } from "@/lib/spacing";
-import { APP_BROWSER_BG_CLASS } from "@/lib/mobile-viewport";
 import { cn } from "design-system/utils";
 
 import React, { useCallback, useState } from "react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { Button } from "design-system/ui/button";
+import {
+  Tooltip,
+  TooltipContent,
+  TooltipProvider,
+  TooltipTrigger,
+} from "design-system/ui/tooltip";
 import { EmailInput } from "design-system/ui/email-input";
 import { InputGroup } from "@/components/ui/input";
 import {
@@ -18,7 +23,7 @@ import {
 import { InquiryForm } from "@/components/inquiry/InquiryForm";
 import { Snackbar } from "@/components/episode/Snackbar";
 import { Title2 } from "@/components/ui/title2";
-import { ICONS } from "@/lib/icons";
+import { ICONS, Icon } from "@/lib/icons";
 import { RenovelStudioLogo } from "@/components/brand/RenovelStudioLogo";
 
 /** 구분선: 선-텍스트-선 (Flexbox) */
@@ -37,7 +42,6 @@ export function LoginPage() {
   const [email, setEmail] = useState("");
   const [inquiryOpen, setInquiryOpen] = useState(false);
   const [snackbar, setSnackbar] = useState({ open: false, message: "" });
-
   const goToSeries = useCallback(() => {
     // TODO: 이메일 로그인 연동
     router.push("/series");
@@ -49,7 +53,7 @@ export function LoginPage() {
   };
 
   return (
-    <div className={cn("relative flex min-h-dvh min-w-0 flex-col items-center justify-center px-6 py-8", APP_BROWSER_BG_CLASS)}>
+    <div className="relative flex min-h-dvh min-w-0 flex-col items-center justify-center px-6 py-8 bg-background">
       {/* 중앙 콘텐츠: 열 방향 Flexbox */}
       <main className="flex w-full max-w-[400px] flex-col items-center gap-6">
         <div className="flex w-full flex-col items-center gap-3 pb-4">
@@ -86,8 +90,8 @@ export function LoginPage() {
           <Button
             type="submit"
             variant="default"
-            size="xl"
             shape="circle"
+            size="2xl"
             className="w-full"
           >
             계속하기
@@ -97,53 +101,56 @@ export function LoginPage() {
         <Divider />
 
         <div className="flex w-full flex-col items-stretch gap-3">
-          {/* Google + 툴팁 (최근 로그인 계정) */}
-          <div className="relative">
-            <Button
-              variant="outline"
-              size="xl"
-              shape="circle"
-              className="w-full"
-              aria-label="Google로 계속하기"
-            >
-              <span className="absolute -top-8 left-1/2 -translate-x-1/2 rounded bg-foreground px-2 py-1 text-caption1_500 text-background before:absolute before:left-1/2 before:top-full before:-translate-x-1/2 before:border-4 before:border-transparent before:border-t-foreground">
-                최근 로그인 계정
-              </span>
-              <ICONS.googleBrand />
-              Google로 계속하기
-            </Button>
-          </div>
+          <TooltipProvider delay={0}>
+            <Tooltip removable defaultOpen>
+              <TooltipTrigger
+                render={
+                  <Button
+                    variant="outline"
+                    shape="circle"
+                    size="xl"
+                    className="w-full bg-background border-border-emphasis"
+                    aria-label="Google로 계속하기"
+                  />
+                }
+              >
+                <Icon icon={ICONS.googleBrand} size="xl" position="inline-start" />
+                Google로 계속하기
+              </TooltipTrigger>
+              <TooltipContent side="top">최근 로그인 계정</TooltipContent>
+            </Tooltip>
+          </TooltipProvider>
 
           <Button
             variant="outline"
-            size="xl"
             shape="circle"
-            className="w-full"
+            size="xl"
+            className="w-full bg-background border-border-emphasis"
             aria-label="Apple로 계속하기"
           >
-            <ICONS.appleBrand className="text-foreground" />
+            <Icon icon={ICONS.appleBrand} size="xl" position="inline-start" className="text-foreground" />
             Apple로 계속하기
           </Button>
 
           <Button
             variant="outline"
-            size="xl"
             shape="circle"
-            className="w-full"
+            size="xl"
+            className="w-full bg-background border-border-emphasis"
             aria-label="X로 계속하기"
           >
-            <ICONS.xBrand />
+            <Icon icon={ICONS.xBrand} size="xl" position="inline-start" />
             X로 계속하기
           </Button>
 
           <Button
             variant="outline"
-            size="xl"
             shape="circle"
-            className="w-full"
+            size="xl"
+            className="w-full bg-background border-border-emphasis"
             aria-label="LINE으로 계속하기"
           >
-            <ICONS.lineBrand />
+            <Icon icon={ICONS.lineBrand} size="xl" position="inline-start" />
             LINE으로 계속하기
           </Button>
         </div>
@@ -162,9 +169,10 @@ export function LoginPage() {
       {/* 우측 하단 고정: 문의하기 → 클릭 시 현재 화면 유지, 480px 문의 팝업 */}
       <Button
         type="button"
-        variant="outline"
-        size="sm"
-        className="absolute bottom-8 right-8"
+        variant="default"
+        shape="square"
+        size="default"
+        className="absolute bottom-5 right-5"
         onClick={() => setInquiryOpen(true)}
       >
         문의하기

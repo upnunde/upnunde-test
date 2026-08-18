@@ -32,7 +32,7 @@ export function InquiryHistoryList({ items, className }: InquiryHistoryListProps
           <React.Fragment key={item.id}>
             {index > 0 ? (
               <li aria-hidden className="list-none">
-                <div className="my-0 h-px w-full bg-muted" role="separator" />
+                <div className="my-0 h-px w-full bg-background-muted" role="separator" />
               </li>
             ) : null}
             <li>

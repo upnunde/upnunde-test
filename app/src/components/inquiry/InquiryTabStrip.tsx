@@ -12,8 +12,8 @@ export interface InquiryTabStripProps {
 
 const TAB_ITEMS = [
   { id: "faq" as const, label: "많이받는 질문" },
-  { id: "inquiry" as const, label: "문의" },
   { id: "history" as const, label: "문의내역" },
+  { id: "inquiry" as const, label: "문의하기" },
 ] as const;
 
 /** 문의 페이지 상단 탭 — PageCard 내부에 배치 */

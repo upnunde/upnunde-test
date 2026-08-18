@@ -40,7 +40,7 @@ export function AnalyticsMonthlyRevenueBars({
                 <span className="ml-1 text-caption1_400 text-foreground-placeholder">(진행 중)</span>
               ) : null}
             </div>
-            <div className="h-3 min-w-0 rounded-[2px] bg-muted">
+            <div className="h-3 min-w-0 rounded-[2px] bg-background-muted">
               <div
                 className="h-full rounded-[2px] bg-primary transition-[width]"
                 style={{ width: `${pct}%` }}

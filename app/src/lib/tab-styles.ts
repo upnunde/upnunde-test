@@ -55,8 +55,8 @@ export function lineTabStripListClassName(
   );
 }
 
-/** PageCard 라인 탭 스트립 좌우 인셋 — spacing-16 (16px) */
-export const LINE_TAB_STRIP_PAD_X_CLASS = "px-4";
+/** PageCard 라인 탭 스트립 좌우 인셋 — 모바일 20 · lg+ 16 */
+export const LINE_TAB_STRIP_PAD_X_CLASS = "max-lg:px-5 lg:px-4";
 
 /** PageCard 내부 라인 탭 스트립 래퍼 */
 export const LINE_TAB_STRIP_SHELL_CLASS = `self-stretch pb-0 pt-0 ${LINE_TAB_STRIP_PAD_X_CLASS}`;
@@ -85,7 +85,7 @@ export function tabInstanceClassName({
     labelClass,
     selectline && activated && "border-b-2 border-border-strong",
     selectline && !activated && "border-transparent",
-    activated ? "text-foreground" : "text-foreground-disabled",
+    activated ? "text-foreground" : "text-disabled-foreground",
   );
 }
 

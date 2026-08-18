@@ -8,7 +8,6 @@ import {
 import {
   ModalFooterButtons,
   ModalHeader,
-  modalDialogContentClassName,
 } from "@/components/ui/modal";
 
 /** 안내팝업 케이스 1: 잠깐! 시작하기 전 체크 (새 콘텐츠 제작 전) */
@@ -42,7 +41,7 @@ export function StartCheckModal({
 
   return (
     <Dialog open={open} onOpenChange={handleOpenChange}>
-      <DialogContent presentation="center" className={modalDialogContentClassName}>
+      <DialogContent showCloseButton={false}>
         <ModalHeader
           title="잠깐! 시작하기 전 체크"
           subtitle="새로운 콘텐츠 제작 전, 아래 내용을 꼭 확인해 주세요!"
@@ -108,7 +107,7 @@ export function LeaveConfirmModal({ open, onClose, onConfirm }: LeaveConfirmModa
 
   return (
     <Dialog open={open} onOpenChange={(o) => !o && onClose()}>
-      <DialogContent presentation="center" className={modalDialogContentClassName}>
+      <DialogContent showCloseButton={false}>
         <ModalHeader
           title="작업을 중단하고 나가시겠습니까?"
           subtitle="저장하지 않은 변경 사항은 사라집니다. 나가기 전에 임시저장해 두시는 것을 권장합니다."
@@ -146,7 +145,7 @@ export function ResourceDeleteModal({
 
   return (
     <Dialog open={open} onOpenChange={(o) => !o && onClose()}>
-      <DialogContent presentation="center" className={modalDialogContentClassName}>
+      <DialogContent showCloseButton={false}>
         <ModalHeader
           title="리소스를 삭제하시겠어요?"
           subtitle="선택한 리소스를 삭제하면 이 리소스를 사용 중인 모든 에피소드에서 표시 오류나 오류가 발생할 수 있습니다."

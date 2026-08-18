@@ -338,7 +338,6 @@ function EditorInner() {
 
       <Dialog open={isEpisodeInfoModalOpen} onOpenChange={setIsEpisodeInfoModalOpen}>
         <DialogContent
-          presentation="auto"
           className={formDialogShellClassName}
           aria-describedby={undefined}
         >

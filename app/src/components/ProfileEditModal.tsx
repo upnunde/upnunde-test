@@ -61,7 +61,7 @@ function ProfileEditFormFields({
           onChange={onAvatarFileChange}
         />
         <div className="relative h-24 w-24">
-          <div className="absolute inset-0 flex items-center justify-center overflow-hidden rounded-full border border-border bg-muted">
+          <div className="absolute inset-0 flex items-center justify-center overflow-hidden rounded-full border border-border bg-background-muted">
             {avatarPreview ? (
               <Image
                 src={avatarPreview}

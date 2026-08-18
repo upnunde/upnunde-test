@@ -273,7 +273,7 @@ export default function EpisodeManagementPage() {
       profileImageUrl={profileImageUrl}
       onProfileImageChange={setProfileImageUrl}
     >
-      <header className={PAGE_SUBHEADER_WITH_STICKY_CLASS}>
+      <header className={cn(PAGE_SUBHEADER_WITH_STICKY_CLASS, "max-lg:px-3")}>
               <div className="flex w-full min-w-0 max-w-[1200px] items-center justify-between gap-3">
                 <div className="flex min-w-0 items-center justify-start gap-3">
                   <HeaderBackButton onClick={handleBack} aria-label="시리즈 목록으로" />
@@ -381,7 +381,6 @@ export default function EpisodeManagementPage() {
       />
       <Dialog open={isCreateEpisodeModalOpen} onOpenChange={setIsCreateEpisodeModalOpen}>
         <DialogContent
-          presentation="auto"
           className={formDialogShellClassName}
           aria-describedby={undefined}
         >

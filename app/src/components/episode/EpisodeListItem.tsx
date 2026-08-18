@@ -419,14 +419,14 @@ export function EpisodeListItem({
       className={cn(
         "cursor-pointer transition-colors",
         PAGE_MOBILE_LIST_ITEM_CARD_CLASS,
-        "max-lg:hover:bg-muted/50",
-        "lg:border-b lg:border-divider lg:px-5 lg:py-3 lg:last:border-b-0 lg:hover:bg-muted",
+        "hover:bg-muted-low",
+        "lg:border-b lg:border-divider lg:px-5 lg:py-3 lg:last:border-b-0",
       )}
       aria-label={`${episode.episodeNumber}화 ${episode.title}`}
     >
       {/* 모바일: 썸네일 + 제목·상태·메타 / 우상단 ⋮ 메뉴 */}
       <div className="flex items-start gap-3 lg:hidden">
-        <div className="relative aspect-[9/16] h-[120px] shrink-0 overflow-hidden rounded border border-border bg-secondary">
+        <div className="relative aspect-[9/16] h-[120px] shrink-0 overflow-hidden rounded border border-border bg-background-muted">
           <Image
             src={episode.thumbnail}
             alt=""
@@ -488,7 +488,7 @@ export function EpisodeListItem({
         </div>
 
         <div className="flex min-w-0 flex-1 items-center gap-4">
-          <div className="relative h-[107px] w-[60px] shrink-0 overflow-hidden rounded border border-border bg-secondary">
+          <div className="relative h-[107px] w-[60px] shrink-0 overflow-hidden rounded border border-border bg-background-muted">
             <Image
               src={episode.thumbnail}
               alt=""

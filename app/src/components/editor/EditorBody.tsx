@@ -239,8 +239,8 @@ function SortableBlockWrapper({
             : hasIssue
               ? "text-destructive"
               : isTextLikeRow
-                ? "text-foreground-disabled"
-                : "text-foreground-disabled",
+                ? "text-disabled-foreground"
+                : "text-disabled-foreground",
           !isDesktop && !isSeedDefault && "max-lg:touch-none",
         )}
         aria-label={!isDesktop && !isSeedDefault ? "길게 눌러 순서 변경" : undefined}

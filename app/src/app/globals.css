@@ -6,6 +6,7 @@
 @import "design-system/typography.css";
 @import "design-system/icons.css";
 @import "design-system/tabs.css";
+@import "../../node_modules/design-system/src/alert.css";
 @import "../lib/block-label-chroma.css";
 @import "../lib/preview-player-chroma.css";
 @import "shadcn/tailwind.css";

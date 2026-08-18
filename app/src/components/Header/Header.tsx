@@ -1,15 +1,16 @@
 "use client";
 
-import { useState, useRef } from "react";
+import { useRef, useState } from "react";
 import { ICONS } from "@/lib/icons";
 import { ThemeToggleButton } from "@/components/ThemeToggleButton";
 import { ProfileEditModal } from "@/components/ProfileEditModal";
-import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { IconButton } from "@/components/ui/icon-button";
 import { Button } from "design-system/ui/button";
+import { Avatar, AvatarFallback, AvatarImage } from "design-system/ui/avatar";
 import { useRouter } from "next/navigation";
 import { APP_HEADER_EDGE_X_CLASS, APP_HEADER_START_INSET_CLASS, APP_HEADER_STICKY_CLASS } from "@/lib/mobile-viewport";
 import { RenovelStudioLogo } from "@/components/brand/RenovelStudioLogo";
+
 import { cn } from "design-system/utils";
 
 export interface HeaderProps {
@@ -26,7 +27,9 @@ export interface HeaderProps {
   className?: string;
 }
 
-/** Global top header: Logo + ICONS.user avatar only. Full width. */
+/** Global top header: Logo + profile Avatar. Full width. */
+const DEFAULT_PROFILE_IMAGE = "https://api.dicebear.com/9.x/adventurer/svg?seed=renovel-studio";
+
 export default function Header({ profileImageUrl, onProfileImageChange, onMenuClick, hideOnMobile, className }: HeaderProps) {
   const router = useRouter();
   const [isProfileModalOpen, setIsProfileModalOpen] = useState(false);
@@ -75,11 +78,9 @@ export default function Header({ profileImageUrl, onProfileImageChange, onMenuCl
           className="overflow-hidden p-0"
           aria-label="프로필 편집"
         >
-          <Avatar className="size-10">
-            {profileImageUrl ? <AvatarImage src={profileImageUrl} alt="프로필" /> : null}
-            <AvatarFallback>
-              <ICONS.user className="h-5 w-5 text-foreground-placeholder" aria-hidden />
-            </AvatarFallback>
+          <Avatar size="lg">
+            <AvatarImage src={profileImageUrl ?? DEFAULT_PROFILE_IMAGE} alt="프로필" />
+            <AvatarFallback />
           </Avatar>
         </Button>
         <ThemeToggleButton />

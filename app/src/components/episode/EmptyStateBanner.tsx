@@ -25,7 +25,7 @@ export function EmptyStateBanner({
   return (
     <div
       className={
-        "flex flex-col items-center justify-center rounded-sm border border-border bg-muted py-16 px-8 text-center " +
+        "flex flex-col items-center justify-center rounded-sm border border-border bg-background-muted py-16 px-8 text-center " +
         (className ?? "")
       }
       role="status"

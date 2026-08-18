@@ -134,7 +134,7 @@ export function BgmListItem({
 
   return (
     <div
-      className="group inline-flex h-fit w-full cursor-pointer flex-col items-center justify-center gap-1 self-stretch overflow-visible rounded-sm px-2 py-2 transition-colors hover:bg-muted max-lg:px-1 lg:px-3"
+      className="group inline-flex h-fit w-full cursor-pointer flex-col items-center justify-center gap-1 self-stretch overflow-visible rounded-sm px-2 py-2 transition-colors hover:bg-muted-low max-lg:px-1 lg:px-3"
       onMouseEnter={() => setIsHovered(true)}
       onMouseLeave={() => setIsHovered(false)}
     >
@@ -224,7 +224,10 @@ export function BgmListItem({
                 shape="circle"
                 size="icon-sm"
                 icon={ICONS.trash2}
-                onClick={() => onDelete(item)}
+                onClick={(event) => {
+                  event.stopPropagation();
+                  onDelete(item);
+                }}
                 aria-label="삭제"
               />
             )}

@@ -62,7 +62,7 @@ export function EpisodeAiThumbnailLoading({
   return (
     <div
       className={cn(
-        "h-[160px] w-[90px] shrink-0 animate-pulse rounded-sm bg-muted",
+        "h-[160px] w-[90px] shrink-0 animate-pulse rounded-sm bg-background-muted",
         className,
       )}
       role="status"

@@ -57,14 +57,14 @@ function ResourceLeadingIcon({
   }
   if (blockType === "bgm" || blockType === "sfx") {
     return (
-      <span className="flex h-5 w-5 shrink-0 items-center justify-center rounded-full bg-muted text-foreground-placeholder">
+      <span className="flex h-5 w-5 shrink-0 items-center justify-center rounded-full bg-background-muted text-foreground-placeholder">
         <ICONS.music className="h-4 w-4" />
       </span>
     );
   }
   if (blockType === "video") {
     return (
-      <span className="flex h-5 w-5 shrink-0 items-center justify-center rounded-full bg-muted text-foreground-placeholder">
+      <span className="flex h-5 w-5 shrink-0 items-center justify-center rounded-full bg-background-muted text-foreground-placeholder">
         <ICONS.film className="h-4 w-4" />
       </span>
     );

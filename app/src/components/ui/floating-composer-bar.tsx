@@ -16,13 +16,13 @@ export type FloatingComposerBarPlacement = "fixed" | "sticky";
 /** 플로팅 AI 입력 바 전용 최대 너비 (에피소드 폼 카드 너비와 무관) */
 export const FLOATING_COMPOSER_MAX_WIDTH_CLASS = "max-w-[560px] w-full";
 
-/** fixed 배치 가로 폭·정렬 — safe-area·20px 양쪽 여백, 가로 화면(landscape) 대응 */
+/**
+ * fixed 배치 가로 폭·정렬
+ * - 모바일: 좌우 20·safe-area inset 사이 fill
+ * - lg+: 중앙 · max 560
+ */
 const FLOATING_COMPOSER_FIXED_WIDTH_CLASS =
-  "left-1/2 -translate-x-1/2 w-[min(560px,calc(100dvw-env(safe-area-inset-left,0px)-env(safe-area-inset-right,0px)-2*var(--space-5)))]";
-
-/** 미리보기 FAB와 겹치지 않도록 우측 inset 확보 */
-const FLOATING_COMPOSER_FIXED_WIDTH_WITH_MOBILE_FAB_LANE_CLASS =
-  "left-[max(var(--space-5),env(safe-area-inset-left,0px))] right-[calc(var(--space-4)+3rem+var(--space-2)+env(safe-area-inset-right,0px))] w-auto max-w-[560px] translate-x-0";
+  "max-lg:left-[max(var(--space-5),env(safe-area-inset-left,0px))] max-lg:right-[max(var(--space-5),env(safe-area-inset-right,0px))] max-lg:w-auto max-lg:max-w-none max-lg:translate-x-0 lg:left-1/2 lg:-translate-x-1/2 lg:w-[min(560px,calc(100dvw-env(safe-area-inset-left,0px)-env(safe-area-inset-right,0px)-2*var(--space-5)))]";
 
 const COMPOSER_TEXTAREA_MAX_HEIGHT_PX = 120;
 /** text-sm leading-5 한 줄 line-height */
@@ -86,12 +86,9 @@ export function FloatingComposerBar({
   const fixedBottomClass = stackAboveMobileSubmitBar
     ? FLOATING_COMPOSER_FIXED_ABOVE_SUBMIT_BAR_BOTTOM_CLASS
     : FLOATING_COMPOSER_FIXED_BOTTOM_CLASS;
-  const fixedWidthClass =
-    stackAboveMobileSubmitBar && reserveMobileFabLane
-      ? SERIES_FORM_MOBILE_COMPOSER_FIXED_INSET_CLASS
-      : reserveMobileFabLane
-        ? FLOATING_COMPOSER_FIXED_WIDTH_WITH_MOBILE_FAB_LANE_CLASS
-        : FLOATING_COMPOSER_FIXED_WIDTH_CLASS;
+  const fixedWidthClass = reserveMobileFabLane
+    ? SERIES_FORM_MOBILE_COMPOSER_FIXED_INSET_CLASS
+    : FLOATING_COMPOSER_FIXED_WIDTH_CLASS;
   const textareaRef = useRef<HTMLTextAreaElement>(null);
   const wasFocusedRef = useRef(false);
   const [isFocused, setIsFocused] = useState(false);
@@ -238,7 +235,7 @@ export function FloatingComposerBar({
         "flex size-9 shrink-0 items-center justify-center rounded-full transition-all",
         canSubmit
           ? "composer-bar-send-active shadow-elevation-10 hover:opacity-90"
-          : "cursor-not-allowed bg-muted text-foreground-placeholder",
+          : "cursor-not-allowed bg-background-muted text-foreground-placeholder",
       )}
       aria-label="AI로 초안 채우기"
     >
@@ -305,6 +302,8 @@ export function FloatingComposerBar({
               showExpandedLayout
                 ? "max-h-[120px] py-0.5"
                 : "min-h-5 py-0 leading-5",
+              // 모바일: 값이 비어 플레이스홀더만 보일 때는 한 줄 말줄임(...). 타이핑(값 존재) 시엔 줄바꿈 유지.
+              isEmpty && !showExpandedLayout && "max-lg:overflow-hidden max-lg:text-ellipsis max-lg:whitespace-nowrap",
               isLoading && "pointer-events-none text-transparent placeholder:text-transparent",
             )}
           />

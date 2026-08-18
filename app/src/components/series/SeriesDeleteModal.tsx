@@ -6,7 +6,6 @@ import {
   ModalConfirmPhraseField,
   ModalFooterButtons,
   ModalHeader,
-  modalDialogContentClassName,
 } from "@/components/ui/modal";
 import { CONFIRM_INPUT_PHRASE } from "@/lib/deleteConfirmPhrase";
 import { useDeleteConfirmInput } from "@/hooks/useDeleteConfirmInput";
@@ -39,7 +38,7 @@ export function SeriesDeleteModal({
 
   return (
     <Dialog open={open} onOpenChange={handleOpenChange}>
-      <DialogContent presentation="center" className={modalDialogContentClassName}>
+      <DialogContent showCloseButton={false}>
         <ModalHeader
           title="시리즈를 삭제하시겠어요?"
           subtitle="시리즈를 삭제하면 포함된 모든 회차 정보와 에피소드, 설정된 캐릭터 및 BGM 리소스가 함께 영구 삭제되며, 복구가 불가능합니다."

@@ -212,7 +212,7 @@ export function EditorSceneTabStrip({
                           className={cn(
                             "flex w-full cursor-pointer items-center gap-3 py-3 text-left transition-colors focus:bg-muted lg:hover:bg-muted",
                             PAGE_FLUSH_CONTENT_PAD_X_CLASS,
-                            isActive && "bg-muted",
+                            isActive && "bg-background-muted",
                           )}
                         >
                           <span

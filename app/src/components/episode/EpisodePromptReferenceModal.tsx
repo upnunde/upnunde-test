@@ -76,7 +76,7 @@ export function EpisodePromptReferenceModal({
                     value={REFERENCE_TITLE}
                     readOnly
                     tabIndex={-1}
-                    className="pointer-events-none bg-muted"
+                    className="pointer-events-none bg-background-muted"
                   />
                   <InputHypertext count={REFERENCE_TITLE.length} max={MAX_TITLE} />
                 </InputGroup>
@@ -98,7 +98,7 @@ export function EpisodePromptReferenceModal({
                     value={REFERENCE_SUMMARY}
                     readOnly
                     tabIndex={-1}
-                    className="pointer-events-none bg-muted"
+                    className="pointer-events-none bg-background-muted"
                   />
                   <InputHypertext count={REFERENCE_SUMMARY.length} max={MAX_SUMMARY} />
                 </InputGroup>
@@ -109,7 +109,7 @@ export function EpisodePromptReferenceModal({
                   title="대표 이미지*"
                   subtitle="에피소드 대표 이미지를 등록해주세요."
                 />
-                <div className="relative h-[107px] w-[60px] overflow-hidden rounded border border-border bg-secondary">
+                <div className="relative h-[107px] w-[60px] overflow-hidden rounded border border-border bg-background-muted">
                   <Image
                     src={REFERENCE_THUMBNAIL}
                     alt="대표 이미지"
@@ -136,7 +136,7 @@ export function EpisodePromptReferenceModal({
                     value={REFERENCE_HISTORY}
                     readOnly
                     tabIndex={-1}
-                    className="pointer-events-none min-h-[160px] max-h-[400px] bg-muted"
+                    className="pointer-events-none min-h-[160px] max-h-[400px] bg-background-muted"
                   />
                   <InputHypertext count={REFERENCE_HISTORY.length} max={MAX_HISTORY} />
                 </InputGroup>
@@ -157,7 +157,7 @@ export function EpisodePromptReferenceModal({
                     value={REFERENCE_SCRIPT}
                     readOnly
                     tabIndex={-1}
-                    className="pointer-events-none min-h-[160px] max-h-[400px] bg-muted"
+                    className="pointer-events-none min-h-[160px] max-h-[400px] bg-background-muted"
                   />
                   <InputHypertext count={REFERENCE_SCRIPT.length} max={MAX_SCRIPT} />
                 </InputGroup>

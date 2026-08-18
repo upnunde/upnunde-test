@@ -7,7 +7,6 @@ import { FormFieldLabel, formFieldAriaDescribedBy } from "@/components/ui/field-
 import { PAGE_FLUSH_CONTENT_PAD_X_CLASS } from "@/lib/page-layout";
 import { Input, InputGroup, InputHypertext } from "@/components/ui/input";
 import { Textarea } from "design-system/ui/textarea";
-import { space } from "@/lib/spacing";
 import { cn } from "design-system/utils";
 
 export type InquiryCategory = "account" | "payment" | "bug" | "etc";
@@ -39,8 +38,7 @@ export function InquiryForm({
   onSuccess,
   onCancel,
   className = cn(
-    "mt-4 flex flex-col",
-    space.form.formGroupGapRelaxed.className,
+    "mt-4 flex flex-col gap-10",
     PAGE_FLUSH_CONTENT_PAD_X_CLASS,
   ),
   rootClassName,
@@ -196,31 +194,27 @@ export function InquiryForm({
           />
         </div>
       </div>
-      </form>
 
-      {/* form과 동일 레벨 — 모달 하단 고정 */}
-      <div className={cn("mx-0 mt-0 w-full shrink-0 bg-background pt-5 pb-5", PAGE_FLUSH_CONTENT_PAD_X_CLASS)}>
-        <div className="flex items-center justify-end gap-3">
-          <Button
-            type="button"
-            variant="outline"
-            size="sm"
-            className="px-5"
-            onClick={handleCancel}
-          >
-            취소
-          </Button>
-          <Button
-            type="submit"
-            form={formDomId}
-            size="sm"
-            className="px-5"
-            disabled={!title || !content}
-          >
-            제출
-          </Button>
-        </div>
+      <div className="flex items-center justify-end gap-3">
+        <Button
+          type="button"
+          variant="outline"
+          size="sm"
+          className="px-5"
+          onClick={handleCancel}
+        >
+          취소
+        </Button>
+        <Button
+          type="submit"
+          size="sm"
+          className="px-5"
+          disabled={!title || !content}
+        >
+          제출
+        </Button>
       </div>
+      </form>
     </div>
   );
 }

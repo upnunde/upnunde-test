@@ -329,7 +329,7 @@ export function ImageResourceDetailPage({ kind, initialData }: ImageResourceDeta
                 />
                 {thumbnailUrl ? (
                   <div className="inline-flex flex-col justify-start items-start gap-1 w-[90px] group">
-                    <div className="w-[90px] h-[160px] rounded-lg overflow-hidden border border-border bg-muted relative">
+                    <div className="w-[90px] h-[160px] rounded-lg overflow-hidden border border-border bg-background-muted relative">
                       <button
                         type="button"
                         onClick={handleThumbnailClick}

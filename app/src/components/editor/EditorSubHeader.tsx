@@ -495,7 +495,7 @@ export function EditorSubHeader({
 
   return (
     <>
-      <header className={cn("relative mx-auto w-full min-w-0 shrink-0", APP_HEADER_BAR_PAD_X_CLASS)}>
+      <header className={cn("relative mx-auto w-full min-w-0 shrink-0", APP_HEADER_BAR_PAD_X_CLASS, "max-lg:px-3")}>
         {/* 모바일 */}
         <div className="flex h-14 items-center gap-2 lg:hidden">
           <HeaderBackButton onClick={handleBack} />

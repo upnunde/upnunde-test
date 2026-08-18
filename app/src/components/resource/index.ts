@@ -8,4 +8,3 @@ export { AddResourceSlot } from "./cards/AddResourceSlot";
 export { BgmSection } from "./bgm/BgmSection";
 export { BgmListItem } from "./bgm/BgmListItem";
 export { BgmListModal } from "./bgm/BgmListModal";
-export { ConfirmDeleteModal } from "./modals/ConfirmDeleteModal";

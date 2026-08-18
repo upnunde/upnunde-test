@@ -1,4 +1,4 @@
-## Cursor Talk to Figma MCP Monorepo
+## Renovel Studio-test
 
 이 리포지토리는 **Cursor ↔ Figma MCP 서버**, **Figma 플러그인**, 그리고 **리노벨 스튜디오 앱(`app/`)**을 함께 담고 있는 모노레포입니다.
 

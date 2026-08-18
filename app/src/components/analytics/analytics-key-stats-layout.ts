@@ -23,12 +23,12 @@ export const ANALYTICS_KEY_STAT_DELTA_CLASS =
 
 /** 주요통계 타일 — 포인터·키보드 포커스 전환 */
 export const ANALYTICS_KEY_STAT_BUTTON_INTERACTION_CLASS =
-  "cursor-pointer text-left transition-colors outline-none focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-2";
+  "cursor-pointer text-left transition-colors outline-none aria-[pressed=false]:hover:bg-muted-low focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-2";
 
 /**
  * 주요통계 타일 표면
  * - 선택: `bg-background-muted` (`--background-muted` · grayscale-10) — 선택 타일을 muted로 눌린 느낌
- * - 비선택: `bg-background`
+ * - 비선택: `bg-background` + hover 시 `bg-muted-low`
  */
 export function analyticsKeyStatButtonStateClass(selected: boolean): string {
   return selected ? "z-0 bg-background-muted" : "bg-background";

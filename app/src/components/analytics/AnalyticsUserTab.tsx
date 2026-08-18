@@ -344,7 +344,7 @@ export function AnalyticsUserTab({
             <div className="grid grid-cols-3 justify-items-center gap-x-3 gap-y-4 px-4 py-5 sm:grid-cols-4 lg:grid-cols-5 lg:gap-x-5 lg:gap-y-6 lg:p-5">
               {userDummy.activeFollowers.map(({ id, nick }) => (
                 <div key={id} className="flex w-full min-w-0 max-w-28 flex-col items-center justify-center gap-2">
-                  <div className="relative h-14 w-14 shrink-0 overflow-hidden rounded-full bg-muted sm:h-16 sm:w-16">
+                  <div className="relative h-14 w-14 shrink-0 overflow-hidden rounded-full bg-background-muted sm:h-16 sm:w-16">
                     <img
                       src={getFollowerDummyProfileUrl(nick)}
                       alt={`${nick} 프로필`}

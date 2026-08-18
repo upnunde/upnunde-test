@@ -26,7 +26,6 @@ import { Dialog, DialogContent, DialogTitle } from "@/components/ui/dialog";
 import {
   ModalFooterButtons,
   ModalHeader,
-  modalDialogContentClassName,
 } from "@/components/ui/modal";
 import { AnalyticsPanel } from "@/components/analytics/AnalyticsPanel";
 import { Title2 } from "@/components/ui/title2";
@@ -830,7 +829,7 @@ export default function MonetizationSettlementsPage() {
         </DialogContent>
       </Dialog>
       <Dialog open={!!rejectionReasonTarget} onOpenChange={(open) => !open && setRejectionReasonTarget(null)}>
-        <DialogContent presentation="center" className={modalDialogContentClassName}>
+        <DialogContent showCloseButton={false}>
           <ModalHeader title="반려 사유" />
           {rejectionReasonTarget ? (
             <>

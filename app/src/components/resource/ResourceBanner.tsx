@@ -1,12 +1,9 @@
 "use client";
 
 import React, { useState, useSyncExternalStore } from "react";
-import { ICONS } from "@/lib/icons";
-import { Button } from "design-system/ui/button";
+import { Alert, AlertDescription, AlertTitle } from "design-system/ui/alert";
 import { PAGE_CARD_SHELL_MOBILE_FLUSH_CLASS } from "@/lib/page-layout";
-import {
-  RESOURCE_MGMT_BANNER_BODY,
-} from "@/lib/episode-resource-copy";
+import { RESOURCE_MGMT_BANNER_BODY } from "@/lib/episode-resource-copy";
 import { cn } from "design-system/utils";
 
 const STORAGE_KEY_PREFIX = "resource-mgmt-banner-dismissed";
@@ -36,7 +33,7 @@ export function ResourceBanner({ seriesId }: ResourceBannerProps) {
     }
   });
 
-  const handleClose = () => {
+  const handleDismiss = () => {
     const key = `${STORAGE_KEY_PREFIX}-${seriesId}`;
     try {
       localStorage.setItem(key, "true");
@@ -50,42 +47,19 @@ export function ResourceBanner({ seriesId }: ResourceBannerProps) {
 
   return (
     <div className="inline-flex self-stretch flex-col items-center justify-start gap-3 pt-0">
-      <div
+      <Alert
+        status="primary"
+        type="default"
+        removable
+        onDismiss={handleDismiss}
         className={cn(
-          "mx-auto inline-flex w-full min-w-0 max-w-[1200px] items-center justify-center gap-4 rounded-sm bg-primary-container py-2 px-4 outline outline-1 outline-offset-[-1px] outline-primary/20",
+          "mx-auto w-full min-w-0 max-w-[1200px]",
           PAGE_CARD_SHELL_MOBILE_FLUSH_CLASS,
-          "max-lg:outline-none",
         )}
       >
-        <div className="flex-1 flex justify-start items-center gap-5">
-          <div className="flex justify-start items-center gap-2">
-            <div className="w-6 h-6 relative rounded overflow-hidden shrink-0">
-              <ICONS.info
-                className="w-5 h-5 absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 text-primary-container-foreground"
-                aria-hidden
-              />
-            </div>
-            <div className="text-primary-container-foreground text-body1_700 font-['Pretendard_JP']">
-              안내
-            </div>
-          </div>
-          <p className="flex-1 text-foreground-muted text-body2_400 lg:text-body3_500 font-['Pretendard_JP']">
-            {RESOURCE_MGMT_BANNER_BODY}
-          </p>
-        </div>
-        <div className="flex justify-start items-center gap-2">
-          <Button
-            type="button"
-            variant="ghost"
-            size="icon"
-            onClick={handleClose}
-            className="h-8 w-8 rounded-full text-foreground-placeholder hover:bg-muted"
-            aria-label="배너 닫기"
-          >
-            <ICONS.close className="h-5 w-5 shrink-0" strokeWidth={2} aria-hidden />
-          </Button>
-        </div>
-      </div>
+        <AlertTitle>안내</AlertTitle>
+        <AlertDescription>{RESOURCE_MGMT_BANNER_BODY}</AlertDescription>
+      </Alert>
     </div>
   );
 }
