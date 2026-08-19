@@ -4,6 +4,15 @@ import { Input, InputGroup, InputHypertext } from "@/components/ui/input";
 import { CONFIRM_INPUT_PHRASE } from "@/lib/deleteConfirmPhrase";
 import { cn } from "design-system/utils";
 
+export function ConfirmInputGuideHint() {
+  return (
+    <>
+      위 내용에 동의하시면 <span className="text-destructive">{`‘${CONFIRM_INPUT_PHRASE}’`}</span>를 입력해
+      주세요.
+    </>
+  );
+}
+
 export interface ModalConfirmPhraseFieldProps {
   inputId: string;
   value: string;
@@ -21,11 +30,10 @@ export function ModalConfirmPhraseField({
   className,
 }: ModalConfirmPhraseFieldProps) {
   return (
-    <div className={cn("w-full bg-background px-6 py-2", className)}>
+    <div className={cn("w-full bg-background px-0 py-2", className)}>
       <div className="flex flex-col gap-2">
         <p className="text-body3_500 text-foreground-muted">
-          위 내용에 동의하시면 <span className="text-primary">{`‘${CONFIRM_INPUT_PHRASE}’`}</span>를 입력해
-          주세요.
+          <ConfirmInputGuideHint />
         </p>
         <InputGroup>
           <Input

@@ -15,7 +15,7 @@ interface SeriesCatalogState {
   orderedIds: string[];
   /** 데모 시리즈(1·2·4)가 목록에 포함되도록 보충 — 사용자 작품은 유지 */
   ensureDemoSeries: () => void;
-  addSeries: (payload: SeriesFormSubmitPayload) => Promise<string>;
+  addSeries: (payload: SeriesFormSubmitPayload, options?: { status?: SeriesStatus }) => Promise<string>;
   updateSeries: (id: string, payload: SeriesFormSubmitPayload) => Promise<void>;
   deleteSeries: (id: string) => void;
   setSeriesStatus: (id: string, status: SeriesStatus) => void;
@@ -70,6 +70,13 @@ export const useSeriesCatalogStore = create<SeriesCatalogState>()(
             seriesById[mock.id] = mock;
             orderedIds.push(mock.id);
             changed = true;
+            continue;
+          }
+
+          const existing = seriesById[mock.id];
+          if (!existing.logoImageUrl && mock.logoImageUrl) {
+            seriesById[mock.id] = { ...existing, logoImageUrl: mock.logoImageUrl };
+            changed = true;
           }
         }
 
@@ -78,11 +85,11 @@ export const useSeriesCatalogStore = create<SeriesCatalogState>()(
         }
       },
 
-      addSeries: async (payload) => {
+      addSeries: async (payload, options) => {
         const id = generateSeriesId();
         const record = await payloadToRecord(payload, {
           id,
-          status: "PRIVATE",
+          status: options?.status ?? "PRIVATE",
           createdAt: new Date().toISOString(),
           episodeCount: 0,
           viewCount: 0,

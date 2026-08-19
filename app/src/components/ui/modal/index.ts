@@ -30,6 +30,11 @@ export {
   type ModalFooterButtonTone,
 } from "./ModalFooterButtons";
 export {
+  ConfirmInputGuideHint,
   ModalConfirmPhraseField,
   type ModalConfirmPhraseFieldProps,
 } from "./ModalConfirmPhraseField";
+export {
+  DeleteAcknowledgeDialog,
+  type DeleteAcknowledgeDialogProps,
+} from "./DeleteAcknowledgeDialog";

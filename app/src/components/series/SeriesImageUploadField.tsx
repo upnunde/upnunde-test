@@ -3,13 +3,12 @@
 import React from "react";
 import Image from "next/image";
 import { FormFieldLabel } from "@/components/ui/field-label";
+import { AddResourceSlot } from "@/components/resource/cards/AddResourceSlot";
 import {
-  RESOURCE_FILE_INPUT_OVERLAY_CLASS,
   THUMBNAIL_SLOT_ARIA,
   THUMBNAIL_DIM_OVERLAY_CLASS,
 } from "@/lib/thumbnail-styles";
 import { ICONS } from "@/lib/icons";
-import { cn } from "design-system/utils";
 
 interface SeriesImageUploadFieldProps {
   label: string;
@@ -45,13 +44,8 @@ export function SeriesImageUploadField({
   onClearPreview,
   onFileSelected,
 }: SeriesImageUploadFieldProps) {
-  const slotClassName = cn(
-    "mt-2 relative flex h-[160px] w-[90px] cursor-pointer items-center justify-center overflow-hidden rounded-lg border border-dashed bg-background",
-    error ? "border-destructive" : "border-border",
-  );
-
   return (
-    <div className="flex flex-col gap-1">
+    <div className="flex flex-col gap-3">
       <FormFieldLabel title={label} subtitle={subtitle} inputId={inputId} />
       {previewUrl ? (
         <label
@@ -67,7 +61,7 @@ export function SeriesImageUploadField({
             e.preventDefault();
             onActivate();
           }}
-          className={cn(slotClassName, "group")}
+          className="group relative flex h-[160px] w-[90px] cursor-pointer items-center justify-center overflow-hidden rounded-lg border border-border-emphasis bg-background"
         >
           <Image
             key={previewUrl}
@@ -93,27 +87,23 @@ export function SeriesImageUploadField({
           </button>
         </label>
       ) : (
-        <label ref={labelRef} className={slotClassName} aria-label={addAriaLabel}>
-          <input
-            ref={inputRef}
-            id={inputId}
-            type="file"
-            accept={accept}
-            className={RESOURCE_FILE_INPUT_OVERLAY_CLASS}
-            aria-label={addAriaLabel}
-            tabIndex={-1}
-            onChange={(e) => {
-              const file = e.target.files?.[0];
-              if (file) {
-                onFileSelected(file);
-              }
-              e.target.value = "";
-            }}
-          />
-          <div className="pointer-events-none relative z-0 flex h-6 w-6 items-center justify-center text-foreground">
-            <ICONS.plus className="size-5" aria-hidden />
-          </div>
-        </label>
+        <AddResourceSlot
+          variant="img9:16"
+          slotKind="thumbnail"
+          error={error}
+          ariaLabel={addAriaLabel}
+          labelRef={labelRef}
+          fileInput={{
+            id: inputId,
+            accept,
+            inputRef,
+            onChange: (event) => {
+              const file = event.target.files?.[0];
+              if (file) onFileSelected(file);
+              event.target.value = "";
+            },
+          }}
+        />
       )}
     </div>
   );

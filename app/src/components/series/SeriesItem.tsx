@@ -67,24 +67,33 @@ export function SeriesItem({
   const emptyMetaClass = hasNoEpisodes ? "text-foreground-placeholder" : "text-foreground-muted";
 
   const handleResource = () => {
-    if (isDraft) return;
     onResourceManage?.(series);
   };
 
   const handleEpisode = () => {
-    if (isDraft) return;
     onEpisodeManage?.(series);
   };
 
-  const manageButtons = (
+  const manageButtons = isDraft ? (
+    <Button
+      type="button"
+      variant="outline"
+      shape="square"
+      size="default"
+      onClick={() => onSeriesManage?.(series)}
+      className="min-w-0 flex-1"
+    >
+      <span className="block w-full overflow-hidden text-ellipsis whitespace-nowrap text-center">
+        이어서 등록하기
+      </span>
+    </Button>
+  ) : (
     <>
       <Button
         type="button"
         variant="outline"
         shape="square"
         size="default"
-        disabled={isDraft}
-        title={isDraft ? "시리즈 작성 완료 후 이용 가능합니다" : undefined}
         onClick={handleResource}
         className="min-w-0 flex-1"
       >
@@ -97,8 +106,6 @@ export function SeriesItem({
         variant="outline"
         shape="square"
         size="default"
-        disabled={isDraft}
-        title={isDraft ? "시리즈 작성 완료 후 이용 가능합니다" : undefined}
         onClick={handleEpisode}
         className="min-w-0 flex-1"
       >
@@ -151,7 +158,7 @@ export function SeriesItem({
         <div className="flex w-full items-start justify-between gap-2">
           <div className={WORKS_ITEM_TITLE_GROUP_CLASS}>
             {isPrivate && (
-              <Badge variant="default" size="md" shape="square">
+              <Badge variant="secondary" status="destructive" size="md" shape="square">
                 비공개
               </Badge>
             )}
@@ -181,13 +188,17 @@ export function SeriesItem({
               />
             </DropdownMenuTrigger>
             <DropdownMenuContent align="end">
-              <DropdownMenuGroup>
-                <DropdownMenuItem onSelect={() => onSeriesManage?.(series)}>
-                  <Icon icon={ICONS.settings2} size="md" />
-                  시리즈 수정
-                </DropdownMenuItem>
-              </DropdownMenuGroup>
-              <DropdownMenuSeparator />
+              {!isDraft && (
+                <>
+                  <DropdownMenuGroup>
+                    <DropdownMenuItem onSelect={() => onSeriesManage?.(series)}>
+                      <Icon icon={ICONS.settings2} size="md" />
+                      시리즈 수정
+                    </DropdownMenuItem>
+                  </DropdownMenuGroup>
+                  <DropdownMenuSeparator />
+                </>
+              )}
               <DropdownMenuGroup>
                 {status === "PUBLIC" && (
                   <>
@@ -215,10 +226,12 @@ export function SeriesItem({
                 )}
                 {(status === "DRAFT" || status === "BANNED") && (
                   <>
-                    <DropdownMenuItem disabled>
-                      <Icon icon={ICONS.eye} size="md" />
-                      공개
-                    </DropdownMenuItem>
+                    {isBanned && (
+                      <DropdownMenuItem disabled>
+                        <Icon icon={ICONS.eye} size="md" />
+                        공개
+                      </DropdownMenuItem>
+                    )}
                     <DropdownMenuItem variant="destructive" onSelect={() => onDelete?.(series)}>
                       <Icon icon={ICONS.trash2} size="md" />
                       삭제

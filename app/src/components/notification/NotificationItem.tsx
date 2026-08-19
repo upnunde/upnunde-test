@@ -94,14 +94,14 @@ export function NotificationItem({
             )}
             <div className="flex items-center justify-end gap-2">
               <Button
-                variant="secondary"
+                variant="outline"
                 size="sm"
                 onClick={handleContactClick}
               >
                 문의하기
               </Button>
               <Button
-                variant="secondary"
+                variant="outline"
                 size="sm"
                 onClick={handleCollapse}
               >

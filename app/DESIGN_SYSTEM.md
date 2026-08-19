@@ -3,7 +3,7 @@
 `design-system`은 GitHub 패키지로 설치한다.
 
 ```json
-"design-system": "github:upnunde/Renovel-Studio-DS#v0.1.1"
+"design-system": "github:upnunde/Renovel-Studio-DS#v0.1.42"
 ```
 
 저장소: [upnunde/Renovel-Studio-DS](https://github.com/upnunde/Renovel-Studio-DS)
@@ -46,7 +46,7 @@ import { ICON_GLYPH_SCALE } from "design-system/icon-tokens";
 ## 버전 올리기 (수동)
 
 1. [Renovel-Studio-DS](https://github.com/upnunde/Renovel-Studio-DS)에 변경 푸시 + 태그 (예: `v0.1.2`)
-2. `app/package.json`의 `#v0.1.1` → `#v0.1.2`
+2. `app/package.json`의 `#v0.1.42` → 새 태그
 3. `npm install` 후 `package-lock.json` 커밋
 4. `npm run check:ds` · `npx tsc --noEmit` · `npm run build` 확인
 

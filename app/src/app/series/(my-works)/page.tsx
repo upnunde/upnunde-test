@@ -106,7 +106,13 @@ export default function SeriesListPage() {
         onSeriesManage={handleSeriesManage}
         onSetPrivate={handleSetPrivate}
         onSetPublic={handleSetPublic}
-        onDelete={(series) => setSeriesToDelete(series)}
+        onDelete={(series) => {
+          if (series.status === "DRAFT") {
+            handleDeleteSeries(series);
+            return;
+          }
+          setSeriesToDelete(series);
+        }}
         onCreateSeries={handleOpenCreateSeries}
       />
 

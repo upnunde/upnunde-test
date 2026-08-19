@@ -797,8 +797,8 @@ export default function MonetizationSettlementsPage() {
                 </section>
 
                 {!getTaxInvoiceCompleteness(taxDetailTarget) ? (
-                  <Alert variant="destructive" className="border-destructive/30 bg-destructive/10 px-3 py-2 rounded-sm">
-                    <AlertDescription className="text-caption1_400 text-destructive">
+                  <Alert status="destructive" type="icon" size="sm">
+                    <AlertDescription>
                       필수 증빙 항목이 일부 누락되었거나 검증이 완료되지 않았어요. 발행 정보와 검증 상태를 확인해 주세요.
                     </AlertDescription>
                   </Alert>
@@ -829,7 +829,7 @@ export default function MonetizationSettlementsPage() {
         </DialogContent>
       </Dialog>
       <Dialog open={!!rejectionReasonTarget} onOpenChange={(open) => !open && setRejectionReasonTarget(null)}>
-        <DialogContent showCloseButton={false}>
+        <DialogContent>
           <ModalHeader title="반려 사유" />
           {rejectionReasonTarget ? (
             <>

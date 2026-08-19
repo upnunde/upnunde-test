@@ -69,12 +69,12 @@ export function ProfilePublicTab({
   };
 
   return (
-    <AnalyticsPanel className="overflow-hidden border-0 bg-transparent">
+    <AnalyticsPanel>
       <Title2 text="공개 프로필" variant="title" asSectionHeader />
       <div
         className={cn(
           "flex flex-col",
-          space.section.sectionStackGapLarge.className,
+          PAGE_GUTTER_GAP_CLASS,
           space.section.sectionPadding.className,
         )}
       >
@@ -109,7 +109,7 @@ export function ProfilePublicTab({
           </p>
         </div>
 
-        <div className={`flex max-w-xl flex-col ${PAGE_GUTTER_GAP_CLASS}`}>
+        <div className={`flex flex-col ${PAGE_GUTTER_GAP_CLASS}`}>
           <div className="flex flex-col gap-3">
             <ProfileFieldLabel text="아이디" hint="로그인에 사용하는 이메일이에요." htmlFor={PROFILE_PUBLIC_LOGIN_ID} />
             <InputGroup>
@@ -172,7 +172,7 @@ export function ProfilePublicTab({
           </div>
         </div>
 
-        <div className="flex justify-end border-t border-border pt-5">
+        <div className="flex justify-end pt-5">
           <Button type="button" className="h-9 min-w-20 px-4" onClick={handleSave}>
             저장
           </Button>

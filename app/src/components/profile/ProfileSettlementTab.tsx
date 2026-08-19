@@ -51,7 +51,7 @@ export function ProfileSettlementTab({ onSaved }: { onSaved: () => void }) {
           }
         />
         <div className={cn(
-          "flex max-w-xl flex-col",
+          "flex flex-col",
           PAGE_GUTTER_GAP_CLASS,
           space.section.sectionPadding.className,
         )}>
@@ -112,7 +112,7 @@ export function ProfileSettlementTab({ onSaved }: { onSaved: () => void }) {
             </InputGroup>
           </div>
 
-          <div className="flex justify-end border-t border-border pt-5">
+          <div className="flex justify-end pt-5">
             <Button type="button" className="h-9 min-w-20 px-4" onClick={handleSave}>
               저장
             </Button>
@@ -123,7 +123,7 @@ export function ProfileSettlementTab({ onSaved }: { onSaved: () => void }) {
       <AnalyticsPanel>
         <Title2 text="사업자·세금계산서" variant="title" asSectionHeader />
         <div className={cn(
-          "flex max-w-xl flex-col",
+          "flex flex-col",
           PAGE_GUTTER_GAP_CLASS,
           space.section.sectionPadding.className,
         )}>
@@ -155,7 +155,7 @@ export function ProfileSettlementTab({ onSaved }: { onSaved: () => void }) {
             </InputGroup>
           </div>
 
-          <div className="flex justify-end border-t border-border pt-5">
+          <div className="flex justify-end pt-5">
             <Button type="button" className="h-9 min-w-20 px-4" onClick={handleSave}>
               저장
             </Button>

@@ -20,6 +20,8 @@ import { useEditorStore } from "@/store/useEditorStore";
 interface UseSeriesFormControllerOptions {
   coverSlotId: string;
   logoSlotId: string;
+  /** 동일 키에서는 initialSnapshot 재적용 생략 — 편집 중 store 갱신 시 입력값 유지 */
+  formInstanceKey?: string;
   initialSnapshot?: SeriesFormInitialSnapshot | null;
   onValidSubmit?: (payload: SeriesFormSubmitPayload) => void | Promise<void>;
 }
@@ -27,6 +29,7 @@ interface UseSeriesFormControllerOptions {
 export function useSeriesFormController({
   coverSlotId,
   logoSlotId,
+  formInstanceKey,
   initialSnapshot,
   onValidSubmit,
 }: UseSeriesFormControllerOptions) {
@@ -65,6 +68,7 @@ export function useSeriesFormController({
   const personaRef = useRef<HTMLInputElement | null>(null);
 
   const setSeriesPersona = useEditorStore((s) => s.setSeriesPersona);
+  const appliedSnapshotKeyRef = useRef<string | null>(null);
 
   const MAX_TITLE = 50;
   const MAX_SUMMARY = 100;
@@ -118,6 +122,10 @@ export function useSeriesFormController({
   useEffect(() => {
     if (!initialSnapshot) return;
 
+    const snapshotKey = formInstanceKey ?? "default";
+    if (appliedSnapshotKeyRef.current === snapshotKey) return;
+    appliedSnapshotKeyRef.current = snapshotKey;
+
     setSeriesTitle(initialSnapshot.seriesTitle);
     setSeriesSummary(initialSnapshot.seriesSummary);
     setKeywordInput("");
@@ -130,7 +138,7 @@ export function useSeriesFormController({
     setCoverPreviewUrl(initialSnapshot.coverPreviewUrl);
     setLogoPreviewUrl(initialSnapshot.logoPreviewUrl);
     setFieldErrors(EMPTY_SERIES_FORM_ERRORS);
-  }, [initialSnapshot, applyKeywordList]);
+  }, [initialSnapshot, formInstanceKey, applyKeywordList]);
 
   const handleAddKeyword = useCallback(() => {
     const cleaned = keywordInput.trim().replace(/,$/, "");
@@ -369,6 +377,44 @@ export function useSeriesFormController({
     logoPreviewUrl,
   ]);
 
+  const getSubmitPayload = useCallback((): SeriesFormSubmitPayload => {
+    return {
+      seriesTitle,
+      seriesSummary,
+      seriesKeywords,
+      keywordList,
+      worldviewDescription,
+      worldviewPrompt,
+      persona,
+      coverPreviewUrl,
+      logoPreviewUrl,
+    };
+  }, [
+    seriesTitle,
+    seriesSummary,
+    seriesKeywords,
+    keywordList,
+    worldviewDescription,
+    worldviewPrompt,
+    persona,
+    coverPreviewUrl,
+    logoPreviewUrl,
+  ]);
+
+  const hasEnteredContent =
+    seriesTitle.trim().length > 0 ||
+    seriesSummary.trim().length > 0 ||
+    seriesKeywords.trim().length > 0 ||
+    keywordInput.trim().length > 0 ||
+    keywordList.length > 0 ||
+    worldviewDescription.trim().length > 0 ||
+    worldviewPrompt.trim().length > 0 ||
+    persona.trim().length > 0 ||
+    hasCoverImage ||
+    hasLogoImage ||
+    Boolean(coverPreviewUrl) ||
+    Boolean(logoPreviewUrl);
+
   return {
     activeTab,
     setActiveTab,
@@ -423,5 +469,7 @@ export function useSeriesFormController({
     handleCoverFileSelected,
     handleLogoFileSelected,
     handleSubmit,
+    getSubmitPayload,
+    hasEnteredContent,
   };
 }

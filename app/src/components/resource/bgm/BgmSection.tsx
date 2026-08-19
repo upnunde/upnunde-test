@@ -247,8 +247,8 @@ export function BgmSection({
           if (!open) setPendingDelete(null);
         }}
       >
-        <DialogContent showCloseButton={false}>
-          <DialogHeader className="text-center">
+        <DialogContent>
+          <DialogHeader>
             <DialogTitle>{BGM_DELETE_TITLE}</DialogTitle>
             <DialogDescription>{BGM_DELETE_DESCRIPTION}</DialogDescription>
           </DialogHeader>

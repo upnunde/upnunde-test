@@ -8,8 +8,10 @@ import { cn } from "design-system/utils";
 interface SeriesFormMobileSubmitBarProps {
   showDraftButton?: boolean;
   onDraftClick?: () => void;
+  draftDisabled?: boolean;
   onSubmit: () => void;
   submitDisabled: boolean;
+  submitLabel?: string;
   className?: string;
 }
 
@@ -17,8 +19,10 @@ interface SeriesFormMobileSubmitBarProps {
 export function SeriesFormMobileSubmitBar({
   showDraftButton = false,
   onDraftClick,
+  draftDisabled = false,
   onSubmit,
   submitDisabled,
+  submitLabel = "등록하기",
   className,
 }: SeriesFormMobileSubmitBarProps) {
   return (
@@ -42,6 +46,7 @@ export function SeriesFormMobileSubmitBar({
           variant="outline"
           shape="square"
           size="xl"
+          disabled={draftDisabled}
           onClick={onDraftClick}
         >
           임시저장
@@ -55,7 +60,7 @@ export function SeriesFormMobileSubmitBar({
         disabled={submitDisabled}
         onClick={onSubmit}
       >
-        등록하기
+        {submitLabel}
       </Button>
     </div>
   );

@@ -1,4 +1,5 @@
 import { DUMMY_BACKGROUND_GALLERY_THUMBNAILS } from "@/lib/dummy-thumbnail-images";
+import { dummyAsset } from "@/lib/dummy-asset-path";
 import type { SeriesFormRecord } from "@/types/series";
 
 function deterministicSeriesThumbnail(seriesId: string): string {
@@ -25,7 +26,7 @@ export function createMockSeriesRecords(): SeriesFormRecord[] {
       worldviewPrompt: "고전 로판 톤, 정치적 긴장감 유지.",
       persona: "차분하고 날카로운 1인칭 서술",
       coverImageUrl: deterministicSeriesThumbnail("1"),
-      logoImageUrl: "",
+      logoImageUrl: dummyAsset("renovel-logo.png"),
       status: "PUBLIC",
       createdAt: "2025-12-01T09:00:00.000Z",
       episodeCount: 120,
@@ -41,7 +42,7 @@ export function createMockSeriesRecords(): SeriesFormRecord[] {
       worldviewPrompt: "감성적이고 따뜻한 대화체.",
       persona: "부드러운 3인칭 관찰자 시점",
       coverImageUrl: deterministicSeriesThumbnail("2"),
-      logoImageUrl: "",
+      logoImageUrl: dummyAsset("renovel-logo.png"),
       status: "PRIVATE",
       createdAt: "2025-11-15T14:30:00.000Z",
       episodeCount: 50,
@@ -57,7 +58,7 @@ export function createMockSeriesRecords(): SeriesFormRecord[] {
       worldviewPrompt: "데모",
       persona: "데모",
       coverImageUrl: deterministicSeriesThumbnail("4"),
-      logoImageUrl: "",
+      logoImageUrl: dummyAsset("renovel-logo.png"),
       status: "BANNED",
       createdAt: "2025-10-01T00:00:00.000Z",
       episodeCount: 10,

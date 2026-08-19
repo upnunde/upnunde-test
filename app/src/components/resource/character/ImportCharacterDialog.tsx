@@ -169,7 +169,7 @@ export function ImportCharacterDialog({
           DESKTOP_MODAL_RADIUS_CLASS,
         )}
       >
-        <div className={cn(IMPORT_DIALOG_SECTION_BORDER_CLASS, PAGE_CONTENT_PAD_X_CLASS, "py-3")}>
+        <div className={cn(PAGE_CONTENT_PAD_X_CLASS, "py-3")}>
           <DialogTitle className="sr-only">{title}</DialogTitle>
           <FieldLabel description={description} className="w-full">
             {title}

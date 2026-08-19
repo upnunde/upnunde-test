@@ -14,6 +14,7 @@ export interface AddResourceSlotFileInputProps {
   accept?: string;
   multiple?: boolean;
   onChange: (event: React.ChangeEvent<HTMLInputElement>) => void;
+  inputRef?: React.Ref<HTMLInputElement>;
 }
 
 /** [정책 5] 리소스 그리드 마지막 요소(신규 등록) 또는 썸네일·이미지 추가 슬롯 */
@@ -43,6 +44,8 @@ export interface AddResourceSlotProps {
   sizeClassName?: string;
   /** 표정·썸네일 행 — 하단 캡션 높이 맞춤 */
   showCaptionSpacer?: boolean;
+  /** 검증 포커스·스크롤용 (시리즈 커버/로고 등) */
+  labelRef?: React.Ref<HTMLLabelElement>;
 }
 
 const SLOT_SIZE_CLASS: Record<"character" | MediaSlotType, string> = {
@@ -64,6 +67,7 @@ export function AddResourceSlot({
   ariaLabel,
   sizeClassName,
   showCaptionSpacer = false,
+  labelRef,
 }: AddResourceSlotProps) {
   const resolvedAriaLabel =
     ariaLabel ??
@@ -76,7 +80,7 @@ export function AddResourceSlot({
     (fileInput || fileInputId) && "relative",
     error
       ? "bg-destructive-container text-destructive-container-foreground hover:bg-destructive-container/90"
-      : "border border-dashed border-border bg-background text-muted-foreground hover:border-border hover:bg-muted",
+      : "border border-dashed border-border-emphasis bg-background text-muted-foreground hover:border-border-emphasis hover:bg-muted",
   );
   const plusIcon = (
     <span
@@ -99,8 +103,9 @@ export function AddResourceSlot({
       )}
     >
       {fileInput ? (
-        <label className={slotClassName} aria-label={resolvedAriaLabel}>
+        <label ref={labelRef} className={slotClassName} aria-label={resolvedAriaLabel}>
           <input
+            ref={fileInput.inputRef}
             type="file"
             id={fileInput.id}
             accept={fileInput.accept ?? "image/*"}
@@ -113,7 +118,7 @@ export function AddResourceSlot({
           {plusIcon}
         </label>
       ) : fileInputId ? (
-        <label htmlFor={fileInputId} className={slotClassName} aria-label={resolvedAriaLabel}>
+        <label ref={labelRef} htmlFor={fileInputId} className={slotClassName} aria-label={resolvedAriaLabel}>
           {plusIcon}
         </label>
       ) : (

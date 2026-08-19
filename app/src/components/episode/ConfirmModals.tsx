@@ -174,10 +174,7 @@ export function PublishConfirmModal({
         if (!isOpen) handleClose();
       }}
     >
-      <DialogContent
-        showCloseButton={false}
-        className="outline-none focus:outline-none"
-      >
+      <DialogContent className="outline-none focus:outline-none">
         {step === "setup" ? (
           <>
             <ModalHeader
@@ -258,7 +255,7 @@ export function PublishConfirmModal({
           <>
             <div className="self-stretch px-5 pt-10 pb-4 bg-background max-lg:rounded-t-xl lg:rounded-t-sm flex flex-col justify-start items-center gap-5">
               <div className="self-stretch flex flex-col justify-center items-center gap-2">
-                <DialogTitle className="text-center text-foreground text-heading2_700 font-['Pretendard_JP']">
+                <DialogTitle>
                   공개 전 유의사항
                 </DialogTitle>
               </div>
@@ -350,7 +347,7 @@ export function DeleteConfirmModal({
         if (!o) onClose();
       }}
     >
-      <DialogContent showCloseButton={false}>
+      <DialogContent>
         <ModalHeader
           title="에피소드를 삭제하시겠어요?"
           subtitle="정말 삭제하시겠어요? 삭제 후에는 복구할 수 없어요."

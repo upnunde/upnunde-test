@@ -511,8 +511,8 @@ export function ResourceManagementPage() {
           if (!open) setPendingDelete(null);
         }}
       >
-        <DialogContent showCloseButton={false}>
-          <DialogHeader className="text-center">
+        <DialogContent>
+          <DialogHeader>
             <DialogTitle>{RESOURCE_DELETE_TITLE}</DialogTitle>
             <DialogDescription>{RESOURCE_DELETE_DESCRIPTION}</DialogDescription>
           </DialogHeader>

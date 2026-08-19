@@ -92,7 +92,7 @@ export function CharacterItem({
           <div className="flex w-full items-start justify-between gap-2">
             <div className={WORKS_ITEM_TITLE_GROUP_CLASS}>
               {isPrivate && (
-                <Badge variant="default" size="md" shape="square">
+                <Badge variant="secondary" status="destructive" size="md" shape="square">
                   비공개
                 </Badge>
               )}

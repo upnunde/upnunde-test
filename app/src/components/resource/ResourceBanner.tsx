@@ -1,7 +1,7 @@
 "use client";
 
 import React, { useState, useSyncExternalStore } from "react";
-import { Alert, AlertDescription, AlertTitle } from "design-system/ui/alert";
+import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
 import { PAGE_CARD_SHELL_MOBILE_FLUSH_CLASS } from "@/lib/page-layout";
 import { RESOURCE_MGMT_BANNER_BODY } from "@/lib/episode-resource-copy";
 import { cn } from "design-system/utils";
@@ -49,7 +49,8 @@ export function ResourceBanner({ seriesId }: ResourceBannerProps) {
     <div className="inline-flex self-stretch flex-col items-center justify-start gap-3 pt-0">
       <Alert
         status="primary"
-        type="default"
+        type="icon"
+        size="md"
         removable
         onDismiss={handleDismiss}
         className={cn(

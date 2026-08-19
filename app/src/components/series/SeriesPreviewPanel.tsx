@@ -1,75 +1,57 @@
 "use client";
 
-import Image from "next/image";
 import { IPhone15ProFrame } from "@/components/preview/IPhone15ProFrame";
+import { SeriesImageCoverPreview } from "@/components/series/SeriesImageCoverPreview";
+import { SeriesInfoLorePreview } from "@/components/series/SeriesInfoLorePreview";
+import type { SeriesFormTab } from "@/lib/seriesForm";
 
 export type SeriesPreviewPanelLayout = "sidebar" | "centered";
 
 interface SeriesPreviewPanelProps {
+  activeTab?: SeriesFormTab;
   coverPreviewUrl: string | null;
   logoPreviewUrl: string | null;
+  title?: string;
+  summary?: string;
+  keywords?: readonly string[];
+  worldviewDescription?: string;
   /** sidebar: 데스크톱 우측 고정 / centered: 모바일 전환 화면 */
   layout?: SeriesPreviewPanelLayout;
 }
 
-function SeriesPreviewContent({
-  coverPreviewUrl,
-  logoPreviewUrl,
-  imageSizes,
-}: {
-  coverPreviewUrl: string | null;
-  logoPreviewUrl: string | null;
-  imageSizes: string;
-}) {
-  if (!coverPreviewUrl && !logoPreviewUrl) {
-    return (
-      <div className="flex h-full w-full items-center justify-center preview-bg-canvas px-5 text-center text-body3_400 preview-text-placeholder">
-        이미지를 등록하면 미리볼 수 있어요
-      </div>
-    );
-  }
-
-  return (
-    <>
-      <Image
-        key={coverPreviewUrl || logoPreviewUrl}
-        src={coverPreviewUrl || logoPreviewUrl!}
-        alt="시리즈 대표이미지 미리보기"
-        fill
-        sizes={imageSizes}
-        unoptimized
-        className="object-cover object-center preview-bg-canvas-50"
-      />
-      {coverPreviewUrl && logoPreviewUrl ? (
-        <Image
-          key={logoPreviewUrl}
-          src={logoPreviewUrl}
-          alt="로고 미리보기"
-          fill
-          sizes={imageSizes}
-          unoptimized
-          className="pointer-events-none z-dropdown object-cover"
-        />
-      ) : null}
-    </>
-  );
-}
-
 export function SeriesPreviewPanel({
+  activeTab = "image",
   coverPreviewUrl,
   logoPreviewUrl,
+  title = "",
+  summary = "",
+  keywords = [],
+  worldviewDescription = "",
   layout = "sidebar",
 }: SeriesPreviewPanelProps) {
   const isFullscreen = layout === "centered";
+  const imageSizes = isFullscreen ? "100vw" : "300px";
+
+  const preview =
+    activeTab === "image" ? (
+      <SeriesImageCoverPreview
+        coverPreviewUrl={coverPreviewUrl}
+        logoPreviewUrl={logoPreviewUrl}
+        imageSizes={imageSizes}
+      />
+    ) : (
+      <SeriesInfoLorePreview
+        title={title}
+        headline={summary}
+        keywords={keywords}
+        body={worldviewDescription}
+      />
+    );
 
   if (isFullscreen) {
     return (
       <div className="relative flex min-h-0 w-full flex-1 bg-inverse">
-        <SeriesPreviewContent
-          coverPreviewUrl={coverPreviewUrl}
-          logoPreviewUrl={logoPreviewUrl}
-          imageSizes="100vw"
-        />
+        {preview}
       </div>
     );
   }
@@ -78,15 +60,7 @@ export function SeriesPreviewPanel({
     <div className="flex w-[300px] shrink-0 flex-col gap-3">
       <p className="text-body1_500 text-foreground-muted">미리보기</p>
       <div className="flex w-full justify-center">
-        <IPhone15ProFrame>
-          <div className="relative h-full w-full">
-            <SeriesPreviewContent
-              coverPreviewUrl={coverPreviewUrl}
-              logoPreviewUrl={logoPreviewUrl}
-              imageSizes="300px"
-            />
-          </div>
-        </IPhone15ProFrame>
+        <IPhone15ProFrame>{preview}</IPhone15ProFrame>
       </div>
     </div>
   );

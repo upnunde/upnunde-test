@@ -59,9 +59,15 @@ interface SeriesFormPageScaffoldProps {
   submitDisabled: boolean;
   coverPreviewUrl: string | null;
   logoPreviewUrl: string | null;
+  seriesTitle?: string;
+  seriesSummary?: string;
+  keywordList?: readonly string[];
+  worldviewDescription?: string;
   children: ReactNode;
   showDraftButton?: boolean;
   onDraftClick?: () => void;
+  draftDisabled?: boolean;
+  submitLabel?: string;
   contentGapClassName?: string;
   aiComposer?: SeriesFormAiComposerConfig;
 }
@@ -77,9 +83,15 @@ export function SeriesFormPageScaffold({
   submitDisabled,
   coverPreviewUrl,
   logoPreviewUrl,
+  seriesTitle = "",
+  seriesSummary = "",
+  keywordList = [],
+  worldviewDescription = "",
   children,
   showDraftButton = false,
   onDraftClick,
+  draftDisabled = false,
+  submitLabel = "등록하기",
   contentGapClassName = space.form.formGroupGapRelaxed.className,
   aiComposer,
 }: SeriesFormPageScaffoldProps) {
@@ -123,13 +135,14 @@ export function SeriesFormPageScaffold({
                 <HeaderBackButton onClick={onBack} aria-label="시리즈 목록으로" />
                 <h1 className="text-heading2_700 text-foreground">{title}</h1>
               </div>
-              <div className="hidden items-center gap-3 lg:flex">
+              <div className="hidden items-center gap-1 lg:flex">
                 {showDraftButton ? (
                   <Button
                     type="button"
                     variant="outline"
                     shape="square"
                     size="xl"
+                    disabled={draftDisabled}
                     onClick={onDraftClick}
                   >
                     임시저장
@@ -143,7 +156,7 @@ export function SeriesFormPageScaffold({
                   disabled={submitDisabled}
                   onClick={onSubmit}
                 >
-                  등록하기
+                  {submitLabel}
                 </Button>
               </div>
             </div>
@@ -182,8 +195,13 @@ export function SeriesFormPageScaffold({
 
                   {isLgUp ? (
                     <SeriesPreviewPanel
+                      activeTab={activeTab}
                       coverPreviewUrl={coverPreviewUrl}
                       logoPreviewUrl={logoPreviewUrl}
+                      title={seriesTitle}
+                      summary={seriesSummary}
+                      keywords={keywordList}
+                      worldviewDescription={worldviewDescription}
                       layout="sidebar"
                     />
                   ) : null}
@@ -200,8 +218,13 @@ export function SeriesFormPageScaffold({
                 )}
               >
                 <SeriesPreviewPanel
+                  activeTab={activeTab}
                   coverPreviewUrl={coverPreviewUrl}
                   logoPreviewUrl={logoPreviewUrl}
+                  title={seriesTitle}
+                  summary={seriesSummary}
+                  keywords={keywordList}
+                  worldviewDescription={worldviewDescription}
                   layout="centered"
                 />
               </div>
@@ -222,8 +245,10 @@ export function SeriesFormPageScaffold({
           <SeriesFormMobileSubmitBar
             showDraftButton={showDraftButton}
             onDraftClick={onDraftClick}
+            draftDisabled={draftDisabled}
             onSubmit={onSubmit}
             submitDisabled={submitDisabled}
+            submitLabel={submitLabel}
           />
         ) : null}
         {aiComposer ? (

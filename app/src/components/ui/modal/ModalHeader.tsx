@@ -6,8 +6,6 @@ import {
   DialogHeader,
   DialogTitle,
 } from "@/components/ui/dialog";
-import { cn } from "design-system/utils";
-import { modalHeaderClassName } from "@/components/ui/modal/modal-styles";
 
 export interface ModalHeaderProps {
   title: string;
@@ -16,21 +14,13 @@ export interface ModalHeaderProps {
   className?: string;
 }
 
-/** modal Header 프레임 — with icon / subtitle 옵션 */
+/** 확인 모달 헤더 — DS DialogHeader 정본(중앙 정렬) */
 export function ModalHeader({ title, subtitle, icon, className }: ModalHeaderProps) {
   return (
-    <DialogHeader className={cn(modalHeaderClassName, className)}>
-      <div className="flex flex-col items-center justify-center gap-2 self-stretch">
-        {icon ? <div className="relative flex h-7 w-7 items-center justify-center">{icon}</div> : null}
-        <DialogTitle className="text-center font-['Pretendard_JP'] text-heading2_700 text-foreground">
-          {title}
-        </DialogTitle>
-      </div>
-      {subtitle ? (
-        <DialogDescription className="self-stretch whitespace-pre-line text-center font-['Pretendard_JP'] text-body1_500 text-foreground-muted">
-          {subtitle}
-        </DialogDescription>
-      ) : null}
+    <DialogHeader className={className}>
+      {icon ? icon : null}
+      <DialogTitle>{title}</DialogTitle>
+      {subtitle ? <DialogDescription>{subtitle}</DialogDescription> : null}
     </DialogHeader>
   );
 }

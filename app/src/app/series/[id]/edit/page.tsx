@@ -3,7 +3,7 @@
 import { space } from "@/lib/spacing";
 import { cn } from "design-system/utils";
 
-import React, { useCallback, useMemo, useState } from "react";
+import React, { useCallback, useEffect, useMemo, useState } from "react";
 import { useRouter, usePathname } from "next/navigation";
 import { Button } from "design-system/ui/button";
 import { ImageCropOnlyModal } from "@/components/resource/character/CharacterExpressionModal";
@@ -16,8 +16,10 @@ import { SeriesFormPageScaffold } from "@/components/series/SeriesFormPageScaffo
 import { SeriesFormStepNav } from "@/components/series/SeriesFormStepNav";
 import { PAGE_FOOTER_ACTION_BUTTON_CLASS } from "@/lib/page-layout";
 import { useSeriesFormController } from "@/hooks/useSeriesFormController";
+import { useWorldviewPromptAutocomplete } from "@/hooks/useWorldviewPromptAutocomplete";
 import { seriesRecordToFormSnapshot } from "@/lib/seriesForm";
 import { useSeriesCatalogStore } from "@/store/useSeriesCatalogStore";
+import { Snackbar } from "@/components/episode/Snackbar";
 
 export default function SeriesEditPage() {
   const router = useRouter();
@@ -30,9 +32,24 @@ export default function SeriesEditPage() {
   const ensureDemoSeries = useSeriesCatalogStore((s) => s.ensureDemoSeries);
   const record = useSeriesCatalogStore((s) => s.seriesById[seriesId]);
   const updateSeries = useSeriesCatalogStore((s) => s.updateSeries);
+  const setSeriesStatus = useSeriesCatalogStore((s) => s.setSeriesStatus);
+  const isDraftSeries = record?.status === "DRAFT";
 
-  React.useEffect(() => {
-    ensureDemoSeries();
+  const [isCatalogReady, setIsCatalogReady] = useState(false);
+
+  useEffect(() => {
+    const syncCatalog = () => {
+      ensureDemoSeries();
+      setIsCatalogReady(true);
+    };
+
+    syncCatalog();
+
+    const unsubHydrate = useSeriesCatalogStore.persist?.onFinishHydration?.(syncCatalog);
+
+    return () => {
+      unsubHydrate?.();
+    };
   }, [ensureDemoSeries]);
 
   const initialSnapshot = useMemo(
@@ -42,6 +59,8 @@ export default function SeriesEditPage() {
 
   const [profileImageUrl, setProfileImageUrl] = React.useState<string | null>(null);
   const [isSubmitting, setIsSubmitting] = useState(false);
+  const [isDraftSaving, setIsDraftSaving] = useState(false);
+  const [snackbar, setSnackbar] = useState({ open: false, message: "" });
 
   const handleBack = useCallback(() => {
     router.push("/series");
@@ -53,12 +72,15 @@ export default function SeriesEditPage() {
       setIsSubmitting(true);
       try {
         await updateSeries(seriesId, payload);
+        if (isDraftSeries) {
+          setSeriesStatus(seriesId, "PRIVATE");
+        }
         router.push("/series");
       } finally {
         setIsSubmitting(false);
       }
     },
-    [router, seriesId, updateSeries],
+    [isDraftSeries, router, seriesId, setSeriesStatus, updateSeries],
   );
 
   const {
@@ -113,14 +135,47 @@ export default function SeriesEditPage() {
     handleCoverFileSelected,
     handleLogoFileSelected,
     handleSubmit,
+    getSubmitPayload,
+    hasEnteredContent,
   } = useSeriesFormController({
     coverSlotId: "series-cover",
     logoSlotId: "series-logo",
+    formInstanceKey: seriesId,
     initialSnapshot,
     onValidSubmit: handleSaveSeries,
   });
 
+  const applyWorldviewPrompt = useCallback(
+    (next: string) => {
+      handleRequiredFieldChange(next, setWorldviewPrompt, "prompt");
+    },
+    [handleRequiredFieldChange, setWorldviewPrompt],
+  );
+  const worldviewPromptAutocomplete = useWorldviewPromptAutocomplete({
+    value: worldviewPrompt,
+    maxLength: MAX_WORLDVIEW_PROMPT,
+    onApply: applyWorldviewPrompt,
+  });
+
+  const handleDraftClick = useCallback(async () => {
+    if (!seriesId || !record || isDraftSaving || !hasEnteredContent) return;
+    setIsDraftSaving(true);
+    try {
+      const payload = getSubmitPayload();
+      await updateSeries(seriesId, {
+        ...payload,
+        seriesTitle: payload.seriesTitle.trim() || "제목 없음",
+      });
+      setSnackbar({ open: true, message: "임시저장을 완료했습니다" });
+    } finally {
+      setIsDraftSaving(false);
+    }
+  }, [getSubmitPayload, hasEnteredContent, isDraftSaving, record, seriesId, updateSeries]);
+
+  const isRecordReady = isCatalogReady && Boolean(record);
+
   return (
+    <>
     <SeriesFormPageScaffold
       profileImageUrl={profileImageUrl}
       onProfileImageChange={setProfileImageUrl}
@@ -129,9 +184,17 @@ export default function SeriesEditPage() {
       onTabChange={setActiveTab}
       onBack={handleBack}
       onSubmit={handleSubmit}
-      submitDisabled={!isFormValid || isSubmitting || !record}
+      submitDisabled={!isFormValid || isSubmitting || !isRecordReady}
+      submitLabel={isDraftSeries ? "등록하기" : "저장하기"}
+      showDraftButton={isDraftSeries}
+      onDraftClick={() => void handleDraftClick()}
+      draftDisabled={!hasEnteredContent || isDraftSaving}
       coverPreviewUrl={coverPreviewUrl}
       logoPreviewUrl={logoPreviewUrl}
+      seriesTitle={seriesTitle}
+      seriesSummary={seriesSummary}
+      keywordList={keywordList}
+      worldviewDescription={worldviewDescription}
     >
       {activeTab === "image" && (
                         <div className={cn("flex flex-col", space.form.formGroupGapRelaxed.className)}>
@@ -204,7 +267,6 @@ export default function SeriesEditPage() {
                             value={seriesSummary}
                             placeholder="시리즈 요약 내용을 작성해주세요."
                             maxLength={MAX_SUMMARY}
-                            rows={3}
                             error={fieldErrors.summary}
                             textareaRef={summaryRef}
                             onValueChange={(value) =>
@@ -234,7 +296,6 @@ export default function SeriesEditPage() {
                             value={worldviewDescription}
                             placeholder="세계관 내용을 작성해주세요."
                             maxLength={MAX_WORLDVIEW}
-                            rows={6}
                             error={fieldErrors.worldview}
                             textareaRef={worldviewRef}
                             onValueChange={(value) =>
@@ -279,6 +340,9 @@ export default function SeriesEditPage() {
                             onValueChange={(value) =>
                               handleRequiredFieldChange(value, setWorldviewPrompt, "prompt")
                             }
+                            actionLabel="AI자동완성"
+                            onAction={() => void worldviewPromptAutocomplete.handleAutocomplete()}
+                            actionLoading={worldviewPromptAutocomplete.isRewriting}
                           />
 
                           <SeriesFormTextInputField
@@ -314,5 +378,11 @@ export default function SeriesEditPage() {
         onSave={handleExpressionModalSave}
       />
     </SeriesFormPageScaffold>
+      <Snackbar
+        open={snackbar.open}
+        message={snackbar.message}
+        onClose={() => setSnackbar((s) => ({ ...s, open: false }))}
+      />
+    </>
   );
 }

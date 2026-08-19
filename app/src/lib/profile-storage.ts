@@ -107,10 +107,13 @@ export function loadProfileSettings(): StoredProfileSettings {
   }
 }
 
+export const PROFILE_UPDATED_EVENT = "profile-settings-updated";
+
 export function saveProfileSettings(settings: StoredProfileSettings): void {
   if (typeof window === "undefined") return;
   try {
     localStorage.setItem(STORAGE_KEY, JSON.stringify(settings));
+    window.dispatchEvent(new CustomEvent(PROFILE_UPDATED_EVENT));
   } catch {
     /* quota / private mode */
   }

@@ -139,7 +139,7 @@ function ProfileEditFooter({
         "flex shrink-0 items-center justify-between gap-2",
         mobile
           ? formDialogSheetStickyFooterClassName
-          : "border-t border-border pt-3 pb-3",
+          : "pt-3 pb-3",
         className,
       )}
     >

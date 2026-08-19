@@ -109,6 +109,14 @@ const modalHeaderPaddingX = createAlias(
   "모달 헤더 좌우 인셋",
   dsSpace.overlay.modalPaddingX,
 );
+const modalHeaderPaddingTop = {
+  name: "modal-header-padding-top",
+  variable: "--space-modal-header-padding-top",
+  className: "pt-8",
+  source: "8_32",
+  px: 32,
+  role: "모달 헤더 상단 인셋 32px (DS v0.1.42 Dialog Content pt-8)",
+} as const;
 const modalFooterPaddingX = createAlias(
   "modal-footer-padding-x",
   dsSpace.overlay.modalPaddingX.className,
@@ -131,6 +139,7 @@ export const space = {
   overlay: {
     ...dsSpace.overlay,
     modalHeaderPaddingX,
+    modalHeaderPaddingTop,
     modalFooterPaddingX,
     modalBodyStackGap,
   },

@@ -16,16 +16,20 @@ import { SeriesFormPageScaffold } from "@/components/series/SeriesFormPageScaffo
 import { SeriesFormStepNav } from "@/components/series/SeriesFormStepNav";
 import { PAGE_FOOTER_ACTION_BUTTON_CLASS } from "@/lib/page-layout";
 import { useSeriesFormController } from "@/hooks/useSeriesFormController";
-import { useFormAiDraftComposer } from "@/hooks/useFormAiDraftComposer";
-import { generateSeriesDraftFromBrief } from "@/lib/series-ai-draft";
-import type { SeriesAiDraft } from "@/lib/series-ai-draft";
+import { useWorldviewPromptAutocomplete } from "@/hooks/useWorldviewPromptAutocomplete";
 import { useSeriesCatalogStore } from "@/store/useSeriesCatalogStore";
+import { Snackbar } from "@/components/episode/Snackbar";
 
 export default function SeriesNewPage() {
   const router = useRouter();
   const addSeries = useSeriesCatalogStore((s) => s.addSeries);
+  const updateSeries = useSeriesCatalogStore((s) => s.updateSeries);
+  const setSeriesStatus = useSeriesCatalogStore((s) => s.setSeriesStatus);
   const [profileImageUrl, setProfileImageUrl] = React.useState<string | null>(null);
   const [isSubmitting, setIsSubmitting] = useState(false);
+  const [draftId, setDraftId] = useState<string | null>(null);
+  const [isDraftSaving, setIsDraftSaving] = useState(false);
+  const [snackbar, setSnackbar] = useState({ open: false, message: "" });
 
   const handleBack = useCallback(() => {
     router.push("/series");
@@ -35,13 +39,18 @@ export default function SeriesNewPage() {
     async (payload: Parameters<typeof addSeries>[0]) => {
       setIsSubmitting(true);
       try {
-        await addSeries(payload);
+        if (draftId) {
+          await updateSeries(draftId, payload);
+          setSeriesStatus(draftId, "PRIVATE");
+        } else {
+          await addSeries(payload);
+        }
         router.push("/series");
       } finally {
         setIsSubmitting(false);
       }
     },
-    [addSeries, router],
+    [addSeries, draftId, router, setSeriesStatus, updateSeries],
   );
 
   const {
@@ -58,7 +67,6 @@ export default function SeriesNewPage() {
     setKeywordInput,
     handleAddKeyword,
     handleRemoveKeyword,
-    initKeywordsFromString,
     worldviewDescription,
     setWorldviewDescription,
     worldviewPrompt,
@@ -97,40 +105,49 @@ export default function SeriesNewPage() {
     handleCoverFileSelected,
     handleLogoFileSelected,
     handleSubmit,
+    getSubmitPayload,
+    hasEnteredContent,
   } = useSeriesFormController({
     coverSlotId: "series-cover-new",
     logoSlotId: "series-logo-new",
     onValidSubmit: handleCreateSeries,
   });
 
-  const applySeriesDraft = useCallback(
-    (draft: SeriesAiDraft) => {
-      setSeriesTitle(draft.title);
-      setSeriesSummary(draft.summary);
-      initKeywordsFromString(draft.keywords.join(", "));
-      setWorldviewDescription(draft.worldview);
-      setWorldviewPrompt(draft.prompt);
-      setPersona(draft.persona);
+  const applyWorldviewPrompt = useCallback(
+    (next: string) => {
+      handleRequiredFieldChange(next, setWorldviewPrompt, "prompt");
     },
-    [
-      initKeywordsFromString,
-      setPersona,
-      setSeriesSummary,
-      setSeriesTitle,
-      setWorldviewDescription,
-      setWorldviewPrompt,
-    ],
+    [handleRequiredFieldChange, setWorldviewPrompt],
   );
-
-  const seriesAiComposer = useFormAiDraftComposer({
-    generate: generateSeriesDraftFromBrief,
-    onApply: applySeriesDraft,
-    successMessage: "시리즈 정보 초안을 채웠어요.",
-    fallbackMessage: "AI 설정이 없어 임시 규칙으로 채웠어요.",
-    errorMessage: "시리즈 초안 생성에 실패했어요.",
+  const worldviewPromptAutocomplete = useWorldviewPromptAutocomplete({
+    value: worldviewPrompt,
+    maxLength: MAX_WORLDVIEW_PROMPT,
+    onApply: applyWorldviewPrompt,
   });
 
+  const handleDraftClick = useCallback(async () => {
+    if (isDraftSaving || !hasEnteredContent) return;
+    setIsDraftSaving(true);
+    try {
+      const payload = getSubmitPayload();
+      const draftPayload = {
+        ...payload,
+        seriesTitle: payload.seriesTitle.trim() || "제목 없음",
+      };
+      if (draftId) {
+        await updateSeries(draftId, draftPayload);
+      } else {
+        const id = await addSeries(draftPayload, { status: "DRAFT" });
+        setDraftId(id);
+      }
+      setSnackbar({ open: true, message: "임시저장을 완료했습니다" });
+    } finally {
+      setIsDraftSaving(false);
+    }
+  }, [addSeries, draftId, getSubmitPayload, hasEnteredContent, isDraftSaving, updateSeries]);
+
   return (
+    <>
     <SeriesFormPageScaffold
       profileImageUrl={profileImageUrl}
       onProfileImageChange={setProfileImageUrl}
@@ -141,14 +158,14 @@ export default function SeriesNewPage() {
       onSubmit={handleSubmit}
       submitDisabled={!isFormValid || isSubmitting}
       showDraftButton
+      onDraftClick={() => void handleDraftClick()}
+      draftDisabled={!hasEnteredContent || isDraftSaving}
       coverPreviewUrl={coverPreviewUrl}
       logoPreviewUrl={logoPreviewUrl}
-      aiComposer={{
-        briefPrompt: seriesAiComposer.briefPrompt,
-        onBriefChange: seriesAiComposer.setBriefPrompt,
-        onSubmit: () => void seriesAiComposer.handleGenerate(),
-        isGenerating: seriesAiComposer.isGenerating,
-      }}
+      seriesTitle={seriesTitle}
+      seriesSummary={seriesSummary}
+      keywordList={keywordList}
+      worldviewDescription={worldviewDescription}
     >
       {activeTab === "image" && (
                         <div className={cn("flex flex-col", space.form.formGroupGapRelaxed.className)}>
@@ -221,7 +238,6 @@ export default function SeriesNewPage() {
                             value={seriesSummary}
                             placeholder="시리즈 요약 내용을 작성해주세요."
                             maxLength={MAX_SUMMARY}
-                            rows={3}
                             error={fieldErrors.summary}
                             textareaRef={summaryRef}
                             onValueChange={(value) =>
@@ -251,7 +267,6 @@ export default function SeriesNewPage() {
                             value={worldviewDescription}
                             placeholder="세계관 내용을 작성해주세요."
                             maxLength={MAX_WORLDVIEW}
-                            rows={6}
                             error={fieldErrors.worldview}
                             textareaRef={worldviewRef}
                             onValueChange={(value) =>
@@ -296,6 +311,9 @@ export default function SeriesNewPage() {
                             onValueChange={(value) =>
                               handleRequiredFieldChange(value, setWorldviewPrompt, "prompt")
                             }
+                            actionLabel="AI자동완성"
+                            onAction={() => void worldviewPromptAutocomplete.handleAutocomplete()}
+                            actionLoading={worldviewPromptAutocomplete.isRewriting}
                           />
 
                           <SeriesFormTextInputField
@@ -331,5 +349,11 @@ export default function SeriesNewPage() {
         onSave={handleExpressionModalSave}
       />
     </SeriesFormPageScaffold>
+      <Snackbar
+        open={snackbar.open}
+        message={snackbar.message}
+        onClose={() => setSnackbar((s) => ({ ...s, open: false }))}
+      />
+    </>
   );
 }

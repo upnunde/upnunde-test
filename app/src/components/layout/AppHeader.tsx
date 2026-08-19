@@ -1,13 +1,22 @@
 "use client";
 
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import Image from "next/image";
 import { ProfileEditModal } from "@/components/ProfileEditModal";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { dummyAsset } from "@/lib/dummy-asset-path";
+import { loadProfileSettings, PROFILE_UPDATED_EVENT } from "@/lib/profile-storage";
 
 export function AppHeader() {
   const [profileDrawerOpen, setProfileDrawerOpen] = useState(false);
+  const [avatarUrl, setAvatarUrl] = useState<string | null>(null);
+
+  useEffect(() => {
+    const sync = () => setAvatarUrl(loadProfileSettings().public.avatarUrl);
+    sync();
+    window.addEventListener(PROFILE_UPDATED_EVENT, sync);
+    return () => window.removeEventListener(PROFILE_UPDATED_EVENT, sync);
+  }, []);
 
   return (
     <header className="sticky top-0 z-sticky flex flex-col bg-background w-full shrink-0">
@@ -37,7 +46,7 @@ export function AppHeader() {
             aria-label="프로필 편집"
           >
             <Avatar className="w-9 h-9 border border-border hover:opacity-90 transition-opacity">
-              <AvatarImage src="https://github.com/shadcn.png" alt="Profile" />
+              {avatarUrl ? <AvatarImage src={avatarUrl} alt="Profile" /> : null}
               <AvatarFallback>CN</AvatarFallback>
             </Avatar>
           </button>

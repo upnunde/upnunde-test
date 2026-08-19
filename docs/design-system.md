@@ -331,7 +331,7 @@ DS 컴포넌트가 자체 값을 정의. 리노벨은 컴포넌트를 통해 사
 | import | Base | 리노벨 어댑터 위치 (Phase C 예정) |
 |---|---|---|
 | `design-system/ui/button` | `@base-ui/react` | `components/ui/button.tsx` |
-| `design-system/ui/dialog` | `@base-ui/react` | `components/ui/dialog.tsx` |
+| `design-system/ui/dialog` | `@base-ui/react` | `components/ui/dialog.tsx` (Close 숨김 래퍼) |
 | `design-system/ui/dropdown-menu` | `@base-ui/react` | `components/ui/dropdown-menu.tsx` |
 | `design-system/ui/popover` | `@base-ui/react` | `components/ui/popover.tsx` |
 | `design-system/ui/input` | `@base-ui/react` | `components/ui/input.tsx` |
@@ -341,10 +341,20 @@ DS 컴포넌트가 자체 값을 정의. 리노벨은 컴포넌트를 통해 사
 | `design-system/ui/chip` | `@base-ui/react` toggle | `components/ui/chip.tsx` |
 | `design-system/ui/tabs` | `@base-ui/react` | `components/ui/segmented-text-tabs.tsx` (도메인) |
 | `design-system/ui/badge` | native span | `components/ui/badge.tsx` |
-| `design-system/ui/avatar` | native | `components/ui/avatar.tsx` |
+| `design-system/ui/avatar` | `@base-ui/react` | 헤더는 `design-system/ui/avatar` 직접 사용 |
 | `design-system/ui/tooltip` | `@base-ui/react` | 필요 시 |
 | `design-system/ui/sonner` | `sonner` | `components/ui/toaster.tsx` |
 | `design-system/ui/card` `alert` `accordion` `skeleton` `separator` `progress` `label` `button-group` `icon` | 각각 | 필요 시 |
+
+현재 핀: **`github:upnunde/Renovel-Studio-DS#v0.1.42`**
+
+### v0.1.42 변경 (앱에 바로 반영)
+
+| 컴포넌트 | 변경 | 앱 영향 |
+|---|---|---|
+| `Dialog` / `DialogInlineShell` | 본문 패딩 `p-5` → `px-5 pt-8 pb-5` | 기본 Dialog는 상단 32px. `className="p-0"` 도메인 모달은 기존대로 덮어씀 |
+| 토큰 | `--space-modal-header-padding-top` (`space-8` / 32px) 추가 | `space.overlay.modalHeaderPaddingTop` (`pt-8`) |
+| `AvatarImage` | 이미지 dim `--black-opacity-10` → `--black-opacity-20` | DS Avatar를 쓰는 헤더 프로필에 적용 |
 
 ### 유틸
 

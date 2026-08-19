@@ -1,14 +1,18 @@
 "use client";
 
-import React, { useId, useState } from "react";
-import Link from "next/link";
-import { Dialog, DialogContent } from "@/components/ui/dialog";
+import { useEffect, useId, useState } from "react";
 import { Button } from "design-system/ui/button";
-import {
-  ModalFooterButtons,
-  ModalHeader,
-} from "@/components/ui/modal";
 import { Checkbox } from "design-system/ui/checkbox";
+import {
+  Dialog,
+  DialogClose,
+  DialogContent,
+  DialogDescription,
+  DialogFooter,
+  DialogHeader,
+  DialogTitle,
+} from "@/components/ui/dialog";
+import { DialogNoticeList } from "design-system/ui/dialog-patterns";
 import { Label } from "design-system/ui/label";
 
 export interface PolicyAgreementModalProps {
@@ -30,79 +34,66 @@ export function PolicyAgreementModal({
   onConfirm,
 }: PolicyAgreementModalProps) {
   const [agreed, setAgreed] = useState(false);
-  const agreementId = useId();
+  const consentId = useId();
+
+  useEffect(() => {
+    if (!open) setAgreed(false);
+  }, [open]);
+
+  const handleOpenChange = (nextOpen: boolean) => {
+    if (!nextOpen) {
+      setAgreed(false);
+      onClose();
+    }
+  };
 
   const handleConfirm = () => {
     if (!agreed) return;
     onConfirm();
     onClose();
-    setAgreed(false);
-  };
-
-  const handleClose = () => {
-    onClose();
-    setAgreed(false);
   };
 
   return (
-    <Dialog open={open} onOpenChange={(isOpen) => !isOpen && handleClose()}>
-      <DialogContent
-        showCloseButton={false}
-        aria-describedby="policy-agreement-description"
-      >
-        <ModalHeader
-          title="잠깐! 시작하기 전 체크"
-          subtitle="즐거운 콘텐츠 창작 전, 아래 내용을 꼭 확인해 주세요!"
-        />
+    <Dialog open={open} onOpenChange={handleOpenChange}>
+      <DialogContent className="gap-0 p-0">
+        <DialogHeader className="w-full px-5 pt-5 pb-2">
+          <DialogTitle>잠깐! 시작하기 전 체크</DialogTitle>
+          <DialogDescription>
+            즐거운 콘텐츠 창작 전, 아래 내용을 꼭 확인해 주세요!
+          </DialogDescription>
+        </DialogHeader>
 
-        <div
-          id="policy-agreement-description"
-          className="w-full px-6 pb-4"
-        >
-          <div className="w-full rounded-lg bg-background-muted px-4 py-3">
-            <ol className="list-decimal list-inside space-y-2 text-body3_400 text-foreground-muted">
-              {POLICIES.map((text, i) => (
-                <li key={i}>{text}</li>
-              ))}
-            </ol>
+        <div className="grid w-full gap-3 px-5 py-2">
+          <div className="w-full rounded-lg bg-background-muted px-2 py-3 text-left">
+            <DialogNoticeList items={POLICIES} />
+          </div>
+
+          <div className="flex items-center gap-2">
+            <Checkbox
+              id={consentId}
+              checked={agreed}
+              onCheckedChange={(checked) => setAgreed(checked === true)}
+            />
+            <Label htmlFor={consentId} className="text-body4_400 leading-5">
+              <span>리노벨 운영정책 동의</span>{" "}
+              <a
+                href="/guide"
+                className="text-primary underline underline-offset-3"
+                target="_blank"
+                rel="noreferrer"
+              >
+                보기
+              </a>
+            </Label>
           </div>
         </div>
 
-        <ModalFooterButtons
-          layout="end"
-          body={
-            <div className="flex w-full items-center justify-between gap-2 bg-background px-6 py-2">
-              <Label
-                htmlFor={agreementId}
-                className="cursor-pointer text-body3_400 text-foreground-muted"
-              >
-                <Checkbox
-                  id={agreementId}
-                  checked={agreed}
-                  onCheckedChange={setAgreed}
-                />
-                리노벨 운영정책 동의
-              </Label>
-              <Button
-                variant="link"
-                size="sm"
-                render={<Link href="/guide" />}
-                nativeButton={false}
-              >
-                보기
-              </Button>
-            </div>
-          }
-          trailingButtons={[
-            { label: "취소", closeOnSelect: true, onClick: handleClose },
-            {
-              label: "동의하고 계속하기",
-              tone: "primary",
-              onClick: handleConfirm,
-              disabled: !agreed,
-            },
-          ]}
-        />
+        <DialogFooter className="mx-0 mb-0 px-5 pt-2 pb-5">
+          <DialogClose render={<Button variant="outline" />}>취소</DialogClose>
+          <Button disabled={!agreed} onClick={handleConfirm}>
+            동의하고 계속하기
+          </Button>
+        </DialogFooter>
       </DialogContent>
     </Dialog>
   );
