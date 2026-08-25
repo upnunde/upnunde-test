@@ -35,7 +35,49 @@ function patchDuplicateFieldLabelExports() {
   }
 }
 
+/**
+ * DS utils: 커스텀 twMerge 그룹 `ds-typography`가 DefaultClassGroupIds에 없어
+ * Next `transpilePackages` 타입체크가 실패한다. 설정 객체만 단언한다.
+ */
+function patchTwMergeDsTypographyTypes() {
+  const filePath = path.join(dsRoot, "src/lib/utils.ts");
+  if (!fs.existsSync(filePath)) return;
+  const source = fs.readFileSync(filePath, "utf8");
+  if (source.includes("/* verify:ds-twmerge-patch */")) return;
+
+  const marker = "const twMerge = extendTailwindMerge({";
+  const idx = source.indexOf(marker);
+  if (idx === -1) return;
+
+  let depth = 0;
+  let end = -1;
+  for (let i = idx + marker.length - 1; i < source.length; i++) {
+    const ch = source[i];
+    if (ch === "{") depth++;
+    else if (ch === "}") {
+      depth--;
+      if (depth === 0 && source[i + 1] === ")") {
+        end = i + 2;
+        break;
+      }
+    }
+  }
+  if (end === -1) return;
+
+  const call = source.slice(idx, end);
+  const patchedCall = call.replace(
+    /\}\)$/,
+    "} as Parameters<typeof extendTailwindMerge>[0] /* verify:ds-twmerge-patch */)",
+  );
+  if (patchedCall === call) return;
+
+  const next = source.slice(0, idx) + patchedCall + source.slice(end);
+  fs.writeFileSync(filePath, next);
+  console.log("verify:ds — patched twMerge ds-typography types");
+}
+
 patchDuplicateFieldLabelExports();
+patchTwMergeDsTypographyTypes();
 const exportsMap = pkg.exports ?? {};
 const missing = [];
 

@@ -62,10 +62,23 @@ export function EpisodePreviewModal({
     return `${safeIndex + 1} / ${blocks.length}`;
   }, [blocks.length, safeIndex]);
 
+  const canGoPrev = blocks.length > 0 && safeIndex > 0;
+  const canGoNext = blocks.length > 0 && safeIndex < blocks.length - 1;
+
   const handleAdvance = useCallback(() => {
     if (!canTapAdvance) return;
     setPlaybackIndex((prev) => clampPlaybackIndex(blocks, prev + 1));
   }, [blocks, canTapAdvance]);
+
+  const handlePrev = useCallback(() => {
+    if (!canGoPrev) return;
+    setPlaybackIndex((prev) => clampPlaybackIndex(blocks, prev - 1));
+  }, [blocks, canGoPrev]);
+
+  const handleNext = useCallback(() => {
+    if (!canGoNext) return;
+    setPlaybackIndex((prev) => clampPlaybackIndex(blocks, prev + 1));
+  }, [blocks, canGoNext]);
 
   const handleChoiceSelect = useCallback(
     (choice: ChoiceItem) => {
@@ -119,6 +132,34 @@ export function EpisodePreviewModal({
               onChoiceSelect={handleChoiceSelect}
             />
           </IPhone15ProFrame>
+
+          <div className="flex items-center justify-center gap-3">
+            <IconButton
+              type="button"
+              variant="outline"
+              shape="circle"
+              size="icon-sm"
+              icon={ICONS.chevronLeft}
+              aria-label="이전"
+              disabled={!canGoPrev}
+              onClick={handlePrev}
+              className="bg-background shadow-elevation-20 disabled:opacity-40"
+            />
+            <span className="min-w-14 text-center text-body3_500 text-foreground-muted">
+              {progressLabel}
+            </span>
+            <IconButton
+              type="button"
+              variant="outline"
+              size="icon-sm"
+              shape="circle"
+              icon={ICONS.chevronRight}
+              aria-label="다음"
+              disabled={!canGoNext}
+              onClick={handleNext}
+              className="bg-background shadow-elevation-20 disabled:opacity-40"
+            />
+          </div>
         </div>
       </DialogContent>
     </Dialog>
