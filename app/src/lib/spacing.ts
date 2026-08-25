@@ -64,7 +64,7 @@ const controlGroupCompact = createAlias(
 const controlGroupStandard = createAlias(
   "control-group-standard",
   "gap-2",
-  "기본 컨트롤 그룹 간격 8px",
+  "기본 컨트롤 그룹 간격 8px — FieldLabel 16px(default)와 필드 사이 기본값",
   dsSpace.layout.pagePaddingX,
 );
 const controlGroupResponsive = createAlias(

@@ -3,6 +3,7 @@
 import React from "react";
 import Image from "next/image";
 import { FormFieldLabel } from "@/components/ui/field-label";
+import { FORM_LABEL_CONTROL_STACK_CLASS } from "@/lib/form-field-styles";
 import { AddResourceSlot } from "@/components/resource/cards/AddResourceSlot";
 import {
   THUMBNAIL_SLOT_ARIA,
@@ -45,7 +46,7 @@ export function SeriesImageUploadField({
   onFileSelected,
 }: SeriesImageUploadFieldProps) {
   return (
-    <div className="flex flex-col gap-3">
+    <div className={FORM_LABEL_CONTROL_STACK_CLASS}>
       <FormFieldLabel title={label} subtitle={subtitle} inputId={inputId} />
       {previewUrl ? (
         <label

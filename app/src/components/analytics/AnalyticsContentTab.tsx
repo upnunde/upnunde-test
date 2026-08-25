@@ -39,6 +39,7 @@ import {
   getContentDummy,
   getEpisodePrimaryStatsDummy,
   getScopedTop5Dummy,
+  type AnalyticsPopularRankMetric,
 } from "@/components/analytics/analytics-dummy-by-scope";
 
 const AnalyticsTrendLineChart = dynamic(
@@ -82,6 +83,9 @@ export function AnalyticsContentTab({
   statsEpisodeNo: "all" | number;
 }) {
   const [primaryMetric, setPrimaryMetric] = useState<AnalyticsPrimaryMetric>("views");
+  const [popularCriterion, setPopularCriterion] = useState<Extract<AnalyticsPopularRankMetric, "views" | "time">>(
+    "views",
+  );
 
   const isSeriesScope = scopeCategory === "series";
 
@@ -100,7 +104,25 @@ export function AnalyticsContentTab({
 
   /** 인기/주의 TOP5 — 범위·선택 작품/캐릭터에 맞는 하위 단위 */
   const popularTop5Rows = useMemo<AnalyticsTopFiveRow[]>(
-    () => getScopedTop5Dummy(scopeCategory, periodRange, seriesId, characterId, scenarioId, "popular"),
+    () =>
+      getScopedTop5Dummy(
+        scopeCategory,
+        periodRange,
+        seriesId,
+        characterId,
+        scenarioId,
+        "popular",
+        popularCriterion,
+      ),
+    [scopeCategory, periodRange, seriesId, characterId, scenarioId, popularCriterion],
+  );
+  const likesTop5Rows = useMemo<AnalyticsTopFiveRow[]>(
+    () => getScopedTop5Dummy(scopeCategory, periodRange, seriesId, characterId, scenarioId, "popular", "likes"),
+    [scopeCategory, periodRange, seriesId, characterId, scenarioId],
+  );
+  const followersTop5Rows = useMemo<AnalyticsTopFiveRow[]>(
+    () =>
+      getScopedTop5Dummy(scopeCategory, periodRange, seriesId, characterId, scenarioId, "popular", "followers"),
     [scopeCategory, periodRange, seriesId, characterId, scenarioId],
   );
   const attentionTop5Rows = useMemo<AnalyticsTopFiveRow[]>(
@@ -157,41 +179,77 @@ export function AnalyticsContentTab({
       </AnalyticsPanel>
 
       <div className={`flex w-full flex-col items-stretch ${PAGE_GUTTER_GAP_CLASS} lg:flex-row`}>
-        <PopularContentsCard rows={popularTop5Rows} isSeriesScope={isSeriesScope} />
+        <PopularContentsCard
+          rows={popularTop5Rows}
+          isSeriesScope={isSeriesScope}
+          popularCriterion={popularCriterion}
+          onPopularCriterionChange={setPopularCriterion}
+        />
         <AttentionContentsCard rows={attentionTop5Rows} isSeriesScope={isSeriesScope} />
+      </div>
+
+      <div className={`flex w-full flex-col items-stretch ${PAGE_GUTTER_GAP_CLASS} lg:flex-row`}>
+        <TopFiveRankingCard
+          title={isSeriesScope ? "최다 좋아요 에피소드 TOP5" : "최다 좋아요 콘텐츠 TOP5"}
+          rows={likesTop5Rows}
+        />
+        <TopFiveRankingCard
+          title={isSeriesScope ? "최다 구독자 에피소드 TOP5" : "최다 구독자 콘텐츠 TOP5"}
+          rows={followersTop5Rows}
+        />
       </div>
     </div>
   );
 }
 
-type PopularCriterionId = "views" | "time" | "likes" | "followers";
+const RANKING_PANEL_CLASS = "w-full min-w-0 flex-1 lg:min-w-[260px]";
+
+type PopularCriterionId = Extract<AnalyticsPopularRankMetric, "views" | "time">;
 
 function PopularContentsCard({
   rows,
   isSeriesScope,
+  popularCriterion,
+  onPopularCriterionChange,
 }: {
   rows: readonly AnalyticsTopFiveRow[];
   isSeriesScope: boolean;
+  popularCriterion: PopularCriterionId;
+  onPopularCriterionChange: (value: PopularCriterionId) => void;
 }) {
-  const [popularCriterion, setPopularCriterion] = useState<PopularCriterionId>("views");
-
   return (
-    <AnalyticsPanel className="w-full min-w-0 flex-1 lg:min-w-[260px]">
+    <AnalyticsPanel className={RANKING_PANEL_CLASS}>
       <Title2
         text={isSeriesScope ? "인기 에피소드 TOP5" : "인기 콘텐츠 TOP5"}
         variant="title"
         asSectionHeader
       />
       <div className={cn(PAGE_FLUSH_CONTENT_PAD_X_CLASS, "pt-3")}>
-        <Tabs value={popularCriterion} onValueChange={(v) => setPopularCriterion(v as PopularCriterionId)}>
+        <Tabs
+          value={popularCriterion}
+          onValueChange={(v) => onPopularCriterionChange(v as PopularCriterionId)}
+        >
           <TabsList variant="line" size="sm" aria-label="인기 콘텐츠 기준" className="self-stretch">
             <TabsTrigger value="views">최다 조회수</TabsTrigger>
             <TabsTrigger value="time">최다 이용시간</TabsTrigger>
-            <TabsTrigger value="likes">최다 좋아요</TabsTrigger>
-            <TabsTrigger value="followers">최다 팔로워</TabsTrigger>
           </TabsList>
         </Tabs>
       </div>
+      <AnalyticsTopFiveRowList rows={rows} />
+    </AnalyticsPanel>
+  );
+}
+
+function TopFiveRankingCard({
+  title,
+  rows,
+}: {
+  title: string;
+  rows: readonly AnalyticsTopFiveRow[];
+}) {
+  return (
+    <AnalyticsPanel className={RANKING_PANEL_CLASS}>
+      <Title2 text={title} variant="title" asSectionHeader />
       <AnalyticsTopFiveRowList rows={rows} />
     </AnalyticsPanel>
   );
@@ -210,7 +268,7 @@ function AttentionContentsCard({
   const isEmpty = rows.length === 0;
 
   return (
-    <AnalyticsPanel className="w-full min-w-0 flex-1 lg:min-w-[260px]">
+    <AnalyticsPanel className={RANKING_PANEL_CLASS}>
       <Title2
         text={isSeriesScope ? "주의 필요한 에피소드 TOP5" : "주의 필요한 콘텐츠 TOP5"}
         variant="title"

@@ -5,13 +5,20 @@ import {
 } from "@/lib/inquiry-list-styles";
 import { Button } from "design-system/ui/button";
 import { cn } from "design-system/utils";
+import Image from "next/image";
 import { ICONS } from "@/lib/icons";
-import type { NotificationData } from "@/types/notification";
+import {
+  notificationCategoryLabel,
+  notificationCategoryToneClass,
+  type NotificationData,
+} from "@/types/notification";
 
 export interface NotificationItemProps {
   notification: NotificationData;
   /** 문의하기 클릭 시 실행할 핸들러 (부모에서 전달) */
   onContactClick?: (notification: NotificationData) => void;
+  /** 새소식 dot 노출 (최대 2개 정책은 부모가 판별) */
+  showNewDot?: boolean;
   /** 펼침 여부 (부모에서 제어, 한 번에 하나만 펼쳐짐) */
   isOpen?: boolean;
   /** 펼치기/접기 토글 시 호출 */
@@ -21,10 +28,11 @@ export interface NotificationItemProps {
 export function NotificationItem({
   notification,
   onContactClick,
+  showNewDot = false,
   isOpen = false,
   onToggle,
 }: NotificationItemProps) {
-  const { id, category, title, content, date } = notification;
+  const { id, category, title, content, date, bannerSrc, bannerAlt } = notification;
 
   const handleContactClick = (e: React.MouseEvent) => {
     e.stopPropagation();
@@ -53,22 +61,27 @@ export function NotificationItem({
         id={`notification-trigger-${id}`}
       >
         <div
-          className={`w-[72px] h-8 shrink-0 p-2 rounded flex justify-center items-center gap-2 ${
-            category === "NOTICE"
-              ? "bg-info/15 text-info"
-              : "bg-success/15 text-success"
-          }`}
+          className={cn(
+            "flex h-8 w-[72px] shrink-0 items-center justify-center gap-2 rounded p-2",
+            notificationCategoryToneClass(category),
+          )}
         >
           <div className="justify-start text-body3_500 font-['Pretendard_JP']">
-            {category === "NOTICE" ? "공지" : "작품알림"}
+            {notificationCategoryLabel(category)}
           </div>
         </div>
         <div className="min-w-0 flex-1 flex flex-col justify-center items-start gap-1">
           <div className="w-full min-w-0 text-left text-body1_700 text-foreground lg:text-body2_500">
             {title}
           </div>
-          <div className="justify-start text-body4_400 text-foreground-placeholder lg:text-caption1_400">
-            {date}
+          <div className="inline-flex items-start gap-1 text-body4_400 leading-[18px] text-foreground-placeholder lg:text-caption1_400 lg:leading-4">
+            <span>{date}</span>
+            {showNewDot && (
+              <span
+                className="mt-[2px] size-1 shrink-0 rounded-full bg-destructive"
+                aria-hidden
+              />
+            )}
           </div>
         </div>
         <div className="w-8 h-8 shrink-0 px-3 rounded-[999px] flex justify-center items-center overflow-hidden bg-transparent text-foreground-placeholder">
@@ -87,6 +100,17 @@ export function NotificationItem({
           className={INQUIRY_NOTIFICATION_ROW_CLASS}
         >
           <div className="min-w-0 flex-1 flex flex-col gap-5 py-1 lg:gap-3">
+            {bannerSrc ? (
+              <div className="relative w-full max-w-[720px] overflow-hidden rounded-md bg-muted">
+                <Image
+                  src={bannerSrc}
+                  alt={bannerAlt ?? title}
+                  width={720}
+                  height={240}
+                  className="h-auto w-full object-cover"
+                />
+              </div>
+            ) : null}
             {content != null && content !== "" ? (
               <p className="text-body3_400 text-foreground-muted whitespace-pre-wrap">{content}</p>
             ) : (

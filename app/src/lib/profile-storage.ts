@@ -1,4 +1,5 @@
 import type { CreatorProfile, SettlementProfile, StoredProfileSettings } from "@/types/profile";
+import { DUMMY_DEFAULT_PROFILE_AVATAR } from "@/lib/dummy-profile-images";
 
 const STORAGE_KEY = "upnunde:creator-profile-settings";
 
@@ -6,11 +7,17 @@ export const PROFILE_PEN_NAME_MAX = 50;
 export const PROFILE_DESCRIPTION_MAX = 500;
 
 export const DEFAULT_CREATOR_PROFILE: CreatorProfile = {
-  loginId: "selly@linefriends.com",
+  loginId: "selly@gmail.com",
   penName: "사자이빨닦기",
   description: "",
-  avatarUrl: null,
+  avatarUrl: DUMMY_DEFAULT_PROFILE_AVATAR,
 };
+
+/** blob·빈 값은 더미 프로필로 — SSR·새로고침 후에도 헤더·마이페이지 일치 */
+export function resolveProfileAvatarUrl(url: string | null | undefined): string {
+  if (!url || url.startsWith("blob:")) return DUMMY_DEFAULT_PROFILE_AVATAR;
+  return url;
+}
 
 export const DEFAULT_SETTLEMENT_PROFILE: SettlementProfile = {
   bankName: "라인은행",
@@ -65,16 +72,19 @@ export function loadProfileSettings(): StoredProfileSettings {
     return {
       public: {
         loginId:
-          typeof pub.loginId === "string" ? pub.loginId : DEFAULT_CREATOR_PROFILE.loginId,
+          typeof pub.loginId === "string" && pub.loginId !== "selly@linefriends.com"
+            ? pub.loginId
+            : DEFAULT_CREATOR_PROFILE.loginId,
         penName: typeof pub.penName === "string" ? pub.penName : DEFAULT_CREATOR_PROFILE.penName,
         description:
           typeof pub.description === "string"
             ? pub.description
             : DEFAULT_CREATOR_PROFILE.description,
-        avatarUrl:
+        avatarUrl: resolveProfileAvatarUrl(
           typeof pub.avatarUrl === "string" || pub.avatarUrl === null
             ? (pub.avatarUrl as string | null)
             : DEFAULT_CREATOR_PROFILE.avatarUrl,
+        ),
       },
       settlement: {
         bankName:
@@ -108,6 +118,14 @@ export function loadProfileSettings(): StoredProfileSettings {
 }
 
 export const PROFILE_UPDATED_EVENT = "profile-settings-updated";
+
+/** 마이페이지 편집 중 아바타 미리보기 — 저장 전 헤더와 동기화 */
+export const PROFILE_AVATAR_PREVIEW_EVENT = "profile-avatar-preview";
+
+export function dispatchProfileAvatarPreview(avatarUrl: string | null): void {
+  if (typeof window === "undefined") return;
+  window.dispatchEvent(new CustomEvent(PROFILE_AVATAR_PREVIEW_EVENT, { detail: avatarUrl }));
+}
 
 export function saveProfileSettings(settings: StoredProfileSettings): void {
   if (typeof window === "undefined") return;

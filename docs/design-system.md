@@ -320,6 +320,24 @@ DS 컴포넌트가 자체 값을 정의. 리노벨은 컴포넌트를 통해 사
 | `xl` | 40px | 대형 폼·터치 |
 | `lg` | 42px | 로그인 CTA·출금 등 폼 필드 |
 
+### FieldLabel (16px default) → 필드 간격
+
+`FieldLabel` / `FormFieldLabel`의 기본 사이즈는 **16px** (`size="default"`, `text-body1_700`).
+
+이 라벨과 **바로 아래 컨트롤**(Input · Textarea · Select · 업로드 슬롯 등) 사이 세로 간격은 **8px가 기본값**이다.
+
+- 클래스: `FORM_LABEL_CONTROL_STACK_CLASS` (`flex flex-col gap-2`) — 라벨·필드가 세로 스택일 때
+- 시맨틱: DS `FIELD_LABEL_CONTROL_GAP` (default·lg `mt-2` / 8px, sm `mt-1` / 4px). `FIELD_LABEL_CONTROL_GAP_GROUP_CLASS`는 FieldLabel 바로 다음 형제에만
+- `gap-2`와 `mt-2`를 겹치지 말 것. `gap-3`나 `gap-1`+`mt-1`로 8px를 만들지 않는다
+- 필드 **그룹 간** 간격은 `space.form.formGroupGap` (`gap-4` / 16px) 등 별도 토큰
+
+```tsx
+<div className={FORM_LABEL_CONTROL_STACK_CLASS}>
+  <FormFieldLabel title="아이디" inputId="login-id" />
+  <Input id="login-id" />
+</div>
+```
+
 ---
 
 ## Part 3: DS 컴포넌트 사용법
@@ -346,7 +364,51 @@ DS 컴포넌트가 자체 값을 정의. 리노벨은 컴포넌트를 통해 사
 | `design-system/ui/sonner` | `sonner` | `components/ui/toaster.tsx` |
 | `design-system/ui/card` `alert` `accordion` `skeleton` `separator` `progress` `label` `button-group` `icon` | 각각 | 필요 시 |
 
-현재 핀: **`github:upnunde/Renovel-Studio-DS#v0.1.42`**
+현재 핀: **`github:upnunde/Renovel-Studio-DS#v0.1.51`**
+
+### v0.1.51 변경 (앱에 바로 반영)
+
+| 컴포넌트 | 변경 | 앱 영향 |
+|---|---|---|
+| `Tabs` (`line` · `text`) size `2xl` | 탭 목록 간격 `gap-6`(24px) → **`gap-5`(20px)** (`TABS_TEXT_LIST_GAP_BY_SIZE`) | 분석·내 작품·알림·문의·반응 등 `TabsList` `size="2xl"` 자동 적용. 앱 래퍼 변경 없음. Figma XL(`tab-styles` `gap-5`)과 일치 |
+
+### v0.1.50 변경 (앱에 바로 반영)
+
+| 컴포넌트 | 변경 | 앱 영향 |
+|---|---|---|
+| `FieldLabel` ↔ Input 간격 | sm 4px → **전 size 8px**. `FIELD_LABEL_CONTROL_GAP_GROUP_CLASS` = `gap-2`. `FIELD_LABEL_CONTROL_GAP_PX` | 마이페이지 `size="sm"` 라벨–필드도 8px. `InputGroup`이 `gap-2`로 간격 소유 |
+| `InputGroup` | Hypertext 전용 `mt-2` 제거 — 그룹 `gap-2`로 통일 | 앱 Input 어댑터 변경 없음 |
+
+### v0.1.49 · v0.1.48 변경 (앱에 바로 반영)
+
+| 컴포넌트 | 변경 | 앱 영향 |
+|---|---|---|
+| `FieldLabel` `size="sm"` | 타이틀 타이포 `body3-*` → **`body2-*`** | 마이페이지 등 `size="sm"` 라벨이 자동으로 body2. 앱 코드 변경 없음 |
+| `Input` / `EmailInput` / `PasswordInput` / `FileInput` | 지우기 버튼은 **값이 있어도 포커스(`focus-within`)일 때만** 노출. `inputEndActionPaddingWhenFocused`. 클리어 후 `input.focus()` | DS 직접 사용처(로그인 EmailInput, 앱 Input 어댑터)는 자동 적용. 비포커스 시 우측 패딩도 예약하지 않음 |
+| `InputClearButton` | `opacity-0` + `pointer-events-none`, `group-focus-within/input-root`에서 표시. mousedown `preventDefault`로 blur 방지 | 앱 래퍼 변경 없음 |
+
+### v0.1.47 · v0.1.46 변경 (앱에 바로 반영)
+
+| 컴포넌트 | 변경 | 앱 영향 |
+|---|---|---|
+| `FieldLabel` | `weight` 500/600/700 합본 타이포. 라벨↔필드 간격은 FieldLabel이 그리지 않음 | 기본 `weight="700"` 유지. 간격은 `FIELD_LABEL_CONTROL_GAP` |
+| 간격 토큰 | default·lg **8px** (`mt-2`), sm **4px** (`mt-1`). `FIELD_LABEL_CONTROL_GAP_GROUP_CLASS` | 세로 스택은 기존 `FORM_LABEL_CONTROL_STACK_CLASS` (`gap-2`). 둘을 겹치지 말 것 |
+| `Input` / `InputGroup` | 스펙에 FieldLabel 간격 소유 명시. Hypertext 행 레이아웃 | 앱 Input 어댑터 변경 없음 |
+| 타이포 | `_600` 유틸 추가 (heading·body·caption). `cn` twMerge 합본 그룹 | `text-body1_600` 등 사용 가능. 합본 옆에 `leading-*`/`font-*` 붙이지 말 것 |
+
+### v0.1.45 변경 (앱에 바로 반영)
+
+| 컴포넌트 | 변경 | 앱 영향 |
+|---|---|---|
+| `FieldLabel` | `description` 최대 3줄 배열 지원, `info` 툴팁(타이틀 행 아이콘) | 기존 `description` 문자열은 그대로. 여러 줄 안내는 `string[]`. 추가 설명은 `info` |
+| 스펙 | `specs/field-label.spec.json` — description 최대 3줄, info 툴팁 nativeNotes | 앱 래퍼 `field-label.tsx`는 DS re-export라 별도 코드 변경 없음 |
+
+### v0.1.44 변경 (앱에 바로 반영)
+
+| 컴포넌트 | 변경 | 앱 영향 |
+|---|---|---|
+| `Input` / `Textarea` / `EmailInput` / `PasswordInput` | `readOnly` 네이티브 지원 — `uiReadOnlyField` · `readOnlyFieldHandlers` (포커스·클릭 차단, ring 제거, `tabIndex=-1`) | 보기 전용 필드는 `disabled` 대신 `readOnly` + 필요 시 `bg-background-muted`만 추가. 수동 `pointer-events-none`·`tabIndex` 제거 |
+| `ui-disabled` | `readOnlyFieldHandlers()` export 추가 | EmailInput 자동완성·PasswordInput 토글도 readOnly 시 비활성 |
 
 ### v0.1.42 변경 (앱에 바로 반영)
 

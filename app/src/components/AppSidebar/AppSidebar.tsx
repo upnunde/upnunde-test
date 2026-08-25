@@ -10,12 +10,12 @@ import { cn } from "design-system/utils";
 
 const SIDEBAR_ITEMS = [
   { id: "series", label: "내 작품", path: "/series" },
-  { id: "analytics", label: "분석", path: "/analytics" },
-  { id: "settlements", label: "정산", path: "/settlements" },
-  { id: "notification", label: "알림", path: "/notifications" },
+  { id: "analytics", label: "통계 분석", path: "/analytics" },
+  { id: "reactions", label: "반응", path: "/reactions" },
+  { id: "settlements", label: "수익 정산", path: "/settlements" },
 ] as const;
 const SIDEBAR_BOTTOM_ITEMS = [
-  { id: "profile", label: "내 정보 관리", path: "/profile" },
+  { id: "notification", label: "알림", path: "/notifications" },
   { id: "inquiry", label: "문의", path: "/inquiry" },
   { id: "guide", label: "이용가이드", path: "/guide" },
 ] as const;
@@ -36,12 +36,12 @@ function sidebarIconFor(id: SidebarItemId): React.ReactNode {
       return <ICONS.libraryBig {...SIDEBAR_ICON_PROPS} />;
     case "analytics":
       return <ICONS.barChart3 {...SIDEBAR_ICON_PROPS} />;
+    case "reactions":
+      return <ICONS.heart {...SIDEBAR_ICON_PROPS} />;
     case "settlements":
-      return <ICONS.receipt {...SIDEBAR_ICON_PROPS} />;
+      return <ICONS.circleWon {...SIDEBAR_ICON_PROPS} />;
     case "guide":
       return <ICONS.bookOpen {...SIDEBAR_ICON_PROPS} />;
-    case "profile":
-      return <ICONS.userRoundCog {...SIDEBAR_ICON_PROPS} />;
     case "notification":
       return <ICONS.bell {...SIDEBAR_ICON_PROPS} />;
     case "inquiry":
@@ -67,8 +67,10 @@ export function deriveSidebarActiveId(pathname: string | null, fallback: Sidebar
   if (pathname.startsWith("/notifications")) return "notification";
   if (pathname.startsWith("/inquiry")) return "inquiry";
   if (pathname.startsWith("/guide")) return "guide";
-  if (pathname.startsWith("/profile")) return "profile";
   if (pathname.startsWith("/analytics")) return "analytics";
+  if (pathname.startsWith("/management") || pathname.startsWith("/comments") || pathname.startsWith("/reactions")) {
+    return "reactions";
+  }
   if (pathname.startsWith("/settlements")) return "settlements";
   if (pathname.startsWith("/monetization/settlements")) return "settlements";
   if (pathname.startsWith("/series")) return "series";
@@ -158,7 +160,7 @@ export default function AppSidebar({
           listClassName="flex flex-col gap-0 px-2"
         />
 
-        {/* 모바일: 알림 아래 구분선 후 하단 메뉴 순서대로 노출 */}
+        {/* 모바일: 본 메뉴 아래 구분선 후 하단 메뉴 순서대로 노출 */}
         <div
           className="mx-5 my-2 border-t border-border lg:hidden"
           role="separator"

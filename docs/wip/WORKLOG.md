@@ -1,31 +1,27 @@
 # 작업 일지 (WORKLOG)
 
-> 마지막 갱신: 2026-08-19  
+> 마지막 갱신: 2026-08-24  
 > 다음 세션: Cursor에서 `@docs/wip/WORKLOG.md` 를 붙이고 「이어서」라고 하면 됩니다.
 
 ## 오늘 한 일
 
-- design-system `v0.1.41` → `v0.1.42` 동기화 (`app/package.json` / `package-lock.json`)
-- v0.1.42 컴포넌트 변경 반영·문서 최신화
-  - **Dialog / DialogInlineShell**: 본문 패딩 `p-5` → `px-5 pt-8 pb-5` (헤더 상단 32px)
-  - **토큰**: `--space-modal-header-padding-top` 추가 → 앱 `space.overlay.modalHeaderPaddingTop`
-  - **AvatarImage**: dim `--black-opacity-10` → `--black-opacity-20` (DS Avatar 사용처에 자동 적용)
-- 시리즈 폼 미리보기·AI자동완성·Badge 등 도메인 작업 이어받음
+- design-system `v0.1.50` → `v0.1.51` 동기화 (`app/package.json` / `package-lock.json`, `node_modules` 강제 재설치)
+- v0.1.51: Tabs `line`/`text` size `2xl` 목록 간격 24px → **20px** (`gap-5`) — 앱 `TabsList size="2xl"` 자동 반영
+- 문서 핀 갱신: `app/DESIGN_SYSTEM.md`, `docs/design-system.md`
+- `tab-styles` XL 주석을 DS 2xl과 정렬 명시
+- 내 작품 「전체」 탭 추가 후 요청에 따라 원복 (시리즈·캐릭터·상황공략만)
 
 ## 다음에 할 일
 
-- `check:ds` · `tsc` 확인 후 커밋 여부 결정
-- 다른 확인 모달도 DS Dialog 패딩(pt-8)과 시각적으로 맞는지 스팟 확인
+- DS sync 커밋·PR 여부
+- 상황공략 탭 구성 확정 전까지 빈 슬롯 유지
 
 ## 막힌 것 · 결정 필요
 
--
+- DS 패키지 `tsc` 오류 (앱이 아님) — `utils.ts` `cn` twMerge `ds-typography` 타입 등 (기존과 동일)
 
 ## 주요 파일 · 브랜치
 
 - 브랜치: `main`
-- 관련 경로: `app/package.json`, `app/package-lock.json`, `app/src/lib/spacing.ts`, `docs/design-system.md`
-
-## 메모
-
-- DS Input 지우기 버튼은 외부 `ref`가 내부 ref를 덮으면 동작하지 않음. 앱 `components/ui/input.tsx` 래퍼가 우회 중 (v0.1.42에서도 Input ref merge는 미수정)
+- `app/package.json`, `app/package-lock.json`
+- `app/DESIGN_SYSTEM.md`, `docs/design-system.md`, `app/src/lib/tab-styles.ts`

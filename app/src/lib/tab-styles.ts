@@ -19,7 +19,7 @@ export const TAB_SIZE_META: Record<
     heightToken: "h48",
     heightClass: CONTROL_HEIGHT_FORM_CLASS,
     labelClass: "text-heading4_700",
-    /** Figma `tab` XL 행 — 탭 사이 spacing-20(20px) */
+    /** Figma `tab` XL 행 — spacing-20(20px). DS Tabs `text`/`line` size 2xl과 동일 */
     listGapClass: "gap-5",
   },
   l: {

@@ -4,6 +4,7 @@ import { useState } from "react";
 import Header from "@/components/Header/Header";
 import { deriveSidebarActiveId, type SidebarItemId } from "@/components/AppSidebar/AppSidebar";
 import { MobileAppSidebarDrawer } from "@/components/layout/MobileAppSidebarDrawer";
+import { useProfileAvatarUrl } from "@/hooks/useProfileAvatarUrl";
 import { APP_BROWSER_BG_CLASS, APP_PAGE_ROOT_CLASS } from "@/lib/mobile-viewport";
 import { APP_MAIN_LAYOUT_CLASS, APP_MAIN_PANEL_CLASS, APP_SHELL_BODY_ROW_CLASS } from "@/lib/page-layout";
 import { cn } from "design-system/utils";
@@ -13,7 +14,7 @@ export interface AppShellProps {
   sidebarActiveId: SidebarItemId;
   children: React.ReactNode;
   className?: string;
-  /** 브라우저·본문 배경 — 기본 `APP_BROWSER_BG_CLASS`(Background Container) */
+  /** 브라우저·본문 배경 — 기본 Background(`bg-canvas`). */
   browserBgClassName?: string;
 }
 
@@ -25,7 +26,7 @@ export function AppShell({
   browserBgClassName = APP_BROWSER_BG_CLASS,
 }: AppShellProps) {
   const pathname = usePathname();
-  const [profileImageUrl, setProfileImageUrl] = useState<string | null>(null);
+  const [profileImageUrl, setProfileImageUrl] = useProfileAvatarUrl();
   const [sidebarOpen, setSidebarOpen] = useState(false);
   const resolvedSidebarActiveId = deriveSidebarActiveId(pathname, sidebarActiveId);
 

@@ -87,7 +87,7 @@ export function RankDecoration({ rank, tone }: { rank: number; tone: ContentTone
 
 export function AnalyticsTopFiveRowList({ rows }: { rows: readonly AnalyticsTopFiveRow[] }) {
   return (
-    <div className="flex flex-col items-start justify-start gap-4 self-stretch rounded-sm p-5">
+    <div className="flex flex-col items-start justify-start gap-4 self-stretch p-5">
       {rows.map((row) => {
         const count = row.countLabel ?? "5,678";
         const suffix = row.countSuffix ?? "회";

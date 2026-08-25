@@ -18,10 +18,21 @@ export function ProfileSettingsTabBar({
   onTabChange: (tab: ProfileSettingsTabId) => void;
 }) {
   return (
-    <Tabs value={activeTab} onValueChange={(v) => onTabChange(v as ProfileSettingsTabId)} className="w-full">
-      <TabsList variant="line" size="default" aria-label="내 정보 관리 탭" className={`${lineTabStripListClassName("l")} border-b-0`}>
+    <Tabs
+      value={activeTab}
+      onValueChange={(v) => onTabChange(v as ProfileSettingsTabId)}
+      className="w-full"
+    >
+      <TabsList
+        variant="line"
+        size="default"
+        aria-label="설정 탭"
+        className={lineTabStripListClassName("l")}
+      >
         {TABS.map((tab) => (
-          <TabsTrigger key={tab.id} value={tab.id}>{tab.label}</TabsTrigger>
+          <TabsTrigger key={tab.id} value={tab.id}>
+            {tab.label}
+          </TabsTrigger>
         ))}
       </TabsList>
     </Tabs>

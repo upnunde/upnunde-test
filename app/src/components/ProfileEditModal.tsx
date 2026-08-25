@@ -6,6 +6,7 @@ import Image from "next/image";
 import { ICONS } from "@/lib/icons";
 import { useRouter } from "next/navigation";
 import { useIsLgUp } from "@/hooks/useMediaQuery";
+import { FORM_LABEL_CONTROL_STACK_CLASS } from "@/lib/form-field-styles";
 import { PAGE_GUTTER_X_CLASS } from "@/lib/page-layout";
 import { Button } from "design-system/ui/button";
 import { Input, InputGroup, InputHypertext } from "@/components/ui/input";
@@ -80,14 +81,14 @@ function ProfileEditFormFields({
       </div>
 
       <div className="flex w-full flex-col gap-5">
-        <div className="flex flex-col gap-3">
+        <div className={FORM_LABEL_CONTROL_STACK_CLASS}>
           <div className="text-body1_700 text-foreground">아이디</div>
           <InputGroup>
             <Input type="text" size="xl" disabled value="selly@linefriends.com" />
           </InputGroup>
         </div>
 
-        <div className="flex flex-col gap-3">
+        <div className={FORM_LABEL_CONTROL_STACK_CLASS}>
           <div className="text-body1_700 text-foreground">작가명</div>
           <InputGroup>
             <Input
@@ -101,7 +102,7 @@ function ProfileEditFormFields({
           </InputGroup>
         </div>
 
-        <div className="flex flex-col gap-3">
+        <div className={FORM_LABEL_CONTROL_STACK_CLASS}>
           <div className="text-body1_700 text-foreground">소개</div>
           <InputGroup>
             <Textarea

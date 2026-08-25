@@ -2,15 +2,20 @@
 
 import React, { useState } from "react";
 import { AppShell } from "@/components/layout/AppShell";
+import { APP_BROWSER_BG_ROOT_CLASS } from "@/lib/mobile-viewport";
 import { PageCard } from "@/components/layout/PageCard";
 import {
   PAGE_CONTAINER_CLASS,
-  PAGE_GUTTER_X_CLASS,
-  PAGE_SCROLL_BOTTOM_CLASS,
-  PAGE_SCROLL_TOP_CLASS,
+  PAGE_DESKTOP_SCROLL_SHELL_CLASS,
+  PAGE_FILTER_HEADER_INNER_CLASS,
+  PAGE_FILTER_HEADER_SHELL_CLASS,
+  PAGE_SCROLL_ROOT_FLOW_CLASS,
+  PAGE_SCROLL_ROOT_MOBILE_FLUSH_CLASS,
   PAGE_SUBHEADER_WITH_FILTER_CLASS,
 } from "@/lib/page-layout";
 import { cn } from "design-system/utils";
+import { analyticsScopeFilterShellClassName } from "@/components/analytics/analytics-filter-chips";
+import { CONTROL_GROUP_GAP_STANDARD_RESPONSIVE_CLASS } from "@/lib/chip-styles";
 import { InquiryFaqList } from "@/components/inquiry/InquiryFaqList";
 import { InquiryForm } from "@/components/inquiry/InquiryForm";
 import { InquiryHistoryList } from "@/components/inquiry/InquiryHistoryList";
@@ -49,33 +54,45 @@ export default function InquiryPage() {
   const [inquiryHistory] = useState<InquiryHistoryItem[]>(MOCK_INQUIRY_HISTORY);
 
   return (
-    <AppShell sidebarActiveId="inquiry">
-      <div className={PAGE_SUBHEADER_WITH_FILTER_CLASS}>
+    <AppShell sidebarActiveId="inquiry" browserBgClassName={APP_BROWSER_BG_ROOT_CLASS}>
+      <div className={PAGE_DESKTOP_SCROLL_SHELL_CLASS}>
+        <div className={PAGE_SUBHEADER_WITH_FILTER_CLASS}>
           <div className={`${PAGE_CONTAINER_CLASS} flex items-center justify-start gap-4`}>
             <h1 className="text-heading2_700 text-foreground">문의</h1>
           </div>
         </div>
 
+        <div className={PAGE_FILTER_HEADER_SHELL_CLASS}>
+          <div className={PAGE_FILTER_HEADER_INNER_CLASS}>
+            <div className={analyticsScopeFilterShellClassName}>
+              <div
+                className={cn(
+                  "flex w-full items-center overflow-x-auto",
+                  CONTROL_GROUP_GAP_STANDARD_RESPONSIVE_CLASS,
+                )}
+              >
+                <InquiryTabStrip activeTab={activeTab} onTabChange={setActiveTab} />
+              </div>
+            </div>
+          </div>
+        </div>
+
         <div
           className={cn(
-            "flex flex-col items-center max-lg:overflow-visible lg:min-h-0 lg:flex-1 lg:overflow-y-auto",
-            PAGE_SCROLL_TOP_CLASS,
-            PAGE_SCROLL_BOTTOM_CLASS,
-            PAGE_GUTTER_X_CLASS,
-            "max-lg:px-0 max-lg:pt-0",
+            PAGE_SCROLL_ROOT_FLOW_CLASS,
+            PAGE_SCROLL_ROOT_MOBILE_FLUSH_CLASS,
+            "items-stretch justify-start gap-0",
           )}
         >
-          <div className="mx-auto flex w-full max-w-[1200px]">
+          <div className={cn(PAGE_CONTAINER_CLASS, "flex")}>
             <div className="min-w-0 flex-1">
               <PageCard
                 fullWidth
                 className="flex h-fit shrink-0 flex-col gap-0 overflow-hidden rounded-sm px-0 pt-2 pb-5 max-lg:rounded-none max-lg:border-0 lg:px-0"
               >
-                <InquiryTabStrip activeTab={activeTab} onTabChange={setActiveTab} />
                 {activeTab === "faq" ? (
                   <InquiryFaqList
                     className="self-stretch"
-                    onGoToInquiry={() => setActiveTab("inquiry")}
                   />
                 ) : activeTab === "inquiry" ? (
                   <InquiryForm
@@ -94,6 +111,7 @@ export default function InquiryPage() {
             </div>
           </div>
         </div>
+      </div>
       <Snackbar
         open={snackbar.open}
         message={snackbar.message}

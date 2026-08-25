@@ -4,6 +4,13 @@ import {
 } from "@/lib/chip-styles";
 import { cn } from "design-system/utils";
 
+/**
+ * FieldLabel → 하단 컨트롤 **8px** (전 size 공통).
+ * DS 정본은 `InputGroup` `gap-2` (`FIELD_LABEL_CONTROL_GAP_GROUP_CLASS`).
+ * 라벨이 InputGroup 밖에 있을 때 이 스택 `gap-2`를 쓴다. `gap-2`와 `mt-2`를 동시에 쓰지 말 것.
+ */
+export const FORM_LABEL_CONTROL_STACK_CLASS = "flex flex-col gap-2";
+
 /** 텍스트·텍스트에어리어 공통 포커스 (에피소드 폼 등과 동일) */
 export const formFieldFocusClassName =
   "focus:outline-none focus:ring-2 focus:ring-primary";

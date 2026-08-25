@@ -109,7 +109,7 @@ function LegendRow({ dotClass, label, value }: { dotClass: string; label: string
 
 const USER_PRIMARY_LABELS: Record<AnalyticsUserMetric, string> = {
   userCount: "이용자 수",
-  totalFollowers: "팔로워",
+  totalFollowers: "구독자",
 };
 
 export function AnalyticsUserTab({
@@ -271,8 +271,13 @@ export function AnalyticsUserTab({
           </AnalyticsPanel>
 
           <AnalyticsPanel>
-            <Title2 text="내 팔로워가 좋아하는 콘텐츠" variant="title" asSectionHeader />
+            <Title2 text="내 구독자가 좋아하는 콘텐츠" variant="title" asSectionHeader />
             <AnalyticsTopFiveRowList rows={followerFavoriteRows} />
+          </AnalyticsPanel>
+
+          <AnalyticsPanel>
+            <Title2 text="내 구독자가 함께 보는 작품" variant="title" asSectionHeader />
+            <AnalyticsTopFiveRowList rows={userDummy.subscriberPeerWorks} />
           </AnalyticsPanel>
         </div>
 
@@ -307,7 +312,7 @@ export function AnalyticsUserTab({
             legend={[
               { label: "신규 이용자", value: userDummy.avgTime.legend[0] },
               { label: "일반 이용자", value: userDummy.avgTime.legend[1] },
-              { label: "팔로워", value: userDummy.avgTime.legend[2] },
+              { label: "구독자", value: userDummy.avgTime.legend[2] },
             ]}
           />
           <SimpleDistributionPanel
@@ -316,7 +321,7 @@ export function AnalyticsUserTab({
             legend={[
               { label: "신규 이용자", value: userDummy.userMix.legend[0] },
               { label: "일반 이용자", value: userDummy.userMix.legend[1] },
-              { label: "팔로워", value: userDummy.userMix.legend[2] },
+              { label: "구독자", value: userDummy.userMix.legend[2] },
             ]}
           />
           <AnalyticsPanel>
@@ -326,7 +331,7 @@ export function AnalyticsUserTab({
                 <TabsList variant="line" size="sm" aria-label="이용 시간대 기준">
                   <TabsTrigger value="all">전체</TabsTrigger>
                   <TabsTrigger value="general">일반 이용자</TabsTrigger>
-                  <TabsTrigger value="follower">팔로워</TabsTrigger>
+                  <TabsTrigger value="follower">구독자</TabsTrigger>
                 </TabsList>
               </Tabs>
             </div>
@@ -340,7 +345,7 @@ export function AnalyticsUserTab({
           </AnalyticsPanel>
 
           <AnalyticsPanel>
-            <Title2 text="가장 적극 활동중인 팔로워" variant="title" asSectionHeader />
+            <Title2 text="가장 적극 활동중인 구독자" variant="title" asSectionHeader />
             <div className="grid grid-cols-3 justify-items-center gap-x-3 gap-y-4 px-4 py-5 sm:grid-cols-4 lg:grid-cols-5 lg:gap-x-5 lg:gap-y-6 lg:p-5">
               {userDummy.activeFollowers.map(({ id, nick }) => (
                 <div key={id} className="flex w-full min-w-0 max-w-28 flex-col items-center justify-center gap-2">
@@ -388,7 +393,7 @@ function AudienceBreakdownPanel({
           <TabsList variant="line" size="sm" aria-label={`${title} 기준`}>
             <TabsTrigger value="all">전체</TabsTrigger>
             <TabsTrigger value="general">일반 이용자</TabsTrigger>
-            <TabsTrigger value="follower">팔로워</TabsTrigger>
+            <TabsTrigger value="follower">구독자</TabsTrigger>
           </TabsList>
         </Tabs>
       </div>
@@ -433,7 +438,7 @@ function SimpleDistributionPanel({
             <TabsList variant="line" size="sm" aria-label={`${title} 기준`}>
               <TabsTrigger value="all">전체</TabsTrigger>
               <TabsTrigger value="general">일반 이용자</TabsTrigger>
-              <TabsTrigger value="follower">팔로워</TabsTrigger>
+              <TabsTrigger value="follower">구독자</TabsTrigger>
             </TabsList>
           </Tabs>
         </div>

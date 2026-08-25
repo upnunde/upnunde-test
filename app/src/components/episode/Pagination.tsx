@@ -90,7 +90,7 @@ export function Pagination({
   };
 
   const shellClassName = cn(
-    "border-t border-divider bg-background rounded-b-sm",
+    "bg-background rounded-b-sm",
     className,
   );
 
@@ -126,7 +126,7 @@ export function Pagination({
       <div
         className={cn(
           shellClassName,
-          "hidden h-16 items-center justify-center gap-8 sm:flex",
+          "hidden items-center justify-center gap-8 py-5 sm:flex",
         )}
       >
         <div className="flex items-center gap-1">

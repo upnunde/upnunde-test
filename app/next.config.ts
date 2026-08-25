@@ -17,6 +17,7 @@ const nextConfig: NextConfig = {
       /** 내 작품 캐릭터 스플래시 (`public/characters/`) */
       { pathname: "/characters/**" },
       { pathname: "/frame-theme-thumbnails/**" },
+      { pathname: "/notifications/**" },
     ],
     remotePatterns: [
       { protocol: "https", hostname: "github.com" },

@@ -20,6 +20,7 @@ import {
   generateMonetizationMonthlyRevenue,
   generateSeriesEpisodeOptions,
   generateUserDummy,
+  type AnalyticsPopularRankMetric,
 } from "@/components/analytics/analytics-dummy-generator";
 
 export type {
@@ -33,6 +34,8 @@ export type {
   UserDummyByScope,
   MonetizationDummyByScope,
 } from "@/components/analytics/analytics-dummy-types";
+
+export type { AnalyticsPopularRankMetric };
 
 const cacheContent = new Map<string, ReturnType<typeof generateContentDummy>>();
 const cacheUser = new Map<string, ReturnType<typeof generateUserDummy>>();
@@ -122,11 +125,12 @@ export function getEpisodeTop5Dummy(
   seriesId: AnalyticsSeriesId,
   period: AnalyticsPeriodRange,
   mode: "popular" | "attention",
+  metric: AnalyticsPopularRankMetric = "views",
 ): AnalyticsTopFiveRow[] {
-  const k = `${seriesId}:${periodKey(period)}:${mode}`;
+  const k = `${seriesId}:${periodKey(period)}:${mode}:${metric}`;
   let v = cacheEpisodeTop5.get(k);
   if (!v) {
-    v = generateEpisodeTop5(seriesId, period, mode);
+    v = generateEpisodeTop5(seriesId, period, mode, metric);
     cacheEpisodeTop5.set(k, v);
   }
   return v;
@@ -137,11 +141,12 @@ export function getCharacterContentTop5Dummy(
   characterId: AnalyticsCharacterId,
   period: AnalyticsPeriodRange,
   mode: "popular" | "attention",
+  metric: AnalyticsPopularRankMetric = "views",
 ): AnalyticsTopFiveRow[] {
-  const k = `${characterId}:${periodKey(period)}:${mode}`;
+  const k = `${characterId}:${periodKey(period)}:${mode}:${metric}`;
   let v = cacheCharacterTop5.get(k);
   if (!v) {
-    v = generateCharacterContentTop5(characterId, period, mode);
+    v = generateCharacterContentTop5(characterId, period, mode, metric);
     cacheCharacterTop5.set(k, v);
   }
   return v;
@@ -157,16 +162,17 @@ export function getScopedTop5Dummy(
   characterId: AnalyticsCharacterId,
   scenarioId: AnalyticsScenarioId,
   mode: "popular" | "attention",
+  metric: AnalyticsPopularRankMetric = "views",
 ): AnalyticsTopFiveRow[] {
-  if (scope === "series") return getEpisodeTop5Dummy(seriesId, period, mode);
-  if (scope === "character") return getCharacterContentTop5Dummy(characterId, period, mode);
-  if (mode === "popular") {
+  if (scope === "series") return getEpisodeTop5Dummy(seriesId, period, mode, metric);
+  if (scope === "character") return getCharacterContentTop5Dummy(characterId, period, mode, metric);
+  if (mode === "popular" && metric === "views") {
     return getContentDummy(scope, period, seriesId, characterId, scenarioId).top5;
   }
-  const k = `${scope}:${periodKey(period)}:${scenarioId}:${mode}`;
+  const k = `${scope}:${periodKey(period)}:${scenarioId}:${mode}:${metric}`;
   let v = cacheScopedTop5.get(k);
   if (!v) {
-    v = generateScopedTop5Dummy(scope, period, seriesId, characterId, scenarioId, mode);
+    v = generateScopedTop5Dummy(scope, period, seriesId, characterId, scenarioId, mode, metric);
     cacheScopedTop5.set(k, v);
   }
   return v;

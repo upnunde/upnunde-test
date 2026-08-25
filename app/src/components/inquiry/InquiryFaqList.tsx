@@ -1,7 +1,6 @@
 "use client";
 
 import React, { useMemo, useState } from "react";
-import { Button } from "design-system/ui/button";
 import { Input } from "@/components/ui/input";
 import { filterInquiryFaqItems } from "@/lib/inquiry-faq";
 import { PAGE_FLUSH_CONTENT_PAD_X_CLASS } from "@/lib/page-layout";
@@ -11,11 +10,10 @@ import { InquiryFaqItem } from "./InquiryFaqItem";
 
 export interface InquiryFaqListProps {
   className?: string;
-  onGoToInquiry?: () => void;
 }
 
 /** 자주 받는 질문 — 검색 + 아코디언 목록 */
-export function InquiryFaqList({ className, onGoToInquiry }: InquiryFaqListProps) {
+export function InquiryFaqList({ className }: InquiryFaqListProps) {
   const [expandedId, setExpandedId] = useState<string | null>(null);
   const [searchQuery, setSearchQuery] = useState("");
 
@@ -28,7 +26,7 @@ export function InquiryFaqList({ className, onGoToInquiry }: InquiryFaqListProps
 
   return (
     <div className={cn("flex h-fit w-full shrink-0 flex-col", className)}>
-      <div className={cn("py-5", PAGE_FLUSH_CONTENT_PAD_X_CLASS)}>
+      <div className={cn("pt-5 pb-0", PAGE_FLUSH_CONTENT_PAD_X_CLASS)}>
         <label htmlFor="inquiry-faq-search" className="sr-only">
           자주 받는 질문 검색
         </label>
@@ -97,25 +95,6 @@ export function InquiryFaqList({ className, onGoToInquiry }: InquiryFaqListProps
           ))}
         </ul>
       )}
-
-      {onGoToInquiry ? (
-        <div
-          className={cn(
-            "mt-2 flex flex-col items-stretch gap-3 border-t border-border py-5 sm:flex-row sm:items-center sm:justify-between",
-            PAGE_FLUSH_CONTENT_PAD_X_CLASS,
-          )}
-        >
-          <p className="text-body3_400 text-foreground-placeholder">원하는 답변을 찾지 못하셨나요?</p>
-          <Button
-            type="button"
-            variant="outline"
-            onClick={onGoToInquiry}
-            className="max-lg:h-9 max-lg:min-h-9 shrink-0"
-          >
-            1:1 문의하기
-          </Button>
-        </div>
-      ) : null}
     </div>
   );
 }

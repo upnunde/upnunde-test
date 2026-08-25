@@ -37,13 +37,12 @@ export const analyticsOutlineChipClassName = chipVariants({
 });
 
 /**
- * 분석 상단 기간 피커 인라인 트리거 — DS `buttonVariants(ghost·neutral)` 기반.
- * 보더 없는 투명 텍스트+아이콘 버튼(원래 스타일)을 DS 버튼 토큰으로 표현하되,
+ * 분석 상단 기간 피커 인라인 트리거 — DS `buttonVariants(outline·neutral)`.
  * radix `PopoverTrigger asChild` 호환을 위해 raw `<button>` + forwardRef 구조는 트리거 컴포넌트에서 유지한다.
  */
 export const analyticsPeriodInlineTriggerClassName = cn(
-  buttonVariants({ variant: "ghost", tone: "neutral", size: "default", shape: "square" }),
-  "min-w-20 gap-2 overflow-hidden px-0 text-body2_500 text-foreground-muted hover:bg-transparent data-[state=open]:bg-transparent",
+  buttonVariants({ variant: "outline", tone: "neutral", size: "default", shape: "square" }),
+  "min-w-0 gap-2 overflow-hidden",
 );
 
 /** 필터 행 구분선 — 모바일 32px · lg+ 36px */

@@ -10,6 +10,9 @@ import {
 export {
   FieldLabel,
   fieldLabelTitleVariants,
+  FIELD_LABEL_CONTROL_GAP,
+  FIELD_LABEL_CONTROL_GAP_GROUP_CLASS,
+  FIELD_LABEL_CONTROL_GAP_PX,
   type FieldLabelProps,
 } from "design-system/ui/field-label";
 
@@ -48,6 +51,9 @@ export type FormFieldLabelProps = Omit<
 /**
  * 폼 필드 라벨 — `Title1`·`ProfileFieldLabel` 마이그레이션용 DS `FieldLabel` 래퍼.
  * `inputId`를 넘기면 동일 id로 `htmlFor`·`descriptionId`를 맞춥니다.
+ *
+ * 라벨과 하단 필드 간격은 DS `FIELD_LABEL_CONTROL_GAP` (전 size **8px**, `InputGroup` `gap-2`).
+ * 스택은 `FORM_LABEL_CONTROL_STACK_CLASS`.
  */
 export function FormFieldLabel({
   title,

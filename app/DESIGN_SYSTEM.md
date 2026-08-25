@@ -3,7 +3,7 @@
 `design-system`은 GitHub 패키지로 설치한다.
 
 ```json
-"design-system": "github:upnunde/Renovel-Studio-DS#v0.1.42"
+"design-system": "github:upnunde/Renovel-Studio-DS#v0.1.51"
 ```
 
 저장소: [upnunde/Renovel-Studio-DS](https://github.com/upnunde/Renovel-Studio-DS)
@@ -39,14 +39,17 @@ sh scripts/ci-install.sh
 import { cn } from "design-system/utils";
 import { Button } from "design-system/ui/button";
 import { ICON_GLYPH_SCALE } from "design-system/icon-tokens";
+import { FORM_LABEL_CONTROL_STACK_CLASS } from "@/lib/form-field-styles";
 ```
+
+16px `FieldLabel`(`size="default"`)와 하단 필드 간격은 **전 size 8px**. 스택은 `FORM_LABEL_CONTROL_STACK_CLASS` 또는 DS `InputGroup` `gap-2`.
 
 전체 export 목록은 `node_modules/design-system/package.json`의 `exports` 필드를 참고한다.
 
 ## 버전 올리기 (수동)
 
 1. [Renovel-Studio-DS](https://github.com/upnunde/Renovel-Studio-DS)에 변경 푸시 + 태그 (예: `v0.1.2`)
-2. `app/package.json`의 `#v0.1.42` → 새 태그
+2. `app/package.json`의 `#v0.1.51` → 새 태그
 3. `npm install` 후 `package-lock.json` 커밋
 4. `npm run check:ds` · `npx tsc --noEmit` · `npm run build` 확인
 

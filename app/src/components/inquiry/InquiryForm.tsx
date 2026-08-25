@@ -4,6 +4,7 @@ import React, { useId, useState } from "react";
 import { ICONS } from "@/lib/icons";
 import { Button } from "design-system/ui/button";
 import { FormFieldLabel, formFieldAriaDescribedBy } from "@/components/ui/field-label";
+import { FORM_LABEL_CONTROL_STACK_CLASS } from "@/lib/form-field-styles";
 import { PAGE_FLUSH_CONTENT_PAD_X_CLASS } from "@/lib/page-layout";
 import { Input, InputGroup, InputHypertext } from "@/components/ui/input";
 import { Textarea } from "design-system/ui/textarea";
@@ -77,13 +78,13 @@ export function InquiryForm({
         className={cn("max-lg:overflow-visible lg:min-h-0 lg:flex-1 lg:overflow-y-auto", className)}
       >
       {/* 문의 유형 */}
-      <div className="flex flex-col gap-1">
+      <div className={FORM_LABEL_CONTROL_STACK_CLASS}>
         <FormFieldLabel
           title="문의 유형*"
           subtitle="문의 내용을 가장 잘 설명하는 유형을 선택해 주세요."
           inputId={`${prefix}inquiry-category`}
         />
-        <div className="relative mt-1 w-full">
+        <div className="relative w-full">
           <select
             id={`${prefix}inquiry-category`}
             aria-describedby={formFieldAriaDescribedBy(`${prefix}inquiry-category`)}
@@ -106,13 +107,13 @@ export function InquiryForm({
       </div>
 
       {/* 제목 */}
-      <div className="flex flex-col gap-1">
+      <div className={FORM_LABEL_CONTROL_STACK_CLASS}>
         <FormFieldLabel
           title="제목*"
           subtitle="제목을 입력해주세요."
           inputId={`${prefix}inquiry-title`}
         />
-        <InputGroup className="mt-1">
+        <InputGroup>
           <Input
             id={`${prefix}inquiry-title`}
             aria-describedby={formFieldAriaDescribedBy(`${prefix}inquiry-title`)}
@@ -127,13 +128,13 @@ export function InquiryForm({
       </div>
 
       {/* 상세내용 작성 */}
-      <div className="flex flex-col gap-1">
+      <div className={FORM_LABEL_CONTROL_STACK_CLASS}>
         <FormFieldLabel
           title="상세내용 작성*"
           subtitle="내용을 최대한 상세하게 작성해 주세요."
           inputId={`${prefix}inquiry-content`}
         />
-        <InputGroup className="mt-1">
+        <InputGroup>
           <Textarea
             id={`${prefix}inquiry-content`}
             aria-describedby={formFieldAriaDescribedBy(`${prefix}inquiry-content`, true)}
@@ -152,13 +153,13 @@ export function InquiryForm({
       </div>
 
       {/* 이메일 */}
-      <div className="flex flex-col gap-1">
+      <div className={FORM_LABEL_CONTROL_STACK_CLASS}>
         <FormFieldLabel
           title="이메일"
           subtitle="답변이 필요하신 경우 이메일 주소를 남겨주세요."
           inputId={`${prefix}inquiry-email`}
         />
-        <InputGroup className="mt-1">
+        <InputGroup>
           <Input
             id={`${prefix}inquiry-email`}
             aria-describedby={formFieldAriaDescribedBy(`${prefix}inquiry-email`)}
@@ -172,13 +173,13 @@ export function InquiryForm({
       </div>
 
       {/* 이미지 파일 첨부 */}
-      <div className="flex flex-col gap-1 pb-2">
+      <div className={cn(FORM_LABEL_CONTROL_STACK_CLASS, "pb-2")}>
         <FormFieldLabel
           title="이미지 파일 첨부"
           subtitle="최대 5개의 파일 업로드 가능. 지원되는 파일 유형: jpg, png, gif, webp, heic, tiff"
           inputId={`${prefix}inquiry-attachments`}
         />
-        <div className="mt-2">
+        <div>
           <label
             htmlFor={`${prefix}inquiry-attachments`}
             className="flex w-[120px] h-[120px] cursor-pointer items-center justify-center rounded-lg border border-dashed border-border bg-background text-muted-foreground transition-colors hover:border-border hover:bg-background"

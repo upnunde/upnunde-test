@@ -3,6 +3,7 @@
 import { useId } from "react";
 
 import { FormFieldLabel, formFieldAriaDescribedBy } from "@/components/ui/field-label";
+import { FORM_LABEL_CONTROL_STACK_CLASS } from "@/lib/form-field-styles";
 import { Input, InputGroup, InputHypertext } from "@/components/ui/input";
 
 interface SeriesFormTextInputFieldProps {
@@ -29,9 +30,9 @@ export function SeriesFormTextInputField({
   const inputId = useId().replace(/:/g, "");
 
   return (
-    <div className="flex flex-col gap-1">
+    <div className={FORM_LABEL_CONTROL_STACK_CLASS}>
       <FormFieldLabel title={title} subtitle={subtitle} inputId={inputId} />
-      <InputGroup className="mt-1">
+      <InputGroup>
         <Input
           ref={inputRef}
           id={inputId}

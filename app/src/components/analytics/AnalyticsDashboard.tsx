@@ -7,8 +7,8 @@ import { ANALYTICS_SCROLL_ROOT_ATTR } from "@/lib/analytics-scroll";
 import {
   PAGE_FILTER_HEADER_INNER_CLASS,
   PAGE_FILTER_HEADER_SHELL_CLASS,
+  PAGE_SCROLL_ROOT_FLOW_CLASS,
   PAGE_SCROLL_ROOT_MOBILE_FLUSH_CLASS,
-  PAGE_SCROLL_ROOT_TRANSPARENT_CLASS,
   PAGE_STACK_CLASS,
 } from "@/lib/page-layout";
 import { cn } from "design-system/utils";
@@ -109,7 +109,7 @@ export function AnalyticsDashboard({ defaultArea = "content", onAreaChange }: An
 
       <div
         className={cn(
-          PAGE_SCROLL_ROOT_TRANSPARENT_CLASS,
+          PAGE_SCROLL_ROOT_FLOW_CLASS,
           PAGE_SCROLL_ROOT_MOBILE_FLUSH_CLASS,
           "items-stretch justify-start gap-0",
         )}

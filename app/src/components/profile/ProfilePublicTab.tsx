@@ -1,32 +1,35 @@
 "use client";
 
-import { space } from "@/lib/spacing";
-import { cn } from "design-system/utils";
-
-import { PAGE_GUTTER_GAP_CLASS } from "@/lib/page-layout";
-
 import { useEffect, useRef, useState } from "react";
+import { useRouter } from "next/navigation";
 import Image from "next/image";
 import { ICONS } from "@/lib/icons";
 import { Button } from "design-system/ui/button";
-import { Title2 } from "@/components/ui/title2";
-import { AnalyticsPanel } from "@/components/analytics/AnalyticsPanel";
-import { Input, InputGroup, InputHypertext } from "@/components/ui/input";
+import { FieldLabel } from "design-system/ui/field-label";
+import { Input, InputGroup, InputHypertext } from "design-system/ui/input";
 import { Textarea } from "design-system/ui/textarea";
-import { ProfileAvatarEditButton } from "@/components/profile/ProfileAvatarEditButton";
-import { ProfileFieldLabel } from "@/components/profile/profile-field-styles";
-import { formFieldAriaDescribedBy } from "@/components/ui/field-label";
+import { cn } from "design-system/utils";
+import { PAGE_FOOTER_ACTION_BUTTON_CLASS, PROFILE_PAGE_STACK_GAP_CLASS } from "@/lib/page-layout";
+import { ProfileAvatarChangeDialog } from "@/components/profile/ProfileAvatarChangeDialog";
+import { ProfileDirtySaveButton } from "@/components/profile/ProfileDirtySaveButton";
 import {
+  DEFAULT_CREATOR_PROFILE,
+  dispatchProfileAvatarPreview,
   loadProfileSettings,
   PROFILE_DESCRIPTION_MAX,
   PROFILE_PEN_NAME_MAX,
+  resolveProfileAvatarUrl,
   saveCreatorProfile,
 } from "@/lib/profile-storage";
 import type { CreatorProfile } from "@/types/profile";
 
-const PROFILE_PUBLIC_LOGIN_ID = "profile-public-login-id";
 const PROFILE_PUBLIC_PEN_NAME_ID = "profile-public-pen-name";
 const PROFILE_PUBLIC_DESCRIPTION_ID = "profile-public-description";
+
+const PROFILE_LOGOUT_BUTTON_CLASS = cn(
+  "h-9 border-border px-4 text-foreground",
+  PAGE_FOOTER_ACTION_BUTTON_CLASS,
+);
 
 export function ProfilePublicTab({
   avatarUrl,
@@ -37,147 +40,174 @@ export function ProfilePublicTab({
   onAvatarChange: (url: string | null) => void;
   onSaved: () => void;
 }) {
+  const router = useRouter();
   const fileInputRef = useRef<HTMLInputElement>(null);
-  const [draft, setDraft] = useState<CreatorProfile>(() => loadProfileSettings().public);
-  const [localAvatar, setLocalAvatar] = useState<string | null>(avatarUrl);
+  const [draft, setDraft] = useState<CreatorProfile>(DEFAULT_CREATOR_PROFILE);
+  const [saved, setSaved] = useState<CreatorProfile>(DEFAULT_CREATOR_PROFILE);
+  const [localAvatar, setLocalAvatar] = useState<string | null>(null);
+  const [avatarSheetOpen, setAvatarSheetOpen] = useState(false);
 
   useEffect(() => {
-    setDraft(loadProfileSettings().public);
-    setLocalAvatar(avatarUrl);
-  }, [avatarUrl]);
+    const publicProfile = loadProfileSettings().public;
+    setDraft(publicProfile);
+    setSaved(publicProfile);
+    setLocalAvatar(publicProfile.avatarUrl);
+    // 미리보기 이벤트는 헤더만 갱신하고, 작성 중인 draft는 덮어쓰지 않는다.
+    // eslint-disable-next-line react-hooks/exhaustive-deps -- mount only
+  }, []);
 
-  const displayAvatar = localAvatar ?? draft.avatarUrl;
+  const rawAvatar = localAvatar === "" ? null : (localAvatar ?? draft.avatarUrl);
+  const displayAvatar = rawAvatar?.startsWith("blob:")
+    ? rawAvatar
+    : rawAvatar
+      ? resolveProfileAvatarUrl(rawAvatar)
+      : null;
+
+  const displayPenName = draft.penName.trim() || DEFAULT_CREATOR_PROFILE.penName;
+  const isDirty =
+    draft.penName !== saved.penName ||
+    draft.description !== saved.description ||
+    rawAvatar !== saved.avatarUrl;
+
+  const applyAvatar = (url: string | null) => {
+    setLocalAvatar(url ?? "");
+    dispatchProfileAvatarPreview(url);
+    setDraft((prev) => ({ ...prev, avatarUrl: url }));
+  };
 
   const handleAvatarFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
     if (!file?.type.startsWith("image/")) return;
     if (localAvatar?.startsWith("blob:")) URL.revokeObjectURL(localAvatar);
-    const next = URL.createObjectURL(file);
-    setLocalAvatar(next);
+    applyAvatar(URL.createObjectURL(file));
     e.target.value = "";
+  };
+
+  const handleAvatarDelete = () => {
+    if (localAvatar?.startsWith("blob:")) URL.revokeObjectURL(localAvatar);
+    applyAvatar(null);
   };
 
   const handleSave = () => {
     const next: CreatorProfile = {
       ...draft,
-      avatarUrl: localAvatar,
+      avatarUrl: rawAvatar,
     };
     saveCreatorProfile(next);
     setDraft(next);
-    onAvatarChange(localAvatar);
+    setSaved(next);
+    onAvatarChange(rawAvatar);
     onSaved();
   };
 
   return (
-    <AnalyticsPanel>
-      <Title2 text="공개 프로필" variant="title" asSectionHeader />
-      <div
-        className={cn(
-          "flex flex-col",
-          PAGE_GUTTER_GAP_CLASS,
-          space.section.sectionPadding.className,
-        )}
-      >
-        <div className="flex flex-col items-center gap-3">
-          <input
-            ref={fileInputRef}
-            type="file"
-            accept="image/*"
-            className="sr-only"
-            aria-label="프로필 사진 선택"
-            onChange={handleAvatarFileChange}
-          />
-          <div className="relative h-24 w-24">
-            <div className="flex h-24 w-24 items-center justify-center overflow-hidden rounded-full border border-border bg-background-muted">
-              {displayAvatar ? (
-                <Image
-                  src={displayAvatar}
-                  alt="프로필"
-                  width={96}
-                  height={96}
-                  unoptimized
-                  className="h-full w-full object-cover"
-                />
-              ) : (
-                <ICONS.user className="h-10 w-10 text-foreground-placeholder" aria-hidden />
-              )}
-            </div>
-            <ProfileAvatarEditButton onClick={() => fileInputRef.current?.click()} />
-          </div>
-          <p className="text-center text-body3_400 text-foreground-muted">
-            독자에게 표시되는 작가 프로필이에요.
-          </p>
-        </div>
+    <div className={cn("flex flex-col max-lg:px-5", PROFILE_PAGE_STACK_GAP_CLASS)}>
+      <input
+        ref={fileInputRef}
+        type="file"
+        accept="image/*"
+        className="sr-only"
+        aria-label="프로필 사진 선택"
+        onChange={handleAvatarFileChange}
+      />
 
-        <div className={`flex flex-col ${PAGE_GUTTER_GAP_CLASS}`}>
-          <div className="flex flex-col gap-3">
-            <ProfileFieldLabel text="아이디" hint="로그인에 사용하는 이메일이에요." htmlFor={PROFILE_PUBLIC_LOGIN_ID} />
-            <InputGroup>
-              <Input
-                id={PROFILE_PUBLIC_LOGIN_ID}
-                aria-describedby={formFieldAriaDescribedBy(PROFILE_PUBLIC_LOGIN_ID)}
-                type="text"
-                size="xl"
-                disabled
-                value={draft.loginId}
+      <div className="flex w-full items-center gap-4">
+        <button
+          type="button"
+          aria-haspopup="dialog"
+          aria-expanded={avatarSheetOpen}
+          aria-label="프로필 사진 바꾸기"
+          className="group relative h-24 w-24 shrink-0 rounded-full outline-none focus-visible:ring-3 focus-visible:ring-ring/50"
+          onClick={() => setAvatarSheetOpen(true)}
+        >
+          <div className="relative flex h-24 w-24 items-center justify-center overflow-hidden rounded-full border border-border bg-background-muted">
+            {displayAvatar ? (
+              <Image
+                src={displayAvatar}
+                alt=""
+                width={96}
+                height={96}
+                unoptimized
+                className="h-full w-full object-cover"
               />
-            </InputGroup>
+            ) : (
+              <ICONS.user className="h-10 w-10 text-foreground-placeholder" aria-hidden />
+            )}
+            <span
+              aria-hidden
+              className="pointer-events-none absolute inset-0 flex items-center justify-center bg-inverse/50 opacity-0 transition-opacity duration-short ease-standard group-hover:opacity-100 group-focus-visible:opacity-100"
+            >
+              <ICONS.camera className="size-8 text-inverse-foreground" strokeWidth={1.75} />
+            </span>
           </div>
-
-          <div className="flex flex-col gap-3">
-            <ProfileFieldLabel text="작가명" htmlFor={PROFILE_PUBLIC_PEN_NAME_ID} />
-            <InputGroup>
-              <Input
-                id={PROFILE_PUBLIC_PEN_NAME_ID}
-                aria-describedby={formFieldAriaDescribedBy(PROFILE_PUBLIC_PEN_NAME_ID)}
-                type="text"
-                size="xl"
-                value={draft.penName}
-                maxLength={PROFILE_PEN_NAME_MAX}
-                onChange={(e) =>
-                  setDraft((prev) => ({ ...prev, penName: e.target.value.slice(0, PROFILE_PEN_NAME_MAX) }))
-                }
-              />
-              <InputHypertext
-                id={formFieldAriaDescribedBy(PROFILE_PUBLIC_PEN_NAME_ID)}
-                count={draft.penName.length}
-                max={PROFILE_PEN_NAME_MAX}
-              />
-            </InputGroup>
-          </div>
-
-          <div className="flex flex-col gap-3">
-            <ProfileFieldLabel text="소개" htmlFor={PROFILE_PUBLIC_DESCRIPTION_ID} />
-            <InputGroup>
-              <Textarea
-                id={PROFILE_PUBLIC_DESCRIPTION_ID}
-                aria-describedby={formFieldAriaDescribedBy(PROFILE_PUBLIC_DESCRIPTION_ID)}
-                placeholder="소개 내용을 작성해 주세요."
-                value={draft.description}
-                maxLength={PROFILE_DESCRIPTION_MAX}
-                onChange={(e) =>
-                  setDraft((prev) => ({
-                    ...prev,
-                    description: e.target.value.slice(0, PROFILE_DESCRIPTION_MAX),
-                  }))
-                }
-                className="min-h-[120px] resize-none"
-              />
-              <InputHypertext
-                id={formFieldAriaDescribedBy(PROFILE_PUBLIC_DESCRIPTION_ID)}
-                count={draft.description.length}
-                max={PROFILE_DESCRIPTION_MAX}
-              />
-            </InputGroup>
-          </div>
-        </div>
-
-        <div className="flex justify-end pt-5">
-          <Button type="button" className="h-9 min-w-20 px-4" onClick={handleSave}>
-            저장
-          </Button>
+        </button>
+        <div className="flex min-w-0 flex-col gap-0.5">
+          <span className="truncate text-heading4_700 text-foreground">{displayPenName}</span>
+          <span className="truncate text-body3_400 text-foreground-muted">{draft.loginId}</span>
         </div>
       </div>
-    </AnalyticsPanel>
+
+      <ProfileAvatarChangeDialog
+        open={avatarSheetOpen}
+        onOpenChange={setAvatarSheetOpen}
+        canDelete={Boolean(displayAvatar)}
+        onUpload={() => {
+          queueMicrotask(() => fileInputRef.current?.click());
+        }}
+        onDelete={handleAvatarDelete}
+      />
+
+      <div className={cn("flex flex-col", PROFILE_PAGE_STACK_GAP_CLASS)}>
+        <InputGroup>
+          <FieldLabel size="sm" weight="600" htmlFor={PROFILE_PUBLIC_PEN_NAME_ID}>
+            작가명
+          </FieldLabel>
+          <Input
+            id={PROFILE_PUBLIC_PEN_NAME_ID}
+            type="text"
+            size="xl"
+            value={draft.penName}
+            maxLength={PROFILE_PEN_NAME_MAX}
+            onChange={(e) =>
+              setDraft((prev) => ({ ...prev, penName: e.target.value.slice(0, PROFILE_PEN_NAME_MAX) }))
+            }
+          />
+          <InputHypertext count={draft.penName.length} max={PROFILE_PEN_NAME_MAX} />
+        </InputGroup>
+
+        <InputGroup>
+          <FieldLabel size="sm" weight="600" htmlFor={PROFILE_PUBLIC_DESCRIPTION_ID}>
+            소개
+          </FieldLabel>
+          <Textarea
+            id={PROFILE_PUBLIC_DESCRIPTION_ID}
+            placeholder="소개 내용을 작성해 주세요."
+            value={draft.description}
+            maxLength={PROFILE_DESCRIPTION_MAX}
+            onChange={(e) =>
+              setDraft((prev) => ({
+                ...prev,
+                description: e.target.value.slice(0, PROFILE_DESCRIPTION_MAX),
+              }))
+            }
+            className="min-h-[120px] resize-none"
+          />
+          <InputHypertext count={draft.description.length} max={PROFILE_DESCRIPTION_MAX} />
+        </InputGroup>
+      </div>
+
+      <ProfileDirtySaveButton visible={isDirty} onClick={handleSave} />
+
+      <div className="flex justify-end">
+        <Button
+          type="button"
+          variant="outline"
+          className={PROFILE_LOGOUT_BUTTON_CLASS}
+          onClick={() => router.push("/")}
+        >
+          로그아웃
+        </Button>
+      </div>
+    </div>
   );
 }

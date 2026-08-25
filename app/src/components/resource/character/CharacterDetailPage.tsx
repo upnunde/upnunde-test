@@ -26,6 +26,7 @@ import {
 } from "@/components/ui/floating-composer-bar";
 import { FloatingAiComposerPortal } from "@/components/ui/FloatingAiComposerPortal";
 import { FormFieldLabel, formFieldAriaDescribedBy } from "@/components/ui/field-label";
+import { FORM_LABEL_CONTROL_STACK_CLASS } from "@/lib/form-field-styles";
 import { Title2 } from "@/components/ui/title2";
 import {
   PAGE_CARD_SHELL_MOBILE_FLUSH_CLASS,
@@ -369,7 +370,7 @@ export function CharacterDetailPage({
               )}
             >
               {/* 이름 */}
-              <section className="flex flex-col gap-2">
+              <section className={FORM_LABEL_CONTROL_STACK_CLASS}>
                 <FormFieldLabel
                   title="이름*"
                   subtitle="캐릭터의 이름을 입력해 주세요."
@@ -390,7 +391,7 @@ export function CharacterDetailPage({
               </section>
 
               {/* 인물 소개 */}
-              <section className="flex flex-col gap-2">
+              <section className={FORM_LABEL_CONTROL_STACK_CLASS}>
                 <FormFieldLabel
                   title="인물 소개*"
                   subtitle="한 줄로 인물의 특징이 드러나도록 정리해 주세요."
@@ -413,7 +414,7 @@ export function CharacterDetailPage({
               {/* 캐릭터 이미지 / 표정 */}
               <section className="flex flex-col gap-4">
                 <div className="grid grid-cols-[auto,1fr] gap-8 items-start">
-                  <div className="flex flex-col gap-3">
+                  <div className={FORM_LABEL_CONTROL_STACK_CLASS}>
                     <FormFieldLabel
                       title="캐릭터 이미지*"
                       subtitle="대화·연출에 쓰일 캐릭터 이미지입니다. 등록한 이미지는 목록 썸네일 등에도 함께 쓰입니다."
@@ -481,7 +482,7 @@ export function CharacterDetailPage({
                     )}
                   </div>
 
-                  <div className="flex flex-col gap-3">
+                  <div className={FORM_LABEL_CONTROL_STACK_CLASS}>
                     <FormFieldLabel
                       title="표정*"
                       subtitle="다양한 감정을 표현할 수 있는 표정을 여러 장까지 등록해 둘 수 있어요. (최대 10개)"
@@ -554,7 +555,7 @@ export function CharacterDetailPage({
               </section>
 
               {/* 해시태그 */}
-              <section className="flex flex-col gap-2">
+              <section className={FORM_LABEL_CONTROL_STACK_CLASS}>
                 <FormFieldLabel
                   title="해시태그*"
                   subtitle="캐릭터를 한눈에 파악할 수 있는 키워드를 입력해 주세요. 쉼표로 구분됩니다."
@@ -597,7 +598,7 @@ export function CharacterDetailPage({
               </section>
 
               {/* 인물 인사 */}
-              <section className="flex flex-col gap-2">
+              <section className={FORM_LABEL_CONTROL_STACK_CLASS}>
                 <FormFieldLabel
                   title="인물 인사*"
                   subtitle="캐릭터의 말투와 성격이 드러나는 짧은 소개 멘트를 작성해 주세요."

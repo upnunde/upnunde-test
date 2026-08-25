@@ -5,6 +5,7 @@ import { createPortal } from "react-dom";
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/ui/dialog";
 import { Button } from "design-system/ui/button";
 import { FormFieldLabel, formFieldAriaDescribedBy } from "@/components/ui/field-label";
+import { FORM_LABEL_CONTROL_STACK_CLASS } from "@/lib/form-field-styles";
 import { Title2 } from "@/components/ui/title2";
 import { AiFieldLoadingMessage } from "@/components/episode/EpisodeAiFieldLoading";
 import { InputGroup, InputHypertext } from "@/components/ui/input";
@@ -219,7 +220,7 @@ export function EpisodeAutoGeneratorModal({
                 cn("flex flex-col pt-5", space.form.formGroupGap.className),
               )}
             >
-              <div className="flex flex-col gap-3">
+              <div className={FORM_LABEL_CONTROL_STACK_CLASS}>
                 <div className="flex items-start justify-between gap-3">
                   <FormFieldLabel
                     title="지난 사건 히스토리"
@@ -281,7 +282,7 @@ export function EpisodeAutoGeneratorModal({
                 ) : null}
               </div>
 
-              <div className="flex flex-col gap-3">
+              <div className={FORM_LABEL_CONTROL_STACK_CLASS}>
                 <FormFieldLabel
                   title="에피소드 대본"
                   subtitle={EPISODE_FORM_FIELD_COPY.script.subtitle}

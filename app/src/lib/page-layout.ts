@@ -17,6 +17,9 @@ export const PAGE_FLUSH_CONTENT_PAD_X_CLASS = "px-5";
 /** 페이지·섹션 스택 간격 — 모바일 12px · lg+ 20px */
 export const PAGE_GUTTER_GAP_CLASS = "gap-3 lg:gap-5";
 
+/** 마이페이지 탭 본문 스택 — 40px */
+export const PROFILE_PAGE_STACK_GAP_CLASS = "gap-10";
+
 /** 카드 섹션 헤더·본문·푸터 좌우 인셋 — 20px */
 export const PAGE_CONTENT_PAD_X_CLASS = PAGE_FLUSH_CONTENT_PAD_X_CLASS;
 
@@ -37,10 +40,10 @@ export const PAGE_SCROLL_GUTTER_CLASS = PAGE_GUTTER_X_CLASS;
 export const PAGE_SCROLL_BOTTOM_CLASS = "pb-20";
 
 /**
- * 스크롤 영역 상단 여백 — 모바일 12px · lg+ 40px.
+ * 스크롤 영역 상단 여백 — 20px.
  * DS `pagePaddingY`는 앱 셸에 쓰지 않음(상·하 비대칭).
  */
-export const PAGE_SCROLL_TOP_CLASS = "max-lg:pt-3 lg:pt-10";
+export const PAGE_SCROLL_TOP_CLASS = "pt-5";
 
 /**
  * 모바일: 문서(body) 스크롤 — 콘텐츠 높이만큼 부모가 늘어나야 sticky containing block이 유효함.
@@ -49,6 +52,13 @@ export const PAGE_SCROLL_TOP_CLASS = "max-lg:pt-3 lg:pt-10";
  */
 const PAGE_SCROLL_MOBILE_FILL_CLASS = "";
 const PAGE_SCROLL_LG_TRAP_CLASS = "lg:min-h-0 lg:flex-1 lg:overflow-y-auto";
+
+/**
+ * 데스크탑: 서브헤더·필터 띠까지 포함한 단일 스크롤 셸.
+ * 모바일: `contents`로 레이아웃에서 사라져 sticky 필터·문서 스크롤을 유지한다.
+ */
+export const PAGE_DESKTOP_SCROLL_SHELL_CLASS =
+  "w-full min-w-0 max-lg:contents lg:flex lg:min-h-0 lg:flex-1 lg:flex-col lg:overflow-y-auto";
 
 /** AppShell main 레이아웃 — 배경은 `browserBgClassName`으로 주입 */
 export const APP_MAIN_LAYOUT_CLASS =
@@ -81,8 +91,15 @@ const PAGE_SCROLL_ROOT_LAYOUT_CLASS =
 /** AppShell main 스크롤 루트 — 상단·가로 인셋 · 하단 80px */
 export const PAGE_SCROLL_ROOT_CLASS = `${PAGE_SCROLL_ROOT_LAYOUT_CLASS} ${APP_BROWSER_BG_CLASS}`;
 
-/** 스크롤 루트 배경 없음 — AppShell browser base(모바일 canvas-muted · lg+ canvas)가 비치도록 */
+/** 스크롤 루트 배경 없음 — AppShell browser base(`bg-canvas` 등)가 비치도록 */
 export const PAGE_SCROLL_ROOT_TRANSPARENT_CLASS = PAGE_SCROLL_ROOT_LAYOUT_CLASS;
+
+/**
+ * `PAGE_DESKTOP_SCROLL_SHELL_CLASS` 안쪽 본문 — lg overflow 트랩 없음(셸이 스크롤).
+ * 상단·가로 인셋 · 하단 80px는 동일.
+ */
+export const PAGE_SCROLL_ROOT_FLOW_CLASS =
+  `flex flex-col max-lg:overflow-visible ${PAGE_SCROLL_TOP_CLASS} ${PAGE_SCROLL_GUTTER_CLASS} ${PAGE_SCROLL_BOTTOM_CLASS}`;
 
 /** 모바일 풀블리드 스크롤 루트 — 외곽 패딩만 제거(콘텐츠 gap은 페이지에서 유지) */
 export const PAGE_SCROLL_ROOT_MOBILE_FLUSH_CLASS = "max-lg:pt-0 max-lg:px-0 max-lg:pb-0";
@@ -171,6 +188,9 @@ export const PAGE_MOBILE_FIXED_ACTION_BAR_SCROLL_PAD_CLASS =
 
 /** 본문·카드·서브헤더 내부 — 모바일 가로 스크롤 방지 (min-w-0) */
 export const PAGE_CONTAINER_CLASS = "w-full min-w-0 max-w-[1200px] mx-auto";
+
+/** 설정·문의 등 좁은 콘텐츠 컬럼 */
+export const PAGE_NARROW_CONTAINER_CLASS = "w-full min-w-0 max-w-[800px] mx-auto";
 
 /** max-width 컨테이너 + 세로 스택(정산·프로필 등 — 세로 패딩은 PAGE_SCROLL_ROOT_CLASS) */
 export const PAGE_STACK_CLASS =

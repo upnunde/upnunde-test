@@ -44,20 +44,20 @@ export const APP_VIEWPORT_SHELL_CLASS =
   "flex w-full min-h-dvh flex-col box-border lg:h-dvh lg:max-h-dvh lg:overflow-hidden";
 
 /**
- * DS M3 Background — `--canvas` (최하위 앱 배경 면)
- * 내 작품·분석·정산·알림 등 카드 대비가 필요한 목록/대시보드 페이지
+ * 브라우저·앱 최하위 면 — Background 시맨틱 `--canvas` (`bg-canvas`)
+ * AppShell 기본·StandaloneHeaderPage·에디터·루트 layout 공용
  */
-export const APP_BROWSER_BG_ROOT_CLASS = "bg-canvas";
+export const APP_BROWSER_BG_CLASS = "bg-canvas";
 
 /**
- * DS M3 Background Container — `--canvas-muted`
- * 앱 기본 브라우저·페이지 셸 배경
+ * @deprecated `APP_BROWSER_BG_CLASS`와 동일 — Background(`bg-canvas`)
+ * 목록 페이지에서 쓰던 별칭. 신규 코드는 `APP_BROWSER_BG_CLASS`를 사용한다.
  */
-export const APP_BROWSER_BG_CLASS = "bg-canvas-muted";
+export const APP_BROWSER_BG_ROOT_CLASS = APP_BROWSER_BG_CLASS;
 
-/** 브라우저 chrome theme-color — canvas-muted (라이트 grayscale-15 · 다크 grayscale-130) */
-export const APP_BROWSER_BG_CANVAS_THEME_COLOR_LIGHT = "#F1F4F6";
-export const APP_BROWSER_BG_CANVAS_THEME_COLOR_DARK = "#323235";
+/** 브라우저 chrome theme-color — canvas (라이트 white · 다크 grayscale-150) */
+export const APP_BROWSER_BG_CANVAS_THEME_COLOR_LIGHT = "#FFFFFF";
+export const APP_BROWSER_BG_CANVAS_THEME_COLOR_DARK = "#121213";
 
 /** @deprecated `APP_BROWSER_BG_CANVAS_THEME_COLOR_LIGHT` 사용 */
 export const APP_BROWSER_BG_BACKGROUND_20_THEME_COLOR = APP_BROWSER_BG_CANVAS_THEME_COLOR_LIGHT;

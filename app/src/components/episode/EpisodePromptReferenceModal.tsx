@@ -8,6 +8,7 @@ import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/u
 import { Button } from "design-system/ui/button";
 import { MODAL_ACTION_BUTTON_SIZE } from "@/components/ui/modal";
 import { FormFieldLabel, formFieldAriaDescribedBy } from "@/components/ui/field-label";
+import { FORM_LABEL_CONTROL_STACK_CLASS } from "@/lib/form-field-styles";
 import { Title2 } from "@/components/ui/title2";
 import { THUMBNAIL_DIM_OVERLAY_CLASS } from "@/lib/thumbnail-styles";
 import { Input, InputGroup, InputHypertext } from "@/components/ui/input";
@@ -60,7 +61,7 @@ export function EpisodePromptReferenceModal({
           <Title2 text="에피소드" asSectionHeader />
           <div className="mx-0 max-w-none min-w-0 border-0 rounded-none px-5 pt-5 pb-5 shadow-none min-h-0 flex-1 overflow-y-auto">
             <div className={cn("mt-0 flex flex-col", space.overlay.modalBodyStackGap.className)}>
-              <div className="flex flex-col gap-3">
+              <div className={FORM_LABEL_CONTROL_STACK_CLASS}>
                 <FormFieldLabel
                   title="에피소드 제목*"
                   subtitle="에피소드 제목을 입력해주세요."
@@ -75,14 +76,12 @@ export function EpisodePromptReferenceModal({
                     maxLength={MAX_TITLE}
                     value={REFERENCE_TITLE}
                     readOnly
-                    tabIndex={-1}
-                    className="pointer-events-none bg-background-muted"
                   />
                   <InputHypertext count={REFERENCE_TITLE.length} max={MAX_TITLE} />
                 </InputGroup>
               </div>
 
-              <div className="flex flex-col gap-3">
+              <div className={FORM_LABEL_CONTROL_STACK_CLASS}>
                 <FormFieldLabel
                   title="에피소드 요약*"
                   subtitle="에피소드를 한 줄로 소개해주세요."
@@ -97,14 +96,12 @@ export function EpisodePromptReferenceModal({
                     maxLength={MAX_SUMMARY}
                     value={REFERENCE_SUMMARY}
                     readOnly
-                    tabIndex={-1}
-                    className="pointer-events-none bg-background-muted"
                   />
                   <InputHypertext count={REFERENCE_SUMMARY.length} max={MAX_SUMMARY} />
                 </InputGroup>
               </div>
 
-              <div className="flex flex-col gap-3 pb-5">
+              <div className={cn(FORM_LABEL_CONTROL_STACK_CLASS, "pb-5")}>
                 <FormFieldLabel
                   title="대표 이미지*"
                   subtitle="에피소드 대표 이미지를 등록해주세요."
@@ -121,7 +118,7 @@ export function EpisodePromptReferenceModal({
                 </div>
               </div>
 
-              <div className="flex flex-col gap-3">
+              <div className={FORM_LABEL_CONTROL_STACK_CLASS}>
                 <FormFieldLabel
                   title="지난 사건 히스토리*"
                   subtitle="지난 사건의 히스토리를 작성해 주세요."
@@ -135,14 +132,13 @@ export function EpisodePromptReferenceModal({
                     maxLength={MAX_HISTORY}
                     value={REFERENCE_HISTORY}
                     readOnly
-                    tabIndex={-1}
-                    className="pointer-events-none min-h-[160px] max-h-[400px] bg-background-muted"
+                    className="min-h-[160px] max-h-[400px]"
                   />
                   <InputHypertext count={REFERENCE_HISTORY.length} max={MAX_HISTORY} />
                 </InputGroup>
               </div>
 
-              <div className="flex flex-col gap-3">
+              <div className={FORM_LABEL_CONTROL_STACK_CLASS}>
                 <FormFieldLabel
                   title="에피소드 대본*"
                   subtitle="에피소드 대본을 상세하게 작성해 주세요."
@@ -156,8 +152,7 @@ export function EpisodePromptReferenceModal({
                     maxLength={MAX_SCRIPT}
                     value={REFERENCE_SCRIPT}
                     readOnly
-                    tabIndex={-1}
-                    className="pointer-events-none min-h-[160px] max-h-[400px] bg-background-muted"
+                    className="min-h-[160px] max-h-[400px]"
                   />
                   <InputHypertext count={REFERENCE_SCRIPT.length} max={MAX_SCRIPT} />
                 </InputGroup>

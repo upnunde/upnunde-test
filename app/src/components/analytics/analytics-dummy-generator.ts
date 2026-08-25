@@ -74,6 +74,40 @@ function generateActiveFollowers(rng: () => number): ActiveFollowerDummy[] {
   return out;
 }
 
+/** 내 구독자가 함께 구독·열람하는 다른 작가 작품 — 스튜디오 보유작과 제목이 겹치지 않게 고정 풀 */
+const SUBSCRIBER_PEER_WORKS: readonly { author: string; title: string }[] = [
+  { author: "한여름", title: "밤의 정원사" },
+  { author: "월하", title: "첫눈이 내리던 교실" },
+  { author: "은빛나래", title: "그 비서의 비밀" },
+  { author: "도원", title: "계약 연애의 법칙" },
+  { author: "서린", title: "가짜 약혼자의 진심" },
+  { author: "라미", title: "이웃집 천재 작가" },
+  { author: "초코", title: "금요일의 자정" },
+];
+
+function generateSubscriberPeerWorks(rng: () => number, ownTitles: ReadonlySet<string>): AnalyticsTopFiveRow[] {
+  const pool = SUBSCRIBER_PEER_WORKS.filter((work) => !ownTitles.has(work.title));
+  const ix = pool.map((_, i) => i);
+  for (let k = ix.length - 1; k > 0; k--) {
+    const j = Math.floor(rng() * (k + 1));
+    [ix[k], ix[j]] = [ix[j]!, ix[k]!];
+  }
+  let pct = 42 + Math.floor(rng() * 10);
+  return ix.slice(0, 5).map((pi, rank) => {
+    const item = pool[pi]!;
+    const countLabel = String(pct);
+    pct = Math.max(9, Math.floor(pct * (0.68 + rng() * 0.16)));
+    return {
+      rank: rank + 1,
+      badge: item.author,
+      title: item.title,
+      tone: "series" as const,
+      countLabel,
+      countSuffix: "%",
+    };
+  });
+}
+
 const TOP5_SERIES: AnalyticsTopFiveRow[] = [
   { rank: 1, badge: "시리즈", title: "꽃에게는 독이 필요하다", tone: "series" },
   { rank: 2, badge: "시리즈", title: "사랑의 언어", tone: "series" },
@@ -98,16 +132,24 @@ const TOP5_SCENARIO: AnalyticsTopFiveRow[] = [
   { rank: 5, badge: "상황공략", title: "안개 속 산책", tone: "scenario" },
 ];
 
+const TOP5_ALL: AnalyticsTopFiveRow[] = [
+  { rank: 1, badge: "시리즈", title: "그놈과의 데이트", tone: "series" },
+  { rank: 2, badge: "캐릭터", title: "강백호", tone: "character" },
+  { rank: 3, badge: "상황공략", title: "밤하늘의 별들에게", tone: "scenario" },
+  { rank: 4, badge: "시리즈", title: "부자집 막내아들과의 스캔들", tone: "series" },
+  { rank: 5, badge: "캐릭터", title: "서윤하", tone: "character" },
+];
+
 function top5PoolForScope(scope: AnalyticsScopeCategoryId): AnalyticsTopFiveRow[] {
   switch (scope) {
+    case "all":
+      return TOP5_ALL;
     case "series":
       return TOP5_SERIES;
     case "character":
       return TOP5_CHARACTER;
     case "scenario":
       return TOP5_SCENARIO;
-    default:
-      return TOP5_SERIES;
   }
 }
 
@@ -137,7 +179,13 @@ function seedFor(
   scenarioId: string = "noscenario",
 ): number {
   const entityKey =
-    scope === "series" ? seriesId : scope === "character" ? characterId : scenarioId;
+    scope === "series"
+      ? seriesId
+      : scope === "character"
+        ? characterId
+        : scope === "scenario"
+          ? scenarioId
+          : "all";
   return hashString(`analytics:${scope}:${periodKey(period)}:${entityKey}`);
 }
 
@@ -251,14 +299,14 @@ function trendPoints(n: number, end: number, rng: () => number, startRatio = 0.8
 
 function scopeVolumeFactor(scope: AnalyticsScopeCategoryId, rng: () => number): number {
   switch (scope) {
+    case "all":
+      return 0.92 + rng() * 0.18;
     case "series":
       return 0.62 + rng() * 0.22;
     case "character":
       return 0.2 + rng() * 0.14;
     case "scenario":
       return 0.09 + rng() * 0.12;
-    default:
-      return 1;
   }
 }
 
@@ -310,11 +358,13 @@ function shuffleRowsWithRanks(pool: AnalyticsTopFiveRow[], rng: () => number): A
 
 function descendingCountsFromTop(rng: () => number, scope: AnalyticsScopeCategoryId): string[] {
   let top =
-    scope === "series"
-      ? 280 + Math.floor(rng() * 400)
-      : scope === "character"
-        ? 80 + Math.floor(rng() * 160)
-        : 40 + Math.floor(rng() * 90);
+    scope === "all"
+      ? 520 + Math.floor(rng() * 480)
+      : scope === "series"
+        ? 280 + Math.floor(rng() * 400)
+        : scope === "character"
+          ? 80 + Math.floor(rng() * 160)
+          : 40 + Math.floor(rng() * 90);
   const out: string[] = [];
   for (let i = 0; i < 5; i++) {
     out.push(String(top));
@@ -473,11 +523,17 @@ export function generateUserDummy(
 
   const timeOfDayHourly = generateHourly24(rng);
   const activeFollowers = generateActiveFollowers(rng);
+  const ownTitles = new Set<string>([
+    ...ANALYTICS_SERIES_WORK_OPTIONS.map((work) => work.label),
+    ...TOP5_SERIES.map((row) => row.title),
+  ]);
+  const subscriberPeerWorks = generateSubscriberPeerWorks(rng, ownTitles);
 
   return {
     primary,
     listA,
     listBCounts,
+    subscriberPeerWorks,
     chartSeries,
     gender,
     age,
@@ -595,34 +651,112 @@ export function generateEpisodePrimaryStats(
   };
 }
 
+/** 인기 TOP5 정렬 기준 — 조회·이용시간은 인기 카드, 좋아요·구독자는 하단 전용 카드 */
+export type AnalyticsPopularRankMetric = "views" | "time" | "likes" | "followers";
+
+type PopularRankKind = "episode" | "work" | "character" | "scenario";
+
+function resolvedPopularMetric(
+  mode: "popular" | "attention",
+  metric: AnalyticsPopularRankMetric,
+): AnalyticsPopularRankMetric {
+  return mode === "attention" ? "views" : metric;
+}
+
+function popularRankSuffix(metric: AnalyticsPopularRankMetric): string | undefined {
+  switch (metric) {
+    case "views":
+      return undefined;
+    case "time":
+      return "시간";
+    case "likes":
+      return "개";
+    case "followers":
+      return "명";
+  }
+}
+
+function popularMetricBaseTop(
+  metric: Exclude<AnalyticsPopularRankMetric, "views">,
+  rng: () => number,
+  kind: PopularRankKind,
+): number {
+  switch (metric) {
+    case "time":
+      return kind === "work"
+        ? 28 + Math.floor(rng() * 20)
+        : kind === "character"
+          ? 12 + Math.floor(rng() * 16)
+          : kind === "scenario"
+            ? 4 + Math.floor(rng() * 10)
+            : 8 + Math.floor(rng() * 24);
+    case "likes":
+      return kind === "work"
+        ? 900 + Math.floor(rng() * 500)
+        : kind === "character"
+          ? 420 + Math.floor(rng() * 280)
+          : kind === "scenario"
+            ? 80 + Math.floor(rng() * 120)
+            : 380 + Math.floor(rng() * 420);
+    case "followers":
+      return kind === "work"
+        ? 220 + Math.floor(rng() * 180)
+        : kind === "character"
+          ? 90 + Math.floor(rng() * 110)
+          : kind === "scenario"
+            ? 18 + Math.floor(rng() * 40)
+            : 70 + Math.floor(rng() * 140);
+  }
+}
+
+function withTop5Count(
+  rank: number,
+  rng: () => number,
+  baseTop: number,
+  suffix?: string,
+): Pick<AnalyticsTopFiveRow, "countLabel" | "countSuffix"> {
+  const decay = Math.pow(0.78, rank);
+  const count = Math.max(1, Math.round(baseTop * decay + (rng() - 0.5) * baseTop * 0.08));
+  return {
+    countLabel: formatInt(count),
+    ...(suffix ? { countSuffix: suffix } : {}),
+  };
+}
+
 /** 시리즈 작품 단위 인기/주의 에피소드 TOP5 — 회차들을 row로 변환 */
 export function generateEpisodeTop5(
   seriesId: AnalyticsSeriesId,
   period: AnalyticsPeriodRange,
   mode: "popular" | "attention",
+  metric: AnalyticsPopularRankMetric = "views",
 ): AnalyticsTopFiveRow[] {
+  const rankMetric = resolvedPopularMetric(mode, metric);
+  const seedExtra = rankMetric === "views" ? "" : `:${rankMetric}`;
+  const suffix = popularRankSuffix(rankMetric);
+
   if (seriesId === ALL_ANALYTICS_SERIES_ID) {
-    const rng = mulberry32(hashString(`series-works-top5:${period}:${mode}`));
+    const rng = mulberry32(hashString(`series-works-top5:${period}:${mode}${seedExtra}`));
     const weights = ANALYTICS_SERIES_WORK_OPTIONS.map(() => 0.85 + rng() * 0.3);
     const sorted = ANALYTICS_SERIES_WORK_OPTIONS.map((work, i) => ({ work, w: weights[i]! }))
       .sort((a, b) => b.w - a.w)
       .slice(0, 5);
-    const baseTop = mode === "popular" ? 5200 + Math.floor(rng() * 3200) : 90 + Math.floor(rng() * 220);
-    return sorted.map((entry, rank) => {
-      const decay = Math.pow(0.78, rank);
-      const count = Math.max(1, Math.round(baseTop * decay + (rng() - 0.5) * baseTop * 0.08));
-      return {
-        rank: rank + 1,
-        badge: "시리즈",
-        title: entry.work.label,
-        tone: "series",
-        countLabel: formatInt(count),
-      };
-    });
+    const baseTop =
+      rankMetric === "views"
+        ? mode === "popular"
+          ? 5200 + Math.floor(rng() * 3200)
+          : 90 + Math.floor(rng() * 220)
+        : popularMetricBaseTop(rankMetric, rng, "work");
+    return sorted.map((entry, rank) => ({
+      rank: rank + 1,
+      badge: "시리즈",
+      title: entry.work.label,
+      tone: "series",
+      ...withTop5Count(rank, rng, baseTop, suffix),
+    }));
   }
 
   const options = generateSeriesEpisodeOptions(seriesId);
-  const rng = mulberry32(hashString(`episode-top5:${seriesId}:${period}:${mode}`));
+  const rng = mulberry32(hashString(`episode-top5:${seriesId}:${period}:${mode}${seedExtra}`));
   const weights = options.map((_, i) =>
     mode === "popular"
       ? Math.pow(0.85, i) * (0.85 + rng() * 0.3)
@@ -634,20 +768,20 @@ export function generateEpisodeTop5(
     .sort((a, b) => b.w - a.w)
     .slice(0, 5);
 
-  /** 1위 카운트 베이스 (회차 단위 합리적인 스케일) */
-  const baseTop = mode === "popular" ? 4500 + Math.floor(rng() * 3000) : 80 + Math.floor(rng() * 200);
+  const baseTop =
+    rankMetric === "views"
+      ? mode === "popular"
+        ? 4500 + Math.floor(rng() * 3000)
+        : 80 + Math.floor(rng() * 200)
+      : popularMetricBaseTop(rankMetric, rng, "episode");
 
-  return sorted.map((entry, rank) => {
-    const decay = Math.pow(0.78, rank);
-    const count = Math.max(1, Math.round(baseTop * decay + (rng() - 0.5) * baseTop * 0.08));
-    return {
-      rank: rank + 1,
-      badge: `${entry.opt.episodeNo}화`,
-      title: entry.opt.title,
-      tone: "series",
-      countLabel: formatInt(count),
-    };
-  });
+  return sorted.map((entry, rank) => ({
+    rank: rank + 1,
+    badge: `${entry.opt.episodeNo}화`,
+    title: entry.opt.title,
+    tone: "series",
+    ...withTop5Count(rank, rng, baseTop, suffix),
+  }));
 }
 
 const CHARACTER_CONTENT_ITEMS: { badge: string; title: string; tone: ContentTone }[] = [
@@ -666,8 +800,13 @@ export function generateCharacterContentTop5(
   characterId: AnalyticsCharacterId,
   period: AnalyticsPeriodRange,
   mode: "popular" | "attention",
+  metric: AnalyticsPopularRankMetric = "views",
 ): AnalyticsTopFiveRow[] {
-  const rng = mulberry32(hashString(`character-top5:${characterId}:${periodKey(period)}:${mode}`));
+  const rankMetric = resolvedPopularMetric(mode, metric);
+  const seedExtra = rankMetric === "views" ? "" : `:${rankMetric}`;
+  const rng = mulberry32(
+    hashString(`character-top5:${characterId}:${periodKey(period)}:${mode}${seedExtra}`),
+  );
   const weights = CHARACTER_CONTENT_ITEMS.map((_, i) =>
     mode === "popular"
       ? Math.pow(0.82, i) * (0.8 + rng() * 0.35)
@@ -676,18 +815,20 @@ export function generateCharacterContentTop5(
   const sorted = CHARACTER_CONTENT_ITEMS.map((item, i) => ({ item, w: weights[i]! }))
     .sort((a, b) => b.w - a.w)
     .slice(0, 5);
-  const baseTop = mode === "popular" ? 3200 + Math.floor(rng() * 2400) : 60 + Math.floor(rng() * 160);
-  return sorted.map((entry, rank) => {
-    const decay = Math.pow(0.76, rank);
-    const count = Math.max(1, Math.round(baseTop * decay + (rng() - 0.5) * baseTop * 0.1));
-    return {
-      rank: rank + 1,
-      badge: entry.item.badge,
-      title: entry.item.title,
-      tone: entry.item.tone,
-      countLabel: formatInt(count),
-    };
-  });
+  const baseTop =
+    rankMetric === "views"
+      ? mode === "popular"
+        ? 3200 + Math.floor(rng() * 2400)
+        : 60 + Math.floor(rng() * 160)
+      : popularMetricBaseTop(rankMetric, rng, "character");
+  const suffix = popularRankSuffix(rankMetric);
+  return sorted.map((entry, rank) => ({
+    rank: rank + 1,
+    badge: entry.item.badge,
+    title: entry.item.title,
+    tone: entry.item.tone,
+    ...withTop5Count(rank, rng, baseTop, suffix),
+  }));
 }
 
 function scopedTop5Rows(
@@ -697,18 +838,28 @@ function scopedTop5Rows(
   characterId: string,
   mode: "popular" | "attention",
   rng: () => number,
+  metric: AnalyticsPopularRankMetric = "views",
 ): AnalyticsTopFiveRow[] {
   if (scope === "series") {
-    return generateEpisodeTop5(seriesId as AnalyticsSeriesId, period, mode);
+    return generateEpisodeTop5(seriesId as AnalyticsSeriesId, period, mode, metric);
   }
   if (scope === "character") {
-    return generateCharacterContentTop5(characterId as AnalyticsCharacterId, period, mode);
+    return generateCharacterContentTop5(characterId as AnalyticsCharacterId, period, mode, metric);
   }
+  const rankMetric = resolvedPopularMetric(mode, metric);
   const top5Rows = shuffleRowsWithRanks(top5PoolForScope(scope), rng).sort((a, b) => a.rank - b.rank);
-  const topCounts = descendingCountsFromTop(rng, scope);
-  return top5Rows.map((row, i) => ({
+  if (rankMetric === "views") {
+    const topCounts = descendingCountsFromTop(rng, scope);
+    return top5Rows.map((row, i) => ({
+      ...row,
+      countLabel: topCounts[i] ?? "0",
+    }));
+  }
+  const baseTop = popularMetricBaseTop(rankMetric, rng, "scenario");
+  const suffix = popularRankSuffix(rankMetric);
+  return top5Rows.map((row, rank) => ({
     ...row,
-    countLabel: topCounts[i] ?? "0",
+    ...withTop5Count(rank, rng, baseTop, suffix),
   }));
 }
 
@@ -720,11 +871,16 @@ export function generateScopedTop5Dummy(
   characterId: AnalyticsCharacterId,
   scenarioId: string,
   mode: "popular" | "attention",
+  metric: AnalyticsPopularRankMetric = "views",
 ): AnalyticsTopFiveRow[] {
+  const rankMetric = resolvedPopularMetric(mode, metric);
+  const seedExtra = rankMetric === "views" ? "" : `:${rankMetric}`;
   const rng = mulberry32(
-    hashString(`scoped-top5:${scope}:${periodKey(period)}:${seriesId}:${characterId}:${scenarioId}:${mode}`),
+    hashString(
+      `scoped-top5:${scope}:${periodKey(period)}:${seriesId}:${characterId}:${scenarioId}:${mode}${seedExtra}`,
+    ),
   );
-  return scopedTop5Rows(scope, period, seriesId, characterId, mode, rng);
+  return scopedTop5Rows(scope, period, seriesId, characterId, mode, rng, metric);
 }
 
 function episodeRevenueShareRatio(

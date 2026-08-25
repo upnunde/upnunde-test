@@ -7,10 +7,11 @@ import { ICONS } from "@/lib/icons";
 import { AppShell } from "@/components/layout/AppShell";
 import {
   PAGE_CONTAINER_CLASS,
+  PAGE_DESKTOP_SCROLL_SHELL_CLASS,
   PAGE_FLUSH_CONTENT_PAD_X_CLASS,
   PAGE_GUTTER_GAP_CLASS,
+  PAGE_SCROLL_ROOT_FLOW_CLASS,
   PAGE_SCROLL_ROOT_MOBILE_FLUSH_CLASS,
-  PAGE_SCROLL_ROOT_TRANSPARENT_CLASS,
   PAGE_STACK_CLASS,
   PAGE_SUBHEADER_WITH_STICKY_CLASS,
 } from "@/lib/page-layout";
@@ -76,7 +77,7 @@ const SETTLEMENT_SUMMARY = {
   depositor: "브라운",
 };
 
-const SETTLEMENT_PAGE_SIZE = 10;
+const SETTLEMENT_PAGE_SIZE = 20;
 
 type RangePreset = "all" | "1m" | "3m" | "6m" | "ytd" | "custom";
 
@@ -90,7 +91,7 @@ const RANGE_PRESET_OPTIONS: ReadonlyArray<{ value: Exclude<RangePreset, "custom"
 
 function getSettlementStatusLabel(status: SettlementStatus): string {
   if (status === "completed") return "지급 완료";
-  if (status === "reviewing") return "지급 심사중";
+  if (status === "reviewing") return "심사중";
   if (status === "waiting") return "지급 예정";
   return "지급 반려";
 }
@@ -180,7 +181,7 @@ function settlementStatusBadgeProps(status: SettlementStatus): {
   variant: NonNullable<VariantProps<typeof badgeVariants>["variant"]>;
   status: NonNullable<VariantProps<typeof badgeVariants>["status"]>;
 } {
-  if (status === "completed") return { variant: "default", status: "default" };
+  if (status === "completed") return { variant: "secondary", status: "success" };
   if (status === "reviewing") return { variant: "secondary", status: "default" };
   if (status === "waiting") return { variant: "outline", status: "default" };
   return { variant: "default", status: "destructive" };
@@ -238,11 +239,11 @@ function SettlementSummaryCard({
   amount: number;
 }) {
   return (
-    <div className="flex h-[80px] w-full min-w-0 flex-col justify-center gap-1 rounded-sm border border-border bg-background px-5 max-lg:py-0 lg:min-h-0 lg:h-auto lg:flex-1 lg:flex-row lg:items-center lg:justify-between lg:gap-4 lg:py-5">
+    <div className="flex h-[80px] w-full min-w-0 flex-1 flex-col justify-center gap-1 bg-background px-5 max-lg:py-0 lg:min-h-0 lg:h-auto lg:flex-row lg:items-center lg:justify-between lg:gap-4 lg:py-5">
       <p className="min-w-0 text-body3_400 text-foreground-muted lg:shrink">{title}</p>
       <div className="inline-flex min-w-0 flex-wrap items-baseline gap-x-1 gap-y-0 tabular-nums">
-        <p className="text-heading4_700 text-foreground lg:text-heading2_700">{formatAmount(amount)}</p>
-        <p className="text-heading4_700 text-foreground lg:text-heading2_700">원</p>
+        <p className="text-heading4_700 text-foreground">{formatAmount(amount)}</p>
+        <p className="text-[20px]/leading-[28px] font-normal text-foreground">원</p>
       </div>
     </div>
   );
@@ -557,82 +558,86 @@ export default function MonetizationSettlementsPage() {
 
   return (
     <AppShell sidebarActiveId="settlements" browserBgClassName={APP_BROWSER_BG_ROOT_CLASS}>
-      <div className={PAGE_SUBHEADER_WITH_STICKY_CLASS}>
+      <div className={PAGE_DESKTOP_SCROLL_SHELL_CLASS}>
+        <div className={PAGE_SUBHEADER_WITH_STICKY_CLASS}>
           <div className={`${PAGE_CONTAINER_CLASS} flex items-center justify-start gap-4`}>
-            <h1 className="text-heading2_700 text-foreground">정산</h1>
+            <h1 className="text-heading2_700 text-foreground">수익 정산</h1>
           </div>
         </div>
 
         <div
           className={cn(
-            PAGE_SCROLL_ROOT_TRANSPARENT_CLASS,
+            PAGE_SCROLL_ROOT_FLOW_CLASS,
             PAGE_SCROLL_ROOT_MOBILE_FLUSH_CLASS,
             "items-stretch justify-start gap-0",
           )}
         >
           <div className={PAGE_STACK_CLASS}>
-                <AnalyticsPanel>
-                  <Title2
-                    text="정산 요약"
-                    variant="title"
-                    asSectionHeader
-                    sectionEnd={
-                      <Button
-                        variant="outline"
-                        size="sm"
-                        render={<Link href="/analytics?area=revenue" />}
-                        nativeButton={false}
-                      >
-                        수익 분석
-                      </Button>
-                    }
-                  />
-                  <div className={cn("flex flex-col p-5 max-lg:pt-2", PAGE_GUTTER_GAP_CLASS)}>
-                    <div className="flex flex-col gap-3 rounded-sm bg-background-muted p-5 sm:p-8 lg:flex-row lg:items-center lg:justify-between lg:gap-6 lg:p-10">
-                      <div className={cn("flex flex-col items-start justify-start mb-5", PAGE_GUTTER_GAP_CLASS)}>
-                        <p className="text-body3_700 text-foreground-muted">지금 출금 가능한 금액</p>
-                        <div className="flex flex-col items-start gap-2">
-                          <div className="inline-flex items-center gap-1">
-                            <p className="text-heading1_700 text-foreground">
-                              {formatAmount(SETTLEMENT_SUMMARY.availableAmount)}
-                            </p>
-                            <p className="text-heading1_700 text-foreground">원</p>
-                          </div>
-                          <div className="flex flex-wrap items-center gap-3">
-                            <p className="text-body3_400 text-foreground-muted">
-                              {SETTLEMENT_SUMMARY.bankAccountMasked}
-                            </p>
-                            <div className="h-4 w-px bg-border" />
-                            <p className="text-body3_400 text-foreground-muted">
-                              {SETTLEMENT_SUMMARY.depositor}
-                            </p>
-                            <button
-                              type="button"
-                              onClick={() => router.push("/profile?tab=settlement")}
-                              className="inline-flex items-center gap-1 text-body3_500 text-foreground-muted underline underline-offset-4 hover:text-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary/40 rounded-sm"
-                            >
-                              계좌 변경
-                            </button>
+                <section className="flex w-full flex-col">
+                  <div className="flex w-full flex-col border border-border bg-background p-0">
+                    <Title2
+                      text="정산 요약"
+                      variant="title"
+                      asSectionHeader
+                      className="max-lg:border-b-0 lg:border-b-0"
+                      sectionEnd={
+                        <Button
+                          variant="outline"
+                          size="sm"
+                          render={<Link href="/analytics?area=revenue" />}
+                          nativeButton={false}
+                        >
+                          수익 분석
+                        </Button>
+                      }
+                    />
+                    <div className="flex flex-col p-0">
+                      <div className="flex flex-col gap-3 rounded-sm border-b border-border bg-background p-5 max-lg:border-t-0 lg:border-t lg:flex-row lg:items-center lg:justify-between lg:gap-6">
+                        <div className="flex flex-col items-start justify-center gap-3">
+                          <p className="text-body3_700 text-foreground-muted">지금 출금 가능한 금액</p>
+                          <div className="flex flex-col items-start gap-2">
+                            <div className="inline-flex items-center gap-1">
+                              <p className="text-heading1_700 text-foreground">
+                                {formatAmount(SETTLEMENT_SUMMARY.availableAmount)}
+                              </p>
+                              <p className="text-heading1_700 text-foreground">원</p>
+                            </div>
+                            <div className="flex flex-wrap items-center gap-3">
+                              <p className="text-body3_400 text-foreground-muted">
+                                {SETTLEMENT_SUMMARY.bankAccountMasked}
+                              </p>
+                              <div className="h-4 w-px bg-border" />
+                              <p className="text-body3_400 text-foreground-muted">
+                                {SETTLEMENT_SUMMARY.depositor}
+                              </p>
+                              <button
+                                type="button"
+                                onClick={() => router.push("/profile?tab=settlement")}
+                                className="inline-flex items-center gap-1 text-body3_500 text-foreground-muted underline underline-offset-4 hover:text-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary/40 rounded-sm"
+                              >
+                                계좌 변경
+                              </button>
+                            </div>
                           </div>
                         </div>
+                        <Button type="button" size="xl" className="min-w-24">
+                          출금 신청
+                        </Button>
                       </div>
-                      <Button type="button" className="h-[42px] min-w-24 rounded-md px-4 text-body1_400">
-                        출금 신청
-                      </Button>
-                    </div>
 
-                    <div className={cn("flex w-full min-w-0 flex-col items-stretch lg:flex-row lg:items-stretch", PAGE_GUTTER_GAP_CLASS)}>
-                      <SettlementSummaryCard
-                        title={SETTLEMENT_SUMMARY.expectedMonthLabel}
-                        amount={SETTLEMENT_SUMMARY.expectedAmount}
-                      />
-                      <SettlementSummaryCard
-                        title={SETTLEMENT_SUMMARY.completedMonthLabel}
-                        amount={SETTLEMENT_SUMMARY.completedAmount}
-                      />
+                      <div className="flex w-full min-w-0 flex-row items-stretch divide-x divide-border">
+                        <SettlementSummaryCard
+                          title={SETTLEMENT_SUMMARY.expectedMonthLabel}
+                          amount={SETTLEMENT_SUMMARY.expectedAmount}
+                        />
+                        <SettlementSummaryCard
+                          title={SETTLEMENT_SUMMARY.completedMonthLabel}
+                          amount={SETTLEMENT_SUMMARY.completedAmount}
+                        />
+                      </div>
                     </div>
                   </div>
-                </AnalyticsPanel>
+                </section>
 
                 <AnalyticsPanel>
                   <div className="px-5 py-4">
@@ -706,7 +711,7 @@ export default function MonetizationSettlementsPage() {
                           <div
                             className={cn(
                               SETTLEMENT_TABLE_GRID_CLASS,
-                              "items-center border-b border-divider bg-background px-5 py-3",
+                              "items-center bg-background-muted px-5 py-3",
                             )}
                           >
                             <div className="min-w-0 truncate text-caption1_400 text-foreground-placeholder">상태</div>
@@ -746,6 +751,7 @@ export default function MonetizationSettlementsPage() {
                 </AnalyticsPanel>
               </div>
             </div>
+      </div>
       <Dialog open={!!taxDetailTarget} onOpenChange={(open) => !open && setTaxDetailTarget(null)}>
         <DialogContent className="w-full max-lg:max-w-none lg:w-[560px] lg:max-w-[calc(100vw-2rem)] max-lg:rounded-t-xl max-lg:rounded-b-none lg:rounded-sm border border-border bg-background p-0">
           <div className="border-b border-divider px-6 py-4">
@@ -854,12 +860,12 @@ export default function MonetizationSettlementsPage() {
         </DialogContent>
       </Dialog>
       <Dialog open={datePickerOpen} onOpenChange={setDatePickerOpen}>
-        <DialogContent className="w-full max-lg:max-w-none lg:w-[420px] lg:max-w-[calc(100vw-2rem)] max-lg:rounded-t-xl max-lg:rounded-b-none lg:rounded-sm border border-border bg-background p-0">
-          <div className="border-b border-divider px-5 py-3">
-            <DialogTitle className="text-body1_700 text-foreground">기간 선택</DialogTitle>
-            <p className="mt-1 text-body3_400 text-foreground-placeholder">조회할 신청일 기간을 설정해 주세요.</p>
-          </div>
-          <div className="px-5 py-4">
+        <DialogContent className="w-full max-lg:max-w-none lg:w-[420px] lg:max-w-[calc(100vw-2rem)] max-lg:rounded-t-xl max-lg:rounded-b-none lg:rounded-sm">
+          <ModalHeader
+            title="기간 선택"
+            subtitle="조회할 신청일 기간을 설정해 주세요."
+          />
+          <div className="px-6 pb-4">
             <div className="flex items-center gap-2">
               <Input
                 type="date"

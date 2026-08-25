@@ -7,7 +7,7 @@ import {
   ICONS as DS_ICONS,
   type LucideIcon,
 } from "design-system/icons";
-import { createLucideIcon } from "lucide-react";
+import { Camera, createLucideIcon } from "lucide-react";
 
 const PencilSparkles = createLucideIcon("pencil-sparkles", [
   ["path", { d: "M10 3H8", key: "mzdi2d" }],
@@ -26,8 +26,18 @@ const PencilSparkles = createLucideIcon("pencil-sparkles", [
   ["path", { d: "M9 2v2", key: "165o2o" }],
 ]);
 
+/** 동그라미 + 원화(₩) — Lucide에 circle-won 없어 보강 */
+const CircleWon = createLucideIcon("circle-won", [
+  ["circle", { cx: "12", cy: "12", r: "10", key: "1mglay" }],
+  ["path", { d: "M7.5 7.5 10 16.5 12 10.5 14 16.5 16.5 7.5", key: "won-w" }],
+  ["path", { d: "M7 11h10", key: "won-bar1" }],
+  ["path", { d: "M7 14h10", key: "won-bar2" }],
+]);
+
 export const ICONS = {
   ...DS_ICONS,
+  camera: Camera,
+  circleWon: CircleWon,
   pencilSparkles: PencilSparkles,
 } as const;
 

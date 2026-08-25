@@ -21,6 +21,7 @@ import {
   DIM_OVERLAY_TEXT_CLASS,
 } from "@/lib/thumbnail-styles";
 import { FormFieldLabel, formFieldAriaDescribedBy } from "@/components/ui/field-label";
+import { FORM_LABEL_CONTROL_STACK_CLASS } from "@/lib/form-field-styles";
 import { Title2 } from "@/components/ui/title2";
 import {
   PAGE_CARD_SHELL_MOBILE_FLUSH_CLASS,
@@ -279,7 +280,7 @@ export function MediaResourceDetailPage({ initialData }: MediaResourceDetailPage
                 space.section.sectionStackGapLarge.className,
               )}
             >
-              <section className="flex flex-col gap-2">
+              <section className={FORM_LABEL_CONTROL_STACK_CLASS}>
                 <FormFieldLabel
                   title="미디어 이름*"
                   subtitle="영상·음성 등을 구분할 수 있는 이름을 입력해 주세요."
@@ -297,7 +298,7 @@ export function MediaResourceDetailPage({ initialData }: MediaResourceDetailPage
                 </InputGroup>
               </section>
 
-              <section className="flex flex-col gap-2">
+              <section className={FORM_LABEL_CONTROL_STACK_CLASS}>
                 <FormFieldLabel
                   title="미디어 설명*"
                   subtitle="어떤 장면에서 사용되는 미디어인지 간단히 설명해 주세요."
@@ -324,7 +325,7 @@ export function MediaResourceDetailPage({ initialData }: MediaResourceDetailPage
                 </InputGroup>
               </section>
 
-              <section className="flex flex-col gap-3">
+              <section className={FORM_LABEL_CONTROL_STACK_CLASS}>
                 <FormFieldLabel
                   title="미디어 파일*"
                   subtitle="에피소드에 삽입할 영상 파일입니다. MP4·WebM 등을 업로드할 수 있습니다."
@@ -410,7 +411,7 @@ export function MediaResourceDetailPage({ initialData }: MediaResourceDetailPage
                 )}
               </section>
 
-              <section className="flex flex-col gap-3">
+              <section className={FORM_LABEL_CONTROL_STACK_CLASS}>
                 <FormFieldLabel
                   title="미리보기 이미지*"
                   subtitle="목록에 표시됩니다. 영상 등록 시 첫 프레임으로 자동 채워집니다."

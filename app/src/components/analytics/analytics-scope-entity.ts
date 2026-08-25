@@ -8,13 +8,13 @@ export function analyticsScopeEntityKey(
   scenarioId: string,
 ): string {
   switch (scope) {
+    case "all":
+      return "all";
     case "series":
       return seriesId;
     case "character":
       return characterId;
     case "scenario":
       return scenarioId;
-    default:
-      return "noseries";
   }
 }

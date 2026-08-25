@@ -84,7 +84,7 @@ export function SeriesItem({
       className="min-w-0 flex-1"
     >
       <span className="block w-full overflow-hidden text-ellipsis whitespace-nowrap text-center">
-        이어서 등록하기
+        이어서 생성하기
       </span>
     </Button>
   ) : (
@@ -98,7 +98,7 @@ export function SeriesItem({
         className="min-w-0 flex-1"
       >
         <span className="block w-full overflow-hidden text-ellipsis whitespace-nowrap text-center">
-          리소스
+          리소스 관리
         </span>
       </Button>
       <Button

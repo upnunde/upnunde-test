@@ -40,7 +40,7 @@ const METRIC_PLACEHOLDER_VALUES: Record<AnalyticsChartMetric, number[]> = {
   totalFollowers: [42000, 42150, 41920, 41800, 41750, 41880, 41950, 42010, 42100, 42200, 42300],
 };
 
-/** 호버 툴팁 값 — 이용자·팔로워는 `명` 고정 */
+/** 호버 툴팁 값 — 이용자·구독자는 `명` 고정 */
 function formatTrendTooltipValue(metric: AnalyticsChartMetric, raw: number): string {
   const v = Math.round(raw);
   const n = v.toLocaleString("ko-KR");

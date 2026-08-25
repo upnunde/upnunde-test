@@ -9,6 +9,7 @@ import { createOptimizedImageObjectUrl } from "@/lib/image-upload-compress";
 import { THUMBNAIL_SLOT_ARIA } from "@/lib/thumbnail-styles";
 import { ImageCard } from "@/components/resource/cards/ImageCard";
 import { FormFieldLabel, formFieldAriaDescribedBy } from "@/components/ui/field-label";
+import { FORM_LABEL_CONTROL_STACK_CLASS } from "@/lib/form-field-styles";
 import { Title2 } from "@/components/ui/title2";
 import { ImageCropPosterModal } from "@/components/resource/character/CharacterExpressionModal";
 import {
@@ -178,7 +179,7 @@ export function EpisodeForm({
 
   const formFields = (
     <div className={cn("mt-0 flex flex-col", space.form.formGroupGap.className)}>
-      <div className="flex flex-col gap-3">
+      <div className={FORM_LABEL_CONTROL_STACK_CLASS}>
         <FormFieldLabel
           title="에피소드 제목*"
           subtitle={EPISODE_FORM_FIELD_COPY.title.subtitle}
@@ -200,7 +201,7 @@ export function EpisodeForm({
         </InputGroup>
       </div>
 
-      <div className="flex flex-col gap-3">
+      <div className={FORM_LABEL_CONTROL_STACK_CLASS}>
         <FormFieldLabel
           title="에피소드 요약*"
           subtitle={EPISODE_FORM_FIELD_COPY.summary.subtitle}
@@ -222,7 +223,7 @@ export function EpisodeForm({
         </InputGroup>
       </div>
 
-      <div className="flex flex-col gap-3">
+      <div className={FORM_LABEL_CONTROL_STACK_CLASS}>
         <FormFieldLabel
           title="대표 이미지*"
           subtitle={EPISODE_FORM_FIELD_COPY.thumbnail.subtitle}

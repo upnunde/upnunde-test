@@ -2,6 +2,7 @@
 
 import { useRef, useState } from "react";
 import { ICONS } from "@/lib/icons";
+import { HeaderNotificationMenu } from "@/components/Header/HeaderNotificationMenu";
 import { ThemeToggleButton } from "@/components/ThemeToggleButton";
 import { ProfileEditModal } from "@/components/ProfileEditModal";
 import { IconButton } from "@/components/ui/icon-button";
@@ -28,8 +29,6 @@ export interface HeaderProps {
 }
 
 /** Global top header: Logo + profile Avatar. Full width. */
-const DEFAULT_PROFILE_IMAGE = "https://api.dicebear.com/9.x/adventurer/svg?seed=renovel-studio";
-
 export default function Header({ profileImageUrl, onProfileImageChange, onMenuClick, hideOnMobile, className }: HeaderProps) {
   const router = useRouter();
   const [isProfileModalOpen, setIsProfileModalOpen] = useState(false);
@@ -67,23 +66,26 @@ export default function Header({ profileImageUrl, onProfileImageChange, onMenuCl
           <RenovelStudioLogo />
         </button>
       </div>
-      <div className="flex items-center gap-1">
+      <div className="flex items-center gap-2">
+        <div className="flex items-center gap-0">
+          <HeaderNotificationMenu />
+          <ThemeToggleButton />
+        </div>
         <Button
           ref={profileButtonRef}
           type="button"
           variant="ghost"
           shape="circle"
-          size="icon-xl"
+          size="icon-sm"
           onClick={() => setIsProfileModalOpen(true)}
           className="overflow-hidden p-0"
           aria-label="프로필 편집"
         >
-          <Avatar size="lg">
-            <AvatarImage src={profileImageUrl ?? DEFAULT_PROFILE_IMAGE} alt="프로필" />
+          <Avatar size="default">
+            {profileImageUrl ? <AvatarImage src={profileImageUrl} alt="프로필" /> : null}
             <AvatarFallback />
           </Avatar>
         </Button>
-        <ThemeToggleButton />
       </div>
       <ProfileEditModal
         isOpen={isProfileModalOpen}

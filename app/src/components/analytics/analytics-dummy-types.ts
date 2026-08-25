@@ -33,6 +33,8 @@ export type UserDummyByScope = {
   primary: UserPrimaryStatDummy[];
   listA: AnalyticsTopFiveRow[];
   listBCounts: string[];
+  /** 내 구독자가 함께 보는 다른 작가 작품 TOP5 (내 작품 제외, 겹침 비율) */
+  subscriberPeerWorks: AnalyticsTopFiveRow[];
   chartSeries: Record<AnalyticsUserMetric, number[]>;
   gender: { flex: [number, number, number]; legend: [string, string, string] };
   age: { flex: [number, number, number, number, number]; legend: [string, string, string, string, string] };

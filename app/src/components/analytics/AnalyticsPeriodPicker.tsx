@@ -43,7 +43,7 @@ export interface AnalyticsPeriodPickerProps {
   onChange: (next: AnalyticsPeriodRange) => void;
   /** 트리거 className 보강 (정렬 등) */
   triggerClassName?: string;
-  /** `inline` — 상단 컨텍스트 바용 보더 없는 트리거 */
+  /** `inline` — 상단 필터 바용 아웃라인 트리거 */
   variant?: "default" | "inline";
   /** 트리거에 적용할 추가 aria-label 컨텍스트 */
   ariaLabelPrefix?: string;

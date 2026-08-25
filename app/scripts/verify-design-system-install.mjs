@@ -19,6 +19,23 @@ if (!fs.existsSync(pkgPath)) {
 }
 
 const pkg = JSON.parse(fs.readFileSync(pkgPath, "utf8"));
+
+/** DS: `export const` + `export { 동일 이름 }` 이중 export로 webpack이 실패한다. */
+function patchDuplicateFieldLabelExports() {
+  const filePath = path.join(dsRoot, "src/components/ui/field-label.tsx");
+  if (!fs.existsSync(filePath)) return;
+  const source = fs.readFileSync(filePath, "utf8");
+  const next = source.replace(
+    /export \{\s*FieldLabel,\s*fieldLabelTitleVariants,(?:\s*FIELD_LABEL_CONTROL_GAP,)?(?:\s*FIELD_LABEL_CONTROL_GAP_GROUP_CLASS,)?(?:\s*FIELD_LABEL_CONTROL_GAP_PX,)?\s*type FieldLabelProps,\s*\}/,
+    "export {\n  FieldLabel,\n  fieldLabelTitleVariants,\n  type FieldLabelProps,\n}",
+  );
+  if (next !== source) {
+    fs.writeFileSync(filePath, next);
+    console.log("verify:ds — patched duplicate FIELD_LABEL_CONTROL_GAP export");
+  }
+}
+
+patchDuplicateFieldLabelExports();
 const exportsMap = pkg.exports ?? {};
 const missing = [];
 

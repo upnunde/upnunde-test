@@ -3,6 +3,7 @@
 import { useId } from "react";
 
 import { FormFieldLabel, formFieldAriaDescribedBy } from "@/components/ui/field-label";
+import { FORM_LABEL_CONTROL_STACK_CLASS } from "@/lib/form-field-styles";
 import { InputGroup, InputHypertext } from "@/components/ui/input";
 import { Button } from "design-system/ui/button";
 import { Textarea } from "design-system/ui/textarea";
@@ -48,9 +49,9 @@ export function SeriesFormTextareaField({
   const showAction = Boolean(actionLabel && onAction);
 
   return (
-    <div className="flex flex-col gap-1">
+    <div className={FORM_LABEL_CONTROL_STACK_CLASS}>
       <FormFieldLabel title={title} subtitle={subtitle} inputId={inputId} />
-      <InputGroup className="mt-1">
+      <InputGroup>
         <div className="relative">
           <Textarea
             ref={textareaRef}
