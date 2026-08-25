@@ -14,6 +14,7 @@ import { EditorBottomSheetMenu } from "@/components/editor/EditorBottomSheetMenu
 import { EditorMenuOption } from "@/components/editor/EditorMenuOption";
 import { Button } from "design-system/ui/button";
 import { IconButton } from "@/components/ui/icon-button";
+import { EpisodePreviewModal } from "@/components/episode/EpisodePreviewModal";
 import type { Episode, EpisodeStatus } from "@/types/episode";
 import { formatViews, formatDateOrRelative, formatScheduledPublishAtParts } from "@/lib/formatEpisode";
 import { THUMBNAIL_DIM_OVERLAY_CLASS } from "@/lib/thumbnail-styles";
@@ -92,6 +93,7 @@ function EpisodeListItemActions({
   onLinkEditor,
   onInquiry,
   onCancelSchedule,
+  onPreview,
   mobile = false,
   className,
 }: {
@@ -103,6 +105,7 @@ function EpisodeListItemActions({
   onLinkEditor?: (episode: Episode) => void;
   onInquiry?: (episode: Episode) => void;
   onCancelSchedule?: (episode: Episode) => void;
+  onPreview?: (episode: Episode) => void;
   mobile?: boolean;
   className?: string;
 }) {
@@ -196,6 +199,16 @@ function EpisodeListItemActions({
                 <EditorMenuOption
                   presentation={presentation}
                   onSelect={() => {
+                    onPreview?.(episode);
+                    closeSheet();
+                  }}
+                >
+                  <Icon icon={ICONS.smartphone} size="md" />
+                  미리보기
+                </EditorMenuOption>
+                <EditorMenuOption
+                  presentation={presentation}
+                  onSelect={() => {
                     onPublish?.(episode);
                     closeSheet();
                   }}
@@ -228,6 +241,16 @@ function EpisodeListItemActions({
             )}
             {status === "PUBLISHED" && (
               <>
+                <EditorMenuOption
+                  presentation={presentation}
+                  onSelect={() => {
+                    onPreview?.(episode);
+                    closeSheet();
+                  }}
+                >
+                  <Icon icon={ICONS.smartphone} size="md" />
+                  미리보기
+                </EditorMenuOption>
                 <EditorMenuOption
                   presentation={presentation}
                   onSelect={() => {
@@ -316,6 +339,15 @@ function EpisodeListItemActions({
 
       {status === "SCHEDULED" && (
         <>
+          <IconButton
+            type="button"
+            variant="outline"
+            shape="circle"
+            size="icon-sm"
+            icon={ICONS.smartphone}
+            aria-label="미리보기"
+            onClick={() => onPreview?.(episode)}
+          />
           <Button
             type="button"
             variant="outline"
@@ -354,30 +386,41 @@ function EpisodeListItemActions({
       )}
 
       {status === "PUBLISHED" && (
-        <DropdownMenu>
-          <DropdownMenuTrigger asChild>
-            <IconButton
-              type="button"
-              variant="outline"
-              shape="circle"
-              size="icon-sm"
-              icon={ICONS.moreVertical}
-              aria-label="더보기"
-            />
-          </DropdownMenuTrigger>
-          <DropdownMenuContent align="end">
-            <DropdownMenuGroup>
-              <DropdownMenuItem onSelect={() => onLinkEditor?.(episode)}>
-                <Icon icon={ICONS.fileText} size="md" />
-                에피소드 상세
-              </DropdownMenuItem>
-              <DropdownMenuItem onSelect={() => onInquiry?.(episode)}>
-                <Icon icon={ICONS.mail} size="md" />
-                문의하기
-              </DropdownMenuItem>
-            </DropdownMenuGroup>
-          </DropdownMenuContent>
-        </DropdownMenu>
+        <>
+          <IconButton
+            type="button"
+            variant="outline"
+            shape="circle"
+            size="icon-sm"
+            icon={ICONS.smartphone}
+            aria-label="미리보기"
+            onClick={() => onPreview?.(episode)}
+          />
+          <DropdownMenu>
+            <DropdownMenuTrigger asChild>
+              <IconButton
+                type="button"
+                variant="outline"
+                shape="circle"
+                size="icon-sm"
+                icon={ICONS.moreVertical}
+                aria-label="더보기"
+              />
+            </DropdownMenuTrigger>
+            <DropdownMenuContent align="end">
+              <DropdownMenuGroup>
+                <DropdownMenuItem onSelect={() => onLinkEditor?.(episode)}>
+                  <Icon icon={ICONS.fileText} size="md" />
+                  에피소드 상세
+                </DropdownMenuItem>
+                <DropdownMenuItem onSelect={() => onInquiry?.(episode)}>
+                  <Icon icon={ICONS.mail} size="md" />
+                  문의하기
+                </DropdownMenuItem>
+              </DropdownMenuGroup>
+            </DropdownMenuContent>
+          </DropdownMenu>
+        </>
       )}
     </div>
   );
@@ -398,6 +441,7 @@ export function EpisodeListItem({
   const isDraft = status === "DRAFT";
   const isScheduled = status === "SCHEDULED";
   const viewsDisplay = isDraft ? "-" : formatViews(views);
+  const [previewOpen, setPreviewOpen] = useState(false);
 
   const handleRowClick = (e: React.MouseEvent) => {
     const target = e.target as HTMLElement;
@@ -405,130 +449,142 @@ export function EpisodeListItem({
     onRowClick?.(episode);
   };
 
+  const openPreview = () => setPreviewOpen(true);
+
   return (
-    <article
-      role="button"
-      tabIndex={0}
-      onClick={handleRowClick}
-      onKeyDown={(e) => {
-        if (e.key === "Enter" || e.key === " ") {
-          e.preventDefault();
-          onRowClick?.(episode);
-        }
-      }}
-      className={cn(
-        "cursor-pointer transition-colors",
-        PAGE_MOBILE_LIST_ITEM_CARD_CLASS,
-        "hover:bg-muted-low",
-        "lg:border-b lg:border-divider lg:px-5 lg:py-3 lg:last:border-b-0",
-      )}
-      aria-label={`${episode.episodeNumber}화 ${episode.title}`}
-    >
-      {/* 모바일: 썸네일 + 제목·상태·메타 / 우상단 ⋮ 메뉴 */}
-      <div className="flex items-start gap-3 lg:hidden">
-        <div className="relative aspect-[9/16] h-[120px] shrink-0 overflow-hidden rounded border border-border bg-background-muted">
-          <Image
-            src={episode.thumbnail}
-            alt=""
-            fill
-            sizes="(max-width: 1024px) 68px, 60px"
-            className="object-cover"
-            unoptimized={isDummyResourceUrl(episode.thumbnail)}
-          />
-          <div className={THUMBNAIL_DIM_OVERLAY_CLASS} aria-hidden />
-        </div>
-
-        <div className="flex min-w-0 flex-1 flex-col gap-0">
-          <div className="flex items-center justify-between gap-1">
-            <p className="min-w-0 text-caption1_400 text-foreground-placeholder">
-              {episode.episodeNumber}화
-            </p>
-            <div className="-mr-2 shrink-0" onClick={(e) => e.stopPropagation()}>
-              <EpisodeListItemActions
-                episode={episode}
-                status={status}
-                onPublish={onPublish}
-                onEdit={onEdit}
-                onDelete={onDelete}
-                onLinkEditor={onLinkEditor}
-                onInquiry={onInquiry}
-                onCancelSchedule={onCancelSchedule}
-                mobile
-              />
-            </div>
-          </div>
-          <span className="line-clamp-2 text-body1_700 text-foreground">{episode.title}</span>
-          <span className={cn("text-caption1_400", STATUS_TEXT_CLASS[status])}>
-            {STATUS_LABEL[status]}
-          </span>
-          <div className="mt-4 flex items-center gap-x-3 text-caption1_400 text-foreground-placeholder">
-            <div className="flex items-center gap-2">
-              <ICONS.calendar className="h-4 w-4 shrink-0" aria-hidden />
-              <EpisodeDateDisplay
-                isDraft={isDraft}
-                isScheduled={isScheduled}
-                scheduledPublishAt={scheduledPublishAt}
-                date={date}
-              />
-            </div>
-            {!isDraft ? (
-              <div className="flex items-center gap-2">
-                <ICONS.eye className="h-4 w-4 shrink-0" aria-hidden />
-                <span>{viewsDisplay}</span>
-              </div>
-            ) : null}
-          </div>
-        </div>
-      </div>
-
-      {/* lg 이상: 기존 테이블 행 (헤더 컬럼 폭과 동일) */}
-      <div className="hidden w-full items-center lg:flex">
-        <div className="w-20 shrink-0 text-body3_400 text-foreground-muted" aria-hidden>
-          {episode.episodeNumber}화
-        </div>
-
-        <div className="flex min-w-0 flex-1 items-center gap-4">
-          <div className="relative h-[107px] w-[60px] shrink-0 overflow-hidden rounded border border-border bg-background-muted">
+    <>
+      <article
+        role="button"
+        tabIndex={0}
+        onClick={handleRowClick}
+        onKeyDown={(e) => {
+          if (e.key === "Enter" || e.key === " ") {
+            e.preventDefault();
+            onRowClick?.(episode);
+          }
+        }}
+        className={cn(
+          "cursor-pointer transition-colors",
+          PAGE_MOBILE_LIST_ITEM_CARD_CLASS,
+          "hover:bg-muted-low",
+          "lg:border-b lg:border-divider lg:px-5 lg:py-3 lg:last:border-b-0",
+        )}
+        aria-label={`${episode.episodeNumber}화 ${episode.title}`}
+      >
+        {/* 모바일: 썸네일 + 제목·상태·메타 / 우상단 ⋮ 메뉴 */}
+        <div className="flex items-start gap-3 lg:hidden">
+          <div className="relative aspect-[9/16] h-[120px] shrink-0 overflow-hidden rounded border border-border bg-background-muted">
             <Image
               src={episode.thumbnail}
               alt=""
               fill
-              sizes="60px"
+              sizes="(max-width: 1024px) 68px, 60px"
               className="object-cover"
               unoptimized={isDummyResourceUrl(episode.thumbnail)}
             />
             <div className={THUMBNAIL_DIM_OVERLAY_CLASS} aria-hidden />
           </div>
-          <span className="min-w-0 flex-1 truncate text-body1_500 text-foreground">
-            {episode.title}
-          </span>
+
+          <div className="flex min-w-0 flex-1 flex-col gap-0">
+            <div className="flex items-center justify-between gap-1">
+              <p className="min-w-0 text-caption1_400 text-foreground-placeholder">
+                {episode.episodeNumber}화
+              </p>
+              <div className="-mr-2 shrink-0" onClick={(e) => e.stopPropagation()}>
+                <EpisodeListItemActions
+                  episode={episode}
+                  status={status}
+                  onPublish={onPublish}
+                  onEdit={onEdit}
+                  onDelete={onDelete}
+                  onLinkEditor={onLinkEditor}
+                  onInquiry={onInquiry}
+                  onCancelSchedule={onCancelSchedule}
+                  onPreview={openPreview}
+                  mobile
+                />
+              </div>
+            </div>
+            <span className="line-clamp-2 text-body1_700 text-foreground">{episode.title}</span>
+            <span className={cn("text-caption1_400", STATUS_TEXT_CLASS[status])}>
+              {STATUS_LABEL[status]}
+            </span>
+            <div className="mt-4 flex items-center gap-x-3 text-caption1_400 text-foreground-placeholder">
+              <div className="flex items-center gap-2">
+                <ICONS.calendar className="h-4 w-4 shrink-0" aria-hidden />
+                <EpisodeDateDisplay
+                  isDraft={isDraft}
+                  isScheduled={isScheduled}
+                  scheduledPublishAt={scheduledPublishAt}
+                  date={date}
+                />
+              </div>
+              {!isDraft ? (
+                <div className="flex items-center gap-2">
+                  <ICONS.eye className="h-4 w-4 shrink-0" aria-hidden />
+                  <span>{viewsDisplay}</span>
+                </div>
+              ) : null}
+            </div>
+          </div>
         </div>
 
-        <EpisodeDateDisplay
-          isDraft={isDraft}
-          isScheduled={isScheduled}
-          scheduledPublishAt={scheduledPublishAt}
-          date={date}
-          className="w-40 shrink-0 px-0 text-body3_400 text-foreground-muted"
-        />
-        <div className="w-24 shrink-0 px-0 text-body3_400 text-foreground-placeholder">{viewsDisplay}</div>
-        <div className={cn("w-24 shrink-0 px-0 text-body3_400", STATUS_TEXT_CLASS[status])}>
-          {STATUS_LABEL[status]}
-        </div>
+        {/* lg 이상: 기존 테이블 행 (헤더 컬럼 폭과 동일) */}
+        <div className="hidden w-full items-center lg:flex">
+          <div className="w-20 shrink-0 text-body3_400 text-foreground-muted" aria-hidden>
+            {episode.episodeNumber}화
+          </div>
 
-        <div className="w-48 shrink-0" onClick={(e) => e.stopPropagation()}>
-          <EpisodeListItemActions
-            episode={episode}
-            status={status}
-            onPublish={onPublish}
-            onEdit={onEdit}
-            onDelete={onDelete}
-            onLinkEditor={onLinkEditor}
-            onInquiry={onInquiry}
-            onCancelSchedule={onCancelSchedule}
+          <div className="flex min-w-0 flex-1 items-center gap-4">
+            <div className="relative h-[107px] w-[60px] shrink-0 overflow-hidden rounded border border-border bg-background-muted">
+              <Image
+                src={episode.thumbnail}
+                alt=""
+                fill
+                sizes="60px"
+                className="object-cover"
+                unoptimized={isDummyResourceUrl(episode.thumbnail)}
+              />
+              <div className={THUMBNAIL_DIM_OVERLAY_CLASS} aria-hidden />
+            </div>
+            <span className="min-w-0 flex-1 truncate text-body1_500 text-foreground">
+              {episode.title}
+            </span>
+          </div>
+
+          <EpisodeDateDisplay
+            isDraft={isDraft}
+            isScheduled={isScheduled}
+            scheduledPublishAt={scheduledPublishAt}
+            date={date}
+            className="w-40 shrink-0 px-0 text-body3_400 text-foreground-muted"
           />
+          <div className="w-24 shrink-0 px-0 text-body3_400 text-foreground-placeholder">{viewsDisplay}</div>
+          <div className={cn("w-24 shrink-0 px-0 text-body3_400", STATUS_TEXT_CLASS[status])}>
+            {STATUS_LABEL[status]}
+          </div>
+
+          <div className="w-56 shrink-0" onClick={(e) => e.stopPropagation()}>
+            <EpisodeListItemActions
+              episode={episode}
+              status={status}
+              onPublish={onPublish}
+              onEdit={onEdit}
+              onDelete={onDelete}
+              onLinkEditor={onLinkEditor}
+              onInquiry={onInquiry}
+              onCancelSchedule={onCancelSchedule}
+              onPreview={openPreview}
+            />
+          </div>
         </div>
-      </div>
-    </article>
+      </article>
+
+      <EpisodePreviewModal
+        open={previewOpen}
+        onOpenChange={setPreviewOpen}
+        episode={episode}
+      />
+    </>
   );
 }

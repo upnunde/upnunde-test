@@ -45,7 +45,7 @@ export function EpisodeList({
         <div className="w-40 px-0 text-caption1_400 text-foreground-placeholder">개시일</div>
         <div className="w-24 px-0 text-caption1_400 text-foreground-placeholder">조회수</div>
         <div className="w-24 px-0 text-caption1_400 text-foreground-placeholder">공개여부</div>
-        <div className="w-48 px-0 text-right text-caption1_400 text-foreground-placeholder">작업</div>
+        <div className="w-56 px-0 text-right text-caption1_400 text-foreground-placeholder">작업</div>
       </div>
 
       {/* Table Body */}
