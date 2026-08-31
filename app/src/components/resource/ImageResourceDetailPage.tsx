@@ -1,6 +1,7 @@
 "use client";
 
 import React, { useCallback, useEffect, useRef, useState } from "react";
+import dynamic from "next/dynamic";
 import Image from "next/image";
 import { useRouter, usePathname } from "next/navigation";
 import { ICONS } from "@/lib/icons";
@@ -32,6 +33,11 @@ import { RESOURCE_DESCRIPTION_MAX, RESOURCE_DESCRIPTION_INPUT_GROUP_CLASS, RESOU
 import { useFormAiDraftComposer } from "@/hooks/useFormAiDraftComposer";
 import { ImageCropPosterModal } from "@/components/resource/character/CharacterExpressionModal";
 import type { ImageResource, ImageResourceKind, MediaResource } from "@/types/resource";
+
+const ImageLightbox = dynamic(
+  () => import("@/components/resource/ImageLightbox").then((mod) => mod.ImageLightbox),
+  { ssr: false },
+);
 
 export type { ImageResourceKind };
 
@@ -139,6 +145,8 @@ export function ImageResourceDetailPage({ kind, initialData }: ImageResourceDeta
     useState<{ id: string; expressionLabel: string; imageUrl?: string }[] | null>(null);
   const [pendingThumbnailUrl, setPendingThumbnailUrl] = useState<string | null>(null);
   const [sceneAiMode, setSceneAiMode] = useState<"apply" | "none">("apply");
+  /** 썸네일 크게 보기 — 리소스 목록의 라이트박스와 동일 */
+  const [lightboxOpen, setLightboxOpen] = useState(false);
 
   /** initialData 참조 변경 시 폼 값 재동기화 — render 중 setState 패턴 */
   const [initialDataSnapshot, setInitialDataSnapshot] = useState(initialData);
@@ -333,9 +341,9 @@ export function ImageResourceDetailPage({ kind, initialData }: ImageResourceDeta
                     <div className="w-[90px] h-[160px] rounded-lg overflow-hidden border border-border bg-background-muted relative">
                       <button
                         type="button"
-                        onClick={handleThumbnailClick}
+                        onClick={() => setLightboxOpen(true)}
                         className="absolute inset-0 z-0 flex h-full w-full cursor-pointer focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-0"
-                        aria-label={`${labels.thumbnailLabel.replace("*", "")} 변경`}
+                        aria-label={`${labels.thumbnailLabel.replace("*", "")} 크게 보기`}
                       >
                         <Image
                           src={thumbnailUrl}
@@ -499,6 +507,13 @@ export function ImageResourceDetailPage({ kind, initialData }: ImageResourceDeta
             return null;
           });
         }}
+      />
+      <ImageLightbox
+        open={lightboxOpen && Boolean(thumbnailUrl)}
+        onClose={() => setLightboxOpen(false)}
+        items={
+          thumbnailUrl ? [{ id: "resource-thumbnail", imageUrl: thumbnailUrl, name }] : []
+        }
       />
       {isNewPage ? (
         <FloatingAiComposerPortal

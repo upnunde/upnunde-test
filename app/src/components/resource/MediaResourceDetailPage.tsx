@@ -1,6 +1,7 @@
 "use client";
 
 import React, { useCallback, useEffect, useRef, useState } from "react";
+import dynamic from "next/dynamic";
 import Image from "next/image";
 import { useRouter, usePathname } from "next/navigation";
 import { ICONS } from "@/lib/icons";
@@ -45,6 +46,11 @@ import {
 } from "@/lib/video-media-utils";
 import type { MediaResource } from "@/types/resource";
 
+const ImageLightbox = dynamic(
+  () => import("@/components/resource/ImageLightbox").then((mod) => mod.ImageLightbox),
+  { ssr: false },
+);
+
 const MEDIA_VIDEO_FILE_INPUT_ID = "media-resource-video-file";
 const MEDIA_PREVIEW_IMAGE_FILE_INPUT_ID = "media-resource-preview-image-file";
 const MEDIA_NAME_INPUT_ID = "media-resource-name";
@@ -88,6 +94,8 @@ export function MediaResourceDetailPage({ initialData }: MediaResourceDetailPage
   const [thumbnailModalInitialSlots, setThumbnailModalInitialSlots] =
     useState<{ id: string; expressionLabel: string; imageUrl?: string }[] | null>(null);
   const [pendingThumbnailUrl, setPendingThumbnailUrl] = useState<string | null>(null);
+  /** 미리보기 이미지 크게 보기 — 리소스 목록의 라이트박스와 동일 */
+  const [lightboxOpen, setLightboxOpen] = useState(false);
 
   const [initialDataSnapshot, setInitialDataSnapshot] = useState(initialData);
   if (initialData !== initialDataSnapshot) {
@@ -424,9 +432,9 @@ export function MediaResourceDetailPage({ initialData }: MediaResourceDetailPage
                     <div className="w-[90px] h-[160px] rounded-lg overflow-hidden border border-border bg-background-muted relative">
                       <button
                         type="button"
-                        onClick={handleThumbnailClick}
+                        onClick={() => setLightboxOpen(true)}
                         className="absolute inset-0 z-0 flex h-full w-full cursor-pointer focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-0"
-                        aria-label="미리보기 이미지 변경"
+                        aria-label="미리보기 이미지 크게 보기"
                       >
                         <Image
                           src={thumbnailUrl}
@@ -536,6 +544,12 @@ export function MediaResourceDetailPage({ initialData }: MediaResourceDetailPage
             return null;
           });
         }}
+      />
+
+      <ImageLightbox
+        open={lightboxOpen && Boolean(thumbnailUrl)}
+        onClose={() => setLightboxOpen(false)}
+        items={thumbnailUrl ? [{ id: "media-thumbnail", imageUrl: thumbnailUrl, name }] : []}
       />
 
       {isNewPage ? (
