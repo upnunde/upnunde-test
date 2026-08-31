@@ -11,6 +11,7 @@ import { useProfileAvatarUrl } from "@/hooks/useProfileAvatarUrl";
 import { useRouter } from "next/navigation";
 import { APP_HEADER_EDGE_X_CLASS, APP_HEADER_START_INSET_CLASS, APP_HEADER_STICKY_CLASS } from "@/lib/mobile-viewport";
 import { RenovelStudioLogo } from "@/components/brand/RenovelStudioLogo";
+import { WORKS_TAB_PATH } from "@/lib/worksArea";
 
 import { cn } from "design-system/utils";
 
@@ -56,9 +57,9 @@ export default function Header({ onMenuClick, hideOnMobile, className }: HeaderP
         ) : null}
         <button
           type="button"
-          onClick={() => router.push("/login")}
+          onClick={() => router.push(WORKS_TAB_PATH.series)}
           className="flex cursor-pointer items-center"
-          aria-label="로그인 화면으로 이동"
+          aria-label="내 작품으로 이동"
         >
           <RenovelStudioLogo />
         </button>

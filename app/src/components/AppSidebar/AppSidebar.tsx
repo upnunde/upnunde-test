@@ -4,6 +4,7 @@ import { useRouter, usePathname } from "next/navigation";
 import { ICONS, Icon, type LucideIcon } from "@/lib/icons";
 import { IconButton } from "@/components/ui/icon-button";
 import { RenovelStudioLogo } from "@/components/brand/RenovelStudioLogo";
+import { WORKS_TAB_PATH } from "@/lib/worksArea";
 import {
   SidebarGroup,
   SidebarMenu,
@@ -98,9 +99,9 @@ function AppSidebarMobileHeader({ onClose }: { onClose: () => void }) {
       />
       <button
         type="button"
-        onClick={() => router.push("/login")}
+        onClick={() => router.push(WORKS_TAB_PATH.series)}
         className="flex cursor-pointer items-center"
-        aria-label="로그인 화면으로 이동"
+        aria-label="내 작품으로 이동"
       >
         <RenovelStudioLogo />
       </button>
