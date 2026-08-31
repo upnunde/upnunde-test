@@ -1,6 +1,7 @@
 "use client";
 
 import React, { useCallback, useState, useEffect, useRef, useMemo } from "react";
+import dynamic from "next/dynamic";
 import Image from "next/image";
 import { useRouter, usePathname } from "next/navigation";
 import { ICONS } from "@/lib/icons";
@@ -46,7 +47,13 @@ import {
   stageMyWorksPendingCharacter,
 } from "@/lib/myWorksCharacterCreate";
 import { WORKS_TAB_PATH } from "@/lib/worksArea";
+import type { ImageLightboxItem } from "@/components/resource/ImageLightbox";
 import type { CharacterResource, CharacterExpressionSlot } from "@/types/resource";
+
+const ImageLightbox = dynamic(
+  () => import("@/components/resource/ImageLightbox").then((mod) => mod.ImageLightbox),
+  { ssr: false },
+);
 
 export type CharacterDetailPageContext = "series-resource" | "my-works";
 
@@ -104,6 +111,11 @@ export function CharacterDetailPage({
   const [pendingThumbnailUrl, setPendingThumbnailUrl] = useState<string | null>(null);
   const [expressionSlots, setExpressionSlots] = useState<CharacterExpressionSlot[]>(() => initialData?.expressions ?? []);
   const [expressionModalOpen, setExpressionModalOpen] = useState(false);
+  /** 썸네일 크게 보기 — 리소스 목록의 라이트박스와 동일 */
+  const [lightbox, setLightbox] = useState<{
+    items: ImageLightboxItem[];
+    index: number;
+  } | null>(null);
   /** 추가하기 → 파일 선택 후 이 슬롯으로 모달을 연다 */
   const [modalInitialSlots, setModalInitialSlots] = useState<CharacterExpressionSlot[] | null>(null);
   const [editingExpressionSlotId, setEditingExpressionSlotId] = useState<string | null>(null);
@@ -172,6 +184,21 @@ export function CharacterDetailPage({
       tagList.length > 0 &&
       greeting.trim().length > 0,
     [name, summary, thumbnailUrl, expressionSlots, tagList, greeting],
+  );
+
+  const filledExpressions = useMemo(
+    () => expressionSlots.filter((slot) => Boolean(slot.imageUrl)),
+    [expressionSlots],
+  );
+
+  const expressionLightboxItems = useMemo<ImageLightboxItem[]>(
+    () =>
+      filledExpressions.map((slot) => ({
+        id: slot.id,
+        imageUrl: slot.imageUrl ?? "",
+        name: slot.expressionLabel || undefined,
+      })),
+    [filledExpressions],
   );
 
   const handleSave = useCallback(() => {
@@ -425,9 +452,16 @@ export function CharacterDetailPage({
                         <div className="w-[90px] h-[160px] rounded-lg overflow-hidden border border-border bg-background-muted relative">
                           <button
                             type="button"
-                            onClick={handleThumbnailAddClick}
+                            onClick={() =>
+                              setLightbox({
+                                items: [
+                                  { id: "character-thumbnail", imageUrl: thumbnailUrl, name },
+                                ],
+                                index: 0,
+                              })
+                            }
                             className="absolute inset-0 z-0 flex h-full w-full cursor-pointer focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-0"
-                            aria-label="캐릭터 이미지 변경"
+                            aria-label="캐릭터 이미지 크게 보기"
                           >
                             <Image
                               src={thumbnailUrl}
@@ -489,7 +523,7 @@ export function CharacterDetailPage({
                       inputId={CHARACTER_DETAIL_EXPRESSION_FILE_INPUT_ID}
                     />
                     <div className="flex flex-wrap items-start gap-3">
-                      {expressionSlots.filter((s) => s.imageUrl).map((slot) => (
+                      {filledExpressions.map((slot, slotIndex) => (
                         <div
                           key={slot.id}
                           className="inline-flex shrink-0 flex-col justify-start items-start gap-1 w-[90px] group"
@@ -502,6 +536,14 @@ export function CharacterDetailPage({
                               sizes="90px"
                               unoptimized
                               className="object-cover object-top"
+                            />
+                            <button
+                              type="button"
+                              aria-label={`${slot.expressionLabel || "표정"} 크게 보기`}
+                              onClick={() =>
+                                setLightbox({ items: expressionLightboxItems, index: slotIndex })
+                              }
+                              className="absolute inset-0 cursor-pointer outline-none focus-visible:ring-2 focus-visible:ring-inset focus-visible:ring-ring"
                             />
                             <div className={THUMBNAIL_DIM_OVERLAY_CLASS} aria-hidden />
                             {/* 어두운 오버레이 */}
@@ -682,6 +724,12 @@ export function CharacterDetailPage({
             return null;
           });
         }}
+      />
+      <ImageLightbox
+        open={lightbox !== null}
+        onClose={() => setLightbox(null)}
+        items={lightbox?.items ?? []}
+        initialIndex={lightbox?.index ?? 0}
       />
       {editingExpressionSlotId ? (
         <CharacterExpressionSingleModal
