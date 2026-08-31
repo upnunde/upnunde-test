@@ -53,17 +53,7 @@ export function ProfileSettlementTab({ onSaved }: { onSaved: () => void }) {
 
   return (
     <div className={cn("flex flex-col max-lg:px-5", PROFILE_PAGE_STACK_GAP_CLASS)}>
-      <InputGroup>
-        <FieldLabel size="sm" weight="600" htmlFor={PROFILE_SETTLEMENT_BANK_ID}>
-          은행
-        </FieldLabel>
-        <BankSelectField
-          id={PROFILE_SETTLEMENT_BANK_ID}
-          value={draft.bankName}
-          onChange={(bankName) => setField("bankName", bankName)}
-        />
-      </InputGroup>
-
+      {/* 은행과 계좌번호는 하나의 정보라 한 줄에 둔다 */}
       <InputGroup>
         <FieldLabel
           size="sm"
@@ -72,18 +62,30 @@ export function ProfileSettlementTab({ onSaved }: { onSaved: () => void }) {
           description="숫자만 입력해 주세요."
           descriptionId={`${PROFILE_SETTLEMENT_ACCOUNT_ID}-desc`}
         >
-          계좌번호
+          계좌정보
         </FieldLabel>
-        <Input
-          id={PROFILE_SETTLEMENT_ACCOUNT_ID}
-          aria-describedby={`${PROFILE_SETTLEMENT_ACCOUNT_ID}-desc`}
-          type="text"
-          size="xl"
-          inputMode="numeric"
-          value={draft.accountNumber}
-          onChange={(e) => setField("accountNumber", e.target.value.replace(/[^\d-]/g, ""))}
-          placeholder="계좌번호"
-        />
+        <div className="flex w-full min-w-0 flex-col gap-2 lg:flex-row lg:items-center">
+          <BankSelectField
+            id={PROFILE_SETTLEMENT_BANK_ID}
+            ariaLabel="은행"
+            value={draft.bankName}
+            onChange={(bankName) => setField("bankName", bankName)}
+            className="lg:w-[160px] lg:shrink-0"
+          />
+          {/* Input이 내부 래퍼에 w-full을 주므로 flex 안에서는 한 겹 감싼다 */}
+          <div className="min-w-0 flex-1">
+            <Input
+              id={PROFILE_SETTLEMENT_ACCOUNT_ID}
+              aria-describedby={`${PROFILE_SETTLEMENT_ACCOUNT_ID}-desc`}
+              type="text"
+              size="xl"
+              inputMode="numeric"
+              value={draft.accountNumber}
+              onChange={(e) => setField("accountNumber", e.target.value.replace(/[^\d-]/g, ""))}
+              placeholder="계좌번호"
+            />
+          </div>
+        </div>
       </InputGroup>
 
       <InputGroup>

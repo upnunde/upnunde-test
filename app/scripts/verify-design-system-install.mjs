@@ -20,19 +20,39 @@ if (!fs.existsSync(pkgPath)) {
 
 const pkg = JSON.parse(fs.readFileSync(pkgPath, "utf8"));
 
-/** DS: `export const` + `export { 동일 이름 }` 이중 export로 webpack이 실패한다. */
+/**
+ * DS field-label: `export const X` + `export { X }` 이중 export → webpack parse fail.
+ * 정본: const 선언 + barrel에서만 export.
+ */
 function patchDuplicateFieldLabelExports() {
   const filePath = path.join(dsRoot, "src/components/ui/field-label.tsx");
   if (!fs.existsSync(filePath)) return;
   const source = fs.readFileSync(filePath, "utf8");
-  const next = source.replace(
-    /export \{\s*FieldLabel,\s*fieldLabelTitleVariants,(?:\s*FIELD_LABEL_CONTROL_GAP,)?(?:\s*FIELD_LABEL_CONTROL_GAP_GROUP_CLASS,)?(?:\s*FIELD_LABEL_CONTROL_GAP_PX,)?\s*type FieldLabelProps,\s*\}/,
-    "export {\n  FieldLabel,\n  fieldLabelTitleVariants,\n  type FieldLabelProps,\n}",
+  const marker = "/* verify:ds-field-label-export-patch */";
+  if (source.includes(marker)) return;
+
+  let next = source.replace(
+    /^(?:export\s+)+const (FIELD_LABEL_CONTROL_GAP(?:_PX|_GROUP_CLASS)?)/gm,
+    "const $1",
   );
-  if (next !== source) {
-    fs.writeFileSync(filePath, next);
-    console.log("verify:ds — patched duplicate FIELD_LABEL_CONTROL_GAP export");
+
+  next = next.replace(
+    /export \{[\s\S]*?type FieldLabelProps,?\s*\}/,
+    `export {\n  FieldLabel,\n  fieldLabelTitleVariants,\n  FIELD_LABEL_CONTROL_GAP,\n  FIELD_LABEL_CONTROL_GAP_GROUP_CLASS,\n  FIELD_LABEL_CONTROL_GAP_PX,\n  type FieldLabelProps,\n} ${marker}`,
+  );
+
+  if (next === source) return;
+
+  const hasExportConst = /^(?:export\s+)+const FIELD_LABEL_CONTROL_GAP/m.test(next);
+  if (hasExportConst) {
+    console.error(
+      "verify:ds — field-label duplicate export patch failed; fix design-system/ui/field-label.tsx",
+    );
+    process.exit(1);
   }
+
+  fs.writeFileSync(filePath, next);
+  console.log("verify:ds — patched duplicate FIELD_LABEL_CONTROL_GAP export");
 }
 
 /**

@@ -356,8 +356,45 @@ const WELCOME_EVENT_NOTIFICATION: NotificationData = {
   bannerAlt: "신규가입 회원 웰컴 쿠폰팩 — 10% 더블쿠폰 + 전상품쿠폰",
 };
 
+const SEARCH_UPDATE_NOTIFICATION: NotificationData = {
+  id: "update-search-improvement",
+  category: "UPDATE",
+  title: "검색 기능 개선",
+  content: `안녕하세요, RE:NOVEL 스튜디오 작가님. RE:NOVEL 팀입니다.
+항상 RE:NOVEL 스튜디오를 이용해 주셔서 감사드립니다.
+
+원하시는 작품을 더 쉽고 정확하게 찾으실 수 있도록 검색 기능을 개선했습니다.
+
+1. 더 똑똑해진 검색
+· 띄어쓰기나 대소문자를 구분하지 않고 검색해 드립니다. (예: "집착대공" = "집착 대공")
+· 유사어나 약어, 줄임말로 검색해도 관련 작품을 찾아 드립니다.
+· 오타가 있어도 자동으로 보정해 검색합니다.
+· 작가명으로도 작품을 찾으실 수 있습니다.
+· 태그를 최대 2개까지 함께 선택해, 두 태그를 모두 포함한 작품을 우선 보여 드립니다. (예: #로맨스 #액션 검색 시 두 태그가 모두 포함된 작품 우선 노출)
+
+2. 추천순 정렬 추가
+· 작품 검색 결과가 기본적으로 '추천순'으로 정렬됩니다.
+· 검색어와의 관련성을 우선하면서, 실제 열람으로 이어질 가능성이 높은 작품과 최근 인기 있는 작품을 위로 올려 보여 드립니다.
+
+3. 검색 결과가 없을 때 추천
+· 찾으시는 결과가 없을 때 빈 화면 대신 좋아하실 만한 작품을 추천해 드립니다.
+· "'○○' 검색 결과가 없어요" 안내와 함께 취향에 맞는 추천 작품과 인기 검색어를 보여 드립니다.
+
+4. 검색 반영 속도 개선
+· 작품의 태그, 공개 상태 등을 수정하시면 검색 결과에 더 빠르게 반영됩니다.
+
+이번에 업데이트된 기능에 대한 개선 의견은 '설정 > 서비스 문의'를 통해 전해 주세요!
+항상 RE:NOVEL 스튜디오에 보내주시는 관심과 애정에 감사드립니다.
+
+감사합니다.
+RE:NOVEL 팀 드림.`,
+  date: "1시간 전",
+  isRead: false,
+};
+
 export const MOCK_NOTIFICATIONS: NotificationData[] = [
   WELCOME_EVENT_NOTIFICATION,
+  SEARCH_UPDATE_NOTIFICATION,
   ...buildMockNotifications(),
 ];
 

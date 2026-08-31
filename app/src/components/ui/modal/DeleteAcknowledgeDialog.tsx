@@ -1,18 +1,16 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import { Button } from "design-system/ui/button";
 import { Input } from "design-system/ui/input";
 import {
   Dialog,
-  DialogClose,
   DialogContent,
   DialogDescription,
-  DialogFooter,
   DialogHeader,
   DialogTitle,
 } from "@/components/ui/dialog";
 import { ConfirmInputGuideHint } from "@/components/ui/modal/ModalConfirmPhraseField";
+import { ModalFooterButtons } from "@/components/ui/modal";
 import { CONFIRM_INPUT_PHRASE } from "@/lib/deleteConfirmPhrase";
 
 export interface DeleteAcknowledgeDialogProps {
@@ -23,7 +21,7 @@ export interface DeleteAcknowledgeDialogProps {
   onConfirm: () => void;
 }
 
-/** DS DialogAcknowledge와 동일 구조 — 확인 안내를 description 줄바꿈에 포함 */
+/** DS Dialog 정본 구조 — 확인 안내를 description 줄바꿈에 포함 */
 export function DeleteAcknowledgeDialog({
   open,
   title,
@@ -67,12 +65,18 @@ export function DeleteAcknowledgeDialog({
           aria-label={`확인 문구 입력: ${CONFIRM_INPUT_PHRASE}`}
           autoComplete="off"
         />
-        <DialogFooter>
-          <DialogClose render={<Button variant="outline" />}>취소</DialogClose>
-          <Button variant="default" tone="destructive" disabled={!ready} onClick={handleConfirm}>
-            동의하고 삭제
-          </Button>
-        </DialogFooter>
+        <ModalFooterButtons
+          layout="end"
+          trailingButtons={[
+            { label: "취소", closeOnSelect: true },
+            {
+              label: "동의하고 삭제",
+              tone: "destructive",
+              onClick: handleConfirm,
+              disabled: !ready,
+            },
+          ]}
+        />
       </DialogContent>
     </Dialog>
   );

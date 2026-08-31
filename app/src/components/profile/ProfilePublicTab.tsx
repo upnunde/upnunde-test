@@ -1,15 +1,13 @@
 "use client";
 
-import { useEffect, useRef, useState } from "react";
-import { useRouter } from "next/navigation";
+import { useEffect, useRef, useState, type ReactNode } from "react";
 import Image from "next/image";
 import { ICONS } from "@/lib/icons";
-import { Button } from "design-system/ui/button";
 import { FieldLabel } from "design-system/ui/field-label";
 import { Input, InputGroup, InputHypertext } from "design-system/ui/input";
 import { Textarea } from "design-system/ui/textarea";
 import { cn } from "design-system/utils";
-import { PAGE_FOOTER_ACTION_BUTTON_CLASS, PROFILE_PAGE_STACK_GAP_CLASS } from "@/lib/page-layout";
+import { PROFILE_PAGE_STACK_GAP_CLASS } from "@/lib/page-layout";
 import { ProfileAvatarChangeDialog } from "@/components/profile/ProfileAvatarChangeDialog";
 import { ProfileDirtySaveButton } from "@/components/profile/ProfileDirtySaveButton";
 import {
@@ -26,21 +24,18 @@ import type { CreatorProfile } from "@/types/profile";
 const PROFILE_PUBLIC_PEN_NAME_ID = "profile-public-pen-name";
 const PROFILE_PUBLIC_DESCRIPTION_ID = "profile-public-description";
 
-const PROFILE_LOGOUT_BUTTON_CLASS = cn(
-  "h-9 border-border px-4 text-foreground",
-  PAGE_FOOTER_ACTION_BUTTON_CLASS,
-);
-
 export function ProfilePublicTab({
   avatarUrl,
   onAvatarChange,
   onSaved,
+  children,
 }: {
   avatarUrl: string | null;
   onAvatarChange: (url: string | null) => void;
   onSaved: () => void;
+  /** 저장 버튼 위에 붙는 후속 섹션 — 버튼이 화면 최하단에 오도록 슬롯으로 받는다 */
+  children?: ReactNode;
 }) {
-  const router = useRouter();
   const fileInputRef = useRef<HTMLInputElement>(null);
   const [draft, setDraft] = useState<CreatorProfile>(DEFAULT_CREATOR_PROFILE);
   const [saved, setSaved] = useState<CreatorProfile>(DEFAULT_CREATOR_PROFILE);
@@ -196,18 +191,9 @@ export function ProfilePublicTab({
         </InputGroup>
       </div>
 
-      <ProfileDirtySaveButton visible={isDirty} onClick={handleSave} />
+      {children}
 
-      <div className="flex justify-end">
-        <Button
-          type="button"
-          variant="outline"
-          className={PROFILE_LOGOUT_BUTTON_CLASS}
-          onClick={() => router.push("/")}
-        >
-          로그아웃
-        </Button>
-      </div>
+      <ProfileDirtySaveButton visible={isDirty} onClick={handleSave} />
     </div>
   );
 }

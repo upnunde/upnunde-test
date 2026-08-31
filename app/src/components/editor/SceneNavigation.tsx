@@ -5,6 +5,13 @@ import { ICONS } from "@/lib/icons";
 import { IconButton } from "@/components/ui/icon-button";
 import { Input } from "@/components/ui/input";
 import { Badge } from "design-system/ui/badge";
+import {
+  SidebarGroup,
+  SidebarGroupLabel,
+  SidebarMenu,
+  SidebarMenuButton,
+  SidebarMenuItem,
+} from "design-system/ui/sidebar";
 import { useEditorStore } from "@/store/useEditorStore";
 import {
   useEditorIssues,
@@ -13,7 +20,6 @@ import {
 } from "@/hooks/useEditorIssues";
 import { useEditorScrollActiveSceneId } from "@/hooks/useEditorScrollActiveSceneId";
 import { resolveEditorActiveSceneId } from "@/lib/editor-scroll";
-import { EDITOR_CONTROL_MUTED_TEXT_CLASS } from "@/lib/editor-block-layout";
 import { cn } from "design-system/utils";
 
 interface SceneNavigationProps {
@@ -163,122 +169,107 @@ export function SceneNavigation({
       <nav
         className={cn(
           "flex-1 overflow-y-auto pt-2",
-          collapsed ? "px-0" : "px-1"
+          collapsed ? "px-0" : "px-2",
         )}
+        aria-label="장면 목록"
       >
-        <div
-          className={cn(
-            "flex items-center gap-2 py-2",
-            collapsed ? "justify-center" : "justify-between pl-3 pr-2"
-          )}
-        >
-          {!collapsed && (
-            <h2 className="text-body3_500 text-foreground flex items-center gap-2">
-              장면 목록
-            </h2>
-          )}
-          {onToggleCollapsed ? (
-            <IconButton
-              type="button"
-              variant="outline"
-              shape="circle"
-              size="icon"
-              icon={ICONS.menu}
-              onClick={onToggleCollapsed}
-              className="shrink-0 shadow-none text-foreground-muted"
-              aria-label={collapsed ? "장면 목록 펼치기" : "장면 목록 최소화"}
-            />
-          ) : null}
-        </div>
-
-        {!collapsed &&
-          (scenes.length === 0 ? (
-            <div className="px-3 py-2 text-body3_400 text-foreground-placeholder text-center">
-              장면이 없습니다
+        {collapsed ? (
+          <div className="flex justify-center py-2">
+            {onToggleCollapsed ? (
+              <IconButton
+                type="button"
+                variant="ghost"
+                shape="circle"
+                size="icon"
+                icon={ICONS.menu}
+                onClick={onToggleCollapsed}
+                className="shrink-0 text-foreground-muted"
+                aria-label="장면 목록 펼치기"
+              />
+            ) : null}
+          </div>
+        ) : (
+          <SidebarGroup>
+            <div className="flex items-center justify-between gap-2 pr-1">
+              <SidebarGroupLabel size="sm" className="min-w-0 flex-1 pt-2">
+                장면 목록
+              </SidebarGroupLabel>
+              {onToggleCollapsed ? (
+                <IconButton
+                  type="button"
+                  variant="ghost"
+                  shape="circle"
+                  size="icon"
+                  icon={ICONS.menu}
+                  onClick={onToggleCollapsed}
+                  className="shrink-0 text-foreground-muted"
+                  aria-label="장면 목록 최소화"
+                />
+              ) : null}
             </div>
-          ) : (
-            <ul className="space-y-1 px-1">
-              {scenes.map(({ block, index }) => {
-                const sceneNumber = blocks.slice(0, index).filter((b) => b.type === "scene").length + 1;
-                const isActive = activeSceneId === block.id;
-                const sceneTitle = block.content?.trim() || `장면 ${sceneNumber}`;
-                const isEditing = editingBlockId === block.id;
 
-                const rowContent = (
-                  <div className="flex items-center gap-3 min-w-0">
-                    <span
-                      className={cn(
-                        "text-caption1_400 font-mono tabular-nums shrink-0",
-                        isActive ? "text-primary" : EDITOR_CONTROL_MUTED_TEXT_CLASS,
+            {scenes.length === 0 ? (
+              <div className="px-3 py-2 text-center text-body3_400 text-foreground-placeholder">
+                장면이 없습니다
+              </div>
+            ) : (
+              <SidebarMenu>
+                {scenes.map(({ block, index }) => {
+                  const sceneNumber =
+                    blocks.slice(0, index).filter((b) => b.type === "scene").length + 1;
+                  const isActive = activeSceneId === block.id;
+                  const sceneTitle = block.content?.trim() || `장면 ${sceneNumber}`;
+                  const isEditing = editingBlockId === block.id;
+                  const sceneNumberLabel = String(sceneNumber).padStart(2, "0");
+
+                  return (
+                    <SidebarMenuItem key={block.id}>
+                      {isEditing ? (
+                        <div className="flex w-full min-w-0 items-center gap-2 rounded-md px-2.5 py-1.5 text-body3_500 ring-1 ring-border ring-inset">
+                          <span className="w-5 shrink-0 text-center tabular-nums text-body3_400 text-foreground-muted">
+                            {sceneNumberLabel}
+                          </span>
+                          <Input
+                            ref={inputRef}
+                            type="text"
+                            size="sm"
+                            value={editValue}
+                            onChange={(e) => setEditValue(e.target.value)}
+                            onBlur={() => commitEdit(block.id, block.content ?? "")}
+                            onKeyDown={(e) => {
+                              if (e.key === "Enter") {
+                                e.preventDefault();
+                                commitEdit(block.id, block.content ?? "");
+                              } else if (e.key === "Escape") {
+                                cancelEdit();
+                              }
+                            }}
+                            onClick={(e) => e.stopPropagation()}
+                            className="min-w-0 flex-1"
+                            aria-label="장면 제목 편집"
+                          />
+                        </div>
+                      ) : (
+                        <SidebarMenuButton
+                          size="sm"
+                          isActive={isActive}
+                          title="더블클릭하여 제목 편집"
+                          onClick={() => handleSceneClick(block.id)}
+                          onDoubleClick={(e) => startEdit(e, block)}
+                        >
+                          <span className="w-5 shrink-0 text-center tabular-nums text-body3_400">
+                            {sceneNumberLabel}
+                          </span>
+                          {sceneTitle}
+                        </SidebarMenuButton>
                       )}
-                    >
-                      {String(sceneNumber).padStart(2, "0")}
-                    </span>
-                    {isEditing ? (
-                      <Input
-                        ref={inputRef}
-                        type="text"
-                        size="sm"
-                        value={editValue}
-                        onChange={(e) => setEditValue(e.target.value)}
-                        onBlur={() => commitEdit(block.id, block.content ?? "")}
-                        onKeyDown={(e) => {
-                          if (e.key === "Enter") {
-                            e.preventDefault();
-                            commitEdit(block.id, block.content ?? "");
-                          } else if (e.key === "Escape") {
-                            cancelEdit();
-                          }
-                        }}
-                        onClick={(e) => e.stopPropagation()}
-                        className="min-w-0 flex-1"
-                        aria-label="장면 제목 편집"
-                      />
-                    ) : (
-                      <span
-                        className={cn(
-                          "truncate text-body3_500 flex-1 min-w-0",
-                          isActive ? "text-primary" : EDITOR_CONTROL_MUTED_TEXT_CLASS,
-                        )}
-                        onDoubleClick={(e) => startEdit(e, block)}
-                        title="더블클릭하여 제목 편집"
-                      >
-                        {sceneTitle}
-                      </span>
-                    )}
-                  </div>
-                );
-
-                return (
-                  <li key={block.id}>
-                    {isEditing ? (
-                      <div
-                        className={cn(
-                          "w-full px-3 py-2 rounded-md text-body3_400",
-                          "bg-background ring-1 ring-border ring-inset"
-                        )}
-                      >
-                        {rowContent}
-                      </div>
-                    ) : (
-                      <button
-                        type="button"
-                        onClick={() => handleSceneClick(block.id)}
-                        className={cn(
-                          "w-full text-left px-3 py-2 rounded-md text-body3_400 transition-colors",
-                          "hover:bg-muted",
-                          isActive && "font-medium",
-                          !isActive && EDITOR_CONTROL_MUTED_TEXT_CLASS
-                        )}
-                      >
-                        {rowContent}
-                      </button>
-                    )}
-                  </li>
-                );
-              })}
-            </ul>
-          ))}
+                    </SidebarMenuItem>
+                  );
+                })}
+              </SidebarMenu>
+            )}
+          </SidebarGroup>
+        )}
       </nav>
 
       {/* 읽기 전용 화면 등에서 오류 패널을 숨길 때도 레이아웃 높이는 유지 */}
@@ -294,7 +285,7 @@ export function SceneNavigation({
                 "w-full rounded-lg border px-3 py-2 text-left transition-colors",
                 issues.length > 0
                   ? "border-destructive/40 bg-destructive-container text-destructive hover:bg-destructive-container"
-                  : "border-border bg-background-muted text-foreground-placeholder hover:bg-muted"
+                  : "border-border bg-background-muted text-foreground-placeholder hover:bg-muted",
               )}
               aria-label="오류 및 누락 알림"
             >
@@ -302,23 +293,23 @@ export function SceneNavigation({
                 <div className="text-body3_500">
                   {issues.length > 0 ? "오류/누락 있음" : "오류/누락 없음"}
                 </div>
-                <div className="text-caption1_400 tabular-nums">
-                  {issues.length}건
-                </div>
+                <div className="text-caption1_400 tabular-nums">{issues.length}건</div>
               </div>
             </button>
 
             {/* Hover list */}
             {issues.length > 0 && (
               <div
-                className="absolute left-0 right-0 bottom-full mb-0 hidden group-hover:block z-sticky"
+                className="absolute bottom-full left-0 right-0 z-sticky mb-0 hidden group-hover:block"
                 role="dialog"
                 aria-label="오류 및 누락 상세"
               >
-                <div className="rounded-lg border border-border bg-background shadow-elevation-40 overflow-hidden">
-                  <div className="px-3 py-2 border-b border-border bg-background-muted">
+                <div className="overflow-hidden rounded-lg border border-border bg-background shadow-elevation-40">
+                  <div className="border-b border-border bg-background-muted px-3 py-2">
                     <div className="text-caption1_500 text-foreground-muted">오류/누락 목록</div>
-                    <div className="text-caption2_400 text-foreground-placeholder">클릭하면 해당 위치로 이동합니다</div>
+                    <div className="text-caption2_400 text-foreground-placeholder">
+                      클릭하면 해당 위치로 이동합니다
+                    </div>
                   </div>
                   <ul className="max-h-60 overflow-y-auto py-1">
                     {issues.map((it, idx) => (
@@ -326,8 +317,8 @@ export function SceneNavigation({
                         <button
                           type="button"
                           className={cn(
-                            "w-full px-3 py-2 text-left text-caption1_400 hover:bg-muted transition-colors",
-                            it.kind === "error" ? "text-destructive" : "text-destructive"
+                            "w-full px-3 py-2 text-left text-caption1_400 transition-colors hover:bg-muted",
+                            "text-destructive",
                           )}
                           onClick={() => {
                             applyIssueFocus(it);
@@ -340,7 +331,11 @@ export function SceneNavigation({
                               {it.kind}
                             </div>
                           </div>
-                          {it.detail && <div className="mt-0.5 text-caption2_400 text-foreground-placeholder">{it.detail}</div>}
+                          {it.detail && (
+                            <div className="mt-0.5 text-caption2_400 text-foreground-placeholder">
+                              {it.detail}
+                            </div>
+                          )}
                         </button>
                       </li>
                     ))}
@@ -365,9 +360,11 @@ export function SceneNavigation({
                 "relative mx-auto flex h-9 w-9 items-center justify-center rounded-lg border transition-colors",
                 issues.length > 0
                   ? "border-destructive/40 bg-destructive-container text-destructive hover:bg-destructive-container"
-                  : "border-border bg-background-muted text-foreground-placeholder hover:bg-muted"
+                  : "border-border bg-background-muted text-foreground-placeholder hover:bg-muted",
               )}
-              aria-label={issues.length > 0 ? `오류 및 누락 알림 ${issues.length}건` : "오류 및 누락 없음"}
+              aria-label={
+                issues.length > 0 ? `오류 및 누락 알림 ${issues.length}건` : "오류 및 누락 없음"
+              }
               aria-expanded={collapsedIssueOpen}
               aria-haspopup="dialog"
             >
@@ -389,10 +386,12 @@ export function SceneNavigation({
                 role="dialog"
                 aria-label="오류 및 누락 상세"
               >
-                <div className="rounded-lg border border-border bg-background shadow-elevation-40 overflow-hidden">
-                  <div className="px-3 py-2 border-b border-border bg-background-muted">
+                <div className="overflow-hidden rounded-lg border border-border bg-background shadow-elevation-40">
+                  <div className="border-b border-border bg-background-muted px-3 py-2">
                     <div className="text-caption1_500 text-foreground-muted">오류/누락 목록</div>
-                    <div className="text-caption2_400 text-foreground-placeholder">클릭하면 해당 위치로 이동합니다</div>
+                    <div className="text-caption2_400 text-foreground-placeholder">
+                      클릭하면 해당 위치로 이동합니다
+                    </div>
                   </div>
                   <ul className="max-h-60 overflow-y-auto py-1">
                     {issues.map((it, idx) => (
@@ -400,8 +399,8 @@ export function SceneNavigation({
                         <button
                           type="button"
                           className={cn(
-                            "w-full px-3 py-2 text-left text-caption1_400 hover:bg-muted transition-colors",
-                            it.kind === "error" ? "text-destructive" : "text-destructive"
+                            "w-full px-3 py-2 text-left text-caption1_400 transition-colors hover:bg-muted",
+                            "text-destructive",
                           )}
                           onClick={() => {
                             applyIssueFocus(it);
@@ -415,7 +414,11 @@ export function SceneNavigation({
                               {it.kind}
                             </div>
                           </div>
-                          {it.detail && <div className="mt-0.5 text-caption2_400 text-foreground-placeholder">{it.detail}</div>}
+                          {it.detail && (
+                            <div className="mt-0.5 text-caption2_400 text-foreground-placeholder">
+                              {it.detail}
+                            </div>
+                          )}
                         </button>
                       </li>
                     ))}

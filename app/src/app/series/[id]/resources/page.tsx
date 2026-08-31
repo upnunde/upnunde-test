@@ -1,6 +1,5 @@
 "use client";
 
-import React, { useState } from "react";
 import { StandaloneHeaderPage } from "@/components/layout/StandaloneHeaderPage";
 import { ResourceManagementPage } from "@/components/resource/ResourceManagementPage";
 
@@ -13,13 +12,8 @@ import { ResourceManagementPage } from "@/components/resource/ResourceManagement
  * - 정책 8, 9, 10: BGM 섹션 (리스트, 추가 팝업, 미리듣기/삭제)
  */
 export default function SeriesResourcesPage() {
-  const [profileImageUrl, setProfileImageUrl] = useState<string | null>(null);
-
   return (
-    <StandaloneHeaderPage
-      profileImageUrl={profileImageUrl}
-      onProfileImageChange={setProfileImageUrl}
-    >
+    <StandaloneHeaderPage>
       <ResourceManagementPage />
     </StandaloneHeaderPage>
   );

@@ -13,12 +13,17 @@ export function BankSelectField({
   onChange,
   placeholder = "은행을 선택해 주세요",
   disabled = false,
+  className,
+  ariaLabel,
 }: {
   id: string;
   value: string;
   onChange: (bankName: string) => void;
   placeholder?: string;
   disabled?: boolean;
+  className?: string;
+  /** 라벨을 다른 필드와 공유할 때 — 계좌번호와 한 줄로 묶는 경우 */
+  ariaLabel?: string;
 }) {
   const [open, setOpen] = useState(false);
   const institution = findFinancialInstitutionByName(value);
@@ -31,6 +36,7 @@ export function BankSelectField({
         type="button"
         aria-haspopup="dialog"
         aria-expanded={open}
+        aria-label={ariaLabel}
         disabled={disabled}
         onClick={() => {
           if (disabled) return;
@@ -42,6 +48,7 @@ export function BankSelectField({
             ? "cursor-default"
             : "hover:bg-muted focus-visible:border-ring focus-visible:ring-3 focus-visible:ring-ring/50",
           !hasValue && "text-foreground-placeholder",
+          className,
         )}
       >
         {institution ? <BankLogo institution={institution} size="sm" /> : null}

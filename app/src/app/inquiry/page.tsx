@@ -1,7 +1,9 @@
 "use client";
 
 import React, { useState } from "react";
+import { useRouter } from "next/navigation";
 import { AppShell } from "@/components/layout/AppShell";
+import { HeaderBackButton } from "@/components/ui/header-back-button";
 import { APP_BROWSER_BG_ROOT_CLASS } from "@/lib/mobile-viewport";
 import { PageCard } from "@/components/layout/PageCard";
 import {
@@ -49,16 +51,21 @@ const MOCK_INQUIRY_HISTORY: InquiryHistoryItem[] = [
 ];
 
 export default function InquiryPage() {
+  const router = useRouter();
   const [activeTab, setActiveTab] = useState<InquiryTab>("faq");
   const [snackbar, setSnackbar] = useState({ open: false, message: "" });
   const [inquiryHistory] = useState<InquiryHistoryItem[]>(MOCK_INQUIRY_HISTORY);
 
   return (
-    <AppShell sidebarActiveId="inquiry" browserBgClassName={APP_BROWSER_BG_ROOT_CLASS}>
+    <AppShell sidebarActiveId="profile" browserBgClassName={APP_BROWSER_BG_ROOT_CLASS}>
       <div className={PAGE_DESKTOP_SCROLL_SHELL_CLASS}>
         <div className={PAGE_SUBHEADER_WITH_FILTER_CLASS}>
-          <div className={`${PAGE_CONTAINER_CLASS} flex items-center justify-start gap-4`}>
-            <h1 className="text-heading2_700 text-foreground">문의</h1>
+          <div className={`${PAGE_CONTAINER_CLASS} flex items-center justify-start gap-1`}>
+            <HeaderBackButton
+              onClick={() => router.push("/profile")}
+              aria-label="설정으로 돌아가기"
+            />
+            <h1 className="text-heading2_700 text-foreground">서비스 문의</h1>
           </div>
         </div>
 

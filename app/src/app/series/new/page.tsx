@@ -25,7 +25,6 @@ export default function SeriesNewPage() {
   const addSeries = useSeriesCatalogStore((s) => s.addSeries);
   const updateSeries = useSeriesCatalogStore((s) => s.updateSeries);
   const setSeriesStatus = useSeriesCatalogStore((s) => s.setSeriesStatus);
-  const [profileImageUrl, setProfileImageUrl] = React.useState<string | null>(null);
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [draftId, setDraftId] = useState<string | null>(null);
   const [isDraftSaving, setIsDraftSaving] = useState(false);
@@ -149,8 +148,6 @@ export default function SeriesNewPage() {
   return (
     <>
     <SeriesFormPageScaffold
-      profileImageUrl={profileImageUrl}
-      onProfileImageChange={setProfileImageUrl}
       title="시리즈 만들기"
       activeTab={activeTab}
       onTabChange={setActiveTab}

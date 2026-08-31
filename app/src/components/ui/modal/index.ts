@@ -20,6 +20,7 @@ export {
   MODAL_ACTION_BUTTON_SIZE,
   modalFooterShellClassName,
   modalHeaderClassName,
+  modalBodyClassName,
 } from "./modal-styles";
 export { ModalHeader, type ModalHeaderProps } from "./ModalHeader";
 export {

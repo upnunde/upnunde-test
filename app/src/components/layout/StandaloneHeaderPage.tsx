@@ -13,8 +13,6 @@ import { cn } from "design-system/utils";
 import type { SidebarItemId } from "@/components/AppSidebar/AppSidebar";
 
 export interface StandaloneHeaderPageProps {
-  profileImageUrl: string | null;
-  onProfileImageChange: (value: string | null) => void;
   children: React.ReactNode;
   className?: string;
   /** 모바일 드로어 활성 메뉴 (기본: 경로에서 추론) */
@@ -24,10 +22,9 @@ export interface StandaloneHeaderPageProps {
 /**
  * AppShell 없는 Header+본문 페이지.
  * 모바일: 햄버거 → 전역 사이드바 드로어. lg+: 사이드바 미노출.
+ * 헤더 아바타는 Header 내부 storage 단일 소스.
  */
 export function StandaloneHeaderPage({
-  profileImageUrl,
-  onProfileImageChange,
   children,
   className,
   sidebarDefaultActiveId = "series",
@@ -38,12 +35,7 @@ export function StandaloneHeaderPage({
 
   return (
     <div className={cn(APP_PAGE_ROOT_CLASS, APP_BROWSER_BG_CLASS, className)}>
-      <Header
-        profileImageUrl={profileImageUrl}
-        onProfileImageChange={onProfileImageChange}
-        onMenuClick={() => setSidebarOpen(true)}
-        hideOnMobile
-      />
+      <Header onMenuClick={() => setSidebarOpen(true)} hideOnMobile />
       <div className="lg:hidden">
         <MobileAppSidebarDrawer
           open={sidebarOpen}

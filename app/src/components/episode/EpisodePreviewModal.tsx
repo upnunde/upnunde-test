@@ -103,7 +103,9 @@ export function EpisodePreviewModal({
     <Dialog open={open} onOpenChange={onOpenChange}>
       <DialogContent
         className={cn(
-          "flex w-auto max-w-[min(100vw-2rem,380px)] flex-col items-center gap-0 border-0 bg-transparent p-0 shadow-none",
+          "flex w-auto max-w-[min(100vw-2rem,420px)] flex-col items-center gap-0 overflow-visible",
+          "rounded-none border-0 bg-transparent p-0 shadow-none ring-0",
+          "outline-none focus:outline-none focus-visible:outline-none focus-visible:ring-0",
           "max-lg:max-w-none",
         )}
       >
@@ -112,26 +114,27 @@ export function EpisodePreviewModal({
         </DialogHeader>
 
         <div className="relative flex flex-col items-center gap-3">
-          <IconButton
-            type="button"
-            variant="outline"
-            shape="circle"
-            size="icon-sm"
-            icon={ICONS.close}
-            aria-label="미리보기 닫기"
-            className="absolute -right-1 -top-1 z-dropdown bg-background shadow-elevation-20"
-            onClick={() => onOpenChange(false)}
-          />
-          <IPhone15ProFrame>
-            <PreviewScreen
-              blocks={blocks}
-              focusedBlockId={focusedBlockId}
-              interactive
-              progressLabel={progressLabel}
-              onTapAdvance={handleAdvance}
-              onChoiceSelect={handleChoiceSelect}
+          <div className="relative">
+            <IconButton
+              type="button"
+              variant="outline"
+              shape="circle"
+              size="icon-sm"
+              icon={ICONS.close}
+              aria-label="미리보기 닫기"
+              className="absolute left-full top-0 z-dropdown ml-3 bg-background shadow-elevation-20"
+              onClick={() => onOpenChange(false)}
             />
-          </IPhone15ProFrame>
+            <IPhone15ProFrame>
+              <PreviewScreen
+                blocks={blocks}
+                focusedBlockId={focusedBlockId}
+                interactive
+                onTapAdvance={handleAdvance}
+                onChoiceSelect={handleChoiceSelect}
+              />
+            </IPhone15ProFrame>
+          </div>
 
           <div className="flex items-center justify-center gap-3">
             <IconButton

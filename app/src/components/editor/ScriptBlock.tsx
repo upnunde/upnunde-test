@@ -48,6 +48,21 @@ import {
 } from "@/lib/editor-control-visibility";
 import { useIsLgUp } from "@/hooks/useMediaQuery";
 import { useMobileBlockTextEdit } from "@/hooks/useMobileBlockTextEdit";
+
+/** Enter 분할이 한 키 입력에 두 번 도는 것 방지 (리마운트·IME 재keydown 포함) */
+let lastTextEnterSplitAt = 0;
+const TEXT_ENTER_SPLIT_COOLDOWN_MS = 250;
+
+function isImeComposingKey(e: React.KeyboardEvent): boolean {
+  return Boolean(e.nativeEvent.isComposing || e.keyCode === 229);
+}
+
+function beginTextEnterSplit(): boolean {
+  const now = Date.now();
+  if (now - lastTextEnterSplitAt < TEXT_ENTER_SPLIT_COOLDOWN_MS) return false;
+  lastTextEnterSplitAt = now;
+  return true;
+}
 import { cn } from "design-system/utils";
 import {
   SPEAKER_PERSONA_TOKEN,
@@ -187,7 +202,6 @@ export function ScriptBlock({
   const textareaRef = useRef<HTMLTextAreaElement | null>(null);
   const sceneInputRef = useRef<HTMLTextAreaElement | HTMLInputElement | null>(null);
   const pendingSelectionRef = useRef<number | null>(null);
-  const enterSplitLockRef = useRef(false);
   const toolbarRef = useRef<HTMLDivElement | null>(null);
   const dropdownRef = useRef<HTMLDivElement | null>(null);
   const [selection, setSelection] = useState<{
@@ -363,20 +377,16 @@ export function ScriptBlock({
         if (!isDesktop) {
           return;
         }
-        if (enterSplitLockRef.current) {
-          e.preventDefault();
+        // IME 조합 확정 Enter는 무시 — 조합 종료 후 실제 Enter만 분할
+        if (isImeComposingKey(e)) {
           return;
         }
-        enterSplitLockRef.current = true;
         e.preventDefault();
+        e.stopPropagation();
+        if (!beginTextEnterSplit()) {
+          return;
+        }
         insertTextBlockAfterCursor();
-        // Unlock on the same timing window as focusBlock's double-rAF focus move.
-        // This prevents a quick "/" right after Enter from being handled by the previous block.
-        requestAnimationFrame(() => {
-          requestAnimationFrame(() => {
-            enterSplitLockRef.current = false;
-          });
-        });
         return;
       }
 
@@ -557,8 +567,14 @@ export function ScriptBlock({
 
       // Enter = 새 텍스트 블록 추가 후 이동 (장면·장면정보는 인풋 내 줄바꿈 없음)
       if (e.key === "Enter") {
+        if (isImeComposingKey(e)) {
+          return;
+        }
         e.preventDefault();
         e.stopPropagation();
+        if (!beginTextEnterSplit()) {
+          return;
+        }
         updateBlock(block.id, field.value);
         const newId = addBlock(index, "text", "");
         focusBlock(newId);

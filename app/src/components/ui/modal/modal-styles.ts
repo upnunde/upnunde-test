@@ -26,13 +26,18 @@ export const MOBILE_MODAL_RADIUS_CLASS = "max-lg:rounded-xl";
 /** 데스크톱 모달 컨테이너 — radius-4 */
 export const DESKTOP_MODAL_RADIUS_CLASS = "lg:rounded-sm";
 
-/** 확인·삭제 alert — max 420px, 뷰포트 좌우 40px(my-40) inset */
+/** 확인·삭제 alert — max 420px (DS `sm:max-w-(--dialog-max-width)` 440 상쇄 포함) */
 export const CONFIRM_DIALOG_WIDTH_CLASS =
-  "w-full max-w-[min(420px,calc(100vw-var(--space-10)*2))]";
+  "w-full max-w-[min(420px,calc(100vw-var(--space-10)*2))] sm:max-w-[min(420px,calc(100vw-var(--space-10)*2))]";
 
-/** 가이드 modal 셸 — Header/Footer 분리 프레임 */
+/**
+ * 가이드 modal 셸 — Header/Footer 분리 프레임.
+ * DS DialogContent 기본(`grid gap-4 px-5 pt-8 pb-5 ring-1 rounded-xl sm:max-w-440`)을
+ * 호출부 className에서 완전히 상쇄해야 한다.
+ */
 export const modalDialogContentClassName = cn(
-  "flex flex-col items-stretch gap-0 overflow-hidden border-0 bg-background p-0 shadow-elevation-50",
+  "flex flex-col items-stretch gap-0 overflow-hidden border-0 bg-background p-0 shadow-elevation-50 ring-0",
+  "rounded-none",
   CONFIRM_DIALOG_WIDTH_CLASS,
   MOBILE_MODAL_RADIUS_CLASS,
   DESKTOP_MODAL_RADIUS_CLASS,
@@ -115,12 +120,26 @@ export const formDialogSheetStickyFooterClassName = cn(
   "max-lg:pb-[calc(var(--space-4)+env(safe-area-inset-bottom,0px))]",
 );
 
+/**
+ * 가이드 modal 헤더 — **p-0 커스텀 셸** 전제(폼·시트).
+ * DS 확인 Dialog(`px-5 pt-8`)에서는 쓰지 말고 `DialogHeader`/`ModalHeader`만 사용.
+ */
 export const modalHeaderClassName = cn(
-  "flex min-h-40 w-full flex-col items-center self-stretch overflow-hidden bg-background",
-  "gap-3",
-  "max-lg:px-5 lg:px-6",
-  space.overlay.modalHeaderPaddingY.className,
+  "flex w-full flex-col items-center self-stretch overflow-hidden bg-background text-center",
+  "gap-2",
+  space.overlay.modalPaddingX.className,
+  "pt-8 pb-4",
   "max-lg:rounded-t-xl lg:rounded-tl-sm lg:rounded-tr-sm",
+);
+
+/**
+ * 가이드 modal 본문 — **p-0 커스텀 셸** 전제.
+ * DS 확인 Dialog에서는 Content 패딩을 그대로 쓰고 추가 좌우 패딩을 넣지 않는다.
+ */
+export const modalBodyClassName = cn(
+  "w-full self-stretch",
+  space.overlay.modalPaddingX.className,
+  "pb-4",
 );
 
 export const modalFooterShellClassName = cn(
@@ -132,7 +151,7 @@ export const modalFooterShellClassName = cn(
 export const modalFooterButtonRowClassName = cn(
   "flex w-full flex-col items-stretch self-stretch bg-background",
   "gap-3",
-  "max-lg:px-5 lg:px-6",
+  space.overlay.modalPaddingX.className,
   space.overlay.modalFooterPaddingY.className,
   "lg:inline-flex lg:h-16 lg:min-h-16 lg:flex-row lg:items-center",
 );

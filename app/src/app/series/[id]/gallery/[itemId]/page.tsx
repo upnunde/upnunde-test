@@ -7,7 +7,6 @@ import { ImageResourceDetailPage } from "@/components/resource/ImageResourceDeta
 import { getGalleryById } from "@/lib/resourceMockData";
 
 export default function SeriesGalleryEditPage() {
-  const [profileImageUrl, setProfileImageUrl] = useState<string | null>(null);
   const pathname = usePathname();
   const router = useRouter();
   const { seriesId, itemId } = useMemo(() => {
@@ -31,10 +30,7 @@ export default function SeriesGalleryEditPage() {
   }
 
   return (
-    <StandaloneHeaderPage
-      profileImageUrl={profileImageUrl}
-      onProfileImageChange={setProfileImageUrl}
-    >
+    <StandaloneHeaderPage>
           <ImageResourceDetailPage kind="gallery" initialData={initialData ?? undefined} />
     </StandaloneHeaderPage>
   );

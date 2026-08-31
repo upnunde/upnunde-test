@@ -3,11 +3,11 @@
 import { useRef, useState } from "react";
 import { ICONS } from "@/lib/icons";
 import { HeaderNotificationMenu } from "@/components/Header/HeaderNotificationMenu";
-import { ThemeToggleButton } from "@/components/ThemeToggleButton";
 import { ProfileEditModal } from "@/components/ProfileEditModal";
 import { IconButton } from "@/components/ui/icon-button";
 import { Button } from "design-system/ui/button";
 import { Avatar, AvatarFallback, AvatarImage } from "design-system/ui/avatar";
+import { useProfileAvatarUrl } from "@/hooks/useProfileAvatarUrl";
 import { useRouter } from "next/navigation";
 import { APP_HEADER_EDGE_X_CLASS, APP_HEADER_START_INSET_CLASS, APP_HEADER_STICKY_CLASS } from "@/lib/mobile-viewport";
 import { RenovelStudioLogo } from "@/components/brand/RenovelStudioLogo";
@@ -17,10 +17,6 @@ import { cn } from "design-system/utils";
 export interface HeaderProps {
   /** Reserved for future use */
   contextLabel?: string;
-  /** 헤더에 표시할 프로필 이미지 URL (저장 시 반영) */
-  profileImageUrl?: string | null;
-  /** 프로필 편집 모달에서 저장 시 호출 */
-  onProfileImageChange?: (avatarUrl: string | null) => void;
   /** 모바일 메뉴 열기 (미전달 시 햄버거 버튼 숨김) */
   onMenuClick?: () => void;
   /** 뒤로가기 서브헤더가 있는 페이지 — 모바일/태블릿(max-lg)에서 전역 헤더 숨김 (헤더 중복 방지) */
@@ -28,9 +24,10 @@ export interface HeaderProps {
   className?: string;
 }
 
-/** Global top header: Logo + profile Avatar. Full width. */
-export default function Header({ profileImageUrl, onProfileImageChange, onMenuClick, hideOnMobile, className }: HeaderProps) {
+/** Global top header: Logo + profile Avatar. Full width. 아바타는 storage 단일 소스. */
+export default function Header({ onMenuClick, hideOnMobile, className }: HeaderProps) {
   const router = useRouter();
+  const [profileImageUrl, setProfileImageUrl] = useProfileAvatarUrl();
   const [isProfileModalOpen, setIsProfileModalOpen] = useState(false);
   const profileButtonRef = useRef<HTMLButtonElement>(null);
 
@@ -69,7 +66,6 @@ export default function Header({ profileImageUrl, onProfileImageChange, onMenuCl
       <div className="flex items-center gap-2">
         <div className="flex items-center gap-0">
           <HeaderNotificationMenu />
-          <ThemeToggleButton />
         </div>
         <Button
           ref={profileButtonRef}
@@ -92,7 +88,7 @@ export default function Header({ profileImageUrl, onProfileImageChange, onMenuCl
         onClose={() => setIsProfileModalOpen(false)}
         anchorRef={profileButtonRef}
         onSave={(avatarUrl) => {
-          onProfileImageChange?.(avatarUrl);
+          setProfileImageUrl(avatarUrl);
           setIsProfileModalOpen(false);
         }}
       />

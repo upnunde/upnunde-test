@@ -6,15 +6,16 @@ import { ICONS } from "@/lib/icons";
 import { IconButton } from "@/components/ui/icon-button";
 import { Button } from "design-system/ui/button";
 import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover";
-import { cn } from "design-system/utils";
 import {
   isTodayNotificationDate,
   markNotificationAsRead,
   useUnreadNotifications,
 } from "@/lib/notification-store";
+import { Badge } from "design-system/ui/badge";
+import { cn } from "design-system/utils";
 import {
+  notificationCategoryBadgeClass,
   notificationCategoryLabel,
-  notificationCategoryToneClass,
   type NotificationData,
 } from "@/types/notification";
 
@@ -31,14 +32,14 @@ function HeaderNotificationRow({
       onClick={() => onSelect(notification)}
       className="flex w-full cursor-pointer items-start gap-3 px-5 py-3 text-left transition-colors hover:bg-muted focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-inset"
     >
-      <div
-        className={cn(
-          "mt-0.5 flex w-[58px] shrink-0 items-center justify-center rounded px-2 py-1 text-center text-caption1_500",
-          notificationCategoryToneClass(notification.category),
-        )}
+      <Badge
+        variant="secondary"
+        size="md"
+        shape="square"
+        className={cn("mt-0.5 w-[58px]", notificationCategoryBadgeClass(notification.category))}
       >
         {notificationCategoryLabel(notification.category)}
-      </div>
+      </Badge>
       <div className="min-w-0 flex-1">
         <div className="line-clamp-2 text-body3_500 text-foreground">{notification.title}</div>
         <div className="mt-1 text-caption1_400 text-foreground-placeholder">{notification.date}</div>

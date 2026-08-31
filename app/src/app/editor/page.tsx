@@ -148,7 +148,6 @@ function EditorInner() {
   const searchParams = useSearchParams();
   const handleSceneClick = useSceneClickHandler();
   const isDesktop = useIsLgUp();
-  const [profileImageUrl, setProfileImageUrl] = useState<string | null>(null);
   const [isSceneSidebarCollapsed, setIsSceneSidebarCollapsed] = useState(false);
   const [mobilePanel, setMobilePanel] = useState<EditorMobilePanel>("edit");
   const [isEpisodeInfoModalOpen, setIsEpisodeInfoModalOpen] = useState(false);
@@ -242,7 +241,7 @@ function EditorInner() {
       )}
     >
       <div className={cn(previewChromeHidden)}>
-        <Header profileImageUrl={profileImageUrl} onProfileImageChange={setProfileImageUrl} hideOnMobile />
+        <Header hideOnMobile />
       </div>
 
       <div
@@ -308,7 +307,6 @@ function EditorInner() {
               />
               <EditorAutoGeneratorFloatingButton
                 placement="below-tabs"
-                compact={mobileSubHeaderHide.isFullyHidden}
                 onClick={() => setIsAutoGeneratorModalOpen(true)}
               />
             </div>

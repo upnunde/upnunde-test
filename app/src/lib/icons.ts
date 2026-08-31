@@ -7,7 +7,16 @@ import {
   ICONS as DS_ICONS,
   type LucideIcon,
 } from "design-system/icons";
-import { Camera, createLucideIcon } from "lucide-react";
+import {
+  ArrowLeft,
+  BookText,
+  Camera,
+  Clock,
+  LogOut,
+  Settings,
+  SunMoon,
+  createLucideIcon,
+} from "lucide-react";
 
 const PencilSparkles = createLucideIcon("pencil-sparkles", [
   ["path", { d: "M10 3H8", key: "mzdi2d" }],
@@ -36,9 +45,17 @@ const CircleWon = createLucideIcon("circle-won", [
 
 export const ICONS = {
   ...DS_ICONS,
+  arrowLeft: ArrowLeft,
+  bookText: BookText,
   camera: Camera,
+  clock: Clock,
   circleWon: CircleWon,
+  logOut: LogOut,
   pencilSparkles: PencilSparkles,
+  /** 톱니바퀴 — DS는 `settings2`(슬라이더형)만 제공해 보강 */
+  settings: Settings,
+  /** 태양·달 반반 — 라이트/다크 공통 표기 */
+  sunMoon: SunMoon,
 } as const;
 
 export type IconKey = keyof typeof ICONS;

@@ -485,10 +485,10 @@ export function EditorSubHeader({
         type="button"
         variant="ghost"
         shape="circle"
-        size="icon"
-        icon={ICONS.pencil}
+        size="icon-xl"
+        icon={ICONS.bookText}
         aria-label="회차 정보 수정"
-        className="shrink-0 text-foreground-placeholder"
+        className="shrink-0"
         onClick={onEditEpisodeInfo}
       />
     ) : null;
@@ -517,10 +517,10 @@ export function EditorSubHeader({
                 type="button"
                 variant="ghost"
                 shape="circle"
-                size="icon"
+                size="icon-xl"
                 icon={ICONS.moreVertical}
                 aria-label="더보기"
-                className="relative shrink-0 shadow-none"
+                className="relative shrink-0"
               >
                 {newHistoryEntryId ? (
                   <HistoryNewDot className="top-0 right-0" />
@@ -574,6 +574,9 @@ export function EditorSubHeader({
               <PopoverTrigger asChild>
                 <IconButton
                   type="button"
+                  variant="ghost"
+                  shape="circle"
+                  size="icon-xl"
                   icon={ICONS.history}
                   aria-label="히스토리"
                   disabled={!isHistoryEnabled}

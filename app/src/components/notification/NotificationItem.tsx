@@ -7,9 +7,10 @@ import { Button } from "design-system/ui/button";
 import { cn } from "design-system/utils";
 import Image from "next/image";
 import { ICONS } from "@/lib/icons";
+import { Badge } from "design-system/ui/badge";
 import {
+  notificationCategoryBadgeClass,
   notificationCategoryLabel,
-  notificationCategoryToneClass,
   type NotificationData,
 } from "@/types/notification";
 
@@ -60,16 +61,14 @@ export function NotificationItem({
         aria-controls={`notification-content-${id}`}
         id={`notification-trigger-${id}`}
       >
-        <div
-          className={cn(
-            "flex h-8 w-[72px] shrink-0 items-center justify-center gap-2 rounded p-2",
-            notificationCategoryToneClass(category),
-          )}
+        <Badge
+          variant="secondary"
+          size="lg"
+          shape="square"
+          className={cn("w-[72px]", notificationCategoryBadgeClass(category))}
         >
-          <div className="justify-start text-body3_500 font-['Pretendard_JP']">
-            {notificationCategoryLabel(category)}
-          </div>
-        </div>
+          {notificationCategoryLabel(category)}
+        </Badge>
         <div className="min-w-0 flex-1 flex flex-col justify-center items-start gap-1">
           <div className="w-full min-w-0 text-left text-body1_700 text-foreground lg:text-body2_500">
             {title}

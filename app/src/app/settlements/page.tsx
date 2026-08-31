@@ -839,9 +839,9 @@ export default function MonetizationSettlementsPage() {
           <ModalHeader title="반려 사유" />
           {rejectionReasonTarget ? (
             <>
-              <div className="px-6 pb-4">
+              <div className="space-y-2">
                 <p className="text-body3_400 text-foreground-muted">{rejectionReasonTarget.rejectionReason}</p>
-                <p className="mt-2 text-caption1_400 text-foreground-placeholder">
+                <p className="text-caption1_400 text-foreground-placeholder">
                   신청일 {rejectionReasonTarget.requestedAt} · 상태 {getSettlementStatusLabel(rejectionReasonTarget.status)}
                 </p>
               </div>
@@ -860,29 +860,27 @@ export default function MonetizationSettlementsPage() {
         </DialogContent>
       </Dialog>
       <Dialog open={datePickerOpen} onOpenChange={setDatePickerOpen}>
-        <DialogContent className="w-full max-lg:max-w-none lg:w-[420px] lg:max-w-[calc(100vw-2rem)] max-lg:rounded-t-xl max-lg:rounded-b-none lg:rounded-sm">
+        <DialogContent>
           <ModalHeader
             title="기간 선택"
             subtitle="조회할 신청일 기간을 설정해 주세요."
           />
-          <div className="px-6 pb-4">
-            <div className="flex items-center gap-2">
-              <Input
-                type="date"
-                size="sm"
-                value={pendingStartDate}
-                onChange={(e) => setPendingStartDate(e.target.value)}
-                className="flex-1"
-              />
-              <span className="text-body3_400 text-foreground-placeholder">~</span>
-              <Input
-                type="date"
-                size="sm"
-                value={pendingEndDate}
-                onChange={(e) => setPendingEndDate(e.target.value)}
-                className="flex-1"
-              />
-            </div>
+          <div className="flex items-center gap-2">
+            <Input
+              type="date"
+              size="sm"
+              value={pendingStartDate}
+              onChange={(e) => setPendingStartDate(e.target.value)}
+              className="flex-1"
+            />
+            <span className="text-body3_400 text-foreground-placeholder">~</span>
+            <Input
+              type="date"
+              size="sm"
+              value={pendingEndDate}
+              onChange={(e) => setPendingEndDate(e.target.value)}
+              className="flex-1"
+            />
           </div>
           <ModalFooterButtons
             layout="end"

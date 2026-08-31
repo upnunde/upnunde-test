@@ -49,8 +49,6 @@ export interface SeriesFormAiComposerConfig {
 }
 
 interface SeriesFormPageScaffoldProps {
-  profileImageUrl: string | null;
-  onProfileImageChange: (value: string | null) => void;
   title: string;
   activeTab: SeriesFormTab;
   onTabChange: (tab: SeriesFormTab) => void;
@@ -73,8 +71,6 @@ interface SeriesFormPageScaffoldProps {
 }
 
 export function SeriesFormPageScaffold({
-  profileImageUrl,
-  onProfileImageChange,
   title,
   activeTab,
   onTabChange,
@@ -114,12 +110,7 @@ export function SeriesFormPageScaffold({
     <SeriesFormMobileChromeProvider enabled={showMobileSubmitBar}>
       <div className={cn(APP_PAGE_ROOT_CLASS, APP_BROWSER_BG_CLASS)}>
         <div className={cn(previewChromeHidden)}>
-          <Header
-            profileImageUrl={profileImageUrl}
-            onProfileImageChange={onProfileImageChange}
-            onMenuClick={() => setSidebarOpen(true)}
-            hideOnMobile
-          />
+          <Header onMenuClick={() => setSidebarOpen(true)} hideOnMobile />
         </div>
         <div className={cn("lg:hidden", previewChromeHidden)}>
           <MobileAppSidebarDrawer

@@ -6,6 +6,7 @@ import {
   DialogHeader,
   DialogTitle,
 } from "@/components/ui/dialog";
+import { cn } from "design-system/utils";
 
 export interface ModalHeaderProps {
   title: string;
@@ -14,10 +15,10 @@ export interface ModalHeaderProps {
   className?: string;
 }
 
-/** 확인 모달 헤더 — DS DialogHeader 정본(중앙 정렬) */
+/** 확인 모달 헤더 — DS DialogHeader 정본(패딩은 DialogContent가 담당) */
 export function ModalHeader({ title, subtitle, icon, className }: ModalHeaderProps) {
   return (
-    <DialogHeader className={className}>
+    <DialogHeader className={cn(className)}>
       {icon ? icon : null}
       <DialogTitle>{title}</DialogTitle>
       {subtitle ? <DialogDescription>{subtitle}</DialogDescription> : null}

@@ -7,7 +7,6 @@ import { MediaResourceDetailPage } from "@/components/resource/MediaResourceDeta
 import { getMediaById } from "@/lib/resourceMockData";
 
 export default function SeriesMediaEditPage() {
-  const [profileImageUrl, setProfileImageUrl] = useState<string | null>(null);
   const pathname = usePathname();
   const router = useRouter();
   const { seriesId, itemId } = useMemo(() => {
@@ -31,10 +30,7 @@ export default function SeriesMediaEditPage() {
   }
 
   return (
-    <StandaloneHeaderPage
-      profileImageUrl={profileImageUrl}
-      onProfileImageChange={setProfileImageUrl}
-    >
+    <StandaloneHeaderPage>
           <MediaResourceDetailPage initialData={initialData ?? undefined} />
     </StandaloneHeaderPage>
   );

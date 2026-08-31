@@ -1,22 +1,15 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import Image from "next/image";
 import { ProfileEditModal } from "@/components/ProfileEditModal";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { dummyAsset } from "@/lib/dummy-asset-path";
-import { loadProfileSettings, PROFILE_UPDATED_EVENT } from "@/lib/profile-storage";
+import { useProfileAvatarUrl } from "@/hooks/useProfileAvatarUrl";
 
 export function AppHeader() {
   const [profileDrawerOpen, setProfileDrawerOpen] = useState(false);
-  const [avatarUrl, setAvatarUrl] = useState<string | null>(null);
-
-  useEffect(() => {
-    const sync = () => setAvatarUrl(loadProfileSettings().public.avatarUrl);
-    sync();
-    window.addEventListener(PROFILE_UPDATED_EVENT, sync);
-    return () => window.removeEventListener(PROFILE_UPDATED_EVENT, sync);
-  }, []);
+  const [avatarUrl, setAvatarUrl] = useProfileAvatarUrl();
 
   return (
     <header className="sticky top-0 z-sticky flex flex-col bg-background w-full shrink-0">
@@ -55,6 +48,10 @@ export function AppHeader() {
       <ProfileEditModal
         isOpen={profileDrawerOpen}
         onClose={() => setProfileDrawerOpen(false)}
+        onSave={(next) => {
+          setAvatarUrl(next);
+          setProfileDrawerOpen(false);
+        }}
       />
     </header>
   );

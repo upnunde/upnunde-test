@@ -115,7 +115,6 @@ export default function EpisodeDetailPage() {
     return episodeNo ? `${episodeNo}화 ${episodeTitle}` : "에피소드 상세";
   }, [searchParams]);
   const setBlocks = useEditorStore((s) => s.setBlocks);
-  const [profileImageUrl, setProfileImageUrl] = useState<string | null>(null);
   const [isSceneSidebarCollapsed, setIsSceneSidebarCollapsed] = useState(false);
   const [isPromptModalOpen, setIsPromptModalOpen] = useState(false);
   const [mobilePanel, setMobilePanel] = useState<EditorMobilePanel>("edit");
@@ -161,7 +160,7 @@ export default function EpisodeDetailPage() {
       )}
     >
       <div className={cn(previewChromeHidden)}>
-        <Header profileImageUrl={profileImageUrl} onProfileImageChange={setProfileImageUrl} hideOnMobile />
+        <Header hideOnMobile />
       </div>
       <div
         className={cn(

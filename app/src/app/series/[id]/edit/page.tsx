@@ -56,8 +56,6 @@ export default function SeriesEditPage() {
     () => (record ? seriesRecordToFormSnapshot(record) : null),
     [record],
   );
-
-  const [profileImageUrl, setProfileImageUrl] = React.useState<string | null>(null);
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [isDraftSaving, setIsDraftSaving] = useState(false);
   const [snackbar, setSnackbar] = useState({ open: false, message: "" });
@@ -177,8 +175,6 @@ export default function SeriesEditPage() {
   return (
     <>
     <SeriesFormPageScaffold
-      profileImageUrl={profileImageUrl}
-      onProfileImageChange={setProfileImageUrl}
       title="시리즈 관리"
       activeTab={activeTab}
       onTabChange={setActiveTab}

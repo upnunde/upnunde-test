@@ -4,7 +4,6 @@ import { useState } from "react";
 import Header from "@/components/Header/Header";
 import { deriveSidebarActiveId, type SidebarItemId } from "@/components/AppSidebar/AppSidebar";
 import { MobileAppSidebarDrawer } from "@/components/layout/MobileAppSidebarDrawer";
-import { useProfileAvatarUrl } from "@/hooks/useProfileAvatarUrl";
 import { APP_BROWSER_BG_CLASS, APP_PAGE_ROOT_CLASS } from "@/lib/mobile-viewport";
 import { APP_MAIN_LAYOUT_CLASS, APP_MAIN_PANEL_CLASS, APP_SHELL_BODY_ROW_CLASS } from "@/lib/page-layout";
 import { cn } from "design-system/utils";
@@ -26,17 +25,12 @@ export function AppShell({
   browserBgClassName = APP_BROWSER_BG_CLASS,
 }: AppShellProps) {
   const pathname = usePathname();
-  const [profileImageUrl, setProfileImageUrl] = useProfileAvatarUrl();
   const [sidebarOpen, setSidebarOpen] = useState(false);
   const resolvedSidebarActiveId = deriveSidebarActiveId(pathname, sidebarActiveId);
 
   return (
     <div className={cn(APP_PAGE_ROOT_CLASS, browserBgClassName, className)}>
-      <Header
-        profileImageUrl={profileImageUrl}
-        onProfileImageChange={setProfileImageUrl}
-        onMenuClick={() => setSidebarOpen(true)}
-      />
+      <Header onMenuClick={() => setSidebarOpen(true)} />
       <div className={cn(APP_SHELL_BODY_ROW_CLASS, browserBgClassName)}>
         <MobileAppSidebarDrawer
           open={sidebarOpen}

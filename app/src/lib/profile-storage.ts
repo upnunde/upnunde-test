@@ -19,6 +19,9 @@ export function resolveProfileAvatarUrl(url: string | null | undefined): string 
   return url;
 }
 
+/** 팔로워 수는 서버 집계값 — 목업 단계라 고정값을 쓴다. */
+export const MOCK_CREATOR_FOLLOWER_COUNT = 12480;
+
 export const DEFAULT_SETTLEMENT_PROFILE: SettlementProfile = {
   bankName: "라인은행",
   accountNumber: "1231234567890",

@@ -7,7 +7,6 @@ import { ImageResourceDetailPage } from "@/components/resource/ImageResourceDeta
 import { getSceneById } from "@/lib/resourceMockData";
 
 export default function SeriesSceneEditPage() {
-  const [profileImageUrl, setProfileImageUrl] = useState<string | null>(null);
   const pathname = usePathname();
   const router = useRouter();
   const { seriesId, itemId } = useMemo(() => {
@@ -31,10 +30,7 @@ export default function SeriesSceneEditPage() {
   }
 
   return (
-    <StandaloneHeaderPage
-      profileImageUrl={profileImageUrl}
-      onProfileImageChange={setProfileImageUrl}
-    >
+    <StandaloneHeaderPage>
           <ImageResourceDetailPage kind="scene" initialData={initialData ?? undefined} />
     </StandaloneHeaderPage>
   );

@@ -61,8 +61,6 @@ export default function EpisodeManagementPage() {
     setEpisodes(getSeedEpisodesForSeries(seriesId));
     setCurrentPage(1);
   }, [seriesId]);
-
-  const [profileImageUrl, setProfileImageUrl] = useState<string | null>(null);
   const [episodes, setEpisodes] = useState<Episode[]>(() => getSeedEpisodesForSeries(seriesId));
   const [sortOptions] = useState<SortOptions>(DEFAULT_SORT);
   const [currentPage, setCurrentPage] = useState(1);
@@ -269,10 +267,7 @@ export default function EpisodeManagementPage() {
   );
 
   return (
-    <StandaloneHeaderPage
-      profileImageUrl={profileImageUrl}
-      onProfileImageChange={setProfileImageUrl}
-    >
+    <StandaloneHeaderPage>
       <header className={cn(PAGE_SUBHEADER_WITH_STICKY_CLASS, "max-lg:px-3")}>
               <div className="flex w-full min-w-0 max-w-[1200px] items-center justify-between gap-3">
                 <div className="flex min-w-0 items-center justify-start gap-3">

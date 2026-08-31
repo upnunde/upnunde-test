@@ -7,7 +7,7 @@ import { Tabs, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { cn } from "design-system/utils";
 import { useNewNotificationIdSet } from "@/lib/notification-store";
 
-export type NotificationTab = "all" | "NOTICE" | "WORK_ALERT" | "EVENT";
+export type NotificationTab = "all" | "NOTICE" | "UPDATE" | "WORK_ALERT" | "EVENT";
 
 export interface NotificationTabStripProps {
   activeTab: NotificationTab;
@@ -18,6 +18,7 @@ export interface NotificationTabStripProps {
 const TAB_ITEMS = [
   { id: "all" as const, label: "전체" },
   { id: "NOTICE" as const, label: "공지" },
+  { id: "UPDATE" as const, label: "업데이트" },
   { id: "WORK_ALERT" as const, label: "작품알림" },
   { id: "EVENT" as const, label: "이벤트" },
 ] as const;

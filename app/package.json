@@ -8,6 +8,8 @@
     "dev:webpack": "next dev --webpack --port 3002",
     "dev:turbo": "next dev --turbopack --port 3002",
     "setup:dev-host": "sh scripts/setup-dev-host.sh",
+    "postinstall": "node scripts/verify-design-system-install.mjs",
+    "predev": "node scripts/verify-design-system-install.mjs",
     "prebuild": "node scripts/verify-design-system-install.mjs",
     "build": "next build --webpack",
     "start": "next start",
@@ -17,6 +19,7 @@
     "migrate:ds-icons": "node scripts/migrate-ds-icons.mjs",
     "migrate:tokens": "node scripts/migrate-design-tokens.mjs",
     "sync:ds": "node scripts/sync-design-system-version.mjs",
+    "export:figma-prototype": "bun scripts/export-figma-prototype-images.mjs",
     "clean": "rm -rf .next"
   },
   "dependencies": {
@@ -29,7 +32,7 @@
     "@visactor/vchart": "^2.0.22",
     "class-variance-authority": "^0.7.1",
     "clsx": "^2.1.1",
-    "design-system": "github:upnunde/Renovel-Studio-DS#v0.1.51",
+    "design-system": "github:upnunde/Renovel-Studio-DS#v0.1.54",
     "lucide-react": "^0.563.0",
     "next": "16.1.6",
     "radix-ui": "^1.4.3",

@@ -10,7 +10,6 @@ import type { CharacterResource } from "@/types/resource";
 
 /** 내 작품 — 캐릭터 설정 (`/series/character/[id]`) */
 export default function WorksCharacterEditPage() {
-  const [profileImageUrl, setProfileImageUrl] = useState<string | null>(null);
   const [initialData, setInitialData] = useState<CharacterResource | undefined>();
   const [resolved, setResolved] = useState(false);
   const router = useRouter();
@@ -36,10 +35,7 @@ export default function WorksCharacterEditPage() {
   }
 
   return (
-    <StandaloneHeaderPage
-      profileImageUrl={profileImageUrl}
-      onProfileImageChange={setProfileImageUrl}
-    >
+    <StandaloneHeaderPage>
       <CharacterDetailPage
         isNew={false}
         context="my-works"
