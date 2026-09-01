@@ -19,7 +19,7 @@ export function WorkDetailPrototype() {
     <article
       className={cn(
         "mx-auto w-full max-w-[420px] overflow-hidden bg-background text-foreground",
-        "shadow-sm ring-1 ring-border lg:rounded-lg",
+        "shadow-elevation-10 ring-1 ring-border lg:rounded-lg",
       )}
     >
       {/* Hero — Figma 420×360 */}
@@ -30,17 +30,15 @@ export function WorkDetailPrototype() {
           sizes="420px"
           priority
           className="absolute inset-0"
-          fallbackClassName="from-stone-500 via-stone-700 to-stone-900"
         />
-        <div className="absolute inset-0 bg-black/60" aria-hidden />
+        <div className="absolute inset-0 bg-dim-20" aria-hidden />
         <div className="absolute inset-0 flex items-center justify-center p-5">
           <PrototypeImage
             src={WORK_DETAIL_IMAGES.cover}
             alt="건방진 스파이 후배 구하기 표지"
             sizes="202px"
             priority
-            className="aspect-[202/269] w-[48%] max-w-[202px] rounded-md shadow-md"
-            fallbackClassName="from-stone-200 to-stone-700"
+            className="aspect-[202/269] w-[48%] max-w-[202px] rounded-md shadow-elevation-20"
           />
         </div>
       </section>

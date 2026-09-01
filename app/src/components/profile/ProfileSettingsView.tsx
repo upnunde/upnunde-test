@@ -97,7 +97,7 @@ export function ProfileSettingsView({
                     onAvatarChange={setAvatarUrl}
                     onSaved={() => handleSaved("프로필을 저장했습니다")}
                   >
-                    <div className="border-t border-divider max-lg:mx-5" role="separator" />
+                    <div className="border-t border-divider" role="separator" />
                     <ProfileAccountTab />
                   </ProfilePublicTab>
                 </div>

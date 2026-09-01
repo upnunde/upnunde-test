@@ -1,6 +1,8 @@
 "use client";
 
 import { Tabs, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import { useFilterTabStripSize } from "@/hooks/useFilterTabStripSize";
+import { FILTER_TAB_STRIP_SHELL_CLASS } from "@/lib/chip-styles";
 import { cn } from "design-system/utils";
 
 export type InquiryTab = "faq" | "inquiry" | "history";
@@ -17,17 +19,19 @@ const TAB_ITEMS = [
   { id: "inquiry" as const, label: "문의하기" },
 ] as const;
 
-/** 문의 페이지 필터 띠 탭 — 분석·내 작품과 동일 (`text` · `2xl`) */
+/** 문의 페이지 필터 띠 탭 — 분석·내 작품과 동일 (`text` · 모바일 `xl` · lg+ `2xl`) */
 export function InquiryTabStrip({ activeTab, onTabChange, className }: InquiryTabStripProps) {
+  const size = useFilterTabStripSize();
+
   return (
     <Tabs
       value={activeTab}
       onValueChange={(v) => onTabChange(v as InquiryTab)}
-      className={cn("max-w-full min-w-0 min-h-12", className)}
+      className={cn(FILTER_TAB_STRIP_SHELL_CLASS, className)}
     >
       <TabsList
         variant="text"
-        size="2xl"
+        size={size}
         aria-label="문의 탭"
         className="max-w-full min-w-0 overflow-x-auto"
       >

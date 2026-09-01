@@ -11,7 +11,6 @@ interface PrototypeImageProps {
   imageClassName?: string;
   sizes: string;
   priority?: boolean;
-  fallbackClassName?: string;
 }
 
 /** export 전·실패 시 DS 톤 placeholder */
@@ -22,7 +21,6 @@ export function PrototypeImage({
   imageClassName,
   sizes,
   priority,
-  fallbackClassName,
 }: PrototypeImageProps) {
   const [failed, setFailed] = useState(false);
   const mountedRef = useRef(false);
@@ -45,10 +43,7 @@ export function PrototypeImage({
     <div className={cn("relative overflow-hidden", className)}>
       {failed ? (
         <div
-          className={cn(
-            "absolute inset-0 bg-gradient-to-br from-muted to-muted-strong",
-            fallbackClassName,
-          )}
+          className="absolute inset-0 bg-gradient-to-br from-muted to-muted-strong"
           role="img"
           aria-label={alt}
         />

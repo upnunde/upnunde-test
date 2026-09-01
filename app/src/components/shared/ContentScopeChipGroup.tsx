@@ -1,6 +1,8 @@
 "use client";
 
 import { Tabs, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import { useFilterTabStripSize } from "@/hooks/useFilterTabStripSize";
+import { FILTER_TAB_STRIP_SHELL_CLASS } from "@/lib/chip-styles";
 import { cn } from "design-system/utils";
 
 export interface ContentScopeChipGroupProps<T extends string> {
@@ -28,16 +30,19 @@ export function ContentScopeChipGroup<T extends string>({
   size = "2xl",
 }: ContentScopeChipGroupProps<T>) {
   const isAreaTab = variant === "text" && size === "2xl";
+  const responsiveAreaTabSize = useFilterTabStripSize();
+  /** 페이지 1차 탭만 모바일에서 한 단계 작게 — 분석 2차 칩 등은 넘겨받은 크기 유지 */
+  const resolvedSize = isAreaTab ? responsiveAreaTabSize : size;
 
   return (
     <Tabs
       value={activeId}
       onValueChange={(value) => onSelect(value as T)}
-      className={cn(isAreaTab ? "max-w-full min-w-0 min-h-12" : "shrink-0", className)}
+      className={cn(isAreaTab ? FILTER_TAB_STRIP_SHELL_CLASS : "shrink-0", className)}
     >
       <TabsList
         variant={variant}
-        size={size}
+        size={resolvedSize}
         aria-label={ariaLabel}
         className={cn(isAreaTab && "max-w-full min-w-0 overflow-x-auto")}
       >

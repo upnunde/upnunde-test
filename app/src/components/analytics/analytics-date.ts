@@ -145,12 +145,12 @@ export function getAnalyticsDateRangeCompactLabel(
   const [ty, tm, td] = win.toYmd.split("-").map(Number);
 
   if (fy === ty && fm === tm) {
-    return `${pad2(fm)}.${pad2(fd)}~${pad2(td)}`;
+    return `${pad2(fm)}.${pad2(fd)} ~ ${pad2(td)}`;
   }
   if (fy === ty) {
-    return `${pad2(fm)}.${pad2(fd)}~${pad2(tm)}.${pad2(td)}`;
+    return `${pad2(fm)}.${pad2(fd)} ~ ${pad2(tm)}.${pad2(td)}`;
   }
-  return `${String(fy).slice(-2)}.${pad2(fm)}.${pad2(fd)}~${String(ty).slice(-2)}.${pad2(tm)}.${pad2(td)}`;
+  return `${String(fy).slice(-2)}.${pad2(fm)}.${pad2(fd)} ~ ${String(ty).slice(-2)}.${pad2(tm)}.${pad2(td)}`;
 }
 
 /**

@@ -24,6 +24,7 @@ alwaysApply: true
 ## UI·스타일 (요약)
 
 - 재사용 → variant/props → 신규 생성 순.
+- **반응형**: 모바일(&lt;768) · 태블릿(768–1023) · 데스크톱(≥1024) 3단 — **`.cursor/rules/layout-breakpoints.mdc`** · `docs/mobile-layout.md`
 - 토큰·스페이싱·타이포 상세: **`.cursor/rules/ui-tokens-quickref.mdc`** · 대량 치환은 **`npm run migrate:tokens`**.
 - 리소스·이미지 업로드·크롭: **`.cursor/rules/resource-patterns.mdc`**
 - 에디터: **`.cursor/rules/editor-patterns.mdc`**

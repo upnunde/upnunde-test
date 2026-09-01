@@ -3,7 +3,6 @@ import {
   CONTROL_GROUP_GAP_STANDARD_RESPONSIVE_CLASS,
   CONTROL_HEIGHT_CLASS,
 } from "@/lib/chip-styles";
-import { buttonVariants } from "design-system/ui/button";
 import { cn } from "design-system/utils";
 
 /** 분석 필터 행 칩·드롭다운 — 모바일 32px · lg+ 36px */
@@ -18,10 +17,10 @@ export const analyticsFilterChipResponsiveClassName = cn(
   "px-3 lg:px-4",
 );
 
-/** 분석 상단 필터 바 셸 — `space.control.controlGroupResponsive` */
+/** 분석 상단 필터 바 셸 — 행 간격 8px (`gap-2`) */
 export const analyticsScopeFilterShellClassName = cn(
   "flex w-full flex-col",
-  "gap-1 lg:gap-2",
+  "gap-2",
 );
 
 /** 분석 필터 행·칩 그룹 가로 간격 — 모바일 4px · lg+ 8px */
@@ -37,12 +36,23 @@ export const analyticsOutlineChipClassName = chipVariants({
 });
 
 /**
- * 분석 상단 기간 피커 인라인 트리거 — DS `buttonVariants(outline·neutral)`.
- * radix `PopoverTrigger asChild` 호환을 위해 raw `<button>` + forwardRef 구조는 트리거 컴포넌트에서 유지한다.
+ * 분석 상단 기간 피커 인라인 트리거.
+ * - 모바일 (`max-md`): 네이버항공권형 메타 행 — 보더 없이 날짜 텍스트 + 셰브론
+ * - 태블릿·데스크톱 (`md+`): DS outline 버튼 (동일 구조)
  */
 export const analyticsPeriodInlineTriggerClassName = cn(
-  buttonVariants({ variant: "outline", tone: "neutral", size: "default", shape: "square" }),
-  "min-w-0 gap-2 overflow-hidden",
+  "inline-flex min-w-0 shrink-0 cursor-pointer items-center select-none outline-none transition-colors",
+  "focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-2",
+  // 모바일 — 텍스트 + 셰브론
+  "max-md:h-auto max-md:gap-1 max-md:border-0 max-md:bg-transparent max-md:px-0 max-md:py-1",
+  "max-md:text-body2_500 max-md:text-foreground max-md:hover:bg-transparent max-md:hover:text-foreground",
+  "max-md:aria-expanded:bg-transparent",
+  // 태블릿·데스크톱 — outline 버튼
+  "md:gap-2 md:overflow-hidden",
+  "md:border md:border-border md:bg-transparent md:hover:bg-muted md:hover:text-foreground",
+  "md:aria-expanded:bg-muted md:aria-expanded:text-foreground",
+  "md:rounded-md md:h-9 md:px-2.5 md:text-sm md:font-medium",
+  "md:dark:border-border-emphasis md:dark:hover:bg-muted",
 );
 
 /** 필터 행 구분선 — 모바일 32px · lg+ 36px */

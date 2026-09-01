@@ -9,6 +9,7 @@ import { AnalyticsViewerHourlyActivityChart } from "@/components/analytics/Analy
 import {
   ANALYTICS_KEY_STAT_BUTTON_CLASS,
   ANALYTICS_KEY_STAT_BUTTON_INTERACTION_CLASS,
+  ANALYTICS_KEY_STATS_CHART_SHELL_CLASS,
   ANALYTICS_KEY_STATS_GROUP_SHELL_CLASS,
   ANALYTICS_KEY_STATS_ROW_CLASS,
   analyticsKeyStatButtonStateClass,
@@ -168,7 +169,7 @@ export function AnalyticsUserTab({
                 className={cn(
                   ANALYTICS_KEY_STAT_BUTTON_CLASS,
                   ANALYTICS_KEY_STAT_BUTTON_INTERACTION_CLASS,
-                  i < arr.length - 1 && "border-r",
+                  i < arr.length - 1 && "lg:border-r",
                   analyticsKeyStatButtonStateClass(selected),
                 )}
               >
@@ -184,7 +185,7 @@ export function AnalyticsUserTab({
           })}
           </div>
         </div>
-        <div className="flex flex-col items-stretch gap-3 self-stretch px-0 py-10">
+        <div className={ANALYTICS_KEY_STATS_CHART_SHELL_CLASS}>
           <p className={cn(PAGE_FLUSH_CONTENT_PAD_X_CLASS, "text-body3_500 text-foreground-muted")}>
             {USER_PRIMARY_LABELS[userMetric] ?? "이용자 수"} 추이
           </p>

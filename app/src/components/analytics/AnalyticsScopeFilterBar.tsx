@@ -11,7 +11,11 @@ import {
   analyticsScopeFilterShellClassName,
 } from "@/components/analytics/analytics-filter-chips";
 import { ContentScopeChipGroup } from "@/components/shared/ContentScopeChipGroup";
-import { CONTROL_GROUP_GAP_STANDARD_RESPONSIVE_CLASS } from "@/lib/chip-styles";
+import { useFilterTabStripSize } from "@/hooks/useFilterTabStripSize";
+import {
+  CONTROL_GROUP_GAP_STANDARD_RESPONSIVE_CLASS,
+  FILTER_TAB_STRIP_SHELL_CLASS,
+} from "@/lib/chip-styles";
 import {
   ANALYTICS_SCOPE_CHIPS,
   isAnalyticsEntityScope,
@@ -78,19 +82,26 @@ export function AnalyticsScopeFilterBar({
   const isCharacterScope = scopeCategory === "character";
   const isScenarioScope = scopeCategory === "scenario";
   const showEntityFilters = isAnalyticsEntityScope(scopeCategory);
+  const areaTabSize = useFilterTabStripSize();
 
   return (
     <div className={cn(analyticsScopeFilterShellClassName, className)}>
-      <div className="flex w-full min-w-0 items-center justify-between gap-1 sm:flex-wrap sm:gap-x-4 sm:gap-y-2 lg:gap-2">
-        <div className="min-w-0 flex-1">
+      {/*
+        브레이크포인트
+        - 모바일(<768): 탭 → 기간(메타) → 범위 칩
+        - 태블릿·데스크톱(≥768): 탭|기간 한 행 → 범위 칩
+        `max-md:contents`로 모바일에서 기간을 탭 아래·칩 위에 둔다.
+      */}
+      <div className="max-md:contents flex w-full min-w-0 md:flex-row md:items-center md:justify-between md:gap-2">
+        <div className="max-md:order-1 min-w-0 w-full flex-1 max-md:pr-5">
           <Tabs
             value={analyticsArea}
             onValueChange={(v) => onAnalyticsAreaChange(v as AnalyticsAreaTabId)}
-            className="max-w-full min-w-0 min-h-12"
+            className={FILTER_TAB_STRIP_SHELL_CLASS}
           >
             <TabsList
               variant="text"
-              size="2xl"
+              size={areaTabSize}
               aria-label="분석 영역"
               className="max-w-full min-w-0 overflow-x-auto"
             >
@@ -100,14 +111,19 @@ export function AnalyticsScopeFilterBar({
             </TabsList>
           </Tabs>
         </div>
-        <div className="shrink-0">
+        <div className="max-md:order-2 max-md:-mt-2 shrink-0 max-md:self-start max-md:pr-5">
           <AnalyticsPeriodPicker value={periodRange} onChange={onPeriodRangeChange} variant="inline" />
         </div>
       </div>
 
+      {/*
+        좁은 셸(max-lg): 부모 우측 패딩을 제거해 스크롤 뷰포트가 화면 끝까지 간다.
+        끝 항목용 pr-5는 스크롤 콘텐츠에만 둔다.
+      */}
       <div
         className={cn(
-          "flex w-full items-center overflow-x-auto",
+          "max-md:order-3 max-md:mt-1 flex w-full min-w-0 items-center overflow-x-auto overscroll-x-contain",
+          "max-lg:pr-5",
           CONTROL_GROUP_GAP_STANDARD_RESPONSIVE_CLASS,
         )}
       >
