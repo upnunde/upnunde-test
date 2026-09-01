@@ -19,6 +19,7 @@ const nextConfig: NextConfig = {
       { pathname: "/frame-theme-thumbnails/**" },
       { pathname: "/notifications/**" },
       { pathname: "/prototype/work-detail/**" },
+      { pathname: "/prototype/coin-events/**" },
     ],
     remotePatterns: [
       { protocol: "https", hostname: "github.com" },
