@@ -4,8 +4,20 @@
 
 ## 브레이크포인트
 
-- **모바일**: `max-lg` (1024px 미만)
-- **데스크톱**: `lg:` (1024px 이상)
+서비스는 **모바일 · 태블릿 · 데스크톱** 3단만 사용한다. (Cursor 규칙: `.cursor/rules/layout-breakpoints.mdc`)
+
+| 구간 | 폭 | Tailwind | JS 훅 |
+|------|-----|----------|--------|
+| **모바일** | &lt; 768px | 기본 · `max-md:` | `!useIsMdUp()` |
+| **태블릿** | 768–1023px | `md:` · `max-lg:` | `useIsTablet()` |
+| **데스크톱** | ≥ 1024px | `lg:` | `useIsLgUp()` |
+
+- 훅 위치: `app/src/hooks/useMediaQuery.ts` (`useIsMdUp` · `useIsTablet` · `useIsLgUp`)
+- **모바일+태블릿 공통** (예: AppShell 사이드바 숨김 등 **셸/크롬**): `max-lg` / `!useIsLgUp()`
+- **콘텐츠가 태블릿≈데스크톱**이면 `md:`부터 맞추고, 모바일만 `max-md` (통계 필터 바 등)
+- **모바일만**: `max-md`
+- **태블릿만**: `md:max-lg:` / `useIsTablet()`
+- 레이아웃 구간 정의에 `sm:` · 임의 `min-[…px]` 사용 금지
 - 뷰포트 높이: `h-dvh` / `min-h-dvh`
 
 ## 페이지 좌우 인셋 (가로 패딩)

@@ -86,7 +86,7 @@ export function AnalyticsDashboard({ defaultArea = "content", onAreaChange }: An
 
   return (
     <>
-      <div className={PAGE_FILTER_HEADER_SHELL_CLASS}>
+      <div className={cn(PAGE_FILTER_HEADER_SHELL_CLASS, "max-md:pr-0")}>
         <div className={PAGE_FILTER_HEADER_INNER_CLASS}>
           <AnalyticsScopeFilterBar
             analyticsArea={analyticsArea}

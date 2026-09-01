@@ -18,6 +18,9 @@ export const CONTROL_GROUP_GAP_STANDARD_CLASS = "gap-2";
 /** 반응형 컨트롤 그룹 — 모바일 4px · lg+ 8px */
 export const CONTROL_GROUP_GAP_STANDARD_RESPONSIVE_CLASS = "gap-1 lg:gap-2";
 
+/** 페이지 필터 띠(알림·분석·반응·문의·내 작품) 셸 — 모바일 40px · md+(태블릿·데스크톱) 48px */
+export const FILTER_TAB_STRIP_SHELL_CLASS = "max-w-full min-w-0 min-h-10 md:min-h-12";
+
 /** @deprecated `CONTROL_GROUP_GAP_COMPACT_CLASS` — FilterChip M 그룹 */
 export const CHIP_GROUP_GAP_CLASS = CONTROL_GROUP_GAP_COMPACT_CLASS;
 

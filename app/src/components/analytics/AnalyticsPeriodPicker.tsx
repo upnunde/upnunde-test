@@ -17,7 +17,7 @@ import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover
 import { Button, buttonVariants } from "design-system/ui/button";
 import { PeriodRangeCalendar } from "@/components/analytics/PeriodRangeCalendar";
 import { analyticsPeriodInlineTriggerClassName } from "@/components/analytics/analytics-filter-chips";
-import { useIsLgUp } from "@/hooks/useMediaQuery";
+import { useIsMdUp } from "@/hooks/useMediaQuery";
 import { PAGE_GUTTER_X_CLASS } from "@/lib/page-layout";
 import { chipVariants, filterChipVariantProps, chipGroupGapClass } from "@/lib/chip-styles";
 import {
@@ -204,16 +204,17 @@ const PeriodPickerTrigger = forwardRef<HTMLButtonElement, PeriodPickerTriggerPro
         {...props}
       >
         <ICONS.calendarDays
-          className="h-5 w-5 shrink-0 text-foreground-muted max-sm:hidden"
+          className="hidden h-5 w-5 shrink-0 text-foreground-muted md:block"
           aria-hidden
         />
-        <span className="min-w-0 truncate text-center text-body3_500 sm:hidden">
+        {/* 모바일·태블릿: 축약 라벨 / 데스크톱(lg+): 풀 표기 */}
+        <span className="min-w-0 truncate text-body2_500 md:text-center md:text-body3_500 lg:hidden">
           {triggerCompactLabel}
         </span>
-        <span className="hidden min-w-0 max-w-[280px] truncate text-center text-body3_500 sm:inline">
+        <span className="hidden min-w-0 max-w-[280px] truncate text-center text-body3_500 lg:inline">
           {triggerLabel}
         </span>
-        <ICONS.chevronDown className="h-4 w-4 shrink-0 text-foreground-muted sm:h-5 sm:w-5" aria-hidden />
+        <ICONS.chevronDown className="h-4 w-4 shrink-0 text-foreground-muted md:h-5 md:w-5" aria-hidden />
       </button>
     );
   },
@@ -226,7 +227,7 @@ export function AnalyticsPeriodPicker({
   variant = "default",
   ariaLabelPrefix = "조회 기간",
 }: AnalyticsPeriodPickerProps) {
-  const isDesktop = useIsLgUp();
+  const isWideLayout = useIsMdUp();
   const [open, setOpen] = useState(false);
 
   const triggerLabel = useMemo(
@@ -268,7 +269,7 @@ export function AnalyticsPeriodPicker({
   }, []);
 
   useEffect(() => {
-    if (isDesktop || !open) return;
+    if (isWideLayout || !open) return;
     const onKeyDown = (e: KeyboardEvent) => {
       if (e.key === "Escape") {
         e.preventDefault();
@@ -277,7 +278,7 @@ export function AnalyticsPeriodPicker({
     };
     window.addEventListener("keydown", onKeyDown);
     return () => window.removeEventListener("keydown", onKeyDown);
-  }, [handleDismiss, isDesktop, open]);
+  }, [handleDismiss, isWideLayout, open]);
 
   function applyPreset(preset: AnalyticsPeriodPreset) {
     // 프리셋 선택 시 패널을 닫지 않는다 — 사용자가 여러 기간을 비교·전환하도록 열린 상태 유지.
@@ -313,7 +314,7 @@ export function AnalyticsPeriodPicker({
     triggerCompactLabel,
   } as const;
 
-  if (!isDesktop) {
+  if (!isWideLayout) {
     const mobileSheet =
       open && typeof document !== "undefined"
         ? createPortal(

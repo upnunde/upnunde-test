@@ -34,7 +34,8 @@ export function ProfileAccountTab() {
   }, []);
 
   return (
-    <div className={cn("flex flex-col max-lg:px-5", PROFILE_PAGE_STACK_GAP_CLASS)}>
+    // 좌우 패딩은 감싸는 회원정보 화면이 갖는다 (모바일 이중 패딩 방지)
+    <div className={cn("flex flex-col", PROFILE_PAGE_STACK_GAP_CLASS)}>
       <InputGroup>
         <FieldLabel size="sm" weight="600" htmlFor={PROFILE_ACCOUNT_LOGIN_ID}>
           아이디

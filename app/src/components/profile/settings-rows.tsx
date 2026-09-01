@@ -25,8 +25,8 @@ export function SettingsList({
 function SettingsRowLabel({ icon, label }: { icon?: LucideIcon; label: string }) {
   return (
     <span className="flex min-w-0 flex-1 items-center gap-4">
-      {icon ? <Icon icon={icon} size="2xl" className="shrink-0 text-foreground" /> : null}
-      <span className="truncate text-body1_500 text-foreground">{label}</span>
+      {icon ? <Icon icon={icon} size="xl" className="shrink-0 text-foreground" /> : null}
+      <span className="truncate text-body2_600 text-foreground">{label}</span>
     </span>
   );
 }
@@ -101,13 +101,14 @@ export function SettingsSwitchRow({
   );
 }
 
-/** 로그아웃 등 액션 행 — 되돌릴 수 있는 동작이라 경고색 대신 보조 텍스트 톤 */
+/**
+ * 로그아웃 등 액션 행 — 되돌릴 수 있는 동작이라 경고색 대신 hint 톤.
+ * 이동·설정 행과 성격이 달라 아이콘 없이 라벨만 가운데 둔다.
+ */
 export function SettingsActionRow({
-  icon,
   label,
   onClick,
 }: {
-  icon?: LucideIcon;
   label: string;
   onClick: () => void;
 }) {
@@ -117,14 +118,11 @@ export function SettingsActionRow({
       onClick={onClick}
       className={cn(
         SETTINGS_ROW_CLASS,
-        "text-foreground-muted",
+        "justify-center text-center text-foreground-placeholder",
         SETTINGS_ROW_INTERACTIVE_CLASS,
       )}
     >
-      <span className="flex min-w-0 flex-1 items-center gap-4">
-        {icon ? <Icon icon={icon} size="2xl" className="shrink-0 text-current" /> : null}
-        <span className="truncate text-body1_500">{label}</span>
-      </span>
+      <span className="truncate text-body1_500">{label}</span>
     </button>
   );
 }

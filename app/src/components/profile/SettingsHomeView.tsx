@@ -146,7 +146,7 @@ export function SettingsHomeView({
           onClick={() => onNavigate("privacy")}
         />
         <SettingsValueRow icon={ICONS.info} label="버전 정보" value={`v${APP_VERSION}`} />
-        <SettingsActionRow icon={ICONS.logOut} label="로그아웃" onClick={() => setLogoutOpen(true)} />
+        <SettingsActionRow label="로그아웃" onClick={() => setLogoutOpen(true)} />
       </SettingsList>
 
       <LogoutConfirmDialog

@@ -77,7 +77,7 @@ export function NotificationItem({
             <span>{date}</span>
             {showNewDot && (
               <span
-                className="mt-[2px] size-1 shrink-0 rounded-full bg-destructive"
+                className="mt-0.5 size-1 shrink-0 rounded-full bg-destructive"
                 aria-hidden
               />
             )}
