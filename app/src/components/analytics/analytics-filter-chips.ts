@@ -51,7 +51,7 @@ export const analyticsPeriodInlineTriggerClassName = cn(
   "md:gap-2 md:overflow-hidden",
   "md:border md:border-border md:bg-transparent md:hover:bg-muted md:hover:text-foreground",
   "md:aria-expanded:bg-muted md:aria-expanded:text-foreground",
-  "md:rounded-md md:h-9 md:px-2.5 md:text-sm md:font-medium",
+  "md:rounded-md md:h-9 md:px-2.5 md:text-body2_500",
   "md:dark:border-border-emphasis md:dark:hover:bg-muted",
 );
 
