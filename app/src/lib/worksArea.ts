@@ -55,6 +55,11 @@ export function getWorksCharacterEditPath(characterId: string): string {
   return `/series/character/${encodeURIComponent(characterId)}`;
 }
 
+/** 내 작품 — 캐릭터 대화 (카톡형 풀페이지) */
+export function getWorksCharacterChatPath(characterId: string): string {
+  return `/series/character/${encodeURIComponent(characterId)}/chat`;
+}
+
 export function getWorksTabFromPathname(pathname: string | null): WorksTabId {
   if (!pathname) return "series";
   const normalized = pathname.replace(/\/$/, "") || "/";

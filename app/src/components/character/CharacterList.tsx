@@ -9,6 +9,8 @@ import { WORKS_LIST_CREATE_SLOT_CLASS, WORKS_LIST_GRID_CLASS } from "@/lib/works
 export interface CharacterListProps {
   characters: CharacterData[];
   onCharacterSettings?: (character: CharacterData) => void;
+  onViewDetail?: (character: CharacterData) => void;
+  onStartChat?: (character: CharacterData) => void;
   onSetPrivate?: (character: CharacterData) => void;
   onSetPublic?: (character: CharacterData) => void;
   onDelete?: (character: CharacterData) => void;
@@ -20,6 +22,8 @@ export interface CharacterListProps {
 export function CharacterList({
   characters,
   onCharacterSettings,
+  onViewDetail,
+  onStartChat,
   onSetPrivate,
   onSetPublic,
   onDelete,
@@ -34,6 +38,8 @@ export function CharacterList({
           key={character.id}
           character={character}
           onCharacterSettings={onCharacterSettings}
+          onViewDetail={onViewDetail}
+          onStartChat={onStartChat}
           onSetPrivate={onSetPrivate}
           onSetPublic={onSetPublic}
           onDelete={onDelete}

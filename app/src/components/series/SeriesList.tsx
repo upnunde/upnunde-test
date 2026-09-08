@@ -8,6 +8,7 @@ import { WORKS_LIST_CREATE_SLOT_CLASS, WORKS_LIST_GRID_CLASS } from "@/lib/works
 
 export interface SeriesListProps {
   seriesList: SeriesData[];
+  onViewDetail?: (series: SeriesData) => void;
   onResourceManage?: (series: SeriesData) => void;
   onEpisodeManage?: (series: SeriesData) => void;
   onSeriesManage?: (series: SeriesData) => void;
@@ -21,6 +22,7 @@ export interface SeriesListProps {
 
 export function SeriesList({
   seriesList,
+  onViewDetail,
   onResourceManage,
   onEpisodeManage,
   onSeriesManage,
@@ -36,6 +38,7 @@ export function SeriesList({
         <SeriesItem
           key={series.id}
           series={series}
+          onViewDetail={onViewDetail}
           onResourceManage={onResourceManage}
           onEpisodeManage={onEpisodeManage}
           onSeriesManage={onSeriesManage}

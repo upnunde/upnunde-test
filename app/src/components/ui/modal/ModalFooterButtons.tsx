@@ -98,6 +98,8 @@ function FooterActionButton({
 /**
  * DS DialogFooter 정본 위 버튼 행.
  * Content `px-5 pb-5`를 `-mx-5 -mb-5 p-5`로 풀블리드(dialog.spec.json).
+ * `p-0` 커스텀 셸에서는 `className`에 `mx-0 mb-0`을 넣어 음수 마진을 상쇄할 것
+ * (안 하면 푸터가 모달 밖으로 삐져나감).
  */
 export function ModalFooterButtons({
   layout,

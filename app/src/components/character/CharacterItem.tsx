@@ -28,6 +28,8 @@ import { cn } from "design-system/utils";
 export interface CharacterItemProps {
   character: CharacterData;
   onCharacterSettings?: (character: CharacterData) => void;
+  onViewDetail?: (character: CharacterData) => void;
+  onStartChat?: (character: CharacterData) => void;
   onSetPrivate?: (character: CharacterData) => void;
   onSetPublic?: (character: CharacterData) => void;
   onDelete?: (character: CharacterData) => void;
@@ -36,6 +38,8 @@ export interface CharacterItemProps {
 export function CharacterItem({
   character,
   onCharacterSettings,
+  onViewDetail,
+  onStartChat,
   onSetPrivate,
   onSetPublic,
   onDelete,
@@ -52,7 +56,7 @@ export function CharacterItem({
   const stat1Str = formatSeriesViewCount(stat1);
   const stat2Str = formatSeriesViewCount(stat2);
 
-  const settingsButton = (
+  const actionButtons = (
     <Button
       type="button"
       variant="outline"
@@ -70,7 +74,12 @@ export function CharacterItem({
   return (
     <div className={WORKS_ITEM_CARD_CLASS}>
       <div className={WORKS_ITEM_CARD_INNER_CLASS}>
-        <div className={WORKS_ITEM_THUMBNAIL_CLASS}>
+        <button
+          type="button"
+          className={cn(WORKS_ITEM_THUMBNAIL_CLASS, "cursor-pointer text-left outline-none focus:outline-none focus-visible:outline-none focus-visible:ring-0")}
+          onClick={() => onViewDetail?.(character)}
+          aria-label={`${title} 상세정보`}
+        >
           {isDraft || !thumbnailUrl ? (
             <div className="flex h-full w-full items-center justify-center bg-background-muted" aria-hidden>
               <span className="text-foreground-placeholder text-caption1_400">썸네일 없음</span>
@@ -86,7 +95,7 @@ export function CharacterItem({
               )}
             </>
           )}
-        </div>
+        </button>
 
         <div className="flex min-w-0 flex-1 flex-col items-start justify-start">
           <div className="flex w-full items-start justify-between gap-2">
@@ -107,7 +116,13 @@ export function CharacterItem({
                   <span className="truncate">가이드 정책을 위반, 이용 금지</span>
                 </Badge>
               )}
-              <h3 className="min-w-0 flex-1 truncate text-heading5_700 text-foreground">{title}</h3>
+              <button
+                type="button"
+                className="min-w-0 flex-1 truncate text-left text-heading5_700 text-foreground outline-none hover:underline focus:outline-none focus-visible:outline-none focus-visible:ring-0"
+                onClick={() => onViewDetail?.(character)}
+              >
+                {title}
+              </button>
             </div>
             <DropdownMenu open={isMenuOpen} onOpenChange={setIsMenuOpen}>
               <DropdownMenuTrigger asChild>
@@ -123,6 +138,10 @@ export function CharacterItem({
               </DropdownMenuTrigger>
               <DropdownMenuContent align="end">
                 <DropdownMenuGroup>
+                  <DropdownMenuItem onSelect={() => onStartChat?.(character)}>
+                    <Icon icon={ICONS.messageCircle} size="md" />
+                    대화하기
+                  </DropdownMenuItem>
                   {status === "PUBLIC" && (
                     <>
                       <DropdownMenuItem onSelect={() => onSetPrivate?.(character)}>
@@ -214,13 +233,13 @@ export function CharacterItem({
           </div>
 
           <div className="hidden w-full items-start justify-start gap-2 lg:flex">
-            {settingsButton}
+            {actionButtons}
           </div>
         </div>
       </div>
 
       <div className="flex w-full items-start justify-start gap-2 lg:hidden">
-        {settingsButton}
+        {actionButtons}
       </div>
     </div>
   );

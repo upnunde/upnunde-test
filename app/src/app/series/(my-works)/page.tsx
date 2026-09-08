@@ -4,6 +4,7 @@ import React, { useState, useCallback, useEffect, startTransition } from "react"
 import { useRouter } from "next/navigation";
 import { SeriesList } from "@/components/series/SeriesList";
 import { SeriesDeleteModal } from "@/components/series/SeriesDeleteModal";
+import { SeriesDetailPreviewModal } from "@/components/series/SeriesDetailPreviewModal";
 import { PolicyAgreementModal } from "@/components/series/PolicyAgreementModal";
 import type { SeriesData } from "@/types/series";
 import { useSeriesCatalogStore } from "@/store/useSeriesCatalogStore";
@@ -20,6 +21,7 @@ export default function SeriesListPage() {
 
   const [seriesList, setSeriesList] = useState<SeriesData[]>([]);
   const [seriesToDelete, setSeriesToDelete] = useState<SeriesData | null>(null);
+  const [detailSeries, setDetailSeries] = useState<SeriesData | null>(null);
   const [policyModalOpen, setPolicyModalOpen] = useState(false);
 
   useEffect(() => {
@@ -101,6 +103,7 @@ export default function SeriesListPage() {
     <>
       <SeriesList
         seriesList={seriesList.filter((s) => s.status !== "BANNED")}
+        onViewDetail={setDetailSeries}
         onResourceManage={handleResourceManage}
         onEpisodeManage={handleEpisodeManage}
         onSeriesManage={handleSeriesManage}
@@ -114,6 +117,15 @@ export default function SeriesListPage() {
           setSeriesToDelete(series);
         }}
         onCreateSeries={handleOpenCreateSeries}
+      />
+
+      <SeriesDetailPreviewModal
+        open={!!detailSeries}
+        series={detailSeries}
+        onOpenChange={(open) => {
+          if (!open) setDetailSeries(null);
+        }}
+        onOpenEpisodes={handleEpisodeManage}
       />
 
       <SeriesDeleteModal

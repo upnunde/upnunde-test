@@ -32,10 +32,10 @@ const MY_WORKS_CHARACTER_DETAILS: Record<string, CharacterResource> = {
   },
   c2: {
     id: "c2",
-    name: "(구) 리신",
+    name: "리신",
     imageUrl: "/characters/leesin-splash.png",
-    summary: "앞을 못 보게 된 건 용의 분노를 일깨우려다 혹독한 대가를 치른 것이라오",
-    tags: "수행자, 용, 각오",
+    summary: "혹독한 훈련을 하다가 눈이 먼 격투가",
+    tags: "남성향, 무협",
     greeting: "앞이 보이지 않아도, 나아갈 길은 분명하다.",
     expressions: [
       {
@@ -159,4 +159,25 @@ export function consumeMyWorksCharacterEdit(characterId: string): CharacterResou
 
 export function resolveMyWorksCharacterDetail(characterId: string): CharacterResource | undefined {
   return getMyWorksCharacterDetailById(characterId) ?? consumeMyWorksCharacterEdit(characterId) ?? undefined;
+}
+
+/** 대화 페이지용 — 목록 목업 우선, 없으면 상세 리소스로 CharacterData 구성 */
+export function resolveMyWorksCharacterData(characterId: string): CharacterData | undefined {
+  const fromList = MY_WORKS_CHARACTERS_MOCK.find((c) => c.id === characterId);
+  if (fromList) return fromList;
+
+  const detail = resolveMyWorksCharacterDetail(characterId);
+  if (!detail) return undefined;
+
+  return {
+    id: detail.id,
+    title: detail.name,
+    tagline: detail.summary ?? "",
+    thumbnailUrl: detail.imageUrl || undefined,
+    status: "PUBLIC",
+    createdAt: new Date(0).toISOString(),
+    viewCount: 0,
+    stat1: 0,
+    stat2: 0,
+  };
 }

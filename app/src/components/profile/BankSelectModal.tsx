@@ -92,7 +92,8 @@ export function BankSelectModal({
         </div>
 
         <ModalFooterButtons
-          className="shrink-0 border-t border-divider"
+          // p-0 셸: DS DialogFooter `-mx-5 -mb-5`를 상쇄해 모달 밖으로 삐져나가지 않게 함
+          className="mx-0 mb-0 shrink-0 border-t border-divider"
           layout="end"
           trailingButtons={[{ label: "취소", closeOnSelect: true }]}
         />

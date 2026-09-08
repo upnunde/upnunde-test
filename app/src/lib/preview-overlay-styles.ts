@@ -11,12 +11,15 @@
 /** 미리보기 플레이어 루트 — chroma 격리 스코프 */
 export const PREVIEW_PLAYER_ROOT_CLASS = "preview-player-root";
 
-/** iPhone 15 Pro 디바이스 프레임 — 치수·라운드는 도메인 고정값 */
+/** iPhone 15 Pro 디바이스 프레임 — 치수·라운드는 도메인 고정값 (기존 300×650 → +20% = 360×780) */
 export const PREVIEW_DEVICE_FRAME_OUTER_CLASS =
-  "relative flex h-[650px] w-[300px] flex-col overflow-hidden rounded-[2.25rem] preview-bg-frame outline outline-[3px] preview-outline-frame";
+  "relative flex h-[780px] w-[360px] flex-col overflow-hidden rounded-[2.25rem] preview-bg-frame outline outline-[3px] preview-outline-frame";
 
 export const PREVIEW_DEVICE_FRAME_INNER_CLASS =
   "relative h-full w-full min-h-0 min-w-0 overflow-hidden rounded-[2rem] preview-bg-canvas";
+
+/** 디바이스 프레임 너비 — 사이드 패널·sizes 등 정렬용 */
+export const PREVIEW_DEVICE_FRAME_WIDTH_PX = 360;
 
 /** PreviewScreen 루트 */
 export const PREVIEW_ROOT_CLASS =

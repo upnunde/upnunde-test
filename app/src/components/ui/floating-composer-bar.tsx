@@ -11,7 +11,7 @@ import {
 import { Textarea } from "design-system/ui/textarea";
 import { cn } from "design-system/utils";
 
-export type FloatingComposerBarPlacement = "fixed" | "sticky";
+export type FloatingComposerBarPlacement = "fixed" | "sticky" | "inline";
 
 /** 플로팅 AI 입력 바 전용 최대 너비 (에피소드 폼 카드 너비와 무관) */
 export const FLOATING_COMPOSER_MAX_WIDTH_CLASS = "max-w-[560px] w-full";
@@ -35,6 +35,8 @@ export interface FloatingComposerBarProps {
   onChange: (value: string) => void;
   onSubmit: () => void;
   placeholder?: string;
+  /** 플레이스홀더 앞 장식 (기본 ✨). 빈 문자열이면 생략 */
+  placeholderPrefix?: string;
   disabled?: boolean;
   submitDisabled?: boolean;
   isLoading?: boolean;
@@ -47,6 +49,12 @@ export interface FloatingComposerBarProps {
   maxWidthClassName?: string;
   className?: string;
   ariaLabel?: string;
+  submitAriaLabel?: string;
+  /**
+   * `gradient` — AI 컴포저 그라데이션 보더 (기본)
+   * `plain` — 보더·그라데이션 없이 단색 표면
+   */
+  variant?: "gradient" | "plain";
 }
 
 const shellShadow = "shadow-elevation-40";
@@ -72,6 +80,7 @@ export function FloatingComposerBar({
   onChange,
   onSubmit,
   placeholder = "AI로 에피소드 내용을 작성해 보세요.",
+  placeholderPrefix = "✨",
   disabled = false,
   submitDisabled = false,
   isLoading = false,
@@ -82,6 +91,8 @@ export function FloatingComposerBar({
   maxWidthClassName = FLOATING_COMPOSER_MAX_WIDTH_CLASS,
   className,
   ariaLabel = "에피소드 AI 초안 입력",
+  submitAriaLabel = "AI로 초안 채우기",
+  variant = "gradient",
 }: FloatingComposerBarProps) {
   const fixedBottomClass = stackAboveMobileSubmitBar
     ? FLOATING_COMPOSER_FIXED_ABOVE_SUBMIT_BAR_BOTTOM_CLASS
@@ -220,10 +231,10 @@ export function FloatingComposerBar({
   }, [isLoading, resetLayoutStyles, value]);
 
   const handleKeyDown = (e: React.KeyboardEvent<HTMLTextAreaElement>) => {
-    if (e.key === "Enter" && !e.shiftKey) {
-      e.preventDefault();
-      handleSubmit();
-    }
+    if (e.key !== "Enter" || e.shiftKey) return;
+    if (e.nativeEvent.isComposing || e.keyCode === 229) return;
+    e.preventDefault();
+    handleSubmit();
   };
 
   const sendButton = (
@@ -234,22 +245,29 @@ export function FloatingComposerBar({
       className={cn(
         "flex size-9 shrink-0 items-center justify-center rounded-full transition-all",
         canSubmit
-          ? "composer-bar-send-active shadow-elevation-10 hover:opacity-90"
+          ? variant === "gradient"
+            ? "composer-bar-send-active shadow-elevation-10 hover:opacity-90"
+            : "bg-primary text-primary-foreground shadow-elevation-10 hover:bg-primary/80"
           : "cursor-not-allowed bg-background-muted text-foreground-placeholder",
       )}
-      aria-label="AI로 초안 채우기"
+      aria-label={submitAriaLabel}
     >
       <ICONS.arrowUp className="size-4" strokeWidth={2.25} aria-hidden />
     </button>
   );
 
+  const placementClass =
+    placement === "fixed"
+      ? `fixed ${fixedWidthClass} ${fixedBottomClass}`
+      : placement === "sticky"
+        ? maxWidthClassName
+        : maxWidthClassName;
+
   return (
     <div
       className={cn(
         "z-overlay pointer-events-auto",
-        placement === "fixed"
-          ? `fixed ${fixedWidthClass} ${fixedBottomClass}`
-          : maxWidthClassName,
+        placementClass,
         placement === "sticky" &&
           "sticky bottom-0 w-full shrink-0 bg-gradient-to-t from-muted from-40% via-muted/95 to-transparent py-6",
         className,
@@ -257,10 +275,12 @@ export function FloatingComposerBar({
     >
       <div
         className={cn(
-          "composer-bar-gradient-inner",
+          variant === "gradient"
+            ? "composer-bar-gradient-inner"
+            : "border-0 bg-background-muted shadow-elevation-10",
           placement === "sticky" && "mb-5",
           shellRadiusClass,
-          shellShadow,
+          variant === "gradient" && shellShadow,
           "grid pl-4 grid-cols-[1fr_auto] pr-2",
           showExpandedLayout
             ? "gap-x-2 gap-y-2 py-2"
@@ -294,7 +314,7 @@ export function FloatingComposerBar({
             onKeyDown={handleKeyDown}
             readOnly={isLoading}
             disabled={disabled}
-            placeholder={`✨${placeholder}`}
+            placeholder={`${placeholderPrefix}${placeholder}`}
             aria-label={ariaLabel}
             className={cn(
               "block min-h-0 w-full min-w-0 resize-none rounded-none border-0 bg-transparent px-0 shadow-none caret-primary",

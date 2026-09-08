@@ -15,6 +15,7 @@ import { EditorMenuOption } from "@/components/editor/EditorMenuOption";
 import { Button } from "design-system/ui/button";
 import { IconButton } from "@/components/ui/icon-button";
 import { EpisodePreviewModal } from "@/components/episode/EpisodePreviewModal";
+import { EpisodeStoryInfoModal } from "@/components/episode/EpisodeStoryInfoModal";
 import type { Episode, EpisodeStatus } from "@/types/episode";
 import { formatViews, formatDateOrRelative, formatScheduledPublishAtParts } from "@/lib/formatEpisode";
 import { THUMBNAIL_DIM_OVERLAY_CLASS } from "@/lib/thumbnail-styles";
@@ -68,7 +69,9 @@ function EpisodeDateDisplay({
 
 export interface EpisodeListItemProps {
   episode: Episode;
-  /** 정책 7: 리스트 항목(썸네일/제목 영역) 클릭 시 에피소드 상세(수정 불가) 진입 */
+  /** 시리즈 제목 — 스토리 정보 모달 표시용 */
+  seriesTitle?: string;
+  /** @deprecated 행 클릭은 스토리 정보 모달을 연다. 편집/상세는 액션 버튼 사용. */
   onRowClick?: (episode: Episode) => void;
   onPublish?: (episode: Episode) => void;
   onEdit?: (episode: Episode) => void;
@@ -428,7 +431,8 @@ function EpisodeListItemActions({
 
 export function EpisodeListItem({
   episode,
-  onRowClick,
+  seriesTitle,
+  onRowClick: _onRowClick,
   onPublish,
   onEdit,
   onDelete,
@@ -441,12 +445,13 @@ export function EpisodeListItem({
   const isDraft = status === "DRAFT";
   const isScheduled = status === "SCHEDULED";
   const viewsDisplay = isDraft ? "-" : formatViews(views);
+  const [storyInfoOpen, setStoryInfoOpen] = useState(false);
   const [previewOpen, setPreviewOpen] = useState(false);
 
   const handleRowClick = (e: React.MouseEvent) => {
     const target = e.target as HTMLElement;
     if (target.closest("button, [role='menuitem']")) return;
-    onRowClick?.(episode);
+    setStoryInfoOpen(true);
   };
 
   const openPreview = () => setPreviewOpen(true);
@@ -460,7 +465,7 @@ export function EpisodeListItem({
         onKeyDown={(e) => {
           if (e.key === "Enter" || e.key === " ") {
             e.preventDefault();
-            onRowClick?.(episode);
+            setStoryInfoOpen(true);
           }
         }}
         className={cn(
@@ -579,6 +584,17 @@ export function EpisodeListItem({
           </div>
         </div>
       </article>
+
+      <EpisodeStoryInfoModal
+        open={storyInfoOpen}
+        onOpenChange={setStoryInfoOpen}
+        episode={episode}
+        seriesTitle={seriesTitle}
+        onPreview={() => {
+          setStoryInfoOpen(false);
+          setPreviewOpen(true);
+        }}
+      />
 
       <EpisodePreviewModal
         open={previewOpen}

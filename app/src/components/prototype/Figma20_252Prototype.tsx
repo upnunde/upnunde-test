@@ -8,7 +8,7 @@ import { TossfaceIcon } from "@/components/prototype/TossfaceIcon";
 import { cn } from "design-system/utils";
 
 /**
- * Figma `20:582` — 코인·이벤트 목록 (393×1152 모바일)
+ * Figma `20:582` — 코인·이벤트 목록 (DS 시맨틱·컴포넌트 매핑)
  * @see https://www.figma.com/design/wxrlczSyjZ0eAfQ2suYFPO/?node-id=20-582
  * @see docs/figma-to-ds-mapping.md
  */
@@ -27,6 +27,7 @@ type EventRowData = {
 };
 
 type PromoCardData = {
+  /** Figma pastel → 가장 가까운 DS container / soft tone */
   bgClass: string;
   label: string;
   headline: string;
@@ -41,6 +42,7 @@ const CATEGORY_TABS: { id: EventCategory; label: string }[] = [
   { id: "pass", label: "이용권" },
 ];
 
+/** Figma 카드 340 · gap 8 · inset 12(space-3) — 디바이스 프레임만 스케일 밖 허용 */
 const PROMO_CARD_WIDTH_PX = 340;
 const PROMO_CARD_GAP_PX = 8;
 const PROMO_CAROUSEL_INSET_PX = 12;
@@ -48,7 +50,7 @@ const PROMO_CARD_STRIDE_PX = PROMO_CARD_WIDTH_PX + PROMO_CARD_GAP_PX;
 
 const PROMO_CARDS: PromoCardData[] = [
   {
-    bgClass: "bg-[#cdebee]",
+    bgClass: "bg-info/15",
     label: "코인 이벤트",
     headline: "오늘 딱 하루만",
     highlight: "3만 코인",
@@ -56,7 +58,7 @@ const PROMO_CARDS: PromoCardData[] = [
     icon: COIN_EVENT_EMOJI.promo,
   },
   {
-    bgClass: "bg-[#cdd9ee]",
+    bgClass: "bg-primary-container",
     label: "코인 이벤트",
     headline: "오늘 딱 하루만",
     highlight: "3만 코인",
@@ -93,28 +95,13 @@ const MISSION_EVENTS: EventRowData[] = [
 ];
 
 const ROW_HOVER_CLASS =
-  "cursor-pointer transition-colors duration-short ease-standard hover:bg-black/[0.04]";
-
-const FIGMA_TEXT = {
-  title: "text-black/90",
-  muted: "text-black/50",
-  rowTitle: "text-black/70 group-hover:text-black/90",
-  rowReward: "text-[#f642d4]",
-  promoLabel: "text-black/50",
-  promoHeadline: "text-black/80",
-} as const;
-
-const FIGMA_ACTION_BUTTON_CLASS =
-  "bg-[#444444] text-white hover:bg-[#444444]/90 data-[hovered=true]:bg-[#444444]/90";
-
-const FIGMA_ACTION_BUTTON_COMPLETED_CLASS =
-  "bg-[#444444]/10 text-black/30 hover:bg-[#444444]/10 data-[hovered=true]:bg-[#444444]/10";
+  "cursor-pointer transition-colors duration-short ease-standard hover:bg-muted";
 
 const ROW_BUTTON_CLASS =
-  "rounded-sm focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-inset focus-visible:ring-primary/40";
+  "rounded-sm focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-inset focus-visible:ring-ring/40";
 
 const COLORED_BLOCK_HOVER_CLASS =
-  "cursor-pointer transition-all duration-short ease-standard hover:brightness-[0.97] hover:shadow-elevation-10 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary/40 active:scale-[0.995]";
+  "cursor-pointer transition-colors duration-short ease-standard hover:opacity-90 hover:shadow-elevation-10 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring/40";
 
 function PromoCarousel({
   activeIndex,
@@ -128,7 +115,7 @@ function PromoCarousel({
       <div
         className={cn(
           "w-full min-w-0 snap-x snap-mandatory overflow-x-auto overscroll-x-contain pb-1",
-          "scroll-px-[12px] touch-pan-x [-webkit-overflow-scrolling:touch]",
+          "scroll-px-3 touch-pan-x",
           "[-ms-overflow-style:none] [scrollbar-width:none] [&::-webkit-scrollbar]:hidden",
         )}
         onScroll={(event) => {
@@ -143,7 +130,7 @@ function PromoCarousel({
         }}
       >
         <div className="flex w-max gap-2">
-          <span className="w-[12px] shrink-0" aria-hidden />
+          <span className="w-3 shrink-0" aria-hidden />
           {PROMO_CARDS.map((card, index) => (
             <button
               key={index}
@@ -155,19 +142,22 @@ function PromoCarousel({
               )}
             >
               <div className="min-w-0 flex-1">
-                <p className={cn("text-body3_400", FIGMA_TEXT.promoLabel)}>{card.label}</p>
-                <p className={cn("mt-2 text-heading4_700", FIGMA_TEXT.promoHeadline)}>{card.headline}</p>
-                <p className={cn("text-heading4_700", FIGMA_TEXT.promoHeadline)}>
-                  <span className={FIGMA_TEXT.rowReward}>{card.highlight}</span>
+                <p className="text-body3_400 text-foreground-muted">{card.label}</p>
+                <p className="mt-2 text-heading4_700 text-foreground">{card.headline}</p>
+                <p className="text-heading4_700 text-foreground">
+                  <span className="text-primary">{card.highlight}</span>
                   {card.suffix}
                 </p>
               </div>
-              <span className="tossface shrink-0 text-[28px] leading-none select-none" aria-hidden>
+              <span
+                className="tossface shrink-0 text-[length:var(--icon-size-3xl)] leading-none select-none"
+                aria-hidden
+              >
                 {card.icon}
               </span>
             </button>
           ))}
-          <span className="w-[12px] shrink-0" aria-hidden />
+          <span className="w-3 shrink-0" aria-hidden />
         </div>
       </div>
 
@@ -177,9 +167,7 @@ function PromoCarousel({
             key={index}
             className={cn(
               "rounded-full",
-              index === activeIndex
-                ? "h-2 w-6 bg-[#2b2b2b]"
-                : "size-2 bg-black/12",
+              index === activeIndex ? "h-2 w-6 bg-foreground" : "size-2 bg-border-medium",
             )}
           />
         ))}
@@ -205,7 +193,7 @@ function EventCategoryTabs({
         variant="line"
         size="default"
         aria-label="이벤트 카테고리"
-        className="h-10 w-full justify-start gap-4 border-b border-black/[0.07] bg-background px-4"
+        className="h-10 w-full justify-start gap-4 border-b border-border bg-background px-4"
       >
         {CATEGORY_TABS.map((tab) => (
           <TabsTrigger key={tab.id} value={tab.id}>
@@ -226,8 +214,8 @@ function EventSectionHeader({
 }) {
   return (
     <header className="flex min-h-16 flex-col justify-center gap-0.5 px-4 pt-2">
-      <h2 className={cn("text-body1_700", FIGMA_TEXT.title)}>{title}</h2>
-      <p className={cn("text-body3_400", FIGMA_TEXT.muted)}>{description}</p>
+      <h2 className="text-body1_700 text-foreground">{title}</h2>
+      <p className="text-body3_400 text-foreground-muted">{description}</p>
     </header>
   );
 }
@@ -241,24 +229,21 @@ function EventRow({ emoji, iconAlt, title, reward, action }: EventRowData) {
       >
         <TossfaceIcon emoji={emoji} label={iconAlt} />
         <span className="min-w-0 flex-1">
-          <span className={cn("block text-body1_700", FIGMA_TEXT.rowTitle)}>
+          <span className="block text-body1_700 text-foreground-muted group-hover:text-foreground">
             {title}
           </span>
-          <span className={cn("block text-body3_500", FIGMA_TEXT.rowReward)}>{reward}</span>
+          <span className="block text-body3_500 text-primary">{reward}</span>
         </span>
       </button>
       {action ? (
         <Button
           type="button"
-          variant="default"
+          variant={action.completed ? "secondary" : "default"}
           tone="neutral"
           shape="circle"
           size="default"
           disabled={action.completed}
-          className={cn(
-            "relative z-[1] shrink-0 px-3.5",
-            action.completed ? FIGMA_ACTION_BUTTON_COMPLETED_CLASS : FIGMA_ACTION_BUTTON_CLASS,
-          )}
+          className="relative shrink-0 px-3.5"
           onClick={(event) => event.stopPropagation()}
         >
           {action.label}
@@ -296,16 +281,18 @@ function ChuseokPromoBanner() {
     <button
       type="button"
       className={cn(
-        "flex min-h-[4.5rem] w-full items-center justify-between gap-3 rounded-xl px-5 py-3 text-left",
-        "bg-[#eedbcd]",
+        "flex min-h-16 w-full items-center justify-between gap-3 rounded-xl bg-warning/15 px-5 py-3 text-left",
         COLORED_BLOCK_HOVER_CLASS,
       )}
     >
       <div className="min-w-0 flex-1">
-        <p className={cn("text-body1_700", FIGMA_TEXT.promoHeadline)}>추석맞이 복주머니 이벤트</p>
-        <p className={cn("text-body4_400", FIGMA_TEXT.muted)}>최대 2,000코인 획득</p>
+        <p className="text-body1_700 text-foreground">추석맞이 복주머니 이벤트</p>
+        <p className="text-body4_400 text-foreground-muted">최대 2,000코인 획득</p>
       </div>
-      <span className="tossface shrink-0 text-[28px] leading-none select-none" aria-hidden>
+      <span
+        className="tossface shrink-0 text-[length:var(--icon-size-3xl)] leading-none select-none"
+        aria-hidden
+      >
         {COIN_EVENT_EMOJI.chuseok}
       </span>
     </button>
@@ -317,7 +304,12 @@ export function Figma20_252Prototype() {
   const [promoIndex, setPromoIndex] = useState(0);
 
   return (
-    <article className="mx-auto flex w-full max-w-[393px] flex-col bg-[#f5f5f5] text-[#2b2b2b] lg:rounded-xl lg:shadow-elevation-10 lg:ring-1 lg:ring-black/[0.07]">
+    <article
+      className={cn(
+        "mx-auto flex w-full max-w-[393px] flex-col bg-muted text-foreground",
+        "lg:rounded-xl lg:shadow-elevation-10 lg:ring-1 lg:ring-border",
+      )}
+    >
       <section className="min-w-0 bg-background pt-3">
         <PromoCarousel activeIndex={promoIndex} onActiveIndexChange={setPromoIndex} />
       </section>

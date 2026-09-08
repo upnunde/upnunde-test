@@ -10,6 +10,8 @@ import { cn } from "design-system/utils";
 
 export interface EpisodeListProps {
   episodes: Episode[];
+  /** 스토리 정보 모달에 표시할 시리즈 제목 */
+  seriesTitle?: string;
   onRowClick: (episode: Episode) => void;
   onPublish: (episode: Episode) => void;
   onEdit: (episode: Episode) => void;
@@ -26,6 +28,7 @@ export interface EpisodeListProps {
  */
 export function EpisodeList({
   episodes,
+  seriesTitle,
   onRowClick,
   onPublish,
   onEdit,
@@ -54,6 +57,7 @@ export function EpisodeList({
           <EpisodeListItem
             key={episode.id}
             episode={episode}
+            seriesTitle={seriesTitle}
             onRowClick={onRowClick}
             onPublish={onPublish}
             onEdit={onEdit}

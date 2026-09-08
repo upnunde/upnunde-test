@@ -4,6 +4,7 @@ import React, { useCallback, useEffect, useMemo, useState } from "react";
 import { useRouter } from "next/navigation";
 import { CharacterList } from "@/components/character/CharacterList";
 import { CharacterDeleteModal } from "@/components/character/CharacterDeleteModal";
+import { CharacterDetailPreviewModal } from "@/components/character/CharacterDetailPreviewModal";
 import {
   ImportCharacterDialog,
   type ImportCharacterApplyPick,
@@ -16,7 +17,11 @@ import {
 import { consumeMyWorksPendingCharacter } from "@/lib/myWorksCharacterCreate";
 import { stageMyWorksCharacterEdit } from "@/lib/myWorksCharacterDetail";
 import { MY_WORKS_CHARACTERS_MOCK } from "@/lib/myWorksCharactersMock";
-import { getWorksCharacterEditPath, WORKS_CHARACTER_NEW_PATH } from "@/lib/worksArea";
+import {
+  getWorksCharacterChatPath,
+  getWorksCharacterEditPath,
+  WORKS_CHARACTER_NEW_PATH,
+} from "@/lib/worksArea";
 import type { CharacterData } from "@/types/character";
 
 /**
@@ -26,6 +31,7 @@ export default function WorksCharacterListPage() {
   const router = useRouter();
   const [characters, setCharacters] = useState<CharacterData[]>(MY_WORKS_CHARACTERS_MOCK);
   const [characterToDelete, setCharacterToDelete] = useState<CharacterData | null>(null);
+  const [detailCharacter, setDetailCharacter] = useState<CharacterData | null>(null);
   const [importModalOpen, setImportModalOpen] = useState(false);
 
   useEffect(() => {
@@ -68,6 +74,10 @@ export default function WorksCharacterListPage() {
           stageMyWorksCharacterEdit(character);
           router.push(getWorksCharacterEditPath(character.id));
         }}
+        onViewDetail={setDetailCharacter}
+        onStartChat={(character) => {
+          router.push(getWorksCharacterChatPath(character.id));
+        }}
         onSetPrivate={handleSetPrivate}
         onSetPublic={handleSetPublic}
         onDelete={(character) => setCharacterToDelete(character)}
@@ -83,6 +93,18 @@ export default function WorksCharacterListPage() {
         title="캐릭터 불러오기"
         description="시리즈를 선택한 뒤, 리소스에 등록한 등장인물을 내 작품 캐릭터로 추가해 주세요."
         onApply={handleImportCharacter}
+      />
+
+      <CharacterDetailPreviewModal
+        open={!!detailCharacter}
+        character={detailCharacter}
+        onOpenChange={(open) => {
+          if (!open) setDetailCharacter(null);
+        }}
+        onStartChat={(character) => {
+          setDetailCharacter(null);
+          router.push(getWorksCharacterChatPath(character.id));
+        }}
       />
 
       <CharacterDeleteModal

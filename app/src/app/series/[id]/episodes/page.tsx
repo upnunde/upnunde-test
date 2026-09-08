@@ -315,6 +315,7 @@ export default function EpisodeManagementPage() {
                 <div className="flex w-full flex-col max-lg:gap-3 lg:overflow-hidden lg:rounded-sm lg:border lg:border-border lg:bg-background">
                   <EpisodeList
                     episodes={paginatedEpisodes}
+                    seriesTitle={seriesTitle}
                     onRowClick={handleRowClick}
                     onPublish={handlePublishClick}
                     onEdit={handleEdit}

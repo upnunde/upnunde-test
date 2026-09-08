@@ -30,7 +30,7 @@ export function SeriesPreviewPanel({
   layout = "sidebar",
 }: SeriesPreviewPanelProps) {
   const isFullscreen = layout === "centered";
-  const imageSizes = isFullscreen ? "100vw" : "300px";
+  const imageSizes = isFullscreen ? "100vw" : "360px";
 
   const preview =
     activeTab === "image" ? (
@@ -57,7 +57,7 @@ export function SeriesPreviewPanel({
   }
 
   return (
-    <div className="flex w-[300px] shrink-0 flex-col gap-3">
+    <div className="flex w-[360px] shrink-0 flex-col gap-3">
       <p className="text-body1_500 text-foreground-muted">미리보기</p>
       <div className="flex w-full justify-center">
         <IPhone15ProFrame>{preview}</IPhone15ProFrame>

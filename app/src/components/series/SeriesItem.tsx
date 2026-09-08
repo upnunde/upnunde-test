@@ -29,6 +29,8 @@ import { cn } from "design-system/utils";
 
 export interface SeriesItemProps {
   series: SeriesData;
+  /** 상세정보(미리보기 시트) */
+  onViewDetail?: (series: SeriesData) => void;
   /** 리소스 관리 클릭 */
   onResourceManage?: (series: SeriesData) => void;
   /** 에피소드 관리 클릭 */
@@ -45,6 +47,7 @@ export interface SeriesItemProps {
 
 export function SeriesItem({
   series,
+  onViewDetail,
   onResourceManage,
   onEpisodeManage,
   onSeriesManage,
@@ -68,10 +71,6 @@ export function SeriesItem({
 
   const handleResource = () => {
     onResourceManage?.(series);
-  };
-
-  const handleEpisode = () => {
-    onEpisodeManage?.(series);
   };
 
   const manageButtons = isDraft ? (
@@ -106,7 +105,7 @@ export function SeriesItem({
         variant="outline"
         shape="square"
         size="default"
-        onClick={handleEpisode}
+        onClick={() => onEpisodeManage?.(series)}
         className="min-w-0 flex-1"
       >
         <span className="block w-full overflow-hidden text-ellipsis whitespace-nowrap text-center">
@@ -121,7 +120,12 @@ export function SeriesItem({
       {/* max-lg: 썸네일+정보 가로 / lg+: contents로 썸네일·우측열을 flex-row 자식으로 */}
       <div className={WORKS_ITEM_CARD_INNER_CLASS}>
         {/* 썸네일 영역 (정책 6, 8, 9, 10) */}
-        <div className={WORKS_ITEM_THUMBNAIL_CLASS}>
+        <button
+          type="button"
+          className={cn(WORKS_ITEM_THUMBNAIL_CLASS, "cursor-pointer text-left outline-none focus:outline-none focus-visible:outline-none focus-visible:ring-0")}
+          onClick={() => onViewDetail?.(series)}
+          aria-label={`${title} 상세정보`}
+        >
         {isDraft || !thumbnailUrl ? (
           <div className="flex h-full w-full items-center justify-center bg-background-muted" aria-hidden>
             <span className="text-foreground-placeholder text-caption1_400">썸네일 없음</span>
@@ -150,7 +154,7 @@ export function SeriesItem({
             )}
           </>
         )}
-        </div>
+        </button>
 
         {/* 우측: 제목, 뱃지, 메타 (+ 데스크톱 버튼) */}
         <div className="flex min-w-0 flex-1 flex-col items-start justify-start">
@@ -173,7 +177,13 @@ export function SeriesItem({
                 <span className="truncate">가이드 정책을 위반, 이용 금지</span>
               </Badge>
             )}
-            <h3 className="min-w-0 flex-1 truncate text-heading5_700 text-foreground">{title}</h3>
+            <button
+              type="button"
+              className="min-w-0 flex-1 truncate text-left text-heading5_700 text-foreground outline-none hover:underline focus:outline-none focus-visible:outline-none focus-visible:ring-0"
+              onClick={() => onViewDetail?.(series)}
+            >
+              {title}
+            </button>
           </div>
           <DropdownMenu open={isMenuOpen} onOpenChange={setIsMenuOpen}>
             <DropdownMenuTrigger asChild>
@@ -194,6 +204,10 @@ export function SeriesItem({
                     <DropdownMenuItem onSelect={() => onSeriesManage?.(series)}>
                       <Icon icon={ICONS.settings2} size="md" />
                       시리즈 수정
+                    </DropdownMenuItem>
+                    <DropdownMenuItem onSelect={() => onEpisodeManage?.(series)}>
+                      <Icon icon={ICONS.layers} size="md" />
+                      에피소드
                     </DropdownMenuItem>
                   </DropdownMenuGroup>
                   <DropdownMenuSeparator />

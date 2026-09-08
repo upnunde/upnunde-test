@@ -1,15 +1,13 @@
 "use client";
 
 import { useCallback, useEffect, useMemo, useState } from "react";
-import {
-  Dialog,
-  DialogContent,
-  DialogHeader,
-  DialogTitle,
-} from "@/components/ui/dialog";
 import { IconButton } from "@/components/ui/icon-button";
 import { PreviewScreen } from "@/components/editor/PreviewScreen";
 import { IPhone15ProFrame } from "@/components/preview/IPhone15ProFrame";
+import {
+  PreviewPhoneDialog,
+  PREVIEW_PHONE_CLOSE_BUTTON_CLASS,
+} from "@/components/preview/PreviewPhoneDialog";
 import { ICONS } from "@/lib/icons";
 import { INITIAL_SCRIPT } from "@/lib/initialScript";
 import {
@@ -29,7 +27,7 @@ export interface EpisodePreviewModalProps {
 }
 
 /**
- * 에피소드 목록 — 상세 우측 폰 미리보기만 모달로 확인.
+ * 에피소드 미리보기 — lg+ 폰 목업 모달 / max-lg 풀페이지.
  * 원고 데이터는 상세와 동일하게 INITIAL_SCRIPT 더미를 사용한다.
  */
 export function EpisodePreviewModal({
@@ -100,71 +98,76 @@ export function EpisodePreviewModal({
   const title = `${episode.episodeNumber}화 ${episode.title}`;
 
   return (
-    <Dialog open={open} onOpenChange={onOpenChange}>
-      <DialogContent
+    <PreviewPhoneDialog open={open} onOpenChange={onOpenChange} title={`${title} 미리보기`}>
+      <div
         className={cn(
-          "flex w-auto max-w-[min(100vw-2rem,420px)] flex-col items-center gap-0 overflow-visible",
-          "rounded-none border-0 bg-transparent p-0 shadow-none ring-0",
-          "outline-none focus:outline-none focus-visible:outline-none focus-visible:ring-0",
-          "max-lg:max-w-none",
+          "relative flex w-full flex-col items-center",
+          "max-lg:h-full max-lg:min-h-0 max-lg:gap-0",
+          "lg:w-auto lg:gap-3",
         )}
       >
-        <DialogHeader className="sr-only">
-          <DialogTitle>{title} 미리보기</DialogTitle>
-        </DialogHeader>
-
-        <div className="relative flex flex-col items-center gap-3">
-          <div className="relative">
-            <IconButton
-              type="button"
-              variant="outline"
-              shape="circle"
-              size="icon-sm"
-              icon={ICONS.close}
-              aria-label="미리보기 닫기"
-              className="absolute left-full top-0 z-dropdown ml-3 bg-background shadow-elevation-20"
-              onClick={() => onOpenChange(false)}
+        <div
+          className={cn(
+            "relative",
+            "max-lg:min-h-0 max-lg:w-full max-lg:flex-1",
+            "lg:w-auto lg:flex-none",
+          )}
+        >
+          <IconButton
+            type="button"
+            variant="outline"
+            shape="circle"
+            size="icon-sm"
+            icon={ICONS.close}
+            aria-label="미리보기 닫기"
+            className={PREVIEW_PHONE_CLOSE_BUTTON_CLASS}
+            onClick={() => onOpenChange(false)}
+          />
+          <IPhone15ProFrame fillOnMobile className="max-lg:h-full">
+            <PreviewScreen
+              blocks={blocks}
+              focusedBlockId={focusedBlockId}
+              interactive
+              onTapAdvance={handleAdvance}
+              onChoiceSelect={handleChoiceSelect}
             />
-            <IPhone15ProFrame>
-              <PreviewScreen
-                blocks={blocks}
-                focusedBlockId={focusedBlockId}
-                interactive
-                onTapAdvance={handleAdvance}
-                onChoiceSelect={handleChoiceSelect}
-              />
-            </IPhone15ProFrame>
-          </div>
-
-          <div className="flex items-center justify-center gap-3">
-            <IconButton
-              type="button"
-              variant="outline"
-              shape="circle"
-              size="icon-sm"
-              icon={ICONS.chevronLeft}
-              aria-label="이전"
-              disabled={!canGoPrev}
-              onClick={handlePrev}
-              className="bg-background shadow-elevation-20 disabled:opacity-40"
-            />
-            <span className="min-w-14 text-center text-body3_500 text-foreground-muted">
-              {progressLabel}
-            </span>
-            <IconButton
-              type="button"
-              variant="outline"
-              size="icon-sm"
-              shape="circle"
-              icon={ICONS.chevronRight}
-              aria-label="다음"
-              disabled={!canGoNext}
-              onClick={handleNext}
-              className="bg-background shadow-elevation-20 disabled:opacity-40"
-            />
-          </div>
+          </IPhone15ProFrame>
         </div>
-      </DialogContent>
-    </Dialog>
+
+        <div
+          className={cn(
+            "flex items-center justify-center gap-3",
+            "max-lg:absolute max-lg:inset-x-0 max-lg:bottom-[max(0.75rem,env(safe-area-inset-bottom))] max-lg:z-dropdown",
+            "lg:relative lg:bottom-auto",
+          )}
+        >
+          <IconButton
+            type="button"
+            variant="outline"
+            shape="circle"
+            size="icon-sm"
+            icon={ICONS.chevronLeft}
+            aria-label="이전"
+            disabled={!canGoPrev}
+            onClick={handlePrev}
+            className="bg-background shadow-elevation-20 disabled:opacity-40"
+          />
+          <span className="min-w-14 rounded-full bg-background/80 px-2 text-center text-body3_500 text-foreground-muted backdrop-blur-sm">
+            {progressLabel}
+          </span>
+          <IconButton
+            type="button"
+            variant="outline"
+            size="icon-sm"
+            shape="circle"
+            icon={ICONS.chevronRight}
+            aria-label="다음"
+            disabled={!canGoNext}
+            onClick={handleNext}
+            className="bg-background shadow-elevation-20 disabled:opacity-40"
+          />
+        </div>
+      </div>
+    </PreviewPhoneDialog>
   );
 }
