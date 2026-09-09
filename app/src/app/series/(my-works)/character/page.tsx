@@ -9,6 +9,12 @@ import {
   ImportCharacterDialog,
   type ImportCharacterApplyPick,
 } from "@/components/resource/character/ImportCharacterDialog";
+import { PolicyAgreementModal } from "@/components/series/PolicyAgreementModal";
+import { Snackbar } from "@/components/episode/Snackbar";
+import {
+  WorksVisibilityConfirmDialog,
+  type WorksVisibilityAction,
+} from "@/components/works/WorksVisibilityConfirmDialog";
 import {
   IMPORT_CHARACTER_SERIES_GROUPS,
   characterResourceToCharacterData,
@@ -33,6 +39,10 @@ export default function WorksCharacterListPage() {
   const [characterToDelete, setCharacterToDelete] = useState<CharacterData | null>(null);
   const [detailCharacter, setDetailCharacter] = useState<CharacterData | null>(null);
   const [importModalOpen, setImportModalOpen] = useState(false);
+  const [policyModalOpen, setPolicyModalOpen] = useState(false);
+  const [visibilityTarget, setVisibilityTarget] = useState<CharacterData | null>(null);
+  const [visibilityAction, setVisibilityAction] = useState<WorksVisibilityAction | null>(null);
+  const [snackbar, setSnackbar] = useState({ open: false, message: "" });
 
   useEffect(() => {
     const created = consumeMyWorksPendingCharacter();
@@ -40,26 +50,66 @@ export default function WorksCharacterListPage() {
     setCharacters((prev) => (prev.some((c) => c.id === created.id) ? prev : [...prev, created]));
   }, []);
 
-  const handleDelete = useCallback((target: CharacterData) => {
-    setCharacters((prev) => prev.filter((c) => c.id !== target.id));
+  const showSnackbar = useCallback((message: string) => {
+    setSnackbar({ open: true, message });
   }, []);
 
-  const handleSetPrivate = useCallback((target: CharacterData) => {
+  const openSettings = useCallback(
+    (character: CharacterData) => {
+      stageMyWorksCharacterEdit(character);
+      router.push(getWorksCharacterEditPath(character.id));
+    },
+    [router],
+  );
+
+  const openChat = useCallback(
+    (character: CharacterData) => {
+      router.push(getWorksCharacterChatPath(character.id));
+    },
+    [router],
+  );
+
+  const handleDelete = useCallback(
+    (target: CharacterData) => {
+      if (detailCharacter?.id === target.id) setDetailCharacter(null);
+      setCharacters((prev) => prev.filter((c) => c.id !== target.id));
+      showSnackbar("캐릭터를 삭제했습니다");
+    },
+    [detailCharacter?.id, showSnackbar],
+  );
+
+  const requestVisibility = useCallback((target: CharacterData, action: WorksVisibilityAction) => {
+    setVisibilityTarget(target);
+    setVisibilityAction(action);
+  }, []);
+
+  const handleConfirmVisibility = useCallback(() => {
+    if (!visibilityTarget || !visibilityAction) return;
+    const nextStatus = visibilityAction === "private" ? "PRIVATE" : "PUBLIC";
     setCharacters((prev) =>
-      prev.map((c) => (c.id === target.id ? { ...c, status: "PRIVATE" as const } : c))
+      prev.map((c) => (c.id === visibilityTarget.id ? { ...c, status: nextStatus } : c)),
     );
-  }, []);
-
-  const handleSetPublic = useCallback((target: CharacterData) => {
-    setCharacters((prev) =>
-      prev.map((c) => (c.id === target.id ? { ...c, status: "PUBLIC" as const } : c))
+    showSnackbar(
+      visibilityAction === "private"
+        ? "캐릭터를 비공개로 전환했습니다"
+        : "캐릭터를 공개했습니다",
     );
-  }, []);
+    setVisibilityTarget(null);
+    setVisibilityAction(null);
+  }, [showSnackbar, visibilityAction, visibilityTarget]);
 
-  const handleImportCharacter = useCallback((picked: ImportCharacterApplyPick) => {
-    const source = characterResourceToCharacterData(picked);
-    setCharacters((prev) => (prev.some((c) => c.id === source.id) ? prev : [...prev, source]));
-  }, []);
+  const handleImportCharacter = useCallback(
+    (picked: ImportCharacterApplyPick) => {
+      const source = characterResourceToCharacterData(picked);
+      setCharacters((prev) => (prev.some((c) => c.id === source.id) ? prev : [...prev, source]));
+      showSnackbar("캐릭터를 불러왔습니다");
+    },
+    [showSnackbar],
+  );
+
+  const handleCreateCharacter = useCallback(() => {
+    router.push(WORKS_CHARACTER_NEW_PATH);
+  }, [router]);
 
   const excludeResourceKeys = useMemo(
     () => collectImportedResourceKeys(characters),
@@ -70,18 +120,13 @@ export default function WorksCharacterListPage() {
     <>
       <CharacterList
         characters={characters}
-        onCharacterSettings={(character) => {
-          stageMyWorksCharacterEdit(character);
-          router.push(getWorksCharacterEditPath(character.id));
-        }}
+        onCharacterSettings={openSettings}
         onViewDetail={setDetailCharacter}
-        onStartChat={(character) => {
-          router.push(getWorksCharacterChatPath(character.id));
-        }}
-        onSetPrivate={handleSetPrivate}
-        onSetPublic={handleSetPublic}
-        onDelete={(character) => setCharacterToDelete(character)}
-        onCreateCharacter={() => router.push(WORKS_CHARACTER_NEW_PATH)}
+        onStartChat={openChat}
+        onSetPrivate={(character) => requestVisibility(character, "private")}
+        onSetPublic={(character) => requestVisibility(character, "public")}
+        onDelete={setCharacterToDelete}
+        onCreateCharacter={() => setPolicyModalOpen(true)}
         onImportCharacter={() => setImportModalOpen(true)}
       />
 
@@ -101,10 +146,8 @@ export default function WorksCharacterListPage() {
         onOpenChange={(open) => {
           if (!open) setDetailCharacter(null);
         }}
-        onStartChat={(character) => {
-          setDetailCharacter(null);
-          router.push(getWorksCharacterChatPath(character.id));
-        }}
+        onStartChat={openChat}
+        onOpenSettings={openSettings}
       />
 
       <CharacterDeleteModal
@@ -115,6 +158,31 @@ export default function WorksCharacterListPage() {
           handleDelete(character);
           setCharacterToDelete(null);
         }}
+      />
+
+      <WorksVisibilityConfirmDialog
+        open={!!visibilityTarget && !!visibilityAction}
+        action={visibilityAction}
+        entityLabel="캐릭터"
+        onOpenChange={(open) => {
+          if (!open) {
+            setVisibilityTarget(null);
+            setVisibilityAction(null);
+          }
+        }}
+        onConfirm={handleConfirmVisibility}
+      />
+
+      <PolicyAgreementModal
+        open={policyModalOpen}
+        onClose={() => setPolicyModalOpen(false)}
+        onConfirm={handleCreateCharacter}
+      />
+
+      <Snackbar
+        open={snackbar.open}
+        message={snackbar.message}
+        onClose={() => setSnackbar((s) => ({ ...s, open: false }))}
       />
     </>
   );

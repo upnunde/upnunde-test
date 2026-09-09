@@ -1,6 +1,7 @@
 "use client";
 
 import { DeleteAcknowledgeDialog } from "@/components/ui/modal";
+import { WorksDraftDeleteConfirmDialog } from "@/components/works/WorksDraftDeleteConfirmDialog";
 import type { SeriesData } from "@/types/series";
 
 /** 안내팝업 케이스: 시리즈를 삭제하시겠어요? */
@@ -17,6 +18,24 @@ export function SeriesDeleteModal({
   onClose,
   onConfirm,
 }: SeriesDeleteModalProps) {
+  const isDraft = series?.status === "DRAFT";
+
+  if (isDraft) {
+    return (
+      <WorksDraftDeleteConfirmDialog
+        open={open}
+        title="시리즈를 삭제할까요?"
+        description="작성 중인 시리즈 초안이 삭제되며, 복구할 수 없어요."
+        onOpenChange={(next) => {
+          if (!next) onClose();
+        }}
+        onConfirm={() => {
+          if (series) onConfirm(series);
+        }}
+      />
+    );
+  }
+
   return (
     <DeleteAcknowledgeDialog
       open={open}

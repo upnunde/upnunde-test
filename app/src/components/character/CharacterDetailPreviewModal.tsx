@@ -9,6 +9,7 @@ import {
 } from "@/components/ui/dialog";
 import { IconButton } from "@/components/ui/icon-button";
 import { Button } from "design-system/ui/button";
+import { WorksStatusBadge } from "@/components/works/WorksStatusBadge";
 import { ICONS, Icon } from "@/lib/icons";
 import { formatSeriesViewCount } from "@/lib/formatSeries";
 import { characterDataToCharacterResource } from "@/lib/myWorksCharacterDetail";
@@ -27,6 +28,7 @@ export interface CharacterDetailPreviewModalProps {
   onOpenChange: (open: boolean) => void;
   character: CharacterData | null;
   onStartChat?: (character: CharacterData) => void;
+  onOpenSettings?: (character: CharacterData) => void;
 }
 
 function parseTags(raw: string | undefined): string[] {
@@ -40,13 +42,14 @@ function parseTags(raw: string | undefined): string[] {
 
 /**
  * 내 작품 캐릭터 — 독자 노출형 상세 시트.
- * 「대화하기」로 캐릭터 대화 풀페이지(`/series/character/[id]/chat`)로 이동한다.
+ * DRAFT: 이어서 설정하기 / 그 외: 대화하기(+ 캐릭터 설정).
  */
 export function CharacterDetailPreviewModal({
   open,
   onOpenChange,
   character,
   onStartChat,
+  onOpenSettings,
 }: CharacterDetailPreviewModalProps) {
   const detail = useMemo(
     () => (character ? characterDataToCharacterResource(character) : null),
@@ -66,15 +69,17 @@ export function CharacterDetailPreviewModal({
   const imageUrl = detail.imageUrl || character.thumbnailUrl || "";
   const imageCount = Math.max(detail.expressions?.length ?? 0, imageUrl ? 1 : 0);
   const tags = parseTags(detail.tags);
-  const displayTags = tags.length > 0 ? tags : ["남성향", "무협"];
   const summary = detail.summary?.trim() || character.tagline;
   const likeCount = formatSeriesViewCount(character.stat1);
   const commentCount = formatSeriesViewCount(character.stat2);
   const viewCount = formatSeriesViewCount(character.viewCount);
+  const isDraft = character.status === "DRAFT";
+  const isBanned = character.status === "BANNED";
+  const canChat = !isDraft && !isBanned;
 
-  const handleChat = () => {
+  const closeThen = (fn?: (c: CharacterData) => void) => {
     onOpenChange(false);
-    onStartChat?.(character);
+    fn?.(character);
   };
 
   return (
@@ -128,6 +133,9 @@ export function CharacterDetailPreviewModal({
 
           <div className="flex flex-col gap-3 px-5 py-4">
             <div className="min-w-0">
+              <div className="mb-1.5 flex flex-wrap items-center gap-1.5">
+                <WorksStatusBadge status={character.status} />
+              </div>
               <h3 className="truncate text-heading4_700 text-foreground">{detail.name}</h3>
               <p className="mt-1 text-body3_400 text-foreground-placeholder">{DEMO_CREATOR_HANDLE}</p>
             </div>
@@ -137,7 +145,7 @@ export function CharacterDetailPreviewModal({
                 <Icon icon={ICONS.image} size="md" className="size-3.5" />
                 이미지 {imageCount}장
               </span>
-              {displayTags.map((tag) => (
+              {tags.map((tag) => (
                 <span
                   key={tag}
                   className="inline-flex items-center rounded-sm border border-border bg-background-muted px-2 py-1 text-caption1_500 text-foreground-muted"
@@ -166,18 +174,47 @@ export function CharacterDetailPreviewModal({
           </div>
         </div>
 
-        <div className="shrink-0 border-t border-divider px-5 py-4">
-          <Button
-            type="button"
-            variant="default"
-            tone="neutral"
-            shape="square"
-            size="xl"
-            className="h-11 w-full"
-            onClick={handleChat}
-          >
-            대화하기
-          </Button>
+        <div className="flex shrink-0 flex-col gap-2 border-t border-divider px-5 py-4">
+          {isDraft ? (
+            <Button
+              type="button"
+              variant="default"
+              tone="neutral"
+              shape="square"
+              size="xl"
+              className="h-11 w-full"
+              onClick={() => closeThen(onOpenSettings)}
+            >
+              이어서 설정하기
+            </Button>
+          ) : (
+            <>
+              {canChat ? (
+                <Button
+                  type="button"
+                  variant="default"
+                  tone="neutral"
+                  shape="square"
+                  size="xl"
+                  className="h-11 w-full"
+                  onClick={() => closeThen(onStartChat)}
+                >
+                  대화하기
+                </Button>
+              ) : null}
+              <Button
+                type="button"
+                variant={canChat ? "outline" : "default"}
+                tone={canChat ? undefined : "neutral"}
+                shape="square"
+                size="xl"
+                className="h-11 w-full"
+                onClick={() => closeThen(onOpenSettings)}
+              >
+                캐릭터 설정
+              </Button>
+            </>
+          )}
         </div>
       </DialogContent>
     </Dialog>

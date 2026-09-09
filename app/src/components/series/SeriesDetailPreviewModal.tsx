@@ -8,6 +8,7 @@ import {
 } from "@/components/ui/dialog";
 import { IconButton } from "@/components/ui/icon-button";
 import { Button } from "design-system/ui/button";
+import { WorksStatusBadge } from "@/components/works/WorksStatusBadge";
 import { ICONS, Icon } from "@/lib/icons";
 import { formatSeriesDateOrRelative, formatSeriesViewCount } from "@/lib/formatSeries";
 import { isDummyResourceUrl } from "@/lib/dummy-asset-path";
@@ -27,6 +28,8 @@ export interface SeriesDetailPreviewModalProps {
   onOpenChange: (open: boolean) => void;
   series: SeriesData | null;
   onOpenEpisodes?: (series: SeriesData) => void;
+  onOpenResources?: (series: SeriesData) => void;
+  onContinueEdit?: (series: SeriesData) => void;
 }
 
 function toPreviewRecord(series: SeriesData, detail?: SeriesFormRecord): {
@@ -55,13 +58,15 @@ function toPreviewRecord(series: SeriesData, detail?: SeriesFormRecord): {
 
 /**
  * 내 작품 시리즈 — 독자 노출형 상세 시트.
- * 캐릭터 상세정보 모달과 동일 톤. 「에피소드」로 에피소드 관리로 이동.
+ * DRAFT: 이어서 생성하기 / 그 외: 에피소드 관리(+ 리소스 관리).
  */
 export function SeriesDetailPreviewModal({
   open,
   onOpenChange,
   series,
   onOpenEpisodes,
+  onOpenResources,
+  onContinueEdit,
 }: SeriesDetailPreviewModalProps) {
   const getSeries = useSeriesCatalogStore((s) => s.getSeries);
   const detail = series ? getSeries(series.id) : undefined;
@@ -78,17 +83,17 @@ export function SeriesDetailPreviewModal({
   }
 
   const imageUrl = preview.coverImageUrl;
-  const likeCount = formatSeriesViewCount(preview.viewCount);
+  const viewCount = formatSeriesViewCount(preview.viewCount);
   const commentCount = formatSeriesViewCount(preview.commentCount);
   const episodeLabel =
     preview.episodeCount === 0 ? "에피소드 없음" : `${preview.episodeCount}회`;
   const dateStr = formatSeriesDateOrRelative(preview.createdAt);
-  const displayKeywords =
-    preview.keywords.length > 0 ? preview.keywords.slice(0, 4) : ["시리즈"];
+  const keywords = preview.keywords.slice(0, 4);
+  const isDraft = preview.status === "DRAFT";
 
-  const handleEpisodes = () => {
+  const closeThen = (fn?: (s: SeriesData) => void) => {
     onOpenChange(false);
-    onOpenEpisodes?.(series);
+    fn?.(series);
   };
 
   return (
@@ -141,12 +146,15 @@ export function SeriesDetailPreviewModal({
             )}
             <div className="absolute bottom-3 right-3 inline-flex items-center gap-1.5 rounded-full bg-dim-40 px-2.5 py-1 text-caption1_500 text-inverse-foreground backdrop-blur-sm">
               <Icon icon={ICONS.eye} size="md" className="size-3.5" />
-              <span>{likeCount}</span>
+              <span>{viewCount}</span>
             </div>
           </div>
 
           <div className="flex flex-col gap-3 px-5 py-4">
             <div className="min-w-0">
+              <div className="mb-1.5 flex flex-wrap items-center gap-1.5">
+                <WorksStatusBadge status={preview.status} />
+              </div>
               <h3 className="truncate text-heading4_700 text-foreground">{preview.title}</h3>
               <p className="mt-1 text-body3_400 text-foreground-placeholder">{DEMO_CREATOR_HANDLE}</p>
             </div>
@@ -156,7 +164,7 @@ export function SeriesDetailPreviewModal({
                 <Icon icon={ICONS.layers} size="md" className="size-3.5" />
                 {episodeLabel}
               </span>
-              {displayKeywords.map((tag) => (
+              {keywords.map((tag) => (
                 <span
                   key={tag}
                   className="inline-flex items-center rounded-sm border border-border bg-background-muted px-2 py-1 text-caption1_500 text-foreground-muted"
@@ -179,24 +187,50 @@ export function SeriesDetailPreviewModal({
               </span>
               <span className="inline-flex items-center gap-1.5 text-caption1_400" title="조회">
                 <Icon icon={ICONS.eye} size="md" />
-                {likeCount}
+                {viewCount}
               </span>
             </div>
           </div>
         </div>
 
-        <div className="shrink-0 border-t border-divider px-5 py-4">
-          <Button
-            type="button"
-            variant="default"
-            tone="neutral"
-            shape="square"
-            size="xl"
-            className="h-11 w-full"
-            onClick={handleEpisodes}
-          >
-            에피소드
-          </Button>
+        <div className="flex shrink-0 flex-col gap-2 border-t border-divider px-5 py-4">
+          {isDraft ? (
+            <Button
+              type="button"
+              variant="default"
+              tone="neutral"
+              shape="square"
+              size="xl"
+              className="h-11 w-full"
+              onClick={() => closeThen(onContinueEdit)}
+            >
+              이어서 생성하기
+            </Button>
+          ) : (
+            <>
+              <Button
+                type="button"
+                variant="default"
+                tone="neutral"
+                shape="square"
+                size="xl"
+                className="h-11 w-full"
+                onClick={() => closeThen(onOpenEpisodes)}
+              >
+                에피소드 관리
+              </Button>
+              <Button
+                type="button"
+                variant="outline"
+                shape="square"
+                size="xl"
+                className="h-11 w-full"
+                onClick={() => closeThen(onOpenResources)}
+              >
+                리소스 관리
+              </Button>
+            </>
+          )}
         </div>
       </DialogContent>
     </Dialog>

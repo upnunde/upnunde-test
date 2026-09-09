@@ -109,7 +109,7 @@ export function SeriesItem({
         className="min-w-0 flex-1"
       >
         <span className="block w-full overflow-hidden text-ellipsis whitespace-nowrap text-center">
-          에피소드
+          에피소드 관리
         </span>
       </Button>
     </>
@@ -193,7 +193,7 @@ export function SeriesItem({
                 shape="circle"
                 size="icon-sm"
                 icon={ICONS.moreVertical}
-                aria-label="더보기"
+                aria-label={`${title} 더보기`}
                 className="-mt-1 -mr-2 shrink-0"
               />
             </DropdownMenuTrigger>
@@ -205,9 +205,13 @@ export function SeriesItem({
                       <Icon icon={ICONS.settings2} size="md" />
                       시리즈 수정
                     </DropdownMenuItem>
+                    <DropdownMenuItem onSelect={() => onResourceManage?.(series)}>
+                      <Icon icon={ICONS.libraryBig} size="md" />
+                      리소스 관리
+                    </DropdownMenuItem>
                     <DropdownMenuItem onSelect={() => onEpisodeManage?.(series)}>
                       <Icon icon={ICONS.layers} size="md" />
-                      에피소드
+                      에피소드 관리
                     </DropdownMenuItem>
                   </DropdownMenuGroup>
                   <DropdownMenuSeparator />

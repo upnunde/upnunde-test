@@ -5,6 +5,15 @@ import { MY_WORKS_CHARACTERS_MOCK } from "@/lib/myWorksCharactersMock";
 
 /** 내 작품 캐릭터 편집 폼용 상세 목업 — 목록 카드(id)와 1:1 */
 const MY_WORKS_CHARACTER_DETAILS: Record<string, CharacterResource> = {
+  c0: {
+    id: "c0",
+    name: "초안 캐릭터",
+    imageUrl: "",
+    summary: "아직 설정을 다듬는 중이에요",
+    tags: "",
+    greeting: "",
+    expressions: [],
+  },
   c1: {
     id: "c1",
     name: "눈싸움 달인 그레이브즈",

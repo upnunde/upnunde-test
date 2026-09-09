@@ -6,6 +6,11 @@ import { SeriesList } from "@/components/series/SeriesList";
 import { SeriesDeleteModal } from "@/components/series/SeriesDeleteModal";
 import { SeriesDetailPreviewModal } from "@/components/series/SeriesDetailPreviewModal";
 import { PolicyAgreementModal } from "@/components/series/PolicyAgreementModal";
+import { Snackbar } from "@/components/episode/Snackbar";
+import {
+  WorksVisibilityConfirmDialog,
+  type WorksVisibilityAction,
+} from "@/components/works/WorksVisibilityConfirmDialog";
 import type { SeriesData } from "@/types/series";
 import { useSeriesCatalogStore } from "@/store/useSeriesCatalogStore";
 
@@ -23,6 +28,9 @@ export default function SeriesListPage() {
   const [seriesToDelete, setSeriesToDelete] = useState<SeriesData | null>(null);
   const [detailSeries, setDetailSeries] = useState<SeriesData | null>(null);
   const [policyModalOpen, setPolicyModalOpen] = useState(false);
+  const [visibilityTarget, setVisibilityTarget] = useState<SeriesData | null>(null);
+  const [visibilityAction, setVisibilityAction] = useState<WorksVisibilityAction | null>(null);
+  const [snackbar, setSnackbar] = useState({ open: false, message: "" });
 
   useEffect(() => {
     const syncList = () => {
@@ -48,6 +56,10 @@ export default function SeriesListPage() {
       router.prefetch(`/series/${series.id}/edit`);
     }
   }, [router, seriesList]);
+
+  const showSnackbar = useCallback((message: string) => {
+    setSnackbar({ open: true, message });
+  }, []);
 
   const handleEpisodeManage = useCallback(
     (series: SeriesData) => {
@@ -80,24 +92,30 @@ export default function SeriesListPage() {
 
   const handleDeleteSeries = useCallback(
     (target: SeriesData) => {
+      if (detailSeries?.id === target.id) setDetailSeries(null);
       deleteSeries(target.id);
+      showSnackbar("시리즈를 삭제했습니다");
     },
-    [deleteSeries],
+    [deleteSeries, detailSeries?.id, showSnackbar],
   );
 
-  const handleSetPrivate = useCallback(
-    (target: SeriesData) => {
-      setSeriesStatus(target.id, "PRIVATE");
-    },
-    [setSeriesStatus],
-  );
+  const requestVisibility = useCallback((target: SeriesData, action: WorksVisibilityAction) => {
+    setVisibilityTarget(target);
+    setVisibilityAction(action);
+  }, []);
 
-  const handleSetPublic = useCallback(
-    (target: SeriesData) => {
-      setSeriesStatus(target.id, "PUBLIC");
-    },
-    [setSeriesStatus],
-  );
+  const handleConfirmVisibility = useCallback(() => {
+    if (!visibilityTarget || !visibilityAction) return;
+    if (visibilityAction === "private") {
+      setSeriesStatus(visibilityTarget.id, "PRIVATE");
+      showSnackbar("시리즈를 비공개로 전환했습니다");
+    } else {
+      setSeriesStatus(visibilityTarget.id, "PUBLIC");
+      showSnackbar("시리즈를 공개했습니다");
+    }
+    setVisibilityTarget(null);
+    setVisibilityAction(null);
+  }, [setSeriesStatus, showSnackbar, visibilityAction, visibilityTarget]);
 
   return (
     <>
@@ -107,15 +125,9 @@ export default function SeriesListPage() {
         onResourceManage={handleResourceManage}
         onEpisodeManage={handleEpisodeManage}
         onSeriesManage={handleSeriesManage}
-        onSetPrivate={handleSetPrivate}
-        onSetPublic={handleSetPublic}
-        onDelete={(series) => {
-          if (series.status === "DRAFT") {
-            handleDeleteSeries(series);
-            return;
-          }
-          setSeriesToDelete(series);
-        }}
+        onSetPrivate={(series) => requestVisibility(series, "private")}
+        onSetPublic={(series) => requestVisibility(series, "public")}
+        onDelete={setSeriesToDelete}
         onCreateSeries={handleOpenCreateSeries}
       />
 
@@ -126,6 +138,8 @@ export default function SeriesListPage() {
           if (!open) setDetailSeries(null);
         }}
         onOpenEpisodes={handleEpisodeManage}
+        onOpenResources={handleResourceManage}
+        onContinueEdit={handleSeriesManage}
       />
 
       <SeriesDeleteModal
@@ -138,10 +152,29 @@ export default function SeriesListPage() {
         }}
       />
 
+      <WorksVisibilityConfirmDialog
+        open={!!visibilityTarget && !!visibilityAction}
+        action={visibilityAction}
+        entityLabel="시리즈"
+        onOpenChange={(open) => {
+          if (!open) {
+            setVisibilityTarget(null);
+            setVisibilityAction(null);
+          }
+        }}
+        onConfirm={handleConfirmVisibility}
+      />
+
       <PolicyAgreementModal
         open={policyModalOpen}
         onClose={() => setPolicyModalOpen(false)}
         onConfirm={handleCreateSeries}
+      />
+
+      <Snackbar
+        open={snackbar.open}
+        message={snackbar.message}
+        onClose={() => setSnackbar((s) => ({ ...s, open: false }))}
       />
     </>
   );

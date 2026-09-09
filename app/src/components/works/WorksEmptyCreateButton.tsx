@@ -14,7 +14,7 @@ export interface WorksEmptyCreateButtonProps {
 }
 
 /**
- * 내 작품 영역 — 작품이 없을 때 노출하는 점선 박스 + 생성 CTA (시리즈 목록과 동일 스타일)
+ * 내 작품 목록 끝 슬롯 — 생성/추가 CTA (empty vs add 카피는 호출측에서 구분)
  */
 export function WorksEmptyCreateButton({
   hint,

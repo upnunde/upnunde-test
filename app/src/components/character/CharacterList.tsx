@@ -31,6 +31,8 @@ export function CharacterList({
   onImportCharacter,
   className,
 }: CharacterListProps) {
+  const isEmpty = characters.length === 0;
+
   return (
     <div className={`${WORKS_LIST_GRID_CLASS} ${className ?? ""}`}>
       {characters.map((character) => (
@@ -47,8 +49,8 @@ export function CharacterList({
       ))}
       <div className={WORKS_LIST_CREATE_SLOT_CLASS}>
         <WorksEmptyCreateButton
-          hint="새로운 캐릭터를 등록하세요"
-          actionLabel="새 캐릭터 생성"
+          hint={isEmpty ? "새로운 캐릭터를 등록하세요" : "캐릭터를 더 추가하세요"}
+          actionLabel={isEmpty ? "새 캐릭터 생성" : "캐릭터 추가"}
           onClick={onCreateCharacter}
           secondaryActionLabel="캐릭터 불러오기"
           onSecondaryClick={onImportCharacter}

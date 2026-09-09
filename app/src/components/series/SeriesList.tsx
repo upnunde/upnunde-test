@@ -32,6 +32,8 @@ export function SeriesList({
   onCreateSeries,
   className,
 }: SeriesListProps) {
+  const isEmpty = seriesList.length === 0;
+
   return (
     <div className={`${WORKS_LIST_GRID_CLASS} ${className ?? ""}`}>
       {seriesList.map((series) => (
@@ -49,8 +51,8 @@ export function SeriesList({
       ))}
       <div className={WORKS_LIST_CREATE_SLOT_CLASS}>
         <WorksEmptyCreateButton
-          hint="새로운 작품을 등록하세요"
-          actionLabel="새 시리즈 생성"
+          hint={isEmpty ? "새로운 작품을 등록하세요" : "시리즈를 더 추가하세요"}
+          actionLabel={isEmpty ? "새 시리즈 생성" : "시리즈 추가"}
           onClick={onCreateSeries}
         />
       </div>

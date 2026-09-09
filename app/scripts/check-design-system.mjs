@@ -242,6 +242,8 @@ async function main() {
   for (const file of files) {
     const rel = relative(appRoot, file).replace(/\\/g, "/");
     if (rel.startsWith("src/components/example-")) continue;
+    // Figma 프로토타입 — 원본 색·수치 유지. DS 동기화 게이트에서 제외.
+    if (rel.startsWith("src/components/prototype/")) continue;
     const content = await readFile(file, "utf8");
     checkFile(rel, content);
   }

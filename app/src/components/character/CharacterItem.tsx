@@ -50,13 +50,14 @@ export function CharacterItem({
   const isDraft = status === "DRAFT";
   const isBanned = status === "BANNED";
   const isPrivate = status === "PRIVATE";
+  const canChat = !isDraft && !isBanned;
 
   const dateStr = formatSeriesDateOrRelative(createdAt);
   const viewStr = formatSeriesViewCount(viewCount);
   const stat1Str = formatSeriesViewCount(stat1);
   const stat2Str = formatSeriesViewCount(stat2);
 
-  const actionButtons = (
+  const actionButtons = isDraft ? (
     <Button
       type="button"
       variant="outline"
@@ -66,9 +67,38 @@ export function CharacterItem({
       className="min-w-0 flex-1"
     >
       <span className="block w-full overflow-hidden text-ellipsis whitespace-nowrap text-center">
-        캐릭터 설정
+        이어서 설정하기
       </span>
     </Button>
+  ) : (
+    <>
+      {canChat ? (
+        <Button
+          type="button"
+          variant="outline"
+          shape="square"
+          size="default"
+          onClick={() => onStartChat?.(character)}
+          className="min-w-0 flex-1"
+        >
+          <span className="block w-full overflow-hidden text-ellipsis whitespace-nowrap text-center">
+            대화하기
+          </span>
+        </Button>
+      ) : null}
+      <Button
+        type="button"
+        variant="outline"
+        shape="square"
+        size="default"
+        onClick={() => onCharacterSettings?.(character)}
+        className="min-w-0 flex-1"
+      >
+        <span className="block w-full overflow-hidden text-ellipsis whitespace-nowrap text-center">
+          캐릭터 설정
+        </span>
+      </Button>
+    </>
   );
 
   return (
@@ -132,16 +162,18 @@ export function CharacterItem({
                   shape="circle"
                   size="icon-sm"
                   icon={ICONS.moreVertical}
-                  aria-label="더보기"
+                  aria-label={`${title} 더보기`}
                   className="-mr-2 -mt-1 shrink-0"
                 />
               </DropdownMenuTrigger>
               <DropdownMenuContent align="end">
                 <DropdownMenuGroup>
-                  <DropdownMenuItem onSelect={() => onStartChat?.(character)}>
-                    <Icon icon={ICONS.messageCircle} size="md" />
-                    대화하기
-                  </DropdownMenuItem>
+                  {canChat ? (
+                    <DropdownMenuItem onSelect={() => onStartChat?.(character)}>
+                      <Icon icon={ICONS.messageCircle} size="md" />
+                      대화하기
+                    </DropdownMenuItem>
+                  ) : null}
                   {status === "PUBLIC" && (
                     <>
                       <DropdownMenuItem onSelect={() => onSetPrivate?.(character)}>
@@ -168,10 +200,12 @@ export function CharacterItem({
                   )}
                   {(status === "DRAFT" || status === "BANNED") && (
                     <>
-                      <DropdownMenuItem disabled>
-                        <Icon icon={ICONS.eye} size="md" />
-                        공개
-                      </DropdownMenuItem>
+                      {isBanned && (
+                        <DropdownMenuItem disabled>
+                          <Icon icon={ICONS.eye} size="md" />
+                          공개
+                        </DropdownMenuItem>
+                      )}
                       <DropdownMenuItem variant="destructive" onSelect={() => onDelete?.(character)}>
                         <Icon icon={ICONS.trash2} size="md" />
                         삭제

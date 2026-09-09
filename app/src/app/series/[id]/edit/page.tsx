@@ -175,7 +175,7 @@ export default function SeriesEditPage() {
   return (
     <>
     <SeriesFormPageScaffold
-      title="시리즈 관리"
+      title="시리즈 수정"
       activeTab={activeTab}
       onTabChange={setActiveTab}
       onBack={handleBack}

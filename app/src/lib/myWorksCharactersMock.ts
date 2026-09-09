@@ -3,6 +3,16 @@ import type { CharacterData } from "@/types/character";
 /** 내 작품 — 캐릭터 목록 목업 (캐릭터 탭·분석·리소스 가져오기 공통) */
 export const MY_WORKS_CHARACTERS_MOCK: CharacterData[] = [
   {
+    id: "c0",
+    title: "초안 캐릭터",
+    tagline: "아직 설정을 다듬는 중이에요",
+    status: "DRAFT",
+    createdAt: "2024-05-10T00:00:00.000Z",
+    viewCount: 0,
+    stat1: 0,
+    stat2: 0,
+  },
+  {
     id: "c1",
     title: "눈싸움 달인 그레이브즈",
     tagline: "뭐, 좋은 생각이라도 있어?",

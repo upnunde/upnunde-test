@@ -352,7 +352,11 @@ export function CharacterDetailPage({
               aria-label={isMyWorks ? "캐릭터 목록으로" : "리소스 목록으로"}
             />
             <h1 className="text-heading2_700 text-foreground">
-              {isMyWorks ? "캐릭터" : "등장인물"} {isNew ? "등록" : "상세"}
+              {isMyWorks
+                ? isNew
+                  ? "캐릭터 등록"
+                  : "캐릭터 설정"
+                : `등장인물 ${isNew ? "등록" : "상세"}`}
             </h1>
           </div>
         </div>
