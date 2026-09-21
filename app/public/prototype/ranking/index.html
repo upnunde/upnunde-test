@@ -6,8 +6,8 @@
   <title>업데이트 홈 · Renovel</title>
   <link rel="preconnect" href="https://cdn.jsdelivr.net" />
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/static/pretendard.min.css" />
-  <script type="module" crossorigin src="/prototype/ranking/assets/index-DnOLCFkR.js"></script>
-  <link rel="stylesheet" crossorigin href="/prototype/ranking/assets/index-WCSd9LxV.css">
+  <script type="module" crossorigin src="/prototype/ranking/assets/index-DJX9Std6.js"></script>
+  <link rel="stylesheet" crossorigin href="/prototype/ranking/assets/index-usPeUedJ.css">
 </head>
 <body>
   <div class="shell">
@@ -309,158 +309,198 @@
         </section>
 
         <section class="view view-ranking-final" id="view-ranking-final" data-view-panel="ranking-final" hidden>
-          <div class="final-page">
+          <div class="final-page" data-layout="grid">
             <div class="rk-filters rk-filters--final" aria-label="기간">
               <div class="rk-periods rk-sorts" role="tablist" aria-label="기간">
                 <button class="rk-chip is-active" type="button" role="tab" aria-selected="true">일간</button>
                 <button class="rk-chip" type="button" role="tab" aria-selected="false">주간</button>
                 <button class="rk-chip" type="button" role="tab" aria-selected="false">월간</button>
               </div>
+              <div class="rk-layout-toggles" role="group" aria-label="목록 형태">
+                <button class="rk-layout-btn is-active" type="button" data-final-layout="grid" aria-pressed="true" aria-label="그리드 보기">
+                  <svg width="20" height="20" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true">
+                    <rect x="2" y="3" width="4" height="14" rx="1" />
+                    <rect x="8" y="3" width="4" height="14" rx="1" />
+                    <rect x="14" y="3" width="4" height="14" rx="1" />
+                  </svg>
+                </button>
+                <button class="rk-layout-btn" type="button" data-final-layout="row" aria-pressed="false" aria-label="가로형 보기">
+                  <svg width="20" height="20" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true">
+                    <rect x="2" y="3" width="16" height="3.5" rx="1" />
+                    <rect x="2" y="8.25" width="16" height="3.5" rx="1" />
+                    <rect x="2" y="13.5" width="16" height="3.5" rx="1" />
+                  </svg>
+                </button>
+              </div>
             </div>
             <div class="rk-grid">
               <a class="rk-card" href="#" data-content-type="캐릭터">
                 <div class="rk-thumb">
                   <img class="js-thumb" src="/prototype/ranking/assets/thumb-01-CmLZ3rZ4.png" alt="" />
-                  <span class="rk-badge" data-badge="캐릭터"><i data-lucide="message-circle" aria-hidden="true"></i>캐릭터</span>
                 </div>
                 <div class="rk-meta">
                   <span class="rk-num">1</span>
                   <span class="rk-delta rk-delta--up" data-delta="up"><span class="rk-delta-icon" aria-hidden="true"></span>5</span>
                 </div>
-                <p class="rk-title">헤어진 전남친과 소꿉친구 사이</p>
-                <span class="rk-count"><i data-lucide="message-circle" aria-hidden="true"></i>860</span>
+                <div class="rk-body">
+                  <span class="rk-badge" data-badge="캐릭터"><i data-lucide="message-circle" aria-hidden="true"></i>캐릭터</span>
+                  <p class="rk-title">헤어진 전남친과 소꿉친구 사이</p>
+                  <span class="rk-count"><i data-lucide="message-circle" aria-hidden="true"></i>860</span>
+                </div>
               </a>
               <a class="rk-card" href="#" data-content-type="시뮬레이션">
                 <div class="rk-thumb">
                   <img class="js-thumb" src="/prototype/ranking/assets/thumb-02-BEbBDHR2.png" alt="" />
-                  <span class="rk-badge" data-badge="시뮬레이션"><i data-lucide="cpu" aria-hidden="true"></i>시뮬레이션</span>
                 </div>
                 <div class="rk-meta">
                   <span class="rk-num">2</span>
                   <span class="rk-delta rk-delta--up" data-delta="up"><span class="rk-delta-icon" aria-hidden="true"></span>7</span>
                 </div>
-                <p class="rk-title">첫사랑과 다시 만난 여름밤</p>
-                <span class="rk-count"><i data-lucide="message-circle" aria-hidden="true"></i>920</span>
+                <div class="rk-body">
+                  <span class="rk-badge" data-badge="시뮬레이션"><i data-lucide="cpu" aria-hidden="true"></i>시뮬레이션</span>
+                  <p class="rk-title">첫사랑과 다시 만난 여름밤</p>
+                  <span class="rk-count"><i data-lucide="message-circle" aria-hidden="true"></i>920</span>
+                </div>
               </a>
               <a class="rk-card" href="#" data-content-type="스토리">
                 <div class="rk-thumb">
                   <img class="js-thumb" src="/prototype/ranking/assets/thumb-03-CjmDST4g.png" alt="" />
-                  <span class="rk-badge" data-badge="스토리"><i data-lucide="play" aria-hidden="true"></i>스토리</span>
                 </div>
                 <div class="rk-meta">
                   <span class="rk-num">3</span>
                   <span class="rk-delta rk-delta--nothing" data-delta="nothing"><span class="rk-delta-flat" aria-hidden="true"></span></span>
                 </div>
-                <p class="rk-title">우연히 마주친 고등학교 동창</p>
-                <span class="rk-count"><i data-lucide="message-circle" aria-hidden="true"></i>780</span>
+                <div class="rk-body">
+                  <span class="rk-badge" data-badge="스토리"><i data-lucide="play" aria-hidden="true"></i>스토리</span>
+                  <p class="rk-title">우연히 마주친 고등학교 동창</p>
+                  <span class="rk-count"><i data-lucide="message-circle" aria-hidden="true"></i>780</span>
+                </div>
               </a>
               <a class="rk-card" href="#" data-content-type="캐릭터">
                 <div class="rk-thumb">
                   <img class="js-thumb" src="/prototype/ranking/assets/thumb-04-BRdo0x4d.png" alt="" />
-                  <span class="rk-badge" data-badge="캐릭터"><i data-lucide="message-circle" aria-hidden="true"></i>캐릭터</span>
                 </div>
                 <div class="rk-meta">
                   <span class="rk-num">4</span>
                   <span class="rk-delta rk-delta--down" data-delta="down"><span class="rk-delta-icon" aria-hidden="true"></span>8</span>
                 </div>
-                <p class="rk-title">비밀스러운 도서관의 만남</p>
-                <span class="rk-count"><i data-lucide="message-circle" aria-hidden="true"></i>650</span>
+                <div class="rk-body">
+                  <span class="rk-badge" data-badge="캐릭터"><i data-lucide="message-circle" aria-hidden="true"></i>캐릭터</span>
+                  <p class="rk-title">비밀스러운 도서관의 만남</p>
+                  <span class="rk-count"><i data-lucide="message-circle" aria-hidden="true"></i>650</span>
+                </div>
               </a>
               <a class="rk-card" href="#" data-content-type="스토리">
                 <div class="rk-thumb">
                   <img class="js-thumb" src="/prototype/ranking/assets/thumb-05-CXg9aeHI.png" alt="" />
-                  <span class="rk-badge" data-badge="스토리"><i data-lucide="play" aria-hidden="true"></i>스토리</span>
                 </div>
                 <div class="rk-meta">
                   <span class="rk-num">5</span>
                   <span class="rk-delta rk-delta--down" data-delta="down"><span class="rk-delta-icon" aria-hidden="true"></span>4</span>
                 </div>
-                <p class="rk-title">오래된 사진 속 추억을 찾아서</p>
-                <span class="rk-count"><i data-lucide="message-circle" aria-hidden="true"></i>710</span>
+                <div class="rk-body">
+                  <span class="rk-badge" data-badge="스토리"><i data-lucide="play" aria-hidden="true"></i>스토리</span>
+                  <p class="rk-title">오래된 사진 속 추억을 찾아서</p>
+                  <span class="rk-count"><i data-lucide="message-circle" aria-hidden="true"></i>710</span>
+                </div>
               </a>
               <a class="rk-card" href="#" data-content-type="캐릭터">
                 <div class="rk-thumb">
                   <img class="js-thumb" src="/prototype/ranking/assets/thumb-06-BxhJFtMh.png" alt="" />
-                  <span class="rk-badge" data-badge="캐릭터"><i data-lucide="message-circle" aria-hidden="true"></i>캐릭터</span>
                 </div>
                 <div class="rk-meta">
                   <span class="rk-num">6</span>
                   <span class="rk-delta rk-delta--up" data-delta="up"><span class="rk-delta-icon" aria-hidden="true"></span>9</span>
                 </div>
-                <p class="rk-title">별빛 아래 속삭이는 첫 고백</p>
-                <span class="rk-count"><i data-lucide="message-circle" aria-hidden="true"></i>830</span>
+                <div class="rk-body">
+                  <span class="rk-badge" data-badge="캐릭터"><i data-lucide="message-circle" aria-hidden="true"></i>캐릭터</span>
+                  <p class="rk-title">별빛 아래 속삭이는 첫 고백</p>
+                  <span class="rk-count"><i data-lucide="message-circle" aria-hidden="true"></i>830</span>
+                </div>
               </a>
               <a class="rk-card" href="#" data-content-type="캐릭터">
                 <div class="rk-thumb">
                   <img class="js-thumb" src="/prototype/ranking/assets/thumb-07-C6zZviJB.png" alt="" />
-                  <span class="rk-badge" data-badge="캐릭터"><i data-lucide="message-circle" aria-hidden="true"></i>캐릭터</span>
                 </div>
                 <div class="rk-meta">
                   <span class="rk-num">7</span>
                   <span class="rk-delta rk-delta--up" data-delta="up"><span class="rk-delta-icon" aria-hidden="true"></span>3</span>
                 </div>
-                <p class="rk-title">새벽 카페에서 마주친 낯선 인연</p>
-                <span class="rk-count"><i data-lucide="message-circle" aria-hidden="true"></i>540</span>
+                <div class="rk-body">
+                  <span class="rk-badge" data-badge="캐릭터"><i data-lucide="message-circle" aria-hidden="true"></i>캐릭터</span>
+                  <p class="rk-title">새벽 카페에서 마주친 낯선 인연</p>
+                  <span class="rk-count"><i data-lucide="message-circle" aria-hidden="true"></i>540</span>
+                </div>
               </a>
               <a class="rk-card" href="#" data-content-type="캐릭터">
                 <div class="rk-thumb">
                   <img class="js-thumb" src="/prototype/ranking/assets/thumb-08-Cu2WI5dg.png" alt="" />
-                  <span class="rk-badge" data-badge="캐릭터"><i data-lucide="message-circle" aria-hidden="true"></i>캐릭터</span>
                 </div>
                 <div class="rk-meta">
                   <span class="rk-num">8</span>
                   <span class="rk-delta rk-delta--up" data-delta="up"><span class="rk-delta-icon" aria-hidden="true"></span>10</span>
                 </div>
-                <p class="rk-title">함께 걷던 강변길의 기억</p>
-                <span class="rk-count"><i data-lucide="message-circle" aria-hidden="true"></i>890</span>
+                <div class="rk-body">
+                  <span class="rk-badge" data-badge="캐릭터"><i data-lucide="message-circle" aria-hidden="true"></i>캐릭터</span>
+                  <p class="rk-title">함께 걷던 강변길의 기억</p>
+                  <span class="rk-count"><i data-lucide="message-circle" aria-hidden="true"></i>890</span>
+                </div>
               </a>
               <a class="rk-card" href="#" data-content-type="시뮬레이션">
                 <div class="rk-thumb">
                   <img class="js-thumb" src="/prototype/ranking/assets/thumb-09-BZ5cVDU_.png" alt="" />
-                  <span class="rk-badge" data-badge="시뮬레이션"><i data-lucide="cpu" aria-hidden="true"></i>시뮬레이션</span>
                 </div>
                 <div class="rk-meta">
                   <span class="rk-num">9</span>
                   <span class="rk-delta rk-delta--down" data-delta="down"><span class="rk-delta-icon" aria-hidden="true"></span>2</span>
                 </div>
-                <p class="rk-title">비오는 날 우산을 나눈 그 사람</p>
-                <span class="rk-count"><i data-lucide="message-circle" aria-hidden="true"></i>670</span>
+                <div class="rk-body">
+                  <span class="rk-badge" data-badge="시뮬레이션"><i data-lucide="cpu" aria-hidden="true"></i>시뮬레이션</span>
+                  <p class="rk-title">비오는 날 우산을 나눈 그 사람</p>
+                  <span class="rk-count"><i data-lucide="message-circle" aria-hidden="true"></i>670</span>
+                </div>
               </a>
               <a class="rk-card" href="#" data-content-type="스토리">
                 <div class="rk-thumb">
                   <img class="js-thumb" src="/prototype/ranking/assets/thumb-10-85eg_TBs.png" alt="" />
-                  <span class="rk-badge" data-badge="스토리"><i data-lucide="play" aria-hidden="true"></i>스토리</span>
                 </div>
                 <div class="rk-meta">
                   <span class="rk-num">10</span>
                   <span class="rk-delta rk-delta--up" data-delta="up"><span class="rk-delta-icon" aria-hidden="true"></span>11</span>
                 </div>
-                <p class="rk-title">졸업식 날 마지막 인사</p>
-                <span class="rk-count"><i data-lucide="message-circle" aria-hidden="true"></i>780</span>
+                <div class="rk-body">
+                  <span class="rk-badge" data-badge="스토리"><i data-lucide="play" aria-hidden="true"></i>스토리</span>
+                  <p class="rk-title">졸업식 날 마지막 인사</p>
+                  <span class="rk-count"><i data-lucide="message-circle" aria-hidden="true"></i>780</span>
+                </div>
               </a>
               <a class="rk-card" href="#" data-content-type="캐릭터">
                 <div class="rk-thumb">
                   <img class="js-thumb" src="/prototype/ranking/assets/thumb-11-BxzNvP4A.png" alt="" />
-                  <span class="rk-badge" data-badge="캐릭터"><i data-lucide="message-circle" aria-hidden="true"></i>캐릭터</span>
                 </div>
                 <div class="rk-meta">
                   <span class="rk-num">11</span>
                   <span class="rk-delta rk-delta--up" data-delta="up"><span class="rk-delta-icon" aria-hidden="true"></span>1</span>
                 </div>
-                <p class="rk-title">첫눈 오는 날의 약속</p>
-                <span class="rk-count"><i data-lucide="message-circle" aria-hidden="true"></i>720</span>
+                <div class="rk-body">
+                  <span class="rk-badge" data-badge="캐릭터"><i data-lucide="message-circle" aria-hidden="true"></i>캐릭터</span>
+                  <p class="rk-title">첫눈 오는 날의 약속</p>
+                  <span class="rk-count"><i data-lucide="message-circle" aria-hidden="true"></i>720</span>
+                </div>
               </a>
               <a class="rk-card" href="#" data-content-type="스토리">
                 <div class="rk-thumb">
                   <img class="js-thumb" src="/prototype/ranking/assets/thumb-12-7-S2JnWb.png" alt="" />
-                  <span class="rk-badge" data-badge="스토리"><i data-lucide="play" aria-hidden="true"></i>스토리</span>
                 </div>
                 <div class="rk-meta">
                   <span class="rk-num">12</span>
                   <span class="rk-delta rk-delta--up" data-delta="up"><span class="rk-delta-icon" aria-hidden="true"></span>12</span>
                 </div>
-                <p class="rk-title">잊혀진 편지 속 고백</p>
-                <span class="rk-count"><i data-lucide="message-circle" aria-hidden="true"></i>860</span>
+                <div class="rk-body">
+                  <span class="rk-badge" data-badge="스토리"><i data-lucide="play" aria-hidden="true"></i>스토리</span>
+                  <p class="rk-title">잊혀진 편지 속 고백</p>
+                  <span class="rk-count"><i data-lucide="message-circle" aria-hidden="true"></i>860</span>
+                </div>
               </a>
             </div>
             <button class="rank-back" type="button" data-rank-back>뒤로</button>
