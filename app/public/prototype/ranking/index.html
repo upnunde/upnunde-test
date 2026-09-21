@@ -1,0 +1,3286 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+  <title>업데이트 홈 · Renovel</title>
+  <link rel="preconnect" href="https://cdn.jsdelivr.net" />
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/static/pretendard.min.css" />
+  <script type="module" crossorigin src="/prototype/ranking/assets/index-DnOLCFkR.js"></script>
+  <link rel="stylesheet" crossorigin href="/prototype/ranking/assets/index-WCSd9LxV.css">
+</head>
+<body>
+  <div class="shell">
+    <div class="phone">
+      <div class="ios-status" aria-hidden="true">
+        <span class="ios-status-time">9:41</span>
+        <div class="ios-status-levels">
+          <svg class="ios-status-signal" viewBox="0 0 17 12" width="17" height="12" fill="currentColor" aria-hidden="true">
+            <rect x="0" y="7.5" width="3" height="4.5" rx="0.6" />
+            <rect x="4.5" y="5" width="3" height="7" rx="0.6" />
+            <rect x="9" y="2.5" width="3" height="9.5" rx="0.6" />
+            <rect x="13.5" y="0" width="3" height="12" rx="0.6" />
+          </svg>
+          <svg class="ios-status-wifi" viewBox="0 0 16 12" width="16" height="12" fill="none" stroke="currentColor" aria-hidden="true">
+            <path d="M1.2 3.8c3.7-3.4 9.9-3.4 13.6 0" stroke-width="1.5" stroke-linecap="round" />
+            <path d="M3.5 6.5c2.5-2.2 6.5-2.2 9 0" stroke-width="1.5" stroke-linecap="round" />
+            <path d="M5.9 9.1c1.2-1 3-1 4.2 0" stroke-width="1.5" stroke-linecap="round" />
+            <circle cx="8" cy="11" r="1" fill="currentColor" stroke="none" />
+          </svg>
+          <svg class="ios-status-battery" viewBox="0 0 27 13" width="27" height="13" aria-hidden="true">
+            <rect x="0.5" y="0.5" width="23" height="12" rx="2.5" fill="none" stroke="currentColor" stroke-opacity="0.4" />
+            <rect x="2" y="2" width="20" height="9" rx="1.5" fill="currentColor" />
+            <path d="M25 4.5v4a2 2 0 0 0 0-4Z" fill="currentColor" fill-opacity="0.4" />
+          </svg>
+        </div>
+      </div>
+      <main class="page">
+        <nav class="top-nav">
+          <div class="top-tabs" role="tablist">
+            <button class="tab is-active" type="button" data-view="home" role="tab" aria-selected="true">홈</button>
+            <button class="tab" type="button" data-view="ranking" role="tab" aria-selected="false">랭킹</button>
+          </div>
+          <div class="nav-actions">
+            <button class="notify-btn" type="button" aria-label="알림">
+              <i data-lucide="bell" aria-hidden="true"></i>
+            </button>
+            <button class="token-btn" type="button" aria-label="토큰">
+              <img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAADAAAAAwCAYAAABXAvmHAAAAAXNSR0IArs4c6QAAAERlWElmTU0AKgAAAAgAAYdpAAQAAAABAAAAGgAAAAAAA6ABAAMAAAABAAEAAKACAAQAAAABAAAAMKADAAQAAAABAAAAMAAAAADbN2wMAAAE/klEQVRoBc1aTYgcRRR+va4kgsbxIBgI2hL0kIszgokxJDuB4CGXzCHgcSZ4FXbmag47C97TkVyT7B48KIFsQDx4yUQwCUKc2YsgKrYQEMxl/DkYDGm/r6Zr6P+u/mFnHtRWddWrV+9Nvb+qWktqBu9uvwOSXZQmio1CmKC44skt64SzxY66wKqLkHev3waD10HPzqHpYnxgvefs5OAZDa8YYeUggfkNMH8baHYOKoeJc1PN4VdFqLQD3rjfkH/lEpjvleLDki3M27SOO26p+ZhkLIBSEZE1MEvdbqDYfkFVGVxQYJmC/q48KzvWUYd2kwu5Anjf9psQ8xIotXOp1YswwroX8nYn0wa8+4N1EBkvgHn+FHQKv+bZSuoO+IY5JKUlAHotJ4mPRAHAvE3pkyYsrG9VWkl2kaZC9OfLBU+UHcZ4iu2A9x2M9onS+xjywjssOQ2jHgX5iO/Af9IJIixV+ykMOwKrkW9GhrdifRU63N//UrMbz++Txgv7KlBSU5tRAkkCNGDApWH692O5/MVYRuOHMvr+YYgOBWi3Dknn1GHpnj0SGjP6sOTFKF7cBu726X3sKKLJ9+bV++KAeQqRB/bBAzL88N2igrhwp68HaYcEKOs+qSbnP/5y+uDHPxpB4iZtCrGBYgzPyUtWy5lq/KgRb+gB05q/9umPbkgZ5rnGzje/GO3YnB8mjwGYC+BH3l5gzKg5+PSOaEM1mhBAar7xsty+cr6YcSPzVbz6dJQK+aeomwHaRs2tr36QC598bYQbRSrFfJCIHxP0DoS2JYiX1abRloHKzHPR2elPVpEu9/BpoxQCusg81Wm/fUh5GfuVAzL5+ZFc/nwsjAeF1SaZM5uas4rAdS55PLv3Dvx8Fqx/0BJnfW2OQmE6Jw8rAWoIaDO64J2BzJ6vUqAx+elRKjZ9fJB5jcj+WsGTNm0gFp5NFpn+kx6sqON7BLY24j1ar/5lKIBbhiyNMQ1o4CbpRNp8435PJhRgYjwhgJilJlSvzWtxF0uvVbNgv9GIt1E6Ad6MmmvIKrPAgctkmtCHN3oNbnQXRs9Ejy61JjcqsoLrFzIBf1oqA2UOFE2Zs4TSY7UEMqg+M9OZEeP+RRMvUl/sHp1nhUXm0QVT+Erq9IwMuKYSQJ0zPdkswgRxz7zzaoOHkzJQSQjwah2bXQ4rFdIMQJW20O7qb5OaBtvqfpabVqTRKqxOuE/FDz7XmJkKaeqPpa+bprXObZpvlgte57CDBVOLkKaEdoBMlzVozh0iO91Gip2X5BGXacX1i+8Lc6QCEDtS0o2GwUJg88QOd5p98XjYw2GdB3oKEvVQ+lDPA31J23GjnMQF8HDFXQH4y/YOHlGCkIzejVquVTz5M8pakgC7SLELB7YoYf1dcwY60XR1HTZi9q7ISA8uXY2HjyhPMQFUTLCWUoiR+e3001mUi0q70O+UbCG2A2QSb7nUNRWqF8q0XpyRN+UhMBYH9BzWOPAPYdCFL7uCNGpop77OkHamAERQ142CB2ycP/m9hzDCmgNfG1KXzRVAz1SvlTw3rOCplTALdrZqV//j4qd0QXP2zApPqJyJAV1jAZJo+ZfBQ4wVSgDntPjQvR+/cuCydj5m2KgkgF6jlK3QME84Q02jbF2LAFyct2SoeEVpo2QB1YUP2KMsJNOx2gTQC0KtetBl3vbZKE2/30VN17xd13+p+HTlfyhCkRWtxtDlAAAAAElFTkSuQmCC" alt="" />
+            </button>
+          </div>
+        </nav>
+
+                <section class="view view-home is-active" id="view-home" data-view-panel="home">
+<section class="hero" aria-label="메인 배너">
+          <div class="hero-track" id="heroTrack">
+            <article class="hero-card is-active">
+              <img class="hero-img js-thumb" src="/prototype/ranking/assets/thumb-01-CmLZ3rZ4.png" alt="" />
+              <div class="hero-dim"></div>
+              <span class="badge badge-story">
+                <i data-lucide="play" aria-hidden="true"></i>
+                스토리
+              </span>
+              <div class="hero-copy">
+                <p class="hero-tags"><span>복수물</span><span>라방</span><span>학원</span></p>
+                <p class="hero-sub">새로운 에피소드 업데이트!<br />지금 바로 즐겨보세요.</p>
+              </div>
+            </article>
+            <article class="hero-card">
+              <img class="hero-img js-thumb" src="/prototype/ranking/assets/thumb-02-BEbBDHR2.png" alt="" />
+              <div class="hero-dim"></div>
+              <span class="badge badge-story"><i data-lucide="play" aria-hidden="true"></i> 스토리</span>
+              <div class="hero-copy">
+                <p class="hero-sub">두 번째 피처드 배너 예시</p>
+              </div>
+            </article>
+            <article class="hero-card">
+              <img class="hero-img js-thumb" src="/prototype/ranking/assets/thumb-03-CjmDST4g.png" alt="" />
+              <div class="hero-dim"></div>
+              <span class="badge badge-story"><i data-lucide="play" aria-hidden="true"></i> 스토리</span>
+              <div class="hero-copy">
+                <p class="hero-sub">세 번째 피처드 배너 예시</p>
+              </div>
+            </article>
+            <article class="hero-card">
+              <img class="hero-img js-thumb" src="/prototype/ranking/assets/thumb-04-BRdo0x4d.png" alt="" />
+              <div class="hero-dim"></div>
+              <span class="badge badge-story"><i data-lucide="play" aria-hidden="true"></i> 스토리</span>
+              <div class="hero-copy">
+                <p class="hero-sub">네 번째 피처드 배너 예시</p>
+              </div>
+            </article>
+          </div>
+          <div class="hero-dots" id="heroDots" aria-hidden="true">
+            <span class="pill"></span><span></span><span></span><span></span>
+          </div>
+        </section>
+
+        <section class="promo" aria-label="롤링 배너">
+          <a class="promo-card" href="#">
+            <img class="js-thumb" src="/prototype/ranking/assets/thumb-05-CXg9aeHI.png" alt="" />
+            <div class="promo-copy">
+              <p class="promo-sub">누적 대화량 1위, 지금 벨라와 대화하기</p>
+              <p class="promo-title">나를 펫 취급하는 그녀</p>
+            </div>
+          </a>
+        </section>
+
+        <section class="section">
+          <div class="section-head">
+            <h2>이어서 즐기기 <em>388</em></h2>
+          </div>
+          <div class="h-scroll">
+            <a class="v-card" href="#">
+              <div class="thumb">
+                <img class="js-thumb" src="/prototype/ranking/assets/thumb-01-CmLZ3rZ4.png" alt="" />
+                <span class="play" aria-hidden="true"><i data-lucide="play"></i></span>
+              </div>
+              <p class="v-title">초이스하우스 89.1MHz</p>
+            </a>
+            <a class="v-card" href="#">
+              <div class="thumb">
+                <img class="js-thumb" src="/prototype/ranking/assets/thumb-02-BEbBDHR2.png" alt="" />
+                <span class="badge badge-new">NEW</span>
+                <span class="play" aria-hidden="true"><i data-lucide="play"></i></span>
+              </div>
+              <p class="v-title">헤어진 전남친과 소꿉친구 사이</p>
+            </a>
+            <a class="v-card" href="#">
+              <div class="thumb">
+                <img class="js-thumb" src="/prototype/ranking/assets/thumb-03-CjmDST4g.png" alt="" />
+                <span class="play" aria-hidden="true"><i data-lucide="play"></i></span>
+              </div>
+              <p class="v-title">헤어진 전남친과 소꿉친구 사이</p>
+            </a>
+            <a class="v-card" href="#">
+              <div class="thumb">
+                <img class="js-thumb" src="/prototype/ranking/assets/thumb-04-BRdo0x4d.png" alt="" />
+                <span class="play" aria-hidden="true"><i data-lucide="play"></i></span>
+              </div>
+              <p class="v-title">나의 찬란한 0교시</p>
+            </a>
+          </div>
+        </section>
+
+        <section class="section">
+          <div class="section-head">
+            <h2>신규시리즈 <em>388</em></h2>
+          </div>
+          <div class="h-scroll">
+            <a class="v-card" href="#">
+              <div class="thumb">
+                <img class="js-thumb" src="/prototype/ranking/assets/thumb-02-BEbBDHR2.png" alt="" />
+                <span class="badge badge-new">NEW</span>
+                <span class="play" aria-hidden="true"><i data-lucide="play"></i></span>
+              </div>
+              <p class="v-title">헤어진 전남친과 소꿉친구 사이</p>
+            </a>
+            <a class="v-card" href="#">
+              <div class="thumb">
+                <img class="js-thumb" src="/prototype/ranking/assets/thumb-03-CjmDST4g.png" alt="" />
+                <span class="badge badge-new">NEW</span>
+                <span class="play" aria-hidden="true"><i data-lucide="play"></i></span>
+              </div>
+              <p class="v-title">나를 펫 취급하는 벨라</p>
+            </a>
+            <a class="v-card" href="#">
+              <div class="thumb">
+                <img class="js-thumb" src="/prototype/ranking/assets/thumb-04-BRdo0x4d.png" alt="" />
+                <span class="badge badge-new">NEW</span>
+                <span class="play" aria-hidden="true"><i data-lucide="play"></i></span>
+              </div>
+              <p class="v-title">나의 찬란한 0교시</p>
+            </a>
+            <a class="v-card" href="#">
+              <div class="thumb">
+                <img class="js-thumb" src="/prototype/ranking/assets/thumb-01-CmLZ3rZ4.png" alt="" />
+                <span class="badge badge-new">NEW</span>
+                <span class="play" aria-hidden="true"><i data-lucide="play"></i></span>
+              </div>
+              <p class="v-title">초이스하우스 89.1MHz</p>
+            </a>
+          </div>
+        </section>
+
+        <section class="section">
+          <div class="section-head">
+            <h2>힐링티키타카 <em>388</em></h2>
+          </div>
+          <div class="grid">
+            <a class="g-card" href="#">
+              <div class="g-thumb">
+                <img class="js-thumb" src="/prototype/ranking/assets/thumb-05-CXg9aeHI.png" alt="" />
+              </div>
+              <p class="g-quote">"이제 상황 파악이 좀 되나? 기어."</p>
+              <p class="g-author"><i data-lucide="pen-line" aria-hidden="true"></i>@작가이름</p>
+              <p class="g-meta">
+                <span class="meta-item"><i data-lucide="message-circle" aria-hidden="true"></i>860</span>
+                <span class="meta-item"><i data-lucide="play" aria-hidden="true"></i>2.1K</span>
+              </p>
+            </a>
+            <a class="g-card" href="#">
+              <div class="g-thumb">
+                <img class="js-thumb" src="/prototype/ranking/assets/thumb-06-BxhJFtMh.png" alt="" />
+              </div>
+              <p class="g-quote">너만 아니면 완벽했는데 어째서…</p>
+              <p class="g-author"><i data-lucide="pen-line" aria-hidden="true"></i>@작가이름</p>
+              <p class="g-meta">
+                <span class="meta-item"><i data-lucide="message-circle" aria-hidden="true"></i>860</span>
+                <span class="meta-item"><i data-lucide="play" aria-hidden="true"></i>2.1K</span>
+              </p>
+            </a>
+            <a class="g-card" href="#">
+              <div class="g-thumb">
+                <img class="js-thumb" src="/prototype/ranking/assets/thumb-07-C6zZviJB.png" alt="" />
+              </div>
+              <p class="g-quote">시리즈 BIo</p>
+              <p class="g-author"><i data-lucide="pen-line" aria-hidden="true"></i>@작가이름</p>
+              <p class="g-meta">
+                <span class="meta-item"><i data-lucide="message-circle" aria-hidden="true"></i>860</span>
+                <span class="meta-item"><i data-lucide="play" aria-hidden="true"></i>2.1K</span>
+              </p>
+            </a>
+            <a class="g-card" href="#">
+              <div class="g-thumb">
+                <img class="js-thumb" src="/prototype/ranking/assets/thumb-08-Cu2WI5dg.png" alt="" />
+              </div>
+              <p class="g-quote">시리즈 BIo</p>
+              <p class="g-author"><i data-lucide="pen-line" aria-hidden="true"></i>@작가이름</p>
+              <p class="g-meta">
+                <span class="meta-item"><i data-lucide="message-circle" aria-hidden="true"></i>860</span>
+                <span class="meta-item"><i data-lucide="play" aria-hidden="true"></i>2.1K</span>
+              </p>
+            </a>
+          </div>
+        </section>
+
+        <section class="section section-best">
+          <div class="section-head">
+            <h2>베스트(큐레이션 명 미정) <em>388</em></h2>
+            <button class="more" type="button">더보기 <i data-lucide="chevron-right" aria-hidden="true"></i></button>
+          </div>
+          <div class="grid">
+            <a class="g-card" href="#">
+              <div class="g-thumb">
+                <img class="js-thumb" src="/prototype/ranking/assets/thumb-06-BxhJFtMh.png" alt="" />
+              </div>
+              <p class="g-quote">캐릭터 BIo</p>
+              <p class="g-author"><i data-lucide="pen-line" aria-hidden="true"></i>@작가이름</p>
+              <p class="g-meta">
+                <span class="meta-item"><i data-lucide="message-circle" aria-hidden="true"></i>860</span>
+                <span class="meta-item"><i data-lucide="play" aria-hidden="true"></i>2.1K</span>
+              </p>
+            </a>
+            <a class="g-card" href="#">
+              <div class="g-thumb">
+                <img class="js-thumb" src="/prototype/ranking/assets/thumb-05-CXg9aeHI.png" alt="" />
+              </div>
+              <p class="g-quote">너만 아니면 완벽했는데 어째서…</p>
+              <p class="g-author"><i data-lucide="pen-line" aria-hidden="true"></i>@작가이름</p>
+              <p class="g-meta">
+                <span class="meta-item"><i data-lucide="message-circle" aria-hidden="true"></i>860</span>
+              </p>
+            </a>
+            <a class="g-card" href="#">
+              <div class="g-thumb">
+                <img class="js-thumb" src="/prototype/ranking/assets/thumb-08-Cu2WI5dg.png" alt="" />
+              </div>
+              <p class="g-quote">캐릭터 BIo</p>
+              <p class="g-author"><i data-lucide="pen-line" aria-hidden="true"></i>@작가이름</p>
+              <p class="g-meta">
+                <span class="meta-item"><i data-lucide="message-circle" aria-hidden="true"></i>860</span>
+              </p>
+            </a>
+            <a class="g-card" href="#">
+              <div class="g-thumb">
+                <img class="js-thumb" src="/prototype/ranking/assets/thumb-07-C6zZviJB.png" alt="" />
+              </div>
+              <p class="g-quote">캐릭터 BIo</p>
+              <p class="g-author"><i data-lucide="pen-line" aria-hidden="true"></i>@작가이름</p>
+              <p class="g-meta">
+                <span class="meta-item"><i data-lucide="message-circle" aria-hidden="true"></i>860</span>
+              </p>
+            </a>
+          </div>
+          <div class="see-all-wrap">
+            <button class="see-all" type="button">전체 보기</button>
+          </div>
+        </section>
+        </section>
+
+        <section class="view view-ranking" id="view-ranking" data-view-panel="ranking" hidden>
+          <div class="rank-hub">
+            <button class="rank-hub-card" type="button" data-rank-entry="filter">
+              정보 필터 (UX)
+            </button>
+            <button class="rank-hub-card" type="button" data-rank-entry="thumbnail">
+              썸네일 (UI)
+            </button>
+            <button class="rank-hub-card rank-hub-card--ai" type="button" data-rank-entry="ai">
+              AI추천
+            </button>
+            <button class="rank-hub-card rank-hub-card--final" type="button" data-rank-entry="final">
+              최종
+            </button>
+            <button class="rank-hub-card" type="button" data-rank-entry="misc">
+              기타
+            </button>
+          </div>
+        </section>
+
+        <section class="view view-ranking-final" id="view-ranking-final" data-view-panel="ranking-final" hidden>
+          <div class="final-page">
+            <div class="rk-filters rk-filters--final" aria-label="기간">
+              <div class="rk-periods rk-sorts" role="tablist" aria-label="기간">
+                <button class="rk-chip is-active" type="button" role="tab" aria-selected="true">일간</button>
+                <button class="rk-chip" type="button" role="tab" aria-selected="false">주간</button>
+                <button class="rk-chip" type="button" role="tab" aria-selected="false">월간</button>
+              </div>
+            </div>
+            <div class="rk-grid">
+              <a class="rk-card" href="#" data-content-type="캐릭터">
+                <div class="rk-thumb">
+                  <img class="js-thumb" src="/prototype/ranking/assets/thumb-01-CmLZ3rZ4.png" alt="" />
+                  <span class="rk-badge" data-badge="캐릭터"><i data-lucide="message-circle" aria-hidden="true"></i>캐릭터</span>
+                </div>
+                <div class="rk-meta">
+                  <span class="rk-num">1</span>
+                  <span class="rk-delta rk-delta--up" data-delta="up"><span class="rk-delta-icon" aria-hidden="true"></span>5</span>
+                </div>
+                <p class="rk-title">헤어진 전남친과 소꿉친구 사이</p>
+                <span class="rk-count"><i data-lucide="message-circle" aria-hidden="true"></i>860</span>
+              </a>
+              <a class="rk-card" href="#" data-content-type="시뮬레이션">
+                <div class="rk-thumb">
+                  <img class="js-thumb" src="/prototype/ranking/assets/thumb-02-BEbBDHR2.png" alt="" />
+                  <span class="rk-badge" data-badge="시뮬레이션"><i data-lucide="cpu" aria-hidden="true"></i>시뮬레이션</span>
+                </div>
+                <div class="rk-meta">
+                  <span class="rk-num">2</span>
+                  <span class="rk-delta rk-delta--up" data-delta="up"><span class="rk-delta-icon" aria-hidden="true"></span>7</span>
+                </div>
+                <p class="rk-title">첫사랑과 다시 만난 여름밤</p>
+                <span class="rk-count"><i data-lucide="message-circle" aria-hidden="true"></i>920</span>
+              </a>
+              <a class="rk-card" href="#" data-content-type="스토리">
+                <div class="rk-thumb">
+                  <img class="js-thumb" src="/prototype/ranking/assets/thumb-03-CjmDST4g.png" alt="" />
+                  <span class="rk-badge" data-badge="스토리"><i data-lucide="play" aria-hidden="true"></i>스토리</span>
+                </div>
+                <div class="rk-meta">
+                  <span class="rk-num">3</span>
+                  <span class="rk-delta rk-delta--nothing" data-delta="nothing"><span class="rk-delta-flat" aria-hidden="true"></span></span>
+                </div>
+                <p class="rk-title">우연히 마주친 고등학교 동창</p>
+                <span class="rk-count"><i data-lucide="message-circle" aria-hidden="true"></i>780</span>
+              </a>
+              <a class="rk-card" href="#" data-content-type="캐릭터">
+                <div class="rk-thumb">
+                  <img class="js-thumb" src="/prototype/ranking/assets/thumb-04-BRdo0x4d.png" alt="" />
+                  <span class="rk-badge" data-badge="캐릭터"><i data-lucide="message-circle" aria-hidden="true"></i>캐릭터</span>
+                </div>
+                <div class="rk-meta">
+                  <span class="rk-num">4</span>
+                  <span class="rk-delta rk-delta--down" data-delta="down"><span class="rk-delta-icon" aria-hidden="true"></span>8</span>
+                </div>
+                <p class="rk-title">비밀스러운 도서관의 만남</p>
+                <span class="rk-count"><i data-lucide="message-circle" aria-hidden="true"></i>650</span>
+              </a>
+              <a class="rk-card" href="#" data-content-type="스토리">
+                <div class="rk-thumb">
+                  <img class="js-thumb" src="/prototype/ranking/assets/thumb-05-CXg9aeHI.png" alt="" />
+                  <span class="rk-badge" data-badge="스토리"><i data-lucide="play" aria-hidden="true"></i>스토리</span>
+                </div>
+                <div class="rk-meta">
+                  <span class="rk-num">5</span>
+                  <span class="rk-delta rk-delta--down" data-delta="down"><span class="rk-delta-icon" aria-hidden="true"></span>4</span>
+                </div>
+                <p class="rk-title">오래된 사진 속 추억을 찾아서</p>
+                <span class="rk-count"><i data-lucide="message-circle" aria-hidden="true"></i>710</span>
+              </a>
+              <a class="rk-card" href="#" data-content-type="캐릭터">
+                <div class="rk-thumb">
+                  <img class="js-thumb" src="/prototype/ranking/assets/thumb-06-BxhJFtMh.png" alt="" />
+                  <span class="rk-badge" data-badge="캐릭터"><i data-lucide="message-circle" aria-hidden="true"></i>캐릭터</span>
+                </div>
+                <div class="rk-meta">
+                  <span class="rk-num">6</span>
+                  <span class="rk-delta rk-delta--up" data-delta="up"><span class="rk-delta-icon" aria-hidden="true"></span>9</span>
+                </div>
+                <p class="rk-title">별빛 아래 속삭이는 첫 고백</p>
+                <span class="rk-count"><i data-lucide="message-circle" aria-hidden="true"></i>830</span>
+              </a>
+              <a class="rk-card" href="#" data-content-type="캐릭터">
+                <div class="rk-thumb">
+                  <img class="js-thumb" src="/prototype/ranking/assets/thumb-07-C6zZviJB.png" alt="" />
+                  <span class="rk-badge" data-badge="캐릭터"><i data-lucide="message-circle" aria-hidden="true"></i>캐릭터</span>
+                </div>
+                <div class="rk-meta">
+                  <span class="rk-num">7</span>
+                  <span class="rk-delta rk-delta--up" data-delta="up"><span class="rk-delta-icon" aria-hidden="true"></span>3</span>
+                </div>
+                <p class="rk-title">새벽 카페에서 마주친 낯선 인연</p>
+                <span class="rk-count"><i data-lucide="message-circle" aria-hidden="true"></i>540</span>
+              </a>
+              <a class="rk-card" href="#" data-content-type="캐릭터">
+                <div class="rk-thumb">
+                  <img class="js-thumb" src="/prototype/ranking/assets/thumb-08-Cu2WI5dg.png" alt="" />
+                  <span class="rk-badge" data-badge="캐릭터"><i data-lucide="message-circle" aria-hidden="true"></i>캐릭터</span>
+                </div>
+                <div class="rk-meta">
+                  <span class="rk-num">8</span>
+                  <span class="rk-delta rk-delta--up" data-delta="up"><span class="rk-delta-icon" aria-hidden="true"></span>10</span>
+                </div>
+                <p class="rk-title">함께 걷던 강변길의 기억</p>
+                <span class="rk-count"><i data-lucide="message-circle" aria-hidden="true"></i>890</span>
+              </a>
+              <a class="rk-card" href="#" data-content-type="시뮬레이션">
+                <div class="rk-thumb">
+                  <img class="js-thumb" src="/prototype/ranking/assets/thumb-09-BZ5cVDU_.png" alt="" />
+                  <span class="rk-badge" data-badge="시뮬레이션"><i data-lucide="cpu" aria-hidden="true"></i>시뮬레이션</span>
+                </div>
+                <div class="rk-meta">
+                  <span class="rk-num">9</span>
+                  <span class="rk-delta rk-delta--down" data-delta="down"><span class="rk-delta-icon" aria-hidden="true"></span>2</span>
+                </div>
+                <p class="rk-title">비오는 날 우산을 나눈 그 사람</p>
+                <span class="rk-count"><i data-lucide="message-circle" aria-hidden="true"></i>670</span>
+              </a>
+              <a class="rk-card" href="#" data-content-type="스토리">
+                <div class="rk-thumb">
+                  <img class="js-thumb" src="/prototype/ranking/assets/thumb-10-85eg_TBs.png" alt="" />
+                  <span class="rk-badge" data-badge="스토리"><i data-lucide="play" aria-hidden="true"></i>스토리</span>
+                </div>
+                <div class="rk-meta">
+                  <span class="rk-num">10</span>
+                  <span class="rk-delta rk-delta--up" data-delta="up"><span class="rk-delta-icon" aria-hidden="true"></span>11</span>
+                </div>
+                <p class="rk-title">졸업식 날 마지막 인사</p>
+                <span class="rk-count"><i data-lucide="message-circle" aria-hidden="true"></i>780</span>
+              </a>
+              <a class="rk-card" href="#" data-content-type="캐릭터">
+                <div class="rk-thumb">
+                  <img class="js-thumb" src="/prototype/ranking/assets/thumb-11-BxzNvP4A.png" alt="" />
+                  <span class="rk-badge" data-badge="캐릭터"><i data-lucide="message-circle" aria-hidden="true"></i>캐릭터</span>
+                </div>
+                <div class="rk-meta">
+                  <span class="rk-num">11</span>
+                  <span class="rk-delta rk-delta--up" data-delta="up"><span class="rk-delta-icon" aria-hidden="true"></span>1</span>
+                </div>
+                <p class="rk-title">첫눈 오는 날의 약속</p>
+                <span class="rk-count"><i data-lucide="message-circle" aria-hidden="true"></i>720</span>
+              </a>
+              <a class="rk-card" href="#" data-content-type="스토리">
+                <div class="rk-thumb">
+                  <img class="js-thumb" src="/prototype/ranking/assets/thumb-12-7-S2JnWb.png" alt="" />
+                  <span class="rk-badge" data-badge="스토리"><i data-lucide="play" aria-hidden="true"></i>스토리</span>
+                </div>
+                <div class="rk-meta">
+                  <span class="rk-num">12</span>
+                  <span class="rk-delta rk-delta--up" data-delta="up"><span class="rk-delta-icon" aria-hidden="true"></span>12</span>
+                </div>
+                <p class="rk-title">잊혀진 편지 속 고백</p>
+                <span class="rk-count"><i data-lucide="message-circle" aria-hidden="true"></i>860</span>
+              </a>
+            </div>
+            <button class="rank-back" type="button" data-rank-back>뒤로</button>
+          </div>
+        </section>
+
+        <section class="view view-ranking-misc" id="view-ranking-misc" data-view-panel="ranking-misc" hidden>
+          <div class="misc-page">
+            <h1 class="misc-title">요즘 가장 뜨고 있는 작가 TOP5</h1>
+            <div class="au-list">
+              <article class="au-item is-open">
+                <button class="au-head" type="button" data-au-toggle aria-expanded="true">
+                  <span class="au-rank">1</span>
+                  <span class="au-avatar" aria-hidden="true"><img src="/prototype/ranking/assets/thumb-01-CmLZ3rZ4.png" alt="" /></span>
+                  <span class="au-info">
+                    <span class="au-name">임덕훈 작가</span>
+                    <span class="au-sub">59개 작품 연재 중</span>
+                  </span>
+                  <span class="au-icon" aria-hidden="true"><i data-lucide="minus"></i></span>
+                </button>
+                <div class="au-body">
+                  <section class="au-series">
+                    <h2 class="au-series-title">초이스 하우스</h2>
+                    <div class="au-rail" data-au-rail></div>
+                  </section>
+                  <section class="au-series">
+                    <h2 class="au-series-title">친구 사이에 싹튼 특별한 감정</h2>
+                    <div class="au-rail" data-au-rail></div>
+                  </section>
+                </div>
+              </article>
+
+              <article class="au-item">
+                <button class="au-head" type="button" data-au-toggle aria-expanded="false">
+                  <span class="au-rank">2</span>
+                  <span class="au-avatar" aria-hidden="true"><img src="/prototype/ranking/assets/thumb-03-CjmDST4g.png" alt="" /></span>
+                  <span class="au-info">
+                    <span class="au-name">구병욱 작가</span>
+                    <span class="au-sub">59개 작품 연재 중</span>
+                  </span>
+                  <span class="au-icon" aria-hidden="true"><i data-lucide="plus"></i></span>
+                </button>
+                <div class="au-body" hidden>
+                  <section class="au-series">
+                    <h2 class="au-series-title">초이스 하우스</h2>
+                    <div class="au-rail" data-au-rail></div>
+                  </section>
+                </div>
+              </article>
+
+              <article class="au-item">
+                <button class="au-head" type="button" data-au-toggle aria-expanded="false">
+                  <span class="au-rank">3</span>
+                  <span class="au-avatar" aria-hidden="true"><img src="/prototype/ranking/assets/thumb-05-CXg9aeHI.png" alt="" /></span>
+                  <span class="au-info">
+                    <span class="au-name">정민지 작가</span>
+                    <span class="au-sub">47개 작품 연재 중</span>
+                  </span>
+                  <span class="au-icon" aria-hidden="true"><i data-lucide="plus"></i></span>
+                </button>
+                <div class="au-body" hidden>
+                  <section class="au-series">
+                    <h2 class="au-series-title">친구 사이에 싹튼 특별한 감정</h2>
+                    <div class="au-rail" data-au-rail></div>
+                  </section>
+                </div>
+              </article>
+
+              <article class="au-item">
+                <button class="au-head" type="button" data-au-toggle aria-expanded="false">
+                  <span class="au-rank">4</span>
+                  <span class="au-avatar" aria-hidden="true"><img src="/prototype/ranking/assets/thumb-07-C6zZviJB.png" alt="" /></span>
+                  <span class="au-info">
+                    <span class="au-name">이태훈 작가</span>
+                    <span class="au-sub">35개 작품 연재 중</span>
+                  </span>
+                  <span class="au-icon" aria-hidden="true"><i data-lucide="plus"></i></span>
+                </button>
+                <div class="au-body" hidden>
+                  <section class="au-series">
+                    <h2 class="au-series-title">초이스 하우스</h2>
+                    <div class="au-rail" data-au-rail></div>
+                  </section>
+                </div>
+              </article>
+
+              <article class="au-item">
+                <button class="au-head" type="button" data-au-toggle aria-expanded="false">
+                  <span class="au-rank">5</span>
+                  <span class="au-avatar" aria-hidden="true"><img src="/prototype/ranking/assets/thumb-09-BZ5cVDU_.png" alt="" /></span>
+                  <span class="au-info">
+                    <span class="au-name">한지윤 작가</span>
+                    <span class="au-sub">62개 작품 연재 중</span>
+                  </span>
+                  <span class="au-icon" aria-hidden="true"><i data-lucide="plus"></i></span>
+                </button>
+                <div class="au-body" hidden>
+                  <section class="au-series">
+                    <h2 class="au-series-title">친구 사이에 싹튼 특별한 감정</h2>
+                    <div class="au-rail" data-au-rail></div>
+                  </section>
+                </div>
+              </article>
+            </div>
+            <button class="rank-back" type="button" data-rank-back>뒤로</button>
+          </div>
+        </section>
+
+        <section class="view view-ranking-ai" id="view-ranking-ai" data-view-panel="ranking-ai" hidden>
+          <div class="rank-case-list">
+            <button class="rank-case-card" type="button" data-ai-case="type">
+              <span class="rank-case-num">01</span>
+              <span class="rank-case-name">타입안내</span>
+            </button>
+            <button class="rank-case-card" type="button" data-ai-case="genre">
+              <span class="rank-case-num">02</span>
+              <span class="rank-case-name">장르힌트</span>
+            </button>
+            <button class="rank-case-card" type="button" data-ai-case="social">
+              <span class="rank-case-num">03</span>
+              <span class="rank-case-name">행동지표</span>
+            </button>
+            <button class="rank-case-card" type="button" data-ai-case="period">
+              <span class="rank-case-num">04</span>
+              <span class="rank-case-name">기간기준</span>
+            </button>
+            <button class="rank-case-card" type="button" data-ai-case="top">
+              <span class="rank-case-num">05</span>
+              <span class="rank-case-name">상위강조</span>
+            </button>
+            <button class="rank-case-card" type="button" data-ai-case="author">
+              <span class="rank-case-num">06</span>
+              <span class="rank-case-name">네임드작가</span>
+            </button>
+            <button class="rank-case-card" type="button" data-ai-case="delta">
+              <span class="rank-case-num">07</span>
+              <span class="rank-case-name">변동기준</span>
+            </button>
+            <button class="rank-case-card rank-case-card--best" type="button" data-ai-case="best">
+              <span class="rank-case-num">08</span>
+              <span class="rank-case-name">베스트 통합</span>
+            </button>
+            <button class="rank-back" type="button" data-rank-back>뒤로</button>
+          </div>
+        </section>
+
+        <section class="view view-ranking-ai-type" id="view-ranking-ai-type" data-view-panel="ranking-ai-type" hidden>
+          <div class="ai-page">
+            <div class="ai-block">
+              <div class="ai-type-row">
+                <button class="rk-type" type="button">
+                  전체
+                  <i data-lucide="chevron-down" aria-hidden="true"></i>
+                </button>
+                <p class="ai-hint">시리즈·캐릭터·시뮬레이션 중 선호 타입을 고를 수 있어요</p>
+              </div>
+            </div>
+            <p class="rk-updated ai-updated">45분 전 갱신</p>
+            <div class="ai-grid">
+              <a class="ai-card" href="#" data-content-type="시리즈">
+                <div class="ai-thumb">
+                  <img class="js-thumb" src="/prototype/ranking/assets/thumb-01-CmLZ3rZ4.png" alt="" />
+                  <span class="rk-badge" data-badge="시리즈"><i data-lucide="play" aria-hidden="true"></i>시리즈</span>
+                </div>
+                <div class="ai-meta">
+                  <span class="ai-rank">1</span>
+                  <span class="rk-delta rk-delta--up" data-delta="up"><span class="rk-delta-icon" aria-hidden="true"></span>12</span>
+                </div>
+                <p class="ai-card-title">왕국을 뒤흔든 계승 전쟁 연대기</p>
+              </a>
+              <a class="ai-card" href="#" data-content-type="캐릭터">
+                <div class="ai-thumb">
+                  <img class="js-thumb" src="/prototype/ranking/assets/thumb-02-BEbBDHR2.png" alt="" />
+                  <span class="rk-badge" data-badge="캐릭터"><i data-lucide="message-circle" aria-hidden="true"></i>캐릭터</span>
+                </div>
+                <div class="ai-meta">
+                  <span class="ai-rank">2</span>
+                  <span class="rk-delta rk-delta--up" data-delta="up"><span class="rk-delta-icon" aria-hidden="true"></span>5</span>
+                </div>
+                <p class="ai-card-title">헤어진 전남친과 소꿉친구 사이</p>
+              </a>
+              <a class="ai-card" href="#" data-content-type="시뮬레이션">
+                <div class="ai-thumb">
+                  <img class="js-thumb" src="/prototype/ranking/assets/thumb-03-CjmDST4g.png" alt="" />
+                  <span class="rk-badge" data-badge="시뮬레이션"><i data-lucide="cpu" aria-hidden="true"></i>시뮬레이션</span>
+                </div>
+                <div class="ai-meta">
+                  <span class="ai-rank">3</span>
+                  <span class="tc-delta tc-delta--new" data-delta="new">NEW</span>
+                </div>
+                <p class="ai-card-title">카페 경영 시뮬레이터: 리뉴얼</p>
+              </a>
+              <a class="ai-card" href="#" data-content-type="시리즈">
+                <div class="ai-thumb">
+                  <img class="js-thumb" src="/prototype/ranking/assets/thumb-04-BRdo0x4d.png" alt="" />
+                  <span class="rk-badge" data-badge="시리즈"><i data-lucide="play" aria-hidden="true"></i>시리즈</span>
+                </div>
+                <div class="ai-meta">
+                  <span class="ai-rank">4</span>
+                  <span class="rk-delta rk-delta--down" data-delta="down"><span class="rk-delta-icon" aria-hidden="true"></span>2</span>
+                </div>
+                <p class="ai-card-title">별을 쫓는 항해자들의 기록</p>
+              </a>
+              <a class="ai-card" href="#" data-content-type="캐릭터">
+                <div class="ai-thumb">
+                  <img class="js-thumb" src="/prototype/ranking/assets/thumb-05-CXg9aeHI.png" alt="" />
+                  <span class="rk-badge" data-badge="캐릭터"><i data-lucide="message-circle" aria-hidden="true"></i>캐릭터</span>
+                </div>
+                <div class="ai-meta">
+                  <span class="ai-rank">5</span>
+                  <span class="rk-delta rk-delta--nothing" data-delta="nothing"><span class="rk-delta-flat" aria-hidden="true"></span></span>
+                </div>
+                <p class="ai-card-title">비밀을 간직한 이웃집 소년</p>
+              </a>
+              <a class="ai-card" href="#" data-content-type="시뮬레이션">
+                <div class="ai-thumb">
+                  <img class="js-thumb" src="/prototype/ranking/assets/thumb-06-BxhJFtMh.png" alt="" />
+                  <span class="rk-badge" data-badge="시뮬레이션"><i data-lucide="cpu" aria-hidden="true"></i>시뮬레이션</span>
+                </div>
+                <div class="ai-meta">
+                  <span class="ai-rank">6</span>
+                  <span class="rk-delta rk-delta--up" data-delta="up"><span class="rk-delta-icon" aria-hidden="true"></span>8</span>
+                </div>
+                <p class="ai-card-title">아이돌 프로듀스 캠페인</p>
+              </a>
+            </div>
+            <button class="rank-back" type="button" data-rank-back="ai">뒤로</button>
+          </div>
+        </section>
+
+        <section class="view view-ranking-ai-genre" id="view-ranking-ai-genre" data-view-panel="ranking-ai-genre" hidden>
+          <div class="ai-page">
+            <div class="ai-block">
+              <div class="rk-filters rk-filters--genre" aria-label="장르 필터">
+                <div class="rk-filters-track rk-sorts" role="tablist" aria-label="장르">
+                  <button class="rk-chip" type="button" role="tab" aria-selected="false">전체</button>
+                  <button class="rk-chip is-active" type="button" role="tab" aria-selected="true">판타지</button>
+                  <button class="rk-chip" type="button" role="tab" aria-selected="false">로맨스</button>
+                  <button class="rk-chip" type="button" role="tab" aria-selected="false">스릴러</button>
+                  <button class="rk-chip" type="button" role="tab" aria-selected="false">코미디</button>
+                </div>
+              </div>
+              <p class="ai-result-hint">판타지 <em>128</em>작품 · 결과 없음 시 다른 장르를 추천합니다</p>
+            </div>
+            <p class="rk-updated ai-updated">45분 전 갱신</p>
+            <div class="ai-grid">
+              <a class="ai-card" href="#" data-content-type="시리즈">
+                <div class="ai-thumb">
+                  <img class="js-thumb" src="/prototype/ranking/assets/thumb-01-CmLZ3rZ4.png" alt="" />
+                  <span class="rk-badge" data-badge="시리즈"><i data-lucide="play" aria-hidden="true"></i>시리즈</span>
+                </div>
+                <div class="ai-meta">
+                  <span class="ai-rank">1</span>
+                  <span class="rk-delta rk-delta--up" data-delta="up"><span class="rk-delta-icon" aria-hidden="true"></span>12</span>
+                </div>
+                <p class="ai-card-title">왕국을 뒤흔든 계승 전쟁 연대기</p>
+              </a>
+              <a class="ai-card" href="#" data-content-type="캐릭터">
+                <div class="ai-thumb">
+                  <img class="js-thumb" src="/prototype/ranking/assets/thumb-02-BEbBDHR2.png" alt="" />
+                  <span class="rk-badge" data-badge="캐릭터"><i data-lucide="message-circle" aria-hidden="true"></i>캐릭터</span>
+                </div>
+                <div class="ai-meta">
+                  <span class="ai-rank">2</span>
+                  <span class="rk-delta rk-delta--up" data-delta="up"><span class="rk-delta-icon" aria-hidden="true"></span>5</span>
+                </div>
+                <p class="ai-card-title">헤어진 전남친과 소꿉친구 사이</p>
+              </a>
+              <a class="ai-card" href="#" data-content-type="시뮬레이션">
+                <div class="ai-thumb">
+                  <img class="js-thumb" src="/prototype/ranking/assets/thumb-03-CjmDST4g.png" alt="" />
+                  <span class="rk-badge" data-badge="시뮬레이션"><i data-lucide="cpu" aria-hidden="true"></i>시뮬레이션</span>
+                </div>
+                <div class="ai-meta">
+                  <span class="ai-rank">3</span>
+                  <span class="tc-delta tc-delta--new" data-delta="new">NEW</span>
+                </div>
+                <p class="ai-card-title">카페 경영 시뮬레이터: 리뉴얼</p>
+              </a>
+              <a class="ai-card" href="#" data-content-type="시리즈">
+                <div class="ai-thumb">
+                  <img class="js-thumb" src="/prototype/ranking/assets/thumb-04-BRdo0x4d.png" alt="" />
+                  <span class="rk-badge" data-badge="시리즈"><i data-lucide="play" aria-hidden="true"></i>시리즈</span>
+                </div>
+                <div class="ai-meta">
+                  <span class="ai-rank">4</span>
+                  <span class="rk-delta rk-delta--down" data-delta="down"><span class="rk-delta-icon" aria-hidden="true"></span>2</span>
+                </div>
+                <p class="ai-card-title">별을 쫓는 항해자들의 기록</p>
+              </a>
+              <a class="ai-card" href="#" data-content-type="캐릭터">
+                <div class="ai-thumb">
+                  <img class="js-thumb" src="/prototype/ranking/assets/thumb-05-CXg9aeHI.png" alt="" />
+                  <span class="rk-badge" data-badge="캐릭터"><i data-lucide="message-circle" aria-hidden="true"></i>캐릭터</span>
+                </div>
+                <div class="ai-meta">
+                  <span class="ai-rank">5</span>
+                  <span class="rk-delta rk-delta--nothing" data-delta="nothing"><span class="rk-delta-flat" aria-hidden="true"></span></span>
+                </div>
+                <p class="ai-card-title">비밀을 간직한 이웃집 소년</p>
+              </a>
+              <a class="ai-card" href="#" data-content-type="시뮬레이션">
+                <div class="ai-thumb">
+                  <img class="js-thumb" src="/prototype/ranking/assets/thumb-06-BxhJFtMh.png" alt="" />
+                  <span class="rk-badge" data-badge="시뮬레이션"><i data-lucide="cpu" aria-hidden="true"></i>시뮬레이션</span>
+                </div>
+                <div class="ai-meta">
+                  <span class="ai-rank">6</span>
+                  <span class="rk-delta rk-delta--up" data-delta="up"><span class="rk-delta-icon" aria-hidden="true"></span>8</span>
+                </div>
+                <p class="ai-card-title">아이돌 프로듀스 캠페인</p>
+              </a>
+            </div>
+            <button class="rank-back" type="button" data-rank-back="ai">뒤로</button>
+          </div>
+        </section>
+
+        <section class="view view-ranking-ai-social" id="view-ranking-ai-social" data-view-panel="ranking-ai-social" hidden>
+          <div class="ai-page">
+            <p class="rk-updated ai-updated">45분 전 갱신</p>
+            <div class="ai-grid">
+              <a class="ai-card" href="#" data-content-type="시리즈">
+                <div class="ai-thumb">
+                  <img class="js-thumb" src="/prototype/ranking/assets/thumb-01-CmLZ3rZ4.png" alt="" />
+                  <span class="rk-badge" data-badge="시리즈"><i data-lucide="play" aria-hidden="true"></i>시리즈</span>
+                </div>
+                <div class="ai-meta">
+                  <span class="ai-rank">1</span>
+                  <span class="rk-delta rk-delta--up" data-delta="up"><span class="rk-delta-icon" aria-hidden="true"></span>12</span>
+                </div>
+                <p class="ai-card-title">왕국을 뒤흔든 계승 전쟁 연대기</p>
+                
+                <p class="ai-social"><i data-lucide="users" aria-hidden="true"></i>1.2K명 보는 중</p>
+                <div class="tb-stats">
+                  <span class="tb-stat"><i data-lucide="message-circle" aria-hidden="true"></i>2.4K</span>
+                  <span class="tb-stat"><i data-lucide="play" aria-hidden="true"></i>8.1K</span>
+                </div>
+              </a>
+              <a class="ai-card" href="#" data-content-type="캐릭터">
+                <div class="ai-thumb">
+                  <img class="js-thumb" src="/prototype/ranking/assets/thumb-02-BEbBDHR2.png" alt="" />
+                  <span class="rk-badge" data-badge="캐릭터"><i data-lucide="message-circle" aria-hidden="true"></i>캐릭터</span>
+                </div>
+                <div class="ai-meta">
+                  <span class="ai-rank">2</span>
+                  <span class="rk-delta rk-delta--up" data-delta="up"><span class="rk-delta-icon" aria-hidden="true"></span>5</span>
+                </div>
+                <p class="ai-card-title">헤어진 전남친과 소꿉친구 사이</p>
+                
+                <p class="ai-social"><i data-lucide="users" aria-hidden="true"></i>860명 보는 중</p>
+                <div class="tb-stats">
+                  <span class="tb-stat"><i data-lucide="message-circle" aria-hidden="true"></i>860</span>
+                  <span class="tb-stat"><i data-lucide="play" aria-hidden="true"></i>2.1K</span>
+                </div>
+              </a>
+              <a class="ai-card" href="#" data-content-type="시뮬레이션">
+                <div class="ai-thumb">
+                  <img class="js-thumb" src="/prototype/ranking/assets/thumb-03-CjmDST4g.png" alt="" />
+                  <span class="rk-badge" data-badge="시뮬레이션"><i data-lucide="cpu" aria-hidden="true"></i>시뮬레이션</span>
+                </div>
+                <div class="ai-meta">
+                  <span class="ai-rank">3</span>
+                  <span class="tc-delta tc-delta--new" data-delta="new">NEW</span>
+                </div>
+                <p class="ai-card-title">카페 경영 시뮬레이터: 리뉴얼</p>
+                
+                <p class="ai-social"><i data-lucide="users" aria-hidden="true"></i>420명 보는 중</p>
+                <div class="tb-stats">
+                  <span class="tb-stat"><i data-lucide="message-circle" aria-hidden="true"></i>1.3K</span>
+                  <span class="tb-stat"><i data-lucide="play" aria-hidden="true"></i>5.5K</span>
+                </div>
+              </a>
+              <a class="ai-card" href="#" data-content-type="시리즈">
+                <div class="ai-thumb">
+                  <img class="js-thumb" src="/prototype/ranking/assets/thumb-04-BRdo0x4d.png" alt="" />
+                  <span class="rk-badge" data-badge="시리즈"><i data-lucide="play" aria-hidden="true"></i>시리즈</span>
+                </div>
+                <div class="ai-meta">
+                  <span class="ai-rank">4</span>
+                  <span class="rk-delta rk-delta--down" data-delta="down"><span class="rk-delta-icon" aria-hidden="true"></span>2</span>
+                </div>
+                <p class="ai-card-title">별을 쫓는 항해자들의 기록</p>
+                
+                <p class="ai-social"><i data-lucide="users" aria-hidden="true"></i>310명 보는 중</p>
+                <div class="tb-stats">
+                  <span class="tb-stat"><i data-lucide="message-circle" aria-hidden="true"></i>1.8K</span>
+                  <span class="tb-stat"><i data-lucide="play" aria-hidden="true"></i>6.3K</span>
+                </div>
+              </a>
+              <a class="ai-card" href="#" data-content-type="캐릭터">
+                <div class="ai-thumb">
+                  <img class="js-thumb" src="/prototype/ranking/assets/thumb-05-CXg9aeHI.png" alt="" />
+                  <span class="rk-badge" data-badge="캐릭터"><i data-lucide="message-circle" aria-hidden="true"></i>캐릭터</span>
+                </div>
+                <div class="ai-meta">
+                  <span class="ai-rank">5</span>
+                  <span class="rk-delta rk-delta--nothing" data-delta="nothing"><span class="rk-delta-flat" aria-hidden="true"></span></span>
+                </div>
+                <p class="ai-card-title">비밀을 간직한 이웃집 소년</p>
+                
+                <p class="ai-social"><i data-lucide="users" aria-hidden="true"></i>190명 보는 중</p>
+                <div class="tb-stats">
+                  <span class="tb-stat"><i data-lucide="message-circle" aria-hidden="true"></i>450</span>
+                  <span class="tb-stat"><i data-lucide="play" aria-hidden="true"></i>1.3K</span>
+                </div>
+              </a>
+              <a class="ai-card" href="#" data-content-type="시뮬레이션">
+                <div class="ai-thumb">
+                  <img class="js-thumb" src="/prototype/ranking/assets/thumb-06-BxhJFtMh.png" alt="" />
+                  <span class="rk-badge" data-badge="시뮬레이션"><i data-lucide="cpu" aria-hidden="true"></i>시뮬레이션</span>
+                </div>
+                <div class="ai-meta">
+                  <span class="ai-rank">6</span>
+                  <span class="rk-delta rk-delta--up" data-delta="up"><span class="rk-delta-icon" aria-hidden="true"></span>8</span>
+                </div>
+                <p class="ai-card-title">아이돌 프로듀스 캠페인</p>
+                
+                <p class="ai-social"><i data-lucide="users" aria-hidden="true"></i>640명 보는 중</p>
+                <div class="tb-stats">
+                  <span class="tb-stat"><i data-lucide="message-circle" aria-hidden="true"></i>2.1K</span>
+                  <span class="tb-stat"><i data-lucide="play" aria-hidden="true"></i>7.8K</span>
+                </div>
+              </a>
+            </div>
+            <button class="rank-back" type="button" data-rank-back="ai">뒤로</button>
+          </div>
+        </section>
+
+        <section class="view view-ranking-ai-period" id="view-ranking-ai-period" data-view-panel="ranking-ai-period" hidden>
+          <div class="ai-page">
+            <div class="ai-block">
+              <div class="ai-period-row">
+                <div class="rk-periods" role="tablist" aria-label="기간">
+                  <button class="rk-chip is-active" type="button" role="tab" aria-selected="true">급상승</button>
+                  <button class="rk-chip" type="button" role="tab" aria-selected="false">실시간</button>
+                  <button class="rk-chip" type="button" role="tab" aria-selected="false">주간</button>
+                  <button class="rk-chip" type="button" role="tab" aria-selected="false">신작</button>
+                </div>
+              </div>
+              <p class="ai-basis">급상승 · 최근 24시간 기준 · 직전 대비 변동</p>
+              <p class="rk-updated ai-updated">45분 전 갱신</p>
+            </div>
+            <div class="ai-grid">
+              <a class="ai-card" href="#" data-content-type="시리즈">
+                <div class="ai-thumb">
+                  <img class="js-thumb" src="/prototype/ranking/assets/thumb-01-CmLZ3rZ4.png" alt="" />
+                  <span class="rk-badge" data-badge="시리즈"><i data-lucide="play" aria-hidden="true"></i>시리즈</span>
+                </div>
+                <div class="ai-meta">
+                  <span class="ai-rank">1</span>
+                  <span class="rk-delta rk-delta--up" data-delta="up"><span class="rk-delta-icon" aria-hidden="true"></span>12</span>
+                </div>
+                <p class="ai-card-title">왕국을 뒤흔든 계승 전쟁 연대기</p>
+              </a>
+              <a class="ai-card" href="#" data-content-type="캐릭터">
+                <div class="ai-thumb">
+                  <img class="js-thumb" src="/prototype/ranking/assets/thumb-02-BEbBDHR2.png" alt="" />
+                  <span class="rk-badge" data-badge="캐릭터"><i data-lucide="message-circle" aria-hidden="true"></i>캐릭터</span>
+                </div>
+                <div class="ai-meta">
+                  <span class="ai-rank">2</span>
+                  <span class="rk-delta rk-delta--up" data-delta="up"><span class="rk-delta-icon" aria-hidden="true"></span>5</span>
+                </div>
+                <p class="ai-card-title">헤어진 전남친과 소꿉친구 사이</p>
+              </a>
+              <a class="ai-card" href="#" data-content-type="시뮬레이션">
+                <div class="ai-thumb">
+                  <img class="js-thumb" src="/prototype/ranking/assets/thumb-03-CjmDST4g.png" alt="" />
+                  <span class="rk-badge" data-badge="시뮬레이션"><i data-lucide="cpu" aria-hidden="true"></i>시뮬레이션</span>
+                </div>
+                <div class="ai-meta">
+                  <span class="ai-rank">3</span>
+                  <span class="tc-delta tc-delta--new" data-delta="new">NEW</span>
+                </div>
+                <p class="ai-card-title">카페 경영 시뮬레이터: 리뉴얼</p>
+              </a>
+              <a class="ai-card" href="#" data-content-type="시리즈">
+                <div class="ai-thumb">
+                  <img class="js-thumb" src="/prototype/ranking/assets/thumb-04-BRdo0x4d.png" alt="" />
+                  <span class="rk-badge" data-badge="시리즈"><i data-lucide="play" aria-hidden="true"></i>시리즈</span>
+                </div>
+                <div class="ai-meta">
+                  <span class="ai-rank">4</span>
+                  <span class="rk-delta rk-delta--down" data-delta="down"><span class="rk-delta-icon" aria-hidden="true"></span>2</span>
+                </div>
+                <p class="ai-card-title">별을 쫓는 항해자들의 기록</p>
+              </a>
+              <a class="ai-card" href="#" data-content-type="캐릭터">
+                <div class="ai-thumb">
+                  <img class="js-thumb" src="/prototype/ranking/assets/thumb-05-CXg9aeHI.png" alt="" />
+                  <span class="rk-badge" data-badge="캐릭터"><i data-lucide="message-circle" aria-hidden="true"></i>캐릭터</span>
+                </div>
+                <div class="ai-meta">
+                  <span class="ai-rank">5</span>
+                  <span class="rk-delta rk-delta--nothing" data-delta="nothing"><span class="rk-delta-flat" aria-hidden="true"></span></span>
+                </div>
+                <p class="ai-card-title">비밀을 간직한 이웃집 소년</p>
+              </a>
+              <a class="ai-card" href="#" data-content-type="시뮬레이션">
+                <div class="ai-thumb">
+                  <img class="js-thumb" src="/prototype/ranking/assets/thumb-06-BxhJFtMh.png" alt="" />
+                  <span class="rk-badge" data-badge="시뮬레이션"><i data-lucide="cpu" aria-hidden="true"></i>시뮬레이션</span>
+                </div>
+                <div class="ai-meta">
+                  <span class="ai-rank">6</span>
+                  <span class="rk-delta rk-delta--up" data-delta="up"><span class="rk-delta-icon" aria-hidden="true"></span>8</span>
+                </div>
+                <p class="ai-card-title">아이돌 프로듀스 캠페인</p>
+              </a>
+            </div>
+            <button class="rank-back" type="button" data-rank-back="ai">뒤로</button>
+          </div>
+        </section>
+
+        <section class="view view-ranking-ai-top" id="view-ranking-ai-top" data-view-panel="ranking-ai-top" hidden>
+          <div class="ai-page">
+            <p class="rk-updated ai-updated">45분 전 갱신</p>
+            <div class="ai-grid">
+              <a class="ai-card ai-card--top" href="#" data-content-type="시리즈">
+                <div class="ai-thumb">
+                  <img class="js-thumb" src="/prototype/ranking/assets/thumb-01-CmLZ3rZ4.png" alt="" />
+                  <span class="rk-badge" data-badge="시리즈"><i data-lucide="play" aria-hidden="true"></i>시리즈</span>
+                  <span class="ai-crown ai-crown--gold" aria-hidden="true">👑</span>
+                </div>
+                <div class="ai-meta">
+                  <span class="ai-rank">1</span>
+                  <span class="rk-delta rk-delta--up" data-delta="up"><span class="rk-delta-icon" aria-hidden="true"></span>12</span>
+                </div>
+                <p class="ai-card-title">왕국을 뒤흔든 계승 전쟁 연대기</p>
+              </a>
+              <a class="ai-card ai-card--top" href="#" data-content-type="캐릭터">
+                <div class="ai-thumb">
+                  <img class="js-thumb" src="/prototype/ranking/assets/thumb-02-BEbBDHR2.png" alt="" />
+                  <span class="rk-badge" data-badge="캐릭터"><i data-lucide="message-circle" aria-hidden="true"></i>캐릭터</span>
+                  <span class="ai-crown ai-crown--silver" aria-hidden="true">👑</span>
+                </div>
+                <div class="ai-meta">
+                  <span class="ai-rank">2</span>
+                  <span class="rk-delta rk-delta--up" data-delta="up"><span class="rk-delta-icon" aria-hidden="true"></span>5</span>
+                </div>
+                <p class="ai-card-title">헤어진 전남친과 소꿉친구 사이</p>
+              </a>
+              <a class="ai-card ai-card--top" href="#" data-content-type="시뮬레이션">
+                <div class="ai-thumb">
+                  <img class="js-thumb" src="/prototype/ranking/assets/thumb-03-CjmDST4g.png" alt="" />
+                  <span class="rk-badge" data-badge="시뮬레이션"><i data-lucide="cpu" aria-hidden="true"></i>시뮬레이션</span>
+                  <span class="ai-crown ai-crown--bronze" aria-hidden="true">👑</span>
+                </div>
+                <div class="ai-meta">
+                  <span class="ai-rank">3</span>
+                  <span class="tc-delta tc-delta--new" data-delta="new">NEW</span>
+                </div>
+                <p class="ai-card-title">카페 경영 시뮬레이터: 리뉴얼</p>
+              </a>
+              <a class="ai-card" href="#" data-content-type="시리즈">
+                <div class="ai-thumb">
+                  <img class="js-thumb" src="/prototype/ranking/assets/thumb-04-BRdo0x4d.png" alt="" />
+                  <span class="rk-badge" data-badge="시리즈"><i data-lucide="play" aria-hidden="true"></i>시리즈</span>
+                </div>
+                <div class="ai-meta">
+                  <span class="ai-rank">4</span>
+                  <span class="rk-delta rk-delta--down" data-delta="down"><span class="rk-delta-icon" aria-hidden="true"></span>2</span>
+                </div>
+                <p class="ai-card-title">별을 쫓는 항해자들의 기록</p>
+              </a>
+              <a class="ai-card" href="#" data-content-type="캐릭터">
+                <div class="ai-thumb">
+                  <img class="js-thumb" src="/prototype/ranking/assets/thumb-05-CXg9aeHI.png" alt="" />
+                  <span class="rk-badge" data-badge="캐릭터"><i data-lucide="message-circle" aria-hidden="true"></i>캐릭터</span>
+                </div>
+                <div class="ai-meta">
+                  <span class="ai-rank">5</span>
+                  <span class="rk-delta rk-delta--nothing" data-delta="nothing"><span class="rk-delta-flat" aria-hidden="true"></span></span>
+                </div>
+                <p class="ai-card-title">비밀을 간직한 이웃집 소년</p>
+              </a>
+              <a class="ai-card" href="#" data-content-type="시뮬레이션">
+                <div class="ai-thumb">
+                  <img class="js-thumb" src="/prototype/ranking/assets/thumb-06-BxhJFtMh.png" alt="" />
+                  <span class="rk-badge" data-badge="시뮬레이션"><i data-lucide="cpu" aria-hidden="true"></i>시뮬레이션</span>
+                </div>
+                <div class="ai-meta">
+                  <span class="ai-rank">6</span>
+                  <span class="rk-delta rk-delta--up" data-delta="up"><span class="rk-delta-icon" aria-hidden="true"></span>8</span>
+                </div>
+                <p class="ai-card-title">아이돌 프로듀스 캠페인</p>
+              </a>
+            </div>
+            <button class="rank-back" type="button" data-rank-back="ai">뒤로</button>
+          </div>
+        </section>
+
+        <section class="view view-ranking-ai-author" id="view-ranking-ai-author" data-view-panel="ranking-ai-author" hidden>
+          <div class="ai-page">
+            <p class="rk-updated ai-updated">45분 전 갱신</p>
+            <div class="ai-grid">
+              <a class="ai-card" href="#" data-content-type="시리즈">
+                <div class="ai-thumb">
+                  <img class="js-thumb" src="/prototype/ranking/assets/thumb-01-CmLZ3rZ4.png" alt="" />
+                  <span class="rk-badge" data-badge="시리즈"><i data-lucide="play" aria-hidden="true"></i>시리즈</span>
+                </div>
+                <div class="ai-meta">
+                  <span class="ai-rank">1</span>
+                  <span class="rk-delta rk-delta--up" data-delta="up"><span class="rk-delta-icon" aria-hidden="true"></span>12</span>
+                </div>
+                <p class="ai-card-title">왕국을 뒤흔든 계승 전쟁 연대기</p>
+                <p class="ai-author"><span class="ai-named">네임드</span>@월하작가</p>
+              </a>
+              <a class="ai-card" href="#" data-content-type="캐릭터">
+                <div class="ai-thumb">
+                  <img class="js-thumb" src="/prototype/ranking/assets/thumb-02-BEbBDHR2.png" alt="" />
+                  <span class="rk-badge" data-badge="캐릭터"><i data-lucide="message-circle" aria-hidden="true"></i>캐릭터</span>
+                </div>
+                <div class="ai-meta">
+                  <span class="ai-rank">2</span>
+                  <span class="rk-delta rk-delta--up" data-delta="up"><span class="rk-delta-icon" aria-hidden="true"></span>5</span>
+                </div>
+                <p class="ai-card-title">헤어진 전남친과 소꿉친구 사이</p>
+                <p class="ai-author"><span class="ai-named">네임드</span>@로맨스작가</p>
+              </a>
+              <a class="ai-card" href="#" data-content-type="시뮬레이션">
+                <div class="ai-thumb">
+                  <img class="js-thumb" src="/prototype/ranking/assets/thumb-03-CjmDST4g.png" alt="" />
+                  <span class="rk-badge" data-badge="시뮬레이션"><i data-lucide="cpu" aria-hidden="true"></i>시뮬레이션</span>
+                </div>
+                <div class="ai-meta">
+                  <span class="ai-rank">3</span>
+                  <span class="tc-delta tc-delta--new" data-delta="new">NEW</span>
+                </div>
+                <p class="ai-card-title">카페 경영 시뮬레이터: 리뉴얼</p>
+                <p class="ai-author">@신인작가</p>
+              </a>
+              <a class="ai-card" href="#" data-content-type="시리즈">
+                <div class="ai-thumb">
+                  <img class="js-thumb" src="/prototype/ranking/assets/thumb-04-BRdo0x4d.png" alt="" />
+                  <span class="rk-badge" data-badge="시리즈"><i data-lucide="play" aria-hidden="true"></i>시리즈</span>
+                </div>
+                <div class="ai-meta">
+                  <span class="ai-rank">4</span>
+                  <span class="rk-delta rk-delta--down" data-delta="down"><span class="rk-delta-icon" aria-hidden="true"></span>2</span>
+                </div>
+                <p class="ai-card-title">별을 쫓는 항해자들의 기록</p>
+                <p class="ai-author">@바다작가</p>
+              </a>
+              <a class="ai-card" href="#" data-content-type="캐릭터">
+                <div class="ai-thumb">
+                  <img class="js-thumb" src="/prototype/ranking/assets/thumb-05-CXg9aeHI.png" alt="" />
+                  <span class="rk-badge" data-badge="캐릭터"><i data-lucide="message-circle" aria-hidden="true"></i>캐릭터</span>
+                </div>
+                <div class="ai-meta">
+                  <span class="ai-rank">5</span>
+                  <span class="rk-delta rk-delta--nothing" data-delta="nothing"><span class="rk-delta-flat" aria-hidden="true"></span></span>
+                </div>
+                <p class="ai-card-title">비밀을 간직한 이웃집 소년</p>
+                <p class="ai-author">@미스터리작가</p>
+              </a>
+              <a class="ai-card" href="#" data-content-type="시뮬레이션">
+                <div class="ai-thumb">
+                  <img class="js-thumb" src="/prototype/ranking/assets/thumb-06-BxhJFtMh.png" alt="" />
+                  <span class="rk-badge" data-badge="시뮬레이션"><i data-lucide="cpu" aria-hidden="true"></i>시뮬레이션</span>
+                </div>
+                <div class="ai-meta">
+                  <span class="ai-rank">6</span>
+                  <span class="rk-delta rk-delta--up" data-delta="up"><span class="rk-delta-icon" aria-hidden="true"></span>8</span>
+                </div>
+                <p class="ai-card-title">아이돌 프로듀스 캠페인</p>
+                <p class="ai-author"><span class="ai-named">네임드</span>@스튜디오K</p>
+              </a>
+            </div>
+            <button class="rank-back" type="button" data-rank-back="ai">뒤로</button>
+          </div>
+        </section>
+
+        <section class="view view-ranking-ai-delta" id="view-ranking-ai-delta" data-view-panel="ranking-ai-delta" hidden>
+          <div class="ai-page">
+            <p class="ai-basis">직전 대비 변동 · 최근 24시간 기준</p>
+            <p class="rk-updated ai-updated">45분 전 갱신</p>
+            <div class="ai-grid">
+              <a class="ai-card" href="#" data-content-type="시리즈">
+                <div class="ai-thumb">
+                  <img class="js-thumb" src="/prototype/ranking/assets/thumb-01-CmLZ3rZ4.png" alt="" />
+                  <span class="rk-badge" data-badge="시리즈"><i data-lucide="play" aria-hidden="true"></i>시리즈</span>
+                </div>
+                <div class="ai-meta">
+                  <span class="ai-rank">1</span>
+                  <span class="rk-delta rk-delta--up" data-delta="up"><span class="rk-delta-icon" aria-hidden="true"></span>12</span>
+                  <span class="ai-delta-basis">24h</span>
+                </div>
+                <p class="ai-card-title">왕국을 뒤흔든 계승 전쟁 연대기</p>
+              </a>
+              <a class="ai-card" href="#" data-content-type="캐릭터">
+                <div class="ai-thumb">
+                  <img class="js-thumb" src="/prototype/ranking/assets/thumb-02-BEbBDHR2.png" alt="" />
+                  <span class="rk-badge" data-badge="캐릭터"><i data-lucide="message-circle" aria-hidden="true"></i>캐릭터</span>
+                </div>
+                <div class="ai-meta">
+                  <span class="ai-rank">2</span>
+                  <span class="rk-delta rk-delta--up" data-delta="up"><span class="rk-delta-icon" aria-hidden="true"></span>5</span>
+                  <span class="ai-delta-basis">24h</span>
+                </div>
+                <p class="ai-card-title">헤어진 전남친과 소꿉친구 사이</p>
+              </a>
+              <a class="ai-card" href="#" data-content-type="시뮬레이션">
+                <div class="ai-thumb">
+                  <img class="js-thumb" src="/prototype/ranking/assets/thumb-03-CjmDST4g.png" alt="" />
+                  <span class="rk-badge" data-badge="시뮬레이션"><i data-lucide="cpu" aria-hidden="true"></i>시뮬레이션</span>
+                </div>
+                <div class="ai-meta">
+                  <span class="ai-rank">3</span>
+                  <span class="tc-delta tc-delta--new" data-delta="new">NEW</span>
+                  <span class="ai-delta-basis">24h</span>
+                </div>
+                <p class="ai-card-title">카페 경영 시뮬레이터: 리뉴얼</p>
+              </a>
+              <a class="ai-card" href="#" data-content-type="시리즈">
+                <div class="ai-thumb">
+                  <img class="js-thumb" src="/prototype/ranking/assets/thumb-04-BRdo0x4d.png" alt="" />
+                  <span class="rk-badge" data-badge="시리즈"><i data-lucide="play" aria-hidden="true"></i>시리즈</span>
+                </div>
+                <div class="ai-meta">
+                  <span class="ai-rank">4</span>
+                  <span class="rk-delta rk-delta--down" data-delta="down"><span class="rk-delta-icon" aria-hidden="true"></span>2</span>
+                  <span class="ai-delta-basis">24h</span>
+                </div>
+                <p class="ai-card-title">별을 쫓는 항해자들의 기록</p>
+              </a>
+              <a class="ai-card" href="#" data-content-type="캐릭터">
+                <div class="ai-thumb">
+                  <img class="js-thumb" src="/prototype/ranking/assets/thumb-05-CXg9aeHI.png" alt="" />
+                  <span class="rk-badge" data-badge="캐릭터"><i data-lucide="message-circle" aria-hidden="true"></i>캐릭터</span>
+                </div>
+                <div class="ai-meta">
+                  <span class="ai-rank">5</span>
+                  <span class="rk-delta rk-delta--nothing" data-delta="nothing"><span class="rk-delta-flat" aria-hidden="true"></span></span>
+                  <span class="ai-delta-basis">24h</span>
+                </div>
+                <p class="ai-card-title">비밀을 간직한 이웃집 소년</p>
+              </a>
+              <a class="ai-card" href="#" data-content-type="시뮬레이션">
+                <div class="ai-thumb">
+                  <img class="js-thumb" src="/prototype/ranking/assets/thumb-06-BxhJFtMh.png" alt="" />
+                  <span class="rk-badge" data-badge="시뮬레이션"><i data-lucide="cpu" aria-hidden="true"></i>시뮬레이션</span>
+                </div>
+                <div class="ai-meta">
+                  <span class="ai-rank">6</span>
+                  <span class="rk-delta rk-delta--up" data-delta="up"><span class="rk-delta-icon" aria-hidden="true"></span>8</span>
+                  <span class="ai-delta-basis">24h</span>
+                </div>
+                <p class="ai-card-title">아이돌 프로듀스 캠페인</p>
+              </a>
+            </div>
+            <button class="rank-back" type="button" data-rank-back="ai">뒤로</button>
+          </div>
+        </section>
+
+        <section class="view view-ranking-ai-best" id="view-ranking-ai-best" data-view-panel="ranking-ai-best" hidden>
+          <div class="ai-page">
+            <div class="ai-block">
+              <div class="rk-filters rk-filters--genre" aria-label="타입·장르 필터">
+                <div class="rk-filters-track">
+                  <button class="rk-type" type="button">
+                    전체
+                    <i data-lucide="chevron-down" aria-hidden="true"></i>
+                  </button>
+                  <span class="rk-divider" aria-hidden="true"></span>
+                  <div class="rk-sorts" role="tablist" aria-label="장르">
+                    <button class="rk-chip" type="button" role="tab" aria-selected="false">전체</button>
+                    <button class="rk-chip is-active" type="button" role="tab" aria-selected="true">판타지</button>
+                    <button class="rk-chip" type="button" role="tab" aria-selected="false">로맨스</button>
+                    <button class="rk-chip" type="button" role="tab" aria-selected="false">스릴러</button>
+                    <button class="rk-chip" type="button" role="tab" aria-selected="false">코미디</button>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div class="ai-block">
+              <div class="ai-period-row">
+                <div class="rk-periods" role="tablist" aria-label="기간" data-ai-period-tabs>
+                  <button class="rk-chip is-active" type="button" role="tab" aria-selected="true" data-ai-period="surge">급상승</button>
+                  <button class="rk-chip" type="button" role="tab" aria-selected="false" data-ai-period="live">실시간</button>
+                  <button class="rk-chip" type="button" role="tab" aria-selected="false" data-ai-period="weekly">주간</button>
+                  <button class="rk-chip" type="button" role="tab" aria-selected="false" data-ai-period="new">신작</button>
+                </div>
+              </div>
+              <p class="ai-basis" data-ai-basis>최근 <em>24시간</em> 집계 · 직전 대비 · 45분 전 갱신</p>
+            </div>
+            <div class="ai-grid">
+              <a class="ai-card ai-card--top" href="#" data-content-type="시리즈">
+                <div class="ai-thumb">
+                  <img class="js-thumb" src="/prototype/ranking/assets/thumb-01-CmLZ3rZ4.png" alt="" />
+                  <span class="rk-badge" data-badge="시리즈"><i data-lucide="play" aria-hidden="true"></i>시리즈</span>
+                  <span class="ai-crown ai-crown--gold" aria-hidden="true">👑</span>
+                </div>
+                <div class="ai-meta">
+                  <span class="ai-rank">1</span>
+                  <span class="rk-delta rk-delta--up" data-delta="up"><span class="rk-delta-icon" aria-hidden="true"></span>12</span>
+                </div>
+                <p class="ai-card-title">왕국을 뒤흔든 계승 전쟁 연대기</p>
+                <p class="ai-author"><span class="ai-named">네임드</span>@월하작가</p>
+                <p class="ai-social"><i data-lucide="users" aria-hidden="true"></i>1.2K명 보는 중</p>
+                <div class="tb-stats">
+                  <span class="tb-stat"><i data-lucide="message-circle" aria-hidden="true"></i>2.4K</span>
+                  <span class="tb-stat"><i data-lucide="play" aria-hidden="true"></i>8.1K</span>
+                </div>
+              </a>
+              <a class="ai-card ai-card--top" href="#" data-content-type="캐릭터">
+                <div class="ai-thumb">
+                  <img class="js-thumb" src="/prototype/ranking/assets/thumb-02-BEbBDHR2.png" alt="" />
+                  <span class="rk-badge" data-badge="캐릭터"><i data-lucide="message-circle" aria-hidden="true"></i>캐릭터</span>
+                  <span class="ai-crown ai-crown--silver" aria-hidden="true">👑</span>
+                </div>
+                <div class="ai-meta">
+                  <span class="ai-rank">2</span>
+                  <span class="rk-delta rk-delta--up" data-delta="up"><span class="rk-delta-icon" aria-hidden="true"></span>5</span>
+                </div>
+                <p class="ai-card-title">헤어진 전남친과 소꿉친구 사이</p>
+                <p class="ai-author"><span class="ai-named">네임드</span>@로맨스작가</p>
+                <p class="ai-social"><i data-lucide="users" aria-hidden="true"></i>860명 보는 중</p>
+                <div class="tb-stats">
+                  <span class="tb-stat"><i data-lucide="message-circle" aria-hidden="true"></i>860</span>
+                  <span class="tb-stat"><i data-lucide="play" aria-hidden="true"></i>2.1K</span>
+                </div>
+              </a>
+              <a class="ai-card ai-card--top" href="#" data-content-type="시뮬레이션">
+                <div class="ai-thumb">
+                  <img class="js-thumb" src="/prototype/ranking/assets/thumb-03-CjmDST4g.png" alt="" />
+                  <span class="rk-badge" data-badge="시뮬레이션"><i data-lucide="cpu" aria-hidden="true"></i>시뮬레이션</span>
+                  <span class="ai-crown ai-crown--bronze" aria-hidden="true">👑</span>
+                </div>
+                <div class="ai-meta">
+                  <span class="ai-rank">3</span>
+                  <span class="tc-delta tc-delta--new" data-delta="new">NEW</span>
+                </div>
+                <p class="ai-card-title">카페 경영 시뮬레이터: 리뉴얼</p>
+                <p class="ai-author">@신인작가</p>
+                <p class="ai-social"><i data-lucide="users" aria-hidden="true"></i>420명 보는 중</p>
+                <div class="tb-stats">
+                  <span class="tb-stat"><i data-lucide="message-circle" aria-hidden="true"></i>1.3K</span>
+                  <span class="tb-stat"><i data-lucide="play" aria-hidden="true"></i>5.5K</span>
+                </div>
+              </a>
+              <a class="ai-card" href="#" data-content-type="시리즈">
+                <div class="ai-thumb">
+                  <img class="js-thumb" src="/prototype/ranking/assets/thumb-04-BRdo0x4d.png" alt="" />
+                  <span class="rk-badge" data-badge="시리즈"><i data-lucide="play" aria-hidden="true"></i>시리즈</span>
+                </div>
+                <div class="ai-meta">
+                  <span class="ai-rank">4</span>
+                  <span class="rk-delta rk-delta--down" data-delta="down"><span class="rk-delta-icon" aria-hidden="true"></span>2</span>
+                </div>
+                <p class="ai-card-title">별을 쫓는 항해자들의 기록</p>
+                <p class="ai-author">@바다작가</p>
+                <p class="ai-social"><i data-lucide="users" aria-hidden="true"></i>310명 보는 중</p>
+                <div class="tb-stats">
+                  <span class="tb-stat"><i data-lucide="message-circle" aria-hidden="true"></i>1.8K</span>
+                  <span class="tb-stat"><i data-lucide="play" aria-hidden="true"></i>6.3K</span>
+                </div>
+              </a>
+              <a class="ai-card" href="#" data-content-type="캐릭터">
+                <div class="ai-thumb">
+                  <img class="js-thumb" src="/prototype/ranking/assets/thumb-05-CXg9aeHI.png" alt="" />
+                  <span class="rk-badge" data-badge="캐릭터"><i data-lucide="message-circle" aria-hidden="true"></i>캐릭터</span>
+                </div>
+                <div class="ai-meta">
+                  <span class="ai-rank">5</span>
+                  <span class="rk-delta rk-delta--nothing" data-delta="nothing"><span class="rk-delta-flat" aria-hidden="true"></span></span>
+                </div>
+                <p class="ai-card-title">비밀을 간직한 이웃집 소년</p>
+                <p class="ai-author">@미스터리작가</p>
+                <p class="ai-social"><i data-lucide="users" aria-hidden="true"></i>190명 보는 중</p>
+                <div class="tb-stats">
+                  <span class="tb-stat"><i data-lucide="message-circle" aria-hidden="true"></i>450</span>
+                  <span class="tb-stat"><i data-lucide="play" aria-hidden="true"></i>1.3K</span>
+                </div>
+              </a>
+              <a class="ai-card" href="#" data-content-type="시뮬레이션">
+                <div class="ai-thumb">
+                  <img class="js-thumb" src="/prototype/ranking/assets/thumb-06-BxhJFtMh.png" alt="" />
+                  <span class="rk-badge" data-badge="시뮬레이션"><i data-lucide="cpu" aria-hidden="true"></i>시뮬레이션</span>
+                </div>
+                <div class="ai-meta">
+                  <span class="ai-rank">6</span>
+                  <span class="rk-delta rk-delta--up" data-delta="up"><span class="rk-delta-icon" aria-hidden="true"></span>8</span>
+                </div>
+                <p class="ai-card-title">아이돌 프로듀스 캠페인</p>
+                <p class="ai-author"><span class="ai-named">네임드</span>@스튜디오K</p>
+                <p class="ai-social"><i data-lucide="users" aria-hidden="true"></i>640명 보는 중</p>
+                <div class="tb-stats">
+                  <span class="tb-stat"><i data-lucide="message-circle" aria-hidden="true"></i>2.1K</span>
+                  <span class="tb-stat"><i data-lucide="play" aria-hidden="true"></i>7.8K</span>
+                </div>
+              </a>
+            </div>
+            <button class="rank-back" type="button" data-rank-back="ai">뒤로</button>
+          </div>
+        </section>
+
+        <section class="view view-ranking-filter" id="view-ranking-filter" data-view-panel="ranking-filter" hidden>
+          <div class="rank-case-list">
+            <button class="rank-case-card" type="button" data-filter-case="uv-a">
+              <span class="rank-case-num">01</span>
+              <span class="rank-case-name">UV타입_A</span>
+            </button>
+            <button class="rank-case-card" type="button" data-filter-case="uv-b">
+              <span class="rank-case-num">02</span>
+              <span class="rank-case-name">UV타입_B</span>
+            </button>
+            <button class="rank-case-card" type="button" data-filter-case="period-a">
+              <span class="rank-case-num">03</span>
+              <span class="rank-case-name">기간타입_A</span>
+            </button>
+            <button class="rank-case-card" type="button" data-filter-case="period-b">
+              <span class="rank-case-num">04</span>
+              <span class="rank-case-name">기간타입_B</span>
+            </button>
+            <button class="rank-case-card" type="button" data-filter-case="genre">
+              <span class="rank-case-num">05</span>
+              <span class="rank-case-name">장르타입</span>
+            </button>
+            <button class="rank-case-card" type="button" data-filter-case="genre-period">
+              <span class="rank-case-num">06</span>
+              <span class="rank-case-name">장르+기간타입 (멀티형)</span>
+            </button>
+            <button class="rank-back" type="button" data-rank-back>뒤로</button>
+          </div>
+        </section>
+
+        <section class="view view-ranking-thumbnail" id="view-ranking-thumbnail" data-view-panel="ranking-thumbnail" hidden>
+          <div class="rank-case-list">
+            <button class="rank-case-card rank-case-card--single" type="button" data-thumb-case="a">
+              타입A
+            </button>
+            <button class="rank-case-card rank-case-card--single" type="button" data-thumb-case="b">
+              타입B
+            </button>
+            <button class="rank-case-card rank-case-card--single" type="button" data-thumb-case="c">
+              타입C
+            </button>
+            <button class="rank-case-card rank-case-card--single" type="button" data-thumb-case="d">
+              타입D
+            </button>
+            <button class="rank-back" type="button" data-rank-back>뒤로</button>
+          </div>
+        </section>
+
+        <section class="view view-ranking-thumb-a" id="view-ranking-thumb-a" data-view-panel="ranking-thumb-a" hidden>
+          <div class="rk-filters" aria-label="랭킹 필터">
+            <div class="rk-filters-track">
+              <button class="rk-type" type="button">
+                전체
+                <i data-lucide="chevron-down" aria-hidden="true"></i>
+              </button>
+              <span class="rk-divider" aria-hidden="true"></span>
+              <div class="rk-sorts" role="tablist" aria-label="정렬">
+                <button class="rk-chip is-active" type="button" role="tab" aria-selected="true">실시간</button>
+                <button class="rk-chip" type="button" role="tab" aria-selected="false">좋아요순</button>
+                <button class="rk-chip" type="button" role="tab" aria-selected="false">댓글순</button>
+                <button class="rk-chip" type="button" role="tab" aria-selected="false">조회순</button>
+                <button class="rk-chip" type="button" role="tab" aria-selected="false">관심순</button>
+              </div>
+            </div>
+          </div>
+          <p class="rk-updated">45분 전 기준 (누적)</p>
+          <div class="ta-grid">
+            <a class="ta-card" href="#">
+              <div class="ta-thumb">
+                <img class="js-thumb" src="/prototype/ranking/assets/thumb-01-CmLZ3rZ4.png" alt="" />
+                <div class="ta-rank">
+                  <span class="ta-rank-num">1</span>
+                  <span class="ta-delta"><span class="ta-delta-icon" aria-hidden="true"></span>5</span>
+                </div>
+              </div>
+              <p class="ta-title">헤어진 전남친과 소꿉친구 사이</p>
+              <p class="ta-author">@작가이름</p>
+              <p class="ta-tag">캐릭터</p>
+            </a>
+            <a class="ta-card" href="#">
+              <div class="ta-thumb">
+                <img class="js-thumb" src="/prototype/ranking/assets/thumb-02-BEbBDHR2.png" alt="" />
+                <div class="ta-rank">
+                  <span class="ta-rank-num">2</span>
+                  <span class="ta-delta"><span class="ta-delta-icon" aria-hidden="true"></span>5</span>
+                </div>
+              </div>
+              <p class="ta-title">첫사랑과 다시 만난 여름</p>
+              <p class="ta-author">@로맨스작가</p>
+              <p class="ta-tag">캐릭터</p>
+            </a>
+            <a class="ta-card" href="#">
+              <div class="ta-thumb">
+                <img class="js-thumb" src="/prototype/ranking/assets/thumb-03-CjmDST4g.png" alt="" />
+                <div class="ta-rank">
+                  <span class="ta-rank-num">3</span>
+                  <span class="ta-delta"><span class="ta-delta-icon" aria-hidden="true"></span>5</span>
+                </div>
+              </div>
+              <p class="ta-title">비밀스러운 학교 도서관에서</p>
+              <p class="ta-author">@미스터리작가</p>
+              <p class="ta-tag">캐릭터</p>
+            </a>
+            <a class="ta-card" href="#">
+              <div class="ta-thumb">
+                <img class="js-thumb" src="/prototype/ranking/assets/thumb-04-BRdo0x4d.png" alt="" />
+                <div class="ta-rank">
+                  <span class="ta-rank-num">4</span>
+                  <span class="ta-delta"><span class="ta-delta-icon" aria-hidden="true"></span>5</span>
+                </div>
+              </div>
+              <p class="ta-title">미래 도시에서 펼쳐지는 모험</p>
+              <p class="ta-author">@SF작가</p>
+              <p class="ta-tag">캐릭터</p>
+            </a>
+            <a class="ta-card" href="#">
+              <div class="ta-thumb">
+                <img class="js-thumb" src="/prototype/ranking/assets/thumb-05-CXg9aeHI.png" alt="" />
+                <div class="ta-rank">
+                  <span class="ta-rank-num">5</span>
+                  <span class="ta-delta"><span class="ta-delta-icon" aria-hidden="true"></span>5</span>
+                </div>
+              </div>
+              <p class="ta-title">잃어버린 기억을 찾아서</p>
+              <p class="ta-author">@판타지작가</p>
+              <p class="ta-tag">캐릭터</p>
+            </a>
+            <a class="ta-card" href="#">
+              <div class="ta-thumb">
+                <img class="js-thumb" src="/prototype/ranking/assets/thumb-06-BxhJFtMh.png" alt="" />
+                <div class="ta-rank">
+                  <span class="ta-rank-num">6</span>
+                  <span class="ta-delta"><span class="ta-delta-icon" aria-hidden="true"></span>5</span>
+                </div>
+              </div>
+              <p class="ta-title">친구들과 떠난 첫 해외여행</p>
+              <p class="ta-author">@여행작가</p>
+              <p class="ta-tag">캐릭터</p>
+            </a>
+            <a class="ta-card" href="#">
+              <div class="ta-thumb">
+                <img class="js-thumb" src="/prototype/ranking/assets/thumb-07-C6zZviJB.png" alt="" />
+                <div class="ta-rank">
+                  <span class="ta-rank-num">7</span>
+                  <span class="ta-delta"><span class="ta-delta-icon" aria-hidden="true"></span>5</span>
+                </div>
+              </div>
+              <p class="ta-title">가족의 비밀을 밝히는 추리극</p>
+              <p class="ta-author">@추리작가</p>
+              <p class="ta-tag">캐릭터</p>
+            </a>
+            <a class="ta-card" href="#">
+              <div class="ta-thumb">
+                <img class="js-thumb" src="/prototype/ranking/assets/thumb-08-Cu2WI5dg.png" alt="" />
+                <div class="ta-rank">
+                  <span class="ta-rank-num">8</span>
+                  <span class="ta-delta"><span class="ta-delta-icon" aria-hidden="true"></span>5</span>
+                </div>
+              </div>
+              <p class="ta-title">도시 속 작은 카페 이야기</p>
+              <p class="ta-author">@감성작가</p>
+              <p class="ta-tag">캐릭터</p>
+            </a>
+            <a class="ta-card" href="#">
+              <div class="ta-thumb">
+                <img class="js-thumb" src="/prototype/ranking/assets/thumb-09-BZ5cVDU_.png" alt="" />
+                <div class="ta-rank">
+                  <span class="ta-rank-num">9</span>
+                  <span class="ta-delta"><span class="ta-delta-icon" aria-hidden="true"></span>5</span>
+                </div>
+              </div>
+              <p class="ta-title">운명적인 만남과 이별의 순간</p>
+              <p class="ta-author">@드라마작가</p>
+              <p class="ta-tag">캐릭터</p>
+            </a>
+          </div>
+        </section>
+
+        <section class="view view-ranking-thumb-b" id="view-ranking-thumb-b" data-view-panel="ranking-thumb-b" hidden>
+          <div class="rk-filters" aria-label="랭킹 필터">
+            <div class="rk-filters-track">
+              <button class="rk-type" type="button">
+                전체
+                <i data-lucide="chevron-down" aria-hidden="true"></i>
+              </button>
+              <span class="rk-divider" aria-hidden="true"></span>
+              <div class="rk-sorts" role="tablist" aria-label="정렬">
+                <button class="rk-chip is-active" type="button" role="tab" aria-selected="true">실시간</button>
+                <button class="rk-chip" type="button" role="tab" aria-selected="false">좋아요순</button>
+                <button class="rk-chip" type="button" role="tab" aria-selected="false">댓글순</button>
+                <button class="rk-chip" type="button" role="tab" aria-selected="false">조회순</button>
+                <button class="rk-chip" type="button" role="tab" aria-selected="false">관심순</button>
+              </div>
+            </div>
+          </div>
+          <p class="rk-updated">45분 전 기준 (누적)</p>
+          <div class="rk-grid">
+            <a class="rk-card" href="#">
+              <div class="rk-thumb">
+                <img class="js-thumb" src="/prototype/ranking/assets/thumb-01-CmLZ3rZ4.png" alt="" />
+                <span class="rk-badge"><i data-lucide="message-circle" aria-hidden="true"></i>캐릭터</span>
+              </div>
+              <div class="rk-meta">
+                <span class="rk-num">1</span>
+                <span class="rk-delta"><span class="rk-delta-icon" aria-hidden="true"></span>3</span>
+              </div>
+              <p class="rk-title">헤어진 전남친과 소꿉친구 사이</p>
+              <div class="tb-stats">
+                <span class="tb-stat"><i data-lucide="message-circle" aria-hidden="true"></i>860</span>
+                <span class="tb-stat"><i data-lucide="play" aria-hidden="true"></i>2.1K</span>
+              </div>
+            </a>
+            <a class="rk-card" href="#">
+              <div class="rk-thumb">
+                <img class="js-thumb" src="/prototype/ranking/assets/thumb-02-BEbBDHR2.png" alt="" />
+                <span class="rk-badge"><i data-lucide="message-circle" aria-hidden="true"></i>캐릭터</span>
+              </div>
+              <div class="rk-meta">
+                <span class="rk-num">2</span>
+                <span class="rk-delta"><span class="rk-delta-icon" aria-hidden="true"></span>5</span>
+              </div>
+              <p class="rk-title">첫 만남에서 느낀 강렬한 설렘</p>
+              <div class="tb-stats">
+                <span class="tb-stat"><i data-lucide="message-circle" aria-hidden="true"></i>860</span>
+                <span class="tb-stat"><i data-lucide="play" aria-hidden="true"></i>2.1K</span>
+              </div>
+            </a>
+            <a class="rk-card" href="#">
+              <div class="rk-thumb">
+                <img class="js-thumb" src="/prototype/ranking/assets/thumb-03-CjmDST4g.png" alt="" />
+                <span class="rk-badge"><i data-lucide="message-circle" aria-hidden="true"></i>캐릭터</span>
+              </div>
+              <div class="rk-meta">
+                <span class="rk-num">3</span>
+                <span class="rk-delta"><span class="rk-delta-icon" aria-hidden="true"></span>2</span>
+              </div>
+              <p class="rk-title">비밀스러운 동네 모임의 이야기</p>
+              <div class="tb-stats">
+                <span class="tb-stat"><i data-lucide="message-circle" aria-hidden="true"></i>860</span>
+                <span class="tb-stat"><i data-lucide="play" aria-hidden="true"></i>2.1K</span>
+              </div>
+            </a>
+            <a class="rk-card" href="#">
+              <div class="rk-thumb">
+                <img class="js-thumb" src="/prototype/ranking/assets/thumb-04-BRdo0x4d.png" alt="" />
+                <span class="rk-badge"><i data-lucide="message-circle" aria-hidden="true"></i>캐릭터</span>
+              </div>
+              <div class="rk-meta">
+                <span class="rk-num">4</span>
+                <span class="rk-delta"><span class="rk-delta-icon" aria-hidden="true"></span>7</span>
+              </div>
+              <p class="rk-title">어린 시절 추억이 깃든 공원 산책</p>
+              <div class="tb-stats">
+                <span class="tb-stat"><i data-lucide="message-circle" aria-hidden="true"></i>860</span>
+                <span class="tb-stat"><i data-lucide="play" aria-hidden="true"></i>2.1K</span>
+              </div>
+            </a>
+            <a class="rk-card" href="#">
+              <div class="rk-thumb">
+                <img class="js-thumb" src="/prototype/ranking/assets/thumb-05-CXg9aeHI.png" alt="" />
+                <span class="rk-badge"><i data-lucide="message-circle" aria-hidden="true"></i>캐릭터</span>
+              </div>
+              <div class="rk-meta">
+                <span class="rk-num">5</span>
+                <span class="rk-delta"><span class="rk-delta-icon" aria-hidden="true"></span>4</span>
+              </div>
+              <p class="rk-title">갈등과 화해, 그 사이의 미묘한 감정</p>
+              <div class="tb-stats">
+                <span class="tb-stat"><i data-lucide="message-circle" aria-hidden="true"></i>860</span>
+                <span class="tb-stat"><i data-lucide="play" aria-hidden="true"></i>2.1K</span>
+              </div>
+            </a>
+            <a class="rk-card" href="#">
+              <div class="rk-thumb">
+                <img class="js-thumb" src="/prototype/ranking/assets/thumb-06-BxhJFtMh.png" alt="" />
+                <span class="rk-badge"><i data-lucide="message-circle" aria-hidden="true"></i>캐릭터</span>
+              </div>
+              <div class="rk-meta">
+                <span class="rk-num">6</span>
+                <span class="rk-delta"><span class="rk-delta-icon" aria-hidden="true"></span>6</span>
+              </div>
+              <p class="rk-title">서로의 꿈을 응원하며 성장하는 모습</p>
+              <div class="tb-stats">
+                <span class="tb-stat"><i data-lucide="message-circle" aria-hidden="true"></i>860</span>
+                <span class="tb-stat"><i data-lucide="play" aria-hidden="true"></i>2.1K</span>
+              </div>
+            </a>
+            <a class="rk-card" href="#">
+              <div class="rk-thumb">
+                <img class="js-thumb" src="/prototype/ranking/assets/thumb-07-C6zZviJB.png" alt="" />
+                <span class="rk-badge"><i data-lucide="message-circle" aria-hidden="true"></i>캐릭터</span>
+              </div>
+              <div class="rk-meta">
+                <span class="rk-num">7</span>
+                <span class="rk-delta"><span class="rk-delta-icon" aria-hidden="true"></span>1</span>
+              </div>
+              <p class="rk-title">예기치 못한 재회, 새로운 시작의 신호</p>
+              <div class="tb-stats">
+                <span class="tb-stat"><i data-lucide="message-circle" aria-hidden="true"></i>860</span>
+                <span class="tb-stat"><i data-lucide="play" aria-hidden="true"></i>2.1K</span>
+              </div>
+            </a>
+            <a class="rk-card" href="#">
+              <div class="rk-thumb">
+                <img class="js-thumb" src="/prototype/ranking/assets/thumb-08-Cu2WI5dg.png" alt="" />
+                <span class="rk-badge"><i data-lucide="message-circle" aria-hidden="true"></i>캐릭터</span>
+              </div>
+              <div class="rk-meta">
+                <span class="rk-num">8</span>
+                <span class="rk-delta"><span class="rk-delta-icon" aria-hidden="true"></span>3</span>
+              </div>
+              <p class="rk-title">시간이 흘러도 변치 않는 우정</p>
+              <div class="tb-stats">
+                <span class="tb-stat"><i data-lucide="message-circle" aria-hidden="true"></i>860</span>
+                <span class="tb-stat"><i data-lucide="play" aria-hidden="true"></i>2.1K</span>
+              </div>
+            </a>
+            <a class="rk-card" href="#">
+              <div class="rk-thumb">
+                <img class="js-thumb" src="/prototype/ranking/assets/thumb-09-BZ5cVDU_.png" alt="" />
+                <span class="rk-badge"><i data-lucide="message-circle" aria-hidden="true"></i>캐릭터</span>
+              </div>
+              <div class="rk-meta">
+                <span class="rk-num">9</span>
+                <span class="rk-delta"><span class="rk-delta-icon" aria-hidden="true"></span>8</span>
+              </div>
+              <p class="rk-title">서로를 이해하게 된 결정적인 순간</p>
+              <div class="tb-stats">
+                <span class="tb-stat"><i data-lucide="message-circle" aria-hidden="true"></i>860</span>
+                <span class="tb-stat"><i data-lucide="play" aria-hidden="true"></i>2.1K</span>
+              </div>
+            </a>
+            <a class="rk-card" href="#">
+              <div class="rk-thumb">
+                <img class="js-thumb" src="/prototype/ranking/assets/thumb-01-CmLZ3rZ4.png" alt="" />
+                <span class="rk-badge"><i data-lucide="message-circle" aria-hidden="true"></i>캐릭터</span>
+              </div>
+              <div class="rk-meta">
+                <span class="rk-num">10</span>
+                <span class="rk-delta"><span class="rk-delta-icon" aria-hidden="true"></span>2</span>
+              </div>
+              <p class="rk-title">함께 쌓아온 추억의 사진첩</p>
+              <div class="tb-stats">
+                <span class="tb-stat"><i data-lucide="message-circle" aria-hidden="true"></i>860</span>
+                <span class="tb-stat"><i data-lucide="play" aria-hidden="true"></i>2.1K</span>
+              </div>
+            </a>
+            <a class="rk-card" href="#">
+              <div class="rk-thumb">
+                <img class="js-thumb" src="/prototype/ranking/assets/thumb-02-BEbBDHR2.png" alt="" />
+                <span class="rk-badge"><i data-lucide="message-circle" aria-hidden="true"></i>캐릭터</span>
+              </div>
+              <div class="rk-meta">
+                <span class="rk-num">11</span>
+                <span class="rk-delta"><span class="rk-delta-icon" aria-hidden="true"></span>5</span>
+              </div>
+              <p class="rk-title">잠시 멀어졌던 거리와 다시 가까워진 마음</p>
+              <div class="tb-stats">
+                <span class="tb-stat"><i data-lucide="message-circle" aria-hidden="true"></i>860</span>
+                <span class="tb-stat"><i data-lucide="play" aria-hidden="true"></i>2.1K</span>
+              </div>
+            </a>
+            <a class="rk-card" href="#">
+              <div class="rk-thumb">
+                <img class="js-thumb" src="/prototype/ranking/assets/thumb-03-CjmDST4g.png" alt="" />
+                <span class="rk-badge"><i data-lucide="message-circle" aria-hidden="true"></i>캐릭터</span>
+              </div>
+              <div class="rk-meta">
+                <span class="rk-num">12</span>
+                <span class="rk-delta"><span class="rk-delta-icon" aria-hidden="true"></span>4</span>
+              </div>
+              <p class="rk-title">운명처럼 마주친 특별한 이벤트</p>
+              <div class="tb-stats">
+                <span class="tb-stat"><i data-lucide="message-circle" aria-hidden="true"></i>860</span>
+                <span class="tb-stat"><i data-lucide="play" aria-hidden="true"></i>2.1K</span>
+              </div>
+            </a>
+          </div>
+        </section>
+
+        <section class="view view-ranking-thumb-c" id="view-ranking-thumb-c" data-view-panel="ranking-thumb-c" hidden>
+          <div class="rk-filters" aria-label="랭킹 필터">
+            <div class="rk-filters-track">
+              <button class="rk-type" type="button">
+                전체
+                <i data-lucide="chevron-down" aria-hidden="true"></i>
+              </button>
+              <span class="rk-divider" aria-hidden="true"></span>
+              <div class="rk-sorts" role="tablist" aria-label="정렬">
+                <button class="rk-chip is-active" type="button" role="tab" aria-selected="true">실시간</button>
+                <button class="rk-chip" type="button" role="tab" aria-selected="false">좋아요순</button>
+                <button class="rk-chip" type="button" role="tab" aria-selected="false">댓글순</button>
+                <button class="rk-chip" type="button" role="tab" aria-selected="false">조회순</button>
+                <button class="rk-chip" type="button" role="tab" aria-selected="false">관심순</button>
+              </div>
+            </div>
+          </div>
+          <p class="rk-updated">45분 전 기준 (누적)</p>
+          <div class="tc-grid">
+            <a class="tc-card" href="#">
+              <div class="tc-thumb">
+                <img class="js-thumb" src="/prototype/ranking/assets/thumb-01-CmLZ3rZ4.png" alt="" />
+                <div class="tc-rank">1<span class="tc-crown tc-crown--gold" aria-hidden="true">👑</span></div>
+              </div>
+              <span class="tc-delta tc-delta--up"><span class="tc-delta-icon" aria-hidden="true"></span>5</span>
+              <p class="tc-title">헤어진 전남친과 소꿉친구 사이</p>
+              <p class="tc-tag">캐릭터</p>
+              <div class="tb-stats">
+                <span class="tb-stat"><i data-lucide="message-circle" aria-hidden="true"></i>860</span>
+                <span class="tb-stat"><i data-lucide="play" aria-hidden="true"></i>2.1K</span>
+              </div>
+            </a>
+            <a class="tc-card" href="#">
+              <div class="tc-thumb">
+                <img class="js-thumb" src="/prototype/ranking/assets/thumb-02-BEbBDHR2.png" alt="" />
+                <div class="tc-rank">2<span class="tc-crown tc-crown--silver" aria-hidden="true">👑</span></div>
+              </div>
+              <span class="tc-delta tc-delta--up"><span class="tc-delta-icon" aria-hidden="true"></span>5</span>
+              <p class="tc-title">첫사랑과의 재회, 새로운 시작</p>
+              <p class="tc-tag">캐릭터</p>
+              <div class="tb-stats">
+                <span class="tb-stat"><i data-lucide="message-circle" aria-hidden="true"></i>860</span>
+                <span class="tb-stat"><i data-lucide="play" aria-hidden="true"></i>2.1K</span>
+              </div>
+            </a>
+            <a class="tc-card" href="#">
+              <div class="tc-thumb">
+                <img class="js-thumb" src="/prototype/ranking/assets/thumb-03-CjmDST4g.png" alt="" />
+                <div class="tc-rank">3<span class="tc-crown tc-crown--bronze" aria-hidden="true">👑</span></div>
+              </div>
+              <span class="tc-delta tc-delta--new">NEW</span>
+              <p class="tc-title">비밀스러운 동네 이야기</p>
+              <p class="tc-tag">캐릭터</p>
+              <div class="tb-stats">
+                <span class="tb-stat"><i data-lucide="message-circle" aria-hidden="true"></i>860</span>
+                <span class="tb-stat"><i data-lucide="play" aria-hidden="true"></i>2.1K</span>
+              </div>
+            </a>
+            <a class="tc-card" href="#">
+              <div class="tc-thumb">
+                <img class="js-thumb" src="/prototype/ranking/assets/thumb-04-BRdo0x4d.png" alt="" />
+                <div class="tc-rank">4</div>
+              </div>
+              <span class="tc-delta tc-delta--up"><span class="tc-delta-icon" aria-hidden="true"></span>5</span>
+              <p class="tc-title">우정과 배신의 경계선</p>
+              <p class="tc-tag">캐릭터</p>
+              <div class="tb-stats">
+                <span class="tb-stat"><i data-lucide="message-circle" aria-hidden="true"></i>860</span>
+                <span class="tb-stat"><i data-lucide="play" aria-hidden="true"></i>2.1K</span>
+              </div>
+            </a>
+            <a class="tc-card" href="#">
+              <div class="tc-thumb">
+                <img class="js-thumb" src="/prototype/ranking/assets/thumb-05-CXg9aeHI.png" alt="" />
+                <div class="tc-rank">5</div>
+              </div>
+              <span class="tc-delta tc-delta--up"><span class="tc-delta-icon" aria-hidden="true"></span>6</span>
+              <p class="tc-title">달빛 아래의 약속</p>
+              <p class="tc-tag">캐릭터</p>
+              <div class="tb-stats">
+                <span class="tb-stat"><i data-lucide="message-circle" aria-hidden="true"></i>860</span>
+                <span class="tb-stat"><i data-lucide="play" aria-hidden="true"></i>2.1K</span>
+              </div>
+            </a>
+            <a class="tc-card" href="#">
+              <div class="tc-thumb">
+                <img class="js-thumb" src="/prototype/ranking/assets/thumb-06-BxhJFtMh.png" alt="" />
+                <div class="tc-rank">6</div>
+              </div>
+              <span class="tc-delta tc-delta--up"><span class="tc-delta-icon" aria-hidden="true"></span>7</span>
+              <p class="tc-title">시간을 달리는 소녀</p>
+              <p class="tc-tag">캐릭터</p>
+              <div class="tb-stats">
+                <span class="tb-stat"><i data-lucide="message-circle" aria-hidden="true"></i>860</span>
+                <span class="tb-stat"><i data-lucide="play" aria-hidden="true"></i>2.1K</span>
+              </div>
+            </a>
+            <a class="tc-card" href="#">
+              <div class="tc-thumb">
+                <img class="js-thumb" src="/prototype/ranking/assets/thumb-07-C6zZviJB.png" alt="" />
+                <div class="tc-rank">7</div>
+              </div>
+              <span class="tc-delta tc-delta--up"><span class="tc-delta-icon" aria-hidden="true"></span>8</span>
+              <p class="tc-title">잃어버린 도시의 비밀</p>
+              <p class="tc-tag">캐릭터</p>
+              <div class="tb-stats">
+                <span class="tb-stat"><i data-lucide="message-circle" aria-hidden="true"></i>860</span>
+                <span class="tb-stat"><i data-lucide="play" aria-hidden="true"></i>2.1K</span>
+              </div>
+            </a>
+            <a class="tc-card" href="#">
+              <div class="tc-thumb">
+                <img class="js-thumb" src="/prototype/ranking/assets/thumb-08-Cu2WI5dg.png" alt="" />
+                <div class="tc-rank">8</div>
+              </div>
+              <span class="tc-delta tc-delta--down"><span class="tc-delta-icon" aria-hidden="true"></span>9</span>
+              <p class="tc-title">침묵의 진실</p>
+              <p class="tc-tag">캐릭터</p>
+              <div class="tb-stats">
+                <span class="tb-stat"><i data-lucide="message-circle" aria-hidden="true"></i>860</span>
+                <span class="tb-stat"><i data-lucide="play" aria-hidden="true"></i>2.1K</span>
+              </div>
+            </a>
+            <a class="tc-card" href="#">
+              <div class="tc-thumb">
+                <img class="js-thumb" src="/prototype/ranking/assets/thumb-09-BZ5cVDU_.png" alt="" />
+                <div class="tc-rank">9</div>
+              </div>
+              <span class="tc-delta tc-delta--up"><span class="tc-delta-icon" aria-hidden="true"></span>10</span>
+              <p class="tc-title">마지막 편지</p>
+              <p class="tc-tag">캐릭터</p>
+              <div class="tb-stats">
+                <span class="tb-stat"><i data-lucide="message-circle" aria-hidden="true"></i>860</span>
+                <span class="tb-stat"><i data-lucide="play" aria-hidden="true"></i>2.1K</span>
+              </div>
+            </a>
+            <a class="tc-card" href="#">
+              <div class="tc-thumb">
+                <img class="js-thumb" src="/prototype/ranking/assets/thumb-01-CmLZ3rZ4.png" alt="" />
+                <div class="tc-rank">10</div>
+              </div>
+              <span class="tc-delta tc-delta--up"><span class="tc-delta-icon" aria-hidden="true"></span>11</span>
+              <p class="tc-title">별들의 전쟁</p>
+              <p class="tc-tag">캐릭터</p>
+              <div class="tb-stats">
+                <span class="tb-stat"><i data-lucide="message-circle" aria-hidden="true"></i>860</span>
+                <span class="tb-stat"><i data-lucide="play" aria-hidden="true"></i>2.1K</span>
+              </div>
+            </a>
+            <a class="tc-card" href="#">
+              <div class="tc-thumb">
+                <img class="js-thumb" src="/prototype/ranking/assets/thumb-02-BEbBDHR2.png" alt="" />
+                <div class="tc-rank">11</div>
+              </div>
+              <span class="tc-delta tc-delta--down"><span class="tc-delta-icon" aria-hidden="true"></span>12</span>
+              <p class="tc-title">고요한 바다의 속삭임</p>
+              <p class="tc-tag">캐릭터</p>
+              <div class="tb-stats">
+                <span class="tb-stat"><i data-lucide="message-circle" aria-hidden="true"></i>860</span>
+                <span class="tb-stat"><i data-lucide="play" aria-hidden="true"></i>2.1K</span>
+              </div>
+            </a>
+            <a class="tc-card" href="#">
+              <div class="tc-thumb">
+                <img class="js-thumb" src="/prototype/ranking/assets/thumb-03-CjmDST4g.png" alt="" />
+                <div class="tc-rank">12</div>
+              </div>
+              <span class="tc-delta tc-delta--up"><span class="tc-delta-icon" aria-hidden="true"></span>13</span>
+              <p class="tc-title">검은 숲의 전설</p>
+              <p class="tc-tag">캐릭터</p>
+              <div class="tb-stats">
+                <span class="tb-stat"><i data-lucide="message-circle" aria-hidden="true"></i>860</span>
+                <span class="tb-stat"><i data-lucide="play" aria-hidden="true"></i>2.1K</span>
+              </div>
+            </a>
+          </div>
+        </section>
+
+        <section class="view view-ranking-thumb-d" id="view-ranking-thumb-d" data-view-panel="ranking-thumb-d" hidden>
+          <div class="rk-filters" aria-label="랭킹 필터">
+            <div class="rk-filters-track">
+              <button class="rk-type" type="button">
+                전체
+                <i data-lucide="chevron-down" aria-hidden="true"></i>
+              </button>
+              <span class="rk-divider" aria-hidden="true"></span>
+              <div class="rk-sorts" role="tablist" aria-label="정렬">
+                <button class="rk-chip is-active" type="button" role="tab" aria-selected="true">실시간</button>
+                <button class="rk-chip" type="button" role="tab" aria-selected="false">좋아요순</button>
+                <button class="rk-chip" type="button" role="tab" aria-selected="false">댓글순</button>
+                <button class="rk-chip" type="button" role="tab" aria-selected="false">조회순</button>
+                <button class="rk-chip" type="button" role="tab" aria-selected="false">관심순</button>
+              </div>
+            </div>
+          </div>
+          <p class="rk-updated">45분 전 기준 (누적)</p>
+          <div class="td-list">
+            <a class="td-row" href="#">
+              <div class="td-thumb">
+                <img class="js-thumb" src="/prototype/ranking/assets/thumb-01-CmLZ3rZ4.png" alt="" />
+                <span class="td-badge"><i data-lucide="message-circle" aria-hidden="true"></i>캐릭터</span>
+              </div>
+              <div class="td-body">
+                <div class="td-rankline">
+                  <span class="td-rank">1</span>
+                  <span class="td-delta td-delta--up"><span class="td-delta-icon" aria-hidden="true"></span>5</span>
+                </div>
+                <p class="td-title">비밀스러운 동네 모임의 이야기</p>
+                <div class="tb-stats">
+                  <span class="tb-stat"><i data-lucide="message-circle" aria-hidden="true"></i>860</span>
+                  <span class="tb-stat"><i data-lucide="play" aria-hidden="true"></i>2.1K</span>
+                </div>
+              </div>
+            </a>
+            <a class="td-row" href="#">
+              <div class="td-thumb">
+                <img class="js-thumb" src="/prototype/ranking/assets/thumb-02-BEbBDHR2.png" alt="" />
+                <span class="td-badge"><i data-lucide="message-circle" aria-hidden="true"></i>캐릭터</span>
+              </div>
+              <div class="td-body">
+                <div class="td-rankline">
+                  <span class="td-rank">2</span>
+                  <span class="td-delta td-delta--up"><span class="td-delta-icon" aria-hidden="true"></span>12</span>
+                </div>
+                <p class="td-title">밤하늘 아래 펼쳐지는 작은 음악회</p>
+                <div class="tb-stats">
+                  <span class="tb-stat"><i data-lucide="message-circle" aria-hidden="true"></i>1.2K</span>
+                  <span class="tb-stat"><i data-lucide="play" aria-hidden="true"></i>3.4K</span>
+                </div>
+              </div>
+            </a>
+            <a class="td-row" href="#">
+              <div class="td-thumb">
+                <img class="js-thumb" src="/prototype/ranking/assets/thumb-03-CjmDST4g.png" alt="" />
+                <span class="td-badge"><i data-lucide="message-circle" aria-hidden="true"></i>캐릭터</span>
+              </div>
+              <div class="td-body">
+                <div class="td-rankline">
+                  <span class="td-rank">3</span>
+                  <span class="td-delta td-delta--up"><span class="td-delta-icon" aria-hidden="true"></span>7</span>
+                </div>
+                <p class="td-title">도시 속 숨겨진 정원 산책기</p>
+                <div class="tb-stats">
+                  <span class="tb-stat"><i data-lucide="message-circle" aria-hidden="true"></i>940</span>
+                  <span class="tb-stat"><i data-lucide="play" aria-hidden="true"></i>1.9K</span>
+                </div>
+              </div>
+            </a>
+            <a class="td-row" href="#">
+              <div class="td-thumb">
+                <img class="js-thumb" src="/prototype/ranking/assets/thumb-04-BRdo0x4d.png" alt="" />
+                <span class="td-badge"><i data-lucide="message-circle" aria-hidden="true"></i>캐릭터</span>
+              </div>
+              <div class="td-body">
+                <div class="td-rankline">
+                  <span class="td-rank">4</span>
+                  <span class="td-delta td-delta--down"><span class="td-delta-icon" aria-hidden="true"></span>3</span>
+                </div>
+                <p class="td-title">오래된 카페에서 만난 인연들</p>
+                <div class="tb-stats">
+                  <span class="tb-stat"><i data-lucide="message-circle" aria-hidden="true"></i>1.5K</span>
+                  <span class="tb-stat"><i data-lucide="play" aria-hidden="true"></i>4.1K</span>
+                </div>
+              </div>
+            </a>
+            <a class="td-row" href="#">
+              <div class="td-thumb">
+                <img class="js-thumb" src="/prototype/ranking/assets/thumb-05-CXg9aeHI.png" alt="" />
+                <span class="td-badge"><i data-lucide="message-circle" aria-hidden="true"></i>캐릭터</span>
+              </div>
+              <div class="td-body">
+                <div class="td-rankline">
+                  <span class="td-rank">5</span>
+                  <span class="td-delta td-delta--up"><span class="td-delta-icon" aria-hidden="true"></span>9</span>
+                </div>
+                <p class="td-title">비 오는 날의 작은 도서관</p>
+                <div class="tb-stats">
+                  <span class="tb-stat"><i data-lucide="message-circle" aria-hidden="true"></i>780</span>
+                  <span class="tb-stat"><i data-lucide="play" aria-hidden="true"></i>2.3K</span>
+                </div>
+              </div>
+            </a>
+            <a class="td-row" href="#">
+              <div class="td-thumb">
+                <img class="js-thumb" src="/prototype/ranking/assets/thumb-06-BxhJFtMh.png" alt="" />
+                <span class="td-badge"><i data-lucide="message-circle" aria-hidden="true"></i>캐릭터</span>
+              </div>
+              <div class="td-body">
+                <div class="td-rankline">
+                  <span class="td-rank">6</span>
+                  <span class="td-delta td-delta--up"><span class="td-delta-icon" aria-hidden="true"></span>11</span>
+                </div>
+                <p class="td-title">골목길 벽화 속 숨겨진 이야기</p>
+                <div class="tb-stats">
+                  <span class="tb-stat"><i data-lucide="message-circle" aria-hidden="true"></i>1.1K</span>
+                  <span class="tb-stat"><i data-lucide="play" aria-hidden="true"></i>3.0K</span>
+                </div>
+              </div>
+            </a>
+            <a class="td-row" href="#">
+              <div class="td-thumb">
+                <img class="js-thumb" src="/prototype/ranking/assets/thumb-07-C6zZviJB.png" alt="" />
+                <span class="td-badge"><i data-lucide="message-circle" aria-hidden="true"></i>캐릭터</span>
+              </div>
+              <div class="td-body">
+                <div class="td-rankline">
+                  <span class="td-rank">7</span>
+                  <span class="td-delta td-delta--new">NEW</span>
+                </div>
+                <p class="td-title">잊혀진 시장 골목의 맛집 탐방</p>
+                <div class="tb-stats">
+                  <span class="tb-stat"><i data-lucide="message-circle" aria-hidden="true"></i>670</span>
+                  <span class="tb-stat"><i data-lucide="play" aria-hidden="true"></i>1.7K</span>
+                </div>
+              </div>
+            </a>
+            <a class="td-row" href="#">
+              <div class="td-thumb">
+                <img class="js-thumb" src="/prototype/ranking/assets/thumb-08-Cu2WI5dg.png" alt="" />
+                <span class="td-badge"><i data-lucide="message-circle" aria-hidden="true"></i>캐릭터</span>
+              </div>
+              <div class="td-body">
+                <div class="td-rankline">
+                  <span class="td-rank">8</span>
+                  <span class="td-delta td-delta--up"><span class="td-delta-icon" aria-hidden="true"></span>14</span>
+                </div>
+                <p class="td-title">평화로운 아침 바닷가 산책</p>
+                <div class="tb-stats">
+                  <span class="tb-stat"><i data-lucide="message-circle" aria-hidden="true"></i>1.3K</span>
+                  <span class="tb-stat"><i data-lucide="play" aria-hidden="true"></i>2.8K</span>
+                </div>
+              </div>
+            </a>
+            <a class="td-row" href="#">
+              <div class="td-thumb">
+                <img class="js-thumb" src="/prototype/ranking/assets/thumb-09-BZ5cVDU_.png" alt="" />
+                <span class="td-badge"><i data-lucide="message-circle" aria-hidden="true"></i>캐릭터</span>
+              </div>
+              <div class="td-body">
+                <div class="td-rankline">
+                  <span class="td-rank">9</span>
+                  <span class="td-delta td-delta--up"><span class="td-delta-icon" aria-hidden="true"></span>6</span>
+                </div>
+                <p class="td-title">고요한 산책로에서 만난 새벽의 고요</p>
+                <div class="tb-stats">
+                  <span class="tb-stat"><i data-lucide="message-circle" aria-hidden="true"></i>900</span>
+                  <span class="tb-stat"><i data-lucide="play" aria-hidden="true"></i>2.2K</span>
+                </div>
+              </div>
+            </a>
+            <a class="td-row" href="#">
+              <div class="td-thumb">
+                <img class="js-thumb" src="/prototype/ranking/assets/thumb-01-CmLZ3rZ4.png" alt="" />
+                <span class="td-badge"><i data-lucide="message-circle" aria-hidden="true"></i>캐릭터</span>
+              </div>
+              <div class="td-body">
+                <div class="td-rankline">
+                  <span class="td-rank">10</span>
+                  <span class="td-delta td-delta--up"><span class="td-delta-icon" aria-hidden="true"></span>8</span>
+                </div>
+                <p class="td-title">추억을 담은 도시 벽화 여행</p>
+                <div class="tb-stats">
+                  <span class="tb-stat"><i data-lucide="message-circle" aria-hidden="true"></i>1.0K</span>
+                  <span class="tb-stat"><i data-lucide="play" aria-hidden="true"></i>3.5K</span>
+                </div>
+              </div>
+            </a>
+          </div>
+        </section>
+
+        <section class="view view-ranking-uv-a" id="view-ranking-uv-a" data-view-panel="ranking-uv-a" hidden>
+          <div class="rk-filters" aria-label="랭킹 필터">
+            <div class="rk-filters-track">
+              <button class="rk-type" type="button">
+                전체
+                <i data-lucide="chevron-down" aria-hidden="true"></i>
+              </button>
+              <span class="rk-divider" aria-hidden="true"></span>
+              <div class="rk-sorts" role="tablist" aria-label="정렬">
+                <button class="rk-chip is-active" type="button" role="tab" aria-selected="true">실시간</button>
+                <button class="rk-chip" type="button" role="tab" aria-selected="false">주간베스트</button>
+                <button class="rk-chip" type="button" role="tab" aria-selected="false">좋아요순</button>
+                <button class="rk-chip" type="button" role="tab" aria-selected="false">댓글순</button>
+                <button class="rk-chip" type="button" role="tab" aria-selected="false">조회순</button>
+                <button class="rk-chip" type="button" role="tab" aria-selected="false">관심순</button>
+              </div>
+            </div>
+          </div>
+          <p class="rk-updated">45분 전 기준 (누적)</p>
+          <div class="rk-grid">
+            <a class="rk-card" href="#">
+              <div class="rk-thumb">
+                <img class="js-thumb" src="/prototype/ranking/assets/thumb-01-CmLZ3rZ4.png" alt="" />
+                <span class="rk-badge"><i data-lucide="message-circle" aria-hidden="true"></i>캐릭터</span>
+              </div>
+              <div class="rk-meta">
+                <span class="rk-num">1</span>
+                <span class="rk-delta"><span class="rk-delta-icon" aria-hidden="true"></span>3</span>
+              </div>
+              <p class="rk-title">헤어진 전남친과 소꿉친구 사이</p>
+            </a>
+            <a class="rk-card" href="#">
+              <div class="rk-thumb">
+                <img class="js-thumb" src="/prototype/ranking/assets/thumb-02-BEbBDHR2.png" alt="" />
+                <span class="rk-badge"><i data-lucide="message-circle" aria-hidden="true"></i>캐릭터</span>
+              </div>
+              <div class="rk-meta">
+                <span class="rk-num">2</span>
+                <span class="rk-delta"><span class="rk-delta-icon" aria-hidden="true"></span>5</span>
+              </div>
+              <p class="rk-title">첫 만남에서 느낀 강렬한 설렘</p>
+            </a>
+            <a class="rk-card" href="#">
+              <div class="rk-thumb">
+                <img class="js-thumb" src="/prototype/ranking/assets/thumb-03-CjmDST4g.png" alt="" />
+                <span class="rk-badge"><i data-lucide="message-circle" aria-hidden="true"></i>캐릭터</span>
+              </div>
+              <div class="rk-meta">
+                <span class="rk-num">3</span>
+                <span class="rk-delta"><span class="rk-delta-icon" aria-hidden="true"></span>2</span>
+              </div>
+              <p class="rk-title">비밀스러운 동네 모임의 이야기</p>
+            </a>
+            <a class="rk-card" href="#">
+              <div class="rk-thumb">
+                <img class="js-thumb" src="/prototype/ranking/assets/thumb-04-BRdo0x4d.png" alt="" />
+                <span class="rk-badge"><i data-lucide="message-circle" aria-hidden="true"></i>캐릭터</span>
+              </div>
+              <div class="rk-meta">
+                <span class="rk-num">4</span>
+                <span class="rk-delta"><span class="rk-delta-icon" aria-hidden="true"></span>7</span>
+              </div>
+              <p class="rk-title">어린 시절 추억이 깃든 공원 산책</p>
+            </a>
+            <a class="rk-card" href="#">
+              <div class="rk-thumb">
+                <img class="js-thumb" src="/prototype/ranking/assets/thumb-05-CXg9aeHI.png" alt="" />
+                <span class="rk-badge"><i data-lucide="message-circle" aria-hidden="true"></i>캐릭터</span>
+              </div>
+              <div class="rk-meta">
+                <span class="rk-num">5</span>
+                <span class="rk-delta"><span class="rk-delta-icon" aria-hidden="true"></span>4</span>
+              </div>
+              <p class="rk-title">갈등과 화해, 그 사이의 미묘한 감정</p>
+            </a>
+            <a class="rk-card" href="#">
+              <div class="rk-thumb">
+                <img class="js-thumb" src="/prototype/ranking/assets/thumb-06-BxhJFtMh.png" alt="" />
+                <span class="rk-badge"><i data-lucide="message-circle" aria-hidden="true"></i>캐릭터</span>
+              </div>
+              <div class="rk-meta">
+                <span class="rk-num">6</span>
+                <span class="rk-delta"><span class="rk-delta-icon" aria-hidden="true"></span>6</span>
+              </div>
+              <p class="rk-title">서로의 꿈을 응원하며 성장하는 모습</p>
+            </a>
+            <a class="rk-card" href="#">
+              <div class="rk-thumb">
+                <img class="js-thumb" src="/prototype/ranking/assets/thumb-07-C6zZviJB.png" alt="" />
+                <span class="rk-badge"><i data-lucide="message-circle" aria-hidden="true"></i>캐릭터</span>
+              </div>
+              <div class="rk-meta">
+                <span class="rk-num">7</span>
+                <span class="rk-delta"><span class="rk-delta-icon" aria-hidden="true"></span>1</span>
+              </div>
+              <p class="rk-title">예기치 못한 재회, 새로운 시작의 신호</p>
+            </a>
+            <a class="rk-card" href="#">
+              <div class="rk-thumb">
+                <img class="js-thumb" src="/prototype/ranking/assets/thumb-08-Cu2WI5dg.png" alt="" />
+                <span class="rk-badge"><i data-lucide="message-circle" aria-hidden="true"></i>캐릭터</span>
+              </div>
+              <div class="rk-meta">
+                <span class="rk-num">8</span>
+                <span class="rk-delta"><span class="rk-delta-icon" aria-hidden="true"></span>3</span>
+              </div>
+              <p class="rk-title">시간이 흘러도 변치 않는 우정</p>
+            </a>
+            <a class="rk-card" href="#">
+              <div class="rk-thumb">
+                <img class="js-thumb" src="/prototype/ranking/assets/thumb-09-BZ5cVDU_.png" alt="" />
+                <span class="rk-badge"><i data-lucide="message-circle" aria-hidden="true"></i>캐릭터</span>
+              </div>
+              <div class="rk-meta">
+                <span class="rk-num">9</span>
+                <span class="rk-delta"><span class="rk-delta-icon" aria-hidden="true"></span>8</span>
+              </div>
+              <p class="rk-title">서로를 이해하게 된 결정적인 순간</p>
+            </a>
+            <a class="rk-card" href="#">
+              <div class="rk-thumb">
+                <img class="js-thumb" src="/prototype/ranking/assets/thumb-01-CmLZ3rZ4.png" alt="" />
+                <span class="rk-badge"><i data-lucide="message-circle" aria-hidden="true"></i>캐릭터</span>
+              </div>
+              <div class="rk-meta">
+                <span class="rk-num">10</span>
+                <span class="rk-delta"><span class="rk-delta-icon" aria-hidden="true"></span>2</span>
+              </div>
+              <p class="rk-title">함께 쌓아온 추억의 사진첩</p>
+            </a>
+            <a class="rk-card" href="#">
+              <div class="rk-thumb">
+                <img class="js-thumb" src="/prototype/ranking/assets/thumb-02-BEbBDHR2.png" alt="" />
+                <span class="rk-badge"><i data-lucide="message-circle" aria-hidden="true"></i>캐릭터</span>
+              </div>
+              <div class="rk-meta">
+                <span class="rk-num">11</span>
+                <span class="rk-delta"><span class="rk-delta-icon" aria-hidden="true"></span>5</span>
+              </div>
+              <p class="rk-title">잠시 멀어졌던 거리와 다시 가까워진 마음</p>
+            </a>
+            <a class="rk-card" href="#">
+              <div class="rk-thumb">
+                <img class="js-thumb" src="/prototype/ranking/assets/thumb-03-CjmDST4g.png" alt="" />
+                <span class="rk-badge"><i data-lucide="message-circle" aria-hidden="true"></i>캐릭터</span>
+              </div>
+              <div class="rk-meta">
+                <span class="rk-num">12</span>
+                <span class="rk-delta"><span class="rk-delta-icon" aria-hidden="true"></span>4</span>
+              </div>
+              <p class="rk-title">운명처럼 마주친 특별한 이벤트</p>
+            </a>
+          </div>
+        </section>
+
+        <section class="view view-ranking-uv-b" id="view-ranking-uv-b" data-view-panel="ranking-uv-b" hidden>
+          <div class="rk-filters rk-filters--b" aria-label="랭킹 필터">
+          <div class="rk-cats" role="tablist" aria-label="카테고리">
+            <button class="rk-cat is-active" type="button" role="tab" aria-selected="true">전체</button>
+            <button class="rk-cat" type="button" role="tab" aria-selected="false">캐릭터</button>
+            <button class="rk-cat" type="button" role="tab" aria-selected="false">시리즈</button>
+            <button class="rk-cat" type="button" role="tab" aria-selected="false">시뮬레이션</button>
+          </div>
+          <div class="rk-sorts rk-sorts--swipe" role="tablist" aria-label="정렬">
+            <button class="rk-chip is-active" type="button" role="tab" aria-selected="true">실시간</button>
+            <button class="rk-chip" type="button" role="tab" aria-selected="false">주간베스트</button>
+            <button class="rk-chip" type="button" role="tab" aria-selected="false">좋아요순</button>
+            <button class="rk-chip" type="button" role="tab" aria-selected="false">댓글순</button>
+            <button class="rk-chip" type="button" role="tab" aria-selected="false">조회순</button>
+          </div>
+        </div>
+          <p class="rk-updated">45분 전 기준 (누적)</p>
+          <div class="rk-grid">
+            <a class="rk-card" href="#">
+              <div class="rk-thumb">
+                <img class="js-thumb" src="/prototype/ranking/assets/thumb-01-CmLZ3rZ4.png" alt="" />
+                <span class="rk-badge"><i data-lucide="message-circle" aria-hidden="true"></i>캐릭터</span>
+              </div>
+              <div class="rk-meta">
+                <span class="rk-num">1</span>
+                <span class="rk-delta"><span class="rk-delta-icon" aria-hidden="true"></span>3</span>
+              </div>
+              <p class="rk-title">헤어진 전남친과 소꿉친구 사이</p>
+            </a>
+            <a class="rk-card" href="#">
+              <div class="rk-thumb">
+                <img class="js-thumb" src="/prototype/ranking/assets/thumb-02-BEbBDHR2.png" alt="" />
+                <span class="rk-badge"><i data-lucide="message-circle" aria-hidden="true"></i>캐릭터</span>
+              </div>
+              <div class="rk-meta">
+                <span class="rk-num">2</span>
+                <span class="rk-delta"><span class="rk-delta-icon" aria-hidden="true"></span>5</span>
+              </div>
+              <p class="rk-title">첫 만남에서 느낀 강렬한 설렘</p>
+            </a>
+            <a class="rk-card" href="#">
+              <div class="rk-thumb">
+                <img class="js-thumb" src="/prototype/ranking/assets/thumb-03-CjmDST4g.png" alt="" />
+                <span class="rk-badge"><i data-lucide="message-circle" aria-hidden="true"></i>캐릭터</span>
+              </div>
+              <div class="rk-meta">
+                <span class="rk-num">3</span>
+                <span class="rk-delta"><span class="rk-delta-icon" aria-hidden="true"></span>2</span>
+              </div>
+              <p class="rk-title">비밀스러운 동네 모임의 이야기</p>
+            </a>
+            <a class="rk-card" href="#">
+              <div class="rk-thumb">
+                <img class="js-thumb" src="/prototype/ranking/assets/thumb-04-BRdo0x4d.png" alt="" />
+                <span class="rk-badge"><i data-lucide="message-circle" aria-hidden="true"></i>캐릭터</span>
+              </div>
+              <div class="rk-meta">
+                <span class="rk-num">4</span>
+                <span class="rk-delta"><span class="rk-delta-icon" aria-hidden="true"></span>7</span>
+              </div>
+              <p class="rk-title">어린 시절 추억이 깃든 공원 산책</p>
+            </a>
+            <a class="rk-card" href="#">
+              <div class="rk-thumb">
+                <img class="js-thumb" src="/prototype/ranking/assets/thumb-05-CXg9aeHI.png" alt="" />
+                <span class="rk-badge"><i data-lucide="message-circle" aria-hidden="true"></i>캐릭터</span>
+              </div>
+              <div class="rk-meta">
+                <span class="rk-num">5</span>
+                <span class="rk-delta"><span class="rk-delta-icon" aria-hidden="true"></span>4</span>
+              </div>
+              <p class="rk-title">갈등과 화해, 그 사이의 미묘한 감정</p>
+            </a>
+            <a class="rk-card" href="#">
+              <div class="rk-thumb">
+                <img class="js-thumb" src="/prototype/ranking/assets/thumb-06-BxhJFtMh.png" alt="" />
+                <span class="rk-badge"><i data-lucide="message-circle" aria-hidden="true"></i>캐릭터</span>
+              </div>
+              <div class="rk-meta">
+                <span class="rk-num">6</span>
+                <span class="rk-delta"><span class="rk-delta-icon" aria-hidden="true"></span>6</span>
+              </div>
+              <p class="rk-title">서로의 꿈을 응원하며 성장하는 모습</p>
+            </a>
+            <a class="rk-card" href="#">
+              <div class="rk-thumb">
+                <img class="js-thumb" src="/prototype/ranking/assets/thumb-07-C6zZviJB.png" alt="" />
+                <span class="rk-badge"><i data-lucide="message-circle" aria-hidden="true"></i>캐릭터</span>
+              </div>
+              <div class="rk-meta">
+                <span class="rk-num">7</span>
+                <span class="rk-delta"><span class="rk-delta-icon" aria-hidden="true"></span>1</span>
+              </div>
+              <p class="rk-title">예기치 못한 재회, 새로운 시작의 신호</p>
+            </a>
+            <a class="rk-card" href="#">
+              <div class="rk-thumb">
+                <img class="js-thumb" src="/prototype/ranking/assets/thumb-08-Cu2WI5dg.png" alt="" />
+                <span class="rk-badge"><i data-lucide="message-circle" aria-hidden="true"></i>캐릭터</span>
+              </div>
+              <div class="rk-meta">
+                <span class="rk-num">8</span>
+                <span class="rk-delta"><span class="rk-delta-icon" aria-hidden="true"></span>3</span>
+              </div>
+              <p class="rk-title">시간이 흘러도 변치 않는 우정</p>
+            </a>
+            <a class="rk-card" href="#">
+              <div class="rk-thumb">
+                <img class="js-thumb" src="/prototype/ranking/assets/thumb-09-BZ5cVDU_.png" alt="" />
+                <span class="rk-badge"><i data-lucide="message-circle" aria-hidden="true"></i>캐릭터</span>
+              </div>
+              <div class="rk-meta">
+                <span class="rk-num">9</span>
+                <span class="rk-delta"><span class="rk-delta-icon" aria-hidden="true"></span>8</span>
+              </div>
+              <p class="rk-title">서로를 이해하게 된 결정적인 순간</p>
+            </a>
+            <a class="rk-card" href="#">
+              <div class="rk-thumb">
+                <img class="js-thumb" src="/prototype/ranking/assets/thumb-01-CmLZ3rZ4.png" alt="" />
+                <span class="rk-badge"><i data-lucide="message-circle" aria-hidden="true"></i>캐릭터</span>
+              </div>
+              <div class="rk-meta">
+                <span class="rk-num">10</span>
+                <span class="rk-delta"><span class="rk-delta-icon" aria-hidden="true"></span>2</span>
+              </div>
+              <p class="rk-title">함께 쌓아온 추억의 사진첩</p>
+            </a>
+            <a class="rk-card" href="#">
+              <div class="rk-thumb">
+                <img class="js-thumb" src="/prototype/ranking/assets/thumb-02-BEbBDHR2.png" alt="" />
+                <span class="rk-badge"><i data-lucide="message-circle" aria-hidden="true"></i>캐릭터</span>
+              </div>
+              <div class="rk-meta">
+                <span class="rk-num">11</span>
+                <span class="rk-delta"><span class="rk-delta-icon" aria-hidden="true"></span>5</span>
+              </div>
+              <p class="rk-title">잠시 멀어졌던 거리와 다시 가까워진 마음</p>
+            </a>
+            <a class="rk-card" href="#">
+              <div class="rk-thumb">
+                <img class="js-thumb" src="/prototype/ranking/assets/thumb-03-CjmDST4g.png" alt="" />
+                <span class="rk-badge"><i data-lucide="message-circle" aria-hidden="true"></i>캐릭터</span>
+              </div>
+              <div class="rk-meta">
+                <span class="rk-num">12</span>
+                <span class="rk-delta"><span class="rk-delta-icon" aria-hidden="true"></span>4</span>
+              </div>
+              <p class="rk-title">운명처럼 마주친 특별한 이벤트</p>
+            </a>
+          </div>
+        </section>
+
+        <section class="view view-ranking-period-a" id="view-ranking-period-a" data-view-panel="ranking-period-a" hidden>
+          <div class="rk-filters rk-filters--period-a" aria-label="랭킹 필터">
+          <div class="rk-periods" role="tablist" aria-label="기간">
+            <button class="rk-chip is-active" type="button" role="tab" aria-selected="true" data-period="daily">일간</button>
+            <button class="rk-chip" type="button" role="tab" aria-selected="false" data-period="weekly">주간</button>
+            <button class="rk-chip" type="button" role="tab" aria-selected="false" data-period="monthly">월간</button>
+          </div>
+          <button class="rk-theme" type="button">
+            테마 전체
+            <i data-lucide="chevron-down" aria-hidden="true"></i>
+          </button>
+        </div>
+          <div class="rk-grid">
+            <a class="rk-card" href="#">
+              <div class="rk-thumb">
+                <img class="js-thumb" src="/prototype/ranking/assets/thumb-01-CmLZ3rZ4.png" alt="" />
+                <span class="rk-badge"><i data-lucide="message-circle" aria-hidden="true"></i>캐릭터</span>
+              </div>
+              <div class="rk-meta">
+                <span class="rk-num">1</span>
+                <span class="rk-delta"><span class="rk-delta-icon" aria-hidden="true"></span>3</span>
+              </div>
+              <p class="rk-title">헤어진 전남친과 소꿉친구 사이</p>
+            </a>
+            <a class="rk-card" href="#">
+              <div class="rk-thumb">
+                <img class="js-thumb" src="/prototype/ranking/assets/thumb-02-BEbBDHR2.png" alt="" />
+                <span class="rk-badge"><i data-lucide="message-circle" aria-hidden="true"></i>캐릭터</span>
+              </div>
+              <div class="rk-meta">
+                <span class="rk-num">2</span>
+                <span class="rk-delta"><span class="rk-delta-icon" aria-hidden="true"></span>5</span>
+              </div>
+              <p class="rk-title">첫 만남에서 느낀 강렬한 설렘</p>
+            </a>
+            <a class="rk-card" href="#">
+              <div class="rk-thumb">
+                <img class="js-thumb" src="/prototype/ranking/assets/thumb-03-CjmDST4g.png" alt="" />
+                <span class="rk-badge"><i data-lucide="message-circle" aria-hidden="true"></i>캐릭터</span>
+              </div>
+              <div class="rk-meta">
+                <span class="rk-num">3</span>
+                <span class="rk-delta"><span class="rk-delta-icon" aria-hidden="true"></span>2</span>
+              </div>
+              <p class="rk-title">비밀스러운 동네 모임의 이야기</p>
+            </a>
+            <a class="rk-card" href="#">
+              <div class="rk-thumb">
+                <img class="js-thumb" src="/prototype/ranking/assets/thumb-04-BRdo0x4d.png" alt="" />
+                <span class="rk-badge"><i data-lucide="message-circle" aria-hidden="true"></i>캐릭터</span>
+              </div>
+              <div class="rk-meta">
+                <span class="rk-num">4</span>
+                <span class="rk-delta"><span class="rk-delta-icon" aria-hidden="true"></span>7</span>
+              </div>
+              <p class="rk-title">어린 시절 추억이 깃든 공원 산책</p>
+            </a>
+            <a class="rk-card" href="#">
+              <div class="rk-thumb">
+                <img class="js-thumb" src="/prototype/ranking/assets/thumb-05-CXg9aeHI.png" alt="" />
+                <span class="rk-badge"><i data-lucide="message-circle" aria-hidden="true"></i>캐릭터</span>
+              </div>
+              <div class="rk-meta">
+                <span class="rk-num">5</span>
+                <span class="rk-delta"><span class="rk-delta-icon" aria-hidden="true"></span>4</span>
+              </div>
+              <p class="rk-title">갈등과 화해, 그 사이의 미묘한 감정</p>
+            </a>
+            <a class="rk-card" href="#">
+              <div class="rk-thumb">
+                <img class="js-thumb" src="/prototype/ranking/assets/thumb-06-BxhJFtMh.png" alt="" />
+                <span class="rk-badge"><i data-lucide="message-circle" aria-hidden="true"></i>캐릭터</span>
+              </div>
+              <div class="rk-meta">
+                <span class="rk-num">6</span>
+                <span class="rk-delta"><span class="rk-delta-icon" aria-hidden="true"></span>6</span>
+              </div>
+              <p class="rk-title">서로의 꿈을 응원하며 성장하는 모습</p>
+            </a>
+            <a class="rk-card" href="#">
+              <div class="rk-thumb">
+                <img class="js-thumb" src="/prototype/ranking/assets/thumb-07-C6zZviJB.png" alt="" />
+                <span class="rk-badge"><i data-lucide="message-circle" aria-hidden="true"></i>캐릭터</span>
+              </div>
+              <div class="rk-meta">
+                <span class="rk-num">7</span>
+                <span class="rk-delta"><span class="rk-delta-icon" aria-hidden="true"></span>1</span>
+              </div>
+              <p class="rk-title">예기치 못한 재회, 새로운 시작의 신호</p>
+            </a>
+            <a class="rk-card" href="#">
+              <div class="rk-thumb">
+                <img class="js-thumb" src="/prototype/ranking/assets/thumb-08-Cu2WI5dg.png" alt="" />
+                <span class="rk-badge"><i data-lucide="message-circle" aria-hidden="true"></i>캐릭터</span>
+              </div>
+              <div class="rk-meta">
+                <span class="rk-num">8</span>
+                <span class="rk-delta"><span class="rk-delta-icon" aria-hidden="true"></span>3</span>
+              </div>
+              <p class="rk-title">시간이 흘러도 변치 않는 우정</p>
+            </a>
+            <a class="rk-card" href="#">
+              <div class="rk-thumb">
+                <img class="js-thumb" src="/prototype/ranking/assets/thumb-09-BZ5cVDU_.png" alt="" />
+                <span class="rk-badge"><i data-lucide="message-circle" aria-hidden="true"></i>캐릭터</span>
+              </div>
+              <div class="rk-meta">
+                <span class="rk-num">9</span>
+                <span class="rk-delta"><span class="rk-delta-icon" aria-hidden="true"></span>8</span>
+              </div>
+              <p class="rk-title">서로를 이해하게 된 결정적인 순간</p>
+            </a>
+            <a class="rk-card" href="#">
+              <div class="rk-thumb">
+                <img class="js-thumb" src="/prototype/ranking/assets/thumb-01-CmLZ3rZ4.png" alt="" />
+                <span class="rk-badge"><i data-lucide="message-circle" aria-hidden="true"></i>캐릭터</span>
+              </div>
+              <div class="rk-meta">
+                <span class="rk-num">10</span>
+                <span class="rk-delta"><span class="rk-delta-icon" aria-hidden="true"></span>2</span>
+              </div>
+              <p class="rk-title">함께 쌓아온 추억의 사진첩</p>
+            </a>
+            <a class="rk-card" href="#">
+              <div class="rk-thumb">
+                <img class="js-thumb" src="/prototype/ranking/assets/thumb-02-BEbBDHR2.png" alt="" />
+                <span class="rk-badge"><i data-lucide="message-circle" aria-hidden="true"></i>캐릭터</span>
+              </div>
+              <div class="rk-meta">
+                <span class="rk-num">11</span>
+                <span class="rk-delta"><span class="rk-delta-icon" aria-hidden="true"></span>5</span>
+              </div>
+              <p class="rk-title">잠시 멀어졌던 거리와 다시 가까워진 마음</p>
+            </a>
+            <a class="rk-card" href="#">
+              <div class="rk-thumb">
+                <img class="js-thumb" src="/prototype/ranking/assets/thumb-03-CjmDST4g.png" alt="" />
+                <span class="rk-badge"><i data-lucide="message-circle" aria-hidden="true"></i>캐릭터</span>
+              </div>
+              <div class="rk-meta">
+                <span class="rk-num">12</span>
+                <span class="rk-delta"><span class="rk-delta-icon" aria-hidden="true"></span>4</span>
+              </div>
+              <p class="rk-title">운명처럼 마주친 특별한 이벤트</p>
+            </a>
+          </div>
+        </section>
+
+        <section class="view view-ranking-period-a-weekly" id="view-ranking-period-a-weekly" data-view-panel="ranking-period-a-weekly" hidden>
+          <div class="rk-filters rk-filters--period-a" aria-label="랭킹 필터">
+            <div class="rk-periods" role="tablist" aria-label="기간">
+              <button class="rk-chip" type="button" role="tab" aria-selected="false" data-period="daily">일간</button>
+              <button class="rk-chip is-active" type="button" role="tab" aria-selected="true" data-period="weekly">주간</button>
+              <button class="rk-chip" type="button" role="tab" aria-selected="false" data-period="monthly">월간</button>
+            </div>
+            <button class="rk-theme" type="button">
+              테마 전체
+              <i data-lucide="chevron-down" aria-hidden="true"></i>
+            </button>
+          </div>
+          <div class="mo-head">
+            <button class="mo-nav mo-nav--prev" type="button" aria-label="이전 기간" data-mo-step="-1">
+              <i data-lucide="chevron-left" aria-hidden="true"></i>
+            </button>
+            <button class="mo-date" type="button" aria-label="연월 선택">
+              <span class="mo-year">2026</span>
+              <span class="mo-month-wrap">
+                <span class="mo-month-label">9월</span>
+                <i data-lucide="chevron-down" aria-hidden="true"></i>
+              </span>
+            </button>
+            <button class="mo-nav mo-nav--next" type="button" aria-label="다음 기간" data-mo-step="1">
+              <i data-lucide="chevron-right" aria-hidden="true"></i>
+            </button>
+          </div>
+          <div class="wk-list">
+          <section class="wk-month">
+            <h2 class="wk-month-title">9월 1주차</h2>
+            <div class="wk-rail h-scroll">
+              <a class="wk-card" href="#">
+                <div class="wk-thumb">
+                  <img class="js-thumb" src="/prototype/ranking/assets/thumb-01-CmLZ3rZ4.png" alt="" />
+                </div>
+                <span class="wk-rank">1</span>
+                <p class="wk-title">헤어진 전남친과 소꿉친구 사이</p>
+              </a>
+              <a class="wk-card" href="#">
+                <div class="wk-thumb">
+                  <img class="js-thumb" src="/prototype/ranking/assets/thumb-02-BEbBDHR2.png" alt="" />
+                </div>
+                <span class="wk-rank">2</span>
+                <p class="wk-title">첫눈에 반한 음악 선생님</p>
+              </a>
+              <a class="wk-card" href="#">
+                <div class="wk-thumb">
+                  <img class="js-thumb" src="/prototype/ranking/assets/thumb-03-CjmDST4g.png" alt="" />
+                </div>
+                <span class="wk-rank">3</span>
+                <p class="wk-title">숨겨진 비밀을 가진 도서관 사서</p>
+              </a>
+              <a class="wk-card" href="#">
+                <div class="wk-thumb">
+                  <img class="js-thumb" src="/prototype/ranking/assets/thumb-04-BRdo0x4d.png" alt="" />
+                </div>
+                <span class="wk-rank">4</span>
+                <p class="wk-title">도시를 구하는 야간 택배기사</p>
+              </a>
+              <a class="wk-card" href="#">
+                <div class="wk-thumb">
+                  <img class="js-thumb" src="/prototype/ranking/assets/thumb-05-CXg9aeHI.png" alt="" />
+                </div>
+                <span class="wk-rank">5</span>
+                <p class="wk-title">시간 여행자를 닮은 카페 바리스타</p>
+              </a>
+            </div>
+          </section>
+          <section class="wk-month">
+            <h2 class="wk-month-title">9월 2주차</h2>
+            <div class="wk-rail h-scroll">
+              <a class="wk-card" href="#">
+                <div class="wk-thumb">
+                  <img class="js-thumb" src="/prototype/ranking/assets/thumb-02-BEbBDHR2.png" alt="" />
+                </div>
+                <span class="wk-rank">1</span>
+                <p class="wk-title">헤어진 전남친과 소꿉친구 사이</p>
+              </a>
+              <a class="wk-card" href="#">
+                <div class="wk-thumb">
+                  <img class="js-thumb" src="/prototype/ranking/assets/thumb-03-CjmDST4g.png" alt="" />
+                </div>
+                <span class="wk-rank">2</span>
+                <p class="wk-title">첫눈에 반한 음악 선생님</p>
+              </a>
+              <a class="wk-card" href="#">
+                <div class="wk-thumb">
+                  <img class="js-thumb" src="/prototype/ranking/assets/thumb-04-BRdo0x4d.png" alt="" />
+                </div>
+                <span class="wk-rank">3</span>
+                <p class="wk-title">숨겨진 비밀을 가진 도서관 사서</p>
+              </a>
+              <a class="wk-card" href="#">
+                <div class="wk-thumb">
+                  <img class="js-thumb" src="/prototype/ranking/assets/thumb-05-CXg9aeHI.png" alt="" />
+                </div>
+                <span class="wk-rank">4</span>
+                <p class="wk-title">도시를 구하는 야간 택배기사</p>
+              </a>
+              <a class="wk-card" href="#">
+                <div class="wk-thumb">
+                  <img class="js-thumb" src="/prototype/ranking/assets/thumb-06-BxhJFtMh.png" alt="" />
+                </div>
+                <span class="wk-rank">5</span>
+                <p class="wk-title">시간 여행자를 닮은 카페 바리스타</p>
+              </a>
+            </div>
+          </section>
+          <section class="wk-month">
+            <h2 class="wk-month-title">9월 3주차</h2>
+            <div class="wk-rail h-scroll">
+              <a class="wk-card" href="#">
+                <div class="wk-thumb">
+                  <img class="js-thumb" src="/prototype/ranking/assets/thumb-03-CjmDST4g.png" alt="" />
+                </div>
+                <span class="wk-rank">1</span>
+                <p class="wk-title">헤어진 전남친과 소꿉친구 사이</p>
+              </a>
+              <a class="wk-card" href="#">
+                <div class="wk-thumb">
+                  <img class="js-thumb" src="/prototype/ranking/assets/thumb-04-BRdo0x4d.png" alt="" />
+                </div>
+                <span class="wk-rank">2</span>
+                <p class="wk-title">첫눈에 반한 음악 선생님</p>
+              </a>
+              <a class="wk-card" href="#">
+                <div class="wk-thumb">
+                  <img class="js-thumb" src="/prototype/ranking/assets/thumb-05-CXg9aeHI.png" alt="" />
+                </div>
+                <span class="wk-rank">3</span>
+                <p class="wk-title">숨겨진 비밀을 가진 도서관 사서</p>
+              </a>
+              <a class="wk-card" href="#">
+                <div class="wk-thumb">
+                  <img class="js-thumb" src="/prototype/ranking/assets/thumb-06-BxhJFtMh.png" alt="" />
+                </div>
+                <span class="wk-rank">4</span>
+                <p class="wk-title">도시를 구하는 야간 택배기사</p>
+              </a>
+              <a class="wk-card" href="#">
+                <div class="wk-thumb">
+                  <img class="js-thumb" src="/prototype/ranking/assets/thumb-07-C6zZviJB.png" alt="" />
+                </div>
+                <span class="wk-rank">5</span>
+                <p class="wk-title">시간 여행자를 닮은 카페 바리스타</p>
+              </a>
+            </div>
+          </section>
+          <section class="wk-month">
+            <h2 class="wk-month-title">9월 4주차</h2>
+            <div class="wk-rail h-scroll">
+              <a class="wk-card" href="#">
+                <div class="wk-thumb">
+                  <img class="js-thumb" src="/prototype/ranking/assets/thumb-04-BRdo0x4d.png" alt="" />
+                </div>
+                <span class="wk-rank">1</span>
+                <p class="wk-title">헤어진 전남친과 소꿉친구 사이</p>
+              </a>
+              <a class="wk-card" href="#">
+                <div class="wk-thumb">
+                  <img class="js-thumb" src="/prototype/ranking/assets/thumb-05-CXg9aeHI.png" alt="" />
+                </div>
+                <span class="wk-rank">2</span>
+                <p class="wk-title">첫눈에 반한 음악 선생님</p>
+              </a>
+              <a class="wk-card" href="#">
+                <div class="wk-thumb">
+                  <img class="js-thumb" src="/prototype/ranking/assets/thumb-06-BxhJFtMh.png" alt="" />
+                </div>
+                <span class="wk-rank">3</span>
+                <p class="wk-title">숨겨진 비밀을 가진 도서관 사서</p>
+              </a>
+              <a class="wk-card" href="#">
+                <div class="wk-thumb">
+                  <img class="js-thumb" src="/prototype/ranking/assets/thumb-07-C6zZviJB.png" alt="" />
+                </div>
+                <span class="wk-rank">4</span>
+                <p class="wk-title">도시를 구하는 야간 택배기사</p>
+              </a>
+              <a class="wk-card" href="#">
+                <div class="wk-thumb">
+                  <img class="js-thumb" src="/prototype/ranking/assets/thumb-08-Cu2WI5dg.png" alt="" />
+                </div>
+                <span class="wk-rank">5</span>
+                <p class="wk-title">시간 여행자를 닮은 카페 바리스타</p>
+              </a>
+            </div>
+          </section>
+          </div>
+        </section>
+
+        <section class="view view-ranking-period-a-monthly" id="view-ranking-period-a-monthly" data-view-panel="ranking-period-a-monthly" hidden>
+          <div class="rk-filters rk-filters--period-a" aria-label="랭킹 필터">
+            <div class="rk-periods" role="tablist" aria-label="기간">
+              <button class="rk-chip" type="button" role="tab" aria-selected="false" data-period="daily">일간</button>
+              <button class="rk-chip" type="button" role="tab" aria-selected="false" data-period="weekly">주간</button>
+              <button class="rk-chip is-active" type="button" role="tab" aria-selected="true" data-period="monthly">월간</button>
+            </div>
+            <button class="rk-theme" type="button">
+              테마 전체
+              <i data-lucide="chevron-down" aria-hidden="true"></i>
+            </button>
+          </div>
+          <div class="mo-head">
+            <button class="mo-nav mo-nav--prev" type="button" aria-label="이전 기간" data-mo-step="-1">
+              <i data-lucide="chevron-left" aria-hidden="true"></i>
+            </button>
+            <button class="mo-date" type="button" aria-label="연월 선택">
+              <span class="mo-year">2026</span>
+              <span class="mo-month-wrap">
+                <span class="mo-month-label">9월</span>
+                <i data-lucide="chevron-down" aria-hidden="true"></i>
+              </span>
+            </button>
+            <button class="mo-nav mo-nav--next" type="button" aria-label="다음 기간" data-mo-step="1">
+              <i data-lucide="chevron-right" aria-hidden="true"></i>
+            </button>
+          </div>
+          <div class="mo-cal">
+            <div class="mo-weekdays"><span class="mo-wd">일</span><span class="mo-wd">월</span><span class="mo-wd">화</span><span class="mo-wd">수</span><span class="mo-wd">목</span><span class="mo-wd">금</span><span class="mo-wd">토</span></div>
+            <div class="mo-weeks" data-mo-weeks></div>
+          </div>
+        </section>
+
+        <section class="view view-ranking-period-b" id="view-ranking-period-b" data-view-panel="ranking-period-b" hidden>
+          <div class="rk-filters rk-filters--period-a" aria-label="랭킹 필터">
+            <div class="rk-periods" role="tablist" aria-label="기간" data-period-b-tabs>
+              <button class="rk-chip is-active" type="button" role="tab" aria-selected="true" data-period="daily">일간</button>
+              <button class="rk-chip" type="button" role="tab" aria-selected="false" data-period="weekly">주간</button>
+              <button class="rk-chip" type="button" role="tab" aria-selected="false" data-period="monthly">월간</button>
+            </div>
+            <button class="rk-theme" type="button">
+              테마 전체
+              <i data-lucide="chevron-down" aria-hidden="true"></i>
+            </button>
+          </div>
+          <div class="rk-grid rk-grid--period-b">
+            <a class="rk-card" href="#">
+              <div class="rk-thumb">
+                <img class="js-thumb" src="/prototype/ranking/assets/thumb-01-CmLZ3rZ4.png" alt="" />
+                <span class="rk-badge"><i data-lucide="message-circle" aria-hidden="true"></i>캐릭터</span>
+              </div>
+              <div class="rk-meta">
+                <span class="rk-num">1</span>
+                <span class="rk-delta"><span class="rk-delta-icon" aria-hidden="true"></span>3</span>
+              </div>
+              <p class="rk-title">헤어진 전남친과 소꿉친구 사이</p>
+            </a>
+            <a class="rk-card" href="#">
+              <div class="rk-thumb">
+                <img class="js-thumb" src="/prototype/ranking/assets/thumb-02-BEbBDHR2.png" alt="" />
+                <span class="rk-badge"><i data-lucide="message-circle" aria-hidden="true"></i>캐릭터</span>
+              </div>
+              <div class="rk-meta">
+                <span class="rk-num">2</span>
+                <span class="rk-delta"><span class="rk-delta-icon" aria-hidden="true"></span>5</span>
+              </div>
+              <p class="rk-title">첫 만남에서 느낀 강렬한 설렘</p>
+            </a>
+            <a class="rk-card" href="#">
+              <div class="rk-thumb">
+                <img class="js-thumb" src="/prototype/ranking/assets/thumb-03-CjmDST4g.png" alt="" />
+                <span class="rk-badge"><i data-lucide="message-circle" aria-hidden="true"></i>캐릭터</span>
+              </div>
+              <div class="rk-meta">
+                <span class="rk-num">3</span>
+                <span class="rk-delta"><span class="rk-delta-icon" aria-hidden="true"></span>2</span>
+              </div>
+              <p class="rk-title">비밀스러운 동네 모임의 이야기</p>
+            </a>
+            <a class="rk-card" href="#">
+              <div class="rk-thumb">
+                <img class="js-thumb" src="/prototype/ranking/assets/thumb-04-BRdo0x4d.png" alt="" />
+                <span class="rk-badge"><i data-lucide="message-circle" aria-hidden="true"></i>캐릭터</span>
+              </div>
+              <div class="rk-meta">
+                <span class="rk-num">4</span>
+                <span class="rk-delta"><span class="rk-delta-icon" aria-hidden="true"></span>7</span>
+              </div>
+              <p class="rk-title">어린 시절 추억이 깃든 공원 산책</p>
+            </a>
+            <a class="rk-card" href="#">
+              <div class="rk-thumb">
+                <img class="js-thumb" src="/prototype/ranking/assets/thumb-05-CXg9aeHI.png" alt="" />
+                <span class="rk-badge"><i data-lucide="message-circle" aria-hidden="true"></i>캐릭터</span>
+              </div>
+              <div class="rk-meta">
+                <span class="rk-num">5</span>
+                <span class="rk-delta"><span class="rk-delta-icon" aria-hidden="true"></span>4</span>
+              </div>
+              <p class="rk-title">갈등과 화해, 그 사이의 미묘한 감정</p>
+            </a>
+            <a class="rk-card" href="#">
+              <div class="rk-thumb">
+                <img class="js-thumb" src="/prototype/ranking/assets/thumb-06-BxhJFtMh.png" alt="" />
+                <span class="rk-badge"><i data-lucide="message-circle" aria-hidden="true"></i>캐릭터</span>
+              </div>
+              <div class="rk-meta">
+                <span class="rk-num">6</span>
+                <span class="rk-delta"><span class="rk-delta-icon" aria-hidden="true"></span>6</span>
+              </div>
+              <p class="rk-title">서로의 꿈을 응원하며 성장하는 모습</p>
+            </a>
+            <a class="rk-card" href="#">
+              <div class="rk-thumb">
+                <img class="js-thumb" src="/prototype/ranking/assets/thumb-07-C6zZviJB.png" alt="" />
+                <span class="rk-badge"><i data-lucide="message-circle" aria-hidden="true"></i>캐릭터</span>
+              </div>
+              <div class="rk-meta">
+                <span class="rk-num">7</span>
+                <span class="rk-delta"><span class="rk-delta-icon" aria-hidden="true"></span>1</span>
+              </div>
+              <p class="rk-title">예기치 못한 재회, 새로운 시작의 신호</p>
+            </a>
+            <a class="rk-card" href="#">
+              <div class="rk-thumb">
+                <img class="js-thumb" src="/prototype/ranking/assets/thumb-08-Cu2WI5dg.png" alt="" />
+                <span class="rk-badge"><i data-lucide="message-circle" aria-hidden="true"></i>캐릭터</span>
+              </div>
+              <div class="rk-meta">
+                <span class="rk-num">8</span>
+                <span class="rk-delta"><span class="rk-delta-icon" aria-hidden="true"></span>3</span>
+              </div>
+              <p class="rk-title">시간이 흘러도 변치 않는 우정</p>
+            </a>
+            <a class="rk-card" href="#">
+              <div class="rk-thumb">
+                <img class="js-thumb" src="/prototype/ranking/assets/thumb-09-BZ5cVDU_.png" alt="" />
+                <span class="rk-badge"><i data-lucide="message-circle" aria-hidden="true"></i>캐릭터</span>
+              </div>
+              <div class="rk-meta">
+                <span class="rk-num">9</span>
+                <span class="rk-delta"><span class="rk-delta-icon" aria-hidden="true"></span>8</span>
+              </div>
+              <p class="rk-title">서로를 이해하게 된 결정적인 순간</p>
+            </a>
+            <a class="rk-card" href="#">
+              <div class="rk-thumb">
+                <img class="js-thumb" src="/prototype/ranking/assets/thumb-01-CmLZ3rZ4.png" alt="" />
+                <span class="rk-badge"><i data-lucide="message-circle" aria-hidden="true"></i>캐릭터</span>
+              </div>
+              <div class="rk-meta">
+                <span class="rk-num">10</span>
+                <span class="rk-delta"><span class="rk-delta-icon" aria-hidden="true"></span>2</span>
+              </div>
+              <p class="rk-title">함께 쌓아온 추억의 사진첩</p>
+            </a>
+            <a class="rk-card" href="#">
+              <div class="rk-thumb">
+                <img class="js-thumb" src="/prototype/ranking/assets/thumb-02-BEbBDHR2.png" alt="" />
+                <span class="rk-badge"><i data-lucide="message-circle" aria-hidden="true"></i>캐릭터</span>
+              </div>
+              <div class="rk-meta">
+                <span class="rk-num">11</span>
+                <span class="rk-delta"><span class="rk-delta-icon" aria-hidden="true"></span>5</span>
+              </div>
+              <p class="rk-title">잠시 멀어졌던 거리와 다시 가까워진 마음</p>
+            </a>
+            <a class="rk-card" href="#">
+              <div class="rk-thumb">
+                <img class="js-thumb" src="/prototype/ranking/assets/thumb-03-CjmDST4g.png" alt="" />
+                <span class="rk-badge"><i data-lucide="message-circle" aria-hidden="true"></i>캐릭터</span>
+              </div>
+              <div class="rk-meta">
+                <span class="rk-num">12</span>
+                <span class="rk-delta"><span class="rk-delta-icon" aria-hidden="true"></span>4</span>
+              </div>
+              <p class="rk-title">운명처럼 마주친 특별한 이벤트</p>
+            </a>
+          </div>
+        </section>
+
+        <section class="view view-ranking-genre" id="view-ranking-genre" data-view-panel="ranking-genre" hidden>
+          <div class="rk-filters rk-filters--genre" aria-label="장르 필터">
+            <div class="rk-filters-track rk-sorts" role="tablist" aria-label="장르">
+              <button class="rk-chip" type="button" role="tab" aria-selected="false">전체</button>
+              <button class="rk-chip is-active" type="button" role="tab" aria-selected="true">판타지</button>
+              <button class="rk-chip" type="button" role="tab" aria-selected="false">로맨스</button>
+              <button class="rk-chip" type="button" role="tab" aria-selected="false">스릴러</button>
+              <button class="rk-chip" type="button" role="tab" aria-selected="false">코미디</button>
+              <button class="rk-chip" type="button" role="tab" aria-selected="false">다큐멘터리</button>
+              <button class="rk-chip" type="button" role="tab" aria-selected="false">SF</button>
+            </div>
+          </div>
+          <p class="rk-updated">45분 전 기준 (누적)</p>
+          <div class="gn-grid">
+            <a class="gn-card" href="#">
+              <div class="gn-thumb">
+                <img class="js-thumb" src="/prototype/ranking/assets/thumb-01-CmLZ3rZ4.png" alt="" />
+              </div>
+              <div class="gn-rankline">
+                <span class="gn-rank">1</span>
+                <span class="gn-delta"><span class="gn-delta-icon" aria-hidden="true"></span>3</span>
+              </div>
+              <p class="gn-title">헤어진 전남친과 소꿉친구 사이</p>
+              <p class="gn-tag">캐릭터</p>
+            </a>
+            <a class="gn-card" href="#">
+              <div class="gn-thumb">
+                <img class="js-thumb" src="/prototype/ranking/assets/thumb-02-BEbBDHR2.png" alt="" />
+              </div>
+              <div class="gn-rankline">
+                <span class="gn-rank">2</span>
+                <span class="gn-delta"><span class="gn-delta-icon" aria-hidden="true"></span>3</span>
+              </div>
+              <p class="gn-title">헤어진 전남친과 소꿉친구 사이</p>
+              <p class="gn-tag">캐릭터</p>
+            </a>
+            <a class="gn-card" href="#">
+              <div class="gn-thumb">
+                <img class="js-thumb" src="/prototype/ranking/assets/thumb-03-CjmDST4g.png" alt="" />
+              </div>
+              <div class="gn-rankline">
+                <span class="gn-rank">4</span>
+                <span class="gn-delta"><span class="gn-delta-icon" aria-hidden="true"></span>7</span>
+              </div>
+              <p class="gn-title">첫사랑과 재회한 대학 동창</p>
+              <p class="gn-tag">로맨스</p>
+            </a>
+            <a class="gn-card" href="#">
+              <div class="gn-thumb">
+                <img class="js-thumb" src="/prototype/ranking/assets/thumb-04-BRdo0x4d.png" alt="" />
+              </div>
+              <div class="gn-rankline">
+                <span class="gn-rank">5</span>
+                <span class="gn-delta"><span class="gn-delta-icon" aria-hidden="true"></span>2</span>
+              </div>
+              <p class="gn-title">비밀을 간직한 이웃집 소년</p>
+              <p class="gn-tag">미스터리</p>
+            </a>
+            <a class="gn-card" href="#">
+              <div class="gn-thumb">
+                <img class="js-thumb" src="/prototype/ranking/assets/thumb-05-CXg9aeHI.png" alt="" />
+              </div>
+              <div class="gn-rankline">
+                <span class="gn-rank">6</span>
+                <span class="gn-delta"><span class="gn-delta-icon" aria-hidden="true"></span>5</span>
+              </div>
+              <p class="gn-title">어린 시절 친구와의 이별과 성장</p>
+              <p class="gn-tag">드라마</p>
+            </a>
+            <a class="gn-card" href="#">
+              <div class="gn-thumb">
+                <img class="js-thumb" src="/prototype/ranking/assets/thumb-06-BxhJFtMh.png" alt="" />
+              </div>
+              <div class="gn-rankline">
+                <span class="gn-rank">7</span>
+                <span class="gn-delta"><span class="gn-delta-icon" aria-hidden="true"></span>8</span>
+              </div>
+              <p class="gn-title">새로운 학교에서 만난 라이벌 관계</p>
+              <p class="gn-tag">청춘</p>
+            </a>
+            <a class="gn-card" href="#">
+              <div class="gn-thumb">
+                <img class="js-thumb" src="/prototype/ranking/assets/thumb-07-C6zZviJB.png" alt="" />
+              </div>
+              <div class="gn-rankline">
+                <span class="gn-rank">8</span>
+                <span class="gn-delta"><span class="gn-delta-icon" aria-hidden="true"></span>1</span>
+              </div>
+              <p class="gn-title">가족과의 갈등 속에서 찾은 우정</p>
+              <p class="gn-tag">감성</p>
+            </a>
+            <a class="gn-card" href="#">
+              <div class="gn-thumb">
+                <img class="js-thumb" src="/prototype/ranking/assets/thumb-08-Cu2WI5dg.png" alt="" />
+              </div>
+              <div class="gn-rankline">
+                <span class="gn-rank">9</span>
+                <span class="gn-delta"><span class="gn-delta-icon" aria-hidden="true"></span>4</span>
+              </div>
+              <p class="gn-title">과거의 오해를 푸는 형제 이야기</p>
+              <p class="gn-tag">가족</p>
+            </a>
+            <a class="gn-card" href="#">
+              <div class="gn-thumb">
+                <img class="js-thumb" src="/prototype/ranking/assets/thumb-09-BZ5cVDU_.png" alt="" />
+              </div>
+              <div class="gn-rankline">
+                <span class="gn-rank">10</span>
+                <span class="gn-delta"><span class="gn-delta-icon" aria-hidden="true"></span>6</span>
+              </div>
+              <p class="gn-title">서로를 이해해가는 동네 친구들</p>
+              <p class="gn-tag">일상</p>
+            </a>
+            <a class="gn-card" href="#">
+              <div class="gn-thumb">
+                <img class="js-thumb" src="/prototype/ranking/assets/thumb-01-CmLZ3rZ4.png" alt="" />
+              </div>
+              <div class="gn-rankline">
+                <span class="gn-rank">11</span>
+                <span class="gn-delta"><span class="gn-delta-icon" aria-hidden="true"></span>3</span>
+              </div>
+              <p class="gn-title">첫 직장에서 만난 멘토와 제자</p>
+              <p class="gn-tag">성장</p>
+            </a>
+            <a class="gn-card" href="#">
+              <div class="gn-thumb">
+                <img class="js-thumb" src="/prototype/ranking/assets/thumb-02-BEbBDHR2.png" alt="" />
+              </div>
+              <div class="gn-rankline">
+                <span class="gn-rank">12</span>
+                <span class="gn-delta"><span class="gn-delta-icon" aria-hidden="true"></span>9</span>
+              </div>
+              <p class="gn-title">온라인 게임에서 만난 현실 친구</p>
+              <p class="gn-tag">게임</p>
+            </a>
+          </div>
+        </section>
+
+        <section class="view view-ranking-genre-period" id="view-ranking-genre-period" data-view-panel="ranking-genre-period" hidden>
+          <div class="mp-tabs" role="tablist" aria-label="멀티 랭킹">
+            <button class="mp-tab is-active" type="button" role="tab" aria-selected="true" data-mp-tab="genre">장르 랭킹</button>
+            <button class="mp-tab" type="button" role="tab" aria-selected="false" data-mp-tab="period">기간랭킹</button>
+          </div>
+          <div class="mp-panel is-active" data-mp-panel="genre">
+            <div class="rk-filters rk-filters--genre" aria-label="장르 필터">
+              <div class="rk-filters-track rk-sorts" role="tablist" aria-label="장르">
+                <button class="rk-chip" type="button" role="tab" aria-selected="false">전체</button>
+                <button class="rk-chip is-active" type="button" role="tab" aria-selected="true">판타지</button>
+                <button class="rk-chip" type="button" role="tab" aria-selected="false">로맨스</button>
+                <button class="rk-chip" type="button" role="tab" aria-selected="false">스릴러</button>
+                <button class="rk-chip" type="button" role="tab" aria-selected="false">코미디</button>
+                <button class="rk-chip" type="button" role="tab" aria-selected="false">다큐멘터리</button>
+                <button class="rk-chip" type="button" role="tab" aria-selected="false">SF</button>
+              </div>
+            </div>
+          </div>
+          <div class="mp-panel" data-mp-panel="period" hidden>
+            <div class="rk-filters rk-filters--period-a" aria-label="기간 필터">
+              <div class="rk-periods" role="tablist" aria-label="기간">
+                <button class="rk-chip is-active" type="button" role="tab" aria-selected="true">일간</button>
+                <button class="rk-chip" type="button" role="tab" aria-selected="false">주간</button>
+                <button class="rk-chip" type="button" role="tab" aria-selected="false">월간</button>
+              </div>
+            </div>
+          </div>
+          <p class="rk-updated">45분 전 기준 (누적)</p>
+          <div class="gn-grid">
+            <a class="gn-card" href="#">
+              <div class="gn-thumb">
+                <img class="js-thumb" src="/prototype/ranking/assets/thumb-01-CmLZ3rZ4.png" alt="" />
+              </div>
+              <div class="gn-rankline">
+                <span class="gn-rank">1</span>
+                <span class="gn-delta"><span class="gn-delta-icon" aria-hidden="true"></span>3</span>
+              </div>
+              <p class="gn-title">헤어진 전남친과 소꿉친구 사이</p>
+              <p class="gn-tag">캐릭터</p>
+            </a>
+            <a class="gn-card" href="#">
+              <div class="gn-thumb">
+                <img class="js-thumb" src="/prototype/ranking/assets/thumb-02-BEbBDHR2.png" alt="" />
+              </div>
+              <div class="gn-rankline">
+                <span class="gn-rank">2</span>
+                <span class="gn-delta"><span class="gn-delta-icon" aria-hidden="true"></span>3</span>
+              </div>
+              <p class="gn-title">헤어진 전남친과 소꿉친구 사이</p>
+              <p class="gn-tag">캐릭터</p>
+            </a>
+            <a class="gn-card" href="#">
+              <div class="gn-thumb">
+                <img class="js-thumb" src="/prototype/ranking/assets/thumb-03-CjmDST4g.png" alt="" />
+              </div>
+              <div class="gn-rankline">
+                <span class="gn-rank">4</span>
+                <span class="gn-delta"><span class="gn-delta-icon" aria-hidden="true"></span>7</span>
+              </div>
+              <p class="gn-title">첫사랑과 재회한 대학 동창</p>
+              <p class="gn-tag">로맨스</p>
+            </a>
+            <a class="gn-card" href="#">
+              <div class="gn-thumb">
+                <img class="js-thumb" src="/prototype/ranking/assets/thumb-04-BRdo0x4d.png" alt="" />
+              </div>
+              <div class="gn-rankline">
+                <span class="gn-rank">5</span>
+                <span class="gn-delta"><span class="gn-delta-icon" aria-hidden="true"></span>2</span>
+              </div>
+              <p class="gn-title">비밀을 간직한 이웃집 소년</p>
+              <p class="gn-tag">미스터리</p>
+            </a>
+            <a class="gn-card" href="#">
+              <div class="gn-thumb">
+                <img class="js-thumb" src="/prototype/ranking/assets/thumb-05-CXg9aeHI.png" alt="" />
+              </div>
+              <div class="gn-rankline">
+                <span class="gn-rank">6</span>
+                <span class="gn-delta"><span class="gn-delta-icon" aria-hidden="true"></span>5</span>
+              </div>
+              <p class="gn-title">어린 시절 친구와의 이별과 성장</p>
+              <p class="gn-tag">드라마</p>
+            </a>
+            <a class="gn-card" href="#">
+              <div class="gn-thumb">
+                <img class="js-thumb" src="/prototype/ranking/assets/thumb-06-BxhJFtMh.png" alt="" />
+              </div>
+              <div class="gn-rankline">
+                <span class="gn-rank">7</span>
+                <span class="gn-delta"><span class="gn-delta-icon" aria-hidden="true"></span>8</span>
+              </div>
+              <p class="gn-title">새로운 학교에서 만난 라이벌 관계</p>
+              <p class="gn-tag">청춘</p>
+            </a>
+            <a class="gn-card" href="#">
+              <div class="gn-thumb">
+                <img class="js-thumb" src="/prototype/ranking/assets/thumb-07-C6zZviJB.png" alt="" />
+              </div>
+              <div class="gn-rankline">
+                <span class="gn-rank">8</span>
+                <span class="gn-delta"><span class="gn-delta-icon" aria-hidden="true"></span>1</span>
+              </div>
+              <p class="gn-title">가족과의 갈등 속에서 찾은 우정</p>
+              <p class="gn-tag">감성</p>
+            </a>
+            <a class="gn-card" href="#">
+              <div class="gn-thumb">
+                <img class="js-thumb" src="/prototype/ranking/assets/thumb-08-Cu2WI5dg.png" alt="" />
+              </div>
+              <div class="gn-rankline">
+                <span class="gn-rank">9</span>
+                <span class="gn-delta"><span class="gn-delta-icon" aria-hidden="true"></span>4</span>
+              </div>
+              <p class="gn-title">과거의 오해를 푸는 형제 이야기</p>
+              <p class="gn-tag">가족</p>
+            </a>
+            <a class="gn-card" href="#">
+              <div class="gn-thumb">
+                <img class="js-thumb" src="/prototype/ranking/assets/thumb-09-BZ5cVDU_.png" alt="" />
+              </div>
+              <div class="gn-rankline">
+                <span class="gn-rank">10</span>
+                <span class="gn-delta"><span class="gn-delta-icon" aria-hidden="true"></span>6</span>
+              </div>
+              <p class="gn-title">서로를 이해해가는 동네 친구들</p>
+              <p class="gn-tag">일상</p>
+            </a>
+            <a class="gn-card" href="#">
+              <div class="gn-thumb">
+                <img class="js-thumb" src="/prototype/ranking/assets/thumb-01-CmLZ3rZ4.png" alt="" />
+              </div>
+              <div class="gn-rankline">
+                <span class="gn-rank">11</span>
+                <span class="gn-delta"><span class="gn-delta-icon" aria-hidden="true"></span>3</span>
+              </div>
+              <p class="gn-title">첫 직장에서 만난 멘토와 제자</p>
+              <p class="gn-tag">성장</p>
+            </a>
+            <a class="gn-card" href="#">
+              <div class="gn-thumb">
+                <img class="js-thumb" src="/prototype/ranking/assets/thumb-02-BEbBDHR2.png" alt="" />
+              </div>
+              <div class="gn-rankline">
+                <span class="gn-rank">12</span>
+                <span class="gn-delta"><span class="gn-delta-icon" aria-hidden="true"></span>9</span>
+              </div>
+              <p class="gn-title">온라인 게임에서 만난 현실 친구</p>
+              <p class="gn-tag">게임</p>
+            </a>
+          </div>
+        </section>
+
+      </main>
+
+      <nav class="tabbar" aria-label="하단 탭">
+        <button class="tabbar-item is-active" type="button">
+          <i data-lucide="house" aria-hidden="true"></i>
+          <span>홈</span>
+        </button>
+        <button class="tabbar-item" type="button">
+          <i data-lucide="play" aria-hidden="true"></i>
+          <span>플레이</span>
+        </button>
+        <button class="tabbar-item" type="button">
+          <i data-lucide="bot" aria-hidden="true"></i>
+          <span>AI 대화</span>
+        </button>
+        <button class="tabbar-item" type="button">
+          <i data-lucide="user" aria-hidden="true"></i>
+          <span>MY</span>
+        </button>
+      </nav>
+
+      <div class="ym-picker" id="ymPicker" hidden aria-hidden="true">
+        <button class="ym-picker-backdrop" type="button" data-ym-cancel aria-label="닫기"></button>
+        <div class="ym-picker-sheet" role="dialog" aria-modal="true" aria-label="연월 선택">
+          <div class="ym-picker-toolbar">
+            <button class="ym-picker-btn" type="button" data-ym-cancel>Cancel</button>
+            <button class="ym-picker-btn ym-picker-btn--set" type="button" data-ym-set>Set</button>
+          </div>
+          <div class="ym-picker-body">
+            <div class="ym-picker-highlight" aria-hidden="true"></div>
+            <div class="ym-picker-cols">
+              <div class="ym-picker-col" data-ym-col="year" tabindex="0"></div>
+              <div class="ym-picker-col" data-ym-col="month" tabindex="0"></div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="opt-sheet" id="typeOptSheet" hidden aria-hidden="true">
+        <button class="opt-sheet-backdrop" type="button" data-opt-close aria-label="닫기"></button>
+        <div class="opt-sheet-panel" role="dialog" aria-modal="true" aria-label="타입 선택">
+          <div class="opt-sheet-handle" aria-hidden="true"></div>
+          <p class="opt-sheet-title">타입 선택</p>
+          <div class="opt-sheet-list" role="listbox" aria-label="타입">
+            <button class="opt-sheet-item is-active" type="button" role="option" data-opt-value="전체" aria-selected="true">전체</button>
+            <button class="opt-sheet-item" type="button" role="option" data-opt-value="시리즈">시리즈</button>
+            <button class="opt-sheet-item" type="button" role="option" data-opt-value="캐릭터" aria-selected="false">캐릭터</button>
+            <button class="opt-sheet-item" type="button" role="option" data-opt-value="시뮬레이션">시뮬레이션</button>
+          </div>
+          <button class="opt-sheet-cancel" type="button" data-opt-close>취소</button>
+        </div>
+      </div>
+    </div>
+  </div>
+  <script src="https://unpkg.com/lucide@0.469.0/dist/umd/lucide.min.js"></script>
+</body>
+</html>
