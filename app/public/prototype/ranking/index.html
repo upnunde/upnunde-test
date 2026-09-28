@@ -6,14 +6,17 @@
   <title>업데이트 홈 · Renovel</title>
   <link rel="preconnect" href="https://cdn.jsdelivr.net" />
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/static/pretendard.min.css" />
-  <script type="module" crossorigin src="/prototype/ranking/assets/index-DtDtf8wc.js"></script>
-  <link rel="stylesheet" crossorigin href="/prototype/ranking/assets/index-DTb8X-mu.css">
+  <script type="module" crossorigin src="/prototype/ranking/assets/index-CvwgF0Bt.js"></script>
+  <link rel="stylesheet" crossorigin href="/prototype/ranking/assets/index-39iD6zpE.css">
 </head>
 <body>
   <div class="shell">
     <div class="phone">
       <div class="ios-status" aria-hidden="true">
-        <span class="ios-status-time">9:41</span>
+        <div class="ios-status-left">
+          <span class="ios-status-time">9:41</span>
+          <span class="ios-status-date">Mon Jun 9</span>
+        </div>
         <div class="ios-status-levels">
           <svg class="ios-status-signal" viewBox="0 0 17 12" width="17" height="12" fill="currentColor" aria-hidden="true">
             <rect x="0" y="7.5" width="3" height="4.5" rx="0.6" />
@@ -39,6 +42,7 @@
           <div class="top-tabs" role="tablist">
             <button class="tab is-active" type="button" data-view="home" role="tab" aria-selected="true">홈</button>
             <button class="tab" type="button" data-view="ranking" role="tab" aria-selected="false">랭킹</button>
+            <button class="tab" type="button" data-view="test" role="tab" aria-selected="false">테스트</button>
           </div>
           <div class="nav-actions">
             <button class="notify-btn" type="button" aria-label="알림">
@@ -308,29 +312,36 @@
           </div>
         </section>
 
+        <section class="view view-test" id="view-test" data-view-panel="test" hidden>
+          <div class="rank-hub">
+            <button class="rank-hub-card" type="button" data-test-entry="responsive">반응형 대응</button>
+            <button class="rank-hub-card" type="button" data-test-entry="duo">아이폰 듀오 대응</button>
+          </div>
+        </section>
+
+        <section class="view view-test-responsive" id="view-test-responsive" data-view-panel="test-responsive" hidden>
+          <div class="rank-hub">
+            <button class="rank-hub-card" type="button" data-test-entry="responsive-intro">작품소개</button>
+            <button class="rank-hub-card" type="button" data-test-entry="responsive-chat">대화화면</button>
+            <button class="rank-back" type="button" data-rank-back="test">뒤로</button>
+          </div>
+        </section>
+
+        <section class="view view-test-duo" id="view-test-duo" data-view-panel="test-duo" hidden>
+          <div class="rank-hub">
+            <button class="rank-hub-card" type="button" data-test-entry="duo-intro">작품소개</button>
+            <button class="rank-hub-card" type="button" data-test-entry="duo-chat">대화화면</button>
+            <button class="rank-back" type="button" data-rank-back="test">뒤로</button>
+          </div>
+        </section>
+
         <section class="view view-ranking-final" id="view-ranking-final" data-view-panel="ranking-final" hidden>
-          <div class="final-page" data-layout="grid">
+          <div class="final-page">
             <div class="rk-filters rk-filters--final" aria-label="기간">
               <div class="rk-periods rk-sorts" role="tablist" aria-label="기간">
                 <button class="rk-chip is-active" type="button" role="tab" aria-selected="true">일간</button>
                 <button class="rk-chip" type="button" role="tab" aria-selected="false">주간</button>
                 <button class="rk-chip" type="button" role="tab" aria-selected="false">월간</button>
-              </div>
-              <div class="rk-layout-toggles" role="group" aria-label="목록 형태">
-                <button class="rk-layout-btn is-active" type="button" data-final-layout="grid" aria-pressed="true" aria-label="그리드 보기">
-                  <svg width="20" height="20" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true">
-                    <rect x="2" y="3" width="4" height="14" rx="1" />
-                    <rect x="8" y="3" width="4" height="14" rx="1" />
-                    <rect x="14" y="3" width="4" height="14" rx="1" />
-                  </svg>
-                </button>
-                <button class="rk-layout-btn" type="button" data-final-layout="row" aria-pressed="false" aria-label="가로형 보기">
-                  <svg width="20" height="20" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true">
-                    <rect x="2" y="3" width="16" height="3.5" rx="1" />
-                    <rect x="2" y="8.25" width="16" height="3.5" rx="1" />
-                    <rect x="2" y="13.5" width="16" height="3.5" rx="1" />
-                  </svg>
-                </button>
               </div>
             </div>
             <div class="rk-grid">
@@ -507,6 +518,160 @@
           </div>
         </section>
 
+        <!-- iPhone Duo: original work detail with responsive sizing -->
+        <section class="view view-ranking-duo" id="view-ranking-duo" data-view-panel="ranking-duo" hidden>
+          <div class="duo-page">
+            <div class="duo-main">
+              <div class="duo-topbar">
+                <button class="duo-back" type="button" data-rank-back="test" aria-label="테스트로 돌아가기"><i data-lucide="chevron-left" aria-hidden="true"></i></button>
+                <div class="duo-seg" role="tablist" aria-label="작품 탭">
+                  <button class="duo-seg-btn is-active" id="duoIntroTab" type="button" role="tab" aria-selected="true" aria-controls="duoIntroPanel" data-duo-tab="intro">작품소개</button>
+                  <button class="duo-seg-btn" id="duoHistoryTab" type="button" role="tab" aria-selected="false" aria-controls="duoHistoryPanel" tabindex="-1" data-duo-tab="history">히스토리</button>
+                </div>
+              </div>
+              <div class="duo-panel" id="duoIntroPanel" role="tabpanel" aria-labelledby="duoIntroTab" data-duo-panel="intro">
+                <div class="duo-hero">
+                  <div class="duo-cover">
+                    <img data-duo-thumb="1" src="/prototype/ranking/assets/thumb-02-BEbBDHR2.png" alt="망캐로 빙의했는데 다들 날 좋아한다 표지" fetchpriority="high" />
+                  </div>
+                  <div class="duo-info">
+                    <div class="duo-info-head">
+                      <h1 class="duo-title">망캐로 빙의했는데 다들 날 좋아한다</h1>
+                      <p class="duo-author">노모어캐시</p>
+                      <p class="duo-desc">원작에서 죽도록 설계된 '망캐'에 빙의했다. 살기 위해서는 30일 안에 엘리시움 아카데미의 누군가와 이어져야만 한다.</p>
+                    </div>
+                    <div class="duo-actions" aria-label="작품 플레이">
+                      <button class="duo-btn duo-btn--ghost" type="button">새로하기</button>
+                      <button class="duo-btn duo-btn--primary" type="button" data-chat-entry>이어하기</button>
+                    </div>
+                    <section class="duo-comments" aria-labelledby="duoCommentsTitle">
+                      <div class="duo-sec-head">
+                        <div class="duo-sec-left"><h2 class="duo-sec-title" id="duoCommentsTitle">댓글</h2><span class="duo-sec-count">388</span></div>
+                        <button class="duo-more" type="button">모두 보기 <i data-lucide="chevron-right" aria-hidden="true"></i></button>
+                      </div>
+                      <div class="duo-comment-list">
+                        <article class="duo-comment">
+                          <p class="duo-comment-name">김부엉부엉</p>
+                          <p class="duo-comment-text">표준희 예민미 미쳤다... 서사가 장난이 아님 체리보일드랑 순애 퍼먹다가 밤샘 제작자님 저 오늘 파산 신청하러 갑니다ㅜㅜ 제작자님 책임져주실? 새 ...</p>
+                        </article>
+                        <article class="duo-comment">
+                          <p class="duo-comment-name">한별빛</p>
+                          <p class="duo-comment-text">요즘 드라마 중에 가장 몰입감 최고! 캐릭터 간 케미도 완벽하고, 매회 반전이 숨막히네요. 다음 회가 벌써부터 기다려져요!</p>
+                        </article>
+                      </div>
+                    </section>
+                  </div>
+                </div>
+                <section class="duo-block duo-block--gallery" aria-labelledby="duoGalleryTitle">
+                  <div class="duo-sec-head">
+                    <h2 class="duo-sec-title" id="duoGalleryTitle">갤러리</h2>
+                    <button class="duo-more" type="button" aria-label="갤러리 모두 보기"><i data-lucide="chevron-right" aria-hidden="true"></i></button>
+                  </div>
+                  <div class="duo-gallery" aria-label="작품 갤러리">
+                    <img data-duo-thumb="2" src="/prototype/ranking/assets/thumb-03-CjmDST4g.png" alt="갤러리 이미지 1" />
+                    <img data-duo-thumb="3" src="/prototype/ranking/assets/thumb-04-BRdo0x4d.png" alt="갤러리 이미지 2" />
+                    <img data-duo-thumb="4" src="/prototype/ranking/assets/thumb-05-CXg9aeHI.png" alt="갤러리 이미지 3" />
+                    <img data-duo-thumb="5" src="/prototype/ranking/assets/thumb-06-BxhJFtMh.png" alt="갤러리 이미지 4" />
+                    <img data-duo-thumb="6" src="/prototype/ranking/assets/thumb-07-C6zZviJB.png" alt="갤러리 이미지 5" />
+                  </div>
+                </section>
+                <section class="duo-block" aria-labelledby="duoCharactersTitle">
+                  <div class="duo-sec-head">
+                    <div class="duo-sec-left"><h2 class="duo-sec-title" id="duoCharactersTitle">등장 캐릭터</h2><span class="duo-sec-count">388</span></div>
+                    <button class="duo-more" type="button" aria-label="등장 캐릭터 모두 보기"><i data-lucide="chevron-right" aria-hidden="true"></i></button>
+                  </div>
+                  <div class="duo-chars">
+                    <span class="duo-char"><img data-duo-thumb="7" src="/prototype/ranking/assets/thumb-08-Cu2WI5dg.png" alt="등장 캐릭터 1" /></span>
+                    <span class="duo-char"><img data-duo-thumb="8" src="/prototype/ranking/assets/thumb-09-BZ5cVDU_.png" alt="등장 캐릭터 2" /></span>
+                    <span class="duo-char"><img data-duo-thumb="9" src="/prototype/ranking/assets/thumb-10-85eg_TBs.png" alt="등장 캐릭터 3" /></span>
+                    <span class="duo-char"><img data-duo-thumb="10" src="/prototype/ranking/assets/thumb-11-BxzNvP4A.png" alt="등장 캐릭터 4" /></span>
+                  </div>
+                </section>
+                <section class="duo-block" aria-labelledby="duoWorldTitle">
+                  <div class="duo-sec-head">
+                    <h2 class="duo-sec-title" id="duoWorldTitle">세계관 &amp; Tip</h2>
+                    <button class="duo-more" type="button" aria-label="세계관과 팁 모두 보기"><i data-lucide="chevron-right" aria-hidden="true"></i></button>
+                  </div>
+                  <p class="duo-tip">새벽 2시, 별 글리터가 묻은 손가락으로 조명을 조정하며 ‘그’ 표정을 완성 비 오는 날 교실 창가에서 혼자 연습하던 포즈가 누군가에게 목격되는 순간 축제 날, 교복 위에 별 핀 하나만 달고도 조금 당당해진 발걸음.
+AI 스토리 시 Gemini 2.5 Pro 사용 권장 / 각 도입부는 Day와 그에 따른 호감도 변화를 반영합니다.
+만약 해당 시스템을 사용하고 싶지 않을 경우, 유저노트에 다음과 같은 내용을 작성해 주세요.</p>
+                </section>
+                <section class="duo-block" aria-labelledby="duoKeywordsTitle">
+                  <div class="duo-sec-head"><h2 class="duo-sec-title" id="duoKeywordsTitle">키워드</h2></div>
+                  <div class="duo-tags"><span class="duo-tag">#가족</span><span class="duo-tag">#여동생</span><span class="duo-tag">#현대배경</span><span class="duo-tag">#러브코미디</span><span class="duo-tag">#Creativity</span></div>
+                </section>
+              </div>
+              <div class="duo-panel" id="duoHistoryPanel" role="tabpanel" aria-labelledby="duoHistoryTab" data-duo-panel="history" hidden>
+                <p class="duo-history-empty">아직 플레이 기록이 없습니다.</p>
+              </div>
+            </div>
+            <aside class="duo-rail" aria-label="화면 제어">
+              <span class="duo-rail-time">9:41</span>
+              <div class="duo-rail-sensor" aria-hidden="true"><i data-lucide="wifi"></i></div>
+              <div class="duo-rail-actions">
+                <button class="duo-rail-btn" type="button" data-rank-back="test" aria-label="닫기"><i data-lucide="x" aria-hidden="true"></i></button>
+                <button class="duo-rail-btn" type="button" aria-label="공유"><i data-lucide="share" aria-hidden="true"></i></button>
+              </div>
+            </aside>
+          </div>
+        </section>
+
+        <!-- Conversation: Figma 119:10285 (mobile) / 143:20388 (landscape). -->
+        <section class="view" id="view-ranking-chat" data-view-panel="ranking-chat" hidden>
+          <div class="chat-page">
+            <div class="chat-main">
+              <div class="chat-status" aria-hidden="true">
+                <span class="chat-status-time">9:41 <span class="chat-status-date">Mon Jun 9</span></span>
+                <span class="chat-status-levels"><i data-lucide="signal"></i><i data-lucide="wifi"></i><span class="chat-status-percent">100%</span><span class="chat-battery"></span></span>
+              </div>
+              <header class="chat-topbar">
+                <button class="chat-back" type="button" data-rank-back="test" aria-label="대화화면 나가기"><i data-lucide="chevron-left" aria-hidden="true"></i><span>16시30분, 영지의 방</span></button>
+                <div class="chat-header-actions">
+                  <button class="chat-icon-button" type="button" data-chat-visibility aria-label="대화 UI 숨기기" aria-pressed="false"><i data-lucide="eye" aria-hidden="true"></i></button>
+                  <button class="chat-icon-button" type="button" data-chat-log aria-label="대화 기록 열기"><i data-lucide="list" aria-hidden="true"></i></button>
+                </div>
+              </header>
+              <div class="chat-layout">
+                <div class="chat-stage" aria-label="유나와의 대화 장면">
+                  <picture><source media="(max-width: 599px)" srcset="/prototype/ranking/assets/scene-mobile-BEZp1lVH.png" /><img class="chat-background" src="/prototype/ranking/assets/scene-CUUDAHJZ.png" alt="" /></picture>
+                  <img class="chat-character" src="/prototype/ranking/assets/yuna-BiX5SmfJ.png" alt="대화 중인 유나" />
+                </div>
+                <div class="chat-workspace">
+                  <div class="chat-log-panel">
+                    <div class="chat-transcript" role="log" aria-label="대화 내용" aria-live="polite" tabindex="0" data-chat-transcript></div>
+                    <button class="chat-latest" type="button" data-chat-latest aria-label="최근 대화로 이동"><i data-lucide="sparkles" aria-hidden="true"></i></button>
+                  </div>
+                  <form class="chat-composer" data-chat-form>
+                    <label class="chat-sr-only" for="chatMessage">대화 입력</label>
+                    <textarea id="chatMessage" name="message" placeholder="대화를 입력하세요..." rows="1" maxlength="2000" enterkeyhint="send"></textarea>
+                    <div class="chat-composer-actions">
+                      <button class="chat-asterisk" type="button" data-chat-asterisk aria-label="행동 묘사 입력"><i data-lucide="asterisk" aria-hidden="true"></i></button>
+                      <button class="chat-send" type="submit" disabled><i data-lucide="send" aria-hidden="true"></i>보내기</button>
+                    </div>
+                  </form>
+                  <div class="chat-tools">
+                    <button class="chat-tool chat-tool--gallery" type="button" data-chat-gallery><i data-lucide="image" aria-hidden="true"></i>GALLERY</button>
+                    <button class="chat-tool" type="button" data-chat-log><i data-lucide="notebook-text" aria-hidden="true"></i>LOG</button>
+                  </div>
+                </div>
+              </div>
+              <div class="chat-home-indicator" aria-hidden="true"><span></span></div>
+            </div>
+            <aside class="chat-rail" aria-label="듀오 화면 제어" hidden>
+              <span class="chat-rail-time">9:41</span>
+              <div class="chat-rail-sensor" aria-hidden="true"><i data-lucide="wifi"></i></div>
+              <div class="chat-rail-actions">
+                <button class="chat-rail-btn" type="button" data-rank-back="test" aria-label="닫기"><i data-lucide="x" aria-hidden="true"></i></button>
+                <button class="chat-rail-btn" type="button" aria-label="공유"><i data-lucide="share" aria-hidden="true"></i></button>
+              </div>
+            </aside>
+            <dialog class="chat-dialog" data-chat-dialog aria-labelledby="chatDialogTitle">
+              <div class="chat-dialog-head"><h2 id="chatDialogTitle">대화 기록</h2><button class="chat-icon-button" type="button" data-chat-dialog-close aria-label="닫기"><i data-lucide="x" aria-hidden="true"></i></button></div>
+              <div class="chat-dialog-body" data-chat-dialog-body></div>
+            </dialog>
+          </div>
+        </section>
+
         <section class="view view-ranking-misc" id="view-ranking-misc" data-view-panel="ranking-misc" hidden>
           <div class="misc-page">
             <h1 class="misc-title">요즘 가장 뜨고 있는 작가 TOP5</h1>
@@ -642,6 +807,11 @@
             <button class="rank-case-card rank-case-card--best" type="button" data-ai-case="best">
               <span class="rank-case-num">08</span>
               <span class="rank-case-name">베스트 통합</span>
+            </button>
+            <button class="rank-case-card rank-case-card--refined" type="button" data-ai-case="refined">
+              <span class="rank-case-num">09</span>
+              <span class="rank-case-name">더 베스트</span>
+              <span class="r9-case-caption">취향은 선명하게, 선택은 간결하게</span>
             </button>
             <button class="rank-back" type="button" data-rank-back>뒤로</button>
           </div>
@@ -1395,6 +1565,81 @@
               </a>
             </div>
             <button class="rank-back" type="button" data-rank-back="ai">뒤로</button>
+          </div>
+        </section>
+
+        <section class="view view-ranking-ai-refined" id="view-ranking-ai-refined" data-view-panel="ranking-ai-refined" hidden>
+          <div class="r9-page">
+            <header class="r9-heading">
+              <h1 data-r9-heading>인기 랭킹</h1>
+              <button class="r9-discover" type="button" data-r9-mode>
+                <span data-r9-mode-label>신작 둘러보기</span><span aria-hidden="true">↗</span>
+              </button>
+            </header>
+
+            <div class="r9-types" role="group" aria-label="콘텐츠 타입">
+              <button type="button" data-r9-type="전체" aria-pressed="true">전체</button>
+              <button type="button" data-r9-type="시리즈" aria-pressed="false">시리즈</button>
+              <button type="button" data-r9-type="캐릭터" aria-pressed="false">캐릭터</button>
+              <button type="button" data-r9-type="시뮬레이션" aria-pressed="false">시뮬레이션</button>
+            </div>
+
+            <div class="r9-toolbar">
+              <div class="r9-periods" role="group" aria-label="집계 기간" data-r9-periods>
+                <button type="button" data-r9-period="daily" aria-pressed="true">일간</button>
+                <button type="button" data-r9-period="weekly" aria-pressed="false">주간</button>
+                <button type="button" data-r9-period="monthly" aria-pressed="false">월간</button>
+              </div>
+              <span class="r9-new-sort" data-r9-new-sort hidden>최근 7일 공개 · 최신순</span>
+              <button class="r9-genre" type="button" data-r9-open-genre aria-haspopup="dialog" aria-controls="r9GenreDialog" aria-label="장르 선택: 전체 장르">
+                <span data-r9-genre-label>전체 장르</span>
+                <svg width="14" height="14" viewBox="0 0 16 16" fill="none" aria-hidden="true"><path d="m4 6 4 4 4-4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" /></svg>
+              </button>
+            </div>
+
+            <div class="r9-context">
+              <p data-r9-basis>최근 24시간 · 09:00 갱신</p>
+              <button class="r9-info" type="button" data-r9-open-info aria-haspopup="dialog" aria-controls="r9InfoDialog">
+                <span data-r9-compare>전일 대비</span>
+                <svg width="14" height="14" viewBox="0 0 16 16" fill="none" aria-hidden="true"><circle cx="8" cy="8" r="6" stroke="currentColor" /><path d="M8 7v4M8 4.7v.3" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" /></svg>
+              </button>
+            </div>
+
+            <p class="r9-sr-only" role="status" aria-live="polite" data-r9-status></p>
+            <div class="r9-grid" data-r9-grid aria-label="인기 작품 목록"></div>
+            <div class="r9-empty" data-r9-empty hidden>
+              <span class="r9-empty-icon" aria-hidden="true">⌕</span>
+              <h2>아직 이 조건의 작품이 없어요</h2>
+              <p>다른 장르나 타입도 둘러보세요.</p>
+              <button type="button" data-r9-reset>전체 작품 보기</button>
+            </div>
+
+            <div class="r9-endnote" data-r9-endnote>
+              <span class="r9-endline" aria-hidden="true"></span>
+              <p data-r9-end-label>마음에 드는 다음 이야기를 만나보세요.</p>
+            </div>
+            <button class="r9-back" type="button" data-rank-back="ai">시안 목록으로</button>
+
+            <dialog class="r9-dialog" id="r9GenreDialog" aria-labelledby="r9GenreTitle">
+              <div class="r9-dialog-head"><h2 id="r9GenreTitle">어떤 장르를 찾으세요?</h2><button class="r9-close" type="button" data-r9-close aria-label="장르 선택 닫기">×</button></div>
+              <div class="r9-genres" role="group" aria-label="장르 선택">
+                <button type="button" data-r9-genre="전체" aria-pressed="true">전체 장르<span aria-hidden="true">✓</span></button>
+                <button type="button" data-r9-genre="로맨스" aria-pressed="false">로맨스<span aria-hidden="true">✓</span></button>
+                <button type="button" data-r9-genre="판타지" aria-pressed="false">판타지<span aria-hidden="true">✓</span></button>
+                <button type="button" data-r9-genre="스릴러" aria-pressed="false">스릴러<span aria-hidden="true">✓</span></button>
+                <button type="button" data-r9-genre="일상" aria-pressed="false">일상<span aria-hidden="true">✓</span></button>
+              </div>
+            </dialog>
+
+            <dialog class="r9-dialog r9-dialog--info" id="r9InfoDialog" aria-labelledby="r9InfoTitle">
+              <div class="r9-dialog-head"><h2 id="r9InfoTitle">랭킹은 이렇게 정해져요</h2><button class="r9-close" type="button" data-r9-close aria-label="집계 기준 닫기">×</button></div>
+              <dl class="r9-rules">
+                <div><dt>이용자 수 기준</dt><dd>선택한 기간 동안 작품을 이용한 사람 수로 정렬해요. 같은 사람이 여러 번 이용해도 한 명으로 계산해요.</dd></div>
+                <div><dt>내가 고른 범위의 순위</dt><dd>타입과 장르를 고르면 그 조건에 해당하는 작품끼리 비교해요.</dd></div>
+                <div><dt>같은 길이의 이전 기간과 비교</dt><dd>일간은 이전 24시간, 주간은 이전 7일, 월간은 이전 30일의 순위와 비교해요. ‘진입’은 이전 기간에 이용 기록이 없어 새로 순위에 오른 작품이에요.</dd></div>
+                <div><dt>새로 나온 작품</dt><dd>신작 보기에서는 최근 7일 이내 공개한 작품을 최신순으로 보여줘요. 인기 순위와는 별도로 볼 수 있어요.</dd></div>
+              </dl>
+            </dialog>
           </div>
         </section>
 
