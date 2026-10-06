@@ -8,8 +8,8 @@
   <link rel="preconnect" href="https://cdn.jsdelivr.net" />
   <link rel="stylesheet"
     href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/static/pretendard.min.css" />
-  <script type="module" crossorigin src="/prototype/ranking/assets/index-i5DfkxK9.js"></script>
-  <link rel="stylesheet" crossorigin href="/prototype/ranking/assets/index-39iD6zpE.css">
+  <script type="module" crossorigin src="/prototype/ranking/assets/index-CkWbQ2lV.js"></script>
+  <link rel="stylesheet" crossorigin href="/prototype/ranking/assets/index-D3zayT4e.css">
 </head>
 
 <body>
@@ -49,6 +49,7 @@
             <button class="tab is-active" type="button" data-view="home" role="tab" aria-selected="true">홈</button>
             <button class="tab" type="button" data-view="ranking" role="tab" aria-selected="false">랭킹</button>
             <button class="tab" type="button" data-view="test" role="tab" aria-selected="false">테스트</button>
+            <button class="tab" type="button" data-view="explore" role="tab" aria-selected="false">탐색</button>
           </div>
           <div class="nav-actions">
             <button class="notify-btn" type="button" aria-label="알림">
@@ -325,6 +326,8 @@
           </div>
         </section>
 
+        <section class="view view-explore" id="view-explore" data-view-panel="explore" aria-label="탐색" hidden></section>
+
         <section class="view view-test-responsive" id="view-test-responsive" data-view-panel="test-responsive" hidden>
           <div class="rank-hub">
             <button class="rank-hub-card" type="button" data-test-entry="responsive-intro">작품소개</button>
@@ -342,203 +345,31 @@
         </section>
 
         <section class="view view-ranking-final" id="view-ranking-final" data-view-panel="ranking-final" hidden>
+          <div class="final-status" aria-hidden="true">
+            <span class="final-status-time">9:41</span>
+            <img class="final-status-levels" src="data:image/svg+xml,%3csvg%20preserveAspectRatio='none'%20overflow='visible'%20style='display:%20block;'%20width='77.6697'%20height='22'%20viewBox='0%200%2077.6697%2022'%20fill='none'%20xmlns='http://www.w3.org/2000/svg'%3e%3cg%20id='Levels'%3e%3cpath%20id='Cellular%20Connection'%20fill-rule='evenodd'%20clip-rule='evenodd'%20d='M19.2%206.53302C19.2%205.89998%2018.7224%205.38679%2018.1333%205.38679H17.0667C16.4776%205.38679%2016%205.89998%2016%206.53302V16.467C16%2017.1%2016.4776%2017.6132%2017.0667%2017.6132H18.1333C18.7224%2017.6132%2019.2%2017.1%2019.2%2016.467V6.53302ZM11.7659%207.83207H12.8326C13.4217%207.83207%2013.8992%208.35757%2013.8992%209.00581V16.4395C13.8992%2017.0877%2013.4217%2017.6132%2012.8326%2017.6132H11.7659C11.1768%2017.6132%2010.6992%2017.0877%2010.6992%2016.4395V9.00581C10.6992%208.35757%2011.1768%207.83207%2011.7659%207.83207ZM7.43411%2010.4811H6.36745C5.77834%2010.4811%205.30078%2011.0133%205.30078%2011.6698V16.4245C5.30078%2017.081%205.77834%2017.6132%206.36745%2017.6132H7.43411C8.02322%2017.6132%208.50078%2017.081%208.50078%2016.4245V11.6698C8.50078%2011.0133%208.02322%2010.4811%207.43411%2010.4811ZM2.13333%2012.9264H1.06667C0.477563%2012.9264%200%2013.451%200%2014.0981V16.4415C0%2017.0886%200.477563%2017.6132%201.06667%2017.6132H2.13333C2.72244%2017.6132%203.2%2017.0886%203.2%2016.4415V14.0981C3.2%2013.451%202.72244%2012.9264%202.13333%2012.9264Z'%20fill='white'/%3e%3cpath%20id='Wifi'%20fill-rule='evenodd'%20clip-rule='evenodd'%20d='M34.7713%207.80213C37.2584%207.80223%2039.6504%208.72432%2041.4529%2010.3778C41.5887%2010.5055%2041.8056%2010.5038%2041.9393%2010.3742L43.2368%209.11072C43.3045%209.04496%2043.3422%208.95588%2043.3417%208.8632C43.3411%208.77052%2043.3023%208.68188%2043.2338%208.61688C38.5028%204.24217%2031.0391%204.24217%2026.3081%208.61688C26.2395%208.68183%2026.2006%208.77045%2026.2%208.86313C26.1994%208.95581%2026.237%209.04491%2026.3047%209.11072L27.6026%2010.3742C27.7362%2010.504%2027.9533%2010.5056%2028.0889%2010.3778C29.8917%208.72421%2032.2839%207.80212%2034.7713%207.80213ZM34.7679%2012.0224C36.1253%2012.0223%2037.4341%2012.5341%2038.4403%2013.4582C38.5764%2013.5893%2038.7907%2013.5865%2038.9234%2013.4518L40.2107%2012.1325C40.2784%2012.0633%2040.3161%2011.9694%2040.3151%2011.8718C40.3141%2011.7743%2040.2746%2011.6812%2040.2054%2011.6134C37.1416%208.72257%2032.3969%208.72257%2029.333%2011.6134C29.2638%2011.6812%2029.2244%2011.7743%2029.2234%2011.8719C29.2225%2011.9695%2029.2603%2012.0634%2029.3282%2012.1325L30.6151%2013.4518C30.7478%2013.5865%2030.9621%2013.5893%2031.0982%2013.4582C32.1037%2012.5347%2033.4115%2012.023%2034.7679%2012.0224ZM37.2924%2014.816C37.2943%2014.9213%2037.2572%2015.0229%2037.1899%2015.0967L35.0133%2017.5514C34.9495%2017.6236%2034.8625%2017.6642%2034.7717%2017.6642C34.6809%2017.6642%2034.5939%2017.6236%2034.5301%2017.5514L32.3531%2015.0967C32.2859%2015.0228%2032.2489%2014.9212%2032.2509%2014.8159C32.2528%2014.7105%2032.2937%2014.6108%2032.3636%2014.5401C33.7537%2013.2262%2035.7897%2013.2262%2037.1798%2014.5401C37.2497%2014.6108%2037.2904%2014.7106%2037.2924%2014.816Z'%20fill='white'/%3e%3cg%20id='Battery'%3e%3crect%20id='Border'%20opacity='0.35'%20x='50.8417'%20y='5.5'%20width='24'%20height='12'%20rx='3.8'%20stroke='white'/%3e%3cpath%20id='Cap'%20opacity='0.4'%20d='M76.3417%209.78113V13.8566C77.1464%2013.5114%2077.6697%2012.7085%2077.6697%2011.8189C77.6697%2010.9293%2077.1464%2010.1263%2076.3417%209.78113'%20fill='white'/%3e%3crect%20id='Capacity'%20x='52.3417'%20y='7'%20width='21'%20height='9'%20rx='2.5'%20fill='white'/%3e%3c/g%3e%3c/g%3e%3c/svg%3e" alt="" />
+          </div>
+          <nav class="top-nav final-nav" aria-label="메인 메뉴">
+            <div class="top-tabs" role="tablist" aria-label="콘텐츠">
+              <button class="tab" type="button" data-view="home" role="tab" aria-selected="false">홈</button>
+              <button class="tab" type="button" data-view="explore" role="tab" aria-selected="false">전체</button>
+              <button class="tab is-active" type="button" data-view="ranking" role="tab" aria-selected="true">랭킹</button>
+            </div>
+            <div class="nav-actions">
+              <button class="notify-btn" type="button" aria-label="알림"><img src="data:image/svg+xml,%3csvg%20preserveAspectRatio='none'%20overflow='visible'%20style='display:%20block;'%20width='24'%20height='24'%20viewBox='0%200%2024%2024'%20fill='none'%20xmlns='http://www.w3.org/2000/svg'%3e%3cg%20id='notification'%3e%3cpath%20id='Union'%20d='M14%2019C14.5522%2019.0001%2015.0155%2019.4597%2014.835%2019.9814L14.7754%2020.1396C14.626%2020.5035%2014.4046%2020.8376%2014.1211%2021.1211C13.5585%2021.6837%2012.7956%2022%2012%2022L11.7031%2021.9854C11.1146%2021.9268%2010.5561%2021.6952%2010.0986%2021.3203L9.87891%2021.1211C9.55484%2020.797%209.31223%2020.4065%209.16505%2019.9814C8.99579%2019.4923%209.39228%2019.0574%209.89747%2019.0049L10%2019H14ZM12%202C16.2954%202.00009%2019.7771%205.48205%2019.7774%209.77734V13.5664L19.7803%2013.5762L20.5459%2015.1025C21.1924%2016.3909%2020.3054%2017.902%2018.8965%2017.9951L18.7588%2018H5.24121C3.79982%2018%202.84715%2016.5295%203.3955%2015.2285L3.45409%2015.1025L4.21972%2013.5762L4.22265%2013.5664V9.77734C4.22288%205.48199%207.7046%202%2012%202ZM12%203.5C8.53303%203.5%205.72288%206.31042%205.72265%209.77734V13.5664C5.72258%2013.8034%205.66681%2014.0372%205.56054%2014.249L4.79394%2015.7754C4.6271%2016.1079%204.86923%2016.5%205.24121%2016.5H18.7588C19.1307%2016.4999%2019.3728%2016.1078%2019.2061%2015.7754L18.4395%2014.249C18.3332%2014.0372%2018.2774%2013.8034%2018.2774%2013.5664V9.77734C18.2771%206.31048%2015.4669%203.50009%2012%203.5Z'%20fill='white'/%3e%3c/g%3e%3c/svg%3e" alt="" /></button>
+              <button class="token-btn" type="button" aria-label="토큰"><img src="data:image/svg+xml,%3csvg%20preserveAspectRatio='none'%20overflow='visible'%20style='display:%20block;'%20width='23.9998'%20height='24.0008'%20viewBox='0%200%2023.9998%2024.0008'%20fill='none'%20xmlns='http://www.w3.org/2000/svg'%3e%3cg%20id='Group%2010584'%3e%3cpath%20id='Subtract'%20d='M8.79385%201.22354C10.6196%20-0.407848%2013.3802%20-0.407848%2015.206%201.22354L15.496%201.48331C15.9022%201.8463%2016.4199%202.06108%2016.9638%202.09171L17.3534%202.11319C19.7979%202.25072%2021.7492%204.20285%2021.8866%206.64737L21.9081%207.03604C21.9387%207.57998%2022.1535%208.09755%2022.5165%208.50382L22.7763%208.79483C24.4076%2010.6206%2024.4076%2013.3802%2022.7763%2015.206L22.5165%2015.497C22.1536%2015.9032%2021.9387%2016.4208%2021.9081%2016.9648L21.8866%2017.3534C21.7492%2019.7979%2019.7979%2021.7501%2017.3534%2021.8876L16.9638%2021.9091C16.4199%2021.9397%2015.9022%2022.1545%2015.496%2022.5175L15.206%2022.7773C13.3802%2024.4086%2010.6196%2024.4086%208.79385%2022.7773L8.50381%2022.5175C8.09759%2022.1545%207.57993%2021.9397%207.03604%2021.9091L6.64639%2021.8876C4.20187%2021.7501%202.25062%2019.798%202.11319%2017.3534L2.09072%2016.9648C2.06014%2016.4208%201.84623%2015.9032%201.4833%2015.497L1.22354%2015.206C-0.407851%2013.3802%20-0.40784%2010.6206%201.22354%208.79483L1.4833%208.50382C1.84625%208.09755%202.06014%207.57997%202.09072%207.03604L2.11319%206.64737C2.25062%204.20284%204.20187%202.25069%206.64639%202.11319L7.03604%202.09171C7.57993%202.06106%208.09759%201.84628%208.50381%201.48331L8.79385%201.22354ZM16.6171%208.05558C14.4413%205.88022%2010.9138%205.88004%208.73819%208.05558C6.56241%2010.2313%206.56241%2013.7597%208.73819%2015.9355C10.9138%2018.111%2014.4413%2018.1108%2016.6171%2015.9355L13.9911%2013.3085C13.2659%2014.0337%2012.0904%2014.0337%2011.3651%2013.3085C10.6399%2012.5832%2010.6399%2011.4078%2011.3651%2010.6825C12.0904%209.95738%2013.2659%209.95731%2013.9911%2010.6825L16.6171%208.05558Z'%20fill='%23FFC670'/%3e%3cpath%20id='Vector'%20d='M8.74037%2015.9347C6.56459%2013.7589%206.56459%2010.2313%208.74037%208.05553C10.9161%205.87976%2014.4438%205.87976%2016.6195%208.05553L13.9931%2010.6819C13.2679%209.95666%2012.092%209.95666%2011.3668%2010.6819C10.6415%2011.4072%2010.6415%2012.5831%2011.3668%2013.3083C12.092%2014.0336%2013.2679%2014.0336%2013.9931%2013.3083L16.6195%2015.9347C14.4438%2018.1105%2010.9161%2018.1105%208.74037%2015.9347Z'%20fill='black'/%3e%3c/g%3e%3c/svg%3e" alt="" /></button>
+              <button class="final-filter-btn" type="button" data-rank-entry="filter" aria-label="랭킹 필터"><img src="data:image/svg+xml,%3csvg%20preserveAspectRatio='none'%20overflow='visible'%20style='display:%20block;'%20width='19.5'%20height='17.5'%20viewBox='0%200%2019.5%2017.5'%20fill='none'%20xmlns='http://www.w3.org/2000/svg'%3e%3cg%20id='Group%2010585'%3e%3cpath%20id='Vector'%20d='M7.75%2014.75H18.75M0.75%2014.75H3.75M3.75%2014.75V16.75M3.75%2014.75V12.75M17.75%208.75H18.75M0.75%208.75H13.75M13.75%208.75V10.75M13.75%208.75V6.75M11.75%202.75H18.75M0.75%202.75H7.75M7.75%202.75V4.75M7.75%202.75V0.75'%20stroke='white'%20stroke-width='1.5'%20stroke-linecap='round'%20stroke-linejoin='round'/%3e%3c/g%3e%3c/svg%3e" alt="" /></button>
+            </div>
+          </nav>
           <div class="final-page">
             <div class="rk-filters rk-filters--final" aria-label="기간">
-              <div class="rk-periods rk-sorts" role="tablist" aria-label="기간">
-                <button class="rk-chip is-active" type="button" role="tab" aria-selected="true">일간</button>
-                <button class="rk-chip" type="button" role="tab" aria-selected="false">주간</button>
-                <button class="rk-chip" type="button" role="tab" aria-selected="false">월간</button>
+              <div class="rk-periods" role="tablist" aria-label="랭킹 기간">
+                <button class="rk-chip is-active" id="final-daily" type="button" role="tab" aria-controls="final-ranking-grid" aria-selected="true" data-final-period="daily">일간</button>
+                <button class="rk-chip" id="final-weekly" type="button" role="tab" aria-controls="final-ranking-grid" aria-selected="false" tabindex="-1" data-final-period="weekly">주간</button>
+                <button class="rk-chip" id="final-monthly" type="button" role="tab" aria-controls="final-ranking-grid" aria-selected="false" tabindex="-1" data-final-period="monthly">월간</button>
               </div>
             </div>
-            <div class="rk-grid">
-              <a class="rk-card" href="#" data-content-type="캐릭터">
-                <div class="rk-thumb">
-                  <img class="js-thumb" src="/prototype/ranking/assets/thumb-01-CmLZ3rZ4.png" alt="" />
-                </div>
-                <div class="rk-meta">
-                  <span class="rk-num">1</span>
-                  <span class="rk-delta rk-delta--up" data-delta="up"><span class="rk-delta-icon"
-                      aria-hidden="true"></span>5</span>
-                </div>
-                <div class="rk-body">
-                  <span class="rk-badge" data-badge="캐릭터"><i data-lucide="message-circle"
-                      aria-hidden="true"></i>캐릭터</span>
-                  <p class="rk-title">헤어진 전남친과 소꿉친구 사이</p>
-                  <span class="rk-count"><i data-lucide="message-circle" aria-hidden="true"></i>860</span>
-                </div>
-              </a>
-              <a class="rk-card" href="#" data-content-type="시뮬레이션">
-                <div class="rk-thumb">
-                  <img class="js-thumb" src="/prototype/ranking/assets/thumb-02-BEbBDHR2.png" alt="" />
-                </div>
-                <div class="rk-meta">
-                  <span class="rk-num">2</span>
-                  <span class="rk-delta rk-delta--up" data-delta="up"><span class="rk-delta-icon"
-                      aria-hidden="true"></span>7</span>
-                </div>
-                <div class="rk-body">
-                  <span class="rk-badge" data-badge="시뮬레이션"><i data-lucide="cpu" aria-hidden="true"></i>시뮬레이션</span>
-                  <p class="rk-title">첫사랑과 다시 만난 여름밤</p>
-                  <span class="rk-count"><i data-lucide="message-circle" aria-hidden="true"></i>920</span>
-                </div>
-              </a>
-              <a class="rk-card" href="#" data-content-type="스토리">
-                <div class="rk-thumb">
-                  <img class="js-thumb" src="/prototype/ranking/assets/thumb-03-CjmDST4g.png" alt="" />
-                </div>
-                <div class="rk-meta">
-                  <span class="rk-num">3</span>
-                  <span class="rk-delta rk-delta--nothing" data-delta="nothing"><span class="rk-delta-flat"
-                      aria-hidden="true"></span></span>
-                </div>
-                <div class="rk-body">
-                  <span class="rk-badge" data-badge="스토리"><i data-lucide="play" aria-hidden="true"></i>스토리</span>
-                  <p class="rk-title">우연히 마주친 고등학교 동창</p>
-                  <span class="rk-count"><i data-lucide="message-circle" aria-hidden="true"></i>780</span>
-                </div>
-              </a>
-              <a class="rk-card" href="#" data-content-type="캐릭터">
-                <div class="rk-thumb">
-                  <img class="js-thumb" src="/prototype/ranking/assets/thumb-04-BRdo0x4d.png" alt="" />
-                </div>
-                <div class="rk-meta">
-                  <span class="rk-num">4</span>
-                  <span class="rk-delta rk-delta--down" data-delta="down"><span class="rk-delta-icon"
-                      aria-hidden="true"></span>8</span>
-                </div>
-                <div class="rk-body">
-                  <span class="rk-badge" data-badge="캐릭터"><i data-lucide="message-circle"
-                      aria-hidden="true"></i>캐릭터</span>
-                  <p class="rk-title">비밀스러운 도서관의 만남</p>
-                  <span class="rk-count"><i data-lucide="message-circle" aria-hidden="true"></i>650</span>
-                </div>
-              </a>
-              <a class="rk-card" href="#" data-content-type="스토리">
-                <div class="rk-thumb">
-                  <img class="js-thumb" src="/prototype/ranking/assets/thumb-05-CXg9aeHI.png" alt="" />
-                </div>
-                <div class="rk-meta">
-                  <span class="rk-num">5</span>
-                  <span class="rk-delta rk-delta--down" data-delta="down"><span class="rk-delta-icon"
-                      aria-hidden="true"></span>4</span>
-                </div>
-                <div class="rk-body">
-                  <span class="rk-badge" data-badge="스토리"><i data-lucide="play" aria-hidden="true"></i>스토리</span>
-                  <p class="rk-title">오래된 사진 속 추억을 찾아서</p>
-                  <span class="rk-count"><i data-lucide="message-circle" aria-hidden="true"></i>710</span>
-                </div>
-              </a>
-              <a class="rk-card" href="#" data-content-type="캐릭터">
-                <div class="rk-thumb">
-                  <img class="js-thumb" src="/prototype/ranking/assets/thumb-06-BxhJFtMh.png" alt="" />
-                </div>
-                <div class="rk-meta">
-                  <span class="rk-num">6</span>
-                  <span class="rk-delta rk-delta--up" data-delta="up"><span class="rk-delta-icon"
-                      aria-hidden="true"></span>9</span>
-                </div>
-                <div class="rk-body">
-                  <span class="rk-badge" data-badge="캐릭터"><i data-lucide="message-circle"
-                      aria-hidden="true"></i>캐릭터</span>
-                  <p class="rk-title">별빛 아래 속삭이는 첫 고백</p>
-                  <span class="rk-count"><i data-lucide="message-circle" aria-hidden="true"></i>830</span>
-                </div>
-              </a>
-              <a class="rk-card" href="#" data-content-type="캐릭터">
-                <div class="rk-thumb">
-                  <img class="js-thumb" src="/prototype/ranking/assets/thumb-07-C6zZviJB.png" alt="" />
-                </div>
-                <div class="rk-meta">
-                  <span class="rk-num">7</span>
-                  <span class="rk-delta rk-delta--up" data-delta="up"><span class="rk-delta-icon"
-                      aria-hidden="true"></span>3</span>
-                </div>
-                <div class="rk-body">
-                  <span class="rk-badge" data-badge="캐릭터"><i data-lucide="message-circle"
-                      aria-hidden="true"></i>캐릭터</span>
-                  <p class="rk-title">새벽 카페에서 마주친 낯선 인연</p>
-                  <span class="rk-count"><i data-lucide="message-circle" aria-hidden="true"></i>540</span>
-                </div>
-              </a>
-              <a class="rk-card" href="#" data-content-type="캐릭터">
-                <div class="rk-thumb">
-                  <img class="js-thumb" src="/prototype/ranking/assets/thumb-08-Cu2WI5dg.png" alt="" />
-                </div>
-                <div class="rk-meta">
-                  <span class="rk-num">8</span>
-                  <span class="rk-delta rk-delta--up" data-delta="up"><span class="rk-delta-icon"
-                      aria-hidden="true"></span>10</span>
-                </div>
-                <div class="rk-body">
-                  <span class="rk-badge" data-badge="캐릭터"><i data-lucide="message-circle"
-                      aria-hidden="true"></i>캐릭터</span>
-                  <p class="rk-title">함께 걷던 강변길의 기억</p>
-                  <span class="rk-count"><i data-lucide="message-circle" aria-hidden="true"></i>890</span>
-                </div>
-              </a>
-              <a class="rk-card" href="#" data-content-type="시뮬레이션">
-                <div class="rk-thumb">
-                  <img class="js-thumb" src="/prototype/ranking/assets/thumb-09-BZ5cVDU_.png" alt="" />
-                </div>
-                <div class="rk-meta">
-                  <span class="rk-num">9</span>
-                  <span class="rk-delta rk-delta--down" data-delta="down"><span class="rk-delta-icon"
-                      aria-hidden="true"></span>2</span>
-                </div>
-                <div class="rk-body">
-                  <span class="rk-badge" data-badge="시뮬레이션"><i data-lucide="cpu" aria-hidden="true"></i>시뮬레이션</span>
-                  <p class="rk-title">비오는 날 우산을 나눈 그 사람</p>
-                  <span class="rk-count"><i data-lucide="message-circle" aria-hidden="true"></i>670</span>
-                </div>
-              </a>
-              <a class="rk-card" href="#" data-content-type="스토리">
-                <div class="rk-thumb">
-                  <img class="js-thumb" src="/prototype/ranking/assets/thumb-10-85eg_TBs.png" alt="" />
-                </div>
-                <div class="rk-meta">
-                  <span class="rk-num">10</span>
-                  <span class="rk-delta rk-delta--up" data-delta="up"><span class="rk-delta-icon"
-                      aria-hidden="true"></span>11</span>
-                </div>
-                <div class="rk-body">
-                  <span class="rk-badge" data-badge="스토리"><i data-lucide="play" aria-hidden="true"></i>스토리</span>
-                  <p class="rk-title">졸업식 날 마지막 인사</p>
-                  <span class="rk-count"><i data-lucide="message-circle" aria-hidden="true"></i>780</span>
-                </div>
-              </a>
-              <a class="rk-card" href="#" data-content-type="캐릭터">
-                <div class="rk-thumb">
-                  <img class="js-thumb" src="/prototype/ranking/assets/thumb-11-BxzNvP4A.png" alt="" />
-                </div>
-                <div class="rk-meta">
-                  <span class="rk-num">11</span>
-                  <span class="rk-delta rk-delta--up" data-delta="up"><span class="rk-delta-icon"
-                      aria-hidden="true"></span>1</span>
-                </div>
-                <div class="rk-body">
-                  <span class="rk-badge" data-badge="캐릭터"><i data-lucide="message-circle"
-                      aria-hidden="true"></i>캐릭터</span>
-                  <p class="rk-title">첫눈 오는 날의 약속</p>
-                  <span class="rk-count"><i data-lucide="message-circle" aria-hidden="true"></i>720</span>
-                </div>
-              </a>
-              <a class="rk-card" href="#" data-content-type="스토리">
-                <div class="rk-thumb">
-                  <img class="js-thumb" src="/prototype/ranking/assets/thumb-12-7-S2JnWb.png" alt="" />
-                </div>
-                <div class="rk-meta">
-                  <span class="rk-num">12</span>
-                  <span class="rk-delta rk-delta--up" data-delta="up"><span class="rk-delta-icon"
-                      aria-hidden="true"></span>12</span>
-                </div>
-                <div class="rk-body">
-                  <span class="rk-badge" data-badge="스토리"><i data-lucide="play" aria-hidden="true"></i>스토리</span>
-                  <p class="rk-title">잊혀진 편지 속 고백</p>
-                  <span class="rk-count"><i data-lucide="message-circle" aria-hidden="true"></i>860</span>
-                </div>
-              </a>
-            </div>
-            <button class="rank-back" type="button" data-rank-back>뒤로</button>
+            <div class="rk-grid" id="final-ranking-grid" role="tabpanel" aria-label="일간 랭킹 1위부터 30위"></div>
           </div>
         </section>
 
@@ -547,8 +378,8 @@
           <div class="duo-page">
             <div class="duo-main">
               <div class="duo-topbar">
-                <button class="duo-back" type="button" data-rank-back="test" aria-label="테스트로 돌아가기"><i
-                    data-lucide="chevron-left" aria-hidden="true"></i></button>
+                <button class="duo-back" type="button" data-rank-back="test" aria-label="닫기"><i
+                    data-lucide="x" aria-hidden="true"></i></button>
                 <div class="duo-seg" role="tablist" aria-label="작품 탭">
                   <button class="duo-seg-btn is-active" id="duoIntroTab" type="button" role="tab" aria-selected="true"
                     aria-controls="duoIntroPanel" data-duo-tab="intro">작품소개</button>
@@ -624,9 +455,9 @@
                         alt="등장 캐릭터 1" /></span>
                     <span class="duo-char"><img data-duo-thumb="8" src="/prototype/ranking/assets/thumb-09-BZ5cVDU_.png"
                         alt="등장 캐릭터 2" /></span>
-                    <span class="duo-char"><img data-duo-thumb="9" src="/prototype/ranking/assets/thumb-10-85eg_TBs.png"
+                    <span class="duo-char"><img data-duo-thumb="9" src="/prototype/ranking/assets/cover-11-85eg_TBs.png"
                         alt="등장 캐릭터 3" /></span>
-                    <span class="duo-char"><img data-duo-thumb="10" src="/prototype/ranking/assets/thumb-11-BxzNvP4A.png"
+                    <span class="duo-char"><img data-duo-thumb="10" src="/prototype/ranking/assets/cover-10-BxzNvP4A.png"
                         alt="등장 캐릭터 4" /></span>
                   </div>
                 </section>
