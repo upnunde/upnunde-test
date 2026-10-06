@@ -2,4 +2,4 @@
 
 공개: https://www.upnunde.shop/prototype/ranking/final
 
-소스: Renovel-Prototype/prototype/update-360 (4ee6c6f) → bun run build:shop
+소스: Renovel-Prototype/prototype/update-360 (31179b7) → bun run build:shop
